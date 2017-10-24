@@ -1,0 +1,108 @@
+"use strict";
+import GraphContent from "../../core/GraphContent";
+import constants from "../../helpers/constants";
+import utils from "../../helpers/utils";
+import {
+    clear,
+    clickHandler,
+    draw,
+    hoverHandler,
+    prepareLegendItems,
+    processDataPoints,
+    removeLegendItem,
+    translateLineGraph
+} from "./helpers";
+import LineConfig from "./LineConfig";
+
+/**
+ * Calculates the min and max values for Y Axis or Y2 Axis
+ * @private
+ * @param {Array} values - Datapoint values
+ * @param {string} axis - y or y2
+ * @returns {Object} - Contains min and max values for the data points
+ */
+const calculateValuesRange = (values, axis = constants.Y_AXIS) =>
+    Object.assign({}, {
+        [axis]: {
+            min: Math.min(...values.map((i) => i.y)),
+            max: Math.max(...values.map((i) => i.y))
+        }
+    });
+
+/**
+ * Data point sets can be loaded using this function.
+ * Load function validates, clones and stores the input onto a config object.
+ * @private
+ * @param {Object} inputJSON - Input JSON provided by the consumer
+ * @returns {Object} LineConfig config object containing consumer data
+ */
+const loadInput = (inputJSON) =>
+    new LineConfig()
+        .setInput(inputJSON)
+        .validateInput()
+        .clone()
+        .getConfig();
+
+/**
+ * A Line graph is a graph used to represent a collection of data
+ * points connected by a line along the X and Y Axis.
+ *
+ * Lifecycle functions include:
+ *  * Load
+ *  * Generate
+ *  * Unload
+ *  * Destroy
+ *
+ * @class Line
+ */
+class Line extends GraphContent {
+    constructor(input) {
+        super();
+        this.config = loadInput(input);
+        this.valuesRange = calculateValuesRange(this.config.values, this.config.yAxis);
+        this.dataTarget = {};
+    }
+
+    /**
+     * @inheritDoc
+     */
+    load(graph) {
+        this.dataTarget = processDataPoints(graph.config, utils.deepClone(this.config));
+        draw(graph.scale, graph.config, graph.svg, this.dataTarget);
+        prepareLegendItems(graph.config, {
+            clickHandler: clickHandler(graph, this, graph.config, graph.svg),
+            hoverHandler: hoverHandler(graph.contentTargets, graph.svg)
+        }, this.dataTarget, graph.legendSVG);
+        return this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    unload(graph) {
+        clear(graph.svg, this.dataTarget);
+        removeLegendItem(graph.legendSVG, this.dataTarget);
+        this.dataTarget = {};
+        this.config = {};
+        return this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    resize(graph) {
+        translateLineGraph(graph.scale, graph.svg);
+        return this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    redraw(graph) {
+        clear(graph.svg, this.dataTarget);
+        draw(graph.scale, graph.config, graph.svg, this.dataTarget);
+        return this;
+    }
+}
+
+export default Line;

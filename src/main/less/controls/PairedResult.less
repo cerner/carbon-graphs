@@ -1,0 +1,25 @@
+@import "../variables";
+
+.carbon-paired-line {
+    fill: none;
+    stroke-width: 1px;
+    stroke: @inverse;
+}
+
+/*
+Colors are dictated by input JSON but since on-selection we need to
+override fill and stroke color we need !important.
+*/
+.carbon-data-pair {
+    cursor: pointer;
+    &[aria-selected="true"] {
+        .carbon-paired-line {
+            stroke: @accent-fg-30 !important;
+            .basic-transition(stroke, @default-transition-delay, @default-transition-timing);
+        }
+        .carbon-paired-point {
+            fill: @accent-fg-30 !important;
+            .basic-transition(fill, @default-transition-delay, @default-transition-timing);
+        }
+    }
+}

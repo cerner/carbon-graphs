@@ -1,0 +1,831 @@
+"use strict";
+import Line from "../../../main/js/controls/Line/Line";
+import Graph from "../../../main/js/core/Graph";
+import constants from "../../../main/js/helpers/constants";
+import errors from "../../../main/js/helpers/errors";
+import styles from "../../../main/js/helpers/styles";
+import utils from "../../../main/js/helpers/utils";
+import LOCALE from "../../../main/js/locale/index";
+import {
+    axisDefault,
+    axisTimeSeries,
+    dimension,
+    fetchElementByClass,
+    getAxes,
+    getData,
+    valuesDefault,
+    valuesTimeSeries
+} from "./helpers";
+
+describe("Graph", () => {
+    let graph = null;
+    let graphContainer;
+    beforeEach(() => {
+        graphContainer = document.createElement("div");
+        graphContainer.id = "testGraph_carbon";
+        graphContainer.setAttribute("style", "width: 1024px; height: 400px;");
+        document.body.appendChild(graphContainer);
+    });
+    afterEach(() => {
+        document.body.innerHTML = "";
+    });
+    describe("when constructed", () => {
+        it("throws error on undefined input", () => {
+            expect(() => {
+                graph = new Graph();
+            }).toThrow(errors.THROW_MSG_NO_AXES_DATA_LOADED);
+        });
+        it("initializes properly", () => {
+            graph = new Graph(getAxes(axisDefault));
+            expect(graph.graphContainer).not.toBeNull();
+            expect(graph.config).not.toBeNull();
+            expect(graph.axis).not.toBeNull();
+            expect(graph.scale).not.toBeNull();
+            expect(graph.legendSVG).not.toBeNull();
+            expect(graph.svg).not.toBeNull();
+            expect(graph.content).toEqual([]);
+            expect(graph.contentTargets).toEqual([]);
+            expect(graph.resizeHandler).toEqual(jasmine.any(Function));
+        });
+    });
+    describe("when input is loaded", () => {
+        it("throws error if no bind is present", () => {
+            expect(() => {
+                const input = getAxes(axisDefault);
+                input.bindTo = "";
+                new Graph(input);
+            }).toThrow(errors.THROW_MSG_NO_BIND);
+        });
+        describe("axis - throws error", () => {
+            it("if no axis is present", () => {
+                expect(() => {
+                    new Graph(getAxes({}));
+                }).toThrow(errors.THROW_MSG_NO_AXIS_INFO);
+            });
+            it("if no x axis is present", () => {
+                expect(() => {
+                    new Graph(getAxes({
+                        x: {},
+                        y: axisDefault.y
+                    }));
+
+                }).toThrow(errors.THROW_MSG_NO_AXIS_INFO);
+            });
+            it("if no y axis is present", () => {
+                expect(() => {
+                    new Graph(getAxes({
+                        x: axisDefault.x,
+                        y: {}
+                    }));
+
+                }).toThrow(errors.THROW_MSG_NO_AXIS_INFO);
+            });
+            it("if x axis type is different than allowed", () => {
+                expect(() => {
+                    new Graph(getAxes({
+                        x: {
+                            type: "DIFFERENT_TYPE",
+                            label: "Some X Label",
+                            lowerLimit: "2016-01-01T12:00:00Z",
+                            upperLimit: "2017-01-01T12:00:00Z"
+                        },
+                        y: axisDefault.y
+                    }));
+
+                }).toThrow(errors.THROW_MSG_INVALID_TYPE);
+            });
+            it("if x axis lowerLimit is not present", () => {
+                expect(() => {
+                    new Graph(getAxes({
+                        x: {
+                            label: "Some X Label",
+                            upperLimit: 20
+                        },
+                        y: axisDefault.y
+                    }));
+
+                }).toThrow(errors.THROW_MSG_NO_AXIS_LIMIT_INFO);
+            });
+            it("if x axis upperLimit is not present", () => {
+                expect(() => {
+                    new Graph(getAxes({
+                        x: {
+                            label: "Some X Label",
+                            lowerLimit: 0
+                        },
+                        y: axisDefault.y
+                    }));
+
+                }).toThrow(errors.THROW_MSG_NO_AXIS_LIMIT_INFO);
+            });
+            it("if y axis lowerLimit is not present", () => {
+                expect(() => {
+                    new Graph(getAxes({
+                        x: axisDefault.x,
+                        y: {
+                            label: "Some Y Label",
+                            upperLimit: 20
+                        }
+                    }));
+
+                }).toThrow(errors.THROW_MSG_NO_AXIS_LIMIT_INFO);
+            });
+            it("if y axis upperLimit is not present", () => {
+                expect(() => {
+                    new Graph(getAxes({
+                        x: axisDefault.x,
+                        y: {
+                            label: "Some Y Label",
+                            lowerLimit: 0
+                        }
+                    }));
+
+                }).toThrow(errors.THROW_MSG_NO_AXIS_LIMIT_INFO);
+            });
+            it("if y axis label is not present", () => {
+                expect(() => {
+                    new Graph(getAxes({
+                        x: axisDefault.x,
+                        y: {
+                            lowerLimit: 0,
+                            upperLimit: 20
+                        }
+                    }));
+
+                }).toThrow(errors.THROW_MSG_NO_AXIS_LABEL_INFO);
+            });
+            it("if y2 axis is enabled but not lowerLimit is present", () => {
+                expect(() => {
+                    new Graph(getAxes({
+                        x: axisDefault.x,
+                        y: axisDefault.y,
+                        y2: {
+                            show: true,
+                            label: "Some Y2 label"
+                        }
+                    }));
+
+                }).toThrow(errors.THROW_MSG_NO_AXIS_LIMIT_INFO);
+            });
+            it("if y2 axis is enabled but not upperLimit is present", () => {
+                expect(() => {
+                    new Graph(getAxes({
+                        x: axisDefault.x,
+                        y: axisDefault.y,
+                        y2: {
+                            show: true,
+                            label: "Some Y2 label",
+                            lowerLimit: 20
+                        }
+                    }));
+                }).toThrow(errors.THROW_MSG_NO_AXIS_LIMIT_INFO);
+            });
+            it("if y2 axis is enabled but not label is present", () => {
+                expect(() => {
+                    new Graph(getAxes({
+                        x: axisDefault.x,
+                        y: axisDefault.y,
+                        y2: {
+                            show: true,
+                            lowerLimit: 20,
+                            upperLimit: 200
+                        }
+                    }));
+                }).toThrow(errors.THROW_MSG_NO_AXIS_LABEL_INFO);
+            });
+        });
+        it("throws error on empty input", () => {
+            expect(() => {
+                graph = new Graph(getAxes(axisDefault));
+                graph.loadContent({});
+            }).toThrow(errors.THROW_MSG_NO_DATA_LOADED);
+        });
+        it("throws error on null input", () => {
+            expect(() => {
+                graph = new Graph(getAxes(axisDefault));
+                graph.loadContent(null);
+            }).toThrow(errors.THROW_MSG_NO_DATA_LOADED);
+        });
+        it("processes the default input without any error", () => {
+            expect(() => {
+                graph = new Graph(getAxes(axisDefault));
+                graph.loadContent(new Line(getData(valuesDefault)));
+            }).not.toThrow();
+        });
+        it("processes the timeseries input without any error", () => {
+            expect(() => {
+                graph = new Graph(getAxes(axisTimeSeries));
+                graph.loadContent(new Line(getData(valuesTimeSeries)));
+            }).not.toThrow();
+        });
+        it("loads the content correctly", () => {
+            const primaryContent = new Line(getData(valuesDefault));
+            graph = new Graph(getAxes(axisDefault));
+            graph.loadContent(primaryContent);
+            expect(graph.content).toEqual([ primaryContent ]);
+            expect(graph.contentTargets).toEqual([ primaryContent.config ]);
+            expect(graph.content.length).toBe(1);
+            expect(graph.contentTargets.length).toBe(1);
+        });
+        it("changes to new object has no impact on base object", () => {
+            const data = getData(valuesDefault);
+            const input = getAxes(axisDefault);
+            const primaryContent = new Line(data);
+            graph = new Graph(input);
+            graph.loadContent(primaryContent);
+            input.bindTo = "";
+            input.axis = {};
+            input.data = [];
+            const cfg = graph.config;
+            expect(input.bindTo).toBe("");
+            expect(input.axis).toEqual({});
+            expect(input.data).toEqual([]);
+            expect(cfg.bindTo).toBe("#testGraph_carbon");
+            expect(cfg.axis.x.label).toBe(axisDefault.x.label);
+            expect(cfg.axis.x.lowerLimit).toBe(axisDefault.x.lowerLimit);
+            expect(cfg.axis.x.upperLimit).toBe(axisDefault.x.upperLimit);
+            expect(cfg.axis.y.label).toBe(axisDefault.y.label);
+            expect(cfg.axis.y.lowerLimit).toBe(axisDefault.y.lowerLimit);
+            expect(cfg.axis.y.upperLimit).toBe(axisDefault.y.upperLimit);
+        });
+        it("processes the default input correctly", () => {
+            const input = getAxes(axisDefault);
+            graph = new Graph(input);
+            expect(graph.config.bindTo).toEqual(input.bindTo);
+            expect(graph.config.axis).not.toBeNull();
+            expect(graph.config.locale).not.toBeNull();
+            expect(graph.config.hasThrottle).toEqual(!!input.throttle);
+            expect(graph.config.throttle).toEqual(constants.RESIZE_THROTTLE);
+            expect(graph.config.showLabel).toEqual(true);
+            expect(graph.config.showLegend).toEqual(true);
+            expect(graph.config.showSymbols).toEqual(true);
+            expect(graph.config.showHGrid).toEqual(true);
+            expect(graph.config.showVGrid).toEqual(true);
+            expect(graph.config.dimension).toEqual({});
+            expect(graph.config.axis.x.type).toEqual(constants.AXIS_TYPE.DEFAULT);
+            expect(graph.config.axis.x.ticks).toEqual({});
+            expect(graph.config.axis.y.ticks).toEqual({});
+            expect(graph.config.axis.x.show).toEqual(true);
+            expect(graph.config.axis.y.show).toEqual(true);
+        });
+        it("processes the timeseries input correctly", () => {
+            const input = getAxes(axisTimeSeries);
+            graph = new Graph(input);
+            expect(graph.config.bindTo).toEqual(input.bindTo);
+            expect(graph.config.axis).not.toBeNull();
+            expect(graph.config.locale).not.toBeNull();
+            expect(graph.config.hasThrottle).toEqual(!!input.throttle);
+            expect(graph.config.throttle).toEqual(constants.RESIZE_THROTTLE);
+            expect(graph.config.showLabel).toEqual(true);
+            expect(graph.config.showLegend).toEqual(true);
+            expect(graph.config.showSymbols).toEqual(true);
+            expect(graph.config.showHGrid).toEqual(true);
+            expect(graph.config.showVGrid).toEqual(true);
+            expect(graph.config.dimension).toEqual({});
+            expect(graph.config.axis.x.type).toEqual(constants.AXIS_TYPE.TIME_SERIES);
+            expect(graph.config.axis.x.ticks).toEqual({});
+            expect(graph.config.axis.y.ticks).toEqual({});
+            expect(graph.config.axis.x.show).toEqual(true);
+            expect(graph.config.axis.y.show).toEqual(true);
+        });
+    });
+    describe("when beforeInit is called", () => {
+        describe("with normal type values", () => {
+            beforeEach(() => {
+                graph = new Graph(getAxes(axisDefault));
+            });
+            it("sets the graph container correctly", () => {
+                expect(graph.graphContainer).not.toBeNull();
+                expect(graph.graphContainer.node()).not.toBeNull();
+            });
+            it("gets the min bound for Y Axis correctly", () => {
+                expect(graph.config.axis[ constants.Y_AXIS ].lowerLimit).toBe(0);
+                expect(graph.config.axis[ constants.Y_AXIS ].dataRange.min).toBeUndefined();
+            });
+            it("gets the max bound for Y Axis correctly", () => {
+                expect(graph.config.axis[ constants.Y_AXIS ].upperLimit).toBe(20);
+                expect(graph.config.axis[ constants.Y_AXIS ].dataRange.max).toBeUndefined();
+            });
+            it("extends Y Axis domain, if lower bound is less", () => {
+                expect(graph.config.axis[ constants.Y_AXIS ].domain[ 0 ]).toBeLessThan(0);
+            });
+            it("extends Y Axis domain, if upper bound is less", () => {
+                expect(graph.config.axis[ constants.Y_AXIS ].domain[ 1 ]).toBeGreaterThan(20);
+            });
+        });
+        describe("with timeseries type values", () => {
+            beforeEach(() => {
+                graph = new Graph(getAxes(axisTimeSeries));
+            });
+            it("sets the graph container correctly", () => {
+                expect(graph.graphContainer).not.toBeNull();
+                expect(graph.graphContainer.node()).not.toBeNull();
+            });
+            it("gets the min bound for Y Axis correctly", () => {
+                expect(graph.config.axis[ constants.Y_AXIS ].lowerLimit).toBe(0);
+                expect(graph.config.axis[ constants.Y_AXIS ].dataRange.min).toBeUndefined();
+            });
+            it("gets the max bound for Y Axis correctly", () => {
+                expect(graph.config.axis[ constants.Y_AXIS ].upperLimit).toBe(20);
+                expect(graph.config.axis[ constants.Y_AXIS ].dataRange.max).toBeUndefined();
+            });
+        });
+        describe("with normal type values and input loaded", () => {
+            beforeEach(() => {
+                graph = new Graph(getAxes(axisDefault));
+                graph.loadContent(new Line(getData(valuesDefault)));
+            });
+            it("sets the graph container correctly", () => {
+                expect(graph.graphContainer).not.toBeNull();
+                expect(graph.graphContainer.node()).not.toBeNull();
+            });
+            it("gets the min bound for Y Axis correctly", () => {
+                expect(graph.config.axis[ constants.Y_AXIS ].lowerLimit).toBe(0);
+                expect(graph.config.axis[ constants.Y_AXIS ].dataRange.min).toBe(4);
+            });
+            it("gets the max bound for Y Axis correctly", () => {
+                expect(graph.config.axis[ constants.Y_AXIS ].upperLimit).toBe(20);
+                expect(graph.config.axis[ constants.Y_AXIS ].dataRange.max).toBe(35);
+            });
+            it("extends Y Axis domain, if lower bound is less", () => {
+                expect(graph.config.axis[ constants.Y_AXIS ].domain[ 0 ]).toBeLessThan(0);
+            });
+            it("extends Y Axis domain, if upper bound is less", () => {
+                expect(graph.config.axis[ constants.Y_AXIS ].domain[ 1 ]).toBeGreaterThan(20);
+            });
+        });
+        describe("with timeseries type values and input loaded", () => {
+            beforeEach(() => {
+                graph = new Graph(getAxes(axisTimeSeries));
+                graph.loadContent(new Line(getData(valuesTimeSeries)));
+            });
+            it("sets the graph container correctly", () => {
+                expect(graph.graphContainer).not.toBeNull();
+                expect(graph.graphContainer.node()).not.toBeNull();
+            });
+            it("gets the min bound for Y Axis correctly", () => {
+                expect(graph.config.axis[ constants.Y_AXIS ].lowerLimit).toBe(0);
+                expect(graph.config.axis[ constants.Y_AXIS ].dataRange.min).toBe(1);
+            });
+            it("gets the max bound for Y Axis correctly", () => {
+                expect(graph.config.axis[ constants.Y_AXIS ].upperLimit).toBe(20);
+                expect(graph.config.axis[ constants.Y_AXIS ].dataRange.max).toBe(100);
+            });
+        });
+    });
+    describe("when init is called", () => {
+        describe("with normal type values", () => {
+            beforeEach(() => {
+                graph = new Graph(getAxes(axisDefault));
+            });
+            it("sets canvas width", () => {
+                expect(graph.config.canvasWidth).not.toBe(0);
+                expect(graph.config.canvasWidth).toBe(1024);
+            });
+            it("sets canvas height", () => {
+                expect(graph.config.canvasHeight).not.toBe(0);
+                expect(graph.config.canvasHeight).toBeGreaterThan(0);
+            });
+            it("sets the height correctly", () => {
+                expect(graph.config.height).toBe(235);
+            });
+            it("returns the consumer set height if dimension is provided", () => {
+                graph = new Graph(Object.assign({ dimension }, getAxes(axisDefault), dimension));
+                expect(graph.config.height).toBe(dimension.height);
+            });
+            it("calculates X axis height", () => {
+                expect(graph.config.axisSizes.x).not.toBe(0);
+                expect(graph.config.axisSizes.x).not.toBeNull();
+                expect(graph.config.axisSizes.x).toBeGreaterThan(0);
+            });
+            it("calculates Y Axis width", () => {
+                expect(graph.config.axisSizes.y).not.toBe(0);
+                expect(graph.config.axisSizes.y).not.toBeNull();
+                expect(graph.config.axisSizes.y).toBeGreaterThan(0);
+            });
+            it("calculates X axis label height", () => {
+                expect(graph.config.axisLabelHeights.x).not.toBe(0);
+                expect(graph.config.axisLabelHeights.x).not.toBeNull();
+                expect(graph.config.axisLabelHeights.x).toBeGreaterThan(0);
+            });
+            it("calculates Y axis label width", () => {
+                expect(graph.config.axisLabelWidths.y).not.toBe(0);
+                expect(graph.config.axisLabelWidths.y).not.toBeNull();
+                expect(graph.config.axisLabelWidths.y).toBeGreaterThan(0);
+            });
+            it("calculates X axis d3 scale using domain and range", () => {
+                expect(graph.scale.x).not.toBeNull();
+                expect(graph.scale.x).toEqual(jasmine.any(Function));
+            });
+            it("calculates Y axis d3 scale using domain and range", () => {
+                expect(graph.scale.y).not.toBeNull();
+                expect(graph.scale.y).toEqual(jasmine.any(Function));
+            });
+        });
+        describe("with timeseries type values", () => {
+            beforeEach(() => {
+                graph = new Graph(getAxes(axisTimeSeries));
+            });
+            it("calculates X axis d3 scale using domain and range", () => {
+                expect(graph.scale.x).not.toBeNull();
+                expect(graph.scale.x).toEqual(jasmine.any(Function));
+            });
+            it("calculates Y axis d3 scale using domain and range", () => {
+                expect(graph.scale.y).not.toBeNull();
+                expect(graph.scale.y).toEqual(jasmine.any(Function));
+            });
+        });
+    });
+    describe("when generate is called", () => {
+        beforeEach(() => {
+            graph = new Graph(getAxes(axisDefault));
+        });
+        it("creates the container svg", () => {
+            const graphElem = document.querySelector(graph.config.bindTo);
+            expect(graphElem).not.toBeNull();
+            expect(graphElem.children[ 0 ].nodeName).toBe("DIV");
+            expect(graphElem.children[ 0 ].getAttribute("class")).toBe(styles.container);
+        });
+        it("creates the canvas svg", () => {
+            const canvas = fetchElementByClass(styles.container).firstChild;
+            expect(canvas).not.toBeNull();
+            expect(canvas.nodeName).toBe("svg");
+            expect(canvas.getAttribute("class")).toBe(styles.canvas);
+            expect(+canvas.getAttribute("height")).toBe(graph.config.canvasHeight);
+            expect(+canvas.getAttribute("width")).toBe(graph.config.canvasWidth - constants.BASE_CANVAS_WIDTH_PADDING);
+        });
+        it("creates defs element with height and width", () => {
+            const defElement = fetchElementByClass(styles.canvas).firstChild;
+            expect(defElement.nodeName).toBe("defs");
+            expect(defElement.firstChild.nodeName).toBe("clipPath");
+            expect(defElement.firstChild.firstChild.nodeName).toBe("rect");
+            expect(defElement.firstChild.firstChild.getAttribute("width")).toBe("100%");
+            expect(+defElement.firstChild.firstChild.getAttribute("height")).toBe(graph.config.canvasHeight);
+        });
+        describe("axes", () => {
+            it("creates the x axis markup", () => {
+                const xAxisElement = fetchElementByClass(styles.axisX);
+                expect(xAxisElement.getAttribute("class")).toBe(`${styles.axis} ${styles.axisX}`);
+            });
+            it("creates the y axis markup", () => {
+                const yAxisElement = fetchElementByClass(styles.axisY);
+                expect(yAxisElement.getAttribute("class")).toBe(`${styles.axis} ${styles.axisY}`);
+            });
+            it("hides x axis when not enabled", () => {
+                graph.destroy();
+                const hiddenAxisObj = utils.deepClone(axisTimeSeries);
+                hiddenAxisObj.x.show = false;
+                graph = new Graph(getAxes(hiddenAxisObj));
+                const xAxisElement = fetchElementByClass(styles.axisX);
+                expect(xAxisElement.getAttribute("class")).toBe(`${styles.axis} ${styles.axisX} hidden`);
+            });
+            it("hides y axis when not enabled", () => {
+                graph.destroy();
+                const hiddenAxisObj = utils.deepClone(axisTimeSeries);
+                hiddenAxisObj.y.show = false;
+                graph = new Graph(getAxes(hiddenAxisObj));
+                const yAxisElement = fetchElementByClass(styles.axisY);
+                expect(yAxisElement.getAttribute("class")).toBe(`${styles.axis} ${styles.axisY} hidden`);
+            });
+            it("hides x and y axis when not enabled", () => {
+                it("hides y axis when not enabled", () => {
+                    graph.destroy();
+                    const hiddenAxisObj = utils.deepClone(axisTimeSeries);
+                    hiddenAxisObj.x.show = false;
+                    hiddenAxisObj.y.show = false;
+                    graph = new Graph(getAxes(hiddenAxisObj));
+                    expect(fetchElementByClass(styles.axisY).getAttribute("class"))
+                        .toBe(`${styles.axis} ${styles.axisY} hidden`);
+                    expect(fetchElementByClass(styles.axisX).getAttribute("class"))
+                        .toBe(`${styles.axis} ${styles.axisX} hidden`);
+                });
+            });
+            describe("for timeseries type", () => {
+                it("creates x axis with ticks in default locale", () => {
+                    graph.destroy();
+                    const localeAxisObj = utils.deepClone(axisTimeSeries);
+                    localeAxisObj.x.ticks = {
+                        format: "%b %Y"
+                    };
+                    graph = new Graph(getAxes(localeAxisObj));
+
+                    const xAxisElement = fetchElementByClass(styles.axisX);
+                    const tick = xAxisElement.querySelector(".tick").querySelector("text");
+                    expect(tick.textContent).toBe("Jan 2016");
+                });
+                it("creates x axis with ticks in provided locale - DE", () => {
+                    graph.destroy();
+                    const localeAxisObj = utils.deepClone(axisTimeSeries);
+                    localeAxisObj.x.ticks = {
+                        format: "%b %Y"
+                    };
+                    graph = new Graph(Object.assign({ locale: LOCALE.de_DE }, getAxes(localeAxisObj)));
+
+                    const xAxisElement = fetchElementByClass(styles.axisX);
+                    const tick = xAxisElement.querySelector(".tick").querySelector("text");
+                    expect(tick.textContent).toBe("Jan 2016");
+                });
+                it("creates x axis with ticks in provided locale - FR", () => {
+                    graph.destroy();
+                    const localeAxisObj = utils.deepClone(axisTimeSeries);
+                    localeAxisObj.x.ticks = {
+                        format: "%b %Y"
+                    };
+                    graph = new Graph(Object.assign({ locale: LOCALE.fr_FR }, getAxes(localeAxisObj)));
+
+                    const xAxisElement = fetchElementByClass(styles.axisX);
+                    const tick = xAxisElement.querySelector(".tick").querySelector("text");
+                    expect(tick.textContent).toBe("janv. 2016");
+                });
+                it("creates x axis with ticks in provided locale - ES", () => {
+                    graph.destroy();
+                    const localeAxisObj = utils.deepClone(axisTimeSeries);
+                    localeAxisObj.x.ticks = {
+                        format: "%b %Y"
+                    };
+                    graph = new Graph(Object.assign({ locale: LOCALE.es_ES }, getAxes(localeAxisObj)));
+
+                    const xAxisElement = fetchElementByClass(styles.axisX);
+                    const tick = xAxisElement.querySelector(".tick").querySelector("text");
+                    expect(tick.textContent).toBe("ene 2016");
+                });
+                it("creates x axis with ticks in provided locale - PT_BR", () => {
+                    graph.destroy();
+                    const localeAxisObj = utils.deepClone(axisTimeSeries);
+                    localeAxisObj.x.ticks = {
+                        format: "%b %Y"
+                    };
+                    graph = new Graph(Object.assign({ locale: LOCALE.pt_BR }, getAxes(localeAxisObj)));
+
+                    const xAxisElement = fetchElementByClass(styles.axisX);
+                    const tick = xAxisElement.querySelector(".tick").querySelector("text");
+                    expect(tick.textContent).toBe("Jan 2016");
+                });
+            });
+            describe("for default type", () => {
+                it("creates x axis with ticks in default locale", () => {
+                    graph.destroy();
+                    const localeAxisObj = utils.deepClone(axisDefault);
+                    localeAxisObj.x.lowerLimit = 1000;
+                    localeAxisObj.x.upperLimit = 20000;
+                    graph = new Graph(getAxes(localeAxisObj));
+                    graph.loadContent(new Line(getData([
+                        {
+                            x: 3500,
+                            y: 4
+                        },
+                        {
+                            x: 15000,
+                            y: 7
+                        }
+                    ])));
+                    const xAxisElement = fetchElementByClass(styles.axisX);
+                    const tick = xAxisElement.querySelectorAll(".tick");
+                    expect(tick[ tick.length - 1 ].querySelector("text").textContent).toBe("20,000");
+                });
+                it("creates x axis with ticks in provided locale - DE", () => {
+                    graph.destroy();
+                    const localeAxisObj = utils.deepClone(axisDefault);
+                    localeAxisObj.x.lowerLimit = 1000;
+                    localeAxisObj.x.upperLimit = 20000;
+                    localeAxisObj.x.ticks = {
+                        format: "n"
+                    };
+                    graph = new Graph(Object.assign({ locale: LOCALE.de_DE }, getAxes(localeAxisObj)));
+                    graph.loadContent(new Line(getData([
+                        {
+                            x: 3500,
+                            y: 4
+                        },
+                        {
+                            x: 15000,
+                            y: 7
+                        }
+                    ])));
+                    const xAxisElement = fetchElementByClass(styles.axisX);
+                    const tick = xAxisElement.querySelectorAll(".tick");
+                    expect(tick[ tick.length - 1 ].querySelector("text").textContent).toBe("20.000");
+                });
+            });
+        });
+
+        describe("grid", () => {
+            it("creates the grid markup", () => {
+                const canvasElement = fetchElementByClass(styles.canvas);
+                expect(canvasElement.querySelector(`.${styles.grid}`)).not.toBeNull();
+                const gridElement = fetchElementByClass(styles.grid);
+                expect(gridElement.childElementCount).toBe(2);
+            });
+            it("creates the horizontal grid markup", () => {
+                const gridElement = fetchElementByClass(styles.grid);
+                expect(gridElement.querySelector(`.${styles.gridH}`)).not.toBeNull();
+                expect(gridElement.querySelector(`.${styles.gridH}`).nodeName).toBe("g");
+            });
+            it("creates the vertical grid markup", () => {
+                const gridElement = fetchElementByClass(styles.grid);
+                expect(gridElement.querySelector(`.${styles.gridV}`)).not.toBeNull();
+                expect(gridElement.querySelector(`.${styles.gridV}`).nodeName).toBe("g");
+            });
+            it("hides the horizontal grid if not enabled", () => {
+                graph.destroy();
+                graph = new Graph(Object.assign({
+                    showVGrid: true,
+                    showHGrid: false
+                }, getAxes(axisDefault)));
+
+                const gridElement = fetchElementByClass(styles.grid);
+                expect(gridElement.querySelector(`.${styles.gridH}`)).toBeNull();
+            });
+            it("hides the vertical grid if not enabled", () => {
+                graph.destroy();
+                graph = new Graph(Object.assign({
+                    showVGrid: false,
+                    showHGrid: true
+                }, getAxes(axisDefault)));
+
+                const gridElement = fetchElementByClass(styles.grid);
+                expect(gridElement.querySelector(`.${styles.gridV}`)).toBeNull();
+            });
+        });
+        describe("label", () => {
+            it("hides the label when not enabled", () => {
+                graph.destroy();
+                graph = new Graph(Object.assign({
+                    showLabel: false
+                }, getAxes(axisDefault)));
+
+                const canvasElement = fetchElementByClass(styles.canvas);
+                expect(canvasElement.querySelector(`.${styles.axisLabelX}`)).toBeNull();
+                expect(canvasElement.querySelector(`.${styles.axisLabelY}`)).toBeNull();
+            });
+            it("creates labels for x and y axes when text is present", () => {
+                graph.destroy();
+                graph = new Graph(getAxes(axisDefault));
+
+                const canvasElement = fetchElementByClass(styles.canvas);
+                expect(canvasElement.querySelector(`.${styles.axisLabelX}`)).not.toBeNull();
+                expect(canvasElement.querySelector(`.${styles.axisLabelY}`)).not.toBeNull();
+            });
+            it("creates label x axis when text is present", () => {
+                graph.destroy();
+                graph = new Graph(getAxes(axisDefault));
+
+                const xLabelElement = fetchElementByClass(styles.axisLabelX);
+                expect(xLabelElement.nodeName).toBe("g");
+                expect(xLabelElement.querySelector("tspan").textContent).toBe(axisDefault.x.label);
+            });
+            it("creates label y axis when text is present", () => {
+                graph.destroy();
+                graph = new Graph(getAxes(axisDefault));
+
+                const yLabelElement = fetchElementByClass(styles.axisLabelY);
+                expect(yLabelElement.nodeName).toBe("g");
+                expect(yLabelElement.querySelector("tspan").textContent).toBe(axisDefault.y.label);
+            });
+            it("doesnt create label x axis when text is not present", () => {
+                graph.destroy();
+                const labelAxisObj = utils.deepClone(axisDefault);
+                labelAxisObj.x.label = "";
+                graph = new Graph(getAxes(labelAxisObj));
+
+                const canvasElement = fetchElementByClass(styles.canvas);
+                expect(canvasElement.querySelector(`.${styles.axisLabelX}`)).toBeNull();
+            });
+            it("throws error when label y axis text is not present", () => {
+                expect(() => {
+                    graph.destroy();
+                    const labelAxisObj = utils.deepClone(axisDefault);
+                    labelAxisObj.y.label = "";
+                    graph = new Graph(getAxes(labelAxisObj));
+
+                }).toThrow(errors.THROW_MSG_NO_AXIS_LABEL_INFO);
+            });
+            it("sanitizes x axis label text", () => {
+                graph.destroy();
+                const labelAxisObj = utils.deepClone(axisDefault);
+                labelAxisObj.x.label = "<HELLO DUMMY X LABEL>";
+                graph = new Graph(getAxes(labelAxisObj));
+
+                const xLabelElement = fetchElementByClass(styles.axisLabelX);
+                expect(xLabelElement.querySelector("tspan").textContent).toBe("&lt;HELLO DUMMY X LABEL&gt;");
+            });
+            it("sanitizes y axis label text", () => {
+                graph.destroy();
+                const labelAxisObj = utils.deepClone(axisDefault);
+                labelAxisObj.y.label = "<HELLO DUMMY Y LABEL>";
+                graph = new Graph(getAxes(labelAxisObj));
+
+                const yLabelElement = fetchElementByClass(styles.axisLabelY);
+                expect(yLabelElement.querySelector("tspan").textContent).toBe("&lt;HELLO DUMMY Y LABEL&gt;");
+            });
+        });
+        describe("legend", () => {
+            it("hides legend when not enabled", () => {
+                graph.destroy();
+                graph = new Graph(Object.assign({
+                    showLegend: false
+                }, getAxes(axisDefault)));
+
+                const canvasElement = fetchElementByClass(styles.canvas);
+                expect(canvasElement.querySelector(`.${styles.legend}`)).toBeNull();
+            });
+        });
+        describe("validates content for unique keys", () => {
+            it("throws error if content doesn't have a unique key", () => {
+                graph = new Graph(Object.assign(getAxes(axisDefault)));
+                graph.loadContent(new Line(getData(valuesDefault)));
+                expect(() => {
+                    graph.loadContent(new Line(getData(valuesDefault)));
+                }).toThrow(errors.THROW_MSG_NON_UNIQUE_KEY);
+            });
+            it("doesn't throws error if content has unique keys", () => {
+                graph = new Graph(Object.assign(getAxes(axisDefault)));
+                graph.loadContent(new Line(getData(valuesDefault)));
+                expect(() => {
+                    const uniqueData = getData(valuesDefault);
+                    uniqueData.key = "uid_2";
+                    graph.loadContent(new Line(uniqueData));
+                }).not.toThrow(errors.THROW_MSG_NON_UNIQUE_KEY);
+            });
+        });
+        it("attaches event handlers", () => {
+            expect(graph.resizeHandler).not.toBeNull();
+            expect(graph.resizeHandler).toEqual(jasmine.any(Function));
+        });
+    });
+    describe("when resize is called", () => {
+        beforeEach(() => {
+            graph = new Graph(getAxes(axisDefault));
+        });
+        it("sets the canvas width correctly", () => {
+            const currentWidth = graph.config.canvasWidth;
+            expect(currentWidth).toBe(1024);
+            graphContainer.setAttribute("style", "width: 800px; height: 200px");
+            graph.resize();
+            expect(graph.config.canvasWidth).toBe(800);
+        });
+        it("calculates X axis d3 scale using domain and range", () => {
+            graph.resize();
+            expect(graph.scale.x).not.toBeNull();
+            expect(graph.scale.x).toEqual(jasmine.any(Function));
+        });
+        it("calculates Y axis d3 scale using domain and range", () => {
+            graph.resize();
+            expect(graph.scale.y).not.toBeNull();
+            expect(graph.scale.y).toEqual(jasmine.any(Function));
+        });
+        it("translates the canvas", () => {
+            graphContainer.setAttribute("style", "width: 800px; height: 200px");
+            graph.resize();
+            expect(+fetchElementByClass(styles.canvas).getAttribute("height")).not.toBe(0);
+            expect(+fetchElementByClass(styles.canvas).getAttribute("height")).toBeGreaterThan(0);
+            expect(+fetchElementByClass(styles.canvas).getAttribute("width")).toBe(790);
+        });
+    });
+    describe("when unload is called", () => {
+        const primaryContent = new Line(getData(valuesDefault));
+        const secondaryContent = new Line(getData(valuesDefault));
+        beforeEach(() => {
+            graph = new Graph(getAxes(axisDefault));
+            graph.loadContent(primaryContent);
+        });
+        it("throws error when unloading a content which isnt loaded", () => {
+            expect(() => {
+                graph.unloadContent(secondaryContent);
+            }).toThrow(errors.THROW_MSG_INVALID_OBJECT_PROVIDED);
+        });
+        it("Removes the content successfully", () => {
+            graph.unloadContent(primaryContent);
+            expect(graph.content).toEqual([]);
+            expect(graph.contentTargets).toEqual([]);
+            expect(graph.content.length).toBe(0);
+            expect(graph.contentTargets.length).toBe(0);
+        });
+    });
+    describe("when destruct is called", () => {
+        beforeEach(() => {
+            graph = new Graph(getAxes(axisDefault));
+            graph.destroy();
+        });
+        it("removes the canvas content", () => {
+            expect(fetchElementByClass(styles.canvas)).toBeNull();
+        });
+        it("removes the container content", () => {
+            expect(fetchElementByClass(styles.container)).toBeNull();
+        });
+        it("resets the API objects", () => {
+            expect(graph.config.canvasWidth).toBeUndefined();
+            expect(graph.config.canvasHeight).toBeUndefined();
+            expect(graph.config.axisSizes).toBeUndefined();
+            expect(graph.config.axisLabelWidths).toBeUndefined();
+            expect(graph.config.axisLabelHeights).toBeUndefined();
+            expect(graph.config).toEqual({});
+            expect(graph.axis).toEqual({});
+            expect(graph.scale).toEqual({});
+            expect(graph.svg).toBeNull();
+            expect(graph.resizeHandler).toBeNull();
+            expect(graph.content).toEqual([]);
+            expect(graph.contentTargets).toEqual([]);
+        });
+    });
+});

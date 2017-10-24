@@ -1,0 +1,182 @@
+import sinon from "sinon";
+import {
+    AXIS_TYPE,
+    COLORS
+} from "../../../main/js/helpers/constants";
+import utils from "../../../main/js/helpers/utils";
+
+const SYMBOLS = {
+    RHOMBUS: "RHOMBUS",
+    TEAR_DROP: "TEAR_DROP"
+};
+export const dataPointClickHandlerSpy = sinon.spy();
+/**
+ * Creates and returns an example input with data point values
+ * @param {Array} values - x and y co-ordinate values
+ * @param {boolean} isDefaultColor - if true, doesnt load the COLOR
+ * @param {boolean} isDefaultSymbol - if true, doesnt load the SYMBOL
+ * @param {boolean} isY2Axis - if true, then "y2"
+ * @returns {Object} input JSON
+ */
+export const getInput = (values = [], isDefaultColor = true, isDefaultSymbol = true, isY2Axis = false) => (
+    {
+        key: `uid_1`,
+        symbol: {
+            high: isDefaultSymbol ? "" : SYMBOLS.TEAR_DROP,
+            mid: isDefaultSymbol ? "" : SYMBOLS.RHOMBUS,
+            low: isDefaultSymbol ? "" : SYMBOLS.TEAR_DROP
+        },
+        color: {
+            high: isDefaultColor ? "" : COLORS[ Object.keys(COLORS)[ 1 ] ],
+            mid: isDefaultColor ? "" : COLORS[ Object.keys(COLORS)[ 2 ] ],
+            low: isDefaultColor ? "" : COLORS[ Object.keys(COLORS)[ 1 ] ]
+        },
+        onClick: dataPointClickHandlerSpy,
+        yAxis: isY2Axis ? "y2" : "y",
+        label: {
+            high: {
+                display: "Data Label High"
+            },
+            mid: {
+                display: "Data Label Median"
+            },
+            low: {
+                display: "Data Label Low"
+            }
+        },
+        values
+    }
+);
+/**
+ * Creates and returns an example input with custom axis
+ * @param {Object} axis - X and Y axis data
+ * @returns {Object} axes JSON
+ */
+export const getAxes = (axis = {}) => ({
+    bindTo: "#testPairedResult_carbon",
+    axis: utils.deepClone(axis)
+});
+export const axisTimeSeries = {
+    x: {
+        type: AXIS_TYPE.TIME_SERIES,
+        label: "X Label",
+        lowerLimit: "2016-01-01T12:00:00Z",
+        upperLimit: "2017-01-01T12:00:00Z"
+    },
+    y: {
+        label: "Y Label",
+        lowerLimit: 0,
+        upperLimit: 200
+    }
+};
+export const valuesTimeSeries = [
+    {
+        high: {
+            x: "2016-08-17T12:00:00Z",
+            y: 110
+        },
+        mid: {
+            x: "2016-08-18T12:00:00Z",
+            y: 70
+        },
+        low: {
+            x: "2016-08-19T02:00:00Z",
+            y: 30
+        }
+    },
+    {
+        high: {
+            x: "2016-10-17T09:00:00Z",
+            y: 160
+        },
+        mid: {
+            x: "2016-10-18T11:00:00Z",
+            y: 120
+        },
+        low: {
+            x: "2016-10-19T21:00:00Z",
+            y: 100
+        }
+    }
+];
+export const axisDefault = {
+    x: {
+        label: "X Label",
+        lowerLimit: 0,
+        upperLimit: 100
+    },
+    y: {
+        label: "Y Label",
+        lowerLimit: 0,
+        upperLimit: 200
+    }
+};
+export const valuesDefault = [
+    {
+        high: {
+            x: 45,
+            y: 350
+        },
+        mid: {
+            x: 45,
+            y: 146
+        },
+        low: {
+            x: 45,
+            y: 75
+        }
+
+    },
+    {
+        high: {
+            x: 470,
+            y: 110
+        },
+        mid: {
+            x: 470,
+            y: 70
+        },
+        low: {
+            x: 470,
+            y: 30
+        }
+    },
+    {
+        high: {
+            x: 300,
+            y: 150
+        },
+        mid: {
+            x: 300,
+            y: 80
+        },
+        low: {
+            x: 300,
+            y: 50
+        }
+    }
+];
+
+/**
+ * Returns the DOM element queried by Class
+ * @param {HTMLElement} id - Id attribute name
+ * @param {string} cls - Class attribute name
+ * @returns {HTMLElement} - DOM element
+ */
+export const fetchElementByClass = (id, cls) => id.querySelector(`.${cls}`);
+
+/**
+ * Triggers an event on provided element
+ * @param {HTMLElement} element - DOM element
+ * @param {string} eventName - event name
+ * @param {Function} [done] - to be called once triggering is complete
+ * @returns {undefined} returns nothing
+ */
+export const triggerEvent = (element, eventName, done) => {
+    const event = document.createEvent("Event");
+    event.initEvent(eventName, true, true);
+    element.dispatchEvent(event);
+    if (done) {
+        done();
+    }
+};

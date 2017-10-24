@@ -1,0 +1,27 @@
+@import "../variables";
+
+.carbon-line path {
+    fill: none;
+    stroke-width: 1px;
+    &.carbon-highlight {
+        stroke-width: 0.2rem;
+        .transform-transition(stroke-width, @default-transition-delay, @default-transition-timing);
+    }
+}
+
+.carbon-selected-data-point {
+    display: block;
+    cursor: pointer;
+    stroke: @accent-bg-20;
+    fill: @accent-fg-30;
+    fill-opacity: 0.15;
+    .basic-transition(opacity, @default-transition-delay, @default-transition-timing);
+    &.hidden {
+        opacity: 0;
+    }
+}
+
+.carbon-point {
+    cursor: pointer;
+    .basic-transition(opacity, @default-transition-delay, @default-transition-timing);
+}

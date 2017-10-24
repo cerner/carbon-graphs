@@ -1,0 +1,97 @@
+{
+  "name": "carbon-graphs",
+  "version": "0.0.1",
+  "description": "A graphing library built using d3 based on Cerner design standards",
+  "keywords": [
+    "d3",
+    "d3-module",
+    "graphs",
+    "graphing"
+  ],
+  "main": "dist/lib/js/carbon-graphs.js",
+  "jsnext:main": "index",
+  "homepage": "https://github.cerner.com/Geneva/carbon-graphs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.cerner.com/Geneva/carbon-graphs.git"
+  },
+  "bugs": "https://github.cerner.com/Geneva/carbon-graphs/issues",
+  "scripts": {
+    "build": "webpack --config ./build/webpack/webpack.config.js --env.TYPE=LIB",
+    "build:dist": "webpack --config ./build/webpack/webpack.config.js --env.TYPE=DIST",
+    "deploy:site": "npm run docs && npm run prepush && webpack --config ./build/webpack/site.webpack.js --env.TYPE=SITE && gh-pages -d .site -m \"Upgrade: Deploy site\"",
+    "dev": "node ./build/webpack/dev-server.js --env.TYPE=DEV",
+    "docs": "node_modules/.bin/jsdoc -c jsdoc.json",
+    "test": "karma start ./build/karma/karma.config.js --single-run --no-auto-watch",
+    "test:persist": "karma start ./build/karma/karma.config.js --no-single-run",
+    "test:chrome": "karma start ./build/karma/karma.config.js --no-single-run --browsers Chrome",
+    "lint:styles": "stylelint src/main/less/**/*.less",
+    "lint:source": "eslint src --color --max-warnings 0",
+    "lint": "npm run lint:source && npm run lint:styles",
+    "lint:fix": "eslint src --color --fix",
+    "prepublish": "in-publish && npm run build && npm run build:dist || not-in-publish",
+    "prepush": "npm run lint && npm run test"
+  },
+  "devDependencies": {
+    "autoprefixer": "^7.1.6",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-istanbul": "^4.1.5",
+    "babel-plugin-transform-es2015-classes": "^6.24.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-babili": "^0.1.4",
+    "babel-preset-es2015": "^6.24.1",
+    "css-loader": "^0.28.7",
+    "docdash": "^0.4.0",
+    "eslint": "^4.9.0",
+    "eslint-plugin-ideal": "^0.1.3",
+    "extract-text-webpack-plugin": "^3.0.1",
+    "fusion-make": "1.6.2",
+    "gh-pages": "^1.0.0",
+    "html-webpack-plugin": "^2.30.1",
+    "husky": "^0.14.3",
+    "in-publish": "^2.0.0",
+    "jasmine-core": "^2.8.0",
+    "jsdoc": "^3.5.5",
+    "karma": "^1.7.1",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-coverage": "^1.1.1",
+    "karma-jasmine": "^1.1.0",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-webpack": "^2.0.5",
+    "less": "^2.7.3",
+    "less-loader": "^4.0.5",
+    "loader-utils": "^1.1.0",
+    "postcss-loader": "^2.0.8",
+    "puppeteer": "^0.12.0",
+    "sinon": "^4.0.1",
+    "style-loader": "^0.19.0",
+    "stylelint": "^8.2.0",
+    "webpack": "^3.8.1",
+    "webpack-dev-server": "2.7.1",
+    "webpack-merge": "^4.1.0"
+  },
+  "dependencies": {
+    "c3": "^0.4.18",
+    "d3": "^3.5.17"
+  },
+  "files": [
+    ".npmrc",
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=6.5"
+  },
+  "browsers": [
+    "Android 2.3",
+    "Android >= 4",
+    "Chrome >= 35",
+    "Firefox >= 31",
+    "Explorer >= 9",
+    "iOS >= 7",
+    "Opera >= 12",
+    "Safari >= 7.1"
+  ]
+}

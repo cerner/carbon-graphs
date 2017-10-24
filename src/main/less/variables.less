@@ -1,0 +1,42 @@
+@base: #fff;
+@inverse: #1c1f21;
+@grey30: #bcbfc0;
+@grey10: #e8e9ea;
+@medium-bg-30: #dedfe0;
+@medium: #9b9fa1;
+@accent-fg-30: #007cc3;
+@accent-bg-20: #a6d9f4;
+@accent-bg-40: #ebf6fd;
+
+/*
+Animations should be fast and nimble, never keeping the user waiting longer than is necessary.
+The aim is to prioritize user-perceived performance over technical benchmarks.
+Animations should last 150ms–250ms and should feel quick and responsive.
+Using cubic-bezier with ->
+Incoming Velocity: 70%
+Outgoing Velocity: 0%
+We quickly accelerate at the beginning of the animation and slowly decelerate by the end.
+*/
+@default-transition-timing: cubic-bezier(0.07, 0.95, 0, 1);
+@default-transition-delay: 0.3s;
+
+.font-smooth() {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.basic-transition(@property, @delay, @timing) {
+    -moz-transition: @property @delay @timing;
+    -webkit-transition: @property @delay @timing;
+    -ms-transition: @property @delay @timing;
+    -o-transition: @property @delay @timing;
+    transition: @property @delay @timing;
+}
+
+.transform-transition (@property, @delay, @timing) {
+    -moz-transition: @property @delay @timing, -moz-transform @delay @timing;
+    -webkit-transition: @property @delay @timing, -webkit-transform @delay @timing;
+    -ms-transition: @property @delay @timing, -ms-transform @delay @timing;
+    -o-transition: @property @delay @timing, -o-transform @delay @timing;
+    transition: @property @delay @timing, transform @delay @timing;
+}

@@ -1,0 +1,98 @@
+@import "variables";
+
+svg:not(:root) {
+    overflow: hidden;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.carbon-graph-container {
+    display: block;
+    color: @inverse;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    vertical-align: middle;
+    width: 100%;
+}
+
+.carbon-graph-canvas {
+    overflow-x: hidden;
+    overflow-y: auto;
+    box-sizing: border-box;
+    .font-smooth();
+}
+
+.carbon-axis path,
+.carbon-axis line {
+    fill: none;
+    stroke: @grey30;
+}
+
+.carbon-axis,
+.carbon-grid line {
+    shape-rendering: crispEdges;
+}
+
+.carbon-axis-x,
+.carbon-axis-y {
+    &.hidden {
+        display: none;
+    }
+}
+
+.carbon-grid line {
+    stroke: @grey10;
+}
+
+.carbon-no-data-text {
+    fill: @inverse;
+}
+
+.carbon-legend {
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-flow: row wrap;
+    flex: 1 1 100%;
+    margin: 0;
+    & .carbon-legend-item {
+        display: flex;
+        align-items: center;
+        margin: 1rem 0.5rem;
+        padding: 0.25rem 0.5rem;
+        cursor: pointer;
+        outline: 0;
+        user-select: none;
+        &:hover {
+            background-color: @accent-bg-40;
+        }
+        & .carbon-legend-item-btn {
+            min-width: 2rem;
+            min-height: 2rem;
+            margin: 0 0.5rem 0 0;
+            padding: 0;
+            cursor: pointer;
+            border-radius: 0.25rem;
+            border: 1px solid @medium-bg-30;
+            background-color: @medium-bg-30;
+        }
+        & .carbon-legend-item-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+    }
+
+    & .carbon-legend-item[aria-selected="false"] {
+        & > .carbon-legend-item-btn {
+            background-color: @base;
+        }
+        & > .carbon-legend-item-text {
+            color: @medium;
+        }
+    }
+}
+
+.carbon-blur {
+    opacity: 0.2;
+    .transform-transition(opacity, @default-transition-delay, @default-transition-timing);
+}

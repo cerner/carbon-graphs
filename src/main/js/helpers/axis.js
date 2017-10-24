@@ -1,0 +1,517 @@
+"use strict";
+import d3 from "d3";
+import { getScale } from "../core/BaseConfig";
+import constants from "../helpers/constants";
+import styles from "../helpers/styles";
+import utils from "../helpers/utils";
+import { DEFAULT_TICK_FORMAT } from "../locale";
+
+const PADDING = constants.PADDING;
+const DEFAULT_HEIGHT = constants.DEFAULT_HEIGHT;
+/**
+ * Create the d3 Axes - X, Y and Y2 and append into the canvas.
+ * If axis.x.show, axis.y.show or axis.y2.show is set to false:
+ * then the axis will be hidden
+ * @private
+ * @param {Object} axis - Axis scaled according to input parameters
+ * @param {Object} scale - d3 scale taking into account the input parameters
+ * @param {Object} config - config object derived from input JSON
+ * @param {Object} canvasSVG - d3 object of canvas svg
+ * @returns {undefined} - returns nothing
+ */
+const createAxes = (axis, scale, config, canvasSVG) => {
+    axis.x = prepareXAxis(scale.x, config.axis.x.ticks.values, getXAxisWidth(config),
+        getAxisTickFormat(config.locale, config.axis.x.ticks.format, config.axis.x.type));
+    axis.y = prepareYAxis(scale.y, config.axis.y.ticks.values, config.height,
+        getAxisTickFormat(config.locale, config.axis.y.ticks.format));
+    canvasSVG.append("g")
+             .classed(styles.axis, true)
+             .classed(styles.axisX, true)
+             .classed("hidden", !config.axis.x.show)
+             .attr("transform", `translate(${getXAxisXPosition(config)}, ${getXAxisYPosition(config)})`)
+             .call(axis.x);
+    canvasSVG.append("g")
+             .classed(styles.axis, true)
+             .classed(styles.axisY, true)
+             .classed("hidden", !config.axis.y.show)
+             .attr("transform", `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition()})`)
+             .call(axis.y);
+    if (hasY2Axis(config.axis)) {
+        axis.y2 = prepareY2Axis(scale.y2, config.axis.y2.ticks.values, config.height,
+            getAxisTickFormat(config.locale, config.axis.y2.ticks.format));
+        canvasSVG.append("g")
+                 .classed(styles.axis, true)
+                 .classed(styles.axisY2, true)
+                 .attr("transform", `translate(${getY2AxisXPosition(config)}, ${getY2AxisYPosition()})`)
+                 .call(axis.y2);
+    }
+};
+/**
+ * Ticks can be formatted by passing the format string via input JSON.
+ * * For formatting numbers (x,y,y2 axes ticks) use Python specifiers.
+ * * Ticks can also be formatted for date time inputs.
+ * @private
+ * @see https://docs.python.org/2/library/string.html#format-specification-mini-language
+ * @see https://github.com/d3/d3-time-format/blob/master/README.md#locales
+ * @param {Object} locale - d3 Locale object
+ * @param {string} format - tick format string
+ * @param {string} type - default or timeseries chart type
+ * @returns {Object} d3 locale object formatter
+ */
+const getAxisTickFormat = (locale, format, type = constants.AXIS_TYPE.DEFAULT) => {
+    if (utils.isEmpty(format)) {
+        return DEFAULT_TICK_FORMAT;
+    }
+    if (type === constants.AXIS_TYPE.TIME_SERIES) {
+        return locale.timeFormat(format);
+    }
+    else {
+        return locale.numberFormat(format);
+    }
+};
+
+/**
+ * Creates the axis using the scale provided for X Axis using d3 svg axis.
+ * If tickValues are provided then they are reserved precedence over ticks/tick counts.
+ * @private
+ * @param {Object} scale - d3 scale calculated using domain and range
+ * @param {Array} tickValues - Array of values that represent the tick values
+ * @param {number} width - Width of the canvas which will be used to tell d3 how many ticks to
+ * keep in the X axis
+ * @param {Object} format - d3 locale object formatted to represent the tick.
+ * @returns {Object} d3 object which forms the x-axis scale
+ */
+const prepareXAxis = (scale, tickValues, width, format) =>
+    d3.svg.axis().scale(scale)
+      .orient("bottom")
+      .ticks(Math.max((width / constants.MAX_TICK_VARIANCE), constants.MIN_TICKS))
+      .tickValues(utils.notEmpty(tickValues) ? tickValues : null)
+      .tickFormat(format);
+/**
+ * Creates the axis using the scale provided for Y Axis using d3 svg axis
+ * @private
+ * @param {Object} scale - d3 scale calculated using domain and range
+ * @param {Array} tickValues - Array of values that represent the tick values
+ * @param {number} height - Height of the Y Axis to calculate the number of Y Axis ticks
+ * @param {Object} format - d3 locale object formatted to represent the tick.
+ * @returns {Object} d3 object which forms the y-axis scale
+ */
+const prepareYAxis = (scale, tickValues, height, format) =>
+    d3.svg.axis().scale(scale)
+      .orient("left")
+      .ticks((height / constants.DEFAULT_Y_AXIS_SPACING))
+      .tickValues(utils.notEmpty(tickValues) ? tickValues : null)
+      .tickFormat(format);
+/**
+ * Creates the axis using the scale provided for Y2 Axis using d3 svg axis
+ * @private
+ * @param {Object} scale - d3 scale calculated using domain and range
+ * @param {Array} tickValues - Array of values that represent the tick values
+ * @param {number} height - Height of the Y2 Axis to calculate the number of Y2 Axis ticks
+ * @param {Object} format - d3 locale object formatted to represent the tick.
+ * @returns {Object} d3 object which forms the y2-axis scale
+ */
+const prepareY2Axis = (scale, tickValues, height, format) =>
+    d3.svg.axis().scale(scale)
+      .orient("right")
+      .ticks((height / constants.DEFAULT_Y_AXIS_SPACING))
+      .tickValues(utils.notEmpty(tickValues) ? tickValues : null)
+      .tickFormat(format);
+/**
+ * Returns the number of degrees the rotation of axis needs to be performed based on axis
+ * @private
+ * @param {string} axis - X, Y or Y2 axis
+ * @returns {number} amount of degrees the rotation needs to be performed
+ */
+const getRotationForAxis = (axis) => {
+    switch (axis) {
+        case constants.Y_AXIS:
+            return -90;
+        case constants.Y2_AXIS:
+            return 90;
+        default:
+            return 0;
+    }
+};
+/**
+ * X Axis label's starting position below the graph
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @returns {number} Position for the label
+ */
+const getXAxisLabelXPosition = (config) =>
+    getXAxisXPosition(config) + (getXAxisWidth(config) / 2);
+/**
+ * X Axis label's position vertically below the graph
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @returns {number} Position for the label
+ */
+const getXAxisLabelYPosition = (config) =>
+    getXAxisYPosition(config) + (config.axisLabelHeights.x * 2) + PADDING.bottom;
+/**
+ * Y Axis label's starting position vertically beside the graph
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @returns {number} Position for the label
+ */
+const getYAxisLabelXPosition = (config) =>
+    getYAxisXPosition(config) - config.axisSizes.y + config.axisLabelWidths.y;
+/**
+ * Y Axis label's position distance away from the graph
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @returns {number} Position for the label
+ */
+const getYAxisLabelYPosition = (config) =>
+    getYAxisYPosition() + ((DEFAULT_HEIGHT - PADDING.top - PADDING.bottom) / 2)
+    * config.outlierStretchFactor.upperLimit;
+/**
+ * Y2 Axis label's starting position vertically beside the graph
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @returns {number} Position for the label
+ */
+const getY2AxisLabelXPosition = (config) =>
+    getY2AxisXPosition(config) + config.axisSizes.y2 - PADDING.right +
+    config.axisLabelWidths.y2;
+/**
+ * X Axis's starting position within the canvas
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @returns {number} Position for the axis
+ */
+const getXAxisXPosition = (config) => config.axisSizes.y + config.axisLabelWidths.y;
+/**
+ * X Axis's position vertically relative to the canvas
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @returns {number} Position for the axis
+ */
+const getXAxisYPosition = (config) => getYAxisHeight(config) + PADDING.bottom;
+/**
+ * Y Axis's starting position relative to the canvas
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @returns {number} Position for the axis
+ */
+const getYAxisXPosition = (config) => getXAxisXPosition(config);
+/**
+ * Y Axis's position vertically relative to the canvas
+ * @private
+ * @returns {number} Position for the axis
+ */
+const getYAxisYPosition = () => PADDING.top;
+/**
+ * Y2 Axis's starting position relative to the canvas
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @returns {number} Position for the axis
+ */
+const getY2AxisXPosition = (config) => getYAxisXPosition(config) + getXAxisWidth(config);
+/**
+ * Y2 Axis's position vertically relative to the canvas
+ * @private
+ * @returns {number} Position for the axis
+ */
+const getY2AxisYPosition = () => PADDING.top;
+/**
+ * X Axis's width that will hold equally spaced ticks
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @returns {number} X Axis width
+ */
+const getXAxisWidth = (config) => config.canvasWidth - config.axisSizes.y - config.axisSizes.y2 -
+    config.axisLabelWidths.y - config.axisLabelWidths.y2;
+/**
+ * Y Axis height for the axis and canvas region to clip the chart within
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @returns {number} Height of the canvas
+ */
+const getYAxisHeight = (config) => config.height;
+/**
+ * X Axis height for the axis and labels to display within
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @returns {Number} Height of the X Axis ticks, labels and numbers/datetimes
+ */
+const getXAxisHeight = (config) => {
+    const scale = getScale(config.axis.x.type).domain(config.axis.x.domain).range([ 0, config.canvasWidth ]);
+    const axis = d3.svg.axis().scale(scale).orient("bottom");
+    const dummy = d3.select("body").append("div");
+    const svg = dummy.append("svg");
+    svg.append("g").call(axis);
+    const height = svg.node().getBoundingClientRect().height;
+    dummy.remove();
+    return height;
+};
+/**
+ * X Axis range used to instruct d3 when creating a scale
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @returns {Array} lower and upper bound forming the range
+ */
+const getXAxisRange = (config) => [ 0, getXAxisWidth(config) ];
+/**
+ * Y Axis range used to instruct d3 when creating a scale
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @returns {Array} lower and upper bound forming the range
+ */
+const getYAxisRange = (config) => [ getYAxisHeight(config), 0 ];
+/**
+ * Dynamically generate the label width for axes
+ * @private
+ * @param {string} label - Label text
+ * @param {string} axis - x, y or y2
+ * @returns {Number} label width
+ */
+const getAxisLabelWidth = (label, axis) => {
+    const dummy = d3.select("body").append("div");
+    const svg = dummy.append("svg");
+    const grouper = svg.append("g").attr("transform", `rotate(${getRotationForAxis(axis)})`);
+    buildAxisLabel(grouper, label);
+    const width = grouper.node().getBoundingClientRect().width;
+    dummy.remove();
+    return width;
+};
+/**
+ * Dynamically generate the label height for axes
+ * @private
+ * @param {string} label - Label text
+ * @returns {Number} label height
+ */
+const getAxisLabelHeight = (label) => {
+    const dummy = d3.select("body").append("div");
+    const svg = dummy.append("svg");
+    const grouper = svg.append("g");
+    buildAxisLabel(grouper, label);
+    const height = grouper.node().getBoundingClientRect().height;
+    dummy.remove();
+    return height;
+};
+/**
+ * Dynamically generate the label width for y axes
+ * @private
+ * @param {string} id - y or y2
+ * @param {Object} config - config object derived from input JSON
+ * @returns {Number} label width
+ */
+const getYAxisWidth = (id, config) => {
+    const scale = d3.scale.linear().domain(config.axis[ id ].domain).range([ config.height, 0 ]);
+    const axis = d3.svg.axis().scale(scale).orient("left");
+    const dummy = d3.select("body").append("div");
+    const svg = dummy.append("svg");
+    const yAxisSVG = svg.append("g").call(axis);
+    const width = yAxisSVG.node().getBoundingClientRect().width;
+    dummy.remove();
+    return width;
+};
+/**
+ * Calculates axes sizes, specifically:
+ *  X Axis: Height
+ *  Y Axis: Width
+ *  Y2 Axis: Width
+ *  @private
+ *  @param {Object} config - config object derived from input JSON
+ *  @returns {undefined} - returns nothing
+ */
+const calculateAxesSize = (config) => {
+    config.axisSizes = {};
+
+    config.axisSizes.y = getYAxisWidth(constants.Y_AXIS, config) + PADDING.left;
+    config.axisSizes.y2 = (hasY2Axis(config.axis) ? getYAxisWidth(constants.Y2_AXIS, config) : 20) + PADDING.right;
+    config.axisSizes.x = getXAxisHeight(config);
+};
+/**
+ * Calculates axes label sizes, specifically:
+ *  X Axis Label: Height
+ *  Y Axis Label: Width
+ *  Y2 Axis Label: Width
+ *  @private
+ *  @param {Object} config - config object derived from input JSON
+ *  @returns {undefined} - returns nothing
+ */
+const calculateAxesLabelSize = (config) => {
+    config.axisLabelHeights = {};
+    config.axisLabelWidths = {};
+
+    config.axisLabelHeights.x = 0;
+    config.axisLabelWidths.y = 0;
+    config.axisLabelWidths.y2 = 0;
+    if (config.showLabel) {
+        if (config.axis.x.label) {
+            config.axisLabelHeights.x = getAxisLabelHeight(config.axis.x.label);
+        }
+        if (config.axis.y.label) {
+            config.axisLabelWidths.y = getAxisLabelWidth(config.axis.y.label, constants.Y_AXIS);
+        }
+        if (hasY2Axis(config.axis) && config.axis.y2.label) {
+            config.axisLabelWidths.y2 =
+                hasY2Axis(config.axis) ? getAxisLabelWidth(config.axis.y2.label, constants.Y2_AXIS) : 0;
+        }
+    }
+};
+/**
+ * Determines if the values provided exceed the lower and upper bounds provided in the Y or Y2 axes
+ * If the values exceed the bounds then the range and domain are adjusted accordingly.
+ * There is no outlier check for X axis, for now, due to the possibility that X axis can be a timeseries.
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @returns {Object} stretch factor determines the new upper and lower limit.
+ */
+const determineOutlierStretchFactor = (config) => {
+    const yAxes = [ constants.Y_AXIS ];
+    const upperStretchFactors = [];
+    const lowerStretchFactors = [];
+    const stretchFactor = {};
+    const getMinValue = (config, yAxis, axisMinValue) => {
+        const dataRangeMinValue = config.axis[ yAxis ].dataRange.min;
+        return dataRangeMinValue < axisMinValue ? dataRangeMinValue : axisMinValue;
+    };
+    const getMaxValue = (config, yAxis, axisMaxValue) => {
+        const dataRangeMaxValue = config.axis[ yAxis ].dataRange.max;
+        return dataRangeMaxValue > axisMaxValue ? dataRangeMaxValue : axisMaxValue;
+    };
+    const getMidPoint = (config, yAxis) => {
+        const axisMidValue = (config.axis[ yAxis ].domain[ 1 ] - config.axis[ yAxis ].domain[ 0 ]) / 2;
+        return config.axis[ yAxis ].domain[ 0 ] + axisMidValue;
+    };
+    if (hasY2Axis(config.axis)) {
+        yAxes.push(constants.Y2_AXIS);
+    }
+    yAxes.forEach((yAxis) => {
+        if (config.axis[ yAxis ].domain) {
+            const axisMinValue = config.axis[ yAxis ].domain[ 0 ];
+            const axisMaxValue = config.axis[ yAxis ].domain[ 1 ];
+            const minValue = getMinValue(config, yAxis, axisMinValue);
+            const maxValue = getMaxValue(config, yAxis, axisMaxValue);
+            const axisMidPoint = getMidPoint(config, yAxis);
+            const lowerStretchFactor = Math.abs((axisMidPoint - minValue) / (axisMidPoint - axisMinValue));
+            const upperStretchFactor = Math.abs((maxValue - axisMidPoint) / (axisMaxValue - axisMidPoint));
+            upperStretchFactors.push(upperStretchFactor > 1 ? upperStretchFactor : 1);
+            lowerStretchFactors.push(lowerStretchFactor > 1 ? lowerStretchFactor : 1);
+        }
+    });
+    stretchFactor.upperLimit = upperStretchFactors.sort((firstValue, secondValue) => secondValue - firstValue)[ 0 ];
+    stretchFactor.lowerLimit = lowerStretchFactors.sort((firstValue, secondValue) => secondValue - firstValue)[ 0 ];
+    return stretchFactor;
+};
+/**
+ * Returns the d3 html element after appending axis label text
+ * @private
+ * @param {Array} grouper - d3 html element
+ * @param {string} label - Label text
+ * @returns {Array} d3 html element
+ */
+const buildAxisLabel = (grouper, label) => grouper.append("text")
+                                                  .attr("text-anchor", "middle")
+                                                  .append("tspan")
+                                                  .text(label);
+/**
+ * Decides true if the input JSON y2.show is enabled and if y2 axis points are provided
+ * @private
+ * @param {Object} axis - x, y and y2 axes values
+ * @returns {boolean} True if enabled
+ */
+const hasY2Axis = (axis) => utils.isDefined(axis.y2) && axis.y2.show;
+/**
+ * Updates the x, y and y2 (if enabled) positions on resize
+ * @private
+ * @param {Object} axis - Axis scaled according to input parameters
+ * @param {Object} scale - d3 scale taking into account the input parameters
+ * @param {Object} config - config object derived from input JSON
+ * @param {Object} canvasSVG - d3 object of canvas svg
+ * @returns {undefined} - returns nothing
+ */
+const translateAxes = (axis, scale, config, canvasSVG) => {
+    axis.x = prepareXAxis(scale.x, config.axis.x.ticks.values, getXAxisWidth(config),
+        getAxisTickFormat(config.locale, config.axis.x.ticks.format, config.axis.x.type));
+    axis.y = prepareYAxis(scale.y, config.axis.y.ticks.values, config.height,
+        getAxisTickFormat(config.locale, config.axis.y.ticks.format));
+    canvasSVG.select(`.${styles.axisX}`)
+             .attr("transform", `translate(${getXAxisXPosition(config)}, ${getXAxisYPosition(config)})`)
+             .call(axis.x);
+    canvasSVG.select(`.${styles.axisY}`)
+             .transition(constants.TRANSITION_FUNCTION)
+             .duration(constants.TRANSITION_DURATION)
+             .attr("transform", `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition()})`)
+             .call(axis.y);
+    if (hasY2Axis(config.axis)) {
+        axis.y2 = prepareY2Axis(scale.y2, config.axis.y2.ticks.values, config.height,
+            getAxisTickFormat(config.locale, config.axis.y2.ticks.format));
+        canvasSVG.select(`.${styles.axisY2}`)
+                 .transition(constants.TRANSITION_FUNCTION)
+                 .duration(constants.TRANSITION_DURATION)
+                 .attr("transform", `translate(${getY2AxisXPosition(config)}, ${getY2AxisYPosition()})`)
+                 .call(axis.y2);
+    }
+};
+/**
+ * Calculates the axes - x, y and y2 data range.
+ * For each data point provided, we need to set the min and max ranges.
+ * Data point sets [n]
+ *  Data points [n]
+ *      x, y, y2 [1]
+ * @private
+ * @param {Object} valuesRange - Object containing min and max data point values
+ * @param {string} axis - y or y2
+ * @param {Object} config - config object derived from input JSON
+ * @returns {undefined} - returns nothing
+ */
+const getAxesDataRange = (valuesRange = {}, axis = constants.Y_AXIS, config) => {
+    if (utils.isEmpty(config.axis.y.dataRange)) {
+        config.axis.y.dataRange = {};
+    }
+    if (hasY2Axis(config.axis) && utils.isEmpty(config.axis.y2.dataRange)) {
+        config.axis.y2.dataRange = {};
+    }
+    if (utils.isEmpty(valuesRange)) {
+        return;
+    }
+    const prevMin = config.axis[ axis ].dataRange.oldMin;
+    const prevMax = config.axis[ axis ].dataRange.oldMax;
+    const isRangeModified = (!(prevMin && prevMax) || !(prevMin <= valuesRange[ axis ].min || prevMax >= valuesRange[ axis ].max));
+    config.axis[ axis ].dataRange.isRangeModified = isRangeModified;
+    if (isRangeModified) {
+        config.axis[ axis ].dataRange.oldMin = config.axis[ axis ].dataRange.min;
+        config.axis[ axis ].dataRange.oldMax = config.axis[ axis ].dataRange.max;
+        config.axis[ axis ].dataRange.min = valuesRange[ axis ].min;
+        config.axis[ axis ].dataRange.max = valuesRange[ axis ].max;
+    }
+};
+
+export {
+    prepareXAxis,
+    prepareYAxis,
+    prepareY2Axis,
+    getRotationForAxis,
+    getXAxisLabelXPosition,
+    getXAxisLabelYPosition,
+    getYAxisLabelXPosition,
+    getYAxisLabelYPosition,
+    getY2AxisLabelXPosition,
+    getXAxisXPosition,
+    getXAxisYPosition,
+    getYAxisXPosition,
+    getYAxisYPosition,
+    getY2AxisXPosition,
+    getY2AxisYPosition,
+    getXAxisWidth,
+    getYAxisHeight,
+    getXAxisHeight,
+    getXAxisRange,
+    getYAxisRange,
+    getAxisLabelWidth,
+    getAxisLabelHeight,
+    getYAxisWidth,
+    calculateAxesSize,
+    calculateAxesLabelSize,
+    determineOutlierStretchFactor,
+    buildAxisLabel,
+    createAxes,
+    getAxesDataRange,
+    hasY2Axis,
+    translateAxes
+};

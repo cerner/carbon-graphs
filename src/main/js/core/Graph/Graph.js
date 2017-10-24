@@ -1,0 +1,265 @@
+"use strict";
+import d3 from "d3";
+import {
+    calculateAxesLabelSize,
+    calculateAxesSize,
+    createAxes,
+    getAxesDataRange,
+    getYAxisHeight
+} from "../../helpers/axis";
+import constants from "../../helpers/constants";
+import errors from "../../helpers/errors";
+import { createLegend } from "../../helpers/legend";
+import styles from "../../helpers/styles";
+import utils from "../../helpers/utils";
+import GraphConfig, {
+    processInput,
+    validateContent
+} from "./GraphConfig";
+import {
+    attachEventHandlers,
+    createDefs,
+    createGrid,
+    createLabel,
+    detachEventHandlers,
+    determineHeight,
+    scaleGraph,
+    translateGraph,
+    updateAxesDomain
+} from "./helpers";
+
+const PADDING = constants.PADDING;
+const BASE_CANVAS_PADDING = constants.BASE_CANVAS_WIDTH_PADDING;
+/**
+ * Sets the canvas width
+ * @private
+ * @param {HTMLElement} container - d3 HTML element object which forms the chart container
+ * @param {Object} config - config object derived from input JSON
+ * @returns {undefined} - returns nothing
+ */
+const setCanvasWidth = (container, config) => {
+    config.canvasWidth = parseInt(container.style("width"), 10);
+};
+
+/**
+ * Sets the canvas width. Canvas rests within a container.
+ * On resize, the canvas is subjected to resizing but its sibling: Legend isnt.
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @returns {undefined} - returns nothing
+ */
+const setCanvasHeight = (config) => {
+    config.canvasHeight = getYAxisHeight(config) +
+        (PADDING.bottom + PADDING.top + config.axisLabelHeights.x) * 2;
+};
+
+/**
+ * Checks if the min max range of the values have changed or otherwise
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @param {string} yAxis - y or y2
+ * @returns {boolean} true if min-max range changed
+ */
+const isRangeModified = (config, yAxis = constants.Y_AXIS) => config.axis[ yAxis ].dataRange.isRangeModified;
+
+/**
+ * Data point sets can be loaded using this function.
+ * Load function validates, clones and stores the input onto a config object.
+ * @private
+ * @throws errors.THROW_MSG_NO_AXES_DATA_LOADED
+ * @param {Object} inputJSON - Input JSON provided by the consumer
+ * @returns {Object} config object containing consumer data
+ */
+const loadInput = (inputJSON) => {
+    if (utils.isEmpty(inputJSON)) {
+        throw errors.THROW_MSG_NO_AXES_DATA_LOADED;
+    }
+    return new GraphConfig()
+        .setInput(inputJSON)
+        .validateInput()
+        .clone()
+        .getConfig();
+};
+
+/**
+ * Executes the before init process checklist, needs to be called by parent control.
+ *  Binds the chart id provided in the input JSON to graph container.
+ *  Calculates the axes data ranges.
+ *  Updates the axes domains.
+ * @private
+ * @param {Graph} control - Graph instance
+ * @returns {Graph} Graph instance
+ */
+const beforeInit = (control) => {
+    control.graphContainer = d3.select(control.config.bindTo);
+    getAxesDataRange({}, "", control.config);
+    updateAxesDomain(control.config);
+    return control;
+};
+
+/**
+ * Executes the init process checklist, needs to be called by parent control.
+ * Needs to be called post calling beforeInit
+ *  Sets the canvas width within the graph container
+ *  Determines the height for canvas
+ *  Calculates Axes width and height
+ *  Calculates Axes label width and height, positioning
+ *  Creates and sets the d3 scale for the Graph
+ * @private
+ * @param {Graph} control - Graph instance
+ * @returns {Graph} Graph instance
+ */
+const init = (control) => {
+    control.config.height = determineHeight(control.config, control.config.dimension);
+    setCanvasWidth(control.graphContainer, control.config);
+    calculateAxesSize(control.config);
+    calculateAxesLabelSize(control.config);
+    setCanvasHeight(control.config);
+    scaleGraph(control.scale, control.config);
+    return control;
+};
+
+/**
+ * A common API used to plot everything except the datapoints and legend themselves.
+ * * Axes - X, Y and optional Y2 axis
+ * * Grid - Horizontal and vertical
+ * * X,Y,Y2 Axis ticks
+ * * Axes Labels
+ *
+ * Lifecycle functions include:
+ *  * BeforeInit
+ *  * Init
+ *  * Render
+ *  * AfterInit
+ *
+ * @class Graph
+ */
+class Graph {
+    constructor(input) {
+        this.graphContainer = null;
+        this.config = {};
+        this.config.axis = {};
+        this.config.axis.x = {};
+        this.config.axis.y = {};
+        this.config.axis.y2 = {};
+        this.config.shownTargets = {};
+        this.axis = {};
+        this.scale = {};
+        this.svg = null;
+        this.legendSVG = null;
+        this.content = [];
+        this.contentTargets = [];
+        this.resizeHandler = null;
+        this.generate(input);
+    }
+
+    /**
+     * Draw function that is called by the parent control. This draws the Axes, grid, legend and
+     * labels for the chart construct.
+     * @param {Object} input - Input JSON
+     * @returns {HTMLElement} d3 HTML element SVG.
+     */
+    generate(input) {
+        this.config = loadInput(input);
+        processInput(input, this.config, this.config.axis.x.type);
+        beforeInit(this);
+        init(this);
+        const containerSVG = d3.select(this.config.bindTo)
+                               .append("div")
+                               .classed(styles.container, true);
+        this.svg = containerSVG
+            .insert("svg", ":first-child")
+            .classed(styles.canvas, true)
+            .attr("role", "img")
+            .attr("height", this.config.canvasHeight)
+            .attr("width", this.config.canvasWidth - BASE_CANVAS_PADDING);
+        createDefs(this.config, this.svg);
+        createAxes(this.axis, this.scale, this.config, this.svg);
+        createGrid(this.axis, this.config, this.svg);
+        createLabel(this.config, this.svg);
+        if (this.config.showLegend) {
+            // If the consumer doesn't wish to show legend item then they can pass blank.
+            // The legend item wont be rendered at that point.
+            this.legendSVG = createLegend(containerSVG);
+        }
+        attachEventHandlers(this);
+        return this.svg;
+    }
+
+    /**
+     * Resizes the graph canvas. Uses the clipPath def.
+     * It scales the graph on resize, and translates the graph elements:
+     *  Axes
+     *  Grid
+     *  Labels
+     *  @returns {Graph} - Graph instance
+     */
+    resize() {
+        setCanvasWidth(this.graphContainer, this.config);
+        scaleGraph(this.scale, this.config);
+        translateGraph(this);
+        this.content.forEach((control) => control.resize(this));
+        return this;
+    }
+
+    /**
+     * Loads the content onto the graph.
+     * The content serves as a 1to1 relationship. For rendering
+     * multiple data sets respective number of content needs to be provided.
+     * @param {Object} content - Graph content
+     * @returns {Graph} - Graph instance
+     */
+    loadContent(content) {
+        validateContent(this.content, content);
+        this.content.push(content);
+        this.contentTargets.push(content.config);
+        getAxesDataRange(content.valuesRange, content.config.yAxis, this.config);
+        if (isRangeModified(this.config, content.config.yAxis)) {
+            updateAxesDomain(this.config);
+        }
+        content.load(this);
+        this.resize();
+        return this;
+    }
+
+    /**
+     * Unloads the content from the graph.
+     * The content serves as a 1to1 relationship. For rendering
+     * multiple data sets respective number of content needs to be provided.
+     * @param {Object} content - Graph content to be removed
+     * @returns {Graph} - Graph instance
+     */
+    unloadContent(content) {
+        const index = this.content.indexOf(content);
+        if (index < 0) {
+            throw errors.THROW_MSG_INVALID_OBJECT_PROVIDED;
+        }
+        this.content.splice(index, 1);
+        this.contentTargets.splice(index, 1);
+        content.unload(this);
+        this.resize();
+        return this;
+    }
+
+    /**
+     * Destroys the graph: Container and canvas.
+     * @returns {Graph} - Graph instance
+     */
+    destroy() {
+        detachEventHandlers(this);
+        this.graphContainer.select(`.${styles.canvas}`).remove();
+        this.graphContainer.select(`.${styles.container}`).remove();
+        this.graphContainer = null;
+        this.config = {};
+        this.axis = {};
+        this.scale = {};
+        this.svg = null;
+        this.legendSVG = null;
+        this.content = [];
+        this.contentTargets = [];
+        this.resizeHandler = null;
+        return this;
+    }
+}
+
+export default Graph;
