@@ -21,8 +21,8 @@ Carbon provides an abstraction for c3 and d3.
 
 ## Usage
 For convenience, there are 2 sets of distributions provided. 
-* `dist/lib/js` - [default] Only core. Does not contain any dependencies, consumers need to provide the items listed in the `Dependencies` section before loading the graph.
-* `dist/js` - Contains core + d3 + c3 + all the necessary polyfills needed to load the graphs.
+* `lib/js` - [default] Only `core`. Does not contain any dependencies, consumers need to provide the items listed in the `Dependencies` section before loading the graph.
+* `dist/js` - Contains core + `d3` + `c3` + all the necessary polyfills needed to load the graphs.
 
 Add `dist/js/carbon-graphs.js` and `dist/css/carbon-graphs.css` in your page and call appropriate graph type declarations mentioned in below documentation.
 ### [Consumer documentation](./docs/README.md)

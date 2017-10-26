@@ -11,7 +11,7 @@ const webpackConfig = (env, folder = "") => ({
     },
     output: {
         path: path.resolve(__dirname, "../.."),
-        filename: `./dist/${folder}js/[name].js`,
+        filename: `./${folder}js/[name].js`,
         library: "Carbon",
         libraryExport: "default",
         libraryTarget: "umd"
@@ -38,7 +38,7 @@ const webpackConfig = (env, folder = "") => ({
         ]
     },
     plugins: [
-        new ExtractTextPlugin(`./dist/${folder}css/carbon-graphs.css`),
+        new ExtractTextPlugin(`./${folder}css/carbon-graphs.css`),
         new webpack.optimize.ModuleConcatenationPlugin(),
         new webpack.optimize.UglifyJsPlugin({
             compress: {
@@ -67,5 +67,5 @@ module.exports = function(env) {
         };
         return merge(webpackConfig(env, "lib/"), custom);
     }
-    return webpackConfig(env);
+    return webpackConfig(env, "dist/");
 };
