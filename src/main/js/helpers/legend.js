@@ -54,7 +54,8 @@ const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
                                .attr("tabindex", 0);
     const iconPath = buttonPath.append("svg")
                                .classed(styles.legendItemIcon, true)
-                               .attr("viewBox", "0 0 11 11");
+                               .attr("role", "img")
+                               .attr("viewBox", constants.LEGEND_ICON_SIZE);
     iconPath.append("path")
             .attr({
                 d() {

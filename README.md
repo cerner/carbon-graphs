@@ -34,7 +34,7 @@ Add `dist/js/carbon-graphs.js` and `dist/css/carbon-graphs.css` in your page and
     * Object.assign
     * Object.values
 
-## Coming soon...
+## Potential features
 * [ ] Reference ranges
 * [ ] Criticality indicator for data point
 * [ ] Spline line graphs
@@ -42,8 +42,9 @@ Add `dist/js/carbon-graphs.js` and `dist/css/carbon-graphs.css` in your page and
 * [ ] Area spline graphs
 * [ ] Datetime formatting
 * [ ] Tick counts
-* [ ] Axes labelling along with symbols
 * [ ] Show/hide ticks
+* [ ] Axes labelling along with symbols
+* [ ] Axes label text overflow
 * [ ] Timeline graph
 * [ ] Gantt charts
 * [ ] Zoom

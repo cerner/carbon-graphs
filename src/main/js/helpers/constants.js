@@ -90,6 +90,7 @@ const HOVER_EVENT = {
     MOUSE_ENTER: "enter",
     MOUSE_EXIT: "exit"
 };
+const LEGEND_ICON_SIZE = "0 0 11 11";
 const TRANSITION_DURATION = 100;
 const TRANSITION_FUNCTION = "linear";
 
@@ -106,6 +107,7 @@ export default {
     DEFAULT_SELECTED_RADIUS,
     DEFAULT_Y_AXIS_SPACING,
     HOVER_EVENT,
+    LEGEND_ICON_SIZE,
     DEFAULT_SYMBOL: D3_INBUILT_SYMBOL.CIRCLE,
     DEFAULT_COLOR: COLORS.BLACK,
     CLIP_PATH_ID: `carbon-${+new Date()}-clip`,

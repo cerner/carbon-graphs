@@ -48,8 +48,8 @@ svg:not(:root) {
 }
 
 .carbon-legend {
-    list-style-type: none;
     display: flex;
+    list-style-type: none;
     justify-content: center;
     align-content: center;
     flex-flow: row wrap;
@@ -67,9 +67,10 @@ svg:not(:root) {
             background-color: @accent-bg-40;
         }
         & .carbon-legend-item-btn {
+            align-self: flex-start;
             min-width: 2rem;
             min-height: 2rem;
-            margin: 0 0.5rem 0 0;
+            margin-right: 0.5rem;
             padding: 0;
             cursor: pointer;
             border-radius: 0.25rem;
@@ -80,13 +81,16 @@ svg:not(:root) {
             width: 1.5rem;
             height: 1.5rem;
         }
+        & .carbon-legend-item-text {
+            word-wrap: break-word;
+        }
     }
 
     & .carbon-legend-item[aria-selected="false"] {
-        & > .carbon-legend-item-btn {
+        & .carbon-legend-item-btn {
             background-color: @base;
         }
-        & > .carbon-legend-item-text {
+        & .carbon-legend-item-text {
             color: @medium;
         }
     }
