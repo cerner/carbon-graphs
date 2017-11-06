@@ -85,8 +85,7 @@ const RESIZE_THROTTLE = (1000 / 60);
 const MIN_TICKS = 3;
 const MAX_TICK_VARIANCE = 100;
 const PAIR_ITEM_TYPES = [ "high", "mid", "low" ];
-const ISO8601_DATETIME = /(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}:\d{2})Z/;
-const ISO8601_DATETIME_MILLI = /(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}:\d{2}.\d{3})Z/;
+const ISO8601_DATE_TIME_MILLI = /(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}(:\d{2}(\.\d+)*)*)Z/;
 const HOVER_EVENT = {
     MOUSE_ENTER: "enter",
     MOUSE_EXIT: "exit"
@@ -97,8 +96,7 @@ const TRANSITION_FUNCTION = "linear";
 export default {
     PADDING,
     PAIR_ITEM_TYPES,
-    ISO8601_DATETIME,
-    ISO8601_DATETIME_MILLI,
+    ISO8601_DATE_TIME_MILLI,
     RESIZE_THROTTLE,
     BASE_CANVAS_WIDTH_PADDING,
     DEFAULT_HEIGHT,
@@ -116,7 +114,6 @@ export default {
     Y2_AXIS: "y2",
     MIN_TICKS,
     MAX_TICK_VARIANCE,
-    AXIS_TYPE,
     D3_INBUILT_SYMBOL,
     CUSTOM_PATH,
     TRANSITION_DURATION,

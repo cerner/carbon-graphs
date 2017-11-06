@@ -8,14 +8,22 @@ import constants from "../../helpers/constants";
  * @param {string} symbol - symbol to display in the point
  * @returns {boolean} true if inbuilt symbol
  */
-const isD3InbuiltPath = (symbol) => symbol in constants.D3_INBUILT_SYMBOL;
+export const isD3InbuiltSymbol = (symbol) => symbol in constants.D3_INBUILT_SYMBOL;
 /**
  * Checks if the symbol is an custom  symbol
  * @private
  * @param {string} symbol - symbol to display in the point
  * @returns {boolean} true if custom symbol
  */
-const isCustomPath = (symbol) => symbol in constants.CUSTOM_PATH;
+export const isNativeSymbol = (symbol) => symbol in constants.CUSTOM_PATH;
+
+/**
+ * Checks if the symbol is a d3 inbuilt symbol or one of the Carbon custom symbols.
+ * @protected
+ * @param {string} symbol - symbol to display in the point
+ * @returns {boolean} true if inbuilt or custom symbol, false otherwise
+ */
+export const isValidCarbonSymbol = (symbol) => ((isD3InbuiltSymbol(symbol)) || (isNativeSymbol(symbol)));
 
 /**
  * A Symbol is a data point representation in a graph.
@@ -35,7 +43,7 @@ class Symbol {
      */
     getPathElement(size) {
         const getCustomPath = (symbol) => {
-            if (isCustomPath(symbol)) {
+            if (isNativeSymbol(symbol)) {
                 return constants.CUSTOM_PATH[ symbol ];
             }
             throw "Unknown symbol type provided for data point";
@@ -43,17 +51,8 @@ class Symbol {
         const getD3Symbol = (symbol) =>
             d3.svg.symbol().type(constants.D3_INBUILT_SYMBOL[ symbol ]).size(size || constants.DEFAULT_PLOT_SIZE)();
 
-        return isD3InbuiltPath(this.symbol) ? getD3Symbol(this.symbol) : getCustomPath(this.symbol);
+        return isD3InbuiltSymbol(this.symbol) ? getD3Symbol(this.symbol) : getCustomPath(this.symbol);
     }
 }
 
 export default Symbol;
-/**
- * Checks if the symbol is a d3 inbuilt symbol or one of the Carbon custom symbols.
- * @protected
- * @param {string} symbol - symbol to display in the point
- * @returns {boolean} true if inbuilt or custom symbol, false otherwise
- */
-Symbol.isBuiltAsAPath = (symbol) => ((isD3InbuiltPath(symbol)) || (isCustomPath(symbol)));
-Symbol.isCustomPath = isCustomPath;
-Symbol.isD3InbuiltPath = isD3InbuiltPath;

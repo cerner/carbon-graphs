@@ -1,11 +1,11 @@
 "use strict";
 import Line from "../../../main/js/controls/Line/Line";
 import Graph from "../../../main/js/core/Graph";
-import constants from "../../../main/js/helpers/constants";
+import constants, { AXIS_TYPE } from "../../../main/js/helpers/constants";
 import errors from "../../../main/js/helpers/errors";
 import styles from "../../../main/js/helpers/styles";
 import utils from "../../../main/js/helpers/utils";
-import LOCALE from "../../../main/js/locale/index";
+import LOCALE from "../../../main/js/locale";
 import {
     axisDefault,
     axisTimeSeries,
@@ -262,7 +262,7 @@ describe("Graph", () => {
             expect(graph.config.showHGrid).toEqual(true);
             expect(graph.config.showVGrid).toEqual(true);
             expect(graph.config.dimension).toEqual({});
-            expect(graph.config.axis.x.type).toEqual(constants.AXIS_TYPE.DEFAULT);
+            expect(graph.config.axis.x.type).toEqual(AXIS_TYPE.DEFAULT);
             expect(graph.config.axis.x.ticks).toEqual({});
             expect(graph.config.axis.y.ticks).toEqual({});
             expect(graph.config.axis.x.show).toEqual(true);
@@ -282,7 +282,7 @@ describe("Graph", () => {
             expect(graph.config.showHGrid).toEqual(true);
             expect(graph.config.showVGrid).toEqual(true);
             expect(graph.config.dimension).toEqual({});
-            expect(graph.config.axis.x.type).toEqual(constants.AXIS_TYPE.TIME_SERIES);
+            expect(graph.config.axis.x.type).toEqual(AXIS_TYPE.TIME_SERIES);
             expect(graph.config.axis.x.ticks).toEqual({});
             expect(graph.config.axis.y.ticks).toEqual({});
             expect(graph.config.axis.x.show).toEqual(true);

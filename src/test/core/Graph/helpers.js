@@ -82,7 +82,7 @@ export const valuesDefault = [
 
 /**
  * Returns the DOM element queried by Class
- * @param {String} cls - Class attribute name
+ * @param {string} cls - Class attribute name
  * @returns {HTMLElement} - DOM element
  */
 export const fetchElementByClass = (cls) => document.querySelector(`.${cls}`);

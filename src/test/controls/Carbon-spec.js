@@ -1,7 +1,7 @@
-import Carbon from "../../main/js/controls/index";
-import Line from "../../main/js/controls/Line/index";
-import PairedResult from "../../main/js/controls/PairedResult/index";
-import Graph from "../../main/js/core/Graph/index";
+import Carbon from "../../main/js/controls";
+import Line from "../../main/js/controls/Line";
+import PairedResult from "../../main/js/controls/PairedResult";
+import Graph from "../../main/js/core/Graph";
 
 const LIBRARY_LIST = [
     "graph",

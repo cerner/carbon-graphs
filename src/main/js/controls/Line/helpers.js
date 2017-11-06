@@ -11,18 +11,19 @@ import {
 } from "../../core/Graph/helpers";
 import Symbol from "../../core/Symbol";
 import { getXAxisXPosition } from "../../helpers/axis";
-import constants from "../../helpers/constants";
+import constants, {
+    AXIS_TYPE,
+    SYMBOLS
+} from "../../helpers/constants";
 import errors from "../../helpers/errors";
 import {
     legendClickHandler,
     legendHoverHandler,
-    loadLegendItem,
-    removeLegendItem
+    loadLegendItem
 } from "../../helpers/legend";
 import styles from "../../helpers/styles";
 import utils from "../../helpers/utils";
 
-const AXIS_TYPE = constants.AXIS_TYPE;
 const PADDING = constants.PADDING;
 
 /**
@@ -205,7 +206,7 @@ const processDataPoints = (graphConfig, dataTarget) => {
         y: Number(value.y),
         color: dataTarget.color || constants.DEFAULT_COLOR,
         label: dataTarget.label || {},
-        symbol: dataTarget.symbol || "CIRCLE",
+        symbol: dataTarget.symbol || SYMBOLS.CIRCLE,
         yAxis: dataTarget.yAxis || constants.Y_AXIS,
         key: dataTarget.key
     }));
@@ -369,6 +370,5 @@ export {
     getDataPointValues,
     drawDataLines,
     drawDataPoints,
-    removeLegendItem,
     clear
 };

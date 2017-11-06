@@ -1,6 +1,7 @@
 "use strict";
 import GraphContent from "../../core/GraphContent";
 import constants from "../../helpers/constants";
+import { removeLegendItem } from "../../helpers/legend";
 import utils from "../../helpers/utils";
 import {
     clear,
@@ -9,7 +10,6 @@ import {
     hoverHandler,
     prepareLegendItems,
     processDataPoints,
-    removeLegendItem,
     translateLineGraph
 } from "./helpers";
 import LineConfig from "./LineConfig";

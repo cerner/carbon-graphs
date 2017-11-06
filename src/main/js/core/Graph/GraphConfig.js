@@ -1,7 +1,7 @@
 "use strict";
 import d3 from "d3";
 import { hasY2Axis } from "../../helpers/axis";
-import constants from "../../helpers/constants";
+import constants, { AXIS_TYPE } from "../../helpers/constants";
 import errors from "../../helpers/errors";
 import utils from "../../helpers/utils";
 import { DEFAULT_LOCALE } from "../../locale";
@@ -32,7 +32,7 @@ export const processInput = (input, config, type) => {
     config.showHGrid = getDefaultValue(input.showHGrid, true);
     config.showVGrid = getDefaultValue(input.showVGrid, true);
     config.dimension = getDefaultValue(input.dimension, {});
-    config.axis.x.type = getDefaultValue(_axis.x.type, constants.AXIS_TYPE.DEFAULT);
+    config.axis.x.type = getDefaultValue(_axis.x.type, AXIS_TYPE.DEFAULT);
     config.axis.x.ticks = getDefaultValue(_axis.x.ticks, {});
     config.axis.y.ticks = getDefaultValue(_axis.y.ticks, {});
     config.axis.x.show = getDefaultValue(_axis.x.show, true);
@@ -140,7 +140,7 @@ class GraphConfig extends BaseConfig {
             throw errors.THROW_MSG_NO_AXIS_INFO;
         }
         if (utils.notEmpty(this.input.axis.x.type) &&
-            !(utils.hasValue(Object.values(constants.AXIS_TYPE), this.input.axis.x.type))) {
+            !(utils.hasValue(Object.values(AXIS_TYPE), this.input.axis.x.type))) {
             throw errors.THROW_MSG_INVALID_TYPE;
         }
         if (utils.isEmpty(this.input.axis.x.lowerLimit) ||

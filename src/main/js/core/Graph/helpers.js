@@ -17,11 +17,11 @@ import {
     hasY2Axis,
     translateAxes
 } from "../../helpers/axis";
-import constants from "../../helpers/constants";
+import constants, { SYMBOLS } from "../../helpers/constants";
 import styles from "../../helpers/styles";
 import utils from "../../helpers/utils";
 import { getScale } from "../BaseConfig";
-import Symbol from "../Symbol";
+import { isValidCarbonSymbol } from "../Symbol";
 
 const BASE_CANVAS_PADDING = constants.BASE_CANVAS_WIDTH_PADDING;
 const PADDING = constants.PADDING;
@@ -132,7 +132,7 @@ const translateLabel = (config, canvasSVG) => {
  * @param {string} str - Datetime string in ISO8601 format: yyyy-MM-ddTHH:mm:ssZ
  * @returns {string} true if in correct format
  */
-const isDate = (str) => constants.ISO8601_DATETIME.test(str) || constants.ISO8601_DATETIME_MILLI.test(str);
+const isDate = (str) => constants.ISO8601_DATE_TIME_MILLI.test(str);
 
 /**
  * Determines the domain for x, y and y2 axes. For Y axis and Y2 axis,
@@ -325,7 +325,7 @@ const determineHeight = (config, dimension) => {
  */
 const isBuiltAsAPathSymbol = (dataPoint) => {
     const symbol = getSymbolForTarget(dataPoint);
-    return Symbol.isBuiltAsAPath(symbol) ? symbol : null;
+    return isValidCarbonSymbol(symbol) ? symbol : null;
 };
 /**
  * Returns the symbol property from the data point.
@@ -334,7 +334,7 @@ const isBuiltAsAPathSymbol = (dataPoint) => {
  * @param {Object} dataPoint - Data point containing x, y co-ordinate points, color and symbol.
  * @returns {string} provided symbol or a circle.
  */
-const getSymbolForTarget = (dataPoint) => (dataPoint.symbol || "CIRCLE");
+const getSymbolForTarget = (dataPoint) => (dataPoint.symbol || SYMBOLS.CIRCLE);
 /**
  * Returns the color property from the data point.
  * If the symbol is not provided then the default color is #1C1F21 {black}.

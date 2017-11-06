@@ -11,18 +11,19 @@ import {
 } from "../../core/Graph/helpers";
 import Symbol from "../../core/Symbol";
 import { getXAxisXPosition } from "../../helpers/axis";
-import constants from "../../helpers/constants";
+import constants, {
+    AXIS_TYPE,
+    SYMBOLS
+} from "../../helpers/constants";
 import errors from "../../helpers/errors";
 import {
     legendClickHandler,
     legendHoverHandler,
-    loadLegendItem,
-    removeLegendItem
+    loadLegendItem
 } from "../../helpers/legend";
 import styles from "../../helpers/styles";
 import utils from "../../helpers/utils";
 
-const AXIS_TYPE = constants.AXIS_TYPE;
 const PADDING = constants.PADDING;
 /**
  * Returns the value based on the type of data point - High, mid or low
@@ -201,7 +202,7 @@ const processDataPoints = (graphConfig, dataTarget) => {
                     y: Number(getValue(value, type).y),
                     color: getValue(dataTarget.color, type) || constants.DEFAULT_COLOR,
                     label: getValue(dataTarget.label, type) || {},
-                    symbol: getValue(dataTarget.symbol, type) || "CIRCLE",
+                    symbol: getValue(dataTarget.symbol, type) || SYMBOLS.CIRCLE,
                     key: `${dataTarget.key}_${type}`
                 };
                 if (!utils.hasValue(graphConfig.shownTargets, subset[ type ].key)) {
@@ -398,6 +399,5 @@ export {
     drawPoints,
     translatePairedResultGraph,
     prepareLegendItems,
-    removeLegendItem,
     clear
 };

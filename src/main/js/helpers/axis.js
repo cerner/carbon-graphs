@@ -1,7 +1,7 @@
 "use strict";
 import d3 from "d3";
 import { getScale } from "../core/BaseConfig";
-import constants from "../helpers/constants";
+import constants, { AXIS_TYPE } from "../helpers/constants";
 import styles from "../helpers/styles";
 import utils from "../helpers/utils";
 import { DEFAULT_TICK_FORMAT } from "../locale";
@@ -58,11 +58,11 @@ const createAxes = (axis, scale, config, canvasSVG) => {
  * @param {string} type - default or timeseries chart type
  * @returns {Object} d3 locale object formatter
  */
-const getAxisTickFormat = (locale, format, type = constants.AXIS_TYPE.DEFAULT) => {
+const getAxisTickFormat = (locale, format, type = AXIS_TYPE.DEFAULT) => {
     if (utils.isEmpty(format)) {
         return DEFAULT_TICK_FORMAT;
     }
-    if (type === constants.AXIS_TYPE.TIME_SERIES) {
+    if (type === AXIS_TYPE.TIME_SERIES) {
         return locale.timeFormat(format);
     }
     else {
@@ -164,8 +164,8 @@ const getYAxisLabelXPosition = (config) =>
  * @returns {number} Position for the label
  */
 const getYAxisLabelYPosition = (config) =>
-    getYAxisYPosition() + ((DEFAULT_HEIGHT - PADDING.top - PADDING.bottom) / 2)
-    * config.outlierStretchFactor.upperLimit;
+    getYAxisYPosition() + ((DEFAULT_HEIGHT - PADDING.top - PADDING.bottom) / 2) *
+    config.outlierStretchFactor.upperLimit;
 /**
  * Y2 Axis label's starting position vertically beside the graph
  * @private
@@ -319,7 +319,6 @@ const getYAxisWidth = (id, config) => {
  */
 const calculateAxesSize = (config) => {
     config.axisSizes = {};
-
     config.axisSizes.y = getYAxisWidth(constants.Y_AXIS, config) + PADDING.left;
     config.axisSizes.y2 = (hasY2Axis(config.axis) ? getYAxisWidth(constants.Y2_AXIS, config) : 20) + PADDING.right;
     config.axisSizes.x = getXAxisHeight(config);
@@ -336,7 +335,6 @@ const calculateAxesSize = (config) => {
 const calculateAxesLabelSize = (config) => {
     config.axisLabelHeights = {};
     config.axisLabelWidths = {};
-
     config.axisLabelHeights.x = 0;
     config.axisLabelWidths.y = 0;
     config.axisLabelWidths.y2 = 0;
@@ -354,6 +352,70 @@ const calculateAxesLabelSize = (config) => {
     }
 };
 /**
+ * Returns the mid value of the axis domain relative to the lower bound
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @param {string} yAxis - Y, Y2 etc
+ * @returns {number} returns a number representing the mid value of y axes domain
+ */
+const getMidPoint = (config, yAxis) => {
+    const axisMidValue = (config.axis[ yAxis ].domain[ 1 ] - config.axis[ yAxis ].domain[ 0 ]) / 2;
+    return config.axis[ yAxis ].domain[ 0 ] + axisMidValue;
+};
+/**
+ * Calculates the lower part of the outlier based on data points.
+ * If the content has any data points that are outside the lower and upper bounds set
+ * in the vertical axis then we adjust the axis bounds to support that outlier value.
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @returns {Array} List of lower bound values for each of the vertical axis
+ */
+const getLowerOutlierStretchFactorList = (config) => {
+    const lowerStretchFactors = [];
+    const getMinValue = (config, yAxis, axisMinValue) => {
+        const dataRangeMinValue = config.axis[ yAxis ].dataRange.min;
+        return dataRangeMinValue < axisMinValue ? dataRangeMinValue : axisMinValue;
+    };
+    const getLowerStretchFactor = (yAxis) => {
+        const axisMinValue = config.axis[ yAxis ].domain[ 0 ];
+        const axisMidPoint = getMidPoint(config, yAxis);
+        const lowerStretchFactor = Math.abs((axisMidPoint - getMinValue(config, yAxis, axisMinValue)) / (axisMidPoint - axisMinValue));
+        return lowerStretchFactor > 1 ? lowerStretchFactor : 1;
+    };
+    lowerStretchFactors.push(getLowerStretchFactor(constants.Y_AXIS));
+    if (hasY2Axis(config.axis)) {
+        lowerStretchFactors.push(getLowerStretchFactor(constants.Y2_AXIS));
+    }
+    return lowerStretchFactors;
+};
+/**
+ * Calculates the upper part of the outlier based on data points.
+ * If the content has any data points that are outside the lower and upper bounds set
+ * in the vertical axis then we adjust the axis bounds to support that outlier value.
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @returns {Array} List of upper bound values for each of the vertical axis
+ */
+const getUpperOutlierStretchFactorList = (config) => {
+    const upperStretchFactors = [];
+    const getMaxValue = (config, yAxis, axisMaxValue) => {
+        const dataRangeMaxValue = config.axis[ yAxis ].dataRange.max;
+        return dataRangeMaxValue > axisMaxValue ? dataRangeMaxValue : axisMaxValue;
+    };
+    const getUpperStretchFactor = (yAxis) => {
+        const axisMaxValue = config.axis[ yAxis ].domain[ 1 ];
+        const axisMidPoint = getMidPoint(config, yAxis);
+        const upperStretchFactor = Math.abs((getMaxValue(config, yAxis, axisMaxValue) - axisMidPoint) / (axisMaxValue - axisMidPoint));
+        return upperStretchFactor > 1 ? upperStretchFactor : 1;
+    };
+    upperStretchFactors.push(getUpperStretchFactor(constants.Y_AXIS));
+    if (hasY2Axis(config.axis)) {
+        upperStretchFactors.push(getUpperStretchFactor(constants.Y2_AXIS));
+    }
+    return upperStretchFactors;
+};
+
+/**
  * Determines if the values provided exceed the lower and upper bounds provided in the Y or Y2 axes
  * If the values exceed the bounds then the range and domain are adjusted accordingly.
  * There is no outlier check for X axis, for now, due to the possibility that X axis can be a timeseries.
@@ -362,41 +424,11 @@ const calculateAxesLabelSize = (config) => {
  * @returns {Object} stretch factor determines the new upper and lower limit.
  */
 const determineOutlierStretchFactor = (config) => {
-    const yAxes = [ constants.Y_AXIS ];
-    const upperStretchFactors = [];
-    const lowerStretchFactors = [];
-    const stretchFactor = {};
-    const getMinValue = (config, yAxis, axisMinValue) => {
-        const dataRangeMinValue = config.axis[ yAxis ].dataRange.min;
-        return dataRangeMinValue < axisMinValue ? dataRangeMinValue : axisMinValue;
+    const sortOutlier = (firstValue, secondValue) => secondValue - firstValue;
+    return {
+        upperLimit: getUpperOutlierStretchFactorList(config).sort(sortOutlier)[ 0 ],
+        lowerLimit: getLowerOutlierStretchFactorList(config).sort(sortOutlier)[ 0 ]
     };
-    const getMaxValue = (config, yAxis, axisMaxValue) => {
-        const dataRangeMaxValue = config.axis[ yAxis ].dataRange.max;
-        return dataRangeMaxValue > axisMaxValue ? dataRangeMaxValue : axisMaxValue;
-    };
-    const getMidPoint = (config, yAxis) => {
-        const axisMidValue = (config.axis[ yAxis ].domain[ 1 ] - config.axis[ yAxis ].domain[ 0 ]) / 2;
-        return config.axis[ yAxis ].domain[ 0 ] + axisMidValue;
-    };
-    if (hasY2Axis(config.axis)) {
-        yAxes.push(constants.Y2_AXIS);
-    }
-    yAxes.forEach((yAxis) => {
-        if (config.axis[ yAxis ].domain) {
-            const axisMinValue = config.axis[ yAxis ].domain[ 0 ];
-            const axisMaxValue = config.axis[ yAxis ].domain[ 1 ];
-            const minValue = getMinValue(config, yAxis, axisMinValue);
-            const maxValue = getMaxValue(config, yAxis, axisMaxValue);
-            const axisMidPoint = getMidPoint(config, yAxis);
-            const lowerStretchFactor = Math.abs((axisMidPoint - minValue) / (axisMidPoint - axisMinValue));
-            const upperStretchFactor = Math.abs((maxValue - axisMidPoint) / (axisMaxValue - axisMidPoint));
-            upperStretchFactors.push(upperStretchFactor > 1 ? upperStretchFactor : 1);
-            lowerStretchFactors.push(lowerStretchFactor > 1 ? lowerStretchFactor : 1);
-        }
-    });
-    stretchFactor.upperLimit = upperStretchFactors.sort((firstValue, secondValue) => secondValue - firstValue)[ 0 ];
-    stretchFactor.lowerLimit = lowerStretchFactors.sort((firstValue, secondValue) => secondValue - firstValue)[ 0 ];
-    return stretchFactor;
 };
 /**
  * Returns the d3 html element after appending axis label text

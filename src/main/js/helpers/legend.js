@@ -1,7 +1,7 @@
 "use strict";
 import d3 from "d3";
-import { Symbol } from "../core";
 import { isBuiltAsAPathSymbol } from "../core/Graph/helpers";
+import Symbol, { isNativeSymbol } from "../core/Symbol";
 import constants from "../helpers/constants";
 import styles from "../helpers/styles";
 import utils from "../helpers/utils";
@@ -67,7 +67,7 @@ const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
                     if (utils.isEmpty(isInBuilt)) {
                         return;
                     }
-                    const scaleFactor = Symbol.isCustomPath(symbol) ? constants.DEFAULT_PLOT_LEGEND_SCALE : 1;
+                    const scaleFactor = isNativeSymbol(symbol) ? constants.DEFAULT_PLOT_LEGEND_SCALE : 1;
                     return `translate(${cx},${cy})` + ` scale(${scaleFactor})`;
                 }
             })

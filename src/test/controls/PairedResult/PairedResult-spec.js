@@ -55,6 +55,111 @@ describe("PairedResult", () => {
                 graphDefault.loadContent(new PairedResult(getInput([], false, false)));
             }).toThrow(errors.THROW_MSG_INVALID_DATA_PROPERTY);
         });
+        it("does not throw error when datetime values have milliseconds", () => {
+            expect(() => {
+                const graphTimeSeries = new Graph(getAxes(axisTimeSeries));
+                graphTimeSeries.loadContent(new PairedResult(getInput([
+                    {
+                        high: {
+                            x: "2016-02-03T12:00:00.000Z",
+                            y: 1
+                        }
+                    }
+
+                ], false, false)));
+            }).not.toThrow();
+            expect(() => {
+                const graphTimeSeries = new Graph(getAxes(axisTimeSeries));
+                graphTimeSeries.loadContent(new PairedResult(getInput([
+                    {
+                        high: {
+                            x: "2016-02-03T12:00:00Z",
+                            y: 1
+                        }
+                    }
+
+                ], false, false)));
+            }).not.toThrow();
+            expect(() => {
+                const graphTimeSeries = new Graph(getAxes(axisTimeSeries));
+                graphTimeSeries.loadContent(new PairedResult(getInput([
+                    {
+                        high: {
+                            x: "2016-02-03T12:00Z",
+                            y: 1
+                        }
+                    }
+
+                ], false, false)));
+            }).not.toThrow();
+        });
+        describe("throws error when values have datetime in a different ISO8601 format", () => {
+            it("on invalid millisecond value", () => {
+                expect(() => {
+                    const graphTimeSeries = new Graph(getAxes(axisTimeSeries));
+                    graphTimeSeries.loadContent(new PairedResult(getInput([
+                        {
+                            high: {
+                                x: "2016-02-03T12:00:00:000Z",
+                                y: 1
+                            }
+                        }
+                    ], false, false)));
+                }).toThrow();
+            });
+            it("on invalid second value", () => {
+                expect(() => {
+                    const graphTimeSeries = new Graph(getAxes(axisTimeSeries));
+                    graphTimeSeries.loadContent(new PairedResult(getInput([
+                        {
+                            high: {
+                                x: "2016-02-03T12:00:00:000.000Z",
+                                y: 1
+                            }
+                        }
+                    ], false, false)));
+                }).toThrow();
+            });
+            it("on no second value but with millisecond value", () => {
+                expect(() => {
+                    const graphTimeSeries = new Graph(getAxes(axisTimeSeries));
+                    graphTimeSeries.loadContent(new PairedResult(getInput([
+                        {
+                            high: {
+                                x: "2016-02-03T12:00.00Z",
+                                y: 1
+                            }
+                        }
+                    ], false, false)));
+                }).toThrow();
+            });
+            it("on no minute or second but with Zulu time stamp", () => {
+                expect(() => {
+                    const graphTimeSeries = new Graph(getAxes(axisTimeSeries));
+                    graphTimeSeries.loadContent(new PairedResult(getInput([
+                        {
+                            high: {
+                                x: "2016-02-03T12Z",
+                                y: 1
+                            }
+                        }
+                    ], false, false)));
+                }).toThrow();
+            });
+            it("on no hour, minute or second value but with Zulu timestamp", () => {
+                expect(() => {
+                    const graphTimeSeries = new Graph(getAxes(axisTimeSeries));
+                    graphTimeSeries.loadContent(new PairedResult(getInput([
+                        {
+                            high: {
+                                x: "2016-02-03Z",
+                                y: 1
+                            }
+                        }
+                    ], false, false)));
+                }).toThrow();
+            });
+        });
         it("clones the input object correctly", () => {
             const input = getInput(valuesDefault, false, false);
             const pairedResult = new PairedResult(input);

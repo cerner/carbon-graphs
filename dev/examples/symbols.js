@@ -1,6 +1,11 @@
 import d3 from "d3";
 import Carbon from "../../src/main/js/carbon";
-import { Symbol } from "../../src/main/js/core/index";
+import { Symbol } from "../../src/main/js/core";
+import {
+    isNativeSymbol,
+    isValidCarbonSymbol
+} from "../../src/main/js/core/Symbol";
+
 import { getSymbols } from "./data";
 
 export const renderSymbols = (id) =>
@@ -12,16 +17,16 @@ export const renderSymbols = (id) =>
       .enter()
       .append("path")
       .attr("d", (d) => {
-          if (!Symbol.isBuiltAsAPath(d)) {
+          if (!isValidCarbonSymbol(d)) {
               return;
           }
           return new Symbol(d).getPathElement(300);
       })
       .attr("transform", (d, i) => {
-          if (!Symbol.isBuiltAsAPath(d)) {
+          if (!isValidCarbonSymbol(d)) {
               return;
           }
-          const scaleFactor = Symbol.isCustomPath(d)
+          const scaleFactor = isNativeSymbol(d)
               ? 2
               : 1;
           return `translate(${i * 100 + 20},${20}) scale(${scaleFactor})`;
