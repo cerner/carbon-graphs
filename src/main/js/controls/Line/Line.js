@@ -15,6 +15,11 @@ import {
 import LineConfig from "./LineConfig";
 
 /**
+ * @typedef {Object} Line
+ * @typedef {Object} GraphContent
+ * @typedef {Object} LineConfig
+ */
+/**
  * Calculates the min and max values for Y Axis or Y2 Axis
  * @private
  * @param {Array} values - Datapoint values
@@ -22,7 +27,7 @@ import LineConfig from "./LineConfig";
  * @returns {Object} - Contains min and max values for the data points
  */
 const calculateValuesRange = (values, axis = constants.Y_AXIS) =>
-    Object.assign({}, {
+    ({
         [axis]: {
             min: Math.min(...values.map((i) => i.y)),
             max: Math.max(...values.map((i) => i.y))
@@ -56,6 +61,10 @@ const loadInput = (inputJSON) =>
  * @class Line
  */
 class Line extends GraphContent {
+    /**
+     * @constructor
+     * @param {LineConfig} input - Input JSON instance created using GraphConfig
+     */
     constructor(input) {
         super();
         this.config = loadInput(input);

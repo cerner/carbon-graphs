@@ -68,8 +68,8 @@ const createLine = (scale, d) => {
  * @returns {string} - translate string for d3 transform
  */
 const transformPoint = (scale, type, value) => {
-    const getX = (value) => scale.x(getValue(value, type).x);
-    const getY = (value) => scale[ value.yAxis ](getValue(value, type).y);
+    const getX = (val) => scale.x(getValue(val, type).x);
+    const getY = (val) => scale[ val.yAxis ](getValue(val, type).y);
     return `translate(${getX(value)},${getY(value)})`;
 };
 /**
@@ -187,7 +187,7 @@ const processDataPoints = (graphConfig, dataTarget) => {
         if (getType(type) === AXIS_TYPE.TIME_SERIES) {
             return parseDateTime(x);
         }
-        return Number(x);
+        return utils.getNumber(x);
     };
     graphConfig.shownTargets.push(dataTarget.key);
     // Each value is a pair. Construct enough information so that you can
@@ -199,7 +199,7 @@ const processDataPoints = (graphConfig, dataTarget) => {
             if (utils.isDefined(getValue(value, type))) {
                 subset[ type ] = {
                     x: getXDataValues(getValue(value, type).x),
-                    y: Number(getValue(value, type).y),
+                    y: utils.getNumber(getValue(value, type).y),
                     color: getValue(dataTarget.color, type) || constants.DEFAULT_COLOR,
                     label: getValue(dataTarget.label, type) || {},
                     symbol: getValue(dataTarget.symbol, type) || SYMBOLS.CIRCLE,

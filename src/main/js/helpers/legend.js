@@ -1,3 +1,7 @@
+/**
+ * @module legend
+ * @alias module:legend
+ */
 "use strict";
 import d3 from "d3";
 import { isBuiltAsAPathSymbol } from "../core/Graph/helpers";
@@ -29,13 +33,13 @@ const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
     if (!t.label) {
         return null;
     }
-    const symbol = t.symbol,
-        isInBuilt = isBuiltAsAPathSymbol(t),
-        color = t.color,
-        text = utils.sanitize(t.label.display),
-        index = shownTargets.indexOf(t.key),
-        cx = 5.5,
-        cy = 6.5;
+    const symbol = t.symbol;
+    const isInBuilt = isBuiltAsAPathSymbol(t);
+    const color = t.color;
+    const text = utils.sanitize(t.label.display);
+    const index = shownTargets.indexOf(t.key);
+    const cx = 5.5;
+    const cy = 6.5;
     const itemPath = legendSVG.append("li")
                               .classed(styles.legendItem, true)
                               .attr("aria-selected", (!t.label.isDisabled && index > -1))
@@ -109,8 +113,8 @@ const createLegend = (container) => container.append("ul")
  * @returns {undefined} - returns nothing
  */
 const legendClickHandler = (element) => {
-    const target = d3.select(element),
-        isSelected = target.attr("aria-selected");
+    const target = d3.select(element);
+    const isSelected = target.attr("aria-selected");
     return target.attr("aria-selected", isSelected !== "true");
 };
 /**
@@ -122,6 +126,9 @@ const legendHoverHandler = () => {
     /* NOP for now, entry point for future development */
 };
 
+/**
+ * @enum {Function}
+ */
 export {
     createLegend,
     loadLegendItem,

@@ -1,4 +1,15 @@
+/**
+ * @module utils
+ * @alias module:utils
+ */
 "use strict";
+/**
+ * Wraps a function in logical negation
+ * @private
+ * @param {Function} [fn=x=>x] - A value-returning function - defaults to the identity function
+ * @returns {Function} that forwards arguments to `fn` and takes the logical negation of the result
+ */
+const not = (fn = (x) => x) => (...args) => !fn(...args);
 /**
  * Checks if parameter is a Function
  * @private
@@ -9,7 +20,7 @@ const isFunction = (o) => typeof o === "function";
 /**
  * Checks if parameter is an Array
  * @private
- * @param {string} o - source object
+ * @param {Object} o - source object
  * @returns {boolean} true if Array
  */
 const isArray = (o) => Array.isArray(o);
@@ -33,7 +44,7 @@ const isUndefined = (v) => typeof v === "undefined";
  * @param {Object} v - source object
  * @returns {boolean} true if defined
  */
-const isDefined = (v) => typeof v !== "undefined";
+const isDefined = not(isUndefined);
 /**
  * Checks if parameter is empty
  *  not undefined,
@@ -52,7 +63,7 @@ const isEmpty = (o) =>
  * @param {Object} o - source object
  * @returns {boolean} True if not empty
  */
-const notEmpty = (o) => !isEmpty(o);
+const notEmpty = not(isEmpty);
 /**
  * Checks if value exists within the given dictionary
  * @private
@@ -74,15 +85,34 @@ const sanitize = (str) => ((typeof str === "string") ? (str.replace(/</g, "&lt;"
  * @param {Object} o - Source object
  * @returns {Object} Returns a cloned object
  */
-const deepClone = (o) =>
-    Object.keys(o).reduce((acc, prop) => {
-        acc[ prop ] = o[ prop ];
-        if (o[ prop ] && typeof(o[ prop ]) === "object" && !Array.isArray(o[ prop ])) {
-            acc[ prop ] = deepClone(o[ prop ]);
-        }
-        return acc;
-    }, {});
+const deepClone = (o) => {
+    if (isArray(o)) {
+        return o.map(deepClone);
+    }
+    else if (o && typeof o === "object") {
+        return Object.keys(o).reduce((acc, key) => {
+            if (isDefined(o[ key ])) {
+                acc[ key ] = deepClone(o[ key ]);
+            }
+            return acc;
+        }, {});
+    }
+    else {
+        return o;
+    }
+};
 
+/**
+ * Case converts to number
+ * @private
+ * @param {string} n - source string
+ * @returns {number} if not undefined or null return Number, 0 otherwise
+ */
+const getNumber = (n) => n ? Number(n) : 0;
+
+/**
+ * @enum {Function}
+ */
 export default {
     deepClone,
     isFunction,
@@ -92,5 +122,6 @@ export default {
     isEmpty,
     notEmpty,
     hasValue,
-    sanitize
+    sanitize,
+    getNumber
 };

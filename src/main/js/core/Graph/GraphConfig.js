@@ -39,16 +39,16 @@ export const processInput = (input, config, type) => {
     config.axis.y.show = getDefaultValue(_axis.y.show, true);
     config.axis.x.domain = getDomain(type, _axis.x.lowerLimit, _axis.x.upperLimit);
     config.axis.y.domain = [
-        Number(_axis.y.lowerLimit),
-        Number(_axis.y.upperLimit)
+        utils.getNumber(_axis.y.lowerLimit),
+        utils.getNumber(_axis.y.upperLimit)
     ];
     if (input.axis.y2) {
         config.axis.y2.ticks = getDefaultValue(input.axis.y2.ticks, {});
         config.axis.y2.show = getDefaultValue(input.axis.y2.show, false);
         if (config.axis.y2.show) {
             config.axis.y2.domain = [
-                Number(input.axis.y2.lowerLimit),
-                Number(input.axis.y2.upperLimit)
+                utils.getNumber(input.axis.y2.lowerLimit),
+                utils.getNumber(input.axis.y2.upperLimit)
             ];
         }
     }
@@ -123,11 +123,11 @@ class GraphConfig extends BaseConfig {
      *      If axis.x.type is provided then it should be either default or timeseries
      *      axis.y
      *      Y axis label is mandatory and X axis is optional
-     * @throws errors.THROW_MSG_NO_BIND
-     * @throws errors.THROW_MSG_INVALID_TYPE
-     * @throws errors.THROW_MSG_NO_AXIS_INFO
-     * @throws errors.THROW_MSG_NO_AXIS_LIMIT_INFO
-     * @throws errors.THROW_MSG_NO_AXIS_LABEL_INFO
+     * @throws {module:errors.THROW_MSG_NO_BIND}
+     * @throws {module:errors.THROW_MSG_INVALID_TYPE}
+     * @throws {module:errors.THROW_MSG_NO_AXIS_INFO}
+     * @throws {module:errors.THROW_MSG_NO_AXIS_LIMIT_INFO}
+     * @throws {module:errors.THROW_MSG_NO_AXIS_LABEL_INFO}
      * @returns {GraphConfig} instance object
      */
     validateInput() {

@@ -485,6 +485,19 @@ describe("PairedResult", () => {
                     triggerEvent(point, "click", done);
                     expect(dataPointClickHandlerSpy.calledOnce).toBeFalsy();
                 });
+                it("hides data point selection when parameter callback is called", () => {
+                    graphDefault.destroy();
+                    graphDefault = new Graph(getAxes(axisDefault));
+                    input = getInput(valuesDefault, false, false);
+                    input.onClick = (clearSelectionCallback) => {
+                        clearSelectionCallback();
+                    };
+                    graphDefault.loadContent(new PairedResult(input));
+                    const box = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
+                    const point = fetchElementByClass(pairedResultGraphContainer, styles.pairedPoint);
+                    triggerEvent(point, "click");
+                    expect(box.getAttribute("aria-selected")).toBe("false");
+                });
                 it("calls onClick callback", () => {
                     const point = fetchElementByClass(pairedResultGraphContainer, styles.pairedPoint);
                     triggerEvent(point, "click");

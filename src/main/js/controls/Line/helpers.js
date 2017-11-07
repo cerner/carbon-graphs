@@ -48,8 +48,8 @@ const createLine = (scale, d) => {
  * @returns {string} - translate string for d3 transform
  */
 const transformPoint = (scale, value) => {
-    const getX = (value) => scale.x(value.x);
-    const getY = (value) => scale[ value.yAxis ](value.y);
+    const getX = (val) => scale.x(val.x);
+    const getY = (val) => scale[ val.yAxis ](val.y);
     return `translate(${getX(value)},${getY(value)})`;
 };
 /**
@@ -197,13 +197,13 @@ const processDataPoints = (graphConfig, dataTarget) => {
         if (getType(type) === AXIS_TYPE.TIME_SERIES) {
             return parseDateTime(x);
         }
-        return Number(x);
+        return utils.getNumber(x);
     };
     graphConfig.shownTargets.push(dataTarget.key);
     dataTarget.internalValuesSubset = dataTarget.values.map((value) => ({
         onClick: dataTarget.onClick,
         x: getXDataValues(value.x),
-        y: Number(value.y),
+        y: utils.getNumber(value.y),
         color: dataTarget.color || constants.DEFAULT_COLOR,
         label: dataTarget.label || {},
         symbol: dataTarget.symbol || SYMBOLS.CIRCLE,

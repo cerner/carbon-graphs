@@ -1,3 +1,7 @@
+/**
+ * @module axis
+ * @alias module:axis
+ */
 "use strict";
 import d3 from "d3";
 import { getScale } from "../core/BaseConfig";
@@ -20,10 +24,14 @@ const DEFAULT_HEIGHT = constants.DEFAULT_HEIGHT;
  * @returns {undefined} - returns nothing
  */
 const createAxes = (axis, scale, config, canvasSVG) => {
-    axis.x = prepareXAxis(scale.x, config.axis.x.ticks.values, getXAxisWidth(config),
-        getAxisTickFormat(config.locale, config.axis.x.ticks.format, config.axis.x.type));
-    axis.y = prepareYAxis(scale.y, config.axis.y.ticks.values, config.height,
-        getAxisTickFormat(config.locale, config.axis.y.ticks.format));
+    axis.x = prepareXAxis(
+        scale.x, config.axis.x.ticks.values, getXAxisWidth(config),
+        getAxisTickFormat(config.locale, config.axis.x.ticks.format, config.axis.x.type)
+    );
+    axis.y = prepareYAxis(
+        scale.y, config.axis.y.ticks.values, config.height,
+        getAxisTickFormat(config.locale, config.axis.y.ticks.format)
+    );
     canvasSVG.append("g")
              .classed(styles.axis, true)
              .classed(styles.axisX, true)
@@ -458,10 +466,14 @@ const hasY2Axis = (axis) => utils.isDefined(axis.y2) && axis.y2.show;
  * @returns {undefined} - returns nothing
  */
 const translateAxes = (axis, scale, config, canvasSVG) => {
-    axis.x = prepareXAxis(scale.x, config.axis.x.ticks.values, getXAxisWidth(config),
-        getAxisTickFormat(config.locale, config.axis.x.ticks.format, config.axis.x.type));
-    axis.y = prepareYAxis(scale.y, config.axis.y.ticks.values, config.height,
-        getAxisTickFormat(config.locale, config.axis.y.ticks.format));
+    axis.x = prepareXAxis(
+        scale.x, config.axis.x.ticks.values, getXAxisWidth(config),
+        getAxisTickFormat(config.locale, config.axis.x.ticks.format, config.axis.x.type)
+    );
+    axis.y = prepareYAxis(
+        scale.y, config.axis.y.ticks.values, config.height,
+        getAxisTickFormat(config.locale, config.axis.y.ticks.format)
+    );
     canvasSVG.select(`.${styles.axisX}`)
              .attr("transform", `translate(${getXAxisXPosition(config)}, ${getXAxisYPosition(config)})`)
              .call(axis.x);
@@ -514,6 +526,9 @@ const getAxesDataRange = (valuesRange = {}, axis = constants.Y_AXIS, config) => 
     }
 };
 
+/**
+ * @enum {Function}
+ */
 export {
     prepareXAxis,
     prepareYAxis,

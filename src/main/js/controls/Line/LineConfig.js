@@ -43,8 +43,8 @@ class LineConfig extends BaseConfig {
      * Validates for:
      *      values
      *      unique keys
-     * @throws errors.THROW_MSG_NO_DATA_POINTS
-     * @throws errors.THROW_MSG_INVALID_DATA_PROPERTY
+     * @throws module:module:errors.THROW_MSG_NO_DATA_POINTS
+     * @throws module:errors.THROW_MSG_INVALID_DATA_PROPERTY
      * @returns {LineConfig} instance object
      */
     validateInput() {

@@ -38,8 +38,10 @@ const translateCanvas = (config, canvasSVG) =>
     canvasSVG.attr("height", config.canvasHeight)
              .attr("width", config.canvasWidth - BASE_CANVAS_PADDING);
 /**
- * Translates the vertical grid on the canvas, grids are only applicable to standard
- * X and Y Axis
+ * Translates the horizontal grid on the canvas, grids are only applicable to standard
+ * X and Y Axis.
+ * We decide using the ticks that are present in the Y Axis and have the grid lines for every tick except the bounds.
+ * When we resize, the ticks change based on the container real estate and we add/remove the grids respectively.
  * @private
  * @param {Object} axis - Axis scaled according to input parameters
  * @param {Object} config - config object derived from input JSON
@@ -61,7 +63,9 @@ const translateHGrid = (axis, config) => {
 };
 /**
  * Translates the vertical grid on the canvas, grids are only applicable to standard
- * X and Y Axis
+ * X and Y Axis.
+ * We decide using the ticks that are present in the X Axis and have the grid lines for every tick except the bounds.
+ * When we resize, the ticks change based on the container real estate and we add/remove the grids respectively.
  * @private
  * @param {Object} axis - Axis scaled according to input parameters
  * @param {Object} config - config object derived from input JSON

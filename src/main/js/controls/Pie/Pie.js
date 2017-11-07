@@ -2,12 +2,19 @@ import c3 from "c3";
 import errors from "../../helpers/errors";
 import utils from "../../helpers/utils";
 import PieConfig, { processInput } from "./PieConfig";
+/**
+ * TODO: NOT INCLUDED IN DIST, PROOF OF CONCEPT only.
+ *  * Add unit tests
+ *  * Validation
+ *  * Extend from GraphContent
+ *  * Remove this TODO
+ */
 
 /**
  * Data point sets can be loaded using this function.
  * Load function validates, clones and stores the input onto a config object.
  * @private
- * @throws errors.THROW_MSG_NO_DATA_LOADED
+ * @throws {module:errors.THROW_MSG_NO_DATA_LOADED}
  * @param {Object} inputJSON - Input JSON provided by the consumer
  * @returns {Object} configuration JSON
  */

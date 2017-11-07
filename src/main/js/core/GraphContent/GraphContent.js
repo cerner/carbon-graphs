@@ -10,7 +10,8 @@ export default class GraphContent {
     /**
      * Loads the input JSON for generating the graph
      * @abstract
-     * @throws errors.THROW_MSG_CONTENT_LOAD_NOT_IMPLEMENTED
+     * @function GraphContent#load
+     * @throws {module:errors.THROW_MSG_CONTENT_LOAD_NOT_IMPLEMENTED}
      * @param {Object} graph - Graph instance
      * @returns {undefined} - returns nothing
      */
@@ -21,7 +22,8 @@ export default class GraphContent {
     /**
      * Remove the data point from the chart.
      * @abstract
-     * @throws errors.THROW_MSG_CONTENT_UNLOAD_NOT_IMPLEMENTED
+     * @function GraphContent#unload
+     * @throws {module:errors.THROW_MSG_CONTENT_UNLOAD_NOT_IMPLEMENTED}
      * @param {Object} graph - Graph instance
      * @returns {undefined} - returns nothing
      */
@@ -32,7 +34,8 @@ export default class GraphContent {
     /**
      * Resizes the graph based on window resize event
      * @abstract
-     * @throws errors.THROW_MSG_CONTENT_RESIZE_NOT_IMPLEMENTED
+     * @function GraphContent#resize
+     * @throws {module:errors.THROW_MSG_CONTENT_RESIZE_NOT_IMPLEMENTED}
      * @param {Object} graph - Graph instance
      * @returns {undefined} - returns nothing
      */
@@ -46,7 +49,8 @@ export default class GraphContent {
      * The involves clearing the graph and redrawing the svg elements based on the data points that
      * can be shown
      * @abstract
-     * @throws errors.THROW_MSG_CONTENT_REDRAW_NOT_IMPLEMENTED
+     * @function GraphContent#redraw
+     * @throws {module:errors.THROW_MSG_CONTENT_REDRAW_NOT_IMPLEMENTED}
      * @param {Object} graph - Graph instance
      * @returns {undefined} - returns nothing
      */

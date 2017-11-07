@@ -1,6 +1,12 @@
 /**
  * @fileOverview
  * Error constants dictionary.
+ * @module errors
+ * @alias module:errors
+ */
+
+/**
+ * @enum {String}
  */
 export default {
     THROW_MSG_NO_BIND: "Invalid input format, graph DOM id must be provided.",

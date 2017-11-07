@@ -149,7 +149,6 @@ describe("Line", () => {
             expect(line.config.symbol).toBe(input.symbol);
             expect(line.config.label).toEqual(input.label);
             expect(line.config.onClick).toEqual(jasmine.any(Function));
-            expect(line.config.values).toBe(input.values);
             expect(line.config.values.length).toBe(3);
             expect(line.config.values.every((i, index) => i.x === input.values[ index ].x)).toBeTruthy();
             expect(line.config.values.every((i, index) => i.y === input.values[ index ].y)).toBeTruthy();
@@ -366,6 +365,19 @@ describe("Line", () => {
                     const point = fetchElementByClass(lineGraphContainer, styles.point);
                     triggerEvent(point, "click");
                     expect(dataPointClickHandlerSpy.calledOnce).toBeFalsy();
+                });
+                it("hides data point selection when parameter callback is called", () => {
+                    graphDefault.destroy();
+                    graphDefault = new Graph(getAxes(axisDefault));
+                    input = getInput(valuesDefault, false, false);
+                    input.onClick = (clearSelectionCallback) => {
+                        clearSelectionCallback();
+                    };
+                    graphDefault.loadContent(new Line(input));
+                    const point = fetchElementByClass(lineGraphContainer, styles.point);
+                    triggerEvent(point, "click");
+                    const selectionPoint = fetchElementByClass(lineGraphContainer, styles.dataPointSelection);
+                    expect(selectionPoint.classList.contains("hidden")).toBeTruthy();
                 });
                 it("calls onClick callback", () => {
                     const point = fetchElementByClass(lineGraphContainer, styles.point);

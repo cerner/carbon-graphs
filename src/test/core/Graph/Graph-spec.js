@@ -608,13 +608,29 @@ describe("Graph", () => {
                 });
             });
         });
-
         describe("grid", () => {
             it("creates the grid markup", () => {
                 const canvasElement = fetchElementByClass(styles.canvas);
                 expect(canvasElement.querySelector(`.${styles.grid}`)).not.toBeNull();
                 const gridElement = fetchElementByClass(styles.grid);
                 expect(gridElement.childElementCount).toBe(2);
+            });
+            it("creates the grid markup with tick values provided", () => {
+                graph.destroy();
+                const localeAxisObj = utils.deepClone(axisDefault);
+                localeAxisObj.x.ticks = {
+                    values: [ 10, 20, 30 ]
+                };
+                localeAxisObj.y.ticks = {
+                    values: [ 1, 5, 8 ]
+                };
+                graph = new Graph(getAxes(localeAxisObj));
+                const gridElement = fetchElementByClass(styles.grid);
+                const gridHElement = fetchElementByClass(styles.gridH);
+                const gridVElement = fetchElementByClass(styles.gridV);
+                expect(gridElement.childElementCount).toBe(2);
+                expect(gridHElement.childElementCount).toBe(2);
+                expect(gridVElement.childElementCount).toBe(2);
             });
             it("creates the horizontal grid markup", () => {
                 const gridElement = fetchElementByClass(styles.grid);
@@ -749,6 +765,7 @@ describe("Graph", () => {
             });
         });
         it("attaches event handlers", () => {
+            graph.resizeHandler();
             expect(graph.resizeHandler).not.toBeNull();
             expect(graph.resizeHandler).toEqual(jasmine.any(Function));
         });
@@ -780,6 +797,19 @@ describe("Graph", () => {
             expect(+fetchElementByClass(styles.canvas).getAttribute("height")).not.toBe(0);
             expect(+fetchElementByClass(styles.canvas).getAttribute("height")).toBeGreaterThan(0);
             expect(+fetchElementByClass(styles.canvas).getAttribute("width")).toBe(790);
+        });
+        it("throttles based on delay provided in the input", (done) => {
+            const throttledInput = getAxes(axisDefault);
+            throttledInput.throttle = 100;
+            graphContainer.setAttribute("style", "width: 800px; height: 200px");
+            graph.destroy();
+            graph = new Graph(throttledInput);
+            graph.resize();
+            setTimeout(() => {
+                done();
+                graph.resizeHandler();
+                expect(graph.resizeHandler).toEqual(jasmine.any(Function));
+            }, 100);
         });
     });
     describe("when unload is called", () => {
@@ -819,7 +849,14 @@ describe("Graph", () => {
             expect(graph.config.axisSizes).toBeUndefined();
             expect(graph.config.axisLabelWidths).toBeUndefined();
             expect(graph.config.axisLabelHeights).toBeUndefined();
-            expect(graph.config).toEqual({});
+            expect(graph.config).toEqual({
+                axis: Object({
+                    x: Object({}),
+                    y: Object({}),
+                    y2: Object({})
+                }),
+                shownTargets: Object({})
+            });
             expect(graph.axis).toEqual({});
             expect(graph.scale).toEqual({});
             expect(graph.svg).toBeNull();

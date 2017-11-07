@@ -17,6 +17,8 @@ const helpers = {
 /**
  * Carbon
  * @public
+ * @module Carbon
+ * @enum {Object}
  */
 const Carbon = {
     api,

@@ -98,7 +98,7 @@ Resources on locale based tick formatting:
 #### Locale
 * If `locale` is provided, `ticks.format` is expected to be provided as well otherwise there is no effect on the graph itself.
 #### Data-point values
-* `values` will not be subjected to any kind of pre-processing before generating the graph. If the `values` are of type `timeseries` then they are expected to be linear/sorted.    
+* `values` will not be subjected to any kind of pre-processing before generating the graph. `values` co-ordinates are expected to be linear/sorted.
 
 ## API Reference
 ![Alt](./controls/api.png "API flowchart")

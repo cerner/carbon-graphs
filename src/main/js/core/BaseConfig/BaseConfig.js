@@ -60,12 +60,7 @@ export const getType = (type) => getDefaultValue(type, AXIS_TYPE.DEFAULT);
  * @param {string} type - consumer passed input type
  * @returns {Object} d3 scale object
  */
-export const getScale = (type) => {
-    if (getType(type) === AXIS_TYPE.TIME_SERIES) {
-        return d3.time.scale();
-    }
-    return d3.scale.linear();
-};
+export const getScale = (type) => getType(type) === AXIS_TYPE.TIME_SERIES ? d3.time.scale() : d3.scale.linear();
 
 /**
  * Returns the domain for the axes. If the range is a number then the domain is treated
@@ -77,18 +72,15 @@ export const getScale = (type) => {
  * @param {string} upperLimit - upper limit of the axes
  * @returns {Array} Array represented by lower and upper limit ranges.
  */
-export const getDomain = (type, lowerLimit, upperLimit) => {
-    if (getType(type) === AXIS_TYPE.TIME_SERIES) {
-        return [
+export const getDomain = (type, lowerLimit, upperLimit) =>
+    (getType(type) === AXIS_TYPE.TIME_SERIES) ? [
             parseDateTime(lowerLimit),
             parseDateTime(upperLimit)
+        ]
+        : [
+            utils.getNumber(lowerLimit),
+            utils.getNumber(upperLimit)
         ];
-    }
-    return [
-        Number(lowerLimit),
-        Number(upperLimit)
-    ];
-};
 
 /**
  * API to parse consumer input.
@@ -98,8 +90,9 @@ export const getDomain = (type, lowerLimit, upperLimit) => {
 export default class BaseConfig {
     /**
      * Validates and verifies the input JSON object
-     * @throws errors.THROW_MSG_CONFIG_VALIDATE_INPUT_NOT_IMPLEMENTED
      * @abstract
+     * @function BaseConfig#validateInput
+     * @throws {module:errors.THROW_MSG_CONFIG_VALIDATE_INPUT_NOT_IMPLEMENTED}
      * @returns {undefined} - returns nothing
      */
     validateInput() {
@@ -108,8 +101,9 @@ export default class BaseConfig {
 
     /**
      * Clones the input JSON into the config object
-     * @throws errors.THROW_MSG_CONFIG_CLONE_INPUT_NOT_IMPLEMENTED
      * @abstract
+     * @function BaseConfig#clone
+     * @throws {module:errors.THROW_MSG_CONFIG_CLONE_INPUT_NOT_IMPLEMENTED}
      * @returns {undefined} - returns nothing
      */
     clone() {

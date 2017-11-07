@@ -15,6 +15,11 @@ import {
 import PairedResultConfig from "./PairedResultConfig";
 
 /**
+ * @typedef {Object} PairedResult
+ * @typedef {Object} GraphContent
+ * @typedef {Object} PairedResultConfig
+ */
+/**
  * Calculates the min and max values for Y Axis or Y2 Axis
  * @private
  * @param {Array} values - Datapoint values
@@ -22,7 +27,7 @@ import PairedResultConfig from "./PairedResultConfig";
  * @returns {Object} - Contains min and max values for the data points
  */
 const calculateValuesRange = (values, axis = constants.Y_AXIS) =>
-    Object.assign({}, {
+    ({
         [axis]: {
             min: Math.min(...values.map((i) =>
                 Math.min(...Object.keys(i).map((j) =>
@@ -50,9 +55,33 @@ const loadInput = (inputJSON) =>
 
 /**
  * A Paired result graph is a graph that is represented by 2 points
- * and a vertical line connecting them. There may be an optional 3rd datapoint
+ * and a line connecting them. There may be an optional 3rd datapoint
  * representing a median between them.
  *
+ * @example
+ * You can have 3 pairs of x and y co-ordinates with different x and y values to make option 3 below.
+ * Or
+ * You can have 3 identical X co-ordinates with varying Y co-ordinates to have option 1, shown below.
+ *   o
+ |
+ |
+ |
+ |
+ o
+
+ // Or
+
+ o------------o
+
+ // Or
+
+ o
+ \
+ \
+ \
+ \
+ o
+ // etc.
  * Lifecycle functions include:
  *  * Load
  *  * Generate
@@ -62,6 +91,10 @@ const loadInput = (inputJSON) =>
  * @class PairedResult
  */
 class PairedResult extends GraphContent {
+    /**
+     * @constructor
+     * @param {PairedResultConfig} input - Input JSON instance created using GraphConfig
+     */
     constructor(input) {
         super();
         this.config = loadInput(input);

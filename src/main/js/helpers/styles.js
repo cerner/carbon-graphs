@@ -1,6 +1,11 @@
 /**
  * @fileOverview
  * CSS Styles constant dictionary.
+ * @module styles
+ * @alias module:styles
+ */
+/**
+ * @enum {String}
  */
 export default {
     container: "carbon-graph-container",

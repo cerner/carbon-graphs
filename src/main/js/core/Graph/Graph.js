@@ -28,6 +28,11 @@ import {
     updateAxesDomain
 } from "./helpers";
 
+/**
+ * @typedef {Object} Graph
+ * @typedef {Object} GraphConfig
+ */
+
 const PADDING = constants.PADDING;
 const BASE_CANVAS_PADDING = constants.BASE_CANVAS_WIDTH_PADDING;
 /**
@@ -66,7 +71,7 @@ const isRangeModified = (config, yAxis = constants.Y_AXIS) => config.axis[ yAxis
  * Data point sets can be loaded using this function.
  * Load function validates, clones and stores the input onto a config object.
  * @private
- * @throws errors.THROW_MSG_NO_AXES_DATA_LOADED
+ * @throws {module:errors.THROW_MSG_NO_AXES_DATA_LOADED}
  * @param {Object} inputJSON - Input JSON provided by the consumer
  * @returns {Object} config object containing consumer data
  */
@@ -94,6 +99,32 @@ const beforeInit = (control) => {
     control.graphContainer = d3.select(control.config.bindTo);
     getAxesDataRange({}, "", control.config);
     updateAxesDomain(control.config);
+    return control;
+};
+
+/**
+ * Initializes the necessary Graph constructor objects
+ * @private
+ * @param {Graph} control - Graph instance
+ * @returns {Graph} Graph instance
+ */
+const initConfig = (control) => {
+    control.graphContainer = null;
+    control.config = {
+        axis: {
+            x: {},
+            y: {},
+            y2: {}
+        },
+        shownTargets: {}
+    };
+    control.axis = {};
+    control.scale = {};
+    control.svg = null;
+    control.legendSVG = null;
+    control.content = [];
+    control.contentTargets = [];
+    control.resizeHandler = null;
     return control;
 };
 
@@ -135,21 +166,12 @@ const init = (control) => {
  * @class Graph
  */
 class Graph {
+    /**
+     * @constructor
+     * @param {GraphConfig} input - Input JSON instance created using GraphConfig
+     */
     constructor(input) {
-        this.graphContainer = null;
-        this.config = {};
-        this.config.axis = {};
-        this.config.axis.x = {};
-        this.config.axis.y = {};
-        this.config.axis.y2 = {};
-        this.config.shownTargets = {};
-        this.axis = {};
-        this.scale = {};
-        this.svg = null;
-        this.legendSVG = null;
-        this.content = [];
-        this.contentTargets = [];
-        this.resizeHandler = null;
+        initConfig(this);
         this.generate(input);
     }
 
@@ -249,15 +271,7 @@ class Graph {
         detachEventHandlers(this);
         this.graphContainer.select(`.${styles.canvas}`).remove();
         this.graphContainer.select(`.${styles.container}`).remove();
-        this.graphContainer = null;
-        this.config = {};
-        this.axis = {};
-        this.scale = {};
-        this.svg = null;
-        this.legendSVG = null;
-        this.content = [];
-        this.contentTargets = [];
-        this.resizeHandler = null;
+        initConfig(this);
         return this;
     }
 }

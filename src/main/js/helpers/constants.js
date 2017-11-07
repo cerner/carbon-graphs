@@ -1,29 +1,11 @@
-const D3_INBUILT_SYMBOL = {
-    CIRCLE: "circle",
-    CROSS: "cross",
-    DIAMOND: "diamond",
-    SQUARE: "square",
-    TRIANGLE_DOWN: "triangle-down",
-    TRIANGLE: "triangle-up"
-};
-// Scaling is necessary for CUSTOM_PATH
-const CUSTOM_PATH = {
-    TEAR_DROP: "m0.05-5.59q0 0 3.05 3.66a3.9 3.9 0 1 1-6.1 0q3.05-3.66 3.05-3.66z",
-    TEAR_ALT: "m0.01 4.72q0 0-3.05-3.66a3.9 3.9 0 1 1 6.1 0q-3.05 3.66-3.05 3.66z",
-    X: "m-5.01-2.47 2.5-2.5 2.5 2.5 2.5-2.5 2.5 2.5-2.5 2.5 2.5 2.5-2.5 2.5-2.5-2.5-2.5 2.5-2.5-2.5 2.5-2.5z",
-    RHOMBUS: "M-0.01-5.01 4.99-0.01-0.01 4.99-5.01-0.01Z",
-    VERTICAL_BAR: "m-2.46-6.05h4.8v12h-4.8v-12"
-};
-const PADDING = {
-    top: 5,
-    bottom: 10,
-    left: 30,
-    right: 30
-};
+/**
+ * @module constants
+ * @alias module:constants
+ */
 /**
  * Consumers can pick a color from this default list
  * @public
- * @type {{BLACK: string, BLUE: string,
+ * @enum {{BLACK: string, BLUE: string,
  * GREEN: string, LIGHT_PURPLE: string, ORANGE: string,
  * YELLOW: string, GREY: string, LIGHT_BLUE: string,
  * LIGHT_GREEN: string, PURPLE: string, LIGHT_ORANGE: string, LIGHT_YELLOW: string}}
@@ -45,7 +27,7 @@ export const COLORS = {
 /**
  * Consumers can pick a symbol from this default list
  * @public
- * @type {{CIRCLE: string, TRIANGLE: string,
+ * @enum {{CIRCLE: string, TRIANGLE: string,
  * SQUARE: string, X: string, DIAMOND: string,
  * CROSS: string, VERTICAL_BAR: string, RHOMBUS: string,
  * TEAR_DROP: string, TEAR_ALT: string, TRIANGLE_DOWN: string}}
@@ -68,56 +50,60 @@ export const SYMBOLS = {
  * DEFAULT is enabled by default. This represents number based axes
  * TIMESERIES is time based axes. For now it only reflects on x-Axis
  * @public
- * @type {{DEFAULT: string, TIME_SERIES: string}}
+ * @enum {{DEFAULT: string, TIME_SERIES: string}}
  */
 export const AXIS_TYPE = {
     DEFAULT: "default",
     TIME_SERIES: "timeseries"
 };
-const DEFAULT_HEIGHT = 250;
-const BASE_CANVAS_WIDTH_PADDING = 10;
-const DEFAULT_PLOT_SIZE = 60;
-const DEFAULT_PLOT_LEGEND_SIZE = 25;
-const DEFAULT_PLOT_LEGEND_SCALE = 0.75;
-const DEFAULT_SELECTED_RADIUS = 9;
-const DEFAULT_Y_AXIS_SPACING = 30;
-const RESIZE_THROTTLE = (1000 / 60);
-const MIN_TICKS = 3;
-const MAX_TICK_VARIANCE = 100;
-const PAIR_ITEM_TYPES = [ "high", "mid", "low" ];
-const ISO8601_DATE_TIME_MILLI = /(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}(:\d{2}(\.\d+)*)*)Z/;
-const HOVER_EVENT = {
-    MOUSE_ENTER: "enter",
-    MOUSE_EXIT: "exit"
-};
-const LEGEND_ICON_SIZE = "0 0 11 11";
-const TRANSITION_DURATION = 100;
-const TRANSITION_FUNCTION = "linear";
-
+/**
+ * @enum {String}
+ */
 export default {
-    PADDING,
-    PAIR_ITEM_TYPES,
-    ISO8601_DATE_TIME_MILLI,
-    RESIZE_THROTTLE,
-    BASE_CANVAS_WIDTH_PADDING,
-    DEFAULT_HEIGHT,
-    DEFAULT_PLOT_SIZE,
-    DEFAULT_PLOT_LEGEND_SIZE,
-    DEFAULT_PLOT_LEGEND_SCALE,
-    DEFAULT_SELECTED_RADIUS,
-    DEFAULT_Y_AXIS_SPACING,
-    HOVER_EVENT,
-    LEGEND_ICON_SIZE,
-    DEFAULT_SYMBOL: D3_INBUILT_SYMBOL.CIRCLE,
+    PADDING: {
+        top: 5,
+        bottom: 10,
+        left: 30,
+        right: 30
+    },
+    PAIR_ITEM_TYPES: [ "high", "mid", "low" ],
+    ISO8601_DATE_TIME_MILLI: /(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}(:\d{2}(\.\d+)*)*)Z/,
+    RESIZE_THROTTLE: (1000 / 60),
+    BASE_CANVAS_WIDTH_PADDING: 10,
+    DEFAULT_HEIGHT: 250,
+    DEFAULT_PLOT_SIZE: 60,
+    DEFAULT_PLOT_LEGEND_SIZE: 25,
+    DEFAULT_PLOT_LEGEND_SCALE: 0.75,
+    DEFAULT_SELECTED_RADIUS: 9,
+    DEFAULT_Y_AXIS_SPACING: 30,
+    HOVER_EVENT: {
+        MOUSE_ENTER: "enter",
+        MOUSE_EXIT: "exit"
+    },
+    LEGEND_ICON_SIZE: "0 0 11 11",
+    DEFAULT_SYMBOL: "circle",
     DEFAULT_COLOR: COLORS.BLACK,
     CLIP_PATH_ID: `carbon-${+new Date()}-clip`,
     X_AXIS: "x",
     Y_AXIS: "y",
     Y2_AXIS: "y2",
-    MIN_TICKS,
-    MAX_TICK_VARIANCE,
-    D3_INBUILT_SYMBOL,
-    CUSTOM_PATH,
-    TRANSITION_DURATION,
-    TRANSITION_FUNCTION
+    MIN_TICKS: 3,
+    MAX_TICK_VARIANCE: 100,
+    D3_INBUILT_SYMBOL: {
+        CIRCLE: "circle",
+        CROSS: "cross",
+        DIAMOND: "diamond",
+        SQUARE: "square",
+        TRIANGLE_DOWN: "triangle-down",
+        TRIANGLE: "triangle-up"
+    },
+    CUSTOM_PATH: {
+        TEAR_DROP: "m0.05-5.59q0 0 3.05 3.66a3.9 3.9 0 1 1-6.1 0q3.05-3.66 3.05-3.66z",
+        TEAR_ALT: "m0.01 4.72q0 0-3.05-3.66a3.9 3.9 0 1 1 6.1 0q-3.05 3.66-3.05 3.66z",
+        X: "m-5.01-2.47 2.5-2.5 2.5 2.5 2.5-2.5 2.5 2.5-2.5 2.5 2.5 2.5-2.5 2.5-2.5-2.5-2.5 2.5-2.5-2.5 2.5-2.5z",
+        RHOMBUS: "M-0.01-5.01 4.99-0.01-0.01 4.99-5.01-0.01Z",
+        VERTICAL_BAR: "m-2.46-6.05h4.8v12h-4.8v-12"
+    },
+    TRANSITION_DURATION: 100,
+    TRANSITION_FUNCTION: "linear"
 };
