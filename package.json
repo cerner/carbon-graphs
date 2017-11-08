@@ -21,15 +21,18 @@
     "deploy:site": "npm run docs && npm run prepush && webpack --config ./build/webpack/site.webpack.js --env.TYPE=SITE && gh-pages -d .site -m \"Upgrade: Deploy site\"",
     "dev": "node ./build/webpack/dev-server.js --env.TYPE=DEV",
     "docs": "node_modules/.bin/jsdoc -c jsdoc.json",
-    "test": "karma start ./build/karma/karma.config.js --single-run --no-auto-watch",
-    "test:persist": "karma start ./build/karma/karma.config.js --no-single-run",
-    "test:chrome": "karma start ./build/karma/karma.config.js --no-single-run --browsers Chrome",
     "lint:styles": "stylelint src/main/less/**/*.less",
     "lint:source": "eslint src --color --max-warnings 0",
     "lint": "npm run lint:source && npm run lint:styles",
     "lint:fix": "eslint src --color --fix",
     "prepublish": "in-publish && npm run build && npm run build:dist || not-in-publish",
-    "prepush": "npm run lint && npm run test"
+    "prepush": "npm run lint && npm run test",
+    "release:patch": "fusion-make patch --ec-profile npm --no-pom",
+    "release:minor": "fusion-make minor --ec-profile npm --no-pom",
+    "release:major": "fusion-make major --ec-profile npm --no-pom",
+    "test": "karma start ./build/karma/karma.config.js --single-run --no-auto-watch",
+    "test:persist": "karma start ./build/karma/karma.config.js --no-single-run",
+    "test:chrome": "karma start ./build/karma/karma.config.js --no-single-run --browsers Chrome"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.6",
