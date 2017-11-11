@@ -85,8 +85,11 @@ Each axis - X, Y and Y2 should have the following properties:
 
 ### Values
 #### Required
- `N/A`
-#### Optional
+|Property Name|Expected|
+---|---|
+|x|string
+|y|string
+
 |Property Name|Expected|Default
 ---|---|---|
 |high|Object|_{x: "", y: ""}_

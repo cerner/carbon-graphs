@@ -92,12 +92,13 @@ Each axis - X, Y and Y2 should have the following properties:
 
 ### Values
 #### Required
- `N/A`
+|Property Name|Expected|
+---|---|
+|x|string
+|y|string
+
 #### Optional
-|Property Name|Expected|Default
----|---|---|
-|x|string|""
-|y|string|""
+ `N/A`
 
 ### Constraints
 * If `label` display is not provided then the legend item will not be shown as well
