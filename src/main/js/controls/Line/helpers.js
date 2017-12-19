@@ -164,18 +164,16 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
                                              .enter()
     );
     if (config.showSymbols) {
-        const pointGroupSVG = lineSVG.append("g")
-                                     .classed(styles.currentPointsGroup, true)
-                                     .attr("transform", `translate(${getXAxisXPosition(config)},${PADDING.top})`);
-        pointGroupSVG.selectAll(`.${styles.pointGroup}`)
-                     .data([ dataTarget ])
-                     .enter()
-                     .append("g")
-                     .classed(styles.pointGroup, true);
-        drawDataPoints(scale, config, pointGroupSVG.select(`.${styles.pointGroup}`)
-                                                   .selectAll(`.${styles.point}`)
-                                                   .data(getDataPointValues)
-                                                   .enter()
+        lineSVG.selectAll(`.${styles.currentPointsGroup}`)
+               .data([ dataTarget ])
+               .enter()
+               .append("g")
+               .classed(styles.currentPointsGroup, true)
+               .attr("transform", `translate(${getXAxisXPosition(config)},${PADDING.top})`);
+        drawDataPoints(scale, config, lineSVG.select(`.${styles.currentPointsGroup}`)
+                                             .selectAll(`.${styles.point}`)
+                                             .data(getDataPointValues)
+                                             .enter()
         );
     }
 };
@@ -266,13 +264,13 @@ const drawDataPoints = (scale, config, canvasSVG) => {
             .attr("transform", transformPoint.bind({}, scale))
             .attr("r", constants.DEFAULT_SELECTED_RADIUS)
             .attr("style", (value) =>
-                `${config.shownTargets.indexOf(value.key) < 0 ? " display: none;" : ""}`)
+                `${config.shownTargets.indexOf(value.key) < 0 ? "display: none;" : ""}`)
             .attr("aria-describedby", (value) => value.key)
             .on("click", function(value, index) {
                 dataPointActionHandler(value, index, this);
             });
     const pointsPath = canvasSVG.append("g")
-                                .classed(styles.dataPointSelectionGroup, true);
+                                .classed(styles.pointGroup, true);
     getSelectionPath(pointsPath.append(constants.DEFAULT_SYMBOL));
     getDataPointPath(pointsPath.append("path"));
 };

@@ -343,7 +343,10 @@ describe("PairedResult", () => {
             });
             it("adds line with default stroke", () => {
                 const linePath = fetchElementByClass(pairedResultGraphContainer, styles.pairedLine);
-                expect(linePath.attributes.getNamedItem("style")).toBeNull();
+                expect(linePath.getAttribute("class")).toBe(styles.pairedLine);
+                expect(linePath.getAttribute("aria-describedby")).toBe(input.key);
+                expect(linePath.attributes.getNamedItem("style").value).toBe("");
+                expect(linePath.attributes.getNamedItem("d").value).not.toBeNull();
             });
             it("adds points for each data point", () => {
                 const pointsGroup = fetchElementByClass(pairedResultGraphContainer, styles.pairedBoxGroup);
@@ -653,7 +656,7 @@ describe("PairedResult", () => {
                 const graph = graphDefault.loadContent(pairResultInstance);
                 triggerEvent(fetchElementByClass(pairedResultGraphContainer, styles.legendItem), "click");
                 pairResultInstance.redraw(graph);
-                expect(pairedResultGraphContainer.querySelector(`.${styles.pairedLine}`)).toBeNull();
+                expect(pairedResultGraphContainer.querySelector(`.${styles.pairedLine}`).style.display).toBe("none");
             });
             it("on click hides the line and points, if the point is low", () => {
                 const input = getInput(valuesDefault, false, false);
@@ -662,7 +665,7 @@ describe("PairedResult", () => {
                 const legendContainer = fetchElementByClass(pairedResultGraphContainer, styles.legend);
                 triggerEvent(legendContainer.querySelector(`[aria-describedby=${input.key}_low]`), "click");
                 pairResultInstance.redraw(graph);
-                expect(pairedResultGraphContainer.querySelector(`.${styles.pairedLine}`)).toBeNull();
+                expect(pairedResultGraphContainer.querySelector(`.${styles.pairedLine}`).style.display).toBe("none");
             });
             it("on click does not hide the line and points, if the point is mid", () => {
                 const input = getInput(valuesDefault, false, false);

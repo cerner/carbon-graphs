@@ -177,7 +177,7 @@ const createDefs = (config, canvasSVG) =>
              .append("clipPath")
              .attr("id", constants.CLIP_PATH_ID)
              .append("rect")
-             .attr("x", getXAxisXPosition(config))
+             .attr(constants.X_AXIS, getXAxisXPosition(config))
              .attr(constants.Y_AXIS, PADDING.top)
              .attr("width", "100%")
              .attr("height", config.canvasHeight);

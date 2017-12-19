@@ -24,7 +24,7 @@ export const processInput = (config) =>
             type: "pie",
             onclick: config.data[ 0 ].onClick,
             colors: Object.assign({}, ...config.data.map((i) => Object.assign({}, {
-                [i.label]: i.color
+                [ i.label ]: i.color
             })))
         }
     });
