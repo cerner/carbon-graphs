@@ -488,17 +488,15 @@ describe("Graph", () => {
                 expect(yAxisElement.getAttribute("class")).toBe(`${styles.axis} ${styles.axisY} hidden`);
             });
             it("hides x and y axis when not enabled", () => {
-                it("hides y axis when not enabled", () => {
-                    graph.destroy();
-                    const hiddenAxisObj = utils.deepClone(axisTimeSeries);
-                    hiddenAxisObj.x.show = false;
-                    hiddenAxisObj.y.show = false;
-                    graph = new Graph(getAxes(hiddenAxisObj));
-                    expect(fetchElementByClass(styles.axisY).getAttribute("class"))
-                        .toBe(`${styles.axis} ${styles.axisY} hidden`);
-                    expect(fetchElementByClass(styles.axisX).getAttribute("class"))
-                        .toBe(`${styles.axis} ${styles.axisX} hidden`);
-                });
+                graph.destroy();
+                const hiddenAxisObj = utils.deepClone(axisTimeSeries);
+                hiddenAxisObj.x.show = false;
+                hiddenAxisObj.y.show = false;
+                graph = new Graph(getAxes(hiddenAxisObj));
+                expect(fetchElementByClass(styles.axisY).getAttribute("class"))
+                    .toBe(`${styles.axis} ${styles.axisY} hidden`);
+                expect(fetchElementByClass(styles.axisX).getAttribute("class"))
+                    .toBe(`${styles.axis} ${styles.axisX} hidden`);
             });
             describe("for timeseries type", () => {
                 it("creates x axis with ticks in default locale", () => {

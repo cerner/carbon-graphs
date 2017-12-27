@@ -178,6 +178,16 @@ class Graph {
     /**
      * Draw function that is called by the parent control. This draws the Axes, grid, legend and
      * labels for the chart construct.
+     * @description Since we dont have the concept of z-index in visualization,
+     * the order of rendering should be following:
+     *  * SVG container
+     *  * Reference ranges
+     *  * Grid
+     *  * X-Axis
+     *  * Y-Axes
+     *  * Labels
+     *  * Legend
+     *  * Data [In our case we have load and unload]
      * @param {Object} input - Input JSON
      * @returns {HTMLElement} d3 HTML element SVG.
      */
@@ -196,12 +206,14 @@ class Graph {
             .attr("height", this.config.canvasHeight)
             .attr("width", this.config.canvasWidth - BASE_CANVAS_PADDING);
         createDefs(this.config, this.svg);
+        createGrid(this.axis, this.scale, this.config, this.svg);
         createAxes(this.axis, this.scale, this.config, this.svg);
-        createGrid(this.axis, this.config, this.svg);
         createLabel(this.config, this.svg);
         if (this.config.showLegend) {
-            // If the consumer doesn't wish to show legend item then they can pass blank.
-            // The legend item wont be rendered at that point.
+            /*
+            If the consumer doesn't wish to show legend item then they can pass blank.
+            The legend item wont be rendered at that point.
+            */
             this.legendSVG = createLegend(containerSVG);
         }
         attachEventHandlers(this);

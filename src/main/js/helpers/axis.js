@@ -24,14 +24,7 @@ const DEFAULT_HEIGHT = constants.DEFAULT_HEIGHT;
  * @returns {undefined} - returns nothing
  */
 const createAxes = (axis, scale, config, canvasSVG) => {
-    axis.x = prepareXAxis(
-        scale.x, config.axis.x.ticks.values, getXAxisWidth(config),
-        getAxisTickFormat(config.locale, config.axis.x.ticks.format, config.axis.x.type)
-    );
-    axis.y = prepareYAxis(
-        scale.y, config.axis.y.ticks.values, config.height,
-        getAxisTickFormat(config.locale, config.axis.y.ticks.format)
-    );
+    getAxesScale(axis, scale, config);
     canvasSVG.append("g")
              .classed(styles.axis, true)
              .classed(styles.axisX, true)
@@ -45,14 +38,35 @@ const createAxes = (axis, scale, config, canvasSVG) => {
              .attr("transform", `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition()})`)
              .call(axis.y);
     if (hasY2Axis(config.axis)) {
-        axis.y2 = prepareY2Axis(scale.y2, config.axis.y2.ticks.values, config.height,
-            getAxisTickFormat(config.locale, config.axis.y2.ticks.format));
         canvasSVG.append("g")
                  .classed(styles.axis, true)
                  .classed(styles.axisY2, true)
                  .attr("transform", `translate(${getY2AxisXPosition(config)}, ${getY2AxisYPosition()})`)
                  .call(axis.y2);
     }
+};
+/**
+ * Prepares X,Y and Y2 Axes according to their scale and available container width and height
+ * @private
+ * @param {Object} axis - Axis scaled according to input parameters
+ * @param {Object} scale - d3 scale taking into account the input parameters
+ * @param {Object} config - config object derived from input JSON
+ * @returns {Object} - Scaled axes object
+ */
+const getAxesScale = (axis, scale, config) => {
+    axis.x = prepareXAxis(
+        scale.x, config.axis.x.ticks.values, getXAxisWidth(config),
+        getAxisTickFormat(config.locale, config.axis.x.ticks.format, config.axis.x.type)
+    );
+    axis.y = prepareYAxis(
+        scale.y, config.axis.y.ticks.values, config.height,
+        getAxisTickFormat(config.locale, config.axis.y.ticks.format)
+    );
+    if (hasY2Axis(config.axis)) {
+        axis.y2 = prepareY2Axis(scale.y2, config.axis.y2.ticks.values, config.height,
+            getAxisTickFormat(config.locale, config.axis.y2.ticks.format));
+    }
+    return axis;
 };
 /**
  * Ticks can be formatted by passing the format string via input JSON.
@@ -77,7 +91,6 @@ const getAxisTickFormat = (locale, format, type = AXIS_TYPE.DEFAULT) => {
         return locale.numberFormat(format);
     }
 };
-
 /**
  * Creates the axis using the scale provided for X Axis using d3 svg axis.
  * If tickValues are provided then they are reserved precedence over ticks/tick counts.
@@ -422,7 +435,6 @@ const getUpperOutlierStretchFactorList = (config) => {
     }
     return upperStretchFactors;
 };
-
 /**
  * Determines if the values provided exceed the lower and upper bounds provided in the Y or Y2 axes
  * If the values exceed the bounds then the range and domain are adjusted accordingly.
@@ -466,14 +478,7 @@ const hasY2Axis = (axis) => utils.isDefined(axis.y2) && axis.y2.show;
  * @returns {undefined} - returns nothing
  */
 const translateAxes = (axis, scale, config, canvasSVG) => {
-    axis.x = prepareXAxis(
-        scale.x, config.axis.x.ticks.values, getXAxisWidth(config),
-        getAxisTickFormat(config.locale, config.axis.x.ticks.format, config.axis.x.type)
-    );
-    axis.y = prepareYAxis(
-        scale.y, config.axis.y.ticks.values, config.height,
-        getAxisTickFormat(config.locale, config.axis.y.ticks.format)
-    );
+    getAxesScale(axis, scale, config);
     canvasSVG.select(`.${styles.axisX}`)
              .attr("transform", `translate(${getXAxisXPosition(config)}, ${getXAxisYPosition(config)})`)
              .call(axis.x);
@@ -483,8 +488,6 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
              .attr("transform", `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition()})`)
              .call(axis.y);
     if (hasY2Axis(config.axis)) {
-        axis.y2 = prepareY2Axis(scale.y2, config.axis.y2.ticks.values, config.height,
-            getAxisTickFormat(config.locale, config.axis.y2.ticks.format));
         canvasSVG.select(`.${styles.axisY2}`)
                  .transition(constants.TRANSITION_FUNCTION)
                  .duration(constants.TRANSITION_DURATION)
@@ -557,6 +560,7 @@ export {
     calculateAxesLabelSize,
     determineOutlierStretchFactor,
     buildAxisLabel,
+    getAxesScale,
     createAxes,
     getAxesDataRange,
     hasY2Axis,
