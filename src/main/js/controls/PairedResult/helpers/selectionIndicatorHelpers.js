@@ -93,7 +93,7 @@ const isDataPointLegendToggled = (config, value) => {
 const toggleDataPointSelection = (config, value, target) => {
     const pairNode = d3.select(target);
     const selectedPairNode = pairNode.select(`.${styles.dataPointSelection}`);
-    pairNode.attr("aria-selected", !(selectedPairNode.attr("aria-selected") === "true"));
+    pairNode.attr("aria-selected", !(pairNode.attr("aria-selected") === "true"));
     selectedPairNode.classed("hidden", !selectedPairNode.classed("hidden"));
     if (isDataPointLegendToggled(config, value)) {
         showHideSiblingDataPoint(config, value, target);
