@@ -118,7 +118,7 @@ const translateLabel = (config, canvasSVG) => {
     if (config.axis.x.label) {
         canvasSVG.select(`.${styles.axisLabelX}`)
                  .attr("transform", `translate(${getXAxisLabelXPosition(config)},${getXAxisLabelYPosition(config)
-                     })`);
+                     }) rotate(${getRotationForAxis(constants.X_AXIS)})`);
     }
 
     if (config.axis.y.label) {
@@ -228,7 +228,7 @@ const createLabel = (config, canvasSVG) => {
             const labelPath = canvasSVG.append("g")
                                        .classed(styles.axisLabelX, true)
                                        .attr("transform", `translate(${getXAxisLabelXPosition(config)},${getXAxisLabelYPosition(config)
-                                           })`);
+                                           }) rotate(${getRotationForAxis(constants.X_AXIS)})`);
             buildAxisLabel(labelPath, utils.sanitize(config.axis.x.label));
         }
         if (config.axis.y.label) {

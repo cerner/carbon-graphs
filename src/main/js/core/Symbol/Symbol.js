@@ -1,6 +1,7 @@
 "use strict";
 import d3 from "d3";
 import constants from "../../helpers/constants";
+import errors from "../../helpers/errors";
 
 /**
  * Checks if the symbol is an inbuilt symbol
@@ -36,7 +37,8 @@ class Symbol {
     }
 
     /**
-     * Returns the moveto path for the symbol.
+     * Returns the Moveto path for the symbol.
+     * @throws {module:errors.THROW_MSG_UNKNOWN_SYMBOL}
      * @param {number} [size] - size of the symbol. Used for d3 inbuilt symbols only.
      * Custom symbols would need separate scaling
      * @returns {string} Moveto paths for the symbol set in the Symbol class
@@ -46,7 +48,7 @@ class Symbol {
             if (isNativeSymbol(symbol)) {
                 return constants.CUSTOM_PATH[ symbol ];
             }
-            throw "Unknown symbol type provided for data point";
+            throw errors.THROW_MSG_UNKNOWN_SYMBOL;
         };
         const getD3Symbol = (symbol) =>
             d3.svg.symbol().type(constants.D3_INBUILT_SYMBOL[ symbol ]).size(size || constants.DEFAULT_PLOT_SIZE)();
