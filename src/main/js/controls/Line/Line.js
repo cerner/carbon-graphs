@@ -11,7 +11,7 @@ import {
     prepareLegendItems,
     processDataPoints,
     translateLineGraph
-} from "./helpers";
+} from "./helpers/helpers";
 import LineConfig from "./LineConfig";
 
 /**

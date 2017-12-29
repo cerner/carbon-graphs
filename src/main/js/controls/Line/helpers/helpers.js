@@ -3,26 +3,26 @@ import d3 from "d3";
 import {
     getType,
     parseDateTime
-} from "../../core/BaseConfig";
+} from "../../../core/BaseConfig/index";
 import {
     getColorForTarget,
     isBuiltAsAPathSymbol,
     isDate
-} from "../../core/Graph/helpers";
-import Symbol from "../../core/Symbol";
-import { getXAxisXPosition } from "../../helpers/axis";
+} from "../../../core/Graph/helpers";
+import Symbol from "../../../core/Symbol/index";
+import { getXAxisXPosition } from "../../../helpers/axis";
 import constants, {
     AXIS_TYPE,
     SYMBOLS
-} from "../../helpers/constants";
-import errors from "../../helpers/errors";
+} from "../../../helpers/constants";
+import errors from "../../../helpers/errors";
 import {
     legendClickHandler,
     legendHoverHandler,
     loadLegendItem
-} from "../../helpers/legend";
-import styles from "../../helpers/styles";
-import utils from "../../helpers/utils";
+} from "../../../helpers/legend";
+import styles from "../../../helpers/styles";
+import utils from "../../../helpers/utils";
 
 const PADDING = constants.PADDING;
 

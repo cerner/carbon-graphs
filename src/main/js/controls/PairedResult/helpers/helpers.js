@@ -238,7 +238,10 @@ const drawPoints = (scale, config, canvasSVG) => {
         const boxPath = d3.select(this);
         constants.PAIR_ITEM_TYPES.forEach((type) => {
             if (utils.isDefined(getValue(value, type))) {
-                getDataPointPath(boxPath.append("path"), type);
+                getDataPointPath(boxPath
+                    .append("g")
+                    .classed(styles.pointGroup, true)
+                    .append("path"), type);
             }
         });
     });

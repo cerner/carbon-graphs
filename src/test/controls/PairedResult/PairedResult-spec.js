@@ -427,19 +427,30 @@ describe("PairedResult", () => {
                     const lineElement = fetchElementByClass(pairedResultGraphContainer, styles.pairedLine);
                     expect(lineElement.attributes.getNamedItem("aria-describedby").value).toBe(input.key);
                 });
+                it("creates a group for each data point", () => {
+                    const pair = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
+                    const pointGroup = pair.querySelectorAll(`.${styles.pointGroup}`);
+                    expect(pointGroup.length).toBe(3);
+                    expect(pointGroup.item(0).tagName).toBe("g");
+                    expect(pointGroup.item(1).tagName).toBe("g");
+                    expect(pointGroup.item(2).tagName).toBe("g");
+                });
                 it("high data-point", () => {
                     const pointsGroup = fetchElementByClass(pairedResultGraphContainer, styles.pairedBoxGroup);
                     const points = pointsGroup.querySelector(`.${styles.pairedPoint}.${styles.high}`);
+                    expect(points.parentNode.classList).toContain(styles.pointGroup);
                     expect(points.getAttribute("aria-describedby")).toBe(`${input.key}_high`);
                 });
                 it("mid data-point", () => {
                     const pointsGroup = fetchElementByClass(pairedResultGraphContainer, styles.pairedBoxGroup);
                     const points = pointsGroup.querySelector(`.${styles.pairedPoint}.${styles.mid}`);
+                    expect(points.parentNode.classList).toContain(styles.pointGroup);
                     expect(points.getAttribute("aria-describedby")).toBe(`${input.key}_mid`);
                 });
                 it("low data-point", () => {
                     const pointsGroup = fetchElementByClass(pairedResultGraphContainer, styles.pairedBoxGroup);
                     const points = pointsGroup.querySelector(`.${styles.pairedPoint}.${styles.low}`);
+                    expect(points.parentNode.classList).toContain(styles.pointGroup);
                     expect(points.getAttribute("aria-describedby")).toBe(`${input.key}_low`);
                 });
             });
@@ -482,8 +493,8 @@ describe("PairedResult", () => {
                     const selectionElement = fetchElementByClass(pairedResultGraphContainer, styles.dataPointSelection);
                     expect(selectionElement).not.toBeNull();
                     expect(selectionElement.tagName).toBe("rect");
-                    expect(selectionElement.classList[ 0 ]).toBe(styles.dataPointSelection);
-                    expect(selectionElement.classList[ 1 ]).toBe("hidden");
+                    expect(selectionElement.classList).toContain(styles.dataPointSelection);
+                    expect(selectionElement.classList).toContain("hidden");
                     expect(selectionElement.getAttribute("aria-describedby")).toBe(input.key);
                     expect(selectionElement.getAttribute("style")).toBe("");
                 });
@@ -499,8 +510,8 @@ describe("PairedResult", () => {
                     graphDefault.loadContent(new PairedResult(input));
                     const selectionElement = fetchElementByClass(pairedResultGraphContainer, styles.dataPointSelection);
                     expect(selectionElement.tagName).toBe("circle");
-                    expect(selectionElement.classList[ 0 ]).toBe(styles.dataPointSelection);
-                    expect(selectionElement.classList[ 1 ]).toBe("hidden");
+                    expect(selectionElement.classList).toContain(styles.dataPointSelection);
+                    expect(selectionElement.classList).toContain("hidden");
                     expect(selectionElement.getAttribute("aria-describedby")).toBe(input.key);
                     expect(selectionElement.getAttribute("style")).toBe("");
                 });
@@ -516,8 +527,8 @@ describe("PairedResult", () => {
                     graphDefault.loadContent(new PairedResult(input));
                     const selectionElement = fetchElementByClass(pairedResultGraphContainer, styles.dataPointSelection);
                     expect(selectionElement.tagName).toBe("circle");
-                    expect(selectionElement.classList[ 0 ]).toBe(styles.dataPointSelection);
-                    expect(selectionElement.classList[ 1 ]).toBe("hidden");
+                    expect(selectionElement.classList).toContain(styles.dataPointSelection);
+                    expect(selectionElement.classList).toContain("hidden");
                     expect(selectionElement.getAttribute("aria-describedby")).toBe(input.key);
                     expect(selectionElement.getAttribute("style")).toBe("");
                 });
@@ -533,8 +544,8 @@ describe("PairedResult", () => {
                     graphDefault.loadContent(new PairedResult(input));
                     const selectionElement = fetchElementByClass(pairedResultGraphContainer, styles.dataPointSelection);
                     expect(selectionElement.tagName).toBe("circle");
-                    expect(selectionElement.classList[ 0 ]).toBe(styles.dataPointSelection);
-                    expect(selectionElement.classList[ 1 ]).toBe("hidden");
+                    expect(selectionElement.classList).toContain(styles.dataPointSelection);
+                    expect(selectionElement.classList).toContain("hidden");
                     expect(selectionElement.getAttribute("aria-describedby")).toBe(input.key);
                     expect(selectionElement.getAttribute("style")).toBe("");
                 });
@@ -580,7 +591,7 @@ describe("PairedResult", () => {
                     triggerEvent(point, "click", done);
                     expect(selectionElement).not.toBeNull();
                     expect(selectionElement.tagName).toBe("rect");
-                    expect(selectionElement.classList[ 0 ]).toBe(styles.dataPointSelection);
+                    expect(selectionElement.classList).toContain(styles.dataPointSelection);
                 });
                 it("removes highlight when data point is clicked again", (done) => {
                     const box = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
@@ -803,24 +814,24 @@ describe("PairedResult", () => {
                         const selectionElement = fetchElementByClass(pairedResultGraphContainer, styles.dataPointSelection);
                         expect(selectionElement).not.toBeNull();
                         expect(selectionElement.tagName).toBe("rect");
-                        expect(selectionElement.classList[ 0 ]).toBe(styles.dataPointSelection);
+                        expect(selectionElement.classList).toContain(styles.dataPointSelection);
                     });
                     it("line is displayed to connect the pair", (done) => {
                         const box = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
                         triggerEvent(box, "click", done);
                         const lineElement = fetchElementByClass(pairedResultGraphContainer, styles.pairedLine);
                         expect(lineElement.tagName).toBe("path");
-                        expect(lineElement.classList[ 0 ]).toBe(styles.pairedLine);
-                        expect(lineElement.classList[ 1 ]).toBe(styles.dataPointDisplayEnable);
+                        expect(lineElement.classList).toContain(styles.pairedLine);
+                        expect(lineElement.classList).toContain(styles.dataPointDisplayEnable);
                     });
                     it("points are displayed even if they are hidden", (done) => {
                         const box = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
                         triggerEvent(box, "click", done);
                         const pointElement = fetchElementByClass(pairedResultGraphContainer, styles.pairedPoint);
                         expect(pointElement.tagName).toBe("path");
-                        expect(pointElement.classList[ 0 ]).toBe(styles.pairedPoint);
-                        expect(pointElement.classList[ 1 ]).toBe(styles.high);
-                        expect(pointElement.classList[ 2 ]).toBe(styles.dataPointDisplayEnable);
+                        expect(pointElement.classList).toContain(styles.pairedPoint);
+                        expect(pointElement.classList).toContain(styles.high);
+                        expect(pointElement.classList).toContain(styles.dataPointDisplayEnable);
                     });
                 });
                 describe("removes highlight when reset", () => {
@@ -848,7 +859,7 @@ describe("PairedResult", () => {
                         const selectionElement = fetchElementByClass(pairedResultGraphContainer, styles.dataPointSelection);
                         expect(selectionElement).not.toBeNull();
                         expect(selectionElement.tagName).toBe("rect");
-                        expect(selectionElement.classList[ 0 ]).toBe(styles.dataPointSelection);
+                        expect(selectionElement.classList).toContain(styles.dataPointSelection);
                     });
                     it("line between the pair is hidden", (done) => {
                         const box = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
@@ -856,7 +867,7 @@ describe("PairedResult", () => {
                         triggerEvent(box, "click", done);
                         const lineElement = fetchElementByClass(pairedResultGraphContainer, styles.pairedLine);
                         expect(lineElement.tagName).toBe("path");
-                        expect(lineElement.classList[ 0 ]).toBe(styles.pairedLine);
+                        expect(lineElement.classList).toContain(styles.pairedLine);
                         expect(lineElement.classList[ 1 ]).toBeUndefined();
                     });
                     it("points are hidden that were toggled off", (done) => {
@@ -865,8 +876,8 @@ describe("PairedResult", () => {
                         triggerEvent(box, "click", done);
                         const pointElement = fetchElementByClass(pairedResultGraphContainer, styles.pairedPoint);
                         expect(pointElement.tagName).toBe("path");
-                        expect(pointElement.classList[ 0 ]).toBe(styles.pairedPoint);
-                        expect(pointElement.classList[ 1 ]).toBe(styles.high);
+                        expect(pointElement.classList).toContain(styles.pairedPoint);
+                        expect(pointElement.classList).toContain(styles.high);
                         expect(pointElement.classList[ 2 ]).toBeUndefined();
                     });
                 });
