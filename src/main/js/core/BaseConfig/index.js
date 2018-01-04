@@ -4,8 +4,7 @@ import BaseConfig, {
     getScale,
     getType,
     isDataValidFormat,
-    isUniqueKey,
-    parseDateTime
+    isUniqueKey
 } from "./BaseConfig";
 
 export {
@@ -15,6 +14,5 @@ export {
     getScale,
     getType,
     isDataValidFormat,
-    isUniqueKey,
-    parseDateTime
+    isUniqueKey
 };

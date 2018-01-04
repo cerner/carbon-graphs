@@ -627,8 +627,8 @@ describe("Graph", () => {
                 const gridHElement = fetchElementByClass(styles.gridH);
                 const gridVElement = fetchElementByClass(styles.gridV);
                 expect(gridElement.childElementCount).toBe(2);
-                expect(gridHElement.childElementCount).toBe(2);
-                expect(gridVElement.childElementCount).toBe(2);
+                expect(gridHElement.querySelectorAll(".tick").length).toBe(3);
+                expect(gridVElement.querySelectorAll(".tick").length).toBe(3);
             });
             it("creates the horizontal grid markup", () => {
                 const gridElement = fetchElementByClass(styles.grid);

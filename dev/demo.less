@@ -1,37 +1,55 @@
 @import "../src/main/less/variables";
 
-@demo-banner-background: #2196f3;
+@demo-banner-background: #0d47a1;
+@demo-button-link: #1976D2;
+@nav-hover: #2196F3;
+
+.box-shadow() {
+    box-shadow: 0 2px 8px rgba(12, 12, 13, .75);
+    -moz-box-shadow: 0 2px 8px rgba(12, 12, 13, .75);
+    -webkit-box-shadow: 0 2px 8px rgba(12, 12, 13, .75);
+}
+
 html {
     word-wrap: break-word;
     font-family: "Segoe UI", sans-serif;
     font-size: 12px;
 }
 
-section {
-    padding: 1rem;
+body {
+    margin: 0
+}
+
+.graph-section {
+    font-family: inherit;
+    padding: 0 0.5rem;
     background-color: transparent;
     &.hidden {
         display: none;
     }
 }
 
-header {
+.graph-banner {
+    font-family: inherit;
     display: flex;
     justify-content: center;
     align-content: center;
     padding: 2rem;
-    margin: 0.25rem;
     font-weight: 500;
-    color: #fff;
+    color: @white;
     font-size: 3rem;
+    margin: 0.25rem;
+    .box-shadow();
+    border-radius: 0.25rem;
     background-color: @demo-banner-background;
-    border-radius: .25rem;
-    box-shadow: 0 2px 8px rgba(12, 12, 13, .75);
-    -moz-box-shadow: 0 2px 8px rgba(12, 12, 13, .75);
-    -webkit-box-shadow: 0 2px 8px rgba(12, 12, 13, .75);
 }
 
-h2, h3 {
+.graph-header {
+    font-family: inherit;
+    font-size: 2rem;
+    letter-spacing: -0.1rem;
+    line-height: 2rem;
+    font-weight: 600;
     color: @demo-banner-background;
 }
 
@@ -40,7 +58,7 @@ h2, h3 {
     padding: 1rem;
     background-color: @white;
     z-index: 20;
-    border-radius: .25rem;
+    border-radius: 0.25rem;
     box-shadow: 0 2px 16px rgba(12, 12, 13, .1);
     -moz-box-shadow: 0 2px 16px rgba(12, 12, 13, .1);
     -webkit-box-shadow: 0 2px 16px rgba(12, 12, 13, .1);
@@ -69,4 +87,53 @@ h2, h3 {
     top: 0;
     left: 0;
     z-index: 10;
+}
+
+.root-content {
+    display: flex;
+    flex-flow: row nowrap;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    height: ~"calc(90vh - 1rem)";
+}
+
+.nav-section {
+    display: inline-flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 15%;
+    max-width: 15%;
+    background-color: @demo-banner-background;
+    font-weight: 400;
+    padding: 0.5rem;
+    margin: 0.25rem;
+    border-radius: 0.25rem;
+}
+
+.content-section {
+    flex: 1 1 auto;
+    background-color: transparent;
+    overflow-y: auto;
+}
+
+.carbon-btn {
+    border: 1px solid @demo-banner-background;
+    background-color: @white;
+    border-radius: 0.25rem;
+    color: @demo-banner-background;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1.25rem;
+    font-weight: 500;
+    padding: 1.25rem;
+    margin: 0.25rem;
+    .basic-transition(background-color, 0.3s, @default-transition-timing);
+    &:hover {
+        background: @nav-hover;
+        color: @white;
+    }
+    &[disabled="disabled"] {
+        background-color: @demo-button-link;
+        color: @white;
+    }
 }

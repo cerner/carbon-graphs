@@ -22,7 +22,7 @@ export const loadPopup = (onCloseCB, key, index, value) => {
       .remove();
 
     // Add new popup
-    d3.select("section")
+    d3.select(".graph-section")
       .insert("div", "#tooltip")
       .attr("id", "overlay")
       .classed("overlay", true)

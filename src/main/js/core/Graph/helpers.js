@@ -16,6 +16,7 @@ import {
     getYAxisLabelYPosition,
     getYAxisRange,
     hasY2Axis,
+    processTickValues,
     translateAxes
 } from "../../helpers/axis";
 import constants, { SYMBOLS } from "../../helpers/constants";
@@ -52,7 +53,7 @@ const translateHGrid = (axis, config) => {
     let yAxisGrid;
     if (utils.notEmpty(config.axis.y.ticks.values)) {
         const ticks = config.axis.y.ticks.values;
-        yAxisGrid = axis.y.tickValues(ticks.slice(1, ticks.length - 1))
+        yAxisGrid = axis.y.tickValues(processTickValues(ticks))
                         .tickSize((getXAxisWidth(config) * -1), 0, 0)
                         .tickFormat("");
     }
@@ -76,7 +77,7 @@ const translateVGrid = (axis, config) => {
     let xAxisGrid;
     if (utils.notEmpty(config.axis.x.ticks.values)) {
         const ticks = config.axis.x.ticks.values;
-        xAxisGrid = axis.x.tickValues(ticks.slice(1, ticks.length - 1))
+        xAxisGrid = axis.x.tickValues(processTickValues(ticks))
                         .tickSize((getYAxisHeight(config)), 0, 0)
                         .tickFormat("");
     }
@@ -133,14 +134,6 @@ const translateLabel = (config, canvasSVG) => {
                      getYAxisLabelYPosition(config)}) rotate(${getRotationForAxis(constants.Y2_AXIS)})`);
     }
 };
-/**
- * Checks to see if the date provided is of ISO8601 datetime format.
- * @private
- * @param {string} str - Datetime string in ISO8601 format: yyyy-MM-ddTHH:mm:ssZ
- * @returns {string} true if in correct format
- */
-const isDate = (str) => constants.ISO8601_DATE_TIME_MILLI.test(str);
-
 /**
  * Determines the domain for x, y and y2 axes. For Y axis and Y2 axis,
  * the end points are calculated based on the ranges provided. This is done so that the axes are
@@ -393,7 +386,6 @@ export {
     translateLabel,
     translateGrid,
     translateCanvas,
-    isDate,
     updateAxesDomain,
     createDefs,
     createGrid,

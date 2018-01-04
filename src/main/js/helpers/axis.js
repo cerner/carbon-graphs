@@ -92,6 +92,20 @@ const getAxisTickFormat = (locale, format, type = AXIS_TYPE.DEFAULT) => {
     }
 };
 /**
+ * Gets the tick values with correct format.
+ * * If there are no tick values provided then null is returned
+ * * If the ticks values are in a ISO8601 format then a date object is returned
+ * * No processing is done, otherwise
+ * @param {Array} ticks - Array of values that represent the tick values
+ * @returns {(Array|null)} returns processed ticks, null otherwise
+ */
+const processTickValues = (ticks) => {
+    if (utils.isEmpty(ticks)) {
+        return null;
+    }
+    return ticks.map((t) => utils.isDate(t) ? utils.parseDateTime(t) : t);
+};
+/**
  * Creates the axis using the scale provided for X Axis using d3 svg axis.
  * If tickValues are provided then they are reserved precedence over ticks/tick counts.
  * @private
@@ -106,7 +120,7 @@ const prepareXAxis = (scale, tickValues, width, format) =>
     d3.svg.axis().scale(scale)
       .orient("bottom")
       .ticks(Math.max((width / constants.MAX_TICK_VARIANCE), constants.MIN_TICKS))
-      .tickValues(utils.notEmpty(tickValues) ? tickValues : null)
+      .tickValues(processTickValues(tickValues))
       .tickFormat(format);
 /**
  * Creates the axis using the scale provided for Y Axis using d3 svg axis
@@ -121,7 +135,7 @@ const prepareYAxis = (scale, tickValues, height, format) =>
     d3.svg.axis().scale(scale)
       .orient("left")
       .ticks((height / constants.DEFAULT_Y_AXIS_SPACING))
-      .tickValues(utils.notEmpty(tickValues) ? tickValues : null)
+      .tickValues(processTickValues(tickValues))
       .tickFormat(format);
 /**
  * Creates the axis using the scale provided for Y2 Axis using d3 svg axis
@@ -136,7 +150,7 @@ const prepareY2Axis = (scale, tickValues, height, format) =>
     d3.svg.axis().scale(scale)
       .orient("right")
       .ticks((height / constants.DEFAULT_Y_AXIS_SPACING))
-      .tickValues(utils.notEmpty(tickValues) ? tickValues : null)
+      .tickValues(processTickValues(tickValues))
       .tickFormat(format);
 /**
  * Returns the number of degrees the rotation of axis needs to be performed based on axis
@@ -563,6 +577,7 @@ export {
     getAxesScale,
     createAxes,
     getAxesDataRange,
+    processTickValues,
     hasY2Axis,
     translateAxes
 };

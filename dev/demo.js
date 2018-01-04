@@ -1,23 +1,71 @@
 import "babel-polyfill";
 import "../src/main/less/carbon.less";
 import "./demo.less";
-import { renderColorsExample } from "./examples/controls/ColorsExample";
-import { renderLineExample } from "./examples/controls/LineExample";
-import { renderPairedResultExample } from "./examples/controls/PairedResultExample";
-import { renderSymbolsExample } from "./examples/controls/SymbolsExample";
 import {
-    div,
-    header
+    CombinationExample,
+    renderCombinationGraphExamples
+} from "./examples/content/renderCombinationGraphExamples";
+import {
+    LineExample,
+    renderLineExamples,
+    toggleLineAsActive
+} from "./examples/content/renderLineExamples";
+import {
+    PairedResultExample,
+    renderPairedResultExamples
+} from "./examples/content/renderPairedResultExamples";
+import { renderColorsExample } from "./examples/controls/colors";
+import { renderSymbolsExample } from "./examples/controls/symbols";
+import {
+    btn,
+    clearContent,
+    renderRoot,
+    renderRootSection,
+    renderTooltip,
+    toggleSectionAsActive
 } from "./examples/helpers";
 
-const renderRoot = (el) => {
-    header.render(el, "Carbon");
-    div.render(el, "tooltip", "tooltip", "display: none;");
-};
 const root = document.querySelector("#root");
 
+/* Render the root here.*/
 renderRoot(root);
-renderLineExample(root);
-renderPairedResultExample(root);
-renderSymbolsExample(root);
-renderColorsExample(root);
+renderTooltip(root);
+renderRootSection(root);
+const toggleSection = root.querySelector(".nav-section");
+const contentSection = root.querySelector(".content-section");
+let _state = {
+    currentSection: null
+};
+const setState = (val) => {
+    _state.currentSection = val;
+};
+const getState = () => _state.currentSection;
+
+/* Add examples (graph types) that needs to go inside the Nav bar
+* Steps:
+*   * Create a "control"
+*   * Create a "content" to tie in control to the DOM
+*   * Add the content function below
+* */
+renderLineExamples(new LineExample(), toggleSection, contentSection, setState, getState);
+renderPairedResultExamples(new PairedResultExample(), toggleSection, contentSection, setState, getState);
+renderCombinationGraphExamples(new CombinationExample(), toggleSection, contentSection, setState, getState);
+
+/* Colors and Symbols */
+btn.render(toggleSection, "Symbols", (event) => {
+    clearContent(contentSection, getState());
+    toggleSectionAsActive(event.target);
+    setState(null);
+    renderSymbolsExample(contentSection, "graph-symbols", "Symbols");
+});
+btn.render(toggleSection, "Colors", (event) => {
+    clearContent(contentSection, getState());
+    toggleSectionAsActive(event.target);
+    setState(null);
+    renderColorsExample(contentSection, "graph-colors", "Colors");
+});
+
+/* Toggle Line in nav bar to show by default */
+toggleLineAsActive(new LineExample(), contentSection, setState, getState)({
+    target: toggleSection.querySelector(".carbon-btn")
+});

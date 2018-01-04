@@ -1,15 +1,11 @@
 "use strict";
 import d3 from "d3";
-import {
-    getType,
-    parseDateTime
-} from "../../../core/BaseConfig/index";
+import { getType } from "../../../core/BaseConfig";
 import {
     getColorForTarget,
-    isBuiltAsAPathSymbol,
-    isDate
+    isBuiltAsAPathSymbol
 } from "../../../core/Graph/helpers";
-import Symbol from "../../../core/Symbol/index";
+import Symbol from "../../../core/Symbol";
 import { getXAxisXPosition } from "../../../helpers/axis";
 import constants, {
     AXIS_TYPE,
@@ -86,7 +82,7 @@ const transformPoint = (scale, type, value) => {
  * @returns {Object} - d3 select object
  */
 const translateLines = (scale, config, canvasSVG) =>
-    canvasSVG.selectAll(`.${styles.pairedLine}`)
+    canvasSVG.selectAll(`.${styles.pairedBoxGroup} .${styles.pairedLine}`)
              .attr("d", (d) => (d.high && d.low) ? createLine(scale, d) : "");
 /**
  * Transforms points for a data point set (high, low and mid) in the Paired Result graph on resize
@@ -97,7 +93,7 @@ const translateLines = (scale, config, canvasSVG) =>
  */
 const translatePoints = (scale, canvasSVG) =>
     constants.PAIR_ITEM_TYPES.forEach((type) => {
-        canvasSVG.selectAll(`.${styles.pairedPoint}.${getValue(styles, type)}`)
+        canvasSVG.selectAll(`.${styles.pairedBoxGroup} .${styles.pairedPoint}.${getValue(styles, type)}`)
                  .attr("transform", transformPoint.bind({}, scale, type));
     });
 /**
@@ -144,12 +140,12 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
 const processDataPoints = (graphConfig, dataTarget) => {
     const type = graphConfig.axis.x.type;
     const getXDataValues = (x) => {
-        if ((isDate(x) && getType(type) !== AXIS_TYPE.TIME_SERIES) ||
-            (!isDate(x) && getType(type) === AXIS_TYPE.TIME_SERIES)) {
+        if ((utils.isDate(x) && getType(type) !== AXIS_TYPE.TIME_SERIES) ||
+            (!utils.isDate(x) && getType(type) === AXIS_TYPE.TIME_SERIES)) {
             throw errors.THROW_MSG_INVALID_FORMAT_TYPE;
         }
         if (getType(type) === AXIS_TYPE.TIME_SERIES) {
-            return parseDateTime(x);
+            return utils.parseDateTime(x);
         }
         return utils.getNumber(x);
     };

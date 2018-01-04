@@ -3,6 +3,8 @@
  * @alias module:utils
  */
 "use strict";
+import constants from "./constants";
+
 /**
  * Wraps a function in logical negation
  * @private
@@ -101,7 +103,22 @@ const deepClone = (o) => {
         return o;
     }
 };
-
+/**
+ * Checks to see if the date provided is of ISO8601 datetime format.
+ * @private
+ * @param {string} str - Datetime string in ISO8601 format: yyyy-MM-ddTHH:mm:ssZ
+ * @returns {string} true if in correct format
+ */
+const isDate = (str) => constants.ISO8601_DATE_TIME_MILLI.test(str);
+/**
+ * Converts ISO8601 datetime string to Date
+ * @private
+ * @param {string} value - ISO8601 datetime string
+ * @todo Handle DST
+ * @todo Convert UTC dates to local date
+ * @returns {Date} new Date object
+ */
+const parseDateTime = (value) => new Date(value);
 /**
  * Case converts to number
  * @private
@@ -109,7 +126,6 @@ const deepClone = (o) => {
  * @returns {number} if not undefined or null return Number, 0 otherwise
  */
 const getNumber = (n) => n ? Number(n) : 0;
-
 /**
  * @enum {Function}
  */
@@ -123,5 +139,7 @@ export default {
     notEmpty,
     hasValue,
     sanitize,
-    getNumber
+    getNumber,
+    isDate,
+    parseDateTime
 };

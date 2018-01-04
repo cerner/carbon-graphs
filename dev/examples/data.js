@@ -23,7 +23,7 @@ export const generateData = (id, sets, graph, type) => {
     const rangeX = () => Math.floor(Math.random() * (ub - lb)) + lb;
     const sym = Object.keys(Carbon.helpers.SYMBOLS);
     const loadData = () =>
-        new Array(sets).fill("").map((_, i) => Object.assign({},
+        new Array(sets).fill("").map((_, i) => (
             {
                 key: `uid_${i}`,
                 label: {
@@ -32,7 +32,7 @@ export const generateData = (id, sets, graph, type) => {
                 symbol: sym[ Math.floor(Math.random() * 10) ],
                 color: Carbon.helpers.COLORS[ Object.keys(Carbon.helpers.COLORS)[ i ] ],
                 onClick: loadPopup,
-                values: new Array(sets).fill("").map((_, j) => Object.assign({}, {
+                values: new Array(sets).fill("").map((_, j) => ({
                     x: isTimeSeries(type) ? getISO(new Date(rangeX()).toISOString()) : rangeX(),
                     y: Math.floor(Math.random() * (yUB - yLB)) + yLB
                 })).sort((a, b) => a.x > b.x)
@@ -77,13 +77,13 @@ const DATA = [
                 },
                 y: {
                     show: true,
-                    label: "Line",
+                    label: "Line Set A",
                     lowerLimit: 0,
                     upperLimit: 20
                 },
                 y2: {
                     show: false,
-                    label: "Some Y2 Label",
+                    label: "Line Set B",
                     lowerLimit: 0,
                     upperLimit: 250
                 }
@@ -94,10 +94,9 @@ const DATA = [
                     label: {
                         display: "Data Label 1"
                     },
-                    symbol: Carbon.helpers.SYMBOLS.RHOMBUS,
                     color: Carbon.helpers.COLORS.BLACK,
                     onClick: loadPopup,
-                    values: new Array(18).fill("").map((_, i) => Object.assign({}, {
+                    values: new Array(20).fill("").map((_, i) => ({
                         y: Math.sin(i) * Math.PI,
                         x: 90 + i * 10
                     }))
@@ -110,7 +109,7 @@ const DATA = [
                     symbol: Carbon.helpers.SYMBOLS.TRIANGLE,
                     color: Carbon.helpers.COLORS.BLUE,
                     onClick: loadPopup,
-                    values: new Array(18).fill("").map((_, i) => Object.assign({}, {
+                    values: new Array(18).fill("").map((_, i) => ({
                         y: Math.sin(i) * Math.PI * 2,
                         x: 90 + i * 10
                     }))
@@ -123,7 +122,7 @@ const DATA = [
                     symbol: Carbon.helpers.SYMBOLS.X,
                     color: Carbon.helpers.COLORS.GREEN,
                     onClick: loadPopup,
-                    values: new Array(10).fill("").map((_, i) => Object.assign({}, {
+                    values: new Array(12).fill("").map((_, i) => ({
                         y: Math.sin(i) * Math.PI * 3,
                         x: 90 + i * 10
                     }))
@@ -136,7 +135,7 @@ const DATA = [
                     symbol: Carbon.helpers.SYMBOLS.CROSS,
                     color: Carbon.helpers.COLORS.LIGHT_PURPLE,
                     onClick: loadPopup,
-                    values: new Array(15).fill("").map((_, i) => Object.assign({}, {
+                    values: new Array(15).fill("").map((_, i) => ({
                         y: Math.sin(i) * Math.PI * 4,
                         x: 90 + i * 10
                     }))
@@ -149,7 +148,7 @@ const DATA = [
                     symbol: Carbon.helpers.SYMBOLS.SQUARE,
                     color: Carbon.helpers.COLORS.ORANGE,
                     onClick: loadPopup,
-                    values: new Array(15).fill("").map((_, i) => Object.assign({}, {
+                    values: new Array(20).fill("").map((_, i) => ({
                         y: Math.cos(i) * Math.PI * 5,
                         x: 90 + i * 10
                     }))
@@ -162,7 +161,7 @@ const DATA = [
                     symbol: Carbon.helpers.SYMBOLS.CIRCLE,
                     color: Carbon.helpers.COLORS.LIGHT_BLUE,
                     onClick: loadPopup,
-                    values: new Array(13).fill("").map((_, i) => Object.assign({}, {
+                    values: new Array(14).fill("").map((_, i) => ({
                         y: Math.cos(i) * Math.PI * 6,
                         x: 90 + i * 10
                     }))
@@ -175,7 +174,7 @@ const DATA = [
                     symbol: Carbon.helpers.SYMBOLS.TRIANGLE_DOWN,
                     color: Carbon.helpers.COLORS.GREY,
                     onClick: loadPopup,
-                    values: new Array(15).fill("").map((_, i) => Object.assign({}, {
+                    values: new Array(18).fill("").map((_, i) => ({
                         y: Math.cos(i) * Math.PI * 7,
                         x: 90 + i * 10
                     }))
@@ -196,17 +195,16 @@ const DATA = [
                     type: Carbon.helpers.AXIS_TYPE.TIME_SERIES,
                     label: "Datetime",
                     lowerLimit: new Date(2016, 0, 1, 1, 0).toISOString(),
-                    upperLimit: new Date(2016, 0, 1, 23, 59).toISOString(),
-                    ticks: {}
+                    upperLimit: new Date(2016, 0, 1, 23, 59).toISOString()
                 },
                 y: {
-                    label: "Line",
+                    label: "Line Set A",
                     lowerLimit: 0,
                     upperLimit: 30
                 },
                 y2: {
                     show: false,
-                    label: "Some Y2 Label",
+                    label: "Line Set B",
                     lowerLimit: 0,
                     upperLimit: 250
                 }
@@ -278,6 +276,58 @@ const DATA = [
                         }
                     ],
                     yAxis: "y" // Default is "y", only need to specify if "y2"
+                },
+                {
+                    key: "uid_2",
+                    label: {
+                        display: "Data Label 2"
+                    },
+                    symbol: Carbon.helpers.SYMBOLS.RHOMBUS,
+                    color: Carbon.helpers.COLORS.BLUE,
+                    onClick: loadPopup,
+                    values: [
+                        {
+                            x: new Date(2016, 0, 1, 1, 5).toISOString(),
+                            y: 0
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 2, 15).toISOString(),
+                            y: 50
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 3, 15).toISOString(),
+                            y: 60
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 4, 15).toISOString(),
+                            y: 80
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 5, 15).toISOString(),
+                            y: 120
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 6, 15).toISOString(),
+                            y: 130
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 7, 0).toISOString(),
+                            y: 180
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 8, 15).toISOString(),
+                            y: 185
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 9, 45).toISOString(),
+                            y: 200
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 12, 15).toISOString(),
+                            y: 220
+                        }
+                    ],
+                    yAxis: "y2"
                 }
             ],
             showLabel: true,
@@ -290,7 +340,6 @@ const DATA = [
     {
         PAIRED_DEFAULT: (id) => ({
             bindTo: id, //"#graph-data-5"
-            locale: Carbon.helpers.LOCALE.de_DE,
             axis: {
                 x: {
                     label: "Data",
@@ -524,8 +573,7 @@ const DATA = [
     },
     {
         PAIRED_TIMESERIES: (id) => ({
-            bindTo: id, //"#graph-data-5"
-            locale: Carbon.helpers.LOCALE.fr_FR,
+            bindTo: id,
             axis: {
                 x: {
                     type: Carbon.helpers.AXIS_TYPE.TIME_SERIES,
@@ -537,9 +585,15 @@ const DATA = [
                     }
                 },
                 y: {
-                    label: "Paired",
+                    label: "Paired Set A",
                     lowerLimit: 0,
                     upperLimit: 200
+                },
+                y2: {
+                    show: false,
+                    label: "Paired Set B",
+                    lowerLimit: 100,
+                    upperLimit: 350
                 }
             },
             data: [
@@ -646,6 +700,76 @@ const DATA = [
                             }
                         }
                     ]
+                },
+                {
+                    key: "uid_2",
+                    label: {
+                        high: {
+                            display: "High"
+                        },
+                        mid: {
+                            display: "Median"
+                        },
+                        low: {
+                            display: "Low"
+                        }
+                    },
+                    symbol: {
+                        high: Carbon.helpers.SYMBOLS.TRIANGLE,
+                        mid: Carbon.helpers.SYMBOLS.SQUARE,
+                        low: Carbon.helpers.SYMBOLS.TRIANGLE_DOWN
+                    },
+                    color: {
+                        high: Carbon.helpers.COLORS.BLACK,
+                        mid: Carbon.helpers.COLORS.ORANGE,
+                        low: Carbon.helpers.COLORS.BLACK
+                    },
+                    onClick: loadPopup,
+                    yAxis: "y2",
+                    values: [
+                        {
+                            high: {
+                                x: "2017-05-01T11:00:00Z",
+                                y: 300
+                            },
+                            mid: {
+                                x: "2017-05-01T11:00:00Z",
+                                y: 250
+                            },
+                            low: {
+                                x: "2017-05-01T11:00:00Z",
+                                y: 175
+                            }
+                        },
+                        {
+                            high: {
+                                x: "2017-08-17T13:00:00Z",
+                                y: 300
+                            },
+                            mid: {
+                                x: "2017-08-17T13:00:00Z",
+                                y: 170
+                            },
+                            low: {
+                                x: "2017-08-17T13:00:00Z",
+                                y: 130
+                            }
+                        },
+                        {
+                            high: {
+                                x: "2017-10-17T15:00:00Z",
+                                y: 250
+                            },
+                            mid: {
+                                x: "2017-10-17T15:00:00Z",
+                                y: 220
+                            },
+                            low: {
+                                x: "2017-10-17T15:00:00Z",
+                                y: 200
+                            }
+                        }
+                    ]
                 }
             ],
             showLabel: true,
@@ -673,8 +797,8 @@ const DATA = [
                 y2: {
                     show: true,
                     label: "Paired",
-                    lowerLimit: 0,
-                    upperLimit: 250
+                    lowerLimit: 40,
+                    upperLimit: 180
                 }
             },
             data: [
@@ -686,7 +810,7 @@ const DATA = [
                     symbol: Carbon.helpers.SYMBOLS.RHOMBUS,
                     color: Carbon.helpers.COLORS.BLUE,
                     onClick: loadPopup,
-                    values: new Array(50).fill("").map((_, i) => Object.assign({}, {
+                    values: new Array(50).fill("").map((_, i) => ({
                         y: Math.sin(i) * 5 + 10,
                         x: 10 + i * 5
                     }))

@@ -160,7 +160,7 @@ const updateSelectionIndicatorAttributes = (d3PairElement, scale, value) =>
  * @returns {Object} - d3 select object
  */
 export const translateSelectionBox = (scale, canvasSVG) =>
-    canvasSVG.selectAll(`rect.${styles.dataPointSelection}`)
+    canvasSVG.selectAll(`.${styles.pairedBoxGroup} rect.${styles.dataPointSelection}`)
              .each(function(value) {
                  return updateSelectionIndicatorAttributes(d3.select(this), scale, value);
              });
@@ -174,7 +174,7 @@ export const translateSelectionBox = (scale, canvasSVG) =>
  * @returns {Object} - d3 select object
  */
 export const translateSelectionItem = (scale, canvasSVG) =>
-    canvasSVG.selectAll(`circle.${styles.dataPointSelection}`)
+    canvasSVG.selectAll(`.${styles.pairedBoxGroup} circle.${styles.dataPointSelection}`)
              .each(function(value) {
                  return d3.select(this)
                           .attr("cx", (d) => scale.x(getIncompletePairObject(d).x))

@@ -1,15 +1,11 @@
 "use strict";
 import d3 from "d3";
-import {
-    getType,
-    parseDateTime
-} from "../../../core/BaseConfig/index";
+import { getType } from "../../../core/BaseConfig";
 import {
     getColorForTarget,
-    isBuiltAsAPathSymbol,
-    isDate
+    isBuiltAsAPathSymbol
 } from "../../../core/Graph/helpers";
-import Symbol from "../../../core/Symbol/index";
+import Symbol from "../../../core/Symbol";
 import { getXAxisXPosition } from "../../../helpers/axis";
 import constants, {
     AXIS_TYPE,
@@ -60,7 +56,7 @@ const transformPoint = (scale, value) => {
  * @returns {Object} d3 select object
  */
 const translateLines = (scale, canvasSVG) =>
-    canvasSVG.selectAll(`.${styles.line}`)
+    canvasSVG.selectAll(`.${styles.lineGraphContent} .${styles.line}`)
              .select("path")
              .attr("d", (value) => createLine(scale, value));
 /**
@@ -71,7 +67,7 @@ const translateLines = (scale, canvasSVG) =>
  * @returns {Object} d3 select object
  */
 const translatePoints = (scale, canvasSVG) =>
-    canvasSVG.selectAll(`.${styles.point}`)
+    canvasSVG.selectAll(`.${styles.lineGraphContent} .${styles.point}`)
              .attr("transform", transformPoint.bind({}, scale));
 /**
  * Transforms selected data point element for a data point in the Line graph on resize
@@ -81,7 +77,7 @@ const translatePoints = (scale, canvasSVG) =>
  * @returns {Object} d3 select object
  */
 const translateSelectedPoint = (scale, canvasSVG) =>
-    canvasSVG.selectAll(`.${styles.dataPointSelection}`)
+    canvasSVG.selectAll(`.${styles.lineGraphContent} .${styles.dataPointSelection}`)
              .attr("transform", transformPoint.bind({}, scale));
 /**
  * Toggles the selection of a data point, executes on click of a data point.
@@ -188,12 +184,12 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
 const processDataPoints = (graphConfig, dataTarget) => {
     const type = graphConfig.axis.x.type;
     const getXDataValues = (x) => {
-        if ((isDate(x) && getType(type) !== AXIS_TYPE.TIME_SERIES) ||
-            (!isDate(x) && getType(type) === AXIS_TYPE.TIME_SERIES)) {
+        if ((utils.isDate(x) && getType(type) !== AXIS_TYPE.TIME_SERIES) ||
+            (!utils.isDate(x) && getType(type) === AXIS_TYPE.TIME_SERIES)) {
             throw errors.THROW_MSG_INVALID_FORMAT_TYPE;
         }
         if (getType(type) === AXIS_TYPE.TIME_SERIES) {
-            return parseDateTime(x);
+            return utils.parseDateTime(x);
         }
         return utils.getNumber(x);
     };

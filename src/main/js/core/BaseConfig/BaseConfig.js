@@ -5,15 +5,6 @@ import errors from "../../helpers/errors";
 import utils from "../../helpers/utils";
 
 /**
- * Converts ISO8601 datetime string to Date
- * @private
- * @param {string} value - ISO8601 datetime string
- * @todo Handle DST
- * @todo Convert UTC dates to local date
- * @returns {Date} new Date object
- */
-export const parseDateTime = (value) => new Date(value);
-/**
  * Checks if the value is undefined and sets the default value if it is.
  * @private
  * @param {Object} value - A value
@@ -74,8 +65,8 @@ export const getScale = (type) => getType(type) === AXIS_TYPE.TIME_SERIES ? d3.t
  */
 export const getDomain = (type, lowerLimit, upperLimit) =>
     (getType(type) === AXIS_TYPE.TIME_SERIES) ? [
-            parseDateTime(lowerLimit),
-            parseDateTime(upperLimit)
+            utils.parseDateTime(lowerLimit),
+            utils.parseDateTime(upperLimit)
         ]
         : [
             utils.getNumber(lowerLimit),
