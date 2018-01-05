@@ -22,7 +22,7 @@ export default {
     currentLinesGroup: "carbon-data-lines-group",
     currentPointsGroup: "carbon-data-points-group",
     dataPointSelection: "carbon-selected-data-point",
-    dataPointSelectionGroup: "carbon-selected-data-point-group",
+    dataPointDisplayEnable: "carbon-data-pair--selected",
     pairedBoxGroup: "carbon-data-pairs-group",
     pairedBox: "carbon-data-pair",
     pointGroup: "carbon-data-points",

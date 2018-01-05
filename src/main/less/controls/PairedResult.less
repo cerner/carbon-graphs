@@ -1,25 +1,18 @@
 @import "../variables";
 
-.carbon-paired-line {
-    fill: none;
-    stroke-width: 1px;
-    stroke: @inverse;
-}
-
-/*
-Colors are dictated by input JSON but since on-selection we need to
-override fill and stroke color we need !important.
-*/
 .carbon-data-pair {
     cursor: pointer;
-    &[aria-selected="true"] {
-        .carbon-paired-line {
-            stroke: @accent-fg-30 !important;
-            .basic-transition(stroke, @default-transition-delay, @default-transition-timing);
-        }
-        .carbon-paired-point {
-            fill: @accent-fg-30 !important;
-            .basic-transition(fill, @default-transition-delay, @default-transition-timing);
-        }
-    }
+}
+
+// We are forcing display of the hidden item for data points,
+// this is only applicable when legend toggle is applied
+// and one of the data point is selected.
+.carbon-data-pair--selected {
+    display: block !important;
+}
+
+.carbon-paired-line {
+    fill: none;
+    stroke-width: 0.1rem;
+    stroke: @dark;
 }

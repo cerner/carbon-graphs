@@ -3,26 +3,32 @@ import d3 from "d3";
 import {
     getType,
     parseDateTime
-} from "../../core/BaseConfig";
+} from "../../../core/BaseConfig/index";
 import {
     getColorForTarget,
     isBuiltAsAPathSymbol,
     isDate
-} from "../../core/Graph/helpers";
-import Symbol from "../../core/Symbol";
-import { getXAxisXPosition } from "../../helpers/axis";
+} from "../../../core/Graph/helpers";
+import Symbol from "../../../core/Symbol/index";
+import { getXAxisXPosition } from "../../../helpers/axis";
 import constants, {
     AXIS_TYPE,
     SYMBOLS
-} from "../../helpers/constants";
-import errors from "../../helpers/errors";
+} from "../../../helpers/constants";
+import errors from "../../../helpers/errors";
 import {
     legendClickHandler,
     legendHoverHandler,
     loadLegendItem
-} from "../../helpers/legend";
-import styles from "../../helpers/styles";
-import utils from "../../helpers/utils";
+} from "../../../helpers/legend";
+import styles from "../../../helpers/styles";
+import utils from "../../../helpers/utils";
+import {
+    dataPointActionHandler,
+    drawSelectionIndicator,
+    translateSelectionBox,
+    translateSelectionItem
+} from "./selectionIndicatorHelpers";
 
 const PADDING = constants.PADDING;
 /**
@@ -34,7 +40,6 @@ const PADDING = constants.PADDING;
  * @returns {Object} value of the type
  */
 const getValue = (val, type) => val ? val[ type ] : "";
-
 /**
  * Creates a new d3 Paired Result using given x1, x2 and y1,y2 coordinates.
  * Interpolation is default linear
@@ -82,12 +87,7 @@ const transformPoint = (scale, type, value) => {
  */
 const translateLines = (scale, config, canvasSVG) =>
     canvasSVG.selectAll(`.${styles.pairedLine}`)
-             .attr("d", (d) => {
-                 if ((d.high && d.low) &&
-                     (utils.hasValue(config.shownTargets, d.high.key) && utils.hasValue(config.shownTargets, d.low.key))) {
-                     return createLine(scale, d);
-                 }
-             });
+             .attr("d", (d) => (d.high && d.low) ? createLine(scale, d) : "");
 /**
  * Transforms points for a data point set (high, low and mid) in the Paired Result graph on resize
  * @private
@@ -101,43 +101,6 @@ const translatePoints = (scale, canvasSVG) =>
                  .attr("transform", transformPoint.bind({}, scale, type));
     });
 /**
- * Toggles the selection of a data point, executes on click of a data point.
- * @private
- * @param {Object} target - DOM element of the data point clicked
- * @returns {Array} d3 html element of the selected point
- */
-const toggleDataPointSelection = (target) => {
-    const selectedPairNode = d3.select(target);
-    selectedPairNode.attr("aria-selected", !(selectedPairNode.attr("aria-selected") === "true"));
-    return selectedPairNode;
-};
-/**
- * Handler for the data point on click. If the content property is present for the data point
- * then the callback is executed other wise it is NOP.
- * If the callback is present, the selected data point is toggled and the element is passed as an argument to the
- * consumer in the callback, to execute once the popup is closed.
- *  Callback arguments:
- *      Post close callback function
- *      value [x and y data point values]
- *      Selected data point target [d3 target]
- *  On close of popup, call -> the provided callback
- * @private
- * @param {Object} value - data point object
- * @param {number} index - data point index for the set
- * @param {Object} target - DOM object of the clicked point
- * @returns {undefined} - returns nothing
- */
-const dataPointActionHandler = (value, index, target) => {
-    if (utils.isEmpty(value.onClick)) {
-        return;
-    }
-    toggleDataPointSelection(target).call((selectedTarget) =>
-        value.onClick(() => {
-            selectedTarget.attr("aria-selected", false);
-        }, value.key, index, value, selectedTarget)
-    );
-};
-/**
  * Draws the PairedResult graph on the canvas element.
  * Once these items are rendered, we will parse through the data points and render the line and points
  * We draw paired box groups. Each box comprises of a Line and 2 points (high and low) possibly mid, if provided
@@ -150,6 +113,7 @@ const dataPointActionHandler = (value, index, target) => {
  */
 const draw = (scale, config, canvasSVG, dataTarget) => {
     const drawBox = (boxPath) => {
+        drawSelectionIndicator(scale, config, boxPath);
         drawLine(scale, config, boxPath);
         drawPoints(scale, config, boxPath);
     };
@@ -165,7 +129,7 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
                      .classed(styles.pairedBox, true)
                      .attr("aria-selected", false)
                      .on("click", function(value, index) {
-                         dataPointActionHandler(value, index, this);
+                         dataPointActionHandler(config, value, index, this);
                      })
                      .call(drawBox);
 };
@@ -241,13 +205,11 @@ const drawLine = (scale, config, boxPath) =>
         const shouldCreateLine = (d) => ((d.high && d.low) &&
             (utils.hasValue(config.shownTargets, d.high.key) &&
                 utils.hasValue(config.shownTargets, d.low.key)));
-        if (!shouldCreateLine(value)) {
-            return;
-        }
         return d3.select(this).append("path")
                  .classed(styles.pairedLine, true)
                  .attr("aria-describedby", value.key)
-                 .attr("d", createLine(scale, value));
+                 .attr("d", (value.high && value.low) ? createLine(scale, value) : "")
+                 .attr("style", (d) => `${!shouldCreateLine(d) ? "display: none;" : ""}`);
     });
 /**
  * Draws the points with options opted in the input JSON by the consumer for each data set.
@@ -276,7 +238,10 @@ const drawPoints = (scale, config, canvasSVG) => {
         const boxPath = d3.select(this);
         constants.PAIR_ITEM_TYPES.forEach((type) => {
             if (utils.isDefined(getValue(value, type))) {
-                getDataPointPath(boxPath.append("path"), type);
+                getDataPointPath(boxPath
+                    .append("g")
+                    .classed(styles.pointGroup, true)
+                    .append("path"), type);
             }
         });
     });
@@ -293,6 +258,8 @@ const drawPoints = (scale, config, canvasSVG) => {
  * @returns {undefined} - returns nothing
  */
 const translatePairedResultGraph = (scale, config, canvasSVG) => {
+    translateSelectionBox(scale, canvasSVG);
+    translateSelectionItem(scale, canvasSVG);
     translateLines(scale, config, canvasSVG);
     translatePoints(scale, canvasSVG);
 };
@@ -384,8 +351,6 @@ const clear = (canvasSVG, dataTarget) =>
     canvasSVG.select(`g[aria-describedby="${dataTarget.key}"]`).remove();
 
 export {
-    dataPointActionHandler,
-    toggleDataPointSelection,
     translatePoints,
     translateLines,
     createLine,

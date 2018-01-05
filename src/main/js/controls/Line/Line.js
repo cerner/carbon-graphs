@@ -11,7 +11,7 @@ import {
     prepareLegendItems,
     processDataPoints,
     translateLineGraph
-} from "./helpers";
+} from "./helpers/helpers";
 import LineConfig from "./LineConfig";
 
 /**
@@ -28,7 +28,7 @@ import LineConfig from "./LineConfig";
  */
 const calculateValuesRange = (values, axis = constants.Y_AXIS) =>
     ({
-        [axis]: {
+        [ axis ]: {
             min: Math.min(...values.map((i) => i.y)),
             max: Math.max(...values.map((i) => i.y))
         }

@@ -3,6 +3,7 @@ import d3 from "d3";
 import {
     buildAxisLabel,
     determineOutlierStretchFactor,
+    getAxesScale,
     getRotationForAxis,
     getXAxisLabelXPosition,
     getXAxisLabelYPosition,
@@ -90,11 +91,13 @@ const translateVGrid = (axis, config) => {
  * Updates the horizontal and vertical grid sizes/positions on resize
  * @private
  * @param {Object} axis - Axis scaled according to input parameters
+ * @param {Object} scale - d3 scale taking into account the input parameters
  * @param {Object} config - config object derived from input JSON
  * @param {Object} canvasSVG - d3 object of canvas svg
  * @returns {undefined} - returns nothing
  */
-const translateGrid = (axis, config, canvasSVG) => {
+const translateGrid = (axis, scale, config, canvasSVG) => {
+    getAxesScale(axis, scale, config);
     canvasSVG.select(`.${styles.grid}`).attr("transform", `translate(${getXAxisXPosition(config)},${PADDING.top})`);
     if (config.showHGrid) {
         canvasSVG.select(`.${styles.gridH}`).call(translateHGrid(axis, config));
@@ -115,7 +118,7 @@ const translateLabel = (config, canvasSVG) => {
     if (config.axis.x.label) {
         canvasSVG.select(`.${styles.axisLabelX}`)
                  .attr("transform", `translate(${getXAxisLabelXPosition(config)},${getXAxisLabelYPosition(config)
-                     })`);
+                     }) rotate(${getRotationForAxis(constants.X_AXIS)})`);
     }
 
     if (config.axis.y.label) {
@@ -177,7 +180,7 @@ const createDefs = (config, canvasSVG) =>
              .append("clipPath")
              .attr("id", constants.CLIP_PATH_ID)
              .append("rect")
-             .attr("x", getXAxisXPosition(config))
+             .attr(constants.X_AXIS, getXAxisXPosition(config))
              .attr(constants.Y_AXIS, PADDING.top)
              .attr("width", "100%")
              .attr("height", config.canvasHeight);
@@ -186,11 +189,13 @@ const createDefs = (config, canvasSVG) =>
  * Only performed if the flags for showHGrid and showVGrid are enabled
  * @private
  * @param {Object} axis - Axis scaled according to input parameters
+ * @param {Object} scale - d3 scale taking into account the input parameters
  * @param {Object} config - config object derived from input JSON
  * @param {Object} canvasSVG - d3 object of canvas svg
  * @returns {undefined} - returns nothing
  */
-const createGrid = (axis, config, canvasSVG) => {
+const createGrid = (axis, scale, config, canvasSVG) => {
+    getAxesScale(axis, scale, config);
     const gridSVG = canvasSVG.append("g")
                              .classed(styles.grid, true)
                              .attr("transform", `translate(${getXAxisXPosition(config)},${PADDING.top})`);
@@ -223,7 +228,7 @@ const createLabel = (config, canvasSVG) => {
             const labelPath = canvasSVG.append("g")
                                        .classed(styles.axisLabelX, true)
                                        .attr("transform", `translate(${getXAxisLabelXPosition(config)},${getXAxisLabelYPosition(config)
-                                           })`);
+                                           }) rotate(${getRotationForAxis(constants.X_AXIS)})`);
             buildAxisLabel(labelPath, utils.sanitize(config.axis.x.label));
         }
         if (config.axis.y.label) {
@@ -283,7 +288,7 @@ const scaleGraph = (scale, config) => {
 const translateGraph = (control) => {
     translateCanvas(control.config, control.svg);
     translateAxes(control.axis, control.scale, control.config, control.svg);
-    translateGrid(control.axis, control.config, control.svg);
+    translateGrid(control.axis, control.scale, control.config, control.svg);
     translateLabel(control.config, control.svg);
 };
 /**

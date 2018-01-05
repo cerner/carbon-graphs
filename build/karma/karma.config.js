@@ -3,7 +3,14 @@ process.env.CHROME_BIN = require('puppeteer').executablePath();
 
 module.exports = function(config) {
     config.set({
-        browsers: [ "ChromeHeadless" ],
+        browsers: [ "ChromeHeadlessCustom" ],
+        customLaunchers: {
+            ChromeHeadlessCustom: {
+                base: "ChromeHeadless",
+                flags: [ "--disable-web-security", "--no-sandbox" ],
+                debug: false
+            }
+        },
         coverageReporter: {
             dir: "../../.coverage",
             reporters: [
@@ -18,6 +25,8 @@ module.exports = function(config) {
             ]
         },
         singleRun: true,
+        browserNoActivityTimeout: 120000, // default: 10000; doing this for jenkins
+        captureTimeout: 120000, // default: 60000; doing this for jenkins
         files: [
             "../../node_modules/babel-polyfill/dist/polyfill.js",
             "../webpack/tests.webpack.js"

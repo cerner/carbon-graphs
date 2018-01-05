@@ -11,7 +11,7 @@ import {
     prepareLegendItems,
     processDataPoints,
     translatePairedResultGraph
-} from "./helpers";
+} from "./helpers/helpers";
 import PairedResultConfig from "./PairedResultConfig";
 
 /**
@@ -28,7 +28,7 @@ import PairedResultConfig from "./PairedResultConfig";
  */
 const calculateValuesRange = (values, axis = constants.Y_AXIS) =>
     ({
-        [axis]: {
+        [ axis ]: {
             min: Math.min(...values.map((i) =>
                 Math.min(...Object.keys(i).map((j) =>
                     i[ j ].y)))),

@@ -343,7 +343,10 @@ describe("PairedResult", () => {
             });
             it("adds line with default stroke", () => {
                 const linePath = fetchElementByClass(pairedResultGraphContainer, styles.pairedLine);
-                expect(linePath.attributes.getNamedItem("style")).toBeNull();
+                expect(linePath.getAttribute("class")).toBe(styles.pairedLine);
+                expect(linePath.getAttribute("aria-describedby")).toBe(input.key);
+                expect(linePath.attributes.getNamedItem("style").value).toBe("");
+                expect(linePath.attributes.getNamedItem("d").value).not.toBeNull();
             });
             it("adds points for each data point", () => {
                 const pointsGroup = fetchElementByClass(pairedResultGraphContainer, styles.pairedBoxGroup);
@@ -424,19 +427,30 @@ describe("PairedResult", () => {
                     const lineElement = fetchElementByClass(pairedResultGraphContainer, styles.pairedLine);
                     expect(lineElement.attributes.getNamedItem("aria-describedby").value).toBe(input.key);
                 });
+                it("creates a group for each data point", () => {
+                    const pair = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
+                    const pointGroup = pair.querySelectorAll(`.${styles.pointGroup}`);
+                    expect(pointGroup.length).toBe(3);
+                    expect(pointGroup.item(0).tagName).toBe("g");
+                    expect(pointGroup.item(1).tagName).toBe("g");
+                    expect(pointGroup.item(2).tagName).toBe("g");
+                });
                 it("high data-point", () => {
                     const pointsGroup = fetchElementByClass(pairedResultGraphContainer, styles.pairedBoxGroup);
                     const points = pointsGroup.querySelector(`.${styles.pairedPoint}.${styles.high}`);
+                    expect(points.parentNode.classList).toContain(styles.pointGroup);
                     expect(points.getAttribute("aria-describedby")).toBe(`${input.key}_high`);
                 });
                 it("mid data-point", () => {
                     const pointsGroup = fetchElementByClass(pairedResultGraphContainer, styles.pairedBoxGroup);
                     const points = pointsGroup.querySelector(`.${styles.pairedPoint}.${styles.mid}`);
+                    expect(points.parentNode.classList).toContain(styles.pointGroup);
                     expect(points.getAttribute("aria-describedby")).toBe(`${input.key}_mid`);
                 });
                 it("low data-point", () => {
                     const pointsGroup = fetchElementByClass(pairedResultGraphContainer, styles.pairedBoxGroup);
                     const points = pointsGroup.querySelector(`.${styles.pairedPoint}.${styles.low}`);
+                    expect(points.parentNode.classList).toContain(styles.pointGroup);
                     expect(points.getAttribute("aria-describedby")).toBe(`${input.key}_low`);
                 });
             });
@@ -474,6 +488,68 @@ describe("PairedResult", () => {
                     expect(points.attributes.getNamedItem("d").value).toBe(constants.CUSTOM_PATH.TEAR_DROP);
                 });
             });
+            describe("creates data point selection elements as needed", () => {
+                it("creates a rectangle highlight for data point", () => {
+                    const selectionElement = fetchElementByClass(pairedResultGraphContainer, styles.dataPointSelection);
+                    expect(selectionElement).not.toBeNull();
+                    expect(selectionElement.tagName).toBe("rect");
+                    expect(selectionElement.classList).toContain(styles.dataPointSelection);
+                    expect(selectionElement.classList).toContain("hidden");
+                    expect(selectionElement.getAttribute("aria-describedby")).toBe(input.key);
+                    expect(selectionElement.getAttribute("style")).toBe("");
+                });
+                it("creates circle for incomplete pairs - high", () => {
+                    graphDefault.destroy();
+                    graphDefault = new Graph(getAxes(axisDefault));
+                    input = getInput([ {
+                        high: {
+                            x: 45,
+                            y: 350
+                        }
+                    } ], false, false);
+                    graphDefault.loadContent(new PairedResult(input));
+                    const selectionElement = fetchElementByClass(pairedResultGraphContainer, styles.dataPointSelection);
+                    expect(selectionElement.tagName).toBe("circle");
+                    expect(selectionElement.classList).toContain(styles.dataPointSelection);
+                    expect(selectionElement.classList).toContain("hidden");
+                    expect(selectionElement.getAttribute("aria-describedby")).toBe(input.key);
+                    expect(selectionElement.getAttribute("style")).toBe("");
+                });
+                it("creates circle for incomplete pairs - mid", () => {
+                    graphDefault.destroy();
+                    graphDefault = new Graph(getAxes(axisDefault));
+                    input = getInput([ {
+                        mid: {
+                            x: 45,
+                            y: 146
+                        }
+                    } ], false, false);
+                    graphDefault.loadContent(new PairedResult(input));
+                    const selectionElement = fetchElementByClass(pairedResultGraphContainer, styles.dataPointSelection);
+                    expect(selectionElement.tagName).toBe("circle");
+                    expect(selectionElement.classList).toContain(styles.dataPointSelection);
+                    expect(selectionElement.classList).toContain("hidden");
+                    expect(selectionElement.getAttribute("aria-describedby")).toBe(input.key);
+                    expect(selectionElement.getAttribute("style")).toBe("");
+                });
+                it("creates circle for incomplete pairs - low", () => {
+                    graphDefault.destroy();
+                    graphDefault = new Graph(getAxes(axisDefault));
+                    input = getInput([ {
+                        low: {
+                            x: 45,
+                            y: 75
+                        }
+                    } ], false, false);
+                    graphDefault.loadContent(new PairedResult(input));
+                    const selectionElement = fetchElementByClass(pairedResultGraphContainer, styles.dataPointSelection);
+                    expect(selectionElement.tagName).toBe("circle");
+                    expect(selectionElement.classList).toContain(styles.dataPointSelection);
+                    expect(selectionElement.classList).toContain("hidden");
+                    expect(selectionElement.getAttribute("aria-describedby")).toBe(input.key);
+                    expect(selectionElement.getAttribute("style")).toBe("");
+                });
+            });
             describe("when clicked on a data point", () => {
                 it("does not do anything if no onClick callback is provided", (done) => {
                     graphDefault.destroy();
@@ -508,6 +584,14 @@ describe("PairedResult", () => {
                     const point = fetchElementByClass(pairedResultGraphContainer, styles.pairedPoint);
                     triggerEvent(point, "click", done);
                     expect(box.getAttribute("aria-selected")).toBe("true");
+                });
+                it("creates a rectangle highlight for data point", (done) => {
+                    const selectionElement = fetchElementByClass(pairedResultGraphContainer, styles.dataPointSelection);
+                    const point = fetchElementByClass(pairedResultGraphContainer, styles.pairedPoint);
+                    triggerEvent(point, "click", done);
+                    expect(selectionElement).not.toBeNull();
+                    expect(selectionElement.tagName).toBe("rect");
+                    expect(selectionElement.classList).toContain(styles.dataPointSelection);
                 });
                 it("removes highlight when data point is clicked again", (done) => {
                     const box = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
@@ -631,83 +715,172 @@ describe("PairedResult", () => {
                 triggerEvent(legendItem, "click");
                 expect(legendItem.getAttribute("aria-selected")).toBe("false");
             });
-            it("on click hides the points", () => {
-                spyOn(window, "requestAnimationFrame").and.callThrough();
-                const input = getInput(valuesDefault, false, false);
-                const pairResultInstance = new PairedResult(input);
-                const graph = graphDefault.loadContent(pairResultInstance);
-                triggerEvent(fetchElementByClass(pairedResultGraphContainer, styles.legendItem), "click");
-                pairResultInstance.redraw(graph);
+            describe("on click", () => {
+                it("hides the points", () => {
+                    spyOn(window, "requestAnimationFrame").and.callThrough();
+                    const input = getInput(valuesDefault, false, false);
+                    const pairResultInstance = new PairedResult(input);
+                    const graph = graphDefault.loadContent(pairResultInstance);
+                    triggerEvent(fetchElementByClass(pairedResultGraphContainer, styles.legendItem), "click");
+                    pairResultInstance.redraw(graph);
 
-                const high = pairedResultGraphContainer.querySelector(`.${styles.pairedPoint}.${styles.high}`);
-                const mid = pairedResultGraphContainer.querySelector(`.${styles.pairedPoint}.${styles.mid}`);
-                const low = pairedResultGraphContainer.querySelector(`.${styles.pairedPoint}.${styles.low}`);
-                expect(window.requestAnimationFrame).toHaveBeenCalledTimes(1);
-                expect(high.style.display).toBe("none");
-                expect(mid.style.display).toBe("");
-                expect(low.style.display).toBe("");
-            });
-            it("on click hides the line and points, if the point is high", () => {
-                const input = getInput(valuesDefault, false, false);
-                const pairResultInstance = new PairedResult(input);
-                const graph = graphDefault.loadContent(pairResultInstance);
-                triggerEvent(fetchElementByClass(pairedResultGraphContainer, styles.legendItem), "click");
-                pairResultInstance.redraw(graph);
-                expect(pairedResultGraphContainer.querySelector(`.${styles.pairedLine}`)).toBeNull();
-            });
-            it("on click hides the line and points, if the point is low", () => {
-                const input = getInput(valuesDefault, false, false);
-                const pairResultInstance = new PairedResult(input);
-                const graph = graphDefault.loadContent(pairResultInstance);
-                const legendContainer = fetchElementByClass(pairedResultGraphContainer, styles.legend);
-                triggerEvent(legendContainer.querySelector(`[aria-describedby=${input.key}_low]`), "click");
-                pairResultInstance.redraw(graph);
-                expect(pairedResultGraphContainer.querySelector(`.${styles.pairedLine}`)).toBeNull();
-            });
-            it("on click does not hide the line and points, if the point is mid", () => {
-                const input = getInput(valuesDefault, false, false);
-                const pairResultInstance = new PairedResult(input);
-                const graph = graphDefault.loadContent(pairResultInstance);
-                const legendContainer = fetchElementByClass(pairedResultGraphContainer, styles.legend);
-                triggerEvent(legendContainer.querySelector(`[aria-describedby=${input.key}_mid]`), "click");
-                pairResultInstance.redraw(graph);
-                const line = pairedResultGraphContainer.querySelector(`.${styles.pairedLine}`);
-                expect(line.getAttribute("d")).not.toBeNull();
-            });
-            it("on click, removes the point but keeps the rest for multiple data sets", () => {
-                const inputPrimary = getInput(valuesDefault, false, false);
-                const inputSecondary = {
-                    key: `uid_2`,
-                    label: {
-                        display: "Data Label B"
-                    },
-                    values: valuesDefault
-                };
-                const primaryPR = new PairedResult(inputPrimary);
-                const secondaryPR = new PairedResult(inputSecondary);
-                graphDefault.loadContent(primaryPR);
-                const graph = graphDefault.loadContent(secondaryPR);
-                triggerEvent(fetchElementByClass(pairedResultGraphContainer, styles.legendItem), "click");
-                primaryPR.redraw(graph);
-                secondaryPR.redraw(graph);
-                const primaryPRElement = pairedResultGraphContainer.querySelector(`.${styles.pairedBoxGroup}[aria-describedby="${inputPrimary.key}"]`);
-                const secondaryPRElement = pairedResultGraphContainer.querySelector(`.${styles.pairedBoxGroup}[aria-describedby="${inputSecondary.key}"]`);
-                expect(graph.config.shownTargets.length).toBe(7);
-                expect(fetchElementByClass(primaryPRElement, styles.pairedPoint).style.display).toBe("none");
-                expect(fetchElementByClass(secondaryPRElement, styles.pairedPoint).style.display).toBe("");
-            });
-            it("on clicking twice toggles the points back to visible", () => {
-                spyOn(window, "requestAnimationFrame").and.callThrough();
-                const input = getInput(valuesDefault, false, false);
-                const line = new PairedResult(input);
-                const graph = graphDefault.loadContent(line);
-                const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
-                triggerEvent(legendItem, "click");
-                line.redraw(graph);
-                triggerEvent(legendItem, "click");
-                line.redraw(graph);
-                expect(window.requestAnimationFrame).toHaveBeenCalledTimes(2);
-                expect(fetchElementByClass(pairedResultGraphContainer, styles.pairedPoint).style.display).toBe("");
+                    const high = pairedResultGraphContainer.querySelector(`.${styles.pairedPoint}.${styles.high}`);
+                    const mid = pairedResultGraphContainer.querySelector(`.${styles.pairedPoint}.${styles.mid}`);
+                    const low = pairedResultGraphContainer.querySelector(`.${styles.pairedPoint}.${styles.low}`);
+                    expect(window.requestAnimationFrame).toHaveBeenCalledTimes(1);
+                    expect(high.style.display).toBe("none");
+                    expect(mid.style.display).toBe("");
+                    expect(low.style.display).toBe("");
+                });
+                it("hides the line and points, if the point is high", () => {
+                    const input = getInput(valuesDefault, false, false);
+                    const pairResultInstance = new PairedResult(input);
+                    const graph = graphDefault.loadContent(pairResultInstance);
+                    triggerEvent(fetchElementByClass(pairedResultGraphContainer, styles.legendItem), "click");
+                    pairResultInstance.redraw(graph);
+                    expect(pairedResultGraphContainer.querySelector(`.${styles.pairedLine}`).style.display).toBe("none");
+                });
+                it("hides the line and points, if the point is low", () => {
+                    const input = getInput(valuesDefault, false, false);
+                    const pairResultInstance = new PairedResult(input);
+                    const graph = graphDefault.loadContent(pairResultInstance);
+                    const legendContainer = fetchElementByClass(pairedResultGraphContainer, styles.legend);
+                    triggerEvent(legendContainer.querySelector(`[aria-describedby=${input.key}_low]`), "click");
+                    pairResultInstance.redraw(graph);
+                    expect(pairedResultGraphContainer.querySelector(`.${styles.pairedLine}`).style.display).toBe("none");
+                });
+                it("does not hide the line and points, if the point is mid", () => {
+                    const input = getInput(valuesDefault, false, false);
+                    const pairResultInstance = new PairedResult(input);
+                    const graph = graphDefault.loadContent(pairResultInstance);
+                    const legendContainer = fetchElementByClass(pairedResultGraphContainer, styles.legend);
+                    triggerEvent(legendContainer.querySelector(`[aria-describedby=${input.key}_mid]`), "click");
+                    pairResultInstance.redraw(graph);
+                    const line = pairedResultGraphContainer.querySelector(`.${styles.pairedLine}`);
+                    expect(line.getAttribute("d")).not.toBeNull();
+                });
+                it("removes the point but keeps the rest for multiple data sets", () => {
+                    const inputPrimary = getInput(valuesDefault, false, false);
+                    const inputSecondary = {
+                        key: `uid_2`,
+                        label: {
+                            display: "Data Label B"
+                        },
+                        values: valuesDefault
+                    };
+                    const primaryPR = new PairedResult(inputPrimary);
+                    const secondaryPR = new PairedResult(inputSecondary);
+                    graphDefault.loadContent(primaryPR);
+                    const graph = graphDefault.loadContent(secondaryPR);
+                    triggerEvent(fetchElementByClass(pairedResultGraphContainer, styles.legendItem), "click");
+                    primaryPR.redraw(graph);
+                    secondaryPR.redraw(graph);
+                    const primaryPRElement = pairedResultGraphContainer.querySelector(`.${styles.pairedBoxGroup}[aria-describedby="${inputPrimary.key}"]`);
+                    const secondaryPRElement = pairedResultGraphContainer.querySelector(`.${styles.pairedBoxGroup}[aria-describedby="${inputSecondary.key}"]`);
+                    expect(graph.config.shownTargets.length).toBe(7);
+                    expect(fetchElementByClass(primaryPRElement, styles.pairedPoint).style.display).toBe("none");
+                    expect(fetchElementByClass(secondaryPRElement, styles.pairedPoint).style.display).toBe("");
+                });
+                it("on clicking twice toggles the points back to visible", () => {
+                    spyOn(window, "requestAnimationFrame").and.callThrough();
+                    const input = getInput(valuesDefault, false, false);
+                    const line = new PairedResult(input);
+                    const graph = graphDefault.loadContent(line);
+                    const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
+                    triggerEvent(legendItem, "click");
+                    line.redraw(graph);
+                    triggerEvent(legendItem, "click");
+                    line.redraw(graph);
+                    expect(window.requestAnimationFrame).toHaveBeenCalledTimes(2);
+                    expect(fetchElementByClass(pairedResultGraphContainer, styles.pairedPoint).style.display).toBe("");
+                });
+                describe("highlights the data point and shows rest of data points", () => {
+                    beforeEach(() => {
+                        const input = getInput(valuesDefault, false, false);
+                        const line = new PairedResult(input);
+                        const graph = graphDefault.loadContent(line);
+                        const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
+                        triggerEvent(legendItem, "click");
+                        line.redraw(graph);
+                    });
+                    it("box is set as selected", (done) => {
+                        const box = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
+                        triggerEvent(box, "click", done);
+                        expect(box.getAttribute("aria-selected")).toBe("true");
+                    });
+                    it("selection element is displayed", (done) => {
+                        const box = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
+                        triggerEvent(box, "click", done);
+                        const selectionElement = fetchElementByClass(pairedResultGraphContainer, styles.dataPointSelection);
+                        expect(selectionElement).not.toBeNull();
+                        expect(selectionElement.tagName).toBe("rect");
+                        expect(selectionElement.classList).toContain(styles.dataPointSelection);
+                    });
+                    it("line is displayed to connect the pair", (done) => {
+                        const box = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
+                        triggerEvent(box, "click", done);
+                        const lineElement = fetchElementByClass(pairedResultGraphContainer, styles.pairedLine);
+                        expect(lineElement.tagName).toBe("path");
+                        expect(lineElement.classList).toContain(styles.pairedLine);
+                        expect(lineElement.classList).toContain(styles.dataPointDisplayEnable);
+                    });
+                    it("points are displayed even if they are hidden", (done) => {
+                        const box = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
+                        triggerEvent(box, "click", done);
+                        const pointElement = fetchElementByClass(pairedResultGraphContainer, styles.pairedPoint);
+                        expect(pointElement.tagName).toBe("path");
+                        expect(pointElement.classList).toContain(styles.pairedPoint);
+                        expect(pointElement.classList).toContain(styles.high);
+                        expect(pointElement.classList).toContain(styles.dataPointDisplayEnable);
+                    });
+                });
+                describe("removes highlight when reset", () => {
+                    beforeEach(() => {
+                        const input = getInput(valuesDefault, false, false);
+                        input.onClick = (clearSelectionCallback) => {
+                            clearSelectionCallback();
+                        };
+                        const line = new PairedResult(input);
+                        const graph = graphDefault.loadContent(line);
+                        const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
+                        triggerEvent(legendItem, "click");
+                        line.redraw(graph);
+                    });
+                    it("box is set as unselected", (done) => {
+                        const box = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
+                        triggerEvent(box, "click");
+                        triggerEvent(box, "click", done);
+                        expect(box.getAttribute("aria-selected")).toBe("false");
+                    });
+                    it("selection element is hidden", (done) => {
+                        const box = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
+                        triggerEvent(box, "click");
+                        triggerEvent(box, "click", done);
+                        const selectionElement = fetchElementByClass(pairedResultGraphContainer, styles.dataPointSelection);
+                        expect(selectionElement).not.toBeNull();
+                        expect(selectionElement.tagName).toBe("rect");
+                        expect(selectionElement.classList).toContain(styles.dataPointSelection);
+                    });
+                    it("line between the pair is hidden", (done) => {
+                        const box = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
+                        triggerEvent(box, "click");
+                        triggerEvent(box, "click", done);
+                        const lineElement = fetchElementByClass(pairedResultGraphContainer, styles.pairedLine);
+                        expect(lineElement.tagName).toBe("path");
+                        expect(lineElement.classList).toContain(styles.pairedLine);
+                        expect(lineElement.classList[ 1 ]).toBeUndefined();
+                    });
+                    it("points are hidden that were toggled off", (done) => {
+                        const box = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
+                        triggerEvent(box, "click");
+                        triggerEvent(box, "click", done);
+                        const pointElement = fetchElementByClass(pairedResultGraphContainer, styles.pairedPoint);
+                        expect(pointElement.tagName).toBe("path");
+                        expect(pointElement.classList).toContain(styles.pairedPoint);
+                        expect(pointElement.classList).toContain(styles.high);
+                        expect(pointElement.classList[ 2 ]).toBeUndefined();
+                    });
+                });
             });
             it("shown targets are removed from Graph", () => {
                 const input = getInput(valuesDefault, false, false);

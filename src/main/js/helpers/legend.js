@@ -61,20 +61,10 @@ const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
                                .attr("role", "img")
                                .attr("viewBox", constants.LEGEND_ICON_SIZE);
     iconPath.append("path")
-            .attr({
-                d() {
-                    if (utils.isEmpty(isInBuilt)) {
-                        return;
-                    }
-                    return new Symbol(isInBuilt).getPathElement(constants.DEFAULT_PLOT_LEGEND_SIZE);
-                },
-                transform() {
-                    if (utils.isEmpty(isInBuilt)) {
-                        return;
-                    }
-                    const scaleFactor = isNativeSymbol(symbol) ? constants.DEFAULT_PLOT_LEGEND_SCALE : 1;
-                    return `translate(${cx},${cy})` + ` scale(${scaleFactor})`;
-                }
+            .attr("d", () => new Symbol(isInBuilt).getPathElement(constants.DEFAULT_PLOT_LEGEND_SIZE))
+            .attr("transform", () => {
+                const scaleFactor = isNativeSymbol(symbol) ? constants.DEFAULT_PLOT_LEGEND_SCALE : 1;
+                return `translate(${cx},${cy}) scale(${scaleFactor})`;
             })
             .attr("style", `fill: ${color}`);
     itemPath.append("span")
