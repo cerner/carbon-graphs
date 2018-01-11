@@ -120,10 +120,10 @@ export const renderLineGridVHidden = (el, id, title) => () => {
     lineDefault.loadContent(Carbon.api.line(getData(`#${id}`, "LINE_DEFAULT").data[ 0 ]));
     return lineDefault;
 };
-export const renderLineSymbolsHidden = (el, id, title) => () => {
+export const renderLineShapesHidden = (el, id, title) => () => {
     shell.render(el, id, title);
     const axisData = utils.deepClone(getAxes(`#${id}`, "LINE_DEFAULT"));
-    axisData.showSymbols = false;
+    axisData.showShapes = false;
     const lineDefault = Carbon.api.graph(axisData);
     lineDefault.loadContent(Carbon.api.line(getData(`#${id}`, "LINE_DEFAULT").data[ 0 ]));
     return lineDefault;

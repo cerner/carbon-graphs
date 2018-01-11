@@ -43,7 +43,7 @@ Add `dist/js/carbon-graphs.js` and `dist/css/carbon-graphs.css` in your page and
 * [ ] Datetime formatting
 * [ ] Tick counts
 * [ ] Show/hide ticks
-* [ ] Axes labelling along with symbols
+* [ ] Axes labelling along with shapes
 * [ ] Axes label text overflow
 * [ ] Timeline graph
 * [ ] Gantt charts

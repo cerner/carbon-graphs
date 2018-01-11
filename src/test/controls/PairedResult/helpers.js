@@ -5,7 +5,7 @@ import {
 } from "../../../main/js/helpers/constants";
 import utils from "../../../main/js/helpers/utils";
 
-const SYMBOLS = {
+const SHAPES = {
     RHOMBUS: "RHOMBUS",
     TEAR_DROP: "TEAR_DROP"
 };
@@ -14,17 +14,17 @@ export const dataPointClickHandlerSpy = sinon.spy();
  * Creates and returns an example input with data point values
  * @param {Array} values - x and y co-ordinate values
  * @param {boolean} isDefaultColor - if true, doesnt load the COLOR
- * @param {boolean} isDefaultSymbol - if true, doesnt load the SYMBOL
+ * @param {boolean} isDefaultShape - if true, doesnt load the SHAPE
  * @param {boolean} isY2Axis - if true, then "y2"
  * @returns {Object} input JSON
  */
-export const getInput = (values = [], isDefaultColor = true, isDefaultSymbol = true, isY2Axis = false) => (
+export const getInput = (values = [], isDefaultColor = true, isDefaultShape = true, isY2Axis = false) => (
     {
         key: `uid_1`,
-        symbol: {
-            high: isDefaultSymbol ? "" : SYMBOLS.TEAR_DROP,
-            mid: isDefaultSymbol ? "" : SYMBOLS.RHOMBUS,
-            low: isDefaultSymbol ? "" : SYMBOLS.TEAR_DROP
+        shape: {
+            high: isDefaultShape ? "" : SHAPES.TEAR_DROP,
+            mid: isDefaultShape ? "" : SHAPES.RHOMBUS,
+            low: isDefaultShape ? "" : SHAPES.TEAR_DROP
         },
         color: {
             high: isDefaultColor ? "" : COLORS[ Object.keys(COLORS)[ 1 ] ],

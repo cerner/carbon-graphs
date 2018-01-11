@@ -80,7 +80,7 @@ Each axis - X, Y and Y2 should have the following properties:
 |yAxis|string|"y"
 |label|Object|{}
 |color|string|COLORS.BLACK
-|symbol|string|SYMBOLS.CIRCLE
+|shape|string|SHAPES.CIRCLE
 |onClick|Function|null
 
 ### Values

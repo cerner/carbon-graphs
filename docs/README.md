@@ -22,8 +22,8 @@ Consumers can generate one of the following graphs:
 |LIGHT_ORANGE| ![#ff7d00](https://placehold.it/15/ff7d00/000000?text=+) `#ff7d00`|
 |LIGHT_YELLOW| ![#ffda6c](https://placehold.it/15/ffda6c/000000?text=+) `#ffda6c`|
 
-### Symbols
-|Symbols|
+### Shapes
+|Shapes|
 |---|
 |CIRCLE|
 |CROSS|

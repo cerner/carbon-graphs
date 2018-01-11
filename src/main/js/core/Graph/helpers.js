@@ -19,11 +19,11 @@ import {
     processTickValues,
     translateAxes
 } from "../../helpers/axis";
-import constants, { SYMBOLS } from "../../helpers/constants";
+import constants, { SHAPES } from "../../helpers/constants";
 import styles from "../../helpers/styles";
 import utils from "../../helpers/utils";
 import { getScale } from "../BaseConfig";
-import { isValidCarbonSymbol } from "../Symbol";
+import { isValidCarbonShape } from "../Shape";
 
 const BASE_CANVAS_PADDING = constants.BASE_CANVAS_WIDTH_PADDING;
 const PADDING = constants.PADDING;
@@ -208,7 +208,7 @@ const createGrid = (axis, scale, config, canvasSVG) => {
  * Only if showLabel is enabled. X Axis is 0 deg rotated, Y Axis is rotated 90 deg
  * Y2 Axis is rotated -90 deg along its horizontal axis.
  * @private
- * @todo Add symbols for each datapoint set into corresponding axis
+ * @todo Add shapes for each datapoint set into corresponding axis
  * @todo Add datapoint set label to corresponding axis
  * @todo Label overflow formatting, adding ellipsis?
  * @param {Object} config - config object derived from input JSON
@@ -320,29 +320,29 @@ const determineHeight = (config, dimension) => {
         halfHeight * config.outlierStretchFactor.lowerLimit);
 };
 /**
- * Checks if the symbol is part of inbuilt d3 symbols list or otherwise.
+ * Checks if the shape is part of inbuilt d3 shapes list or otherwise.
  * @private
- * @param {Object} dataPoint - Data point containing the symbol
- * @returns {Object} Symbol Object if present or null
+ * @param {Object} dataPoint - Data point containing the shape
+ * @returns {Object} Shape Object if present or null
  */
-const isBuiltAsAPathSymbol = (dataPoint) => {
-    const symbol = getSymbolForTarget(dataPoint);
-    return isValidCarbonSymbol(symbol) ? symbol : null;
+const isShapeBuiltAsAPath = (dataPoint) => {
+    const shape = getShapeForTarget(dataPoint);
+    return isValidCarbonShape(shape) ? shape : null;
 };
 /**
- * Returns the symbol property from the data point.
- * If the symbol is not provided then the default symbol is Circle.
+ * Returns the shape property from the data point.
+ * If the shape is not provided then the default shape is Circle.
  * @private
- * @param {Object} dataPoint - Data point containing x, y co-ordinate points, color and symbol.
- * @returns {string} provided symbol or a circle.
+ * @param {Object} dataPoint - Data point containing x, y co-ordinate points, color and shape.
+ * @returns {string} provided shape or a circle.
  */
-const getSymbolForTarget = (dataPoint) => (dataPoint.symbol || SYMBOLS.CIRCLE);
+const getShapeForTarget = (dataPoint) => (dataPoint.shape || SHAPES.CIRCLE);
 /**
  * Returns the color property from the data point.
- * If the symbol is not provided then the default color is #1C1F21 {black}.
+ * If the shape is not provided then the default color is #1C1F21 {black}.
  * @private
- * @param {Object} dataPoint - Data point containing x, y co-ordinate points, color and symbol.
- * @returns {string} provided symbol or a circle.
+ * @param {Object} dataPoint - Data point containing x, y co-ordinate points, color and shape.
+ * @returns {string} provided shape or a circle.
  */
 const getColorForTarget = (dataPoint) => (dataPoint.color || constants.DEFAULT_COLOR);
 
@@ -394,8 +394,8 @@ export {
     translateGraph,
     padDomain,
     determineHeight,
-    isBuiltAsAPathSymbol,
-    getSymbolForTarget,
+    isShapeBuiltAsAPath,
+    getShapeForTarget,
     getColorForTarget,
     attachEventHandlers,
     detachEventHandlers

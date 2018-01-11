@@ -15,7 +15,7 @@ import {
     renderPairedResultExamples
 } from "./examples/content/renderPairedResultExamples";
 import { renderColorsExample } from "./examples/controls/colors";
-import { renderSymbolsExample } from "./examples/controls/symbols";
+import { renderShapesExample } from "./examples/controls/shapes";
 import {
     btn,
     clearContent,
@@ -51,12 +51,12 @@ renderLineExamples(new LineExample(), toggleSection, contentSection, setState, g
 renderPairedResultExamples(new PairedResultExample(), toggleSection, contentSection, setState, getState);
 renderCombinationGraphExamples(new CombinationExample(), toggleSection, contentSection, setState, getState);
 
-/* Colors and Symbols */
-btn.render(toggleSection, "Symbols", (event) => {
+/* Colors and Shapes */
+btn.render(toggleSection, "Shapes", (event) => {
     clearContent(contentSection, getState());
     toggleSectionAsActive(event.target);
     setState(null);
-    renderSymbolsExample(contentSection, "graph-symbols", "Symbols");
+    renderShapesExample(contentSection, "graph-shapes", "Shapes");
 });
 btn.render(toggleSection, "Colors", (event) => {
     clearContent(contentSection, getState());

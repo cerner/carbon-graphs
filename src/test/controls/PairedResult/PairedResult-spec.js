@@ -165,7 +165,7 @@ describe("PairedResult", () => {
             const pairedResult = new PairedResult(input);
             expect(pairedResult.config.key).toBe(input.key);
             expect(pairedResult.config.color).toEqual(input.color);
-            expect(pairedResult.config.symbol).toEqual(input.symbol);
+            expect(pairedResult.config.shape).toEqual(input.shape);
             expect(pairedResult.config.label).toEqual(input.label);
             expect(pairedResult.config.onClick).toEqual(jasmine.any(Function));
             expect(pairedResult.config.values).toEqual(input.values);
@@ -178,13 +178,13 @@ describe("PairedResult", () => {
             const pairedResult = new PairedResult(input);
             input.key = "";
             input.color = "";
-            input.symbol = "";
+            input.shape = "";
             input.onClick = null;
             input.label = {};
             input.values = [];
             expect(pairedResult.config.key).not.toBe(input.key);
             expect(pairedResult.config.color).not.toBe(input.color);
-            expect(pairedResult.config.symbol).not.toBe(input.symbol);
+            expect(pairedResult.config.shape).not.toBe(input.shape);
             expect(pairedResult.config.label).not.toEqual(input.label);
             expect(pairedResult.config.values).not.toBe(input.values);
             expect(pairedResult.config.onClick).toEqual(jasmine.any(Function));
@@ -237,7 +237,7 @@ describe("PairedResult", () => {
                     i[ j ].x !== null &&
                     i[ j ].y !== null &&
                     i[ j ].label !== null &&
-                    i[ j ].symbol &&
+                    i[ j ].shape &&
                     i[ j ].color &&
                     i[ j ].key === `${data.key}_${j}`
                 )
@@ -269,12 +269,12 @@ describe("PairedResult", () => {
                 )
             )).toBeTruthy();
         });
-        it("defaults symbols to circle when not provided", () => {
+        it("defaults shapes to circle when not provided", () => {
             const graph = graphDefault.loadContent(new PairedResult(getInput(valuesDefault)));
             const data = graph.content[ 0 ].dataTarget;
             expect(data.internalValuesSubset.every((i) =>
                 constants.PAIR_ITEM_TYPES.map((j) =>
-                    j.symbol === "CIRCLE"
+                    j.shape === "CIRCLE"
                 )
             )).toBeTruthy();
         });
@@ -471,21 +471,21 @@ describe("PairedResult", () => {
                     expect(points.attributes.getNamedItem("style").value).toBe("fill: #007cc3;");
                 });
             });
-            describe("data points have correct symbol", () => {
+            describe("data points have correct shape", () => {
                 it("high", () => {
                     const pointsGroup = fetchElementByClass(pairedResultGraphContainer, styles.pairedBoxGroup);
                     const points = pointsGroup.querySelector(`.${styles.pairedPoint}.${styles.high}`);
-                    expect(points.attributes.getNamedItem("d").value).toBe(constants.CUSTOM_PATH.TEAR_DROP);
+                    expect(points.attributes.getNamedItem("d").value).toBe(constants.CUSTOM_SHAPE_PATH.TEAR_DROP);
                 });
                 it("mid", () => {
                     const pointsGroup = fetchElementByClass(pairedResultGraphContainer, styles.pairedBoxGroup);
                     const points = pointsGroup.querySelector(`.${styles.pairedPoint}.${styles.mid}`);
-                    expect(points.attributes.getNamedItem("d").value).toBe(constants.CUSTOM_PATH.RHOMBUS);
+                    expect(points.attributes.getNamedItem("d").value).toBe(constants.CUSTOM_SHAPE_PATH.RHOMBUS);
                 });
                 it("low", () => {
                     const pointsGroup = fetchElementByClass(pairedResultGraphContainer, styles.pairedBoxGroup);
                     const points = pointsGroup.querySelector(`.${styles.pairedPoint}.${styles.low}`);
-                    expect(points.attributes.getNamedItem("d").value).toBe(constants.CUSTOM_PATH.TEAR_DROP);
+                    expect(points.attributes.getNamedItem("d").value).toBe(constants.CUSTOM_SHAPE_PATH.TEAR_DROP);
                 });
             });
             describe("creates data point selection elements as needed", () => {
@@ -670,7 +670,7 @@ describe("PairedResult", () => {
                 expect(legendItems.length).toBe(3);
                 expect(legendText.textContent).toBe("&lt;HELLO DUMMY X LABEL&gt;");
             });
-            it("loads item with a symbol", () => {
+            it("loads item with a shape", () => {
                 const input = getInput(valuesDefault, false, false);
                 graphDefault.loadContent(new PairedResult(input));
                 const legendItemBtn = fetchElementByClass(pairedResultGraphContainer, styles.legendItemBtn);
@@ -689,14 +689,14 @@ describe("PairedResult", () => {
                 expect(legendItem.children[ 1 ].tagName).toBe("SPAN");
                 expect(legendItem.children[ 1 ].textContent).toBe(input.label.high.display);
             });
-            it("loads the correct symbol", () => {
+            it("loads the correct shape", () => {
                 const input = getInput(valuesDefault, false, false);
                 graphDefault.loadContent(new PairedResult(input));
                 const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
                 const iconPath = legendItem.querySelector("path");
                 expect(iconPath).not.toBeNull();
                 expect(iconPath.getAttribute("d")).not.toBeNull();
-                expect(iconPath.getAttribute("d")).toBe(constants.CUSTOM_PATH.TEAR_DROP);
+                expect(iconPath.getAttribute("d")).toBe(constants.CUSTOM_SHAPE_PATH.TEAR_DROP);
                 expect(iconPath.getAttribute("transform")).not.toBeNull();
             });
             it("loads the correct color", () => {

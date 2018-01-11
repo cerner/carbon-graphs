@@ -258,7 +258,7 @@ describe("Graph", () => {
             expect(graph.config.throttle).toEqual(constants.RESIZE_THROTTLE);
             expect(graph.config.showLabel).toEqual(true);
             expect(graph.config.showLegend).toEqual(true);
-            expect(graph.config.showSymbols).toEqual(true);
+            expect(graph.config.showShapes).toEqual(true);
             expect(graph.config.showHGrid).toEqual(true);
             expect(graph.config.showVGrid).toEqual(true);
             expect(graph.config.dimension).toEqual({});
@@ -278,7 +278,7 @@ describe("Graph", () => {
             expect(graph.config.throttle).toEqual(constants.RESIZE_THROTTLE);
             expect(graph.config.showLabel).toEqual(true);
             expect(graph.config.showLegend).toEqual(true);
-            expect(graph.config.showSymbols).toEqual(true);
+            expect(graph.config.showShapes).toEqual(true);
             expect(graph.config.showHGrid).toEqual(true);
             expect(graph.config.showVGrid).toEqual(true);
             expect(graph.config.dimension).toEqual({});

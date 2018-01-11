@@ -4,8 +4,8 @@
  */
 "use strict";
 import d3 from "d3";
-import { isBuiltAsAPathSymbol } from "../core/Graph/helpers";
-import Symbol, { isNativeSymbol } from "../core/Symbol";
+import { isShapeBuiltAsAPath } from "../core/Graph/helpers";
+import Shape, { isNativeShape } from "../core/Shape";
 import constants from "../helpers/constants";
 import styles from "../helpers/styles";
 import utils from "../helpers/utils";
@@ -33,8 +33,8 @@ const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
     if (!t.label) {
         return null;
     }
-    const symbol = t.symbol;
-    const isInBuilt = isBuiltAsAPathSymbol(t);
+    const shape = t.shape;
+    const isInBuilt = isShapeBuiltAsAPath(t);
     const color = t.color;
     const text = utils.sanitize(t.label.display);
     const index = shownTargets.indexOf(t.key);
@@ -61,9 +61,9 @@ const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
                                .attr("role", "img")
                                .attr("viewBox", constants.LEGEND_ICON_SIZE);
     iconPath.append("path")
-            .attr("d", () => new Symbol(isInBuilt).getPathElement(constants.DEFAULT_PLOT_LEGEND_SIZE))
+            .attr("d", () => new Shape(isInBuilt).getPathElement(constants.DEFAULT_PLOT_LEGEND_SIZE))
             .attr("transform", () => {
-                const scaleFactor = isNativeSymbol(symbol) ? constants.DEFAULT_PLOT_LEGEND_SCALE : 1;
+                const scaleFactor = isNativeShape(shape) ? constants.DEFAULT_PLOT_LEGEND_SCALE : 1;
                 return `translate(${cx},${cy}) scale(${scaleFactor})`;
             })
             .attr("style", `fill: ${color}`);
@@ -85,7 +85,7 @@ const removeLegendItem = (legendSVG, dataTarget) => legendSVG ? legendSVG.select
 /**
  * Creates the legend item list and appends into the container. The container consists of
  * the canvas which houses the graph itself, and the legend <ul> which contains the list of data points labels and
- * their respective symbols.
+ * their respective shapes.
  * Only if showLegend is enabled.
  * @private
  * @param {container} container - Container

@@ -3,13 +3,13 @@ import d3 from "d3";
 import { getType } from "../../../core/BaseConfig";
 import {
     getColorForTarget,
-    isBuiltAsAPathSymbol
+    isShapeBuiltAsAPath
 } from "../../../core/Graph/helpers";
-import Symbol from "../../../core/Symbol";
+import Shape from "../../../core/Shape";
 import { getXAxisXPosition } from "../../../helpers/axis";
 import constants, {
     AXIS_TYPE,
-    SYMBOLS
+    SHAPES
 } from "../../../helpers/constants";
 import errors from "../../../helpers/errors";
 import {
@@ -130,7 +130,7 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
                      .call(drawBox);
 };
 /**
- * Processes the input JSON and adds the symbols, colors, labels etc. to each data points so that we
+ * Processes the input JSON and adds the shapes, colors, labels etc. to each data points so that we
  * can use them when rendering the data point.
  * @private
  * @param {Object} graphConfig - config object of Graph API
@@ -162,7 +162,7 @@ const processDataPoints = (graphConfig, dataTarget) => {
                     y: utils.getNumber(getValue(value, type).y),
                     color: getValue(dataTarget.color, type) || constants.DEFAULT_COLOR,
                     label: getValue(dataTarget.label, type) || {},
-                    symbol: getValue(dataTarget.symbol, type) || SYMBOLS.CIRCLE,
+                    shape: getValue(dataTarget.shape, type) || SHAPES.CIRCLE,
                     key: `${dataTarget.key}_${type}`
                 };
                 if (!utils.hasValue(graphConfig.shownTargets, subset[ type ].key)) {
@@ -179,7 +179,7 @@ const processDataPoints = (graphConfig, dataTarget) => {
 };
 /**
  * Returns the internal values subset which is the array that was created from the input JSON.
- * This array has information for each data point w.r.t symbol, colors and on click callback along with
+ * This array has information for each data point w.r.t shape, colors and on click callback along with
  * x and y co-ordinates.
  * @private
  * @param {Object} target - Object containing the subsets
@@ -209,7 +209,7 @@ const drawLine = (scale, config, boxPath) =>
     });
 /**
  * Draws the points with options opted in the input JSON by the consumer for each data set.
- *  Render the point with appropriate color, symbol, x and y co-ordinates, label etc.
+ *  Render the point with appropriate color, shape, x and y co-ordinates, label etc.
  *  On click content callback function is called.
  * @private
  * @param {Object} scale - d3 scale for Graph
@@ -222,8 +222,8 @@ const drawPoints = (scale, config, canvasSVG) => {
         path.classed(styles.pairedPoint, true)
             .classed(getValue(styles, type), true)
             .attr("d", (value) => {
-                const symbol = isBuiltAsAPathSymbol(getValue(value, type));
-                return new Symbol(symbol).getPathElement();
+                const shape = isShapeBuiltAsAPath(getValue(value, type));
+                return new Shape(shape).getPathElement();
             })
             .attr("transform", transformPoint.bind({}, scale, type))
             .attr("style", (value) =>
@@ -319,7 +319,7 @@ const hoverHandler = (config, canvasSVG) => (item, state) => {
  */
 const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
     const constructLegendLabels = (d, type) => Object.assign({}, {
-        symbol: getValue(d.symbol, type),
+        shape: getValue(d.shape, type),
         color: getValue(d.color, type),
         label: getValue(d.label, type),
         key: `${d.key}_${type}`

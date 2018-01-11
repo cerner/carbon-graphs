@@ -25,7 +25,7 @@ export class ExampleControl {
         Promise.all(this.exampleSet.map((fn) => new Promise((resolve) => {
                    resolve(fn);
                })))
-               .then((fn) => fn.map((i) => i()));
+               .then((fn) => fn.map((i) => this.instanceList.push(i())));
         return this;
     }
 

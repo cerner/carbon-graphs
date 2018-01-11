@@ -28,7 +28,7 @@ export const processInput = (input, config, type) => {
     config.throttle = getDefaultValue(input.throttle, constants.RESIZE_THROTTLE);
     config.showLabel = getDefaultValue(input.showLabel, true);
     config.showLegend = getDefaultValue(input.showLegend, true);
-    config.showSymbols = getDefaultValue(input.showSymbols, true);
+    config.showShapes = getDefaultValue(input.showShapes, true);
     config.showHGrid = getDefaultValue(input.showHGrid, true);
     config.showVGrid = getDefaultValue(input.showVGrid, true);
     config.dimension = getDefaultValue(input.dimension, {});

@@ -25,14 +25,14 @@ export const COLORS = {
     LIGHT_YELLOW: "#ffda6c"
 };
 /**
- * Consumers can pick a symbol from this default list
+ * Consumers can pick a shape from this default list
  * @public
  * @enum {{CIRCLE: string, TRIANGLE: string,
  * SQUARE: string, X: string, DIAMOND: string,
  * CROSS: string, VERTICAL_BAR: string, RHOMBUS: string,
  * TEAR_DROP: string, TEAR_ALT: string, TRIANGLE_DOWN: string}}
  */
-export const SYMBOLS = {
+export const SHAPES = {
     CIRCLE: "CIRCLE",
     TRIANGLE: "TRIANGLE",
     SQUARE: "SQUARE",
@@ -81,7 +81,7 @@ export default {
         MOUSE_EXIT: "exit"
     },
     LEGEND_ICON_SIZE: "0 0 11 11",
-    DEFAULT_SYMBOL: "circle",
+    DEFAULT_SHAPE: "circle",
     DEFAULT_COLOR: COLORS.BLACK,
     CLIP_PATH_ID: `carbon-${+new Date()}-clip`,
     X_AXIS: "x",
@@ -89,7 +89,7 @@ export default {
     Y2_AXIS: "y2",
     MIN_TICKS: 3,
     MAX_TICK_VARIANCE: 100,
-    D3_INBUILT_SYMBOL: {
+    D3_INBUILT_SHAPE: {
         CIRCLE: "circle",
         CROSS: "cross",
         DIAMOND: "diamond",
@@ -97,7 +97,7 @@ export default {
         TRIANGLE_DOWN: "triangle-down",
         TRIANGLE: "triangle-up"
     },
-    CUSTOM_PATH: {
+    CUSTOM_SHAPE_PATH: {
         TEAR_DROP: "m0.05-5.59q0 0 3.05 3.66a3.9 3.9 0 1 1-6.1 0q3.05-3.66 3.05-3.66z",
         TEAR_ALT: "m0.01 4.72q0 0-3.05-3.66a3.9 3.9 0 1 1 6.1 0q-3.05 3.66-3.05 3.66z",
         X: "m-5.01-2.47 2.5-2.5 2.5 2.5 2.5-2.5 2.5 2.5-2.5 2.5 2.5 2.5-2.5 2.5-2.5-2.5-2.5 2.5-2.5-2.5 2.5-2.5z",

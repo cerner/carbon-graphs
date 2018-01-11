@@ -7,7 +7,7 @@ const JSON = {
     data: [],
     showLabel: true,
     showLegend: true,
-    showSymbols: true,
+    showShapes: true,
     showVGrid: true,
     showHGrid: true
 };
@@ -21,7 +21,7 @@ export const generateData = (id, sets, graph, type) => {
     const yLB = 2;
     const yUB = 60;
     const rangeX = () => Math.floor(Math.random() * (ub - lb)) + lb;
-    const sym = Object.keys(Carbon.helpers.SYMBOLS);
+    const sym = Object.keys(Carbon.helpers.SHAPES);
     const loadData = () =>
         new Array(sets).fill("").map((_, i) => (
             {
@@ -29,7 +29,7 @@ export const generateData = (id, sets, graph, type) => {
                 label: {
                     display: `Data item ${i + 1}`
                 },
-                symbol: sym[ Math.floor(Math.random() * 10) ],
+                shape: sym[ Math.floor(Math.random() * 10) ],
                 color: Carbon.helpers.COLORS[ Object.keys(Carbon.helpers.COLORS)[ i ] ],
                 onClick: loadPopup,
                 values: new Array(sets).fill("").map((_, j) => ({
@@ -106,7 +106,7 @@ const DATA = [
                     label: {
                         display: "Data Label 2"
                     },
-                    symbol: Carbon.helpers.SYMBOLS.TRIANGLE,
+                    shape: Carbon.helpers.SHAPES.TRIANGLE,
                     color: Carbon.helpers.COLORS.BLUE,
                     onClick: loadPopup,
                     values: new Array(18).fill("").map((_, i) => ({
@@ -119,7 +119,7 @@ const DATA = [
                     label: {
                         display: "Data Label 3"
                     },
-                    symbol: Carbon.helpers.SYMBOLS.X,
+                    shape: Carbon.helpers.SHAPES.X,
                     color: Carbon.helpers.COLORS.GREEN,
                     onClick: loadPopup,
                     values: new Array(12).fill("").map((_, i) => ({
@@ -132,7 +132,7 @@ const DATA = [
                     label: {
                         display: "Data Label 4"
                     },
-                    symbol: Carbon.helpers.SYMBOLS.CROSS,
+                    shape: Carbon.helpers.SHAPES.CROSS,
                     color: Carbon.helpers.COLORS.LIGHT_PURPLE,
                     onClick: loadPopup,
                     values: new Array(15).fill("").map((_, i) => ({
@@ -145,7 +145,7 @@ const DATA = [
                     label: {
                         display: "Data Label 5"
                     },
-                    symbol: Carbon.helpers.SYMBOLS.SQUARE,
+                    shape: Carbon.helpers.SHAPES.SQUARE,
                     color: Carbon.helpers.COLORS.ORANGE,
                     onClick: loadPopup,
                     values: new Array(20).fill("").map((_, i) => ({
@@ -158,7 +158,7 @@ const DATA = [
                     label: {
                         display: "Data Label 6"
                     },
-                    symbol: Carbon.helpers.SYMBOLS.CIRCLE,
+                    shape: Carbon.helpers.SHAPES.CIRCLE,
                     color: Carbon.helpers.COLORS.LIGHT_BLUE,
                     onClick: loadPopup,
                     values: new Array(14).fill("").map((_, i) => ({
@@ -171,7 +171,7 @@ const DATA = [
                     label: {
                         display: "Data Label 7"
                     },
-                    symbol: Carbon.helpers.SYMBOLS.TRIANGLE_DOWN,
+                    shape: Carbon.helpers.SHAPES.TRIANGLE_DOWN,
                     color: Carbon.helpers.COLORS.GREY,
                     onClick: loadPopup,
                     values: new Array(18).fill("").map((_, i) => ({
@@ -182,7 +182,7 @@ const DATA = [
             ],
             showLabel: true,
             showLegend: true,
-            showSymbols: true,
+            showShapes: true,
             showVGrid: true,
             showHGrid: true
         })
@@ -215,7 +215,7 @@ const DATA = [
                     label: {
                         display: "Data Label 1"
                     },
-                    symbol: Carbon.helpers.SYMBOLS.CIRCLE,
+                    shape: Carbon.helpers.SHAPES.CIRCLE,
                     onClick: loadPopup,
                     values: [
                         {
@@ -282,7 +282,7 @@ const DATA = [
                     label: {
                         display: "Data Label 2"
                     },
-                    symbol: Carbon.helpers.SYMBOLS.RHOMBUS,
+                    shape: Carbon.helpers.SHAPES.RHOMBUS,
                     color: Carbon.helpers.COLORS.BLUE,
                     onClick: loadPopup,
                     values: [
@@ -332,7 +332,7 @@ const DATA = [
             ],
             showLabel: true,
             showLegend: true,
-            showSymbols: true,
+            showShapes: true,
             showVGrid: true,
             showHGrid: true
         })
@@ -380,10 +380,10 @@ const DATA = [
                             display: "Low"
                         }
                     },
-                    symbol: {
-                        high: Carbon.helpers.SYMBOLS.TEAR_ALT,
-                        mid: Carbon.helpers.SYMBOLS.RHOMBUS,
-                        low: Carbon.helpers.SYMBOLS.TEAR_DROP
+                    shape: {
+                        high: Carbon.helpers.SHAPES.TEAR_ALT,
+                        mid: Carbon.helpers.SHAPES.RHOMBUS,
+                        low: Carbon.helpers.SHAPES.TEAR_DROP
                     },
                     color: {
                         high: Carbon.helpers.COLORS.BLACK,
@@ -520,10 +520,10 @@ const DATA = [
                             display: "Low"
                         }
                     },
-                    symbol: {
-                        high: Carbon.helpers.SYMBOLS.TEAR_ALT,
-                        mid: Carbon.helpers.SYMBOLS.RHOMBUS,
-                        low: Carbon.helpers.SYMBOLS.TEAR_DROP
+                    shape: {
+                        high: Carbon.helpers.SHAPES.TEAR_ALT,
+                        mid: Carbon.helpers.SHAPES.RHOMBUS,
+                        low: Carbon.helpers.SHAPES.TEAR_DROP
                     },
                     color: {
                         high: Carbon.helpers.COLORS.BLACK,
@@ -618,10 +618,10 @@ const DATA = [
                             display: "Low"
                         }
                     },
-                    symbol: {
-                        high: Carbon.helpers.SYMBOLS.TEAR_ALT,
-                        mid: Carbon.helpers.SYMBOLS.RHOMBUS,
-                        low: Carbon.helpers.SYMBOLS.TEAR_DROP
+                    shape: {
+                        high: Carbon.helpers.SHAPES.TEAR_ALT,
+                        mid: Carbon.helpers.SHAPES.RHOMBUS,
+                        low: Carbon.helpers.SHAPES.TEAR_DROP
                     },
                     color: {
                         high: Carbon.helpers.COLORS.BLACK,
@@ -714,10 +714,10 @@ const DATA = [
                             display: "Low"
                         }
                     },
-                    symbol: {
-                        high: Carbon.helpers.SYMBOLS.TRIANGLE,
-                        mid: Carbon.helpers.SYMBOLS.SQUARE,
-                        low: Carbon.helpers.SYMBOLS.TRIANGLE_DOWN
+                    shape: {
+                        high: Carbon.helpers.SHAPES.TRIANGLE,
+                        mid: Carbon.helpers.SHAPES.SQUARE,
+                        low: Carbon.helpers.SHAPES.TRIANGLE_DOWN
                     },
                     color: {
                         high: Carbon.helpers.COLORS.BLACK,
@@ -807,7 +807,7 @@ const DATA = [
                     label: {
                         display: "Line"
                     },
-                    symbol: Carbon.helpers.SYMBOLS.RHOMBUS,
+                    shape: Carbon.helpers.SHAPES.RHOMBUS,
                     color: Carbon.helpers.COLORS.BLUE,
                     onClick: loadPopup,
                     values: new Array(50).fill("").map((_, i) => ({
@@ -829,10 +829,10 @@ const DATA = [
                         }
                     },
                     yAxis: "y2",
-                    symbol: {
-                        high: Carbon.helpers.SYMBOLS.TEAR_ALT,
-                        mid: Carbon.helpers.SYMBOLS.RHOMBUS,
-                        low: Carbon.helpers.SYMBOLS.TEAR_DROP
+                    shape: {
+                        high: Carbon.helpers.SHAPES.TEAR_ALT,
+                        mid: Carbon.helpers.SHAPES.RHOMBUS,
+                        low: Carbon.helpers.SHAPES.TEAR_DROP
                     },
                     color: {
                         high: Carbon.helpers.COLORS.BLACK,
@@ -917,7 +917,7 @@ const DATA = [
             ],
             showLabel: true,
             showLegend: true,
-            showSymbols: true,
+            showShapes: true,
             showVGrid: true,
             showHGrid: true
         })
@@ -962,4 +962,4 @@ export const getAxes = (id, type) => {
     const res = DATA.find((t) => t[ type ]);
     return res ? res[ type ](id) : null;
 };
-export const getSymbols = () => Object.keys(Carbon.helpers.SYMBOLS);
+export const getShapes = () => Object.keys(Carbon.helpers.SHAPES);

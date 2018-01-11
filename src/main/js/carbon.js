@@ -4,7 +4,7 @@ import api from "./controls";
 import {
     AXIS_TYPE,
     COLORS,
-    SYMBOLS
+    SHAPES
 } from "./helpers/constants";
 import LOCALE from "./locale";
 
@@ -12,7 +12,7 @@ const helpers = {
     AXIS_TYPE,
     COLORS,
     LOCALE,
-    SYMBOLS
+    SHAPES
 };
 /**
  * Carbon

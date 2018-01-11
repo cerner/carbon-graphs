@@ -32,7 +32,7 @@ lineDefault.loadContent(Carbon.api.line(/* Data array D */));
 |throttle|number|(1000/60) => time in ms
 |showLabel|boolean|true
 |showLegend|boolean|true
-|showSymbols|boolean|true
+|showShapes|boolean|true
 |showVGrid|boolean|true
 |showHGrid|boolean|true
 
@@ -87,7 +87,7 @@ Each axis - X, Y and Y2 should have the following properties:
 |yAxis|string|"y"
 |label|Object|{}
 |color|string|COLORS.BLACK
-|symbol|string|SYMBOLS.CIRCLE
+|shape|string|SHAPES.CIRCLE
 |onClick|Function|null
 
 ### Values
@@ -128,7 +128,7 @@ var input = {
     },
     showLabel: true,
     showLegend: true,
-    showSymbols: true,
+    showShapes: true,
     showVGrid: true,
     showHGrid: true
 };
@@ -138,7 +138,7 @@ var data = {
     {
         display: "Data Label 1"
     },
-    symbol: Carbon.helpers.SYMBOLS.SQUARE,
+    shape: Carbon.helpers.SHAPES.SQUARE,
     color: Carbon.helpers.COLORS.BLUE,
     onClick: (onCloseCB, key, index, value) =>
     {

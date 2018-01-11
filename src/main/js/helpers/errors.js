@@ -9,7 +9,7 @@
  * @enum {String}
  */
 export default {
-    THROW_MSG_UNKNOWN_SYMBOL: "Unknown symbol type provided for data point",
+    THROW_MSG_UNKNOWN_SHAPE: "Unknown shape type provided for data point",
     THROW_MSG_NO_BIND: "Invalid input format, graph DOM id must be provided.",
     THROW_MSG_NO_AXES_DATA_LOADED: "Graph axes data needs to be loaded.",
     THROW_MSG_NO_DATA_LOADED: "Graph data needs to be loaded.",

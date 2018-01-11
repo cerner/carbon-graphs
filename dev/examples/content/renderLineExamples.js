@@ -6,7 +6,7 @@ import {
     renderLineLabelHidden,
     renderLineLegendHidden,
     renderLineLegendItemDisabled,
-    renderLineSymbolsHidden,
+    renderLineShapesHidden,
     renderLineTimeSeries,
     renderLineXAlternateLocale,
     renderLineXAxisFormatted,
@@ -44,7 +44,7 @@ const exampleSet = (exampleInstance, contentSection, setState) => {
     exampleInstance.load(renderLineLegendItemDisabled(contentSection, "lineLegendItemDisabled", "Legend Item Disabled"));
     exampleInstance.load(renderLineGridHHidden(contentSection, "lineGridHHidden", "Horizontal Grid Hidden"));
     exampleInstance.load(renderLineGridVHidden(contentSection, "lineGridVHidden", "Vertical Grid Hidden"));
-    exampleInstance.load(renderLineSymbolsHidden(contentSection, "lineSymbolsHidden", "Symbols Hidden"));
+    exampleInstance.load(renderLineShapesHidden(contentSection, "lineShapesHidden", "Shapes Hidden"));
     exampleInstance.render();
     setState(exampleInstance);
     return exampleInstance;

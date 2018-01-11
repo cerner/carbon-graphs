@@ -3,13 +3,13 @@ import d3 from "d3";
 import { getType } from "../../../core/BaseConfig";
 import {
     getColorForTarget,
-    isBuiltAsAPathSymbol
+    isShapeBuiltAsAPath
 } from "../../../core/Graph/helpers";
-import Symbol from "../../../core/Symbol";
+import Shape from "../../../core/Shape";
 import { getXAxisXPosition } from "../../../helpers/axis";
 import constants, {
     AXIS_TYPE,
-    SYMBOLS
+    SHAPES
 } from "../../../helpers/constants";
 import errors from "../../../helpers/errors";
 import {
@@ -159,7 +159,7 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
                                              .data([ dataTarget ])
                                              .enter()
     );
-    if (config.showSymbols) {
+    if (config.showShapes) {
         lineSVG.selectAll(`.${styles.currentPointsGroup}`)
                .data([ dataTarget ])
                .enter()
@@ -174,7 +174,7 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
     }
 };
 /**
- * Processes the input JSON and adds the symbols, colors, labels etc. to each data points so that we
+ * Processes the input JSON and adds the shapes, colors, labels etc. to each data points so that we
  * can use them when rendering the data point.
  * @private
  * @param {Object} graphConfig - config object of Graph API
@@ -200,7 +200,7 @@ const processDataPoints = (graphConfig, dataTarget) => {
         y: utils.getNumber(value.y),
         color: dataTarget.color || constants.DEFAULT_COLOR,
         label: dataTarget.label || {},
-        symbol: dataTarget.symbol || SYMBOLS.CIRCLE,
+        shape: dataTarget.shape || SHAPES.CIRCLE,
         yAxis: dataTarget.yAxis || constants.Y_AXIS,
         key: dataTarget.key
     }));
@@ -208,7 +208,7 @@ const processDataPoints = (graphConfig, dataTarget) => {
 };
 /**
  * Returns the internal values subset which is the array that was created from the input JSON.
- * This array has information for each data point w.r.t symbol, colors and on click callback along with
+ * This array has information for each data point w.r.t shape, colors and on click callback along with
  * x and y co-ordinates.
  * @private
  * @param {Object} target - Object containing the subsets
@@ -234,7 +234,7 @@ const drawDataLines = (scale, config, lineGroupSVG) =>
                 .attr("aria-describedby", (target) => target.key);
 /**
  * Draws the points with options opted in the input JSON by the consumer for each data set.
- *  Render the point with appropriate color, symbol, x and y co-ordinates, label etc.
+ *  Render the point with appropriate color, shape, x and y co-ordinates, label etc.
  *  On click content callback function is called.
  * @private
  * @param {Object} scale - d3 scale for Graph
@@ -245,7 +245,7 @@ const drawDataLines = (scale, config, lineGroupSVG) =>
 const drawDataPoints = (scale, config, canvasSVG) => {
     const getDataPointPath = (path) =>
         path.classed(styles.point, true)
-            .attr("d", (value) => new Symbol(isBuiltAsAPathSymbol(value)).getPathElement())
+            .attr("d", (value) => new Shape(isShapeBuiltAsAPath(value)).getPathElement())
             .attr("transform", transformPoint.bind({}, scale))
             .on("click", function(value, index) {
                 dataPointActionHandler(value, index, this);
@@ -256,7 +256,7 @@ const drawDataPoints = (scale, config, canvasSVG) => {
     const getSelectionPath = (path) =>
         path.classed(styles.dataPointSelection, true)
             .classed("hidden", true)
-            .attr("d", (value) => new Symbol(isBuiltAsAPathSymbol(value)).getPathElement())
+            .attr("d", (value) => new Shape(isShapeBuiltAsAPath(value)).getPathElement())
             .attr("transform", transformPoint.bind({}, scale))
             .attr("r", constants.DEFAULT_SELECTED_RADIUS)
             .attr("style", (value) =>
@@ -267,7 +267,7 @@ const drawDataPoints = (scale, config, canvasSVG) => {
             });
     const pointsPath = canvasSVG.append("g")
                                 .classed(styles.pointGroup, true);
-    getSelectionPath(pointsPath.append(constants.DEFAULT_SYMBOL));
+    getSelectionPath(pointsPath.append(constants.DEFAULT_SHAPE));
     getDataPointPath(pointsPath.append("path"));
 };
 

@@ -146,7 +146,7 @@ describe("Line", () => {
             const line = new Line(input);
             expect(line.config.key).toBe(input.key);
             expect(line.config.color).toBe(input.color);
-            expect(line.config.symbol).toBe(input.symbol);
+            expect(line.config.shape).toBe(input.shape);
             expect(line.config.label).toEqual(input.label);
             expect(line.config.onClick).toEqual(jasmine.any(Function));
             expect(line.config.values.length).toBe(3);
@@ -158,14 +158,14 @@ describe("Line", () => {
             const line = new Line(input);
             input.key = "";
             input.color = "";
-            input.symbol = "";
+            input.shape = "";
             input.onClick = null;
             input.label = {};
             input.values = [];
 
             expect(line.config.key).not.toBe(input.key);
             expect(line.config.color).not.toBe(input.color);
-            expect(line.config.symbol).not.toBe(input.symbol);
+            expect(line.config.shape).not.toBe(input.shape);
             expect(line.config.label).not.toEqual(input.label);
             expect(line.config.onClick).toEqual(jasmine.any(Function));
             expect(line.config.values).not.toBe(input.values);
@@ -218,7 +218,7 @@ describe("Line", () => {
                 j.x !== null &&
                 j.y !== null &&
                 j.label !== null &&
-                j.symbol &&
+                j.shape &&
                 j.color &&
                 j.yAxis &&
                 j.key === data.key
@@ -241,11 +241,11 @@ describe("Line", () => {
                 j.color === constants.DEFAULT_COLOR
             )).toBeTruthy();
         });
-        it("defaults symbols to circle when not provided", () => {
+        it("defaults shapes to circle when not provided", () => {
             const graph = graphDefault.loadContent(new Line(getInput(valuesDefault)));
             const data = graph.content[ 0 ].dataTarget;
             expect(data.internalValuesSubset.every((j) =>
-                j.symbol === "CIRCLE"
+                j.shape === "CIRCLE"
             )).toBeTruthy();
         });
         it("defaults axis to Y axis when not provided", () => {
@@ -303,13 +303,13 @@ describe("Line", () => {
                 const lineElement = fetchElementByClass(lineGraphContainer, styles.line);
                 expect(lineElement.firstChild.attributes.getNamedItem("aria-describedby").value).toBe(input.key);
             });
-            it("does not render points if symbols needs to be hidden", () => {
+            it("does not render points if shapes needs to be hidden", () => {
                 graphDefault.destroy();
-                const hiddenSymbolInput = getAxes(axisDefault);
-                hiddenSymbolInput.showSymbols = false;
-                const hiddenSymbolGraph = new Graph(hiddenSymbolInput);
+                const hiddenShapeInput = getAxes(axisDefault);
+                hiddenShapeInput.showShapes = false;
+                const hiddenShapeGraph = new Graph(hiddenShapeInput);
                 input = getInput(valuesDefault, false, false);
-                hiddenSymbolGraph.loadContent(new Line(input));
+                hiddenShapeGraph.loadContent(new Line(input));
                 expect(fetchElementByClass(lineGraphContainer, styles.currentPointsGroup)).toBeNull();
             });
             it("add points group for data points", () => {
@@ -328,10 +328,10 @@ describe("Line", () => {
                 const points = fetchElementByClass(pointsGroup, styles.point);
                 expect(points.attributes.getNamedItem("style").value).toBe("fill: #007cc3;");
             });
-            it("points have correct symbol", () => {
+            it("points have correct shape", () => {
                 const pointsGroup = fetchElementByClass(lineGraphContainer, styles.currentPointsGroup);
                 const points = fetchElementByClass(pointsGroup, styles.point);
-                expect(points.attributes.getNamedItem("d").value).toBe(constants.CUSTOM_PATH.RHOMBUS);
+                expect(points.attributes.getNamedItem("d").value).toBe(constants.CUSTOM_SHAPE_PATH.RHOMBUS);
             });
             it("points have correct unique key assigned", () => {
                 const pointsGroup = fetchElementByClass(lineGraphContainer, styles.currentPointsGroup);
@@ -347,7 +347,7 @@ describe("Line", () => {
                 const selectedPoints = fetchElementByClass(lineGraphContainer, styles.dataPointSelection);
                 expect(selectedPoints.classList.contains("hidden")).toBeTruthy();
             });
-            it("selected data point has circle as symbol", () => {
+            it("selected data point has circle as shape", () => {
                 const selectedPoints = fetchElementByClass(lineGraphContainer, styles.dataPointSelection);
                 expect(selectedPoints.tagName).toBe("circle");
             });
@@ -463,7 +463,7 @@ describe("Line", () => {
                 expect(legendContainer.tagName).toBe("UL");
                 expect(legendItems.length).toBe(1);
             });
-            it("loads item with a symbol and text", () => {
+            it("loads item with a shape and text", () => {
                 const input = getInput(valuesDefault, false, false);
                 graphDefault.loadContent(new Line(input));
                 const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
@@ -478,14 +478,14 @@ describe("Line", () => {
                 expect(legendItemBtn.children[ 0 ].tagName).toBe("svg");
                 expect(legendItemBtn.children[ 0 ].classList.contains(styles.legendItemIcon)).toBeTruthy();
             });
-            it("loads the correct symbol", () => {
+            it("loads the correct shape", () => {
                 const input = getInput(valuesDefault, false, false);
                 graphDefault.loadContent(new Line(input));
                 const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
                 const iconPath = legendItem.querySelector("path");
                 expect(iconPath).not.toBeNull();
                 expect(iconPath.getAttribute("d")).not.toBeNull();
-                expect(iconPath.getAttribute("d")).toBe(constants.CUSTOM_PATH.RHOMBUS);
+                expect(iconPath.getAttribute("d")).toBe(constants.CUSTOM_SHAPE_PATH.RHOMBUS);
                 expect(iconPath.getAttribute("transform")).not.toBeNull();
             });
             it("loads the correct color", () => {

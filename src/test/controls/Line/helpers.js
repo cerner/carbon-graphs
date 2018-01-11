@@ -5,7 +5,7 @@ import {
 } from "../../../main/js/helpers/constants";
 import utils from "../../../main/js/helpers/utils";
 
-const SYMBOLS = {
+const SHAPES = {
     RHOMBUS: "RHOMBUS",
     CIRCLE: "CIRCLE"
 };
@@ -14,15 +14,15 @@ export const dataPointClickHandlerSpy = sinon.spy();
  * Creates and returns an example input with data point values
  * @param {Array} values - x and y co-ordinate values
  * @param {boolean} isDefaultColor - if true, doesnt load the COLOR
- * @param {boolean} isDefaultSymbol - if true, doesnt load the SYMBOL
+ * @param {boolean} isDefaultShape - if true, doesnt load the SHAPE
  * @param {boolean} isY2Axis - if true, then "y2"
  * @returns {Object} input JSON
  */
-export const getInput = (values = [], isDefaultColor = true, isDefaultSymbol = true, isY2Axis = false) => (
+export const getInput = (values = [], isDefaultColor = true, isDefaultShape = true, isY2Axis = false) => (
     {
         key: `uid_1`,
         color: isDefaultColor ? "" : COLORS[ Object.keys(COLORS)[ 1 ] ],
-        symbol: isDefaultSymbol ? "" : SYMBOLS.RHOMBUS,
+        shape: isDefaultShape ? "" : SHAPES.RHOMBUS,
         onClick: dataPointClickHandlerSpy,
         yAxis: isY2Axis ? "y2" : "y",
         label: {
