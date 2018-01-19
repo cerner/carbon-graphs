@@ -2,14 +2,11 @@
 
 [] Documentation update
 [] Bug fix
-[] New control
-[] Changes an existing control
-[] Build related changes
-[] Core changes
+[] New functionality
+[] Changes an existing functionality
 [] Other, please explain:
 
 **What changes did you make? (Give an overview)**
 
 
 **Is there anything you'd like reviewers to focus on?**
-
