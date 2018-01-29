@@ -1406,6 +1406,12 @@ describe("PairedResult", () => {
                     triggerEvent(legendItem, "mouseenter");
                     expect(document.querySelector(`rect[aria-describedby="region_${inputPrimary.key}_high"]`)
                                    .classList.contains(styles.regionHighlight)).toBeTruthy();
+                    expect(document.querySelector(`rect[aria-describedby="region_${inputPrimary.key}_high"]`)
+                                   .classList.contains(styles.regionBlur)).toBeFalsy();
+                    expect(document.querySelector(`rect[aria-describedby="region_${inputPrimary.key}_low"]`)
+                                   .classList.contains(styles.regionHighlight)).toBeFalsy();
+                    expect(document.querySelector(`rect[aria-describedby="region_${inputPrimary.key}_low"]`)
+                                   .classList.contains(styles.regionBlur)).toBeTruthy();
                 });
                 it("Hides region on mouse exit", () => {
                     const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
@@ -1413,6 +1419,8 @@ describe("PairedResult", () => {
                     triggerEvent(legendItem, "mouseleave");
                     expect(document.querySelector(`rect[aria-describedby="region_${inputPrimary.key}_high"]`)
                                    .classList.contains(styles.regionHighlight)).toBeFalsy();
+                    expect(document.querySelector(`rect[aria-describedby="region_${inputPrimary.key}_low"]`)
+                                   .classList.contains(styles.regionBlur)).toBeFalsy();
                 });
             });
             describe("When multi-paired result", () => {

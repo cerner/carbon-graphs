@@ -92,7 +92,7 @@ svg:not(:root) {
             background-color: @white;
         }
         & .carbon-legend-item-text {
-            color: @grey45;
+            color: @grey65;
         }
     }
 }
@@ -116,14 +116,14 @@ svg:not(:root) {
 
 .carbon-region {
     fill: @grey5;
-    &[aria-hidden="true"] {
+    &[aria-hidden="true"],
+    &.carbon-region-blur {
         opacity: 0;
         visibility: hidden;
-        .transform-transition(opacity, @default-transition-duration, @default-transition-timing);
     }
     &.carbon-region-highlight {
         opacity: 1;
         visibility: visible;
-        .transform-transition(opacity, @default-transition-duration, @default-transition-timing);
     }
+    .transform-transition(opacity, @default-transition-duration, @default-transition-timing);
 }

@@ -169,6 +169,7 @@ const processDataPoints = (graphConfig, dataTarget) => {
                     color: getValue(dataTarget.color, type) || constants.DEFAULT_COLOR,
                     label: getValue(dataTarget.label, type) || {},
                     shape: getValue(dataTarget.shape, type) || SHAPES.CIRCLE,
+                    isCritical: dataTarget.isCritical || false,
                     key: `${dataTarget.key}_${type}`
                 };
                 if (!utils.hasValue(graphConfig.shownTargets, subset[ type ].key)) {
@@ -313,6 +314,8 @@ const hoverHandler = (config, canvasSVG) => (item, state) => {
                      .classed(styles.blur, (state === constants.HOVER_EVENT.MOUSE_ENTER));
             canvasSVG.selectAll(`.${styles.pairedLine}`)
                      .classed(styles.blur, (state === constants.HOVER_EVENT.MOUSE_ENTER));
+            canvasSVG.selectAll(`.${styles.region}[aria-describedby="region_${k}"]`)
+                     .classed(styles.regionBlur, (state === constants.HOVER_EVENT.MOUSE_ENTER));
         }
     });
     // Highlight region(s) of the item hovered on, only if the graph is currently displayed

@@ -38,8 +38,8 @@ const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
     const color = t.color;
     const text = utils.sanitize(t.label.display);
     const index = shownTargets.indexOf(t.key);
-    const cx = 25;
-    const cy = 22.5;
+    const cx = constants.DEFAULT_LEGEND_ICON_X_POS;
+    const cy = constants.DEFAULT_LEGEND_ICON_Y_POS;
     const d3ShapeScaleFactor = 5;
     const itemPath = legendSVG.append("li")
                               .classed(styles.legendItem, true)
@@ -62,9 +62,9 @@ const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
                                .attr("role", "img")
                                .attr("viewBox", constants.LEGEND_ICON_SIZE);
     iconPath.append("path")
-            .attr("d", () => new Shape(isInBuilt).getPathElement(constants.DEFAULT_PLOT_LEGEND_SIZE))
+            .attr("d", () => new Shape(isInBuilt).getPathElement(constants.DEFAULT_LEGEND_ICON_SIZE))
             .attr("transform", () => {
-                const scaleFactor = isNativeShape(shape) ? constants.DEFAULT_PLOT_LEGEND_SCALE : d3ShapeScaleFactor;
+                const scaleFactor = isNativeShape(shape) ? constants.DEFAULT_LEGEND_ICON_SCALE : d3ShapeScaleFactor;
                 return `translate(${cx},${cy}) scale(${scaleFactor})`;
             })
             .attr("style", color ? `fill: ${color}` : "");

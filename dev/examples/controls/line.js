@@ -181,7 +181,7 @@ export const renderLineRegionSimple = (el, id, title) => () => {
 };
 export const renderLineRegionMultiple = (el, id, title) => () => {
     shell.render(el, id, title,
-        "* A Line based graph which has multiple ranges for a single data set. By default, region is hidden unless hovered upon in the legend. ");
+        "* A Line based graph which has multiple ranges for a single data set.");
     const lineDefault = Carbon.api.graph(getAxes(`#${id}`, "LINE_DEFAULT"));
     const data = utils.deepClone(getData(`#${id}`, "LINE_DEFAULT").data[ 4 ]);
     data.regions = regions;

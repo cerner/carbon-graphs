@@ -48,5 +48,6 @@ export default {
     regionGroup: "carbon-region-group",
     regionPairGroup: "carbon-region-pair-group",
     region: "carbon-region",
-    regionHighlight: "carbon-region-highlight"
+    regionHighlight: "carbon-region-highlight",
+    regionBlur: "carbon-region-blur"
 };

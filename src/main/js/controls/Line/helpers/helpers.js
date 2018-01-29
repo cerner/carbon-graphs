@@ -201,6 +201,7 @@ const processDataPoints = (graphConfig, dataTarget) => {
     graphConfig.shownTargets.push(dataTarget.key);
     dataTarget.internalValuesSubset = dataTarget.values.map((value) => ({
         onClick: dataTarget.onClick,
+        isCritical: dataTarget.isCritical || false,
         x: getXDataValues(value.x),
         y: utils.getNumber(value.y),
         color: dataTarget.color || constants.DEFAULT_COLOR,

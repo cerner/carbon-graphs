@@ -220,7 +220,8 @@ const DATA = [
                     values: [
                         {
                             x: new Date(2016, 0, 1, 1, 5).toISOString(),
-                            y: 1
+                            y: 1,
+                            isCritical: false
                         },
                         {
                             x: new Date(2016, 0, 1, 2, 15).toISOString(),
@@ -619,7 +620,8 @@ const DATA = [
                         {
                             high: {
                                 x: "2016-05-01T12:00:00Z",
-                                y: 150
+                                y: 150,
+                                isCritical: false
                             },
                             mid: {
                                 x: "2016-05-01T12:00:00Z",
@@ -627,9 +629,9 @@ const DATA = [
                             },
                             low: {
                                 x: "2016-05-01T12:00:00Z",
-                                y: 10
-                            },
-                            isCritical: false // TODO Future implementation
+                                y: 10,
+                                isCritical: false
+                            }
                         },
                         {
                             high: {
