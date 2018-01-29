@@ -2,6 +2,17 @@ import { AXIS_TYPE } from "../../../main/js/helpers/constants";
 import utils from "../../../main/js/helpers/utils";
 
 /**
+ * Triggers an event on provided element
+ * @param {HTMLElement} element - DOM element
+ * @param {string} eventName - event name
+ * @returns {undefined} returns nothing
+ */
+export const triggerEvent = (element, eventName) => {
+    const event = document.createEvent("Event");
+    event.initEvent(eventName, true, true);
+    element.dispatchEvent(event);
+};
+/**
  * Creates and returns an example input with custom axis values
  * @param {Object} axis - X and Y axis data
  * @returns {Object} input JSON

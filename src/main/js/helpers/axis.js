@@ -28,13 +28,13 @@ const createAxes = (axis, scale, config, canvasSVG) => {
     canvasSVG.append("g")
              .classed(styles.axis, true)
              .classed(styles.axisX, true)
-             .classed("hidden", !config.axis.x.show)
+             .attr("aria-hidden", !config.axis.x.show)
              .attr("transform", `translate(${getXAxisXPosition(config)}, ${getXAxisYPosition(config)})`)
              .call(axis.x);
     canvasSVG.append("g")
              .classed(styles.axis, true)
              .classed(styles.axisY, true)
-             .classed("hidden", !config.axis.y.show)
+             .attr("aria-hidden", !config.axis.y.show)
              .attr("transform", `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition()})`)
              .call(axis.y);
     if (hasY2Axis(config.axis)) {

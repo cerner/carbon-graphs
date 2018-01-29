@@ -94,7 +94,7 @@ const toggleDataPointSelection = (config, value, target) => {
     const pairNode = d3.select(target);
     const selectedPairNode = pairNode.select(`.${styles.dataPointSelection}`);
     pairNode.attr("aria-selected", !(pairNode.attr("aria-selected") === "true"));
-    selectedPairNode.classed("hidden", !selectedPairNode.classed("hidden"));
+    selectedPairNode.attr("aria-hidden", !(selectedPairNode.attr("aria-hidden") === "true"));
     if (isDataPointLegendToggled(config, value)) {
         showHideSiblingDataPoint(config, value, target);
     }
@@ -125,7 +125,7 @@ export const dataPointActionHandler = (config, value, index, target) => {
         value.onClick(() => {
             const selectedNodeParent = selectedTarget.node().parentNode;
             d3.select(selectedNodeParent).attr("aria-selected", false);
-            selectedTarget.classed("hidden", true);
+            selectedTarget.attr("aria-hidden", true);
             if (isDataPointLegendToggled(config, value)) {
                 showHideSiblingDataPoint(config, value, selectedNodeParent);
             }
@@ -193,11 +193,13 @@ const addRect = (d3PairElement, scale, config, value) =>
     updateSelectionIndicatorAttributes(
         d3PairElement.append("rect")
                      .classed(styles.dataPointSelection, true)
-                     .classed("hidden", true)
                      .attr("rx", 3)
                      .attr("ry", 3)
+                     .attr("aria-hidden", true)
                      .attr("aria-describedby", value.key)
-                     .attr("style", (d) => `${isPairPartiallyHidden(config, d) ? "display: none;" : ""}`), scale, value
+                     .attr("style", (d) => `${isPairPartiallyHidden(config, d) ? "display: none;" : ""}`),
+        scale,
+        value
     );
 /**
  * Adds a CIRCLE svg element for each data point pair high OR low OR mid.
@@ -211,12 +213,12 @@ const addRect = (d3PairElement, scale, config, value) =>
 const addCircle = (d3PairElement, scale, config, value) =>
     d3PairElement.append("circle")
                  .classed(styles.dataPointSelection, true)
-                 .classed("hidden", true)
                  .attr("cx", (d) => scale.x(getIncompletePairObject(d).x))
                  .attr("cy", (d) => scale[ value.yAxis ](getIncompletePairObject(d).y))
                  .attr("r", constants.DEFAULT_SELECTED_RADIUS)
                  .attr("style", (d) =>
                      `${isIncompletePairHidden(config, d) ? "display: none;" : ""}`)
+                 .attr("aria-hidden", true)
                  .attr("aria-describedby", value.key);
 /**
  * Draws a rectangle around the 2 data points high and low. If either one of them is missing

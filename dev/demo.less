@@ -1,23 +1,16 @@
 @import "../src/main/less/variables";
 
-@demo-banner-background: #0d47a1;
-@demo-button-link: #1976D2;
-@nav-hover: #2196F3;
-
-.box-shadow() {
-    box-shadow: 0 2px 8px rgba(12, 12, 13, .75);
-    -moz-box-shadow: 0 2px 8px rgba(12, 12, 13, .75);
-    -webkit-box-shadow: 0 2px 8px rgba(12, 12, 13, .75);
-}
-
-html {
-    word-wrap: break-word;
-    font-family: "Segoe UI", sans-serif;
-    font-size: 12px;
-}
+@demo-banner-bg: #3949ab;
+@demo-nav-hover-bg: #3949ab;
+@demo-nav-btn: #5c6bc0;
+@demo-nav-bg: #e8eaf6;
 
 body {
-    margin: 0
+    margin: 0;
+    word-wrap: break-word;
+    font-family: "Segoe UI", sans-serif;
+    line-height: 1.4;
+    font-size: 0.75em;
 }
 
 .graph-section {
@@ -35,22 +28,22 @@ body {
     justify-content: center;
     align-content: center;
     padding: 2rem;
-    font-weight: 500;
+    font-size: 2rem;
+    font-weight: 600;
     color: @white;
-    font-size: 3rem;
-    margin: 0.25rem;
-    .box-shadow();
-    border-radius: 0.25rem;
-    background-color: @demo-banner-background;
+    margin: 0;
+    background-color: @demo-banner-bg;
 }
 
 .graph-header {
     font-family: inherit;
-    font-size: 2rem;
-    letter-spacing: -0.1rem;
-    line-height: 2rem;
-    font-weight: 600;
-    color: @demo-banner-background;
+    color: @demo-nav-btn;
+}
+
+.graph-subHeader {
+    color: @grey45;
+    font-size: 0.75rem;
+    margin-left: 0.5rem;
 }
 
 .tooltip {
@@ -59,9 +52,9 @@ body {
     background-color: @white;
     z-index: 20;
     border-radius: 0.25rem;
-    box-shadow: 0 2px 16px rgba(12, 12, 13, .1);
-    -moz-box-shadow: 0 2px 16px rgba(12, 12, 13, .1);
-    -webkit-box-shadow: 0 2px 16px rgba(12, 12, 13, .1);
+    box-shadow: 0 2px 16px rgba(12, 12, 13, 0.1);
+    -moz-box-shadow: 0 2px 16px rgba(12, 12, 13, 0.1);
+    -webkit-box-shadow: 0 2px 16px rgba(12, 12, 13, 0.1);
     & .popup-item {
         display: block;
     }
@@ -70,7 +63,7 @@ body {
         & .popup-label {
             color: @grey45;
             &:after {
-                content: ": "
+                content: ": ";
             }
         }
         &:not(:last-child) {
@@ -101,13 +94,11 @@ body {
     display: inline-flex;
     flex: 1;
     flex-direction: column;
-    min-width: 15%;
-    max-width: 15%;
-    background-color: @demo-banner-background;
+    min-width: 12.5%;
+    max-width: 12.5%;
+    background-color: @demo-nav-bg;
     font-weight: 400;
     padding: 0.5rem;
-    margin: 0.25rem;
-    border-radius: 0.25rem;
 }
 
 .content-section {
@@ -117,23 +108,21 @@ body {
 }
 
 .carbon-btn {
-    border: 1px solid @demo-banner-background;
-    background-color: @white;
-    border-radius: 0.25rem;
-    color: @demo-banner-background;
+    border: 0;
+    background-color: @demo-nav-bg;
+    color: @demo-nav-btn;
     cursor: pointer;
     font-family: inherit;
-    font-size: 1.25rem;
     font-weight: 500;
-    padding: 1.25rem;
-    margin: 0.25rem;
-    .basic-transition(background-color, 0.3s, @default-transition-timing);
-    &:hover {
-        background: @nav-hover;
+    padding: 1rem;
+    margin: 0.25rem 0;
+    &[disabled="disabled"] {
+        cursor: not-allowed;
+        background-color: @demo-nav-btn;
         color: @white;
     }
-    &[disabled="disabled"] {
-        background-color: @demo-button-link;
+    &:hover {
+        background: @demo-nav-hover-bg;
         color: @white;
     }
 }

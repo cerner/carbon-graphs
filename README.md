@@ -2,6 +2,15 @@
 Carbon is a graphing library built using d3 visualization library. It provides an API for generating native graphs such as Line and Paired Result graphs based on design standards.
 Carbon provides an abstraction for c3 and d3. 
 
+## Usage
+For convenience, there are 2 sets of distributions provided. 
+* `lib/js` - [default] Only `core`. Does not contain any dependencies, consumers need to provide the items listed in the `Dependencies` section before loading the graph.
+* `dist/js` - Contains core + `d3` + `c3` + all the necessary polyfills needed to load the graphs.
+
+Add `dist/js/carbon-graphs.js` and `dist/css/carbon-graphs.css` in your page and call appropriate graph type declarations mentioned in below documentation.
+
+### [Consumer documentation](./docs/README.md)
+
 ### [Demo](https://pages.github.cerner.com/Geneva/carbon-graphs/)
 
 ## Features
@@ -11,6 +20,7 @@ Carbon provides an abstraction for c3 and d3.
   * Labels
   * Grid `Vertical & Horizontal`
   * Axes `x, y or y2`
+  * Regions `Horizontal`
 * Native graphs
     * Line graph
     * Multi-line graph
@@ -18,14 +28,6 @@ Carbon provides an abstraction for c3 and d3.
 * Default theme for data points
 * Locale support for axes ticks
 * Responsive
-
-## Usage
-For convenience, there are 2 sets of distributions provided. 
-* `lib/js` - [default] Only `core`. Does not contain any dependencies, consumers need to provide the items listed in the `Dependencies` section before loading the graph.
-* `dist/js` - Contains core + `d3` + `c3` + all the necessary polyfills needed to load the graphs.
-
-Add `dist/js/carbon-graphs.js` and `dist/css/carbon-graphs.css` in your page and call appropriate graph type declarations mentioned in below documentation.
-### [Consumer documentation](./docs/README.md)
 
 ## Dependencies
 * **d3** [_v3.5.17_]
@@ -35,18 +37,18 @@ Add `dist/js/carbon-graphs.js` and `dist/css/carbon-graphs.css` in your page and
     * Object.values
 
 ## Potential features
-* [ ] Reference ranges
 * [ ] Criticality indicator for data point
 * [ ] Spline line graphs
+* [ ] Gantt charts
+* [ ] Axes labelling along with shapes
+* [ ] Bar graphs
 * [ ] Area graphs
 * [ ] Area spline graphs
 * [ ] Datetime formatting
 * [ ] Tick counts
 * [ ] Show/hide ticks
-* [ ] Axes labelling along with shapes
 * [ ] Axes label text overflow
 * [ ] Timeline graph
-* [ ] Gantt charts
 * [ ] Zoom
 * [ ] Pan
 

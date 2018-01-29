@@ -1,11 +1,5 @@
 import utils from "../../src/main/js/helpers/utils";
 
-const graphHeader = (el, content, tag) => {
-    const elem = el.appendChild(document.createElement(tag));
-    elem.innerHTML = content;
-    elem.setAttribute("class", "graph-header");
-    return elem;
-};
 const init = (instance) => {
     instance.instanceList = [];
     instance.exampleSet = [];
@@ -50,14 +44,14 @@ export const toggleSectionAsActive = (target) => {
 };
 export const header = {
     render: (el, content) => {
-        const elem = el.appendChild(document.createElement("header"));
+        const elem = el.appendChild(document.createElement("h1"));
         elem.innerHTML = content;
         elem.setAttribute("class", "graph-banner");
     }
 };
 export const section = {
     render: (el, cls = "") => {
-        const elem = el.appendChild(document.createElement("section"));
+        const elem = el.appendChild(document.createElement("div"));
         elem.setAttribute("class", `graph-section ${cls}`);
         return elem;
     }
@@ -79,14 +73,21 @@ export const vector = {
         return elem;
     }
 };
-export const h1 = {
-    render: (el, content) => graphHeader(el, content, "h1")
-};
 export const h2 = {
-    render: (el, content) => graphHeader(el, content, "h2")
+    render: (el, content) => {
+        const elem = el.appendChild(document.createElement("h2"));
+        elem.innerHTML = content;
+        elem.setAttribute("class", "graph-header");
+        return elem;
+    }
 };
-export const h3 = {
-    render: (el, content) => graphHeader(el, content, "h3")
+export const paragraph = {
+    render: (el, content) => {
+        const elem = el.appendChild(document.createElement("p"));
+        elem.setAttribute("class", "graph-subHeader");
+        elem.innerHTML = content;
+        return elem;
+    }
 };
 export const btn = {
     render: (el, display, contentCallback) => {
@@ -97,11 +98,19 @@ export const btn = {
     }
 };
 export const shell = {
-    render: (el, id, title) => {
+    render: (el, id, title, supportingTitle = "") => {
         const sect = section.render(el);
-        h1.render(sect, title);
+        h2.render(sect, title);
+        paragraph.render(sect, supportingTitle);
         div.render(sect, id, "carbon-graph");
         return sect;
+    }
+};
+export const small = {
+    render: (el, display) => {
+        const elem = document.createElement("small");
+        el.appendChild(elem).innerHTML = display;
+        return elem;
     }
 };
 export const renderRoot = (el) => {

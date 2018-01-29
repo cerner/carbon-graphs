@@ -127,6 +127,13 @@ const parseDateTime = (value) => new Date(value);
  */
 const getNumber = (n) => n ? Number(n) : 0;
 /**
+ * Checks if input is a number or not
+ * @private
+ * @param {*} n - input to be determined a number
+ * @returns {boolean} if not undefined or null return Number, 0 otherwise
+ */
+const isNumber = (n) => typeof n === "number" && !isNaN(n);
+/**
  * @enum {Function}
  */
 export default {
@@ -141,5 +148,6 @@ export default {
     sanitize,
     getNumber,
     isDate,
+    isNumber,
     parseDateTime
 };

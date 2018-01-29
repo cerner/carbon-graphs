@@ -34,7 +34,7 @@ svg:not(:root) {
 
 .carbon-axis-x,
 .carbon-axis-y {
-    &.hidden {
+    &[aria-hidden="true"] {
         display: none;
     }
 }
@@ -67,19 +67,20 @@ svg:not(:root) {
             background-color: @blue10;
         }
         & .carbon-legend-item-btn {
+            font-size: inherit;
             align-self: flex-start;
-            min-width: 2rem;
-            min-height: 2rem;
             margin-right: 0.5rem;
-            padding: 0;
+            padding: 0.25rem;
             cursor: pointer;
             border-radius: 0.25rem;
             border: 0.1rem solid @grey15;
             background-color: @grey15;
         }
         & .carbon-legend-item-icon {
-            width: 1.5rem;
-            height: 1.5rem;
+            display: inline-block;
+            vertical-align: middle;
+            width: 1rem;
+            height: 1rem;
         }
         & .carbon-legend-item-text {
             word-wrap: break-word;
@@ -107,8 +108,22 @@ svg:not(:root) {
     stroke: @blue30;
     fill: @blue10;
     fill-opacity: 0.25;
-    &.hidden {
+    &[aria-hidden="true"] {
         opacity: 0;
+        .transform-transition(opacity, @default-transition-duration, @default-transition-timing);
+    }
+}
+
+.carbon-region {
+    fill: @grey5;
+    &[aria-hidden="true"] {
+        opacity: 0;
+        visibility: hidden;
+        .transform-transition(opacity, @default-transition-duration, @default-transition-timing);
+    }
+    &.carbon-region-highlight {
+        opacity: 1;
+        visibility: visible;
         .transform-transition(opacity, @default-transition-duration, @default-transition-timing);
     }
 }

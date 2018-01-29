@@ -39,16 +39,16 @@ export default class PieConfig extends BaseConfig {
      */
     validateInput() {
         if (utils.isEmpty(this.input.bindTo)) {
-            throw errors.THROW_MSG_NO_BIND;
+            throw new Error(errors.THROW_MSG_NO_BIND);
         }
         if (utils.isEmpty(this.input.data)) {
-            throw errors.THROW_MSG_NO_DATA_POINTS;
+            throw new Error(errors.THROW_MSG_NO_DATA_POINTS);
         }
         if (!isDataValidFormat(this.input.data)) {
-            throw errors.THROW_MSG_INVALID_DATA_PROPERTY;
+            throw new Error(errors.THROW_MSG_INVALID_DATA_PROPERTY);
         }
         if (!isUniqueKey(this.input.data)) {
-            throw errors.THROW_MSG_NON_UNIQUE_KEY;
+            throw new Error(errors.THROW_MSG_NON_UNIQUE_KEY);
         }
         return this;
     }

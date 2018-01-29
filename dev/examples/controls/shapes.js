@@ -7,14 +7,14 @@ import {
 } from "../../../src/main/js/core/Shape";
 import { getShapes } from "../data";
 import {
-    h1,
+    h2,
     section,
     vector
 } from "../helpers";
 
 export const renderShapesExample = (el, id, title) => {
     const sect = section.render(el);
-    h1.render(sect, title);
+    h2.render(sect, title);
     vector.render(sect, id, "0 0 1050 200");
     d3.select(`#${id}`)
       .append("g")

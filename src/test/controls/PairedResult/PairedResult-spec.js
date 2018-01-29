@@ -1,6 +1,10 @@
 "use strict";
 import PairedResult from "../../../main/js/controls/PairedResult";
 import Graph from "../../../main/js/core/Graph/Graph";
+import {
+    getXAxisWidth,
+    getXAxisXPosition
+} from "../../../main/js/helpers/axis";
 import constants, {
     AXIS_TYPE,
     COLORS
@@ -15,6 +19,8 @@ import {
     fetchElementByClass,
     getAxes,
     getInput,
+    multiRegion,
+    simpleRegion,
     triggerEvent,
     valuesDefault,
     valuesTimeSeries
@@ -43,17 +49,17 @@ describe("PairedResult", () => {
         it("throws error when no input is provided", () => {
             expect(() => {
                 graphDefault.loadContent(new PairedResult());
-            }).toThrow(errors.THROW_MSG_NO_DATA_POINTS);
+            }).toThrow(new Error(errors.THROW_MSG_NO_DATA_POINTS));
         });
         it("throws error when invalid input is provided", () => {
             expect(() => {
                 graphDefault.loadContent(new PairedResult({ dummy: "dummy" }));
-            }).toThrow(errors.THROW_MSG_INVALID_DATA_PROPERTY);
+            }).toThrow(new Error(errors.THROW_MSG_INVALID_DATA_PROPERTY));
         });
         it("throws error when no values are provided", () => {
             expect(() => {
                 graphDefault.loadContent(new PairedResult(getInput([], false, false)));
-            }).toThrow(errors.THROW_MSG_INVALID_DATA_PROPERTY);
+            }).toThrow(new Error(errors.THROW_MSG_INVALID_DATA_PROPERTY));
         });
         it("does not throw error when datetime values have milliseconds", () => {
             expect(() => {
@@ -220,14 +226,14 @@ describe("PairedResult", () => {
                 const input = getInput(valuesDefault, false, false);
                 const invalidGraph = new Graph(getAxes(invalidTypeAxis));
                 invalidGraph.loadContent(new PairedResult(input));
-            }).toThrow(errors.THROW_MSG_INVALID_FORMAT_TYPE);
+            }).toThrow(new Error(errors.THROW_MSG_INVALID_FORMAT_TYPE));
         });
         it("throws error when type and values are a mismatch", () => {
             expect(() => {
                 const input = getInput(valuesTimeSeries, false, false);
                 const validGraph = new Graph(getAxes(utils.deepClone(axisDefault)));
                 validGraph.loadContent(new PairedResult(input));
-            }).toThrow(errors.THROW_MSG_INVALID_FORMAT_TYPE);
+            }).toThrow(new Error(errors.THROW_MSG_INVALID_FORMAT_TYPE));
         });
         it("internal subsets gets created correctly for each data point", () => {
             const graph = graphDefault.loadContent(new PairedResult(getInput(valuesDefault, false, false)));
@@ -333,6 +339,7 @@ describe("PairedResult", () => {
                 expect(pairedBox).not.toBeNull();
                 expect(pairedBox.tagName).toBe("g");
                 expect(pairedBox.getAttribute("aria-selected")).toBe("false");
+                expect(pairedBox.getAttribute("transform")).not.toBeNull();
             });
             it("adds line path as an SVG", () => {
                 const pairedGroupContentContainer = fetchElementByClass(pairedResultGraphContainer, styles.pairedBoxGroup);
@@ -494,7 +501,7 @@ describe("PairedResult", () => {
                     expect(selectionElement).not.toBeNull();
                     expect(selectionElement.tagName).toBe("rect");
                     expect(selectionElement.classList).toContain(styles.dataPointSelection);
-                    expect(selectionElement.classList).toContain("hidden");
+                    expect(selectionElement.getAttribute("aria-hidden")).toBe("true");
                     expect(selectionElement.getAttribute("aria-describedby")).toBe(input.key);
                     expect(selectionElement.getAttribute("style")).toBe("");
                 });
@@ -511,7 +518,7 @@ describe("PairedResult", () => {
                     const selectionElement = fetchElementByClass(pairedResultGraphContainer, styles.dataPointSelection);
                     expect(selectionElement.tagName).toBe("circle");
                     expect(selectionElement.classList).toContain(styles.dataPointSelection);
-                    expect(selectionElement.classList).toContain("hidden");
+                    expect(selectionElement.getAttribute("aria-hidden")).toBe("true");
                     expect(selectionElement.getAttribute("aria-describedby")).toBe(input.key);
                     expect(selectionElement.getAttribute("style")).toBe("");
                 });
@@ -528,7 +535,7 @@ describe("PairedResult", () => {
                     const selectionElement = fetchElementByClass(pairedResultGraphContainer, styles.dataPointSelection);
                     expect(selectionElement.tagName).toBe("circle");
                     expect(selectionElement.classList).toContain(styles.dataPointSelection);
-                    expect(selectionElement.classList).toContain("hidden");
+                    expect(selectionElement.getAttribute("aria-hidden")).toBe("true");
                     expect(selectionElement.getAttribute("aria-describedby")).toBe(input.key);
                     expect(selectionElement.getAttribute("style")).toBe("");
                 });
@@ -545,7 +552,7 @@ describe("PairedResult", () => {
                     const selectionElement = fetchElementByClass(pairedResultGraphContainer, styles.dataPointSelection);
                     expect(selectionElement.tagName).toBe("circle");
                     expect(selectionElement.classList).toContain(styles.dataPointSelection);
-                    expect(selectionElement.classList).toContain("hidden");
+                    expect(selectionElement.getAttribute("aria-hidden")).toBe("true");
                     expect(selectionElement.getAttribute("aria-describedby")).toBe(input.key);
                     expect(selectionElement.getAttribute("style")).toBe("");
                 });
@@ -961,6 +968,522 @@ describe("PairedResult", () => {
             pairedResult.unload(graphDefault);
             expect(pairedResult.dataTarget).toEqual({});
             expect(pairedResult.config).toEqual({});
+        });
+    });
+    describe("Region", () => {
+        let pairedResultPrimaryContent = null;
+        let data = null;
+        const inputSecondary = {
+            key: `uid_2`,
+            regions: simpleRegion,
+            label: {
+                display: "Data Label B"
+            },
+            values: valuesDefault
+        };
+        describe("On load", () => {
+            afterEach(() => pairedResultPrimaryContent ? pairedResultPrimaryContent.unload(graphDefault) : "");
+            describe("Ideally", () => {
+                beforeEach(() => {
+                    data = utils.deepClone(getInput(valuesDefault, false, false));
+                    data.regions = simpleRegion;
+                    pairedResultPrimaryContent = new PairedResult(data);
+                    graphDefault.loadContent(pairedResultPrimaryContent);
+                });
+                it("Creates a pair group for each data-set region", () => {
+                    const regionGroupElement = fetchElementByClass(pairedResultGraphContainer, styles.regionGroup);
+                    expect(regionGroupElement.firstChild).not.toBeNull();
+                    expect(regionGroupElement.firstChild.getAttribute("class")).toBe(styles.regionPairGroup);
+                    expect(regionGroupElement.firstChild.getAttribute("aria-describedby"))
+                        .toBe(`region_${data.key}`);
+                });
+                it("Creates a pair group for each data-set region for multi pair", () => {
+                    const pairedResultSecondaryContent = new PairedResult(inputSecondary);
+                    graphDefault.loadContent(pairedResultSecondaryContent);
+                    const regionGroupElement = fetchElementByClass(pairedResultGraphContainer, styles.regionGroup);
+                    expect(regionGroupElement.firstChild).not.toBeNull();
+                    expect(regionGroupElement.firstChild.getAttribute("class")).toBe(styles.regionPairGroup);
+                    expect(regionGroupElement.firstChild.getAttribute("aria-describedby"))
+                        .toBe(`region_${data.key}`);
+                    expect(regionGroupElement.childNodes[ 1 ].getAttribute("aria-describedby"))
+                        .toBe(`region_${inputSecondary.key}`);
+                });
+                it("Creates region when present", () => {
+                    const regionGroupElement = fetchElementByClass(pairedResultGraphContainer, styles.regionGroup);
+                    const regionElement = fetchElementByClass(regionGroupElement, styles.region);
+                    expect(regionGroupElement.childNodes.length).toBe(1);
+                    expect(regionElement.nodeName).toBe("rect");
+                });
+                it("shows region by default", () => {
+                    const regionPairGroupElement = fetchElementByClass(pairedResultGraphContainer, styles.regionPairGroup);
+                    expect(regionPairGroupElement.childNodes[ 0 ].getAttribute("class")).toBe(styles.region);
+                    expect(regionPairGroupElement.childNodes[ 0 ].getAttribute("aria-hidden")).toBe("false");
+                    expect(regionPairGroupElement.childNodes[ 0 ].getAttribute("aria-describedby")).toBe(`region_${data.key}_high`);
+
+                    expect(regionPairGroupElement.childNodes[ 1 ].getAttribute("class")).toBe(styles.region);
+                    expect(regionPairGroupElement.childNodes[ 1 ].getAttribute("aria-hidden")).toBe("false");
+                    expect(regionPairGroupElement.childNodes[ 1 ].getAttribute("aria-describedby")).toBe(`region_${data.key}_low`);
+                });
+            });
+            it("Creates region only if present", () => {
+                data = utils.deepClone(getInput(valuesDefault, false, false));
+                data.regions = null;
+                pairedResultPrimaryContent = new PairedResult(data);
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                const regionGroupElement = fetchElementByClass(pairedResultGraphContainer, styles.regionGroup);
+                const regionElement = fetchElementByClass(regionGroupElement, styles.region);
+                expect(regionGroupElement.childNodes.length).toBe(0);
+                expect(regionElement).toBeNull();
+            });
+            describe("Creates region when there are multiple regions", () => {
+                beforeEach(() => {
+                    data = utils.deepClone(getInput(valuesDefault, false, false));
+                    data.regions = multiRegion;
+                    pairedResultPrimaryContent = new PairedResult(data);
+                    graphDefault.loadContent(pairedResultPrimaryContent);
+                });
+                it("Correctly renders", () => {
+                    const regionGroupElement = fetchElementByClass(pairedResultGraphContainer, styles.regionPairGroup);
+                    expect(regionGroupElement.childNodes.length).toBe(3);
+                    expect(regionGroupElement.childNodes[ 0 ].nodeName).toBe("rect");
+                    expect(regionGroupElement.childNodes[ 1 ].nodeName).toBe("rect");
+                    expect(regionGroupElement.childNodes[ 2 ].nodeName).toBe("rect");
+                    expect(regionGroupElement.childNodes[ 0 ].getAttribute("class")).toBe(styles.region);
+                    expect(regionGroupElement.childNodes[ 1 ].getAttribute("class")).toBe(styles.region);
+                    expect(regionGroupElement.childNodes[ 2 ].getAttribute("class")).toBe(styles.region);
+                });
+                it("shows multiple regions face-up by default", () => {
+                    const regionGroupElement = fetchElementByClass(pairedResultGraphContainer, styles.regionPairGroup);
+                    expect(regionGroupElement.childNodes.length).toBe(3);
+                    expect(regionGroupElement.childNodes[ 0 ].getAttribute("aria-describedby")).toBe(`region_${data.key}_high`);
+                    expect(regionGroupElement.childNodes[ 1 ].getAttribute("aria-describedby")).toBe(`region_${data.key}_high`);
+                    expect(regionGroupElement.childNodes[ 2 ].getAttribute("aria-describedby")).toBe(`region_${data.key}_low`);
+                    expect(regionGroupElement.childNodes[ 0 ].getAttribute("aria-hidden")).toBe("false");
+                    expect(regionGroupElement.childNodes[ 1 ].getAttribute("aria-hidden")).toBe("false");
+                    expect(regionGroupElement.childNodes[ 2 ].getAttribute("aria-hidden")).toBe("false");
+                });
+            });
+            describe("Validates each region", () => {
+                beforeEach(() => {
+                    data = utils.deepClone(getInput(valuesDefault, false, false));
+                });
+                afterEach(() => {
+                    data = null;
+                });
+                it("Throws error when empty", () => {
+                    data.regions = { high: {} };
+                    pairedResultPrimaryContent = new PairedResult(data);
+                    expect(() => {
+                        graphDefault.loadContent(pairedResultPrimaryContent);
+                    }).toThrow(new Error(errors.THROW_MSG_REGION_EMPTY));
+                });
+                it("Throws error when both start and end are empty", () => {
+                    data.regions = {
+                        high: [
+                            {
+                                start: null,
+                                end: null
+                            }
+                        ]
+                    };
+                    pairedResultPrimaryContent = new PairedResult(data);
+                    expect(() => {
+                        graphDefault.loadContent(pairedResultPrimaryContent);
+                    }).toThrow(new Error(errors.THROW_MSG_REGION_START_END_MISSING));
+                });
+                it("Throws error when axis info is invalid", () => {
+                    data.regions = {
+                        high: [
+                            {
+                                axis: "x",
+                                start: 10,
+                                end: 20
+                            }
+                        ]
+                    };
+                    pairedResultPrimaryContent = new PairedResult(data);
+                    expect(() => {
+                        graphDefault.loadContent(pairedResultPrimaryContent);
+                    }).toThrow(new Error(errors.THROW_MSG_REGION_INVALID_AXIS_PROVIDED));
+                });
+                it("Throws error when axis info is invalid for Y2 axis", () => {
+                    data = utils.deepClone(getInput(valuesDefault, false, false, true));
+                    data.regions = {
+                        high: [
+                            {
+                                axis: "x",
+                                start: 10,
+                                end: 20
+                            }
+                        ]
+                    };
+                    pairedResultPrimaryContent = new PairedResult(data);
+                    expect(() => {
+                        graphDefault.loadContent(pairedResultPrimaryContent);
+                    }).toThrow(new Error(errors.THROW_MSG_REGION_INVALID_AXIS_PROVIDED));
+                });
+                it("Throws error when axis provided is different than data-set axis", () => {
+                    data = utils.deepClone(getInput(valuesDefault, false, false, true));
+                    data.regions = {
+                        high: [
+                            {
+                                axis: constants.Y_AXIS,
+                                start: 10,
+                                end: 20
+                            }
+                        ]
+                    };
+                    pairedResultPrimaryContent = new PairedResult(data);
+                    expect(() => {
+                        graphDefault.loadContent(pairedResultPrimaryContent);
+                    }).toThrow(new Error(errors.THROW_MSG_REGION_INVALID_AXIS_PROVIDED));
+                });
+                it("Throws error when axis is not and data-set axis is Y2", () => {
+                    data = utils.deepClone(getInput(valuesDefault, false, false, true));
+                    data.regions = {
+                        high: [
+                            {
+                                start: 10,
+                                end: 20
+                            }
+                        ]
+                    };
+                    pairedResultPrimaryContent = new PairedResult(data);
+                    expect(() => {
+                        graphDefault.loadContent(pairedResultPrimaryContent);
+                    }).toThrow(new Error(errors.THROW_MSG_REGION_INVALID_AXIS_PROVIDED));
+                });
+                it("Throws error when start value is invalid", () => {
+                    data.regions = {
+                        high: [
+                            {
+                                start: "10",
+                                end: 20
+                            }
+                        ]
+                    };
+                    pairedResultPrimaryContent = new PairedResult(data);
+                    expect(() => {
+                        graphDefault.loadContent(pairedResultPrimaryContent);
+                    }).toThrow(new Error(errors.THROW_MSG_REGION_INVALID_VALUE_TYPE_PROVIDED));
+                });
+                it("Throws error when end value is invalid", () => {
+                    data.regions = {
+                        high: [
+                            {
+                                start: 10,
+                                end: "20"
+                            }
+                        ]
+                    };
+                    pairedResultPrimaryContent = new PairedResult(data);
+                    expect(() => {
+                        graphDefault.loadContent(pairedResultPrimaryContent);
+                    }).toThrow(new Error(errors.THROW_MSG_REGION_INVALID_VALUE_TYPE_PROVIDED));
+                });
+                it("Throws error when start is more than end", () => {
+                    data.regions = {
+                        high: [
+                            {
+                                start: 20,
+                                end: 10
+                            }
+                        ]
+                    };
+                    pairedResultPrimaryContent = new PairedResult(data);
+                    expect(() => {
+                        graphDefault.loadContent(pairedResultPrimaryContent);
+                    }).toThrow(new Error(errors.THROW_MSG_REGION_START_MORE_END));
+                });
+                it("Correctly passes validation", () => {
+                    data.regions = {
+                        high: [
+                            {
+                                axis: constants.Y_AXIS,
+                                start: 10,
+                                end: 15
+                            }
+                        ]
+                    };
+                    pairedResultPrimaryContent = new PairedResult(data);
+                    expect(() => {
+                        graphDefault.loadContent(pairedResultPrimaryContent);
+                    }).not.toThrow();
+                });
+            });
+            it("Translates region correctly", () => {
+                data = utils.deepClone(getInput(valuesDefault));
+                data.regions = simpleRegion;
+                pairedResultPrimaryContent = new PairedResult(data);
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                const regionElement = fetchElementByClass(pairedResultGraphContainer, styles.region);
+                expect(regionElement.nodeName).toBe("rect");
+                expect(+regionElement.getAttribute("x")).toBe(getXAxisXPosition(graphDefault.config));
+                expect(+regionElement.getAttribute("y")).toBe(graphDefault.scale.y(220) + constants.PADDING.top);
+            });
+            it("Does not hide regions is graph has only 1 data-set", () => {
+                data = utils.deepClone(getInput(valuesDefault));
+                data.regions = simpleRegion;
+                pairedResultPrimaryContent = new PairedResult(data);
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                const regionGroupElement = fetchElementByClass(pairedResultGraphContainer, styles.regionPairGroup);
+                expect(regionGroupElement.childNodes.length).toBe(2);
+                expect(regionGroupElement.childNodes[ 0 ].getAttribute("aria-describedby")).toBe(`region_${data.key}_high`);
+                expect(regionGroupElement.childNodes[ 1 ].getAttribute("aria-describedby")).toBe(`region_${data.key}_low`);
+                expect(regionGroupElement.childNodes[ 0 ].getAttribute("aria-hidden")).toBe("false");
+                expect(regionGroupElement.childNodes[ 1 ].getAttribute("aria-hidden")).toBe("false");
+            });
+            it("Hides all the regions if graph has more than 1 data-set", () => {
+                const inputSecondary = {
+                    key: `uid_2`,
+                    label: {
+                        display: "Data Label B"
+                    },
+                    regions: multiRegion,
+                    values: valuesDefault
+                };
+                data = utils.deepClone(getInput(valuesDefault));
+                data.regions = simpleRegion;
+                pairedResultPrimaryContent = new PairedResult(data);
+                const pairedResultSecondaryContent = new PairedResult(inputSecondary);
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                graphDefault.loadContent(pairedResultSecondaryContent);
+                const regionGroupElements = pairedResultGraphContainer.querySelectorAll(`.${styles.regionPairGroup}`);
+
+                expect(regionGroupElements[ 0 ].childNodes.length).toBe(2); // Regions from primary
+                expect(regionGroupElements[ 1 ].childNodes.length).toBe(3); // Regions from secondary
+
+                expect(regionGroupElements[ 0 ].childNodes[ 0 ].getAttribute("aria-describedby")).toBe(`region_${data.key}_high`);
+                expect(regionGroupElements[ 0 ].childNodes[ 1 ].getAttribute("aria-describedby")).toBe(`region_${data.key}_low`);
+                expect(regionGroupElements[ 1 ].childNodes[ 0 ].getAttribute("aria-describedby")).toBe(`region_${inputSecondary.key}_high`);
+                expect(regionGroupElements[ 1 ].childNodes[ 1 ].getAttribute("aria-describedby")).toBe(`region_${inputSecondary.key}_high`);
+                expect(regionGroupElements[ 1 ].childNodes[ 2 ].getAttribute("aria-describedby")).toBe(`region_${inputSecondary.key}_low`);
+
+                expect(regionGroupElements[ 0 ].childNodes[ 0 ].getAttribute("aria-hidden")).toBe("true");
+                expect(regionGroupElements[ 0 ].childNodes[ 1 ].getAttribute("aria-hidden")).toBe("true");
+                expect(regionGroupElements[ 1 ].childNodes[ 0 ].getAttribute("aria-hidden")).toBe("true");
+                expect(regionGroupElements[ 1 ].childNodes[ 1 ].getAttribute("aria-hidden")).toBe("true");
+                expect(regionGroupElements[ 1 ].childNodes[ 2 ].getAttribute("aria-hidden")).toBe("true");
+                graphDefault.unloadContent(pairedResultSecondaryContent);
+            });
+            it("Sets the width correctly", () => {
+                data = utils.deepClone(getInput(valuesDefault));
+                data.regions = simpleRegion;
+                pairedResultPrimaryContent = new PairedResult(data);
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                const regionElement = fetchElementByClass(pairedResultGraphContainer, styles.region);
+                expect(+regionElement.getAttribute("width")).toBe(getXAxisWidth(graphDefault.config));
+            });
+            it("Sets the height correctly", () => {
+                data = utils.deepClone(getInput(valuesDefault));
+                data.regions = simpleRegion;
+                pairedResultPrimaryContent = new PairedResult(data);
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                const regionElement = fetchElementByClass(pairedResultGraphContainer, styles.region);
+                expect(+regionElement.getAttribute("height")).toBeGreaterThan(constants.PADDING.top);
+            });
+            it("Creates a goal pairedResult when start and end are same", () => {
+                data = utils.deepClone(getInput(valuesDefault));
+                data.regions = {
+                    high: [
+                        {
+                            start: 15,
+                            end: 15
+                        }
+                    ]
+                };
+                pairedResultPrimaryContent = new PairedResult(data);
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                const regionElement = fetchElementByClass(pairedResultGraphContainer, styles.region);
+                expect(+regionElement.getAttribute("height")).toBe(constants.PADDING.top);
+            });
+            it("Creates region correctly when start is not provided", () => {
+                data = utils.deepClone(getInput(valuesDefault));
+                data.regions = {
+                    high: [
+                        {
+                            end: 15
+                        }
+                    ]
+                };
+                pairedResultPrimaryContent = new PairedResult(data);
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                const regionElement = fetchElementByClass(pairedResultGraphContainer, styles.region);
+                expect(+regionElement.getAttribute("x")).toBe(getXAxisXPosition(graphDefault.config));
+                expect(+regionElement.getAttribute("y")).toBeGreaterThan(constants.PADDING.top);
+                expect(+regionElement.getAttribute("y")).toBeLessThan(graphDefault.config.height);
+            });
+            it("Creates region correctly when end is not provided", () => {
+                data = utils.deepClone(getInput(valuesDefault));
+                data.regions = {
+                    high: [
+                        {
+                            start: 10
+                        }
+                    ]
+                };
+                pairedResultPrimaryContent = new PairedResult(data);
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                const regionElement = fetchElementByClass(pairedResultGraphContainer, styles.region);
+                expect(+regionElement.getAttribute("x")).toBe(getXAxisXPosition(graphDefault.config));
+                expect(+regionElement.getAttribute("y")).toBe(constants.PADDING.top);
+            });
+            it("Creates region correctly for y2 axis", () => {
+                data = utils.deepClone(getInput(valuesDefault, false, false, true));
+                data.regions = {
+                    high: [
+                        {
+                            axis: constants.Y2_AXIS,
+                            start: 10,
+                            end: 15
+                        }
+                    ]
+                };
+                pairedResultPrimaryContent = new PairedResult(data);
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                const regionElement = fetchElementByClass(pairedResultGraphContainer, styles.region);
+                expect(regionElement.nodeName).toBe("rect");
+                expect(+regionElement.getAttribute("x")).toBe(getXAxisXPosition(graphDefault.config));
+                expect(+regionElement.getAttribute("y")).toBe(graphDefault.scale.y2(15) + constants.PADDING.top);
+            });
+            it("Creates region with correct, color if provided", () => {
+                data = utils.deepClone(getInput(valuesDefault));
+                data.regions = {
+                    high: [
+                        {
+                            axis: constants.Y_AXIS,
+                            start: 10,
+                            end: 15,
+                            color: "#f44444"
+                        }
+                    ]
+                };
+                pairedResultPrimaryContent = new PairedResult(data);
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                const regionElement = fetchElementByClass(pairedResultGraphContainer, styles.region);
+                expect(regionElement.getAttribute("style")).toBe('fill: #f44444;');
+            });
+        });
+        describe("On unload", () => {
+            it("Removes any region", () => {
+                data = utils.deepClone(getInput(valuesDefault));
+                data.regions = simpleRegion;
+                pairedResultPrimaryContent = new PairedResult(data);
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                graphDefault.unloadContent(pairedResultPrimaryContent);
+                const regionGroupElement = fetchElementByClass(pairedResultGraphContainer, styles.regionGroup);
+                expect(regionGroupElement.childNodes.length).toBe(0);
+            });
+            it("Removes all regions", () => {
+                data = utils.deepClone(getInput(valuesDefault));
+                data.regions = multiRegion;
+                pairedResultPrimaryContent = new PairedResult(data);
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                graphDefault.unloadContent(pairedResultPrimaryContent);
+                const regionGroupElement = fetchElementByClass(pairedResultGraphContainer, styles.regionGroup);
+                expect(regionGroupElement.childNodes.length).toBe(0);
+            });
+        });
+        describe("On legend item hover", () => {
+            describe("When single-paired result", () => {
+                let inputPrimary = null;
+                let pairedResultPrimaryContent = null;
+                let pairedResultSecondaryContent = null;
+                beforeEach(() => {
+                    inputPrimary = getInput(valuesDefault);
+                    inputPrimary.regions = simpleRegion;
+                    pairedResultPrimaryContent = new PairedResult(inputPrimary);
+                    pairedResultSecondaryContent = new PairedResult(inputSecondary);
+                    graphDefault.loadContent(pairedResultPrimaryContent);
+                    graphDefault.loadContent(pairedResultSecondaryContent);
+                });
+                afterEach(() => {
+                    graphDefault.unloadContent(pairedResultPrimaryContent);
+                    graphDefault.unloadContent(pairedResultSecondaryContent);
+                });
+                it("Shows region on mouse enter", () => {
+                    const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
+                    triggerEvent(legendItem, "mouseenter");
+                    expect(document.querySelector(`rect[aria-describedby="region_${inputPrimary.key}_high"]`)
+                                   .classList.contains(styles.regionHighlight)).toBeTruthy();
+                });
+                it("Hides region on mouse exit", () => {
+                    const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
+                    triggerEvent(legendItem, "mouseenter");
+                    triggerEvent(legendItem, "mouseleave");
+                    expect(document.querySelector(`rect[aria-describedby="region_${inputPrimary.key}_high"]`)
+                                   .classList.contains(styles.regionHighlight)).toBeFalsy();
+                });
+            });
+            describe("When multi-paired result", () => {
+                let inputPrimary = null;
+                let pairedResultPrimaryContent = null;
+                let pairedResultSecondaryContent = null;
+                beforeEach(() => {
+                    inputPrimary = getInput(valuesDefault, false, false);
+                    inputPrimary.regions = multiRegion;
+                    pairedResultPrimaryContent = new PairedResult(inputPrimary);
+                    pairedResultSecondaryContent = new PairedResult(inputSecondary);
+                    graphDefault.loadContent(pairedResultPrimaryContent);
+                    graphDefault.loadContent(pairedResultSecondaryContent);
+                });
+                afterEach(() => {
+                    graphDefault.unloadContent(pairedResultPrimaryContent);
+                    graphDefault.unloadContent(pairedResultSecondaryContent);
+                });
+                it("Shows region on mouse enter", () => {
+                    const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
+                    triggerEvent(legendItem, "mouseenter");
+                    const regionElements = document.querySelectorAll(`rect[aria-describedby="region_${inputPrimary.key}_high"]`);
+                    expect(regionElements[ 0 ].classList.contains(styles.regionHighlight)).toBeTruthy();
+                    expect(regionElements[ 1 ].classList.contains(styles.regionHighlight)).toBeTruthy();
+                });
+                it("Hides all the regions except current", () => {
+                    const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
+                    triggerEvent(legendItem, "mouseenter");
+                    triggerEvent(legendItem, "mouseleave");
+                    const regionElements = document.querySelectorAll(`rect[aria-describedby="region_${inputPrimary.key}_high"]`);
+                    expect(regionElements[ 0 ].classList.contains(styles.regionHighlight)).toBeFalsy();
+                    expect(regionElements[ 1 ].classList.contains(styles.regionHighlight)).toBeFalsy();
+                });
+            });
+        });
+        describe("On legend item click", () => {
+            let inputPrimary = null;
+            let pairedResultPrimaryContent = null;
+            beforeEach(() => {
+                spyOn(window, "requestAnimationFrame");
+                inputPrimary = getInput(valuesDefault);
+                inputPrimary.regions = multiRegion;
+                pairedResultPrimaryContent = new PairedResult(inputPrimary);
+                graphDefault.loadContent(pairedResultPrimaryContent);
+            });
+            afterEach(() => {
+                graphDefault.unloadContent(pairedResultPrimaryContent);
+            });
+            describe("When single-paired result", () => {
+                it("Hides region on toggle", () => {
+                    const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
+                    triggerEvent(legendItem, "click");
+                    const regionElement = document.querySelector(`rect[aria-describedby="region_${inputPrimary.key}_high"]`);
+                    expect(regionElement.getAttribute("aria-hidden")).toBe("true");
+                });
+                it("Hides regions on toggle", () => {
+                    const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
+                    triggerEvent(legendItem, "click");
+                    const regionElements = document.querySelectorAll(`rect[aria-describedby="region_${inputPrimary.key}_high"]`);
+                    expect(regionElements[ 0 ].getAttribute("aria-hidden")).toBe("true");
+                    expect(regionElements[ 1 ].getAttribute("aria-hidden")).toBe("true");
+                });
+                it("Shows region on re-toggle", () => {
+                    const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
+                    triggerEvent(legendItem, "click");
+                    triggerEvent(legendItem, "click");
+                    const regionElements = document.querySelectorAll(`rect[aria-describedby="region_${inputPrimary.key}_high"]`);
+                    expect(regionElements[ 0 ].getAttribute("aria-hidden")).toBe("false");
+                    expect(regionElements[ 1 ].getAttribute("aria-hidden")).toBe("false");
+                });
+            });
         });
     });
 });

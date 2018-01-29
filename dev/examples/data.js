@@ -98,7 +98,7 @@ const DATA = [
                     onClick: loadPopup,
                     values: new Array(20).fill("").map((_, i) => ({
                         y: Math.sin(i) * Math.PI,
-                        x: 90 + i * 10
+                        x: 85 + i * 10
                     }))
                 },
                 {
@@ -111,7 +111,7 @@ const DATA = [
                     onClick: loadPopup,
                     values: new Array(18).fill("").map((_, i) => ({
                         y: Math.sin(i) * Math.PI * 2,
-                        x: 90 + i * 10
+                        x: 85 + i * 10
                     }))
                 },
                 {
@@ -124,7 +124,7 @@ const DATA = [
                     onClick: loadPopup,
                     values: new Array(12).fill("").map((_, i) => ({
                         y: Math.sin(i) * Math.PI * 3,
-                        x: 90 + i * 10
+                        x: 85 + i * 10
                     }))
                 },
                 {
@@ -137,7 +137,7 @@ const DATA = [
                     onClick: loadPopup,
                     values: new Array(15).fill("").map((_, i) => ({
                         y: Math.sin(i) * Math.PI * 4,
-                        x: 90 + i * 10
+                        x: 85 + i * 10
                     }))
                 },
                 {
@@ -150,7 +150,7 @@ const DATA = [
                     onClick: loadPopup,
                     values: new Array(20).fill("").map((_, i) => ({
                         y: Math.cos(i) * Math.PI * 5,
-                        x: 90 + i * 10
+                        x: 85 + i * 10
                     }))
                 },
                 {
@@ -163,7 +163,7 @@ const DATA = [
                     onClick: loadPopup,
                     values: new Array(14).fill("").map((_, i) => ({
                         y: Math.cos(i) * Math.PI * 6,
-                        x: 90 + i * 10
+                        x: 85 + i * 10
                     }))
                 },
                 {
@@ -176,7 +176,7 @@ const DATA = [
                     onClick: loadPopup,
                     values: new Array(18).fill("").map((_, i) => ({
                         y: Math.cos(i) * Math.PI * 7,
-                        x: 90 + i * 10
+                        x: 85 + i * 10
                     }))
                 }
             ],
@@ -409,29 +409,15 @@ const DATA = [
                         },
                         {
                             high: {
-                                x: 50,
-                                y: 50
+                                x: 80,
+                                y: 100
                             },
                             mid: {
-                                x: 70,
-                                y: 50
+                                x: 80,
+                                y: 75
                             },
                             low: {
-                                x: 90,
-                                y: 50
-                            }
-                        },
-                        {
-                            high: {
-                                x: 125,
-                                y: 50
-                            },
-                            mid: {
-                                x: 125,
-                                y: 50
-                            },
-                            low: {
-                                x: 125,
+                                x: 80,
                                 y: 50
                             }
                         },
@@ -599,7 +585,7 @@ const DATA = [
             data: [
                 {
                     key: "uid_1",
-                    regions: [ // TODO Future implementation
+                    regions: [
                         {
                             axis: "y",
                             start: 0,
@@ -858,34 +844,6 @@ const DATA = [
                         },
                         {
                             high: {
-                                x: 85,
-                                y: 110
-                            },
-                            mid: {
-                                x: 85,
-                                y: 70
-                            },
-                            low: {
-                                x: 85,
-                                y: 30
-                            }
-                        },
-                        {
-                            high: {
-                                x: 115,
-                                y: 110
-                            },
-                            mid: {
-                                x: 115,
-                                y: 70
-                            },
-                            low: {
-                                x: 115,
-                                y: 30
-                            }
-                        },
-                        {
-                            high: {
                                 x: 160,
                                 y: 110
                             },
@@ -934,8 +892,6 @@ const DATA = [
                     label: "Apple",
                     color: Carbon.helpers.COLORS.BLUE,
                     onClick: (d, i) => {
-                        console.log(d);
-                        console.log(i);
                     },
                     values: [ 100, 100 ]
                 },

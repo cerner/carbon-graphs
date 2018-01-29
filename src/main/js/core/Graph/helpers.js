@@ -25,7 +25,7 @@ import utils from "../../helpers/utils";
 import { getScale } from "../BaseConfig";
 import { isValidCarbonShape } from "../Shape";
 
-const BASE_CANVAS_PADDING = constants.BASE_CANVAS_WIDTH_PADDING;
+const BASE_CANVAS_WIDTH_PADDING = constants.BASE_CANVAS_WIDTH_PADDING;
 const PADDING = constants.PADDING;
 const DEFAULT_HEIGHT = constants.DEFAULT_HEIGHT;
 
@@ -38,7 +38,21 @@ const DEFAULT_HEIGHT = constants.DEFAULT_HEIGHT;
  */
 const translateCanvas = (config, canvasSVG) =>
     canvasSVG.attr("height", config.canvasHeight)
-             .attr("width", config.canvasWidth - BASE_CANVAS_PADDING);
+             .attr("width", config.canvasWidth - BASE_CANVAS_WIDTH_PADDING);
+/**
+ * Updates clipPath rectangle width and height on resize.
+ * `clipPath` updates are necessary since the clip-path URL needs to get
+ * the necessary parameters on resize so that data points are not cut off
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @param {Object} canvasSVG - d3 object of canvas svg
+ * @returns {Object} d3 svg path
+ */
+const translateDefs = (config, canvasSVG) =>
+    canvasSVG.select(`clipPath#${constants.CLIP_PATH_ID}`)
+             .selectAll("rect")
+             .attr("height", config.height)
+             .attr("width", getXAxisWidth(config));
 /**
  * Translates the horizontal grid on the canvas, grids are only applicable to standard
  * X and Y Axis.
@@ -175,8 +189,8 @@ const createDefs = (config, canvasSVG) =>
              .append("rect")
              .attr(constants.X_AXIS, getXAxisXPosition(config))
              .attr(constants.Y_AXIS, PADDING.top)
-             .attr("width", "100%")
-             .attr("height", config.canvasHeight);
+             .attr("width", getXAxisWidth(config))
+             .attr("height", config.height);
 /**
  * Create the d3 grid - horizontal and vertical and append into the canvas.
  * Only performed if the flags for showHGrid and showVGrid are enabled
@@ -253,13 +267,14 @@ const createLabel = (config, canvasSVG) => {
  * @returns {undefined} - returns nothing
  */
 const scaleGraph = (scale, config) => {
+    scale.x = getScale(config.axis.x.type)
+        .domain(config.axis.x.domain)
+        .range(getXAxisRange(config))
+        .nice();
     scale.y = d3.scale.linear()
                 .domain(config.axis.y.domain)
                 .range(getYAxisRange(config))
                 .nice();
-    scale.x = getScale(config.axis.x.type).domain(config.axis.x.domain)
-                                          .range(getXAxisRange(config))
-                                          .nice();
     if (hasY2Axis(config.axis)) {
         scale.y2 = d3.scale.linear()
                      .domain(config.axis.y2.domain)
@@ -280,12 +295,14 @@ const scaleGraph = (scale, config) => {
  */
 const translateGraph = (control) => {
     translateCanvas(control.config, control.svg);
+    translateDefs(control.config, control.svg);
     translateAxes(control.axis, control.scale, control.config, control.svg);
     translateGrid(control.axis, control.scale, control.config, control.svg);
     translateLabel(control.config, control.svg);
 };
 /**
- * Pads the domain with some buffer that gets calculated based on input values
+ * Pads the domain with some buffer that gets calculated based on input values.
+ * Pad percentage is 5%
  * @private
  * @param {Array} domain - Lower and upper bounds for the axes. Currently only being performed for Y and Y2 axes
  * @returns {undefined} - returns nothing
@@ -294,7 +311,7 @@ const padDomain = (domain) => {
     const lowerBound = domain[ 0 ];
     const upperBound = domain[ 1 ];
     const domainRange = Math.abs(upperBound - lowerBound);
-    const domainStretch = domainRange * (60 / 1000);
+    const domainStretch = domainRange * (50 / 1000);
     domain[ 1 ] = upperBound + domainStretch;
     domain[ 0 ] = lowerBound - domainStretch;
 };
@@ -348,25 +365,20 @@ const getColorForTarget = (dataPoint) => (dataPoint.color || constants.DEFAULT_C
 
 /**
  * Attach event handlers for Line graph.
- * requestAnimationFrame will be used if consumer doesnt need
+ * requestAnimationFrame will be used if consumer doesn't need
  * to throttle the graph resize. Which will result in a smoother animation
  * If the throttle is needed then use `throttle` property in the input JSON
  * @private
- * @param {Object} control - Line instance
+ * @param {Object} control - Graph instance
  * @returns {undefined} - returns nothing
  */
 const attachEventHandlers = (control) => {
     let resizeTimeout = 0;
-    const getConfig = (control, config) => {
-        const boundResize = control.resize.bind(control);
-        const setRequestAnimationFrame = () => window.requestAnimationFrame(boundResize);
-        if (!config.hasThrottle) {
-            return setRequestAnimationFrame;
-        }
-        return () => {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(setRequestAnimationFrame, config.throttle);
-        };
+    const boundResize = control.resize.bind(control);
+    const setRequestAnimationFrame = () => window.requestAnimationFrame(boundResize);
+    const getConfig = (control, config) => () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(setRequestAnimationFrame, config.throttle);
     };
     const resizeCallback = getConfig(control, control.config);
     window.addEventListener("resize", resizeCallback, true);
@@ -375,7 +387,7 @@ const attachEventHandlers = (control) => {
 /**
  * Detach event handlers currently set for Line graph
  * @private
- * @param {Object} control - Line instance
+ * @param {Object} control - Graph instance
  * @returns {undefined} - returns nothing
  */
 const detachEventHandlers = (control) => {

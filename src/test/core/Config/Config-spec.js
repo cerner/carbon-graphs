@@ -16,11 +16,11 @@ describe("BaseConfig", () => {
     it("throws error when validateInput is called without being implemented", () => {
         expect(() => {
             config.validateInput();
-        }).toThrow(errors.THROW_MSG_CONFIG_VALIDATE_INPUT_NOT_IMPLEMENTED);
+        }).toThrow(new Error(errors.THROW_MSG_CONFIG_VALIDATE_INPUT_NOT_IMPLEMENTED));
     });
     it("throws error when clone is called without being implemented", () => {
         expect(() => {
             config.clone();
-        }).toThrow(errors.THROW_MSG_CONFIG_CLONE_INPUT_NOT_IMPLEMENTED);
+        }).toThrow(new Error(errors.THROW_MSG_CONFIG_CLONE_INPUT_NOT_IMPLEMENTED));
     });
 });

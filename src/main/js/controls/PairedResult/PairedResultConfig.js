@@ -48,10 +48,10 @@ class PairedResultConfig extends BaseConfig {
      */
     validateInput() {
         if (utils.isEmpty(this.input)) {
-            throw errors.THROW_MSG_NO_DATA_POINTS;
+            throw new Error(errors.THROW_MSG_NO_DATA_POINTS);
         }
         if (!isDataValidFormat(this.input)) {
-            throw errors.THROW_MSG_INVALID_DATA_PROPERTY;
+            throw new Error(errors.THROW_MSG_INVALID_DATA_PROPERTY);
         }
         return this;
     }

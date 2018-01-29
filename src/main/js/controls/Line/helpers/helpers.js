@@ -17,6 +17,7 @@ import {
     legendHoverHandler,
     loadLegendItem
 } from "../../../helpers/legend";
+import { processRegions } from "../../../helpers/region";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 
@@ -33,7 +34,7 @@ const createLine = (scale, d) => {
     const newLine = d3.svg.line()
                       .x((value) => scale.x(value.x))
                       .y((value) => scale[ value.yAxis ](value.y))
-                      .interpolate("linear");
+                      .interpolate(constants.DEFAULT_INTERPOLATION);
     return newLine(getDataPointValues(d));
 };
 /**
@@ -88,7 +89,7 @@ const translateSelectedPoint = (scale, canvasSVG) =>
 const toggleDataPointSelection = (target) => {
     const selectedPointNode = d3.select(target.parentNode)
                                 .select(`.${styles.dataPointSelection}`);
-    selectedPointNode.classed("hidden", !selectedPointNode.classed("hidden"));
+    selectedPointNode.attr("aria-hidden", !(selectedPointNode.attr("aria-hidden") === "true"));
     return selectedPointNode;
 };
 /**
@@ -113,7 +114,7 @@ const dataPointActionHandler = (value, index, target) => {
     }
     toggleDataPointSelection(target).call((selectedTarget) =>
         value.onClick(() => {
-            selectedTarget.classed("hidden", true);
+            selectedTarget.attr("aria-hidden", true);
         }, value.key, index, value, selectedTarget)
     );
 };
@@ -150,14 +151,18 @@ const translateLineGraph = (scale, canvasSVG) => {
 const draw = (scale, config, canvasSVG, dataTarget) => {
     const lineSVG = canvasSVG.append("g")
                              .classed(styles.lineGraphContent, true)
-                             .attr("clip-path", `url(#${constants.CLIP_PATH_ID});`)
+                             .attr("clip-path", `url(#${constants.CLIP_PATH_ID})`)
+                             .attr("aria-hidden", config.shownTargets.indexOf(dataTarget.key) < 0)
                              .attr("aria-describedby", dataTarget.key);
     const lineGroupSVG = lineSVG.append("g")
                                 .classed(styles.currentLinesGroup, true)
                                 .attr("transform", `translate(${getXAxisXPosition(config)},${PADDING.top})`);
-    drawDataLines(scale, config, lineGroupSVG.selectAll(`.${styles.line}`)
-                                             .data([ dataTarget ])
-                                             .enter()
+    drawDataLines(
+        scale,
+        config,
+        lineGroupSVG.selectAll(`.${styles.line}`)
+                    .data([ dataTarget ])
+                    .enter()
     );
     if (config.showShapes) {
         lineSVG.selectAll(`.${styles.currentPointsGroup}`)
@@ -186,7 +191,7 @@ const processDataPoints = (graphConfig, dataTarget) => {
     const getXDataValues = (x) => {
         if ((utils.isDate(x) && getType(type) !== AXIS_TYPE.TIME_SERIES) ||
             (!utils.isDate(x) && getType(type) === AXIS_TYPE.TIME_SERIES)) {
-            throw errors.THROW_MSG_INVALID_FORMAT_TYPE;
+            throw new Error(errors.THROW_MSG_INVALID_FORMAT_TYPE);
         }
         if (getType(type) === AXIS_TYPE.TIME_SERIES) {
             return utils.parseDateTime(x);
@@ -255,12 +260,12 @@ const drawDataPoints = (scale, config, canvasSVG) => {
             .attr("aria-describedby", (value) => value.key);
     const getSelectionPath = (path) =>
         path.classed(styles.dataPointSelection, true)
-            .classed("hidden", true)
             .attr("d", (value) => new Shape(isShapeBuiltAsAPath(value)).getPathElement())
             .attr("transform", transformPoint.bind({}, scale))
             .attr("r", constants.DEFAULT_SELECTED_RADIUS)
             .attr("style", (value) =>
                 `${config.shownTargets.indexOf(value.key) < 0 ? "display: none;" : ""}`)
+            .attr("aria-hidden", true)
             .attr("aria-describedby", (value) => value.key)
             .on("click", function(value, index) {
                 dataPointActionHandler(value, index, this);
@@ -293,10 +298,11 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (element, ite
     legendClickHandler(element);
     updateShownTarget(config.shownTargets, item);
     canvasSVG.select(`path[aria-describedby="${item.key}"]`)
-             .classed("hidden", true);
+             .attr("aria-hidden", true);
     canvasSVG.select(`.${styles.point}[aria-describedby="${item.key}"]`)
-             .classed("hidden", true);
+             .attr("aria-hidden", true);
     window.requestAnimationFrame(control.redraw.bind(control, graphContext));
+    processRegions(config.shownTargets, canvasSVG);
 };
 /**
  * Hover handler for legend item. Highlights current line and blurs the rest of the targets in Graph
@@ -309,17 +315,24 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (element, ite
 const hoverHandler = (graphTargets, canvasSVG) => (item, state) => {
     legendHoverHandler();
     // Blur all other items except the item hovered on
-    graphTargets.forEach((t) => {
-        if (t.key !== item.key) {
-            canvasSVG.selectAll(`path[aria-describedby="${t.key}"]`)
+    graphTargets.forEach((shownTarget) => {
+        if (shownTarget !== item.key) {
+            canvasSVG.selectAll(`path[aria-describedby="${shownTarget}"]`)
                      .classed(styles.blur, (state === constants.HOVER_EVENT.MOUSE_ENTER));
-            canvasSVG.selectAll(`.${styles.point}[aria-describedby="${t.key}"]`)
+            canvasSVG.selectAll(`.${styles.point}[aria-describedby="${shownTarget}"]`)
                      .classed(styles.blur, (state === constants.HOVER_EVENT.MOUSE_ENTER));
         }
     });
     // Highlight the line of the item hovered on
     canvasSVG.selectAll(`path[aria-describedby="${item.key}"]`)
              .classed(styles.highlight, (state === constants.HOVER_EVENT.MOUSE_ENTER));
+
+    // Highlight region(s) of the item hovered on, only if the graph is currently displayed
+    canvasSVG.selectAll(`.${styles.region}[aria-describedby="region_${item.key}"]`)
+             .classed(
+                 styles.regionHighlight,
+                 (state === constants.HOVER_EVENT.MOUSE_ENTER && graphTargets.indexOf(item.key) > -1)
+             );
 };
 /**
  * A callback that will be sent to Graph class so that when graph is

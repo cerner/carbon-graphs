@@ -17,6 +17,10 @@ import {
     legendHoverHandler,
     loadLegendItem
 } from "../../../helpers/legend";
+import {
+    createRegion,
+    showHideRegion
+} from "../../../helpers/region";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 import {
@@ -48,7 +52,7 @@ const createLine = (scale, d) => {
     const newLine = d3.svg.line()
                       .x((value) => scale.x(value.x))
                       .y((value) => scale[ d.yAxis ](value.y))
-                      .interpolate("linear");
+                      .interpolate(constants.DEFAULT_INTERPOLATION);
     return newLine([
         {
             x: d.high.x,
@@ -115,8 +119,7 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
     };
     const pairedBoxGroupSVG = canvasSVG.append("g")
                                        .classed(styles.pairedBoxGroup, true)
-                                       .attr("clip-path", `url(#${constants.CLIP_PATH_ID});`)
-                                       .attr("transform", `translate(${getXAxisXPosition(config)},${PADDING.top})`)
+                                       .attr("clip-path", `url(#${constants.CLIP_PATH_ID})`)
                                        .attr("aria-describedby", dataTarget.key);
     pairedBoxGroupSVG.selectAll(`.${styles.pairedBox}`)
                      .data(getDataPointValues(dataTarget))
@@ -124,6 +127,7 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
                      .append("g")
                      .classed(styles.pairedBox, true)
                      .attr("aria-selected", false)
+                     .attr("transform", `translate(${getXAxisXPosition(config)},${PADDING.top})`)
                      .on("click", function(value, index) {
                          dataPointActionHandler(config, value, index, this);
                      })
@@ -142,14 +146,16 @@ const processDataPoints = (graphConfig, dataTarget) => {
     const getXDataValues = (x) => {
         if ((utils.isDate(x) && getType(type) !== AXIS_TYPE.TIME_SERIES) ||
             (!utils.isDate(x) && getType(type) === AXIS_TYPE.TIME_SERIES)) {
-            throw errors.THROW_MSG_INVALID_FORMAT_TYPE;
+            throw new Error(errors.THROW_MSG_INVALID_FORMAT_TYPE);
         }
         if (getType(type) === AXIS_TYPE.TIME_SERIES) {
             return utils.parseDateTime(x);
         }
         return utils.getNumber(x);
     };
+
     graphConfig.shownTargets.push(dataTarget.key);
+
     // Each value is a pair. Construct enough information so that you can
     // construct a box. Each box would need 3 icons so we need 3 (max) data sets
     dataTarget.internalValuesSubset = dataTarget.values.map((value) => {
@@ -281,8 +287,13 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (element, ite
     legendClickHandler(element);
     updateShownTarget(config.shownTargets, item);
     canvasSVG.selectAll(`path[aria-describedby="${item.key}"]`)
-             .classed("hidden", true);
+             .attr("aria-hidden", true);
     window.requestAnimationFrame(control.redraw.bind(control, graphContext));
+    showHideRegion(
+        canvasSVG,
+        `region_${item.key}`,
+        (config.shownTargets.indexOf(item.key) > -1 && graphContext.content.length === 1)
+    );
 };
 /**
  * Hover handler for legend item. Highlights current line and blurs the rest of the targets in Graph
@@ -304,6 +315,12 @@ const hoverHandler = (config, canvasSVG) => (item, state) => {
                      .classed(styles.blur, (state === constants.HOVER_EVENT.MOUSE_ENTER));
         }
     });
+    // Highlight region(s) of the item hovered on, only if the graph is currently displayed
+    canvasSVG.selectAll(`.${styles.region}[aria-describedby="region_${item.key}"]`)
+             .classed(
+                 styles.regionHighlight,
+                 (state === constants.HOVER_EVENT.MOUSE_ENTER && config.shownTargets.indexOf(item.key) > -1)
+             );
 };
 /**
  * A callback that will be sent to Graph class so that when graph is
@@ -335,6 +352,49 @@ const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
     }
 };
 /**
+ * Renders the regions for each pair item, if available
+ * Each region in a graph content is created as a group.
+ * Each group is defined by its unique id with the prefix "region_",
+ * so that any region belonging to the pair can be rendered within the paired region group.
+ * This is a bit different than other types of graph since we have individual legend
+ * for each of the pair types.
+ * Criteria for loading the regions:
+ *  Each content should show regions for high, low and/or mid upfront
+ *  Region should only be hidden if:
+ *      Toggled using legend
+ *      If more than 1 data set/content is available
+ * @private
+ * @param {Object} scale - d3 scale for Graph
+ * @param {Object} config - config object derived from input JSON
+ * @param {Object} canvasSVG - d3 object of canvas svg
+ * @param {Object} dataTarget - Data points object
+ * @returns {undefined} - returns nothing
+ */
+const renderRegion = (scale, config, canvasSVG, dataTarget) => {
+    const regionGroupSVG = canvasSVG.select(`.${styles.regionGroup}`);
+    const regionPairGroup = regionGroupSVG.append("g")
+                                          .classed(styles.regionPairGroup, true)
+                                          .attr("aria-describedby", `region_${dataTarget.key}`);
+    regionPairGroup.call(() => {
+        constants.PAIR_ITEM_TYPES.forEach((type) => {
+            if (dataTarget.regions[ type ]) {
+                if (!utils.isArray(dataTarget.regions[ type ]) || utils.isUndefined(dataTarget.regions[ type ])) {
+                    throw new Error(errors.THROW_MSG_REGION_EMPTY);
+                }
+                createRegion(
+                    scale,
+                    config,
+                    regionPairGroup,
+                    dataTarget.regions[ type ],
+                    `region_${dataTarget.key}_${type}`,
+                    dataTarget.yAxis
+                );
+            }
+        });
+    });
+};
+
+/**
  * Clears the paired boxes before redrawing.
  * We are selecting all the box pairs along
  * with all the data sets before clearing them.
@@ -360,5 +420,6 @@ export {
     drawPoints,
     translatePairedResultGraph,
     prepareLegendItems,
+    renderRegion,
     clear
 };

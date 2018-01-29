@@ -24,7 +24,6 @@ export const processInput = (input, config, type) => {
     config.bindTo = input.bindTo;
     config.axis = _axis;
     config.locale = d3.locale(getDefaultValue(input.locale, DEFAULT_LOCALE));
-    config.hasThrottle = !!input.throttle;
     config.throttle = getDefaultValue(input.throttle, constants.RESIZE_THROTTLE);
     config.showLabel = getDefaultValue(input.showLabel, true);
     config.showLegend = getDefaultValue(input.showLegend, true);
@@ -75,10 +74,10 @@ export const isUniqueKey = (dictionary, key) =>
  */
 export const validateContent = (content, input) => {
     if (utils.isEmpty(input)) {
-        throw errors.THROW_MSG_NO_DATA_LOADED;
+        throw new Error(errors.THROW_MSG_NO_DATA_LOADED);
     }
     if (!isUniqueKey(content, input.config.key)) {
-        throw errors.THROW_MSG_NON_UNIQUE_KEY;
+        throw new Error(errors.THROW_MSG_NON_UNIQUE_KEY);
     }
 };
 
@@ -132,33 +131,33 @@ class GraphConfig extends BaseConfig {
      */
     validateInput() {
         if (utils.isEmpty(this.input.bindTo)) {
-            throw errors.THROW_MSG_NO_BIND;
+            throw new Error(errors.THROW_MSG_NO_BIND);
         }
         if (utils.isEmpty(this.input.axis) ||
             utils.isEmpty(this.input.axis.x) ||
             utils.isEmpty(this.input.axis.y)) {
-            throw errors.THROW_MSG_NO_AXIS_INFO;
+            throw new Error(errors.THROW_MSG_NO_AXIS_INFO);
         }
         if (utils.notEmpty(this.input.axis.x.type) &&
             !(utils.hasValue(Object.values(AXIS_TYPE), this.input.axis.x.type))) {
-            throw errors.THROW_MSG_INVALID_TYPE;
+            throw new Error(errors.THROW_MSG_INVALID_TYPE);
         }
         if (utils.isEmpty(this.input.axis.x.lowerLimit) ||
             utils.isEmpty(this.input.axis.x.upperLimit) ||
             utils.isEmpty(this.input.axis.y.lowerLimit) ||
             utils.isEmpty(this.input.axis.y.upperLimit)) {
-            throw errors.THROW_MSG_NO_AXIS_LIMIT_INFO;
+            throw new Error(errors.THROW_MSG_NO_AXIS_LIMIT_INFO);
         }
         if (utils.isEmpty(this.input.axis.y.label)) {
-            throw errors.THROW_MSG_NO_AXIS_LABEL_INFO;
+            throw new Error(errors.THROW_MSG_NO_AXIS_LABEL_INFO);
         }
         if (hasY2Axis(this.input.axis)) {
             if (utils.isEmpty(this.input.axis.y2.lowerLimit) ||
                 utils.isEmpty(this.input.axis.y2.upperLimit)) {
-                throw errors.THROW_MSG_NO_AXIS_LIMIT_INFO;
+                throw new Error(errors.THROW_MSG_NO_AXIS_LIMIT_INFO);
             }
             if (utils.isEmpty(this.input.axis.y2.label)) {
-                throw errors.THROW_MSG_NO_AXIS_LABEL_INFO;
+                throw new Error(errors.THROW_MSG_NO_AXIS_LABEL_INFO);
             }
         }
         return this;

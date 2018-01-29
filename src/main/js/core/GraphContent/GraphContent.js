@@ -13,10 +13,10 @@ export default class GraphContent {
      * @function GraphContent#load
      * @throws {module:errors.THROW_MSG_CONTENT_LOAD_NOT_IMPLEMENTED}
      * @param {Object} graph - Graph instance
-     * @returns {undefined} - returns nothing
+     * @returns {Object} - inherited class instance
      */
     load(graph) {
-        throw errors.THROW_MSG_CONTENT_LOAD_NOT_IMPLEMENTED;
+        throw new Error(errors.THROW_MSG_CONTENT_LOAD_NOT_IMPLEMENTED);
     }
 
     /**
@@ -25,10 +25,10 @@ export default class GraphContent {
      * @function GraphContent#unload
      * @throws {module:errors.THROW_MSG_CONTENT_UNLOAD_NOT_IMPLEMENTED}
      * @param {Object} graph - Graph instance
-     * @returns {undefined} - returns nothing
+     * @returns {Object} - inherited class instance
      */
     unload(graph) {
-        throw errors.THROW_MSG_CONTENT_UNLOAD_NOT_IMPLEMENTED;
+        throw new Error(errors.THROW_MSG_CONTENT_UNLOAD_NOT_IMPLEMENTED);
     }
 
     /**
@@ -37,10 +37,10 @@ export default class GraphContent {
      * @function GraphContent#resize
      * @throws {module:errors.THROW_MSG_CONTENT_RESIZE_NOT_IMPLEMENTED}
      * @param {Object} graph - Graph instance
-     * @returns {undefined} - returns nothing
+     * @returns {Object} - inherited class instance
      */
     resize(graph) {
-        throw errors.THROW_MSG_CONTENT_RESIZE_NOT_IMPLEMENTED;
+        throw new Error(errors.THROW_MSG_CONTENT_RESIZE_NOT_IMPLEMENTED);
     }
 
     /**
@@ -52,9 +52,9 @@ export default class GraphContent {
      * @function GraphContent#redraw
      * @throws {module:errors.THROW_MSG_CONTENT_REDRAW_NOT_IMPLEMENTED}
      * @param {Object} graph - Graph instance
-     * @returns {undefined} - returns nothing
+     * @returns {Object} - inherited class instance
      */
     redraw(graph) {
-        throw errors.THROW_MSG_CONTENT_REDRAW_NOT_IMPLEMENTED;
+        throw new Error(errors.THROW_MSG_CONTENT_REDRAW_NOT_IMPLEMENTED);
     }
 }

@@ -77,6 +77,12 @@ export const axisDefault = {
         label: "Some Y Label",
         lowerLimit: 0,
         upperLimit: 20
+    },
+    y2: {
+        show: true,
+        label: "Some Y2 Label",
+        lowerLimit: 0,
+        upperLimit: 120
     }
 };
 export const valuesDefault = [

@@ -1,14 +1,14 @@
 import d3 from "d3";
 import Carbon from "../../../src/main/js/carbon";
 import {
-    h1,
+    h2,
     section,
     vector
 } from "../helpers";
 
 export const renderColorsExample = (el, id, title) => {
     const sect = section.render(el);
-    h1.render(sect, title);
+    h2.render(sect, title);
     vector.render(sect, id, "0 0 1050 200");
     d3.select(`#${id}`)
       .append("g")

@@ -1,4 +1,3 @@
-import Line from "../../../src/main/js/controls/Line/Line";
 import {
     renderLine,
     renderLineGridHHidden,
@@ -30,8 +29,8 @@ export class LineExample extends ExampleControl {
 }
 
 const exampleSet = (exampleInstance, contentSection, setState) => {
-    exampleInstance.load(renderMultiLine(contentSection, "multiLine", "Multi-line Graph"));
     exampleInstance.load(renderLine(contentSection, "lineSimple", "Simple Line Graph"));
+    exampleInstance.load(renderMultiLine(contentSection, "multiLine", "Multi-line Graph"));
     exampleInstance.load(renderLineTimeSeries(contentSection, "lineTimeSeries", "Time-Series"));
     exampleInstance.load(renderLineY2Axis(contentSection, "lineY2", "Y2 Axis"));
     exampleInstance.load(renderLineXHidden(contentSection, "lineXHidden", "X Axis Hidden"));

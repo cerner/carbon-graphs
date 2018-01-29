@@ -15,14 +15,14 @@ pairedGraph.loadContent(Carbon.api.pairedResult(/* Add "data" JSON, shown below 
 |Property Name|Expected|
 ---|---|
 |bindTo|string|
-|axis|Object|
-|data|Object|
+|axis|object|
+|data|array|
 
 #### Optional 
 |Property Name|Expected|Default|
 ---|---|---|
-|locale|Object|LOCALE.en_US
-|dimension|Object|{}
+|locale|object|LOCALE.en_US
+|dimension|object|{}
 |throttle|number|(1000/60) => time in ms
 |showLabel|boolean|true
 |showLegend|boolean|true
@@ -53,7 +53,7 @@ Each axis - X, Y and Y2 should have the following properties:
 ---|---|---|
 |type|string|AXIS_TYPE.DEFAULT
 |show|boolean|true
-|ticks|Object|null
+|ticks|object|null
 
 `Note` _y2 axis is mandatory if the **y2.show** is enabled_
 
@@ -62,7 +62,7 @@ Each axis - X, Y and Y2 should have the following properties:
 `N/A`
 
 #### Optional
-|Property Name|Expected|Default|
+|Property Name|Expected|Value
 ---|---|---|
 |[format](https://github.com/d3/d3-time-format/blob/master/README.md#locales)|string|""
 |values|array|[]
@@ -78,23 +78,35 @@ Each axis - X, Y and Y2 should have the following properties:
 |Property Name|Expected|Default
 ---|---|---|
 |yAxis|string|"y"
-|label|Object|{}
+|regions|object|{}
+|label|object|{}
 |color|string|COLORS.BLACK
 |shape|string|SHAPES.CIRCLE
 |onClick|Function|null
 
 ### Values
 #### Required
-|Property Name|Expected|
----|---|
-|x|string
-|y|string
+|Property Name|Expected|Value
+---|---|---|
+|high|object|_{x: "", y: ""}_
+|low|object|_{x: "", y: ""}_
+|mid|object|_{x: "", y: ""}_
 
+### Regions
+* Each data-set can have 1 or more regions for `high`, `low` and/or `mid`
+* Each pair type mentioned above needs to have a `start` and `end`
+#### Required
+|Property Name|Expected|Value
+---|---|---|
+|high|object|_{start: `number`, end: `number`}_
+|low|object|_{start: `number`, end: `number`}_
+|mid|object|_{start: `number`, end: `number`}_
+
+#### Optional type properties
 |Property Name|Expected|Default
 ---|---|---|
-|high|Object|_{x: "", y: ""}_
-|low|Object|_{x: "", y: ""}_
-|mid|Object|_{x: "", y: ""}_
+|axis|string|"y"
+|color|string|![#f4f4f4](https://placehold.it/15/f4f4f4/000000?text=+) `#f4f4f4`
 
 ### Constraints
 * If `label` display is not provided for `high`, `low` and `mid`, the legend item will not be shown as well
@@ -122,6 +134,23 @@ var input = {
 };
 var data = {
     key: "uid_1",
+    regions: {
+         high: [
+             {
+                 axis: "y",
+                 start: 120,
+                 end: 170,
+                 color: "#c8cacb"
+             }
+         ],
+         low: [
+             {
+                 axis: "y",
+                 start: 20,
+                 end: 100
+             }
+         ]
+     },
     onClick: (onCloseCB, key, index, value) =>
     {
         /*

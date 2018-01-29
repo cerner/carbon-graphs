@@ -20,7 +20,7 @@ import PieConfig, { processInput } from "./PieConfig";
  */
 const getConfig = (inputJSON) => {
     if (utils.isEmpty(inputJSON)) {
-        throw errors.THROW_MSG_NO_DATA_LOADED;
+        throw new Error(errors.THROW_MSG_NO_DATA_LOADED);
     }
     return processInput(new PieConfig()
         .setInput(inputJSON)

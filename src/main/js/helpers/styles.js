@@ -44,5 +44,9 @@ export default {
     legendItemText: "carbon-legend-item-text",
     high: "carbon-high",
     low: "carbon-low",
-    mid: "carbon-mid"
+    mid: "carbon-mid",
+    regionGroup: "carbon-region-group",
+    regionPairGroup: "carbon-region-pair-group",
+    region: "carbon-region",
+    regionHighlight: "carbon-region-highlight"
 };

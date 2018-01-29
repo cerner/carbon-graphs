@@ -84,10 +84,10 @@ export default class BaseConfig {
      * @abstract
      * @function BaseConfig#validateInput
      * @throws {module:errors.THROW_MSG_CONFIG_VALIDATE_INPUT_NOT_IMPLEMENTED}
-     * @returns {undefined} - returns nothing
+     * @returns {Object} - inherited class instance
      */
     validateInput() {
-        throw errors.THROW_MSG_CONFIG_VALIDATE_INPUT_NOT_IMPLEMENTED;
+        throw new Error(errors.THROW_MSG_CONFIG_VALIDATE_INPUT_NOT_IMPLEMENTED);
     }
 
     /**
@@ -95,9 +95,9 @@ export default class BaseConfig {
      * @abstract
      * @function BaseConfig#clone
      * @throws {module:errors.THROW_MSG_CONFIG_CLONE_INPUT_NOT_IMPLEMENTED}
-     * @returns {undefined} - returns nothing
+     * @returns {Object} - inherited class instance
      */
     clone() {
-        throw errors.THROW_MSG_CONFIG_CLONE_INPUT_NOT_IMPLEMENTED;
+        throw new Error(errors.THROW_MSG_CONFIG_CLONE_INPUT_NOT_IMPLEMENTED);
     }
 }

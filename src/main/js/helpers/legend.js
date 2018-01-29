@@ -25,10 +25,10 @@ import utils from "../helpers/utils";
  */
 const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
     if (!utils.isFunction(eventHandlers.clickHandler)) {
-        throw "Invalid Argument: eventHandlers needs a clickHandler callback function";
+        throw new Error("Invalid Argument: eventHandlers needs a clickHandler callback function");
     }
     if (!utils.isFunction(eventHandlers.hoverHandler)) {
-        throw "Invalid Argument: eventHandlers needs a hoverHandler callback function";
+        throw new Error("Invalid Argument: eventHandlers needs a hoverHandler callback function");
     }
     if (!t.label) {
         return null;
@@ -38,8 +38,9 @@ const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
     const color = t.color;
     const text = utils.sanitize(t.label.display);
     const index = shownTargets.indexOf(t.key);
-    const cx = 5.5;
-    const cy = 6.5;
+    const cx = 25;
+    const cy = 22.5;
+    const d3ShapeScaleFactor = 5;
     const itemPath = legendSVG.append("li")
                               .classed(styles.legendItem, true)
                               .attr("aria-selected", (!t.label.isDisabled && index > -1))
@@ -63,10 +64,10 @@ const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
     iconPath.append("path")
             .attr("d", () => new Shape(isInBuilt).getPathElement(constants.DEFAULT_PLOT_LEGEND_SIZE))
             .attr("transform", () => {
-                const scaleFactor = isNativeShape(shape) ? constants.DEFAULT_PLOT_LEGEND_SCALE : 1;
+                const scaleFactor = isNativeShape(shape) ? constants.DEFAULT_PLOT_LEGEND_SCALE : d3ShapeScaleFactor;
                 return `translate(${cx},${cy}) scale(${scaleFactor})`;
             })
-            .attr("style", `fill: ${color}`);
+            .attr("style", color ? `fill: ${color}` : "");
     itemPath.append("span")
             .classed(styles.legendItemText, true)
             .attr("tabindex", -1)
@@ -81,7 +82,6 @@ const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
  * @returns {Object} - d3 svg object
  */
 const removeLegendItem = (legendSVG, dataTarget) => legendSVG ? legendSVG.select(`li[aria-describedby="${dataTarget.key}"]`).remove() : "";
-
 /**
  * Creates the legend item list and appends into the container. The container consists of
  * the canvas which houses the graph itself, and the legend <ul> which contains the list of data points labels and

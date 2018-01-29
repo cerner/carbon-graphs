@@ -2,6 +2,12 @@
 import GraphContent from "../../core/GraphContent";
 import constants from "../../helpers/constants";
 import { removeLegendItem } from "../../helpers/legend";
+import {
+    hideAllRegions,
+    removeRegion,
+    translateRegion
+} from "../../helpers/region";
+import styles from "../../helpers/styles";
 import utils from "../../helpers/utils";
 import {
     clear,
@@ -10,6 +16,7 @@ import {
     hoverHandler,
     prepareLegendItems,
     processDataPoints,
+    renderRegion,
     translatePairedResultGraph
 } from "./helpers/helpers";
 import PairedResultConfig from "./PairedResultConfig";
@@ -63,25 +70,25 @@ const loadInput = (inputJSON) =>
  * Or
  * You can have 3 identical X co-ordinates with varying Y co-ordinates to have option 1, shown below.
  *   o
- |
- |
- |
- |
- o
-
- // Or
-
- o------------o
-
- // Or
-
- o
- \
- \
- \
- \
- o
- // etc.
+ *   |
+ *   |
+ *   |
+ *   |
+ *   o
+ *
+ *  // Or
+ *
+ * o------------o
+ *
+ * // Or
+ * o
+ *  \
+ *   \
+ *    \
+ *     \
+ *      o
+ *
+ * // etc.
  * Lifecycle functions include:
  *  * Load
  *  * Generate
@@ -108,6 +115,9 @@ class PairedResult extends GraphContent {
     load(graph) {
         this.dataTarget = processDataPoints(graph.config, utils.deepClone(this.config));
         draw(graph.scale, graph.config, graph.svg, this.dataTarget);
+        if (utils.notEmpty(this.dataTarget.regions)) {
+            renderRegion(graph.scale, graph.config, graph.svg, this.dataTarget);
+        }
         prepareLegendItems(graph.config, {
             clickHandler: clickHandler(graph, this, graph.config, graph.svg),
             hoverHandler: hoverHandler(graph.config, graph.svg)
@@ -120,6 +130,7 @@ class PairedResult extends GraphContent {
      */
     unload(graph) {
         clear(graph.svg, this.dataTarget);
+        removeRegion(graph.svg.select(`.${styles.regionGroup}`), this.dataTarget);
         removeLegendItem(graph.legendSVG, this.dataTarget);
         this.dataTarget = {};
         this.config = {};
@@ -130,6 +141,17 @@ class PairedResult extends GraphContent {
      * @inheritDoc
      */
     resize(graph) {
+        if (utils.notEmpty(this.dataTarget.regions)) {
+            // If graph has more than 1 content then we dont load the regions
+            if (graph.content.length > 1) {
+                hideAllRegions(graph.svg);
+            }
+            translateRegion(
+                graph.scale,
+                graph.config,
+                graph.svg.select(`g[aria-describedby="region_${this.dataTarget.key}"]`)
+            );
+        }
         translatePairedResultGraph(graph.scale, graph.config, graph.svg);
         return this;
     }

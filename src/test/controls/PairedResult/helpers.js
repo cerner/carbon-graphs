@@ -109,6 +109,12 @@ export const axisDefault = {
         label: "Y Label",
         lowerLimit: 0,
         upperLimit: 200
+    },
+    y2: {
+        show: true,
+        label: "Y2 Label",
+        lowerLimit: 0,
+        upperLimit: 200
     }
 };
 export const valuesDefault = [
@@ -125,7 +131,6 @@ export const valuesDefault = [
             x: 45,
             y: 75
         }
-
     },
     {
         high: {
@@ -156,7 +161,46 @@ export const valuesDefault = [
         }
     }
 ];
-
+export const simpleRegion = {
+    high: [
+        {
+            axis: "y",
+            start: 140,
+            end: 220,
+            color: "#c8cacb"
+        }
+    ],
+    low: [
+        {
+            axis: "y",
+            start: 20,
+            end: 70
+        }
+    ]
+};
+export const multiRegion = {
+    high: [
+        {
+            axis: "y",
+            start: 140,
+            end: 220,
+            color: "#c8cacb"
+        },
+        {
+            axis: "y",
+            start: 180,
+            end: 230,
+            color: "#d6d8d9"
+        }
+    ],
+    low: [
+        {
+            axis: "y",
+            start: 20,
+            end: 70
+        }
+    ]
+};
 /**
  * Returns the DOM element queried by Class
  * @param {HTMLElement} id - Id attribute name

@@ -48,7 +48,7 @@ class Shape {
             if (isNativeShape(shape)) {
                 return constants.CUSTOM_SHAPE_PATH[ shape ];
             }
-            throw errors.THROW_MSG_UNKNOWN_SHAPE;
+            throw new Error(errors.THROW_MSG_UNKNOWN_SHAPE);
         };
         const getD3Shape = (shape) =>
             d3.svg.symbol().type(constants.D3_INBUILT_SHAPE[ shape ]).size(size || constants.DEFAULT_PLOT_SIZE)();

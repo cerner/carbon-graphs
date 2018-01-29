@@ -1,6 +1,10 @@
 "use strict";
 import Line from "../../../main/js/controls/Line";
 import Graph from "../../../main/js/core/Graph/Graph";
+import {
+    getXAxisWidth,
+    getXAxisXPosition
+} from "../../../main/js/helpers/axis";
 import constants, {
     AXIS_TYPE,
     COLORS
@@ -43,17 +47,17 @@ describe("Line", () => {
         it("throws error when no input is provided", () => {
             expect(() => {
                 graphDefault.loadContent(new Line());
-            }).toThrow(errors.THROW_MSG_NO_DATA_POINTS);
+            }).toThrow(new Error(errors.THROW_MSG_NO_DATA_POINTS));
         });
         it("throws error when invalid input is provided", () => {
             expect(() => {
                 graphDefault.loadContent(new Line({ dummy: "dummy" }));
-            }).toThrow(errors.THROW_MSG_INVALID_DATA_PROPERTY);
+            }).toThrow(new Error(errors.THROW_MSG_INVALID_DATA_PROPERTY));
         });
         it("throws error when no values are provided", () => {
             expect(() => {
                 graphDefault.loadContent(new Line(getInput([], false, false)));
-            }).toThrow(errors.THROW_MSG_INVALID_DATA_PROPERTY);
+            }).toThrow(new Error(errors.THROW_MSG_INVALID_DATA_PROPERTY));
         });
         it("does not throw error when datetime values have milliseconds", () => {
             expect(() => {
@@ -201,14 +205,14 @@ describe("Line", () => {
                 const input = getInput(valuesDefault, false, false);
                 const invalidGraph = new Graph(getAxes(invalidTypeAxis));
                 invalidGraph.loadContent(new Line(input));
-            }).toThrow(errors.THROW_MSG_INVALID_FORMAT_TYPE);
+            }).toThrow(new Error(errors.THROW_MSG_INVALID_FORMAT_TYPE));
         });
         it("throws error when type and values are a mismatch", () => {
             expect(() => {
                 const input = getInput(valuesTimeSeries, false, false);
                 const validGraph = new Graph(getAxes(utils.deepClone(axisDefault)));
                 validGraph.loadContent(new Line(input));
-            }).toThrow(errors.THROW_MSG_INVALID_FORMAT_TYPE);
+            }).toThrow(new Error(errors.THROW_MSG_INVALID_FORMAT_TYPE));
         });
         it("internal subsets gets created correctly for each data point", () => {
             const graph = graphDefault.loadContent(new Line(getInput(valuesDefault, false, false)));
@@ -345,7 +349,7 @@ describe("Line", () => {
             });
             it("selected data point is hidden by default", () => {
                 const selectedPoints = fetchElementByClass(lineGraphContainer, styles.dataPointSelection);
-                expect(selectedPoints.classList.contains("hidden")).toBeTruthy();
+                expect(selectedPoints.getAttribute("aria-hidden")).toBe("true");
             });
             it("selected data point has circle as shape", () => {
                 const selectedPoints = fetchElementByClass(lineGraphContainer, styles.dataPointSelection);
@@ -377,7 +381,7 @@ describe("Line", () => {
                     const point = fetchElementByClass(lineGraphContainer, styles.point);
                     triggerEvent(point, "click");
                     const selectionPoint = fetchElementByClass(lineGraphContainer, styles.dataPointSelection);
-                    expect(selectionPoint.classList.contains("hidden")).toBeTruthy();
+                    expect(selectionPoint.getAttribute("aria-hidden")).toBe("true");
                 });
                 it("calls onClick callback", () => {
                     const point = fetchElementByClass(lineGraphContainer, styles.point);
@@ -388,27 +392,27 @@ describe("Line", () => {
                     const selectionPoint = fetchElementByClass(lineGraphContainer, styles.dataPointSelection);
                     const point = fetchElementByClass(lineGraphContainer, styles.point);
                     triggerEvent(point, "click");
-                    expect(selectionPoint.classList.contains("hidden")).toBeFalsy();
+                    expect(selectionPoint.getAttribute("aria-hidden")).toBe("false");
                 });
                 it("removes highlight when data point is clicked again", () => {
                     const selectionPoint = fetchElementByClass(lineGraphContainer, styles.dataPointSelection);
                     const point = fetchElementByClass(lineGraphContainer, styles.point);
                     triggerEvent(point, "click");
                     triggerEvent(point, "click");
-                    expect(selectionPoint.classList.contains("hidden")).toBeTruthy();
+                    expect(selectionPoint.getAttribute("aria-hidden")).toBe("true");
                 });
             });
             describe("when clicked on a data point's near surrounding area", () => {
                 it("highlights the data point", () => {
                     const selectionPoint = fetchElementByClass(lineGraphContainer, styles.dataPointSelection);
                     triggerEvent(selectionPoint, "click");
-                    expect(selectionPoint.classList.contains("hidden")).toBeFalsy();
+                    expect(selectionPoint.getAttribute("aria-hidden")).toBe("false");
                 });
                 it("removes highlight when clicked again", () => {
                     const selectionPoint = fetchElementByClass(lineGraphContainer, styles.dataPointSelection);
                     triggerEvent(selectionPoint, "click");
                     triggerEvent(selectionPoint, "click");
-                    expect(selectionPoint.classList.contains("hidden")).toBeTruthy();
+                    expect(selectionPoint.getAttribute("aria-hidden")).toBe("true");
                 });
             });
         });
@@ -517,7 +521,6 @@ describe("Line", () => {
                 expect(fetchElementByClass(lineGraphContainer, styles.line).firstChild.style.display).toBe("none");
             });
             it("on click, removes the first line but keeps the rest", () => {
-                let graph = null;
                 const inputPrimary = getInput(valuesDefault, false, false);
                 const inputSecondary = {
                     key: `uid_2`,
@@ -529,7 +532,7 @@ describe("Line", () => {
                 const primaryLine = new Line(inputPrimary);
                 const secondaryLine = new Line(inputSecondary);
                 graphDefault.loadContent(primaryLine);
-                graph = graphDefault.loadContent(secondaryLine);
+                const graph = graphDefault.loadContent(secondaryLine);
                 triggerEvent(fetchElementByClass(lineGraphContainer, styles.legendItem), "click");
                 primaryLine.redraw(graph);
                 secondaryLine.redraw(graph);
@@ -636,6 +639,558 @@ describe("Line", () => {
             line.unload(graphDefault);
             expect(line.dataTarget).toEqual({});
             expect(line.config).toEqual({});
+        });
+    });
+    describe("Region", () => {
+        let line = null;
+        let data = null;
+        const inputSecondary = {
+            key: `uid_2`,
+            label: {
+                display: "Data Label B"
+            },
+            values: valuesDefault
+        };
+        describe("On load", () => {
+            afterEach(() => line ? line.unload(graphDefault) : "");
+            describe("Ideally", () => {
+                beforeEach(() => {
+                    data = utils.deepClone(getInput(valuesDefault, false, false));
+                    data.regions = [
+                        {
+                            axis: constants.Y_AXIS,
+                            start: 5,
+                            end: 15,
+                            color: "#f4f4f4"
+                        }
+                    ];
+                    line = new Line(data);
+                    graphDefault.loadContent(line);
+                });
+                it("Creates region when present", () => {
+                    const regionGroupElement = fetchElementByClass(lineGraphContainer, styles.regionGroup);
+                    const regionElement = fetchElementByClass(regionGroupElement, styles.region);
+                    expect(regionGroupElement.childNodes.length).toBe(1);
+                    expect(regionElement.nodeName).toBe("rect");
+                });
+                it("shows region by default", () => {
+                    const regionElement = fetchElementByClass(
+                        fetchElementByClass(lineGraphContainer, styles.regionGroup),
+                        styles.region
+                    );
+                    expect(regionElement.getAttribute("class")).toBe(styles.region);
+                    expect(regionElement.getAttribute("aria-hidden")).toBe("false");
+                    expect(regionElement.getAttribute("aria-describedby")).toBe(`region_${data.key}`);
+                });
+            });
+            it("Creates region only if present", () => {
+                data = utils.deepClone(getInput(valuesDefault, false, false));
+                data.regions = null;
+                line = new Line(data);
+                graphDefault.loadContent(line);
+                const regionGroupElement = fetchElementByClass(lineGraphContainer, styles.regionGroup);
+                const regionElement = fetchElementByClass(regionGroupElement, styles.region);
+                expect(regionGroupElement.childNodes.length).toBe(0);
+                expect(regionElement).toBeNull();
+            });
+            describe("Creates region when there are multiple regions", () => {
+                beforeEach(() => {
+                    data = utils.deepClone(getInput(valuesDefault, false, false));
+                    data.regions = [
+                        {
+                            axis: constants.Y_AXIS,
+                            start: 5,
+                            end: 10
+                        },
+                        {
+                            axis: constants.Y_AXIS,
+                            start: 10,
+                            end: 15
+                        }
+                    ];
+                    line = new Line(data);
+                    graphDefault.loadContent(line);
+                });
+                it("Correctly renders", () => {
+                    const regionGroupElement = fetchElementByClass(lineGraphContainer, styles.regionGroup);
+                    const regionElement = fetchElementByClass(regionGroupElement, styles.region);
+                    expect(regionGroupElement.childNodes.length).toBe(2);
+                    expect(regionElement.nodeName).toBe("rect");
+                });
+                it("shows multiple regions face-up by default", () => {
+                    const regionsElement = document.querySelectorAll(`.${styles.region}`);
+                    expect(regionsElement.length).toBe(2);
+                    expect(regionsElement[ 0 ].getAttribute("aria-hidden")).toBe("false");
+                    expect(regionsElement[ 1 ].getAttribute("aria-hidden")).toBe("false");
+                    expect(regionsElement[ 0 ].getAttribute("aria-describedby")).toBe(`region_${data.key}`);
+                    expect(regionsElement[ 1 ].getAttribute("aria-describedby")).toBe(`region_${data.key}`);
+                });
+            });
+            describe("Validates each region", () => {
+                beforeEach(() => {
+                    data = utils.deepClone(getInput(valuesDefault, false, false));
+                });
+                afterEach(() => {
+                    data = null;
+                });
+                it("Throws error when empty", () => {
+                    data.regions = [ {} ];
+                    line = new Line(data);
+                    expect(() => {
+                        graphDefault.loadContent(line);
+                    }).toThrow(new Error(errors.THROW_MSG_REGION_EMPTY));
+                });
+                it("Throws error when both start and end are empty", () => {
+                    data.regions = [
+                        {
+                            start: null,
+                            end: null
+                        }
+                    ];
+                    line = new Line(data);
+                    expect(() => {
+                        graphDefault.loadContent(line);
+                    }).toThrow(new Error(errors.THROW_MSG_REGION_START_END_MISSING));
+                });
+                it("Throws error when axis info is invalid", () => {
+                    data.regions = [
+                        {
+                            axis: "x",
+                            start: 10,
+                            end: 20
+                        }
+                    ];
+                    line = new Line(data);
+                    expect(() => {
+                        graphDefault.loadContent(line);
+                    }).toThrow(new Error(errors.THROW_MSG_REGION_INVALID_AXIS_PROVIDED));
+                });
+                it("Throws error when axis info is invalid for Y2 axis", () => {
+                    data = utils.deepClone(getInput(valuesDefault, false, false, true));
+                    data.regions = [
+                        {
+                            axis: "x",
+                            start: 10,
+                            end: 20
+                        }
+                    ];
+                    line = new Line(data);
+                    expect(() => {
+                        graphDefault.loadContent(line);
+                    }).toThrow(new Error(errors.THROW_MSG_REGION_INVALID_AXIS_PROVIDED));
+                });
+                it("Throws error when axis provided is different than data-set axis", () => {
+                    data = utils.deepClone(getInput(valuesDefault, false, false, true));
+                    data.regions = [
+                        {
+                            axis: constants.Y_AXIS,
+                            start: 10,
+                            end: 20
+                        }
+                    ];
+                    line = new Line(data);
+                    expect(() => {
+                        graphDefault.loadContent(line);
+                    }).toThrow(new Error(errors.THROW_MSG_REGION_INVALID_AXIS_PROVIDED));
+                });
+                it("Throws error when axis is not and data-set axis is Y2", () => {
+                    data = utils.deepClone(getInput(valuesDefault, false, false, true));
+                    data.regions = [
+                        {
+                            start: 10,
+                            end: 20
+                        }
+                    ];
+                    line = new Line(data);
+                    expect(() => {
+                        graphDefault.loadContent(line);
+                    }).toThrow(new Error(errors.THROW_MSG_REGION_INVALID_AXIS_PROVIDED));
+                });
+                it("Throws error when start value is invalid", () => {
+                    data.regions = [
+                        {
+                            axis: constants.Y_AXIS,
+                            start: "10",
+                            end: 20
+                        }
+                    ];
+                    line = new Line(data);
+                    expect(() => {
+                        graphDefault.loadContent(line);
+                    }).toThrow(new Error(errors.THROW_MSG_REGION_INVALID_VALUE_TYPE_PROVIDED));
+                });
+                it("Throws error when end value is invalid", () => {
+                    data.regions = [
+                        {
+                            axis: constants.Y_AXIS,
+                            start: 10,
+                            end: "20"
+                        }
+                    ];
+                    line = new Line(data);
+                    expect(() => {
+                        graphDefault.loadContent(line);
+                    }).toThrow(new Error(errors.THROW_MSG_REGION_INVALID_VALUE_TYPE_PROVIDED));
+                });
+                it("Throws error when start is more than end", () => {
+                    data.regions = [
+                        {
+                            axis: constants.Y_AXIS,
+                            start: 20,
+                            end: 10
+                        }
+                    ];
+                    line = new Line(data);
+                    expect(() => {
+                        graphDefault.loadContent(line);
+                    }).toThrow(new Error(errors.THROW_MSG_REGION_START_MORE_END));
+                });
+                it("Correctly passes validation", () => {
+                    data.regions = [
+                        {
+                            axis: constants.Y_AXIS,
+                            start: 10,
+                            end: 15
+                        }
+                    ];
+                    line = new Line(data);
+                    expect(() => {
+                        graphDefault.loadContent(line);
+                    }).not.toThrow();
+                });
+            });
+            it("Translates region correctly", () => {
+                data = utils.deepClone(getInput(valuesDefault));
+                data.regions = [
+                    {
+                        axis: constants.Y_AXIS,
+                        start: 10,
+                        end: 15
+                    }
+                ];
+                line = new Line(data);
+                graphDefault.loadContent(line);
+                const regionElement = fetchElementByClass(lineGraphContainer, styles.region);
+                expect(regionElement.nodeName).toBe("rect");
+                expect(+regionElement.getAttribute("x")).toBe(getXAxisXPosition(graphDefault.config));
+                expect(+regionElement.getAttribute("y")).toBe(graphDefault.scale.y(15) + constants.PADDING.top);
+            });
+            it("Does not hide regions is graph has only 1 data-set", () => {
+                data = utils.deepClone(getInput(valuesDefault));
+                data.regions = [
+                    {
+                        start: 1,
+                        end: 5
+                    }
+                ];
+                line = new Line(data);
+                graphDefault.loadContent(line);
+                const regionGroupElement = fetchElementByClass(lineGraphContainer, styles.regionGroup);
+                const regionElement = fetchElementByClass(regionGroupElement, styles.region);
+                expect(regionGroupElement.childNodes.length).toBe(1);
+                expect(regionElement.getAttribute("aria-describedby")).toBe(`region_${data.key}`);
+                expect(regionElement.getAttribute("aria-hidden")).toBe("false");
+            });
+            it("Hides all the regions if graph has more than 1 data-set", () => {
+                const inputSecondary = {
+                    key: `uid_2`,
+                    label: {
+                        display: "Data Label B"
+                    },
+                    values: valuesDefault
+                };
+                data = utils.deepClone(getInput(valuesDefault));
+                data.regions = [
+                    {
+                        start: 1,
+                        end: 5
+                    },
+                    {
+                        start: 10,
+                        end: 15
+                    }
+                ];
+                line = new Line(data);
+                const lineContent = new Line(inputSecondary);
+                graphDefault.loadContent(line);
+                graphDefault.loadContent(lineContent);
+                const regionGroupElement = fetchElementByClass(lineGraphContainer, styles.regionGroup);
+                expect(regionGroupElement.childNodes.length).toBe(2);
+                expect(regionGroupElement.childNodes[ 0 ].getAttribute("aria-describedby")).toBe(`region_${data.key}`);
+                expect(regionGroupElement.childNodes[ 1 ].getAttribute("aria-describedby")).toBe(`region_${data.key}`);
+                expect(regionGroupElement.childNodes[ 0 ].getAttribute("aria-hidden")).toBe("true");
+                expect(regionGroupElement.childNodes[ 1 ].getAttribute("aria-hidden")).toBe("true");
+                graphDefault.unloadContent(lineContent);
+            });
+            it("Sets the width correctly", () => {
+                data = utils.deepClone(getInput(valuesDefault));
+                data.regions = [
+                    {
+                        axis: constants.Y_AXIS,
+                        start: 10,
+                        end: 15
+                    }
+                ];
+                line = new Line(data);
+                graphDefault.loadContent(line);
+                const regionElement = fetchElementByClass(lineGraphContainer, styles.region);
+                expect(+regionElement.getAttribute("width")).toBe(getXAxisWidth(graphDefault.config));
+            });
+            it("Sets the height correctly", () => {
+                data = utils.deepClone(getInput(valuesDefault));
+                data.regions = [
+                    {
+                        axis: constants.Y_AXIS,
+                        start: 10,
+                        end: 15
+                    }
+                ];
+                line = new Line(data);
+                graphDefault.loadContent(line);
+                const regionElement = fetchElementByClass(lineGraphContainer, styles.region);
+                expect(+regionElement.getAttribute("height")).toBeGreaterThan(constants.PADDING.top);
+            });
+            it("Creates a goal line when start and end are same", () => {
+                data = utils.deepClone(getInput(valuesDefault));
+                data.regions = [
+                    {
+                        axis: constants.Y_AXIS,
+                        start: 15,
+                        end: 15
+                    }
+                ];
+                line = new Line(data);
+                graphDefault.loadContent(line);
+                const regionElement = fetchElementByClass(lineGraphContainer, styles.region);
+                expect(+regionElement.getAttribute("height")).toBe(constants.PADDING.top);
+            });
+            it("Creates region correctly when start is not provided", () => {
+                data = utils.deepClone(getInput(valuesDefault));
+                data.regions = [
+                    {
+                        end: 15
+                    }
+                ];
+                line = new Line(data);
+                graphDefault.loadContent(line);
+                const regionElement = fetchElementByClass(lineGraphContainer, styles.region);
+                expect(+regionElement.getAttribute("x")).toBe(getXAxisXPosition(graphDefault.config));
+                expect(+regionElement.getAttribute("y")).toBeGreaterThan(constants.PADDING.top);
+                expect(+regionElement.getAttribute("y")).toBeLessThan(graphDefault.config.height);
+            });
+            it("Creates region correctly when end is not provided", () => {
+                data = utils.deepClone(getInput(valuesDefault));
+                data.regions = [
+                    {
+                        start: 15
+                    }
+                ];
+                line = new Line(data);
+                graphDefault.loadContent(line);
+                const regionElement = fetchElementByClass(lineGraphContainer, styles.region);
+                expect(+regionElement.getAttribute("x")).toBe(getXAxisXPosition(graphDefault.config));
+                expect(+regionElement.getAttribute("y")).toBe(constants.PADDING.top);
+            });
+            it("Creates region correctly for y2 axis", () => {
+                data = utils.deepClone(getInput(valuesDefault, false, false, true));
+                data.regions = [
+                    {
+                        axis: constants.Y2_AXIS,
+                        start: 10,
+                        end: 15
+                    }
+                ];
+                line = new Line(data);
+                graphDefault.loadContent(line);
+                const regionElement = fetchElementByClass(lineGraphContainer, styles.region);
+                expect(regionElement.nodeName).toBe("rect");
+                expect(+regionElement.getAttribute("x")).toBe(getXAxisXPosition(graphDefault.config));
+                expect(+regionElement.getAttribute("y")).toBe(graphDefault.scale.y2(15) + constants.PADDING.top);
+            });
+            it("Creates region with correct, color if provided", () => {
+                data = utils.deepClone(getInput(valuesDefault));
+                data.regions = [
+                    {
+                        start: 10,
+                        end: 15,
+                        color: "#f44444"
+                    }
+                ];
+                line = new Line(data);
+                graphDefault.loadContent(line);
+                const regionElement = fetchElementByClass(lineGraphContainer, styles.region);
+                expect(regionElement.getAttribute("style")).toBe('fill: #f44444;');
+            });
+        });
+        describe("On unload", () => {
+            it("Removes any region", () => {
+                data = utils.deepClone(getInput(valuesDefault));
+                data.regions = [
+                    {
+                        start: 10,
+                        end: 15
+                    }
+                ];
+                line = new Line(data);
+                graphDefault.loadContent(line);
+                graphDefault.unloadContent(line);
+                const regionGroupElement = fetchElementByClass(lineGraphContainer, styles.regionGroup);
+                expect(regionGroupElement.childNodes.length).toBe(0);
+            });
+            it("Removes all regions", () => {
+                data = utils.deepClone(getInput(valuesDefault));
+                data.regions = [
+                    {
+                        start: 1,
+                        end: 5
+                    },
+                    {
+                        start: 10,
+                        end: 15
+                    }
+                ];
+                line = new Line(data);
+                graphDefault.loadContent(line);
+                graphDefault.unloadContent(line);
+                const regionGroupElement = fetchElementByClass(lineGraphContainer, styles.regionGroup);
+                expect(regionGroupElement.childNodes.length).toBe(0);
+            });
+        });
+        describe("On legend item hover", () => {
+            describe("When single-line", () => {
+                let inputPrimary = null;
+                let linePrimary = null;
+                let lineSecondary = null;
+                beforeEach(() => {
+                    inputPrimary = getInput(valuesDefault, false, false);
+                    inputPrimary.regions = [
+                        {
+                            start: 1,
+                            end: 5
+                        }
+                    ];
+                    linePrimary = new Line(inputPrimary);
+                    lineSecondary = new Line(inputSecondary);
+                    graphDefault.loadContent(linePrimary);
+                    graphDefault.loadContent(lineSecondary);
+                });
+                afterEach(() => {
+                    graphDefault.unloadContent(linePrimary);
+                    graphDefault.unloadContent(lineSecondary);
+                });
+                it("Shows region on mouse enter", () => {
+                    const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
+                    triggerEvent(legendItem, "mouseenter");
+                    expect(document.querySelector(`rect[aria-describedby="region_${inputPrimary.key}"]`)
+                                   .classList.contains(styles.regionHighlight)).toBeTruthy();
+                });
+                it("Hides region on mouse exit", () => {
+                    const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
+                    triggerEvent(legendItem, "mouseenter");
+                    triggerEvent(legendItem, "mouseleave");
+                    expect(document.querySelector(`rect[aria-describedby="region_${inputPrimary.key}"]`)
+                                   .classList.contains(styles.regionHighlight)).toBeFalsy();
+                });
+            });
+            describe("When multi-line", () => {
+                let inputPrimary = null;
+                let linePrimary = null;
+                let lineSecondary = null;
+                beforeEach(() => {
+                    inputPrimary = getInput(valuesDefault, false, false);
+                    inputPrimary.regions = [
+                        {
+                            start: 1,
+                            end: 5
+                        },
+                        {
+                            start: 10,
+                            end: 15
+                        }
+                    ];
+                    linePrimary = new Line(inputPrimary);
+                    lineSecondary = new Line(inputSecondary);
+                    graphDefault.loadContent(linePrimary);
+                    graphDefault.loadContent(lineSecondary);
+                });
+                afterEach(() => {
+                    graphDefault.unloadContent(linePrimary);
+                    graphDefault.unloadContent(lineSecondary);
+                });
+                it("Shows region on mouse enter", () => {
+                    const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
+                    triggerEvent(legendItem, "mouseenter");
+                    const regionElements = document.querySelectorAll(`rect[aria-describedby="region_${inputPrimary.key}"]`);
+                    expect(regionElements[ 0 ].classList.contains(styles.regionHighlight)).toBeTruthy();
+                    expect(regionElements[ 1 ].classList.contains(styles.regionHighlight)).toBeTruthy();
+                });
+                it("Hides all the regions except current", () => {
+                    const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
+                    triggerEvent(legendItem, "mouseenter");
+                    triggerEvent(legendItem, "mouseleave");
+                    const regionElements = document.querySelectorAll(`rect[aria-describedby="region_${inputPrimary.key}"]`);
+                    expect(regionElements[ 0 ].classList.contains(styles.regionHighlight)).toBeFalsy();
+                    expect(regionElements[ 1 ].classList.contains(styles.regionHighlight)).toBeFalsy();
+                });
+            });
+        });
+        describe("On legend item click", () => {
+            let inputPrimary = null;
+            let linePrimary = null;
+            let lineSecondary = null;
+            beforeEach(() => {
+                spyOn(window, "requestAnimationFrame");
+                inputPrimary = getInput(valuesDefault);
+                inputPrimary.regions = [
+                    {
+                        start: 1,
+                        end: 5
+                    },
+                    {
+                        start: 10,
+                        end: 15
+                    }
+                ];
+                linePrimary = new Line(inputPrimary);
+                graphDefault.loadContent(linePrimary);
+            });
+            afterEach(() => {
+                graphDefault.unloadContent(linePrimary);
+            });
+            describe("When single-line", () => {
+                it("Hides region on toggle", () => {
+                    const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
+                    triggerEvent(legendItem, "click");
+                    const regionElement = document.querySelector(`rect[aria-describedby="region_${inputPrimary.key}"]`);
+                    expect(regionElement.getAttribute("aria-hidden")).toBe("true");
+                });
+                it("Hides regions on toggle", () => {
+                    const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
+                    triggerEvent(legendItem, "click");
+                    const regionElements = document.querySelectorAll(`rect[aria-describedby="region_${inputPrimary.key}"]`);
+                    expect(regionElements[ 0 ].getAttribute("aria-hidden")).toBe("true");
+                    expect(regionElements[ 1 ].getAttribute("aria-hidden")).toBe("true");
+                });
+                it("Shows region on re-toggle", () => {
+                    const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
+                    triggerEvent(legendItem, "click");
+                    triggerEvent(legendItem, "click");
+                    const regionElements = document.querySelectorAll(`rect[aria-describedby="region_${inputPrimary.key}"]`);
+                    expect(regionElements[ 0 ].getAttribute("aria-hidden")).toBe("false");
+                    expect(regionElements[ 1 ].getAttribute("aria-hidden")).toBe("false");
+                });
+            });
+            describe("When multi-line", () => {
+                it("Shows when data-sets shown === 1", () => {
+                    lineSecondary = new Line(inputSecondary);
+                    graphDefault.loadContent(lineSecondary);
+                    const legendItem = lineGraphContainer.querySelectorAll(`.${styles.legendItem}`);
+                    triggerEvent(legendItem[ 1 ], "click");
+                    expect(document.querySelector(`rect[aria-describedby="region_${inputPrimary.key}"]`)
+                                   .getAttribute("aria-hidden")).toBe("false");
+                    graphDefault.unloadContent(lineSecondary);
+                });
+            });
         });
     });
 });

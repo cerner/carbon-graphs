@@ -10,6 +10,7 @@ import {
 import constants from "../../helpers/constants";
 import errors from "../../helpers/errors";
 import { createLegend } from "../../helpers/legend";
+import { createRegionContainer } from "../../helpers/region";
 import styles from "../../helpers/styles";
 import utils from "../../helpers/utils";
 import GraphConfig, {
@@ -34,7 +35,7 @@ import {
  */
 
 const PADDING = constants.PADDING;
-const BASE_CANVAS_PADDING = constants.BASE_CANVAS_WIDTH_PADDING;
+const BASE_CANVAS_WIDTH_PADDING = constants.BASE_CANVAS_WIDTH_PADDING;
 /**
  * Sets the canvas width
  * @private
@@ -77,7 +78,7 @@ const isRangeModified = (config, yAxis = constants.Y_AXIS) => config.axis[ yAxis
  */
 const loadInput = (inputJSON) => {
     if (utils.isEmpty(inputJSON)) {
-        throw errors.THROW_MSG_NO_AXES_DATA_LOADED;
+        throw new Error(errors.THROW_MSG_NO_AXES_DATA_LOADED);
     }
     return new GraphConfig()
         .setInput(inputJSON)
@@ -204,8 +205,9 @@ class Graph {
             .classed(styles.canvas, true)
             .attr("role", "img")
             .attr("height", this.config.canvasHeight)
-            .attr("width", this.config.canvasWidth - BASE_CANVAS_PADDING);
+            .attr("width", this.config.canvasWidth - BASE_CANVAS_WIDTH_PADDING);
         createDefs(this.config, this.svg);
+        createRegionContainer(this.config, this.svg);
         createGrid(this.axis, this.scale, this.config, this.svg);
         createAxes(this.axis, this.scale, this.config, this.svg);
         createLabel(this.config, this.svg);
@@ -266,7 +268,7 @@ class Graph {
     unloadContent(content) {
         const index = this.content.indexOf(content);
         if (index < 0) {
-            throw errors.THROW_MSG_INVALID_OBJECT_PROVIDED;
+            throw new Error(errors.THROW_MSG_INVALID_OBJECT_PROVIDED);
         }
         this.content.splice(index, 1);
         this.contentTargets.splice(index, 1);

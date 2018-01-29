@@ -21,14 +21,14 @@ lineDefault.loadContent(Carbon.api.line(/* Data array D */));
 |Property Name|Expected|
 ---|---|
 |bindTo|string|
-|axis|Object|
-|data|Object|
+|axis|object|
+|data|array|
 
 #### Optional 
 |Property Name|Expected|Default|
 ---|---|---|
-|locale|Object|LOCALE.en_US
-|dimension|Object|{}
+|locale|object|LOCALE.en_US
+|dimension|object|{}
 |throttle|number|(1000/60) => time in ms
 |showLabel|boolean|true
 |showLegend|boolean|true
@@ -60,7 +60,7 @@ Each axis - X, Y and Y2 should have the following properties:
 ---|---|---|
 |type|string|AXIS_TYPE.DEFAULT
 |show|boolean|true
-|ticks|Object|null
+|ticks|object|null
 
 `Note` _y2 axis is mandatory if the **y2.show** is enabled_
 
@@ -85,7 +85,8 @@ Each axis - X, Y and Y2 should have the following properties:
 |Property Name|Expected|Default
 ---|---|---|
 |yAxis|string|"y"
-|label|Object|{}
+|regions|array|[]
+|label|object|{}
 |color|string|COLORS.BLACK
 |shape|string|SHAPES.CIRCLE
 |onClick|Function|null
@@ -99,6 +100,21 @@ Each axis - X, Y and Y2 should have the following properties:
 
 #### Optional
  `N/A`
+
+### Regions
+Each data-set can have 1 or more regions. `start` and `end` is necessary for rendering a horizontal region. 
+
+#### Required
+|Property Name|Expected|
+---|---|
+|start|number
+|end|number
+
+#### Optional
+|Property Name|Expected|Default
+---|---|---|
+|axis|string|"y"
+|color|string|![#f4f4f4](https://placehold.it/15/f4f4f4/000000?text=+) `#f4f4f4`
 
 ### Constraints
 * If `label` display is not provided then the legend item will not be shown as well
@@ -138,6 +154,14 @@ var data = {
     {
         display: "Data Label 1"
     },
+    regions: [
+        {
+            axis: "y",
+            start: 2,
+            end: 10,
+            color: "#f4f4f4"
+        }
+    ],
     shape: Carbon.helpers.SHAPES.SQUARE,
     color: Carbon.helpers.COLORS.BLUE,
     onClick: (onCloseCB, key, index, value) =>

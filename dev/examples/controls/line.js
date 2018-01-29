@@ -13,7 +13,20 @@ const tickValues = [
     new Date(2016, 0, 1, 15, 0).toISOString(),
     new Date(2016, 0, 1, 20, 0).toISOString()
 ];
-
+const regions = [
+    {
+        axis: "y",
+        start: 2,
+        end: 10,
+        color: "#f4f4f4"
+    },
+    {
+        axis: "y",
+        start: 12,
+        end: 18,
+        color: "#c8cacb"
+    }
+];
 export const renderLine = (el, id, title) => () => {
     shell.render(el, id, title);
     const lineDefault = Carbon.api.graph(getAxes(`#${id}`, "LINE_DEFAULT"));
@@ -157,4 +170,99 @@ export const renderLineTimeSeries = (el, id, title) => () => {
     const lineTime = Carbon.api.graph(getAxes(`#${id}`, "LINE_TIMESERIES"));
     lineTime.loadContent(Carbon.api.line(getData(`#${id}`, "LINE_TIMESERIES").data[ 0 ]));
     return lineTime;
+};
+export const renderLineRegionSimple = (el, id, title) => () => {
+    shell.render(el, id, title, "* A simple Line based graph. By default, region is shown face-up");
+    const lineDefault = Carbon.api.graph(getAxes(`#${id}`, "LINE_DEFAULT"));
+    const data = utils.deepClone(getData(`#${id}`, "LINE_DEFAULT").data[ 0 ]);
+    data.regions = [ regions[ 0 ] ];
+    lineDefault.loadContent(Carbon.api.line(data));
+    return lineDefault;
+};
+export const renderLineRegionMultiple = (el, id, title) => () => {
+    shell.render(el, id, title,
+        "* A Line based graph which has multiple ranges for a single data set. By default, region is hidden unless hovered upon in the legend. ");
+    const lineDefault = Carbon.api.graph(getAxes(`#${id}`, "LINE_DEFAULT"));
+    const data = utils.deepClone(getData(`#${id}`, "LINE_DEFAULT").data[ 4 ]);
+    data.regions = regions;
+    lineDefault.loadContent(Carbon.api.line(data));
+    return lineDefault;
+};
+export const renderLineRegionNoLower = (el, id, title) => () => {
+    shell.render(el, id, title, "* A Line based graph which has no lower bound for its region.");
+    const lineDefault = Carbon.api.graph(getAxes(`#${id}`, "LINE_DEFAULT"));
+    const data = utils.deepClone(getData(`#${id}`, "LINE_DEFAULT").data[ 0 ]);
+    data.regions = [
+        {
+            end: 10
+        }
+    ];
+    lineDefault.loadContent(Carbon.api.line(data));
+    return lineDefault;
+};
+export const renderLineRegionNoUpper = (el, id, title) => () => {
+    shell.render(el, id, title, "* A Line based graph which has no upper bound for its region.");
+    const lineDefault = Carbon.api.graph(getAxes(`#${id}`, "LINE_DEFAULT"));
+    const data = utils.deepClone(getData(`#${id}`, "LINE_DEFAULT").data[ 0 ]);
+    data.regions = [
+        {
+            start: 2
+        }
+    ];
+    lineDefault.loadContent(Carbon.api.line(data));
+    return lineDefault;
+};
+export const renderLineRegionY2 = (el, id, title) => () => {
+    shell.render(el, id, title,
+        "* A Line based graph where the region is provided for Y2 axis. Click on 1st data-set or Hover over 2nd data-set to see the range.");
+    const axisData = utils.deepClone(getAxes(`#${id}`, "LINE_TIMESERIES"));
+    const dataValueObject = utils.deepClone(getData(`#${id}`, "LINE_TIMESERIES").data[ 1 ]);
+    axisData.axis.y2.show = true;
+    dataValueObject.regions = [
+        {
+            axis: "y2",
+            start: 50,
+            end: 150
+        }
+    ];
+    const lineTime = Carbon.api.graph(axisData);
+    lineTime.loadContent(Carbon.api.line(getData(`#${id}`, "LINE_TIMESERIES").data[ 0 ]));
+    lineTime.loadContent(Carbon.api.line(dataValueObject));
+    return lineTime;
+};
+export const renderMultiLineRegion = (el, id, title) => () => {
+    shell.render(el, id, title, "* A set of regions in a multi line scenario, each line has its own region expect the 3rd data set." +
+        "By default, region is hidden unless hovered upon in the legend OR there is only 1 data set shown at a time in the graph.");
+    const lineDefault = Carbon.api.graph(getAxes(`#${id}`, "LINE_DEFAULT"));
+    const data = utils.deepClone(getData(`#${id}`, "LINE_DEFAULT").data[ 0 ]);
+    const dataAlt = utils.deepClone(getData(`#${id}`, "LINE_DEFAULT").data[ 2 ]);
+    data.regions = [
+        {
+            start: 2
+        }
+    ];
+    dataAlt.regions = [
+        {
+            start: 2,
+            end: 14
+        }
+    ];
+    lineDefault.loadContent(Carbon.api.line(data));
+    lineDefault.loadContent(Carbon.api.line(dataAlt));
+    lineDefault.loadContent(Carbon.api.line(getData(`#${id}`, "LINE_DEFAULT").data[ 4 ]));
+    return lineDefault;
+};
+export const renderGoalLine = (el, id, title) => () => {
+    shell.render(el, id, title, "* The region is condensed into a 'Goal' line, achieved when 'start' and 'end' region parameters are the same.");
+    const lineDefault = Carbon.api.graph(getAxes(`#${id}`, "LINE_DEFAULT"));
+    const data = utils.deepClone(getData(`#${id}`, "LINE_DEFAULT").data[ 5 ]);
+    data.regions = [
+        {
+            start: 15,
+            end: 15,
+            color: "#bcbfc0"
+        }
+    ];
+    lineDefault.loadContent(Carbon.api.line(data));
+    return lineDefault;
 };

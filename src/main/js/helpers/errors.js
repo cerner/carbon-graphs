@@ -28,5 +28,10 @@ export default {
     THROW_MSG_CONTENT_RESIZE_NOT_IMPLEMENTED: "Resize function has not been implemented for this graph type.",
     THROW_MSG_CONTENT_REDRAW_NOT_IMPLEMENTED: "Redraw function has not been implemented for this graph type.",
     THROW_MSG_CONFIG_VALIDATE_INPUT_NOT_IMPLEMENTED: "Input validation has not been implemented.",
-    THROW_MSG_CONFIG_CLONE_INPUT_NOT_IMPLEMENTED: "Clone input function has not been implemented."
+    THROW_MSG_CONFIG_CLONE_INPUT_NOT_IMPLEMENTED: "Clone input function has not been implemented.",
+    THROW_MSG_REGION_EMPTY: "Region in data object cannot be empty.",
+    THROW_MSG_REGION_INVALID_AXIS_PROVIDED: "Region axis provided is invalid.",
+    THROW_MSG_REGION_INVALID_VALUE_TYPE_PROVIDED: "Region 'start' and 'end' value has invalid type.",
+    THROW_MSG_REGION_START_END_MISSING: "Region cannot have both 'start' and 'end' empty.",
+    THROW_MSG_REGION_START_MORE_END: "Region 'start' cannot be larger than 'end'."
 };

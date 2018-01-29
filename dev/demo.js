@@ -14,6 +14,10 @@ import {
     PairedResultExample,
     renderPairedResultExamples
 } from "./examples/content/renderPairedResultExamples";
+import {
+    RegionsExample,
+    renderRegionsExamples
+} from "./examples/content/renderRegionsExamples";
 import { renderColorsExample } from "./examples/controls/colors";
 import { renderShapesExample } from "./examples/controls/shapes";
 import {
@@ -46,10 +50,11 @@ const getState = () => _state.currentSection;
 *   * Create a "control"
 *   * Create a "content" to tie in control to the DOM
 *   * Add the content function below
-* */
+*/
 renderLineExamples(new LineExample(), toggleSection, contentSection, setState, getState);
 renderPairedResultExamples(new PairedResultExample(), toggleSection, contentSection, setState, getState);
 renderCombinationGraphExamples(new CombinationExample(), toggleSection, contentSection, setState, getState);
+renderRegionsExamples(new RegionsExample(), toggleSection, contentSection, setState, getState);
 
 /* Colors and Shapes */
 btn.render(toggleSection, "Shapes", (event) => {
