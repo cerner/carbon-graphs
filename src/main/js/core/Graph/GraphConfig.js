@@ -37,18 +37,18 @@ export const processInput = (input, config, type) => {
     config.axis.x.show = getDefaultValue(_axis.x.show, true);
     config.axis.y.show = getDefaultValue(_axis.y.show, true);
     config.axis.x.domain = getDomain(type, _axis.x.lowerLimit, _axis.x.upperLimit);
-    config.axis.y.domain = [
-        utils.getNumber(_axis.y.lowerLimit),
-        utils.getNumber(_axis.y.upperLimit)
-    ];
+    config.axis.y.domain = {
+        lowerLimit: utils.getNumber(_axis.y.lowerLimit),
+        upperLimit: utils.getNumber(_axis.y.upperLimit)
+    };
     if (input.axis.y2) {
         config.axis.y2.ticks = getDefaultValue(input.axis.y2.ticks, {});
         config.axis.y2.show = getDefaultValue(input.axis.y2.show, false);
         if (config.axis.y2.show) {
-            config.axis.y2.domain = [
-                utils.getNumber(input.axis.y2.lowerLimit),
-                utils.getNumber(input.axis.y2.upperLimit)
-            ];
+            config.axis.y2.domain = {
+                lowerLimit: utils.getNumber(input.axis.y2.lowerLimit),
+                upperLimit: utils.getNumber(input.axis.y2.upperLimit)
+            };
         }
     }
     config.shownTargets = [];

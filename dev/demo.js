@@ -6,6 +6,10 @@ import {
     renderCombinationGraphExamples
 } from "./examples/content/renderCombinationGraphExamples";
 import {
+    CriticalityExample,
+    renderCriticalityExamples
+} from "./examples/content/renderCriticalityExamples";
+import {
     LineExample,
     renderLineExamples,
     toggleLineAsActive
@@ -37,7 +41,7 @@ renderTooltip(root);
 renderRootSection(root);
 const toggleSection = root.querySelector(".nav-section");
 const contentSection = root.querySelector(".content-section");
-let _state = {
+const _state = {
     currentSection: null
 };
 const setState = (val) => {
@@ -55,6 +59,7 @@ renderLineExamples(new LineExample(), toggleSection, contentSection, setState, g
 renderPairedResultExamples(new PairedResultExample(), toggleSection, contentSection, setState, getState);
 renderCombinationGraphExamples(new CombinationExample(), toggleSection, contentSection, setState, getState);
 renderRegionsExamples(new RegionsExample(), toggleSection, contentSection, setState, getState);
+renderCriticalityExamples(new CriticalityExample(), toggleSection, contentSection, setState, getState);
 
 /* Colors and Shapes */
 btn.render(toggleSection, "Shapes", (event) => {

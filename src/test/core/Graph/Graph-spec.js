@@ -307,10 +307,10 @@ describe("Graph", () => {
                 expect(graph.config.axis[ constants.Y_AXIS ].dataRange.max).toBeUndefined();
             });
             it("extends Y Axis domain, if lower bound is less", () => {
-                expect(graph.config.axis[ constants.Y_AXIS ].domain[ 0 ]).toBeLessThan(0);
+                expect(graph.config.axis[ constants.Y_AXIS ].domain.lowerLimit).toBeLessThan(0);
             });
             it("extends Y Axis domain, if upper bound is less", () => {
-                expect(graph.config.axis[ constants.Y_AXIS ].domain[ 1 ]).toBeGreaterThan(20);
+                expect(graph.config.axis[ constants.Y_AXIS ].domain.upperLimit).toBeGreaterThan(20);
             });
         });
         describe("with timeseries type values", () => {
@@ -348,10 +348,10 @@ describe("Graph", () => {
                 expect(graph.config.axis[ constants.Y_AXIS ].dataRange.max).toBe(35);
             });
             it("extends Y Axis domain, if lower bound is less", () => {
-                expect(graph.config.axis[ constants.Y_AXIS ].domain[ 0 ]).toBeLessThan(0);
+                expect(graph.config.axis[ constants.Y_AXIS ].domain.lowerLimit).toBeLessThan(0);
             });
             it("extends Y Axis domain, if upper bound is less", () => {
-                expect(graph.config.axis[ constants.Y_AXIS ].domain[ 1 ]).toBeGreaterThan(20);
+                expect(graph.config.axis[ constants.Y_AXIS ].domain.upperLimit).toBeGreaterThan(20);
             });
         });
         describe("with timeseries type values and input loaded", () => {

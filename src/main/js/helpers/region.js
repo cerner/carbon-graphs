@@ -189,9 +189,7 @@ const toggleRegion = (canvasSVG, key) =>
  * @returns {Object} d3 svg path
  */
 const processRegions = (shownTargets, canvasSVG) =>
-    isSingleTargetDisplayed(shownTargets) ? shownTargets.forEach((key) =>
-        toggleRegion(canvasSVG, key)
-    ) : hideAllRegions(canvasSVG);
+    isSingleTargetDisplayed(shownTargets) ? toggleRegion(canvasSVG, ...shownTargets) : hideAllRegions(canvasSVG);
 /**
  * @enum {Function}
  */

@@ -334,7 +334,9 @@ const getAxisLabelHeight = (label) => {
  * @returns {Number} label width
  */
 const getYAxisWidth = (id, config) => {
-    const scale = d3.scale.linear().domain(config.axis[ id ].domain).range([ config.height, 0 ]);
+    const scale = d3.scale.linear()
+                    .domain([ config.axis[ id ].domain.lowerLimit, config.axis[ id ].domain.upperLimit ])
+                    .range([ config.height, 0 ]);
     const axis = d3.svg.axis().scale(scale).orient("left");
     const dummy = d3.select("body").append("div");
     const svg = dummy.append("svg");
@@ -394,8 +396,8 @@ const calculateAxesLabelSize = (config) => {
  * @returns {number} returns a number representing the mid value of y axes domain
  */
 const getMidPoint = (config, yAxis) => {
-    const axisMidValue = (config.axis[ yAxis ].domain[ 1 ] - config.axis[ yAxis ].domain[ 0 ]) / 2;
-    return config.axis[ yAxis ].domain[ 0 ] + axisMidValue;
+    const axisMidValue = (config.axis[ yAxis ].domain.upperLimit - config.axis[ yAxis ].domain.lowerLimit) / 2;
+    return config.axis[ yAxis ].domain.lowerLimit + axisMidValue;
 };
 /**
  * Calculates the lower part of the outlier based on data points.
@@ -412,7 +414,7 @@ const getLowerOutlierStretchFactorList = (config) => {
         return dataRangeMinValue < axisMinValue ? dataRangeMinValue : axisMinValue;
     };
     const getLowerStretchFactor = (yAxis) => {
-        const axisMinValue = config.axis[ yAxis ].domain[ 0 ];
+        const axisMinValue = config.axis[ yAxis ].domain.lowerLimit;
         const axisMidPoint = getMidPoint(config, yAxis);
         const lowerStretchFactor = Math.abs((axisMidPoint - getMinValue(config, yAxis, axisMinValue)) / (axisMidPoint - axisMinValue));
         return lowerStretchFactor > 1 ? lowerStretchFactor : 1;
@@ -438,7 +440,7 @@ const getUpperOutlierStretchFactorList = (config) => {
         return dataRangeMaxValue > axisMaxValue ? dataRangeMaxValue : axisMaxValue;
     };
     const getUpperStretchFactor = (yAxis) => {
-        const axisMaxValue = config.axis[ yAxis ].domain[ 1 ];
+        const axisMaxValue = config.axis[ yAxis ].domain.upperLimit;
         const axisMidPoint = getMidPoint(config, yAxis);
         const upperStretchFactor = Math.abs((getMaxValue(config, yAxis, axisMaxValue) - axisMidPoint) / (axisMaxValue - axisMidPoint));
         return upperStretchFactor > 1 ? upperStretchFactor : 1;

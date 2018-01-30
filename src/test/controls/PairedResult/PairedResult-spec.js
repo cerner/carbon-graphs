@@ -253,7 +253,7 @@ describe("PairedResult", () => {
                 i.yAxis !== null &&
                 i.key === data.key
             )).toBeTruthy();
-            expect(graph.config.shownTargets.length).toBe(4);
+            expect(graph.config.shownTargets.length).toBe(3);
         });
         it("internal subsets gets created successfully for time series", () => {
             const graphTimeSeries = new Graph(getAxes(axisTimeSeries));
@@ -784,7 +784,7 @@ describe("PairedResult", () => {
                     secondaryPR.redraw(graph);
                     const primaryPRElement = pairedResultGraphContainer.querySelector(`.${styles.pairedBoxGroup}[aria-describedby="${inputPrimary.key}"]`);
                     const secondaryPRElement = pairedResultGraphContainer.querySelector(`.${styles.pairedBoxGroup}[aria-describedby="${inputSecondary.key}"]`);
-                    expect(graph.config.shownTargets.length).toBe(7);
+                    expect(graph.config.shownTargets.length).toBe(5);
                     expect(fetchElementByClass(primaryPRElement, styles.pairedPoint).style.display).toBe("none");
                     expect(fetchElementByClass(secondaryPRElement, styles.pairedPoint).style.display).toBe("");
                 });
@@ -893,7 +893,7 @@ describe("PairedResult", () => {
                 const input = getInput(valuesDefault, false, false);
                 const graph = graphDefault.loadContent(new PairedResult(input));
                 triggerEvent(fetchElementByClass(pairedResultGraphContainer, styles.legendItem), "click");
-                expect(graph.config.shownTargets.length).toBe(3);
+                expect(graph.config.shownTargets.length).toBe(2);
             });
             it("shown targets are updated back when toggled", () => {
                 const input = getInput(valuesDefault, false, false);
@@ -901,7 +901,7 @@ describe("PairedResult", () => {
                 const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
                 triggerEvent(legendItem, "click");
                 triggerEvent(legendItem, "click");
-                expect(graph.config.shownTargets.length).toBe(4);
+                expect(graph.config.shownTargets.length).toBe(3);
             });
             it("attaches mouse enter event handlers correctly", () => {
                 const inputPrimary = getInput(valuesDefault, false, false);

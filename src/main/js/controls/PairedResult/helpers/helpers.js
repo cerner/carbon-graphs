@@ -19,6 +19,7 @@ import {
 } from "../../../helpers/legend";
 import {
     createRegion,
+    processRegions,
     showHideRegion
 } from "../../../helpers/region";
 import styles from "../../../helpers/styles";
@@ -153,9 +154,6 @@ const processDataPoints = (graphConfig, dataTarget) => {
         }
         return utils.getNumber(x);
     };
-
-    graphConfig.shownTargets.push(dataTarget.key);
-
     // Each value is a pair. Construct enough information so that you can
     // construct a box. Each box would need 3 icons so we need 3 (max) data sets
     dataTarget.internalValuesSubset = dataTarget.values.map((value) => {
@@ -290,11 +288,13 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (element, ite
     canvasSVG.selectAll(`path[aria-describedby="${item.key}"]`)
              .attr("aria-hidden", true);
     window.requestAnimationFrame(control.redraw.bind(control, graphContext));
-    showHideRegion(
-        canvasSVG,
-        `region_${item.key}`,
-        (config.shownTargets.indexOf(item.key) > -1 && graphContext.content.length === 1)
-    );
+    if (graphContext.content.length === 1) {
+        showHideRegion(canvasSVG, `region_${item.key}`, (config.shownTargets.indexOf(item.key) > -1));
+    }
+    else {
+        processRegions(config.shownTargets, canvasSVG);
+    }
+
 };
 /**
  * Hover handler for legend item. Highlights current line and blurs the rest of the targets in Graph

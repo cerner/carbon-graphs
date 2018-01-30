@@ -161,17 +161,17 @@ const translateLabel = (config, canvasSVG) => {
  */
 const updateAxesDomain = (config) => {
     config.outlierStretchFactor = determineOutlierStretchFactor(config);
-    const halfDomain = (config.axis.y.domain[ 1 ] - config.axis.y.domain[ 0 ]) / 2;
-    const midPoint = (config.axis.y.domain[ 1 ] + config.axis.y.domain[ 0 ]) / 2;
-    config.axis.y.domain[ 0 ] = midPoint - (halfDomain * config.outlierStretchFactor.lowerLimit);
-    config.axis.y.domain[ 1 ] = midPoint + (halfDomain * config.outlierStretchFactor.upperLimit);
-    padDomain(config.axis.y.domain);
+    const setDomain = (outlierStretchFactor, lowerLimit, upperLimit) => {
+        const halfDomain = (upperLimit - lowerLimit) / 2;
+        const midPoint = (upperLimit + lowerLimit) / 2;
+        return padDomain({
+            lowerLimit: midPoint - (halfDomain * outlierStretchFactor.lowerLimit),
+            upperLimit: midPoint + (halfDomain * outlierStretchFactor.upperLimit)
+        });
+    };
+    config.axis.y.domain = setDomain(config.outlierStretchFactor, config.axis.y.domain.lowerLimit, config.axis.y.domain.upperLimit);
     if (hasY2Axis(config.axis)) {
-        const halfDomain = (config.axis.y2.domain[ 1 ] - config.axis.y2.domain[ 0 ]) / 2;
-        const midPoint = (config.axis.y2.domain[ 1 ] + config.axis.y2.domain[ 0 ]) / 2;
-        config.axis.y2.domain[ 0 ] = midPoint - (halfDomain * config.outlierStretchFactor.lowerLimit);
-        config.axis.y2.domain[ 1 ] = midPoint + (halfDomain * config.outlierStretchFactor.upperLimit);
-        padDomain(config.axis.y2.domain);
+        config.axis.y2.domain = setDomain(config.outlierStretchFactor, config.axis.y2.domain.lowerLimit, config.axis.y2.domain.upperLimit);
     }
     return config;
 };
@@ -272,12 +272,12 @@ const scaleGraph = (scale, config) => {
         .range(getXAxisRange(config))
         .nice();
     scale.y = d3.scale.linear()
-                .domain(config.axis.y.domain)
+                .domain([ config.axis.y.domain.lowerLimit, config.axis.y.domain.upperLimit ])
                 .range(getYAxisRange(config))
                 .nice();
     if (hasY2Axis(config.axis)) {
         scale.y2 = d3.scale.linear()
-                     .domain(config.axis.y2.domain)
+                     .domain([ config.axis.y2.domain.lowerLimit, config.axis.y2.domain.upperLimit ])
                      .range(getYAxisRange(config))
                      .nice();
     }
@@ -304,16 +304,18 @@ const translateGraph = (control) => {
  * Pads the domain with some buffer that gets calculated based on input values.
  * Pad percentage is 5%
  * @private
- * @param {Array} domain - Lower and upper bounds for the axes. Currently only being performed for Y and Y2 axes
- * @returns {undefined} - returns nothing
+ * @param {Object} domain - Lower and upper bounds for the axes. Currently only being performed for Y and Y2 axes
+ * @returns {object} - Bound adjusted (Padded) lower and upper bounds for the axes
  */
 const padDomain = (domain) => {
-    const lowerBound = domain[ 0 ];
-    const upperBound = domain[ 1 ];
+    const lowerBound = domain.lowerLimit;
+    const upperBound = domain.upperLimit;
     const domainRange = Math.abs(upperBound - lowerBound);
     const domainStretch = domainRange * (50 / 1000);
-    domain[ 1 ] = upperBound + domainStretch;
-    domain[ 0 ] = lowerBound - domainStretch;
+    return {
+        lowerLimit: lowerBound - domainStretch,
+        upperLimit: upperBound + domainStretch
+    };
 };
 
 /**
