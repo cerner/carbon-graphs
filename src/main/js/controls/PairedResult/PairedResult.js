@@ -1,6 +1,11 @@
 "use strict";
 import GraphContent from "../../core/GraphContent";
 import constants from "../../helpers/constants";
+import {
+    hideAllCriticality,
+    shouldHideAllCriticality,
+    showHideCriticality
+} from "../../helpers/criticality";
 import { removeLegendItem } from "../../helpers/legend";
 import {
     hideAllRegions,
@@ -14,6 +19,7 @@ import {
     clickHandler,
     draw,
     hoverHandler,
+    iterateOnPairType,
     prepareLegendItems,
     processDataPoints,
     renderRegion,
@@ -141,6 +147,14 @@ class PairedResult extends GraphContent {
      * @inheritDoc
      */
     resize(graph) {
+        if (graph.config.hasCriticality) {
+            if (shouldHideAllCriticality(graph.content)) {
+                hideAllCriticality(graph.svg);
+            }
+            else {
+                iterateOnPairType((type) => showHideCriticality(graph.svg, `${this.dataTarget.key}_${type}`, true));
+            }
+        }
         if (utils.notEmpty(this.dataTarget.regions)) {
             // If graph has more than 1 content then we dont load the regions
             if (graph.content.length > 1) {

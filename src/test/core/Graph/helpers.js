@@ -90,10 +90,16 @@ export const valuesDefault = [
         y: 35
     }
 ];
-
 /**
  * Returns the DOM element queried by Class
  * @param {string} cls - Class attribute name
  * @returns {HTMLElement} - DOM element
  */
 export const fetchElementByClass = (cls) => document.querySelector(`.${cls}`);
+/**
+ * Wraps the provided function inside a setTimeout
+ * @param {Function} fn - function to call
+ * @param {number} [time=100] - Timeout milliseconds
+ * @returns {number} Timeout identifier
+ */
+export const delay = (fn, time = 100) => setTimeout(fn, time);

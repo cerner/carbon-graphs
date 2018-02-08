@@ -1,6 +1,12 @@
 "use strict";
+import sinon from "sinon";
 import PairedResult from "../../../main/js/controls/PairedResult";
 import Graph from "../../../main/js/core/Graph/Graph";
+import {
+    getTransformScale,
+    isShapeBuiltAsAPath
+} from "../../../main/js/core/Graph/helpers";
+import Shape from "../../../main/js/core/Shape/Shape";
 import {
     getXAxisWidth,
     getXAxisXPosition
@@ -16,10 +22,13 @@ import {
     axisDefault,
     axisTimeSeries,
     dataPointClickHandlerSpy,
+    delay,
     fetchElementByClass,
     getAxes,
     getInput,
+    inputSecondary,
     multiRegion,
+    SHAPES,
     simpleRegion,
     triggerEvent,
     valuesDefault,
@@ -768,13 +777,6 @@ describe("PairedResult", () => {
                 });
                 it("removes the point but keeps the rest for multiple data sets", () => {
                     const inputPrimary = getInput(valuesDefault, false, false);
-                    const inputSecondary = {
-                        key: `uid_2`,
-                        label: {
-                            display: "Data Label B"
-                        },
-                        values: valuesDefault
-                    };
                     const primaryPR = new PairedResult(inputPrimary);
                     const secondaryPR = new PairedResult(inputSecondary);
                     graphDefault.loadContent(primaryPR);
@@ -905,13 +907,6 @@ describe("PairedResult", () => {
             });
             it("attaches mouse enter event handlers correctly", () => {
                 const inputPrimary = getInput(valuesDefault, false, false);
-                const inputSecondary = {
-                    key: `uid_2`,
-                    label: {
-                        display: "Data Label B"
-                    },
-                    values: valuesDefault
-                };
                 graphDefault.loadContent(new PairedResult(inputPrimary));
                 graphDefault.loadContent(new PairedResult(inputSecondary));
                 const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
@@ -924,13 +919,6 @@ describe("PairedResult", () => {
             });
             it("attaches mouse leave event handlers correctly", () => {
                 const inputPrimary = getInput(valuesDefault, false, false);
-                const inputSecondary = {
-                    key: `uid_2`,
-                    label: {
-                        display: "Data Label B"
-                    },
-                    values: valuesDefault
-                };
                 graphDefault.loadContent(new PairedResult(inputPrimary));
                 graphDefault.loadContent(new PairedResult(inputSecondary));
                 const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
@@ -977,7 +965,15 @@ describe("PairedResult", () => {
             key: `uid_2`,
             regions: simpleRegion,
             label: {
-                display: "Data Label B"
+                high: {
+                    display: "Data Label 2 High"
+                },
+                mid: {
+                    display: "Data Label 2 Median"
+                },
+                low: {
+                    display: "Data Label 2 Low"
+                }
             },
             values: valuesDefault
         };
@@ -1237,7 +1233,15 @@ describe("PairedResult", () => {
                 const inputSecondary = {
                     key: `uid_2`,
                     label: {
-                        display: "Data Label B"
+                        high: {
+                            display: "Data Label 2 High"
+                        },
+                        mid: {
+                            display: "Data Label 2 Median"
+                        },
+                        low: {
+                            display: "Data Label 2 Low"
+                        }
                     },
                     regions: multiRegion,
                     values: valuesDefault
@@ -1460,7 +1464,7 @@ describe("PairedResult", () => {
             let inputPrimary = null;
             let pairedResultPrimaryContent = null;
             beforeEach(() => {
-                spyOn(window, "requestAnimationFrame");
+                spyOn(window, "requestAnimationFrame").and.callThrough();
                 inputPrimary = getInput(valuesDefault);
                 inputPrimary.regions = multiRegion;
                 pairedResultPrimaryContent = new PairedResult(inputPrimary);
@@ -1470,26 +1474,447 @@ describe("PairedResult", () => {
                 graphDefault.unloadContent(pairedResultPrimaryContent);
             });
             describe("When single-paired result", () => {
-                it("Hides region on toggle", () => {
+                it("Hides region on toggle", (done) => {
                     const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
                     triggerEvent(legendItem, "click");
-                    const regionElement = document.querySelector(`rect[aria-describedby="region_${inputPrimary.key}_high"]`);
-                    expect(regionElement.getAttribute("aria-hidden")).toBe("true");
+                    delay(() => {
+                        const regionElement = document.querySelector(`rect[aria-describedby="region_${inputPrimary.key}_high"]`);
+                        expect(regionElement.getAttribute("aria-hidden")).toBe("true");
+                        done();
+                    });
                 });
-                it("Hides regions on toggle", () => {
+                it("Hides regions on toggle", (done) => {
                     const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
                     triggerEvent(legendItem, "click");
-                    const regionElements = document.querySelectorAll(`rect[aria-describedby="region_${inputPrimary.key}_high"]`);
-                    expect(regionElements[ 0 ].getAttribute("aria-hidden")).toBe("true");
-                    expect(regionElements[ 1 ].getAttribute("aria-hidden")).toBe("true");
+                    delay(() => {
+                        const regionElements = document.querySelectorAll(`rect[aria-describedby="region_${inputPrimary.key}_high"]`);
+                        expect(regionElements[ 0 ].getAttribute("aria-hidden")).toBe("true");
+                        expect(regionElements[ 1 ].getAttribute("aria-hidden")).toBe("true");
+                        done();
+                    });
                 });
-                it("Shows region on re-toggle", () => {
+                it("Shows region on re-toggle", (done) => {
                     const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
                     triggerEvent(legendItem, "click");
+                    delay(() => {
+                        triggerEvent(legendItem, "click");
+                        delay(() => {
+                            const regionElements = document.querySelectorAll(`rect[aria-describedby="region_${inputPrimary.key}_high"]`);
+                            expect(regionElements[ 0 ].getAttribute("aria-hidden")).toBe("false");
+                            expect(regionElements[ 1 ].getAttribute("aria-hidden")).toBe("false");
+                            done();
+                        }, 200);
+                    });
+                });
+            });
+        });
+    });
+    describe("Criticality", () => {
+        let inputPrimary = null;
+        let pairedResultPrimaryContent = null;
+        let pairedResultSecondaryContent = null;
+        describe("On load", () => {
+            afterEach(() => pairedResultPrimaryContent ? pairedResultPrimaryContent.unload(graphDefault) : "");
+            it("Does not add indicator if data point is not critical", () => {
+                const valuesMutated = utils.deepClone(valuesDefault);
+                pairedResultPrimaryContent = new PairedResult(getInput(valuesMutated));
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                const criticalOuterElement = fetchElementByClass(pairedResultGraphContainer, styles.criticalityOuterPoint);
+                const criticalInnerElement = fetchElementByClass(pairedResultGraphContainer, styles.criticalityInnerPoint);
+                expect(criticalOuterElement).toBeNull();
+                expect(criticalInnerElement).toBeNull();
+            });
+            it("Does not add indicator if data point is critical false", () => {
+                const valuesMutated = utils.deepClone(valuesDefault);
+                valuesMutated[ 0 ].high.isCritical = false;
+                valuesMutated[ 0 ].mid.isCritical = false;
+                valuesMutated[ 0 ].low.isCritical = false;
+                pairedResultPrimaryContent = new PairedResult(getInput(valuesMutated));
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                const criticalOuterElement = fetchElementByClass(pairedResultGraphContainer, styles.criticalityOuterPoint);
+                const criticalInnerElement = fetchElementByClass(pairedResultGraphContainer, styles.criticalityInnerPoint);
+                expect(criticalOuterElement).toBeNull();
+                expect(criticalInnerElement).toBeNull();
+            });
+            it("Adds outer indicator - Red", () => {
+                const valuesMutated = utils.deepClone(valuesDefault);
+                valuesMutated[ 0 ].high.isCritical = true;
+                valuesMutated[ 0 ].mid.isCritical = true;
+                valuesMutated[ 0 ].low.isCritical = true;
+                inputPrimary = getInput(valuesMutated);
+                pairedResultPrimaryContent = new PairedResult(inputPrimary);
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                const criticalOuterElement = fetchElementByClass(pairedResultGraphContainer, styles.criticalityOuterPoint);
+                expect(criticalOuterElement).not.toBeNull();
+                expect(criticalOuterElement.nodeName).toBe("path");
+                expect(criticalOuterElement.classList).toContain(styles.pairedPoint);
+                expect(criticalOuterElement.classList).toContain(styles.criticalityOuterPoint);
+                expect(criticalOuterElement.getAttribute("aria-hidden")).toBe("false");
+                expect(criticalOuterElement.getAttribute("aria-describedby")).toBe(`${inputPrimary.key}_high`);
+            });
+            it("Adds inner indicator - White", () => {
+                const valuesMutated = utils.deepClone(valuesDefault);
+                valuesMutated[ 0 ].high.isCritical = true;
+                valuesMutated[ 0 ].mid.isCritical = true;
+                valuesMutated[ 0 ].low.isCritical = true;
+                inputPrimary = getInput(valuesMutated);
+                pairedResultPrimaryContent = new PairedResult(inputPrimary);
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                const criticalInnerElement = fetchElementByClass(pairedResultGraphContainer, styles.criticalityInnerPoint);
+                expect(criticalInnerElement).not.toBeNull();
+                expect(criticalInnerElement.nodeName).toBe("path");
+                expect(criticalInnerElement.classList).toContain(styles.pairedPoint);
+                expect(criticalInnerElement.classList).toContain(styles.criticalityInnerPoint);
+                expect(criticalInnerElement.getAttribute("aria-hidden")).toBe("false");
+                expect(criticalInnerElement.getAttribute("aria-describedby")).toBe(`${inputPrimary.key}_high`);
+            });
+            it("Adds inner and outer indicator for all the types", () => {
+                const valuesMutated = utils.deepClone(valuesDefault);
+                valuesMutated[ 0 ].high.isCritical = true;
+                valuesMutated[ 0 ].mid.isCritical = true;
+                valuesMutated[ 0 ].low.isCritical = true;
+                inputPrimary = getInput(valuesMutated);
+                pairedResultPrimaryContent = new PairedResult(inputPrimary);
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                const criticalOuterElements = pairedResultGraphContainer.querySelectorAll(`.${styles.criticalityOuterPoint}`);
+                const criticalInnerElements = pairedResultGraphContainer.querySelectorAll(`.${styles.criticalityInnerPoint}`);
+                expect(criticalOuterElements[ 0 ].getAttribute("aria-hidden")).toBe("false");
+                expect(criticalOuterElements[ 0 ].getAttribute("aria-describedby")).toBe(`${inputPrimary.key}_high`);
+                expect(criticalOuterElements[ 1 ].getAttribute("aria-hidden")).toBe("false");
+                expect(criticalOuterElements[ 1 ].getAttribute("aria-describedby")).toBe(`${inputPrimary.key}_mid`);
+                expect(criticalOuterElements[ 2 ].getAttribute("aria-hidden")).toBe("false");
+                expect(criticalOuterElements[ 2 ].getAttribute("aria-describedby")).toBe(`${inputPrimary.key}_low`);
+                expect(criticalInnerElements[ 0 ].getAttribute("aria-hidden")).toBe("false");
+                expect(criticalInnerElements[ 0 ].getAttribute("aria-describedby")).toBe(`${inputPrimary.key}_high`);
+                expect(criticalInnerElements[ 1 ].getAttribute("aria-hidden")).toBe("false");
+                expect(criticalInnerElements[ 1 ].getAttribute("aria-describedby")).toBe(`${inputPrimary.key}_mid`);
+                expect(criticalInnerElements[ 2 ].getAttribute("aria-hidden")).toBe("false");
+                expect(criticalInnerElements[ 2 ].getAttribute("aria-describedby")).toBe(`${inputPrimary.key}_low`);
+            });
+            it("Adds indicators inner and outer with same shape", () => {
+                const valuesMutated = utils.deepClone(valuesDefault);
+                valuesMutated[ 0 ].high.isCritical = true;
+                valuesMutated[ 0 ].mid.isCritical = true;
+                valuesMutated[ 0 ].low.isCritical = true;
+                inputPrimary = getInput(valuesMutated, false, false);
+                pairedResultPrimaryContent = new PairedResult(inputPrimary);
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                const criticalOuterElement = fetchElementByClass(pairedResultGraphContainer, styles.criticalityOuterPoint);
+                const criticalInnerElement = fetchElementByClass(pairedResultGraphContainer, styles.criticalityInnerPoint);
+                const currentShape = new Shape(isShapeBuiltAsAPath({ shape: SHAPES.TEAR_DROP }));
+                expect(criticalOuterElement.getAttribute("d")).toBe(currentShape.getPathElement());
+                expect(criticalInnerElement.getAttribute("d")).toBe(currentShape.getPathElement());
+            });
+            it("Adds indicators inner and outer with same shape for all pair types", () => {
+                const valuesMutated = utils.deepClone(valuesDefault);
+                valuesMutated[ 0 ].high.isCritical = true;
+                valuesMutated[ 0 ].mid.isCritical = true;
+                valuesMutated[ 0 ].low.isCritical = true;
+                inputPrimary = getInput(valuesMutated, false, false);
+                pairedResultPrimaryContent = new PairedResult(inputPrimary);
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                const criticalOuterElements = pairedResultGraphContainer.querySelectorAll(`.${styles.criticalityOuterPoint}`);
+                const criticalInnerElements = pairedResultGraphContainer.querySelectorAll(`.${styles.criticalityInnerPoint}`);
+                const shapeHigh = new Shape(isShapeBuiltAsAPath({ shape: SHAPES.TEAR_DROP }));
+                const shapeMid = new Shape(isShapeBuiltAsAPath({ shape: SHAPES.RHOMBUS }));
+                const shapeLow = new Shape(isShapeBuiltAsAPath({ shape: SHAPES.TEAR_DROP }));
+                expect(criticalOuterElements[ 0 ].getAttribute("d")).toBe(shapeHigh.getPathElement());
+                expect(criticalOuterElements[ 1 ].getAttribute("d")).toBe(shapeMid.getPathElement());
+                expect(criticalOuterElements[ 2 ].getAttribute("d")).toBe(shapeLow.getPathElement());
+                expect(criticalInnerElements[ 0 ].getAttribute("d")).toBe(shapeHigh.getPathElement());
+                expect(criticalInnerElements[ 1 ].getAttribute("d")).toBe(shapeMid.getPathElement());
+                expect(criticalInnerElements[ 2 ].getAttribute("d")).toBe(shapeLow.getPathElement());
+            });
+            it("Translates properly", () => {
+                const valuesMutated = utils.deepClone(valuesDefault);
+                valuesMutated[ 0 ].high.isCritical = true;
+                valuesMutated[ 0 ].mid.isCritical = true;
+                valuesMutated[ 0 ].low.isCritical = true;
+                inputPrimary = getInput(valuesMutated, false, false);
+                pairedResultPrimaryContent = new PairedResult(inputPrimary);
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                const criticalOuterElement = fetchElementByClass(pairedResultGraphContainer, styles.criticalityOuterPoint);
+                const criticalInnerElement = fetchElementByClass(pairedResultGraphContainer, styles.criticalityInnerPoint);
+                expect(criticalOuterElement.getAttribute("transform")).not.toBeNull();
+                expect(criticalInnerElement.getAttribute("transform")).not.toBeNull();
+                expect(getTransformScale(criticalOuterElement)[ 0 ]).toBe(constants.DEFAULT_CRITICAL_OUTER_PLOT_SCALE[ 0 ]);
+                expect(getTransformScale(criticalInnerElement)[ 0 ]).toBe(constants.DEFAULT_CRITICAL_INNER_PLOT_SCALE[ 0 ]);
+            });
+            it("Hidden if multiple data-set", () => {
+                const valuesMutated = utils.deepClone(valuesDefault);
+                valuesMutated[ 0 ].high.isCritical = true;
+                valuesMutated[ 0 ].mid.isCritical = true;
+                valuesMutated[ 0 ].low.isCritical = true;
+                inputPrimary = getInput(valuesMutated, false, false);
+                pairedResultPrimaryContent = new PairedResult(inputPrimary);
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                pairedResultSecondaryContent = new PairedResult(inputSecondary);
+                graphDefault.loadContent(pairedResultSecondaryContent);
+                const criticalOuterElement = fetchElementByClass(pairedResultGraphContainer, styles.criticalityOuterPoint);
+                const criticalInnerElement = fetchElementByClass(pairedResultGraphContainer, styles.criticalityInnerPoint);
+                expect(criticalOuterElement).not.toBeNull();
+                expect(criticalOuterElement.nodeName).toBe("path");
+                expect(criticalOuterElement.classList).toContain(styles.pairedPoint);
+                expect(criticalOuterElement.classList).toContain(styles.criticalityOuterPoint);
+                expect(criticalOuterElement.getAttribute("aria-hidden")).toBe("true");
+                expect(criticalInnerElement).not.toBeNull();
+                expect(criticalInnerElement.nodeName).toBe("path");
+                expect(criticalInnerElement.classList).toContain(styles.pairedPoint);
+                expect(criticalInnerElement.classList).toContain(styles.criticalityInnerPoint);
+                expect(criticalInnerElement.getAttribute("aria-hidden")).toBe("true");
+            });
+            it("selects data point when clicked on outer indicator", () => {
+                const criticalOuterPointSpy = sinon.spy();
+                const valuesMutated = utils.deepClone(valuesDefault);
+                valuesMutated[ 0 ].high.isCritical = true;
+                valuesMutated[ 0 ].mid.isCritical = true;
+                valuesMutated[ 0 ].low.isCritical = true;
+                inputPrimary = getInput(valuesMutated);
+                inputPrimary.onClick = criticalOuterPointSpy;
+                pairedResultPrimaryContent = new PairedResult(inputPrimary);
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                const point = fetchElementByClass(pairedResultGraphContainer, styles.criticalityOuterPoint);
+                triggerEvent(point, "click");
+                expect(criticalOuterPointSpy.calledOnce).toBeTruthy();
+            });
+            it("selects data point when clicked on inner indicator", () => {
+                const criticalInnerPointSpy = sinon.spy();
+                const valuesMutated = utils.deepClone(valuesDefault);
+                valuesMutated[ 0 ].high.isCritical = true;
+                valuesMutated[ 0 ].mid.isCritical = true;
+                valuesMutated[ 0 ].low.isCritical = true;
+                inputPrimary = getInput(valuesMutated);
+                inputPrimary.onClick = criticalInnerPointSpy;
+                pairedResultPrimaryContent = new PairedResult(inputPrimary);
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                const point = fetchElementByClass(pairedResultGraphContainer, styles.criticalityInnerPoint);
+                triggerEvent(point, "click");
+                expect(criticalInnerPointSpy.calledOnce).toBeTruthy();
+            });
+        });
+        describe("On unload", () => {
+            beforeEach(() => {
+                const valuesMutated = utils.deepClone(valuesDefault);
+                valuesMutated[ 0 ].high.isCritical = true;
+                valuesMutated[ 0 ].mid.isCritical = true;
+                valuesMutated[ 0 ].low.isCritical = true;
+                inputPrimary = getInput(valuesMutated, false, false);
+                pairedResultPrimaryContent = new PairedResult(inputPrimary);
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                graphDefault.unloadContent(pairedResultPrimaryContent);
+            });
+            it("Removes outer indicator", () => {
+                const criticalOuterElement = fetchElementByClass(pairedResultGraphContainer, styles.criticalityOuterPoint);
+                expect(criticalOuterElement).toBeNull();
+            });
+            it("Removes inner indicator", () => {
+                const criticalInnerElement = fetchElementByClass(pairedResultGraphContainer, styles.criticalityInnerPoint);
+                expect(criticalInnerElement).toBeNull();
+            });
+        });
+        describe("On legend item hover", () => {
+            describe("On single data-set", () => {
+                beforeEach(() => {
+                    const valuesMutated = utils.deepClone(valuesDefault);
+                    valuesMutated[ 0 ].high.isCritical = true;
+                    valuesMutated[ 0 ].mid.isCritical = true;
+                    valuesMutated[ 0 ].low.isCritical = true;
+                    inputPrimary = getInput(valuesMutated, false, false);
+                    pairedResultPrimaryContent = new PairedResult(inputPrimary);
+                    graphDefault.loadContent(pairedResultPrimaryContent);
+                });
+                it("Highlights the indicators on mouse-enter", () => {
+                    const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
+                    triggerEvent(legendItem, "mouseenter");
+                    const criticalOuterElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                    const criticalInnerElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                    expect(criticalOuterElement.getAttribute("aria-hidden")).toBe("false");
+                    expect(criticalOuterElement.classList).toContain(styles.criticalityHighlight);
+                    expect(criticalInnerElement.getAttribute("aria-hidden")).toBe("false");
+                    expect(criticalInnerElement.classList).toContain(styles.criticalityHighlight);
+                });
+                it("Removes highlights for indicators on mouse-leave", () => {
+                    const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
+                    triggerEvent(legendItem, "mouseenter");
+                    triggerEvent(legendItem, "mouseleave");
+                    const criticalOuterElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                    const criticalInnerElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                    expect(criticalOuterElement.getAttribute("aria-hidden")).toBe("false");
+                    expect(criticalOuterElement.classList).not.toContain(styles.criticalityHighlight);
+                    expect(criticalInnerElement.getAttribute("aria-hidden")).toBe("false");
+                    expect(criticalInnerElement.classList).not.toContain(styles.criticalityHighlight);
+                });
+                it("Highlights the indicators on mouse-enter", () => {
+                    const legendItem = pairedResultGraphContainer.querySelectorAll(`.${styles.legendItem}`)[ 1 ];
+                    triggerEvent(legendItem, "mouseenter");
+                    const criticalOuterElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_mid"]`);
+                    const criticalInnerElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_mid"]`);
+                    expect(criticalOuterElement.getAttribute("aria-hidden")).toBe("false");
+                    expect(criticalOuterElement.classList).toContain(styles.criticalityHighlight);
+                    expect(criticalInnerElement.getAttribute("aria-hidden")).toBe("false");
+                    expect(criticalInnerElement.classList).toContain(styles.criticalityHighlight);
+                });
+                it("Removes highlights for indicators on mouse-leave", () => {
+                    const legendItem = pairedResultGraphContainer.querySelectorAll(`.${styles.legendItem}`)[ 1 ];
+                    triggerEvent(legendItem, "mouseenter");
+                    triggerEvent(legendItem, "mouseleave");
+                    const criticalOuterElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_mid"]`);
+                    const criticalInnerElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_mid"]`);
+                    expect(criticalOuterElement.getAttribute("aria-hidden")).toBe("false");
+                    expect(criticalOuterElement.classList).not.toContain(styles.criticalityHighlight);
+                    expect(criticalInnerElement.getAttribute("aria-hidden")).toBe("false");
+                    expect(criticalInnerElement.classList).not.toContain(styles.criticalityHighlight);
+                });
+                it("Highlights the indicators on mouse-enter", () => {
+                    const legendItem = pairedResultGraphContainer.querySelectorAll(`.${styles.legendItem}`)[ 2 ];
+                    triggerEvent(legendItem, "mouseenter");
+                    const criticalOuterElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_low"]`);
+                    const criticalInnerElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_low"]`);
+                    expect(criticalOuterElement.getAttribute("aria-hidden")).toBe("false");
+                    expect(criticalOuterElement.classList).toContain(styles.criticalityHighlight);
+                    expect(criticalInnerElement.getAttribute("aria-hidden")).toBe("false");
+                    expect(criticalInnerElement.classList).toContain(styles.criticalityHighlight);
+                });
+                it("Removes highlights for indicators on mouse-leave", () => {
+                    const legendItem = pairedResultGraphContainer.querySelectorAll(`.${styles.legendItem}`)[ 2 ];
+                    triggerEvent(legendItem, "mouseenter");
+                    triggerEvent(legendItem, "mouseleave");
+                    const criticalOuterElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_low"]`);
+                    const criticalInnerElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_low"]`);
+                    expect(criticalOuterElement.getAttribute("aria-hidden")).toBe("false");
+                    expect(criticalOuterElement.classList).not.toContain(styles.criticalityHighlight);
+                    expect(criticalInnerElement.getAttribute("aria-hidden")).toBe("false");
+                    expect(criticalInnerElement.classList).not.toContain(styles.criticalityHighlight);
+                });
+            });
+            describe("On multiple data-set", () => {
+                beforeEach(() => {
+                    const valuesMutated = utils.deepClone(valuesDefault);
+                    const valuesMutatedAlt = utils.deepClone(valuesDefault);
+                    valuesMutated[ 0 ].high.isCritical = true;
+                    valuesMutated[ 0 ].mid.isCritical = true;
+                    valuesMutated[ 0 ].low.isCritical = true;
+                    valuesMutatedAlt[ 1 ].high.isCritical = true;
+                    inputPrimary = getInput(valuesMutated);
+                    inputSecondary.values = utils.deepClone(valuesMutatedAlt);
+                    pairedResultPrimaryContent = new PairedResult(inputPrimary);
+                    pairedResultSecondaryContent = new PairedResult(inputSecondary);
+                    graphDefault.loadContent(pairedResultPrimaryContent);
+                    graphDefault.loadContent(pairedResultSecondaryContent);
+                });
+                afterEach(() => {
+                    graphDefault.unloadContent(pairedResultSecondaryContent);
+                });
+                it("Highlights only the current indicator", () => {
+                    const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
+                    triggerEvent(legendItem, "mouseenter");
+                    const criticalOuterElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                    const criticalInnerElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                    expect(criticalOuterElement.getAttribute("aria-hidden")).toBe("true");
+                    expect(criticalOuterElement.classList).toContain(styles.criticalityHighlight);
+                    expect(criticalInnerElement.getAttribute("aria-hidden")).toBe("true");
+                    expect(criticalInnerElement.classList).toContain(styles.criticalityHighlight);
+                });
+                it("Blurs other indicators", () => {
+                    const legendItem = pairedResultGraphContainer.querySelector(`.${styles.legendItem}[aria-describedby="${inputSecondary.key}_high"]`);
+                    triggerEvent(legendItem, "mouseenter");
+                    const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                    const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                    const criticalOuterElementAlt = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputSecondary.key}_high"]`);
+                    const criticalInnerElementAlt = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputSecondary.key}_high"]`);
+                    expect(criticalOuterElement.getAttribute("aria-hidden")).toBe("true");
+                    expect(criticalOuterElement.classList).not.toContain(styles.criticalityHighlight);
+                    expect(criticalInnerElement.getAttribute("aria-hidden")).toBe("true");
+                    expect(criticalInnerElement.classList).not.toContain(styles.criticalityHighlight);
+                    expect(criticalOuterElementAlt.getAttribute("aria-hidden")).toBe("true");
+                    expect(criticalOuterElementAlt.classList).toContain(styles.criticalityHighlight);
+                    expect(criticalInnerElementAlt.getAttribute("aria-hidden")).toBe("true");
+                    expect(criticalInnerElementAlt.classList).toContain(styles.criticalityHighlight);
+                });
+                it("Removes highlights on mouse-leave", () => {
+                    const legendItem = pairedResultGraphContainer.querySelector(`.${styles.legendItem}[aria-describedby="${inputPrimary.key}_high"]`);
+                    triggerEvent(legendItem, "mouseenter");
+                    triggerEvent(legendItem, "mouseleave");
+                    const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                    const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                    expect(criticalOuterElement.getAttribute("aria-hidden")).toBe("true");
+                    expect(criticalOuterElement.classList).not.toContain(styles.criticalityHighlight);
+                    expect(criticalInnerElement.getAttribute("aria-hidden")).toBe("true");
+                    expect(criticalInnerElement.classList).not.toContain(styles.criticalityHighlight);
+                });
+                it("Removes blur for other data points on mouse-leave", () => {
+                    const legendItem = pairedResultGraphContainer.querySelector(`.${styles.legendItem}[aria-describedby="${inputSecondary.key}_high"]`);
+                    triggerEvent(legendItem, "mouseenter");
+                    triggerEvent(legendItem, "mouseleave");
+                    const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                    const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                    const criticalOuterElementAlt = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputSecondary.key}_high"]`);
+                    const criticalInnerElementAlt = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputSecondary.key}_high"]`);
+                    expect(criticalOuterElement.getAttribute("aria-hidden")).toBe("true");
+                    expect(criticalOuterElement.classList).not.toContain(styles.criticalityHighlight);
+                    expect(criticalInnerElement.getAttribute("aria-hidden")).toBe("true");
+                    expect(criticalInnerElement.classList).not.toContain(styles.criticalityHighlight);
+                    expect(criticalOuterElementAlt.getAttribute("aria-hidden")).toBe("true");
+                    expect(criticalOuterElementAlt.classList).not.toContain(styles.criticalityHighlight);
+                    expect(criticalInnerElementAlt.getAttribute("aria-hidden")).toBe("true");
+                    expect(criticalInnerElementAlt.classList).not.toContain(styles.criticalityHighlight);
+                });
+            });
+        });
+        describe("On legend item click", () => {
+            beforeEach(() => {
+                spyOn(window, "requestAnimationFrame").and.callThrough();
+                const valuesMutated = utils.deepClone(valuesDefault);
+                valuesMutated[ 0 ].high.isCritical = true;
+                valuesMutated[ 0 ].mid.isCritical = true;
+                valuesMutated[ 0 ].low.isCritical = true;
+                inputPrimary = getInput(valuesMutated);
+                pairedResultPrimaryContent = new PairedResult(inputPrimary);
+                graphDefault.loadContent(pairedResultPrimaryContent);
+            });
+            describe("On single data-set", () => {
+                it("Hides indicators on toggle", (done) => {
+                    const legendItem = pairedResultGraphContainer.querySelector(`.${styles.legendItem}[aria-describedby="${inputPrimary.key}_high"]`);
                     triggerEvent(legendItem, "click");
-                    const regionElements = document.querySelectorAll(`rect[aria-describedby="region_${inputPrimary.key}_high"]`);
-                    expect(regionElements[ 0 ].getAttribute("aria-hidden")).toBe("false");
-                    expect(regionElements[ 1 ].getAttribute("aria-hidden")).toBe("false");
+                    delay(() => {
+                        const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                        const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                        expect(criticalOuterElement.getAttribute("aria-hidden")).toBe("true");
+                        expect(criticalInnerElement.getAttribute("aria-hidden")).toBe("true");
+                        done();
+                    });
+                });
+                it("Shows indicators on re-toggle", (done) => {
+                    const legendItem = pairedResultGraphContainer.querySelector(`.${styles.legendItem}[aria-describedby="${inputPrimary.key}_high"]`);
+                    triggerEvent(legendItem, "click");
+                    delay(() => {
+                        triggerEvent(legendItem, "click");
+                        delay(() => {
+                            const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                            const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                            expect(criticalOuterElement.getAttribute("aria-hidden")).toBe("false");
+                            expect(criticalInnerElement.getAttribute("aria-hidden")).toBe("false");
+                            done();
+                        }, 200);
+                    });
+                });
+                it("Shows indicators on re-toggle low", (done) => {
+                    const legendItem = pairedResultGraphContainer.querySelector(`.${styles.legendItem}[aria-describedby="${inputPrimary.key}_low"]`);
+                    triggerEvent(legendItem, "click");
+                    delay(() => {
+                        triggerEvent(legendItem, "click");
+                        delay(() => {
+                            let criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_low"]`);
+                            let criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_low"]`);
+                            expect(criticalOuterElement.getAttribute("aria-hidden")).toBe("false");
+                            expect(criticalInnerElement.getAttribute("aria-hidden")).toBe("false");
+                            criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                            criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                            expect(criticalOuterElement.getAttribute("aria-hidden")).toBe("false");
+                            expect(criticalInnerElement.getAttribute("aria-hidden")).toBe("false");
+                            done();
+                        }, 200);
+                    });
                 });
             });
         });

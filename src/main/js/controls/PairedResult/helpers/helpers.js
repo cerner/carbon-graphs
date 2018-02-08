@@ -3,6 +3,7 @@ import d3 from "d3";
 import { getType } from "../../../core/BaseConfig";
 import {
     getColorForTarget,
+    getTransformScale,
     isShapeBuiltAsAPath
 } from "../../../core/Graph/helpers";
 import Shape from "../../../core/Shape";
@@ -11,6 +12,12 @@ import constants, {
     AXIS_TYPE,
     SHAPES
 } from "../../../helpers/constants";
+import {
+    criticalityLegendHoverHandler,
+    hideAllCriticality,
+    isSingleTargetDisplayed,
+    showHideCriticality
+} from "../../../helpers/criticality";
 import errors from "../../../helpers/errors";
 import {
     legendClickHandler,
@@ -19,7 +26,8 @@ import {
 } from "../../../helpers/legend";
 import {
     createRegion,
-    processRegions,
+    hideAllRegions,
+    regionLegendHoverHandler,
     showHideRegion
 } from "../../../helpers/region";
 import styles from "../../../helpers/styles";
@@ -41,6 +49,13 @@ const PADDING = constants.PADDING;
  * @returns {Object} value of the type
  */
 const getValue = (val, type) => val ? val[ type ] : "";
+/**
+ * Iterates each type of a pair. High, low and mid.
+ * @private
+ * @param {function} fn - A function
+ * @returns {undefined} - returns nothing
+ */
+const iterateOnPairType = (fn) => constants.PAIR_ITEM_TYPES.forEach(fn);
 /**
  * Creates a new d3 Paired Result using given x1, x2 and y1,y2 coordinates.
  * Interpolation is default linear
@@ -70,20 +85,20 @@ const createLine = (scale, d) => {
  * @private
  * @param {Object} scale - d3 scale for Graph
  * @param {string} type - high, mid or low
- * @param {Object} value - data point object
+ * @param {Array<number>|number} [scaleFactor] - amount of transform needs to be done for scaling an svg
  * @returns {string} - translate string for d3 transform
  */
-const transformPoint = (scale, type, value) => {
+const transformPoint = (scale, type, scaleFactor = constants.DEFAULT_PLOT_SCALE) => (value) => {
     const getX = (val) => scale.x(getValue(val, type).x);
     const getY = (val) => scale[ val.yAxis ](getValue(val, type).y);
-    return `translate(${getX(value)},${getY(value)})`;
+    return `translate(${getX(value)},${getY(value)}) scale(${scaleFactor})`;
 };
 /**
  * Transforms lines for a data point set in the Paired Result graph on resize
  * @private
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} config - config object derived from input JSON
- * @param {Object} canvasSVG - d3 object of canvas svg
+ * @param {Array} canvasSVG - d3 object of canvas svg
  * @returns {Object} - d3 select object
  */
 const translateLines = (scale, config, canvasSVG) =>
@@ -93,13 +108,15 @@ const translateLines = (scale, config, canvasSVG) =>
  * Transforms points for a data point set (high, low and mid) in the Paired Result graph on resize
  * @private
  * @param {Object} scale - d3 scale for Graph
- * @param {Object} canvasSVG - d3 object of canvas svg
+ * @param {Array} canvasSVG - d3 object of canvas svg
  * @returns {Object} - d3 select object
  */
 const translatePoints = (scale, canvasSVG) =>
-    constants.PAIR_ITEM_TYPES.forEach((type) => {
+    iterateOnPairType((type) => {
         canvasSVG.selectAll(`.${styles.pairedBoxGroup} .${styles.pairedPoint}.${getValue(styles, type)}`)
-                 .attr("transform", transformPoint.bind({}, scale, type));
+                 .attr("transform", function(value) {
+                     return transformPoint(scale, type, getTransformScale(this))(value);
+                 });
     });
 /**
  * Draws the PairedResult graph on the canvas element.
@@ -108,7 +125,7 @@ const translatePoints = (scale, canvasSVG) =>
  * @private
  * @param {Object} scale - d3 scale taking into account the input parameters
  * @param {Object} config - config object derived from input JSON
- * @param {Object} canvasSVG - d3 object of canvas svg
+ * @param {Array} canvasSVG - d3 object of canvas svg
  * @param {Array} dataTarget - Data points
  * @returns {undefined} - returns nothing
  */
@@ -159,15 +176,16 @@ const processDataPoints = (graphConfig, dataTarget) => {
     dataTarget.internalValuesSubset = dataTarget.values.map((value) => {
         const subset = {};
         // We are going to iterate through different pair item types: HIGH, LOW and MID
-        constants.PAIR_ITEM_TYPES.forEach((type) => {
+        iterateOnPairType((type) => {
             if (utils.isDefined(getValue(value, type))) {
+                const currentValue = getValue(value, type);
                 subset[ type ] = {
-                    x: getXDataValues(getValue(value, type).x),
-                    y: utils.getNumber(getValue(value, type).y),
+                    x: getXDataValues(currentValue.x),
+                    y: utils.getNumber(currentValue.y),
+                    isCritical: currentValue.isCritical || false,
                     color: getValue(dataTarget.color, type) || constants.DEFAULT_COLOR,
                     label: getValue(dataTarget.label, type) || {},
                     shape: getValue(dataTarget.shape, type) || SHAPES.CIRCLE,
-                    isCritical: dataTarget.isCritical || false,
                     key: `${dataTarget.key}_${type}`
                 };
                 if (!utils.hasValue(graphConfig.shownTargets, subset[ type ].key)) {
@@ -230,22 +248,51 @@ const drawPoints = (scale, config, canvasSVG) => {
                 const shape = isShapeBuiltAsAPath(getValue(value, type));
                 return new Shape(shape).getPathElement();
             })
-            .attr("transform", transformPoint.bind({}, scale, type))
+            .attr("transform", transformPoint(scale, type))
             .attr("style", (value) =>
                 `fill: ${getColorForTarget(getValue(value, type))}${
                     config.shownTargets.indexOf(getValue(value, type).key) < 0 ? "; display: none;" : ";"}`)
             .attr("aria-describedby", (value) => getValue(value, type).key);
     canvasSVG.each(function(value) {
         const boxPath = d3.select(this);
-        constants.PAIR_ITEM_TYPES.forEach((type) => {
+        iterateOnPairType((type) => {
             if (utils.isDefined(getValue(value, type))) {
-                getDataPointPath(boxPath
-                    .append("g")
-                    .classed(styles.pointGroup, true)
-                    .append("path"), type);
+                const currentValue = getValue(value, type);
+                const pointGroup = boxPath.append("g")
+                                          .classed(styles.pointGroup, true);
+                if (currentValue.isCritical) {
+                    config.hasCriticality = true;
+                    drawCriticalityPoints(scale, config, pointGroup, type, value);
+                }
+                getDataPointPath(pointGroup.append("path"), type);
             }
         });
     });
+};
+/**
+ * Draws the criticality points with options opted in the input JSON by the consumer for each data set.
+ *  On click content callback function is called.
+ * @private
+ * @param {Object} scale - d3 scale for Graph
+ * @param {Object} config - Graph config object derived from input JSON
+ * @param {Array} pointGroup - d3 html element of the point group (high, mid or low)
+ * @param {string} type - High, mid or low
+ * @param {Object} value - A value
+ * @returns {undefined} - returns nothing
+ */
+const drawCriticalityPoints = (scale, config, pointGroup, type, value) => {
+    const renderPoint = (path, type, value, cls, scaleFactor) =>
+        path.append("path")
+            .classed(styles.pairedPoint, true)
+            .classed(getValue(styles, type), true)
+            .classed(cls, true)
+            .attr("d", new Shape(isShapeBuiltAsAPath(getValue(value, type))).getPathElement())
+            .attr("transform", transformPoint(scale, type, scaleFactor))
+            .attr("style", `${config.shownTargets.indexOf(getValue(value, type).key) < 0 ? "display: none;" : ""}`)
+            .attr("aria-hidden", false)
+            .attr("aria-describedby", getValue(value, type).key);
+    renderPoint(pointGroup, type, value, styles.criticalityOuterPoint, constants.DEFAULT_CRITICAL_OUTER_PLOT_SCALE);
+    renderPoint(pointGroup, type, value, styles.criticalityInnerPoint, constants.DEFAULT_CRITICAL_INNER_PLOT_SCALE);
 };
 /**
  * Called on resize, translates the data point values.
@@ -255,7 +302,7 @@ const drawPoints = (scale, config, canvasSVG) => {
  * @private
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} config - config object derived from input JSON
- * @param {Object} canvasSVG - d3 object of canvas svg
+ * @param {Array} canvasSVG - d3 object of canvas svg
  * @returns {undefined} - returns nothing
  */
 const translatePairedResultGraph = (scale, config, canvasSVG) => {
@@ -263,6 +310,63 @@ const translatePairedResultGraph = (scale, config, canvasSVG) => {
     translateSelectionItem(scale, canvasSVG);
     translateLines(scale, config, canvasSVG);
     translatePoints(scale, canvasSVG);
+};
+/**
+ * Show/hide regions based on the following criteria:
+ * * If more than 1 target is displayed -> Hide regions
+ * * If only 1 target is displayed -> show the region using unique data set key
+ * @private
+ * @param {Object} graphContext - Graph instance
+ * @param {Object} config - Graph config object derived from input JSON
+ * @param {Array} canvasSVG - d3 html element of canvas
+ * @param {string} key - Pair type - high, low or mid pair object containing the key
+ * @returns {undefined} - returns nothing
+ */
+const processRegions = (graphContext, config, canvasSVG, { key }) => {
+    if (isSingleTargetDisplayed(graphContext.content)) {
+        showHideRegion(canvasSVG, `region_${key}`, (config.shownTargets.indexOf(key) > -1));
+    }
+    else {
+        hideAllRegions(canvasSVG);
+    }
+};
+/**
+ * Processes the criteria for displaying criticality indicators within a graph
+ * * If more than 1 target is displayed -> Hide indicator(s)
+ * * If only 1 target is displayed -> show the indicator(s) using unique data set key
+ * @private
+ * @param {Object} graphContext - Graph instance
+ * @param {Object} config - Graph config object derived from input JSON
+ * @param {Array} canvasSVG - d3 html element of canvas
+ * @param {string} key - Pair type - high, low or mid pair object containing the key
+ * @returns {undefined} - returns nothing
+ */
+const processCriticalityCriteria = (graphContext, config, canvasSVG, { key }) => {
+    if (isSingleTargetDisplayed(graphContext.content)) {
+        showHideCriticality(canvasSVG, key, (config.shownTargets.indexOf(key) > -1));
+    }
+    else {
+        hideAllCriticality(canvasSVG);
+    }
+};
+/**
+ * Handler for Request animation frame, executes on resize.
+ *  * Order of execution
+ *      * Redraws the content
+ *      * Shows/hides the regions
+ *      * Shows/hides the criticality indicators
+ * @private
+ * @param {Object} graphContext - Graph instance
+ * @param {Line} control - Paired Result instance
+ * @param {Object} config - Graph config object derived from input JSON
+ * @param {Array} canvasSVG - d3 html element of canvas
+ * @param {string} item - paired result type unique key
+ * @return {function()} callback function handler for RAF
+ */
+const onAnimationHandler = (graphContext, control, config, canvasSVG, item) => () => {
+    control.redraw(graphContext);
+    processRegions(graphContext, config, canvasSVG, item);
+    processCriticalityCriteria(graphContext, config, canvasSVG, item);
 };
 /**
  * Click handler for legend item. Removes the line from graph when clicked and calls redraw
@@ -287,14 +391,7 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (element, ite
     updateShownTarget(config.shownTargets, item);
     canvasSVG.selectAll(`path[aria-describedby="${item.key}"]`)
              .attr("aria-hidden", true);
-    window.requestAnimationFrame(control.redraw.bind(control, graphContext));
-    if (graphContext.content.length === 1) {
-        showHideRegion(canvasSVG, `region_${item.key}`, (config.shownTargets.indexOf(item.key) > -1));
-    }
-    else {
-        processRegions(config.shownTargets, canvasSVG);
-    }
-
+    window.requestAnimationFrame(onAnimationHandler(graphContext, control, config, canvasSVG, item));
 };
 /**
  * Hover handler for legend item. Highlights current line and blurs the rest of the targets in Graph
@@ -305,25 +402,15 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (element, ite
  * @returns {undefined} - returns nothing
  */
 const hoverHandler = (config, canvasSVG) => (item, state) => {
-    legendHoverHandler();
-    // Blur everything except the item hovered
-    // If user hovers over High, for instance: Blur -> Low, Median and the line
-    config.shownTargets.forEach((k) => {
-        if (k !== item.key) {
-            canvasSVG.selectAll(`path[aria-describedby="${k}"]`)
-                     .classed(styles.blur, (state === constants.HOVER_EVENT.MOUSE_ENTER));
-            canvasSVG.selectAll(`.${styles.pairedLine}`)
-                     .classed(styles.blur, (state === constants.HOVER_EVENT.MOUSE_ENTER));
-            canvasSVG.selectAll(`.${styles.region}[aria-describedby="region_${k}"]`)
-                     .classed(styles.regionBlur, (state === constants.HOVER_EVENT.MOUSE_ENTER));
-        }
-    });
+    const additionalHoverHandler = (shownTargets, canvasSVG, currentKey, hoverState, k) => {
+        canvasSVG.selectAll(`.${styles.region}[aria-describedby="region_${k}"]`)
+                 .classed(styles.regionBlur, (hoverState === constants.HOVER_EVENT.MOUSE_ENTER));
+    };
+    legendHoverHandler(config.shownTargets, canvasSVG, item.key, state, [ additionalHoverHandler ]);
     // Highlight region(s) of the item hovered on, only if the graph is currently displayed
-    canvasSVG.selectAll(`.${styles.region}[aria-describedby="region_${item.key}"]`)
-             .classed(
-                 styles.regionHighlight,
-                 (state === constants.HOVER_EVENT.MOUSE_ENTER && config.shownTargets.indexOf(item.key) > -1)
-             );
+    regionLegendHoverHandler(config.shownTargets, canvasSVG, item.key, state);
+    // Highlight criticality indicator(s) of the item hovered on, only if the content is currently displayed
+    criticalityLegendHoverHandler(config.shownTargets, canvasSVG, item.key, state);
 };
 /**
  * A callback that will be sent to Graph class so that when graph is
@@ -345,7 +432,7 @@ const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
         key: `${d.key}_${type}`
     });
     if (dataTarget.label && legendSVG) {
-        constants.PAIR_ITEM_TYPES.forEach((type) => {
+        iterateOnPairType((type) => {
                 const label = getValue(dataTarget.label, type);
                 if (label && label.display) {
                     loadLegendItem(legendSVG, constructLegendLabels(dataTarget, type), config.shownTargets, eventHandlers);
@@ -369,7 +456,7 @@ const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
  * @private
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} config - config object derived from input JSON
- * @param {Object} canvasSVG - d3 object of canvas svg
+ * @param {Array} canvasSVG - d3 object of canvas svg
  * @param {Object} dataTarget - Data points object
  * @returns {undefined} - returns nothing
  */
@@ -379,7 +466,7 @@ const renderRegion = (scale, config, canvasSVG, dataTarget) => {
                                           .classed(styles.regionPairGroup, true)
                                           .attr("aria-describedby", `region_${dataTarget.key}`);
     regionPairGroup.call(() => {
-        constants.PAIR_ITEM_TYPES.forEach((type) => {
+        iterateOnPairType((type) => {
             if (dataTarget.regions[ type ]) {
                 if (!utils.isArray(dataTarget.regions[ type ]) || utils.isUndefined(dataTarget.regions[ type ])) {
                     throw new Error(errors.THROW_MSG_REGION_EMPTY);
@@ -414,6 +501,7 @@ export {
     translateLines,
     createLine,
     clickHandler,
+    iterateOnPairType,
     hoverHandler,
     transformPoint,
     draw,

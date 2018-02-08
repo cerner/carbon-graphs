@@ -5,7 +5,7 @@ import {
 } from "../../../main/js/helpers/constants";
 import utils from "../../../main/js/helpers/utils";
 
-const SHAPES = {
+export const SHAPES = {
     RHOMBUS: "RHOMBUS",
     TEAR_DROP: "TEAR_DROP"
 };
@@ -201,6 +201,21 @@ export const multiRegion = {
         }
     ]
 };
+export const inputSecondary = {
+    key: `uid_2`,
+    label: {
+        high: {
+            display: "Data Label 2 High"
+        },
+        mid: {
+            display: "Data Label 2 Median"
+        },
+        low: {
+            display: "Data Label 2 Low"
+        }
+    },
+    values: valuesDefault
+};
 /**
  * Returns the DOM element queried by Class
  * @param {HTMLElement} id - Id attribute name
@@ -224,3 +239,10 @@ export const triggerEvent = (element, eventName, done) => {
         done();
     }
 };
+/**
+ * Wraps the provided function inside a setTimeout
+ * @param {Function} fn - function to call
+ * @param {number} [time=100] - Timeout milliseconds
+ * @returns {number} Timeout identifier
+ */
+export const delay = (fn, time = 100) => setTimeout(fn, time);

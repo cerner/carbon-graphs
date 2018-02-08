@@ -22,8 +22,11 @@ import {
     RegionsExample,
     renderRegionsExamples
 } from "./examples/content/renderRegionsExamples";
+import {
+    renderShapesExamples,
+    ShapesExample
+} from "./examples/content/renderShapesExamples";
 import { renderColorsExample } from "./examples/controls/colors";
-import { renderShapesExample } from "./examples/controls/shapes";
 import {
     btn,
     clearContent,
@@ -60,14 +63,8 @@ renderPairedResultExamples(new PairedResultExample(), toggleSection, contentSect
 renderCombinationGraphExamples(new CombinationExample(), toggleSection, contentSection, setState, getState);
 renderRegionsExamples(new RegionsExample(), toggleSection, contentSection, setState, getState);
 renderCriticalityExamples(new CriticalityExample(), toggleSection, contentSection, setState, getState);
+renderShapesExamples(new ShapesExample(), toggleSection, contentSection, setState, getState);
 
-/* Colors and Shapes */
-btn.render(toggleSection, "Shapes", (event) => {
-    clearContent(contentSection, getState());
-    toggleSectionAsActive(event.target);
-    setState(null);
-    renderShapesExample(contentSection, "graph-shapes", "Shapes");
-});
 btn.render(toggleSection, "Colors", (event) => {
     clearContent(contentSection, getState());
     toggleSectionAsActive(event.target);

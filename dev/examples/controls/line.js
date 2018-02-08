@@ -145,24 +145,12 @@ export const renderMultiLine = (el, id, title) => () => {
     shell.render(el, id, title);
     const lineDefault = Carbon.api.graph(getAxes(`#${id}`, "LINE_DEFAULT"));
     lineDefault.loadContent(Carbon.api.line(getData(`#${id}`, "LINE_DEFAULT").data[ 0 ]));
-    setTimeout(() =>
-            lineDefault.loadContent(Carbon.api.line(getData(`#${id}`, "LINE_DEFAULT").data[ 1 ]))
-        , 500);
-    setTimeout(() =>
-            lineDefault.loadContent(Carbon.api.line(getData(`#${id}`, "LINE_DEFAULT").data[ 2 ]))
-        , 1000);
-    setTimeout(() =>
-            lineDefault.loadContent(Carbon.api.line(getData(`#${id}`, "LINE_DEFAULT").data[ 3 ]))
-        , 1500);
-    setTimeout(() =>
-            lineDefault.loadContent(Carbon.api.line(getData(`#${id}`, "LINE_DEFAULT").data[ 4 ]))
-        , 2000);
-    setTimeout(() =>
-            lineDefault.loadContent(Carbon.api.line(getData(`#${id}`, "LINE_DEFAULT").data[ 5 ]))
-        , 2500);
-    setTimeout(() =>
-            lineDefault.loadContent(Carbon.api.line(getData(`#${id}`, "LINE_DEFAULT").data[ 6 ]))
-        , 3000);
+    setTimeout(() => lineDefault.graphContainer ? lineDefault.loadContent(Carbon.api.line(getData(`#${id}`, "LINE_DEFAULT").data[ 1 ])) : "", 500);
+    setTimeout(() => lineDefault.graphContainer ? lineDefault.loadContent(Carbon.api.line(getData(`#${id}`, "LINE_DEFAULT").data[ 2 ])) : "", 1000);
+    setTimeout(() => lineDefault.graphContainer ? lineDefault.loadContent(Carbon.api.line(getData(`#${id}`, "LINE_DEFAULT").data[ 3 ])) : "", 1500);
+    setTimeout(() => lineDefault.graphContainer ? lineDefault.loadContent(Carbon.api.line(getData(`#${id}`, "LINE_DEFAULT").data[ 4 ])) : "", 2000);
+    setTimeout(() => lineDefault.graphContainer ? lineDefault.loadContent(Carbon.api.line(getData(`#${id}`, "LINE_DEFAULT").data[ 5 ])) : "", 2500);
+    setTimeout(() => lineDefault.graphContainer ? lineDefault.loadContent(Carbon.api.line(getData(`#${id}`, "LINE_DEFAULT").data[ 6 ])) : "", 3000);
     return lineDefault;
 };
 export const renderLineTimeSeries = (el, id, title) => () => {

@@ -110,7 +110,25 @@ svg:not(:root) {
     fill-opacity: 0.25;
     &[aria-hidden="true"] {
         opacity: 0;
-        .transform-transition(opacity, @default-transition-duration, @default-transition-timing);
+        .basic-transition(opacity, @default-transition-duration, @default-transition-timing);
+    }
+}
+
+.carbon-criticality-outer {
+    fill: @red85;
+}
+
+.carbon-criticality-inner {
+    fill: @white;
+}
+
+.carbon-criticality-outer,
+.carbon-criticality-inner {
+    &[aria-hidden="true"] {
+        .opacity-hide();
+    }
+    &.carbon-criticality-highlight {
+        .opacity-show();
     }
 }
 
@@ -118,12 +136,9 @@ svg:not(:root) {
     fill: @grey5;
     &[aria-hidden="true"],
     &.carbon-region-blur {
-        opacity: 0;
-        visibility: hidden;
+        .opacity-hide();
     }
     &.carbon-region-highlight {
-        opacity: 1;
-        visibility: visible;
+        .opacity-show();
     }
-    .transform-transition(opacity, @default-transition-duration, @default-transition-timing);
 }

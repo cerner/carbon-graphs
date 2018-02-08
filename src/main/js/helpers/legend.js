@@ -88,7 +88,7 @@ const removeLegendItem = (legendSVG, dataTarget) => legendSVG ? legendSVG.select
  * their respective shapes.
  * Only if showLegend is enabled.
  * @private
- * @param {container} container - Container
+ * @param {Object} container - d3 Container svg
  * @returns {Object} - d3 svg object
  */
 const createLegend = (container) => container.append("ul")
@@ -100,7 +100,7 @@ const createLegend = (container) => container.append("ul")
  * control.
  * @private
  * @param {HTMLElement} element - d3 element of the legend item clicked
- * @returns {undefined} - returns nothing
+ * @returns {Object} - d3 svg object
  */
 const legendClickHandler = (element) => {
     const target = d3.select(element);
@@ -110,10 +110,25 @@ const legendClickHandler = (element) => {
 /**
  * Hover handler for legend items.
  * @private
+ * @param {Array} shownTargets - Targets/data sets that are currently displayed in graph
+ * @param {Array} canvasSVG - d3 html element of canvas
+ * @param {string} key - Data points set unique key
+ * @param {string} hoverState - state of mouse hover => enter or leave
+ * @param {Array} [additionalHandlers] - Additional set of handlers that consumers can execute on
+ * top of the base hover handler
  * @returns {undefined} - returns nothing
  */
-const legendHoverHandler = () => {
-    /* NOP for now, entry point for future development */
+const legendHoverHandler = (shownTargets, canvasSVG, key, hoverState, additionalHandlers = []) => {
+    // Blur everything except the item hovered
+    shownTargets.filter((target) => (target !== key)).forEach((k) => {
+        canvasSVG.selectAll(`path[aria-describedby="${k}"]`)
+                 .classed(styles.blur, (hoverState === constants.HOVER_EVENT.MOUSE_ENTER));
+        canvasSVG.selectAll(`.${styles.pairedLine}`)
+                 .classed(styles.blur, (hoverState === constants.HOVER_EVENT.MOUSE_ENTER));
+        if (utils.notEmpty(additionalHandlers)) {
+            additionalHandlers.forEach((fn) => fn(shownTargets, canvasSVG, key, hoverState, k));
+        }
+    });
 };
 
 /**

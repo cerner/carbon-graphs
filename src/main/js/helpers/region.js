@@ -65,7 +65,7 @@ const removeRegion = (regionGroupSVG, dataTarget) =>
  * @private
  * @param {Object} config - config object
  * derived from input JSON
- * @param {Object} canvasSVG - d3 object of canvas svg
+ * @param {Array} canvasSVG - d3 object of canvas svg
  * @returns {Object} d3 svg path
  */
 const createRegionContainer = (config, canvasSVG) =>
@@ -191,15 +191,32 @@ const toggleRegion = (canvasSVG, key) =>
 const processRegions = (shownTargets, canvasSVG) =>
     isSingleTargetDisplayed(shownTargets) ? toggleRegion(canvasSVG, ...shownTargets) : hideAllRegions(canvasSVG);
 /**
+ * Handler for show/hide region(s) when hovered over a legend item
+ * @private
+ * @param {Array} shownTargets - Targets/data sets that are currently displayed in graph
+ * @param {Array} canvasSVG - d3 html element of canvas
+ * @param {string} key - Data points set unique key
+ * @param {string} hoverState - state of mouse hover => enter or leave
+ * @returns {undefined} - returns nothing
+ */
+const regionLegendHoverHandler = (shownTargets, canvasSVG, key, hoverState) => {
+    const shouldShow = (hoverState === constants.HOVER_EVENT.MOUSE_ENTER && shownTargets.indexOf(key) > -1);
+    canvasSVG.selectAll(`.${styles.region}[aria-describedby="region_${key}"]`)
+             .classed(styles.regionHighlight, shouldShow);
+};
+
+/**
  * @enum {Function}
  */
 export {
     createRegionContainer,
     createRegion,
     hideAllRegions,
+    isSingleTargetDisplayed,
     showHideRegion,
     processRegions,
     removeRegion,
+    regionLegendHoverHandler,
     shouldHideAllRegions,
     translateRegion
 };

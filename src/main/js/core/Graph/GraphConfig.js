@@ -52,6 +52,7 @@ export const processInput = (input, config, type) => {
         }
     }
     config.shownTargets = [];
+    config.hasCriticality = false;
     return config;
 };
 

@@ -20,7 +20,7 @@ const DEFAULT_HEIGHT = constants.DEFAULT_HEIGHT;
  * @param {Object} axis - Axis scaled according to input parameters
  * @param {Object} scale - d3 scale taking into account the input parameters
  * @param {Object} config - config object derived from input JSON
- * @param {Object} canvasSVG - d3 object of canvas svg
+ * @param {Array} canvasSVG - d3 object of canvas svg
  * @returns {undefined} - returns nothing
  */
 const createAxes = (axis, scale, config, canvasSVG) => {
@@ -490,7 +490,7 @@ const hasY2Axis = (axis) => utils.isDefined(axis.y2) && axis.y2.show;
  * @param {Object} axis - Axis scaled according to input parameters
  * @param {Object} scale - d3 scale taking into account the input parameters
  * @param {Object} config - config object derived from input JSON
- * @param {Object} canvasSVG - d3 object of canvas svg
+ * @param {Array} canvasSVG - d3 object of canvas svg
  * @returns {undefined} - returns nothing
  */
 const translateAxes = (axis, scale, config, canvasSVG) => {

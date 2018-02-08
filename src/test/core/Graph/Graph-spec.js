@@ -10,6 +10,7 @@ import LOCALE from "../../../main/js/locale";
 import {
     axisDefault,
     axisTimeSeries,
+    delay,
     dimension,
     fetchElementByClass,
     getAxes,
@@ -883,7 +884,7 @@ describe("Graph", () => {
             graph = new Graph(throttledInput);
             graphContainer.setAttribute("style", "width: 600px; height: 200px");
             triggerEvent(window, "resize");
-            setTimeout(() => {
+            delay(() => {
                 expect(window.requestAnimationFrame).toHaveBeenCalled();
                 done();
             }, constants.RESIZE_THROTTLE);
@@ -896,7 +897,7 @@ describe("Graph", () => {
             graph = new Graph(throttledInput);
             graphContainer.setAttribute("style", "width: 400px; height: 200px");
             triggerEvent(window, "resize");
-            setTimeout(() => {
+            delay(() => {
                 expect(window.requestAnimationFrame).toHaveBeenCalled();
                 done();
             }, throttledInput.throttle);

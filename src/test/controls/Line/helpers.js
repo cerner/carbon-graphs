@@ -5,7 +5,7 @@ import {
 } from "../../../main/js/helpers/constants";
 import utils from "../../../main/js/helpers/utils";
 
-const SHAPES = {
+export const SHAPES = {
     RHOMBUS: "RHOMBUS",
     CIRCLE: "CIRCLE"
 };
@@ -21,8 +21,8 @@ export const dataPointClickHandlerSpy = sinon.spy();
 export const getInput = (values = [], isDefaultColor = true, isDefaultShape = true, isY2Axis = false) => (
     {
         key: `uid_1`,
-        color: isDefaultColor ? "" : COLORS[ Object.keys(COLORS)[ 1 ] ],
-        shape: isDefaultShape ? "" : SHAPES.RHOMBUS,
+        color: !isDefaultColor ? COLORS[ Object.keys(COLORS)[ 1 ] ] : "",
+        shape: !isDefaultShape ? SHAPES.RHOMBUS : "",
         onClick: dataPointClickHandlerSpy,
         yAxis: isY2Axis ? "y2" : "y",
         label: {
@@ -100,6 +100,13 @@ export const valuesDefault = [
     }
 ];
 
+export const inputSecondary = {
+    key: `uid_2`,
+    label: {
+        display: "Data Label B"
+    },
+    values: valuesDefault
+};
 /**
  * Returns the DOM element queried by Class
  * @param {HTMLElement} id - Id attribute name
@@ -119,3 +126,10 @@ export const triggerEvent = (element, eventName) => {
     event.initEvent(eventName, true, true);
     element.dispatchEvent(event);
 };
+/**
+ * Wraps the provided function inside a setTimeout
+ * @param {Function} fn - function to call
+ * @param {number} [time=100] - Timeout milliseconds
+ * @returns {number} Timeout identifier
+ */
+export const delay = (fn, time = 100) => setTimeout(fn, time);

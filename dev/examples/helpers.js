@@ -101,7 +101,7 @@ export const shell = {
     render: (el, id, title, supportingTitle = "") => {
         const sect = section.render(el);
         h2.render(sect, title);
-        paragraph.render(sect, supportingTitle);
+        supportingTitle ? paragraph.render(sect, supportingTitle) : "";
         div.render(sect, id, "carbon-graph");
         return sect;
     }

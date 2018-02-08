@@ -1,5 +1,7 @@
 import {
     renderCriticalityLineSimple,
+    renderCriticalityMultiLine,
+    renderCriticalityMultiPairedResult,
     renderCriticalityPairedResultSimple
 } from "../controls/criticality";
 import {
@@ -19,8 +21,10 @@ export const renderCriticalityExamples = (instance, toggleSection, contentSectio
     btn.render(toggleSection, "Criticality", (event) => {
         clearContent(contentSection, getState());
         toggleSectionAsActive(event.target);
-        instance.load(renderCriticalityLineSimple(contentSection, "criticalityLineSimple", "Line"));
-        instance.load(renderCriticalityPairedResultSimple(contentSection, "criticalityPairedSimple", "Paired Result"));
+        instance.load(renderCriticalityLineSimple(contentSection, "criticalityLineSimple", "Simple Line"));
+        instance.load(renderCriticalityMultiLine(contentSection, "criticalityMultiLine", "Multi-line"));
+        instance.load(renderCriticalityPairedResultSimple(contentSection, "criticalityPairedSimple", "Simple Paired Result"));
+        instance.load(renderCriticalityMultiPairedResult(contentSection, "criticalityMultiPaired", "Multi Paired Result"));
         instance.render();
         setState(instance);
     });

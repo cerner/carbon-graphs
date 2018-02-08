@@ -49,5 +49,8 @@ export default {
     regionPairGroup: "carbon-region-pair-group",
     region: "carbon-region",
     regionHighlight: "carbon-region-highlight",
-    regionBlur: "carbon-region-blur"
+    regionBlur: "carbon-region-blur",
+    criticalityOuterPoint: "carbon-criticality-outer",
+    criticalityInnerPoint: "carbon-criticality-inner",
+    criticalityHighlight: "carbon-criticality-highlight"
 };

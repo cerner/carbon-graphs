@@ -1,41 +1,46 @@
 import d3 from "d3";
-import Carbon from "../../../src/main/js/carbon";
 import { Shape } from "../../../src/main/js/core";
-import {
-    isNativeShape,
-    isValidCarbonShape
-} from "../../../src/main/js/core/Shape";
+import { isNativeShape } from "../../../src/main/js/core/Shape";
+import styles from "../../../src/main/js/helpers/styles";
 import { getShapes } from "../data";
 import {
-    h2,
-    section,
+    shell,
     vector
 } from "../helpers";
 
-export const renderShapesExample = (el, id, title) => {
-    const sect = section.render(el);
-    h2.render(sect, title);
-    vector.render(sect, id, "0 0 1050 200");
-    d3.select(`#${id}`)
+const viewBoxSize = "0 0 1050 100";
+const transformPoint = (scaleFactor = 3) =>
+    (d, i) => `translate(${i * 100 + 20},${25}) scale(${isNativeShape(d) ? scaleFactor : 1})`;
+export const renderShapesSimple = (el, id, title) => {
+    shell.render(el, id, title);
+    vector.render(document.querySelector(`#${id}`), `${id}Items`, viewBoxSize);
+    d3.select(`#${id}Items`)
       .append("g")
-      .attr("style", `fill: ${Carbon.helpers.COLORS.BLACK}`)
       .selectAll("path")
       .data(getShapes())
       .enter()
       .append("path")
-      .attr("d", (d) => {
-          if (!isValidCarbonShape(d)) {
-              return;
-          }
-          return new Shape(d).getPathElement(500);
-      })
-      .attr("transform", (d, i) => {
-          if (!isValidCarbonShape(d)) {
-              return;
-          }
-          const scaleFactor = isNativeShape(d)
-              ? 3
-              : 1;
-          return `translate(${i * 100 + 20},${100}) scale(${scaleFactor})`;
-      });
+      .attr("d", (d) => new Shape(d).getPathElement(500))
+      .attr("transform", transformPoint());
+};
+export const renderCriticalityShapes = (el, id, title) => {
+    shell.render(el, id, title);
+    vector.render(document.querySelector(`#${id}`), `${id}Items`, viewBoxSize);
+    const groupSVG = d3.select(`#${id}Items`)
+                       .append("g")
+                       .selectAll("g")
+                       .data(getShapes())
+                       .enter()
+                       .append("g");
+    groupSVG.append("path")
+            .classed(styles.criticalityOuterPoint, true)
+            .attr("d", (d) => new Shape(d).getPathElement(24 * 25))
+            .attr("transform", transformPoint(3));
+    groupSVG.append("path")
+            .classed(styles.criticalityInnerPoint, true)
+            .attr("d", (d) => new Shape(d).getPathElement(15 * 25))
+            .attr("transform", transformPoint(2));
+    groupSVG.append("path")
+            .attr("d", (d) => new Shape(d).getPathElement(9 * 25))
+            .attr("transform", transformPoint(1.5));
 };

@@ -33,7 +33,7 @@ const DEFAULT_HEIGHT = constants.DEFAULT_HEIGHT;
  * Updates the height and width of the canvas on resize
  * @private
  * @param {Object} config - config object derived from input JSON
- * @param {Object} canvasSVG - d3 object of canvas svg
+ * @param {Array} canvasSVG - d3 object of canvas svg
  * @returns {Object} d3 svg path
  */
 const translateCanvas = (config, canvasSVG) =>
@@ -45,7 +45,7 @@ const translateCanvas = (config, canvasSVG) =>
  * the necessary parameters on resize so that data points are not cut off
  * @private
  * @param {Object} config - config object derived from input JSON
- * @param {Object} canvasSVG - d3 object of canvas svg
+ * @param {Array} canvasSVG - d3 object of canvas svg
  * @returns {Object} d3 svg path
  */
 const translateDefs = (config, canvasSVG) =>
@@ -108,7 +108,7 @@ const translateVGrid = (axis, config) => {
  * @param {Object} axis - Axis scaled according to input parameters
  * @param {Object} scale - d3 scale taking into account the input parameters
  * @param {Object} config - config object derived from input JSON
- * @param {Object} canvasSVG - d3 object of canvas svg
+ * @param {Array} canvasSVG - d3 object of canvas svg
  * @returns {undefined} - returns nothing
  */
 const translateGrid = (axis, scale, config, canvasSVG) => {
@@ -126,7 +126,7 @@ const translateGrid = (axis, scale, config, canvasSVG) => {
  * Updates the x, y, y2 axes label positions on resize
  * @private
  * @param {Object} config - config object derived from input JSON
- * @param {Object} canvasSVG - d3 object of canvas svg
+ * @param {Array} canvasSVG - d3 object of canvas svg
  * @returns {undefined} - returns nothing
  */
 const translateLabel = (config, canvasSVG) => {
@@ -179,7 +179,7 @@ const updateAxesDomain = (config) => {
  * Added defs element for the canvas. This currently holds the clip paths for the entire chart.
  * @private
  * @param {Object} config - config object derived from input JSON
- * @param {Object} canvasSVG - d3 object of canvas svg
+ * @param {Array} canvasSVG - d3 object of canvas svg
  * @returns {Object} d3 svg path
  */
 const createDefs = (config, canvasSVG) =>
@@ -198,7 +198,7 @@ const createDefs = (config, canvasSVG) =>
  * @param {Object} axis - Axis scaled according to input parameters
  * @param {Object} scale - d3 scale taking into account the input parameters
  * @param {Object} config - config object derived from input JSON
- * @param {Object} canvasSVG - d3 object of canvas svg
+ * @param {Array} canvasSVG - d3 object of canvas svg
  * @returns {undefined} - returns nothing
  */
 const createGrid = (axis, scale, config, canvasSVG) => {
@@ -226,7 +226,7 @@ const createGrid = (axis, scale, config, canvasSVG) => {
  * @todo Add datapoint set label to corresponding axis
  * @todo Label overflow formatting, adding ellipsis?
  * @param {Object} config - config object derived from input JSON
- * @param {Object} canvasSVG - d3 object of canvas svg
+ * @param {Array} canvasSVG - d3 object of canvas svg
  * @returns {undefined} - returns nothing
  */
 const createLabel = (config, canvasSVG) => {
@@ -364,7 +364,31 @@ const getShapeForTarget = (dataPoint) => (dataPoint.shape || SHAPES.CIRCLE);
  * @returns {string} provided shape or a circle.
  */
 const getColorForTarget = (dataPoint) => (dataPoint.color || constants.DEFAULT_COLOR);
-
+/**
+ * Returns the current d3 transform attribute object from context object
+ * @private
+ * @param {Object} context - d3 element
+ * @returns {Object} returns the current d3 transform attribute object
+ */
+const getCurrentTransform = (context) => d3.select(context).attr("transform");
+/**
+ * Rounds to 2 decimals places. Use scaling technique
+ * to bring two figures across the decimal point turning the figure into a whole number by
+ * adding 0.00001 and then rounding it to 2 decimal places.
+ * @private
+ * @param {number} v - A long decimal
+ * @return {number} decimal rounded to 2 decimal places
+ */
+const round2Decimals = (v) => Math.round((v + 0.00001) * 100) / 100;
+/**
+ * Returns the scale from current d3 transform attribute object within context object
+ * d3 transform for a scale returns decimal number like: 1.9000000953674316 for 1.9 or
+ * 1.100000023841858 for 1.1. We are going to round this to 2 decimal places.
+ * @private
+ * @param {Object} context - d3 element
+ * @returns {Array<number>} returns the scale from d3 element
+ */
+const getTransformScale = (context) => d3.transform(getCurrentTransform(context)).scale.map((v) => round2Decimals(v));
 /**
  * Attach event handlers for Line graph.
  * requestAnimationFrame will be used if consumer doesn't need
@@ -411,6 +435,8 @@ export {
     isShapeBuiltAsAPath,
     getShapeForTarget,
     getColorForTarget,
+    getCurrentTransform,
+    getTransformScale,
     attachEventHandlers,
     detachEventHandlers
 };

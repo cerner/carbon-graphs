@@ -36,7 +36,7 @@ const regions = {
         }
     ]
 };
-const multiRegion = {
+export const multiRegion = {
     high: [
         {
             axis: "y",
@@ -53,7 +53,7 @@ const multiRegion = {
         }
     ]
 };
-const multiRegionAlt = {
+export const multiRegionAlt = {
     high: [
         {
             axis: "y2",
