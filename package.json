@@ -3,6 +3,8 @@
   "version": "0.2.0",
   "description": "A graphing library built using d3 based on Cerner design standards",
   "keywords": [
+    "carbon",
+    "carbon-graphs",
     "d3",
     "d3-module",
     "graphs",
@@ -35,7 +37,7 @@
     "test:chrome": "karma start ./build/karma/karma.config.js --no-single-run --browsers Chrome"
   },
   "devDependencies": {
-    "autoprefixer": "^7.2.5",
+    "autoprefixer": "^8.0.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-istanbul": "^4.1.5",
@@ -46,7 +48,7 @@
     "babel-preset-es2015": "^6.24.1",
     "css-loader": "^0.28.9",
     "docdash": "^0.4.0",
-    "eslint": "^4.15.0",
+    "eslint": "^4.17.0",
     "eslint-plugin-ideal": "^0.1.3",
     "extract-text-webpack-plugin": "^3.0.2",
     "fusion-make": "^1.6.3",
@@ -54,7 +56,7 @@
     "html-webpack-plugin": "^2.30.1",
     "husky": "^0.14.3",
     "in-publish": "^2.0.0",
-    "jasmine-core": "^2.9.0",
+    "jasmine-core": "^2.99.1",
     "jsdoc": "^3.5.5",
     "karma": "^2.0.0",
     "karma-chrome-launcher": "^2.2.0",
@@ -65,17 +67,17 @@
     "less": "^2.7.3",
     "less-loader": "^4.0.5",
     "loader-utils": "^1.1.0",
-    "postcss-loader": "^2.0.10",
+    "postcss-loader": "^2.1.0",
     "puppeteer": "^1.0.0",
-    "sinon": "^4.1.6",
-    "style-loader": "^0.19.1",
+    "sinon": "^4.3.0",
+    "style-loader": "^0.20.1",
     "stylelint": "^8.4.0",
-    "webpack": "^3.10.0",
+    "webpack": "^3.11.0",
     "webpack-dev-server": "2.7.1",
     "webpack-merge": "^4.1.1"
   },
   "dependencies": {
-    "c3": "^0.4.18",
+    "c3": "^0.4.20",
     "d3": "^3.5.17"
   },
   "publishConfig": {
@@ -91,13 +93,11 @@
     "node": ">=6.5"
   },
   "browsers": [
-    "Android 2.3",
     "Android >= 4",
     "Chrome >= 35",
     "Firefox >= 31",
     "Explorer >= 9",
     "iOS >= 7",
-    "Opera >= 12",
     "Safari >= 7.1"
   ]
 }
