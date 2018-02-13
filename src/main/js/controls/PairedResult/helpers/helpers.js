@@ -12,12 +12,6 @@ import constants, {
     AXIS_TYPE,
     SHAPES
 } from "../../../helpers/constants";
-import {
-    criticalityLegendHoverHandler,
-    hideAllCriticality,
-    isSingleTargetDisplayed,
-    showHideCriticality
-} from "../../../helpers/criticality";
 import errors from "../../../helpers/errors";
 import {
     legendClickHandler,
@@ -27,6 +21,7 @@ import {
 import {
     createRegion,
     hideAllRegions,
+    isSingleTargetDisplayed,
     regionLegendHoverHandler,
     showHideRegion
 } from "../../../helpers/region";
@@ -331,30 +326,10 @@ const processRegions = (graphContext, config, canvasSVG, { key }) => {
     }
 };
 /**
- * Processes the criteria for displaying criticality indicators within a graph
- * * If more than 1 target is displayed -> Hide indicator(s)
- * * If only 1 target is displayed -> show the indicator(s) using unique data set key
- * @private
- * @param {Object} graphContext - Graph instance
- * @param {Object} config - Graph config object derived from input JSON
- * @param {Array} canvasSVG - d3 html element of canvas
- * @param {string} key - Pair type - high, low or mid pair object containing the key
- * @returns {undefined} - returns nothing
- */
-const processCriticalityCriteria = (graphContext, config, canvasSVG, { key }) => {
-    if (isSingleTargetDisplayed(graphContext.content)) {
-        showHideCriticality(canvasSVG, key, (config.shownTargets.indexOf(key) > -1));
-    }
-    else {
-        hideAllCriticality(canvasSVG);
-    }
-};
-/**
  * Handler for Request animation frame, executes on resize.
  *  * Order of execution
  *      * Redraws the content
  *      * Shows/hides the regions
- *      * Shows/hides the criticality indicators
  * @private
  * @param {Object} graphContext - Graph instance
  * @param {Line} control - Paired Result instance
@@ -366,7 +341,6 @@ const processCriticalityCriteria = (graphContext, config, canvasSVG, { key }) =>
 const onAnimationHandler = (graphContext, control, config, canvasSVG, item) => () => {
     control.redraw(graphContext);
     processRegions(graphContext, config, canvasSVG, item);
-    processCriticalityCriteria(graphContext, config, canvasSVG, item);
 };
 /**
  * Click handler for legend item. Removes the line from graph when clicked and calls redraw
@@ -407,10 +381,11 @@ const hoverHandler = (config, canvasSVG) => (item, state) => {
                  .classed(styles.regionBlur, (hoverState === constants.HOVER_EVENT.MOUSE_ENTER));
     };
     legendHoverHandler(config.shownTargets, canvasSVG, item.key, state, [ additionalHoverHandler ]);
+    // Highlight the line of the item hovered on
+    canvasSVG.selectAll(`path[aria-describedby="${item.key}"]`)
+             .classed(styles.highlight, (state === constants.HOVER_EVENT.MOUSE_ENTER));
     // Highlight region(s) of the item hovered on, only if the graph is currently displayed
     regionLegendHoverHandler(config.shownTargets, canvasSVG, item.key, state);
-    // Highlight criticality indicator(s) of the item hovered on, only if the content is currently displayed
-    criticalityLegendHoverHandler(config.shownTargets, canvasSVG, item.key, state);
 };
 /**
  * A callback that will be sent to Graph class so that when graph is

@@ -1,11 +1,6 @@
 "use strict";
 import GraphContent from "../../core/GraphContent";
 import constants from "../../helpers/constants";
-import {
-    hideAllCriticality,
-    shouldHideAllCriticality,
-    showHideCriticality
-} from "../../helpers/criticality";
 import { removeLegendItem } from "../../helpers/legend";
 import {
     createRegion,
@@ -126,14 +121,6 @@ class Line extends GraphContent {
     resize(graph) {
         if (shouldHideAllRegions(this.dataTarget.regions, graph.config.shownTargets)) {
             hideAllRegions(graph.svg);
-        }
-        if (graph.config.hasCriticality) {
-            if (shouldHideAllCriticality(graph.config.shownTargets)) {
-                hideAllCriticality(graph.svg);
-            }
-            else {
-                showHideCriticality(graph.svg, this.dataTarget.key, true);
-            }
         }
         translateRegion(
             graph.scale,

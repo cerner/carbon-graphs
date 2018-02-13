@@ -1246,7 +1246,7 @@ describe("Line", () => {
                 expect(criticalOuterElement.nodeName).toBe("path");
                 expect(criticalOuterElement.classList).toContain(styles.point);
                 expect(criticalOuterElement.classList).toContain(styles.criticalityOuterPoint);
-                expect(criticalOuterElement.getAttribute("aria-hidden")).toBe("false");
+                expect(criticalOuterElement.getAttribute("style")).toBe("");
                 expect(criticalOuterElement.getAttribute("aria-describedby")).toBe(inputPrimary.key);
             });
             it("Adds inner indicator - White", () => {
@@ -1260,7 +1260,7 @@ describe("Line", () => {
                 expect(criticalInnerElement.nodeName).toBe("path");
                 expect(criticalInnerElement.classList).toContain(styles.point);
                 expect(criticalInnerElement.classList).toContain(styles.criticalityInnerPoint);
-                expect(criticalInnerElement.getAttribute("aria-hidden")).toBe("false");
+                expect(criticalInnerElement.getAttribute("style")).toBe("");
                 expect(criticalInnerElement.getAttribute("aria-describedby")).toBe(inputPrimary.key);
             });
             it("Adds indicators inner and outer with same shape", () => {
@@ -1289,7 +1289,7 @@ describe("Line", () => {
                 expect(getTransformScale(criticalOuterElement)[ 0 ]).toBe(constants.DEFAULT_CRITICAL_OUTER_PLOT_SCALE[ 0 ]);
                 expect(getTransformScale(criticalInnerElement)[ 0 ]).toBe(constants.DEFAULT_CRITICAL_INNER_PLOT_SCALE[ 0 ]);
             });
-            it("Hidden if multiple data-set", () => {
+            it("Shows even on multiple data-set", () => {
                 const valuesMutated = utils.deepClone(valuesDefault);
                 valuesMutated[ 0 ].isCritical = true;
                 inputPrimary = getInput(valuesMutated, false, false);
@@ -1303,14 +1303,14 @@ describe("Line", () => {
                 expect(criticalOuterElement.nodeName).toBe("path");
                 expect(criticalOuterElement.classList).toContain(styles.point);
                 expect(criticalOuterElement.classList).toContain(styles.criticalityOuterPoint);
-                expect(criticalOuterElement.getAttribute("aria-hidden")).toBe("true");
+                expect(criticalOuterElement.getAttribute("style")).toBe("");
                 expect(criticalInnerElement).not.toBeNull();
                 expect(criticalInnerElement.nodeName).toBe("path");
                 expect(criticalInnerElement.classList).toContain(styles.point);
                 expect(criticalInnerElement.classList).toContain(styles.criticalityInnerPoint);
-                expect(criticalInnerElement.getAttribute("aria-hidden")).toBe("true");
+                expect(criticalInnerElement.getAttribute("style")).toBe("");
             });
-            it("selects data point when clicked on outer indicator", () => {
+            it("Selects data point when clicked on outer indicator", () => {
                 const criticalOuterPointSpy = sinon.spy();
                 const valuesMutated = utils.deepClone(valuesDefault);
                 valuesMutated[ 0 ].isCritical = true;
@@ -1322,7 +1322,7 @@ describe("Line", () => {
                 triggerEvent(point, "click");
                 expect(criticalOuterPointSpy.calledOnce).toBeTruthy();
             });
-            it("selects data point when clicked on inner indicator", () => {
+            it("Selects data point when clicked on inner indicator", () => {
                 const criticalInnerPointSpy = sinon.spy();
                 const valuesMutated = utils.deepClone(valuesDefault);
                 valuesMutated[ 0 ].isCritical = true;
@@ -1367,10 +1367,10 @@ describe("Line", () => {
                     triggerEvent(legendItem, "mouseenter");
                     const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}"]`);
                     const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`);
-                    expect(criticalOuterElement.getAttribute("aria-hidden")).toBe("false");
-                    expect(criticalOuterElement.classList).toContain(styles.criticalityHighlight);
-                    expect(criticalInnerElement.getAttribute("aria-hidden")).toBe("false");
-                    expect(criticalInnerElement.classList).toContain(styles.criticalityHighlight);
+                    expect(criticalOuterElement.getAttribute("style")).toBe("");
+                    expect(criticalOuterElement.classList).toContain(styles.highlight);
+                    expect(criticalInnerElement.getAttribute("style")).toBe("");
+                    expect(criticalInnerElement.classList).toContain(styles.highlight);
                 });
                 it("Removes highlights for indicators on mouse-leave", () => {
                     const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
@@ -1378,10 +1378,10 @@ describe("Line", () => {
                     triggerEvent(legendItem, "mouseleave");
                     const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}"]`);
                     const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`);
-                    expect(criticalOuterElement.getAttribute("aria-hidden")).toBe("false");
-                    expect(criticalOuterElement.classList).not.toContain(styles.criticalityHighlight);
-                    expect(criticalInnerElement.getAttribute("aria-hidden")).toBe("false");
-                    expect(criticalInnerElement.classList).not.toContain(styles.criticalityHighlight);
+                    expect(criticalOuterElement.getAttribute("style")).toBe("");
+                    expect(criticalOuterElement.classList).not.toContain(styles.highlight);
+                    expect(criticalInnerElement.getAttribute("style")).toBe("");
+                    expect(criticalInnerElement.classList).not.toContain(styles.highlight);
                 });
             });
             describe("On multiple data-set", () => {
@@ -1406,15 +1406,15 @@ describe("Line", () => {
                 afterEach(() => {
                     graphDefault.unloadContent(lineSecondary);
                 });
-                it("Highlights only the current indicator", () => {
+                it("Highlights the current indicator", () => {
                     const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
                     triggerEvent(legendItem, "mouseenter");
                     const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}"]`);
                     const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`);
-                    expect(criticalOuterElement.getAttribute("aria-hidden")).toBe("true");
-                    expect(criticalOuterElement.classList).toContain(styles.criticalityHighlight);
-                    expect(criticalInnerElement.getAttribute("aria-hidden")).toBe("true");
-                    expect(criticalInnerElement.classList).toContain(styles.criticalityHighlight);
+                    expect(criticalOuterElement.getAttribute("style")).toBe("");
+                    expect(criticalInnerElement.getAttribute("style")).toBe("");
+                    expect(criticalOuterElement.classList).toContain(styles.highlight);
+                    expect(criticalInnerElement.classList).toContain(styles.highlight);
                 });
                 it("Blurs other indicators", () => {
                     const legendItem = lineGraphContainer.querySelector(`.${styles.legendItem}[aria-describedby="${inputSecondary.key}"]`);
@@ -1423,14 +1423,10 @@ describe("Line", () => {
                     const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`);
                     const criticalOuterElementAlt = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputSecondary.key}"]`);
                     const criticalInnerElementAlt = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputSecondary.key}"]`);
-                    expect(criticalOuterElement.getAttribute("aria-hidden")).toBe("true");
-                    expect(criticalOuterElement.classList).not.toContain(styles.criticalityHighlight);
-                    expect(criticalInnerElement.getAttribute("aria-hidden")).toBe("true");
-                    expect(criticalInnerElement.classList).not.toContain(styles.criticalityHighlight);
-                    expect(criticalOuterElementAlt.getAttribute("aria-hidden")).toBe("true");
-                    expect(criticalOuterElementAlt.classList).toContain(styles.criticalityHighlight);
-                    expect(criticalInnerElementAlt.getAttribute("aria-hidden")).toBe("true");
-                    expect(criticalInnerElementAlt.classList).toContain(styles.criticalityHighlight);
+                    expect(criticalOuterElement.classList).not.toContain(styles.highlight);
+                    expect(criticalInnerElement.classList).not.toContain(styles.highlight);
+                    expect(criticalOuterElementAlt.classList).toContain(styles.highlight);
+                    expect(criticalInnerElementAlt.classList).toContain(styles.highlight);
                 });
                 it("Removes highlights on mouse-leave", () => {
                     const legendItem = lineGraphContainer.querySelector(`.${styles.legendItem}[aria-describedby="${inputPrimary.key}"]`);
@@ -1438,10 +1434,8 @@ describe("Line", () => {
                     triggerEvent(legendItem, "mouseleave");
                     const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}"]`);
                     const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`);
-                    expect(criticalOuterElement.getAttribute("aria-hidden")).toBe("true");
-                    expect(criticalOuterElement.classList).not.toContain(styles.criticalityHighlight);
-                    expect(criticalInnerElement.getAttribute("aria-hidden")).toBe("true");
-                    expect(criticalInnerElement.classList).not.toContain(styles.criticalityHighlight);
+                    expect(criticalOuterElement.classList).not.toContain(styles.highlight);
+                    expect(criticalInnerElement.classList).not.toContain(styles.highlight);
                 });
                 it("Removes blur for other data points on mouse-leave", () => {
                     const legendItem = lineGraphContainer.querySelector(`.${styles.legendItem}[aria-describedby="${inputSecondary.key}"]`);
@@ -1451,14 +1445,10 @@ describe("Line", () => {
                     const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`);
                     const criticalOuterElementAlt = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputSecondary.key}"]`);
                     const criticalInnerElementAlt = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputSecondary.key}"]`);
-                    expect(criticalOuterElement.getAttribute("aria-hidden")).toBe("true");
-                    expect(criticalOuterElement.classList).not.toContain(styles.criticalityHighlight);
-                    expect(criticalInnerElement.getAttribute("aria-hidden")).toBe("true");
-                    expect(criticalInnerElement.classList).not.toContain(styles.criticalityHighlight);
-                    expect(criticalOuterElementAlt.getAttribute("aria-hidden")).toBe("true");
-                    expect(criticalOuterElementAlt.classList).not.toContain(styles.criticalityHighlight);
-                    expect(criticalInnerElementAlt.getAttribute("aria-hidden")).toBe("true");
-                    expect(criticalInnerElementAlt.classList).not.toContain(styles.criticalityHighlight);
+                    expect(criticalOuterElement.classList).not.toContain(styles.highlight);
+                    expect(criticalInnerElement.classList).not.toContain(styles.highlight);
+                    expect(criticalOuterElementAlt.classList).not.toContain(styles.highlight);
+                    expect(criticalInnerElementAlt.classList).not.toContain(styles.highlight);
                 });
             });
         });
@@ -1484,8 +1474,8 @@ describe("Line", () => {
                     delay(() => {
                         const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}"]`);
                         const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`);
-                        expect(criticalOuterElement.getAttribute("aria-hidden")).toBe("true");
-                        expect(criticalInnerElement.getAttribute("aria-hidden")).toBe("true");
+                        expect(criticalOuterElement.getAttribute("style")).toBe("display: none;");
+                        expect(criticalInnerElement.getAttribute("style")).toBe("display: none;");
                         done();
                     });
                 });
@@ -1497,8 +1487,8 @@ describe("Line", () => {
                         delay(() => {
                             const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}"]`);
                             const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`);
-                            expect(criticalOuterElement.getAttribute("aria-hidden")).toBe("false");
-                            expect(criticalInnerElement.getAttribute("aria-hidden")).toBe("false");
+                            expect(criticalOuterElement.getAttribute("style")).toBe("");
+                            expect(criticalInnerElement.getAttribute("style")).toBe("");
                             done();
                         }, 200);
                     });
@@ -1518,10 +1508,10 @@ describe("Line", () => {
                         const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`);
                         const criticalOuterElementAlt = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputSecondary.key}"]`);
                         const criticalInnerElementAlt = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputSecondary.key}"]`);
-                        expect(criticalOuterElement.getAttribute("aria-hidden")).toBe("false");
-                        expect(criticalInnerElement.getAttribute("aria-hidden")).toBe("false");
-                        expect(criticalOuterElementAlt.getAttribute("aria-hidden")).toBe("true");
-                        expect(criticalInnerElementAlt.getAttribute("aria-hidden")).toBe("true");
+                        expect(criticalOuterElement.getAttribute("style")).toBe("");
+                        expect(criticalInnerElement.getAttribute("style")).toBe("");
+                        expect(criticalOuterElementAlt.getAttribute("style")).toBe("display: none;");
+                        expect(criticalInnerElementAlt.getAttribute("style")).toBe("display: none;");
                         graphDefault.unloadContent(lineSecondary);
                         done();
                     });

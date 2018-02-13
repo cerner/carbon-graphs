@@ -12,10 +12,6 @@ import constants, {
     AXIS_TYPE,
     SHAPES
 } from "../../../helpers/constants";
-import {
-    criticalityLegendHoverHandler,
-    processCriticalityCriteria
-} from "../../../helpers/criticality";
 import errors from "../../../helpers/errors";
 import {
     legendClickHandler,
@@ -290,7 +286,6 @@ const drawDataPoints = (scale, config, canvasSVG) => {
             .attr("d", new Shape(isShapeBuiltAsAPath(value)).getPathElement())
             .attr("transform", transformPoint(scale, scaleFactor))
             .attr("style", `${config.shownTargets.indexOf(value.key) < 0 ? "display: none;" : ""}`)
-            .attr("aria-hidden", true)
             .attr("aria-describedby", value.key)
             .on("click", function(value, index) {
                 dataPointActionHandler(value, index, this);
@@ -313,7 +308,6 @@ const drawDataPoints = (scale, config, canvasSVG) => {
  *  * Order of execution
  *      * Redraws the content
  *      * Shows/hides the regions
- *      * Shows/hides the criticality indicators
  * @private
  * @param {Object} graphContext - Graph instance
  * @param {Line} control - Line instance
@@ -324,9 +318,6 @@ const drawDataPoints = (scale, config, canvasSVG) => {
 const onAnimationHandler = (graphContext, control, config, canvasSVG) => () => {
     control.redraw(graphContext);
     processRegions(config.shownTargets, canvasSVG);
-    if (config.showShapes) {
-        processCriticalityCriteria(config.shownTargets, config, canvasSVG);
-    }
 };
 /**
  * Click handler for legend item. Removes the line from graph when clicked and calls redraw
@@ -374,8 +365,6 @@ const hoverHandler = (graphTargets, canvasSVG) => (item, state) => {
              .classed(styles.highlight, (state === constants.HOVER_EVENT.MOUSE_ENTER));
     // Highlight region(s) of the item hovered on, only if the content is currently displayed
     regionLegendHoverHandler(graphTargets, canvasSVG, item.key, state);
-    // Highlight criticality indicator(s) of the item hovered on, only if the content is currently displayed
-    criticalityLegendHoverHandler(graphTargets, canvasSVG, item.key, state);
 };
 /**
  * A callback that will be sent to Graph class so that when graph is
