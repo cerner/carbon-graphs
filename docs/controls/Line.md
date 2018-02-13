@@ -99,7 +99,9 @@ Each axis - X, Y and Y2 should have the following properties:
 |y|string
 
 #### Optional
- `N/A`
+|Property Name|Expected|Default
+---|---|---|
+|isCritical|boolean|`false`
 
 ### Regions
 Each data-set can have 1 or more regions. `start` and `end` is necessary for rendering a horizontal region. 
@@ -175,6 +177,11 @@ var data = {
         {
             x: "2016-02-03T12:00:00Z",
             y: "1"
+        },
+        {
+            x: "2016-05-01T12:00:00Z",
+            y: "15",
+            isCritical: true
         }
     ]
 };

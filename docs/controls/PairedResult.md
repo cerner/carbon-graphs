@@ -88,9 +88,9 @@ Each axis - X, Y and Y2 should have the following properties:
 #### Required
 |Property Name|Expected|Value
 ---|---|---|
-|high|object|_{x: "", y: ""}_
-|low|object|_{x: "", y: ""}_
-|mid|object|_{x: "", y: ""}_
+|high|object|_{x: "", y: "", isCritical: `true`}_
+|low|object|_{x: "", y: "", isCritical: `true`}_
+|mid|object|_{x: "", y: "", isCritical: `true`}_
 
 ### Regions
 * Each data-set can have 1 or more regions for `high`, `low` and/or `mid`
@@ -163,7 +163,8 @@ var data = {
             high:
             {
                 x: 20,
-                y: 150
+                y: 150,
+                isCritical: true
             },
             low:
             {
