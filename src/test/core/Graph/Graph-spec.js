@@ -27,6 +27,7 @@ describe("Graph", () => {
         graphContainer = document.createElement("div");
         graphContainer.id = "testGraph_carbon";
         graphContainer.setAttribute("style", "width: 1024px; height: 400px;");
+        graphContainer.setAttribute("class", "carbon-test-class");
         document.body.appendChild(graphContainer);
     });
     afterEach(() => {
@@ -288,6 +289,12 @@ describe("Graph", () => {
             expect(graph.config.axis.y.ticks).toEqual({});
             expect(graph.config.axis.x.show).toEqual(true);
             expect(graph.config.axis.y.show).toEqual(true);
+        });
+        it("process bindLegendTo correctly", () => {
+            const input = utils.deepClone(getAxes(axisDefault));
+            input.bindLegendTo = "#lineLegendContainer";
+            graph = new Graph(input);
+            expect(graph.config.bindLegendTo).toEqual(input.bindLegendTo);
         });
     });
     describe("when beforeInit is called", () => {
@@ -792,6 +799,24 @@ describe("Graph", () => {
             });
         });
         describe("legend", () => {
+            it("loads legend in separate container when bindLegendTo used", () => {
+                graph.destroy();
+                const legendContainer = document.createElement("div");
+                legendContainer.setAttribute("id", "lineLegendContainer");
+                legendContainer.setAttribute("class", "legend-container");
+                graphContainer.appendChild(legendContainer);
+                const input = utils.deepClone(getAxes(axisDefault));
+                input.bindLegendTo = "#lineLegendContainer";
+                graph = new Graph(input);
+                const container = fetchElementByClass(styles.container);
+                const parentContainer = fetchElementByClass("carbon-test-class");
+                expect(graph.config.bindLegendTo).toEqual(input.bindLegendTo);
+                expect(container.childNodes.length).toEqual(1);
+                expect(parentContainer.childNodes.length).toEqual(2);
+                expect(parentContainer.childNodes[ 0 ].getAttribute("id")).toEqual("lineLegendContainer");
+                expect(parentContainer.childNodes[ 0 ].getAttribute("class")).toEqual("legend-container");
+                expect(parentContainer.childNodes[ 1 ].getAttribute("class")).toEqual(styles.container);
+            });
             it("hides legend when not enabled", () => {
                 graph.destroy();
                 graph = new Graph(Object.assign({

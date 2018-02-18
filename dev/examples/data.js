@@ -7,7 +7,7 @@ const DATA = [
     {
         LINE_DEFAULT: (id) => ({
             bindTo: id,
-            bindLegendInto: null,
+            bindLegendTo: null,
             axis: {
                 x: {
                     show: true,

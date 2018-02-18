@@ -22,6 +22,7 @@ import BaseConfig, {
 export const processInput = (input, config, type) => {
     const _axis = utils.deepClone(input.axis);
     config.bindTo = input.bindTo;
+    config.bindLegendTo = input.bindLegendTo;
     config.axis = _axis;
     config.locale = d3.locale(getDefaultValue(input.locale, DEFAULT_LOCALE));
     config.throttle = getDefaultValue(input.throttle, constants.RESIZE_THROTTLE);

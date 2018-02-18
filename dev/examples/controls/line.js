@@ -262,3 +262,27 @@ export const renderLineBlankDataPoint = (el, id, title) => () => {
     lineTime.loadContent(Carbon.api.line(data));
     return lineTime;
 };
+export const renderLineLegendTo = (el, id, title) => () => {
+    shell.render(el, id, title);
+    const parentContainerElem = document.querySelector(`#${id}`);
+    parentContainerElem.setAttribute("style", "display: flex;");
+
+    // Prepare legend container
+    const legendContainer = document.createElement("div");
+    const graphContainer = document.createElement("div");
+    legendContainer.setAttribute("id", "lineLegendContainer");
+    legendContainer.setAttribute("class", "legend-container");
+    document.querySelector(`#${id}`).appendChild(legendContainer);
+
+    //Prepare graph container
+    graphContainer.setAttribute("id", "graphContainer");
+    graphContainer.setAttribute("class", "graph-container");
+    document.querySelector(`#${id}`).appendChild(graphContainer);
+
+    // Add legend container ID to input JSON
+    const data = utils.deepClone(getAxes(`#graphContainer`, "LINE_TIMESERIES"));
+    data.bindLegendTo = "#lineLegendContainer";
+    const lineTime = Carbon.api.graph(data);
+    lineTime.loadContent(Carbon.api.line(getData(`#${id}`, "LINE_TIMESERIES").data[ 0 ]));
+    return lineTime;
+};

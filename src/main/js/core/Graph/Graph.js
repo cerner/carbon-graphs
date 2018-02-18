@@ -215,8 +215,10 @@ class Graph {
             /*
             If the consumer doesn't wish to show legend item then they can pass blank.
             The legend item wont be rendered at that point.
+            The consumer can also choose to render legend into another container
+            using "bindLegendTo" property
             */
-            this.legendSVG = createLegend(containerSVG);
+            this.legendSVG = createLegend(this.config.bindLegendTo ? d3.select(this.config.bindLegendTo) : containerSVG);
         }
         attachEventHandlers(this);
         return this.svg;

@@ -21,6 +21,7 @@ pairedGraph.loadContent(Carbon.api.pairedResult(/* Add "data" JSON, shown below 
 #### Optional 
 |Property Name|Expected|Default|
 ---|---|---|
+|bindLegendTo|string|null (Example: `"#legendContainer"`)
 |locale|object|LOCALE.en_US
 |dimension|object|{}
 |throttle|number|(1000/60) => time in ms

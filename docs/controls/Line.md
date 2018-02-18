@@ -27,6 +27,7 @@ lineDefault.loadContent(Carbon.api.line(/* Data array D */));
 #### Optional 
 |Property Name|Expected|Default|
 ---|---|---|
+|bindLegendTo|string|null (Example: `"#legendContainer"`)
 |locale|object|LOCALE.en_US
 |dimension|object|{}
 |throttle|number|(1000/60) => time in ms
