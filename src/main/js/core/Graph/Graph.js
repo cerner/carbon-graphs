@@ -27,7 +27,7 @@ import {
     scaleGraph,
     translateGraph,
     updateAxesDomain
-} from "./helpers";
+} from "./helpers/helpers";
 
 /**
  * @typedef {Object} Graph

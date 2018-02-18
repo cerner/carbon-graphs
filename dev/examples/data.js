@@ -3,64 +3,11 @@ import d3 from "d3";
 import Carbon from "../../src/main/js/carbon";
 import { loadPopup } from "./popup";
 
-const JSON = {
-    data: [],
-    showLabel: true,
-    showLegend: true,
-    showShapes: true,
-    showVGrid: true,
-    showHGrid: true
-};
-const today = () => new Date();
-const getDate = (diff) => new Date().setDate(today().getDate() - diff);
-const getISO = (d) => d.split(".")[ 0 ].concat("Z");
-export const generateData = (id, sets, graph, type) => {
-    const isTimeSeries = (t) => t === Carbon.helpers.AXIS_TYPE.TIME_SERIES;
-    const lb = isTimeSeries(type) ? getDate(25) : 25;
-    const ub = isTimeSeries(type) ? getDate(-200) : 200;
-    const yLB = 2;
-    const yUB = 60;
-    const rangeX = () => Math.floor(Math.random() * (ub - lb)) + lb;
-    const sym = Object.keys(Carbon.helpers.SHAPES);
-    const loadData = () =>
-        new Array(sets).fill("").map((_, i) => (
-            {
-                key: `uid_${i}`,
-                label: {
-                    display: `Data item ${i + 1}`
-                },
-                shape: sym[ Math.floor(Math.random() * 10) ],
-                color: Carbon.helpers.COLORS[ Object.keys(Carbon.helpers.COLORS)[ i ] ],
-                onClick: loadPopup,
-                values: new Array(sets).fill("").map((_, j) => ({
-                    x: isTimeSeries(type) ? getISO(new Date(rangeX()).toISOString()) : rangeX(),
-                    y: Math.floor(Math.random() * (yUB - yLB)) + yLB
-                })).sort((a, b) => a.x > b.x)
-            })
-        );
-    return Object.assign({}, JSON, {
-        bindTo: id,
-        data: loadData(),
-        axis: {
-            x: {
-                type,
-                label: "Label Axis X",
-                lowerLimit: isTimeSeries(type) ? getISO(new Date(lb).toISOString()) : lb,
-                upperLimit: isTimeSeries(type) ? getISO(new Date(ub).toISOString()) : ub
-            },
-            y: {
-                label: "Label Axis Y",
-                lowerLimit: yLB,
-                upperLimit: yUB
-            }
-        }
-    });
-};
-
 const DATA = [
     {
         LINE_DEFAULT: (id) => ({
             bindTo: id,
+            bindLegendInto: null,
             axis: {
                 x: {
                     show: true,
@@ -345,26 +292,12 @@ const DATA = [
                 x: {
                     label: "Data",
                     lowerLimit: 0,
-                    upperLimit: 1000,
-                    ticks: {
-                        // under development
-                        show: true,
-                        count: 10,
-                        format: "n",
-                        values: []
-                    }
+                    upperLimit: 1000
                 },
                 y: {
                     label: "Paired",
                     lowerLimit: 0,
-                    upperLimit: 200,
-                    ticks: {
-                        // under development
-                        show: true,
-                        count: 10,
-                        format: "",
-                        values: []
-                    }
+                    upperLimit: 200
                 }
             },
             data: [

@@ -4,7 +4,7 @@
  */
 "use strict";
 import d3 from "d3";
-import { isShapeBuiltAsAPath } from "../core/Graph/helpers";
+import { isShapeBuiltAsAPath } from "../core/Graph/helpers/helpers";
 import Shape, { isNativeShape } from "../core/Shape";
 import constants from "../helpers/constants";
 import styles from "../helpers/styles";

@@ -5,7 +5,7 @@ import {
     getColorForTarget,
     getTransformScale,
     isShapeBuiltAsAPath
-} from "../../../core/Graph/helpers";
+} from "../../../core/Graph/helpers/helpers";
 import Shape from "../../../core/Shape";
 import { getXAxisXPosition } from "../../../helpers/axis";
 import constants, {

@@ -5,7 +5,7 @@ import Graph from "../../../main/js/core/Graph/Graph";
 import {
     getTransformScale,
     isShapeBuiltAsAPath
-} from "../../../main/js/core/Graph/helpers";
+} from "../../../main/js/core/Graph/helpers/helpers";
 import Shape from "../../../main/js/core/Shape/Shape";
 import {
     getXAxisWidth,

@@ -18,12 +18,12 @@ import {
     hasY2Axis,
     processTickValues,
     translateAxes
-} from "../../helpers/axis";
-import constants, { SHAPES } from "../../helpers/constants";
-import styles from "../../helpers/styles";
-import utils from "../../helpers/utils";
-import { getScale } from "../BaseConfig";
-import { isValidCarbonShape } from "../Shape";
+} from "../../../helpers/axis";
+import constants, { SHAPES } from "../../../helpers/constants";
+import styles from "../../../helpers/styles";
+import utils from "../../../helpers/utils";
+import { getScale } from "../../BaseConfig/index";
+import { isValidCarbonShape } from "../../Shape/index";
 
 const BASE_CANVAS_WIDTH_PADDING = constants.BASE_CANVAS_WIDTH_PADDING;
 const PADDING = constants.PADDING;
