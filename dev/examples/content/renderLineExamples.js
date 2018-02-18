@@ -1,5 +1,6 @@
 import {
     renderLine,
+    renderLineBlankDataPoint,
     renderLineGridHHidden,
     renderLineGridVHidden,
     renderLineLabelHidden,
@@ -33,6 +34,7 @@ const exampleSet = (exampleInstance, contentSection, setState) => {
     exampleInstance.load(renderMultiLine(contentSection, "multiLine", "Multi-line Graph"));
     exampleInstance.load(renderLineTimeSeries(contentSection, "lineTimeSeries", "Time-Series"));
     exampleInstance.load(renderLineY2Axis(contentSection, "lineY2", "Y2 Axis"));
+    exampleInstance.load(renderLineBlankDataPoint(contentSection, "lineBlankDataPoint", "Non-Contiguous Data"));
     exampleInstance.load(renderLineXHidden(contentSection, "lineXHidden", "X Axis Hidden"));
     exampleInstance.load(renderLineYHidden(contentSection, "lineYHidden", "Y Axis Hidden"));
     exampleInstance.load(renderLineXStaticTicks(contentSection, "lineXStaticTick", "Static X Axis Ticks"));

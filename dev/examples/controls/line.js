@@ -254,3 +254,11 @@ export const renderGoalLine = (el, id, title) => () => {
     lineDefault.loadContent(Carbon.api.line(data));
     return lineDefault;
 };
+export const renderLineBlankDataPoint = (el, id, title) => () => {
+    const data = utils.deepClone(getData(`#${id}`, "LINE_TIMESERIES").data[ 0 ]);
+    data.values[ 6 ].y = null;
+    shell.render(el, id, title);
+    const lineTime = Carbon.api.graph(getAxes(`#${id}`, "LINE_TIMESERIES"));
+    lineTime.loadContent(Carbon.api.line(data));
+    return lineTime;
+};

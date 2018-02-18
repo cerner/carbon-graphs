@@ -36,6 +36,7 @@ const PADDING = constants.PADDING;
  */
 const createLine = (scale, d) => {
     const newLine = d3.svg.line()
+                      .defined((value) => value.y !== null)
                       .x((value) => scale.x(value.x))
                       .y((value) => scale[ value.yAxis ](value.y))
                       .interpolate(constants.DEFAULT_INTERPOLATION);
@@ -214,7 +215,7 @@ const processDataPoints = (graphConfig, dataTarget) => {
         onClick: dataTarget.onClick,
         isCritical: value.isCritical || false,
         x: getXDataValues(value.x),
-        y: utils.getNumber(value.y),
+        y: value.y,
         color: dataTarget.color || constants.DEFAULT_COLOR,
         label: dataTarget.label || {},
         shape: dataTarget.shape || SHAPES.CIRCLE,
@@ -232,6 +233,15 @@ const processDataPoints = (graphConfig, dataTarget) => {
  * @returns {Array} List of data point subsets
  */
 const getDataPointValues = (target) => target.internalValuesSubset;
+/**
+ * Checks the data-set is currently shown in the graph and if the y data-point value is null
+ * If they are then true, false otherwise
+ * @private
+ * @param {Object} shownTargets - graph targets config object
+ * @param {object} value - data point value object
+ * @return {boolean} true if data point needs to be hidden, false otherwise
+ */
+const shouldHideDataPoints = (shownTargets, value) => (shownTargets.indexOf(value.key) < 0 || value.y === null);
 /**
  * Draws lines using the data point values.
  * Lines are created using d3 svg line with linear interpolation.
@@ -264,7 +274,7 @@ const drawDataPoints = (scale, config, canvasSVG) => {
         path.classed(styles.point, true)
             .attr("d", new Shape(isShapeBuiltAsAPath(value)).getPathElement())
             .attr("transform", transformPoint(scale))
-            .attr("style", `fill: ${getColorForTarget(value)}${config.shownTargets.indexOf(value.key) < 0 ? "; display: none;" : ";"}`)
+            .attr("style", `fill: ${getColorForTarget(value)}${shouldHideDataPoints(config.shownTargets, value) ? "; display: none;" : ";"}`)
             .attr("aria-describedby", value.key)
             .on("click", function(value, index) {
                 dataPointActionHandler(value, index, this);
@@ -274,7 +284,7 @@ const drawDataPoints = (scale, config, canvasSVG) => {
             .attr("d", new Shape(isShapeBuiltAsAPath(value)).getPathElement())
             .attr("transform", transformPoint(scale))
             .attr("r", constants.DEFAULT_SELECTED_RADIUS)
-            .attr("style", `${config.shownTargets.indexOf(value.key) < 0 ? "display: none;" : ""}`)
+            .attr("style", `${shouldHideDataPoints(config.shownTargets, value) ? "display: none;" : ""}`)
             .attr("aria-hidden", true)
             .attr("aria-describedby", value.key)
             .on("click", function(value, index) {
@@ -285,7 +295,7 @@ const drawDataPoints = (scale, config, canvasSVG) => {
             .classed(cls, true)
             .attr("d", new Shape(isShapeBuiltAsAPath(value)).getPathElement())
             .attr("transform", transformPoint(scale, scaleFactor))
-            .attr("style", `${config.shownTargets.indexOf(value.key) < 0 ? "display: none;" : ""}`)
+            .attr("style", `${shouldHideDataPoints(config.shownTargets, value) ? "display: none;" : ""}`)
             .attr("aria-describedby", value.key)
             .on("click", function(value, index) {
                 dataPointActionHandler(value, index, this);

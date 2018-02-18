@@ -85,7 +85,7 @@ const sanitize = (str) => ((typeof str === "string") ? (str.replace(/</g, "&lt;"
  * Deep clones the provided object
  * @private
  * @param {Object} o - Source object
- * @returns {Object} Returns a cloned object
+ * @returns {Object|Array} Returns a cloned object
  */
 const deepClone = (o) => {
     if (isArray(o)) {

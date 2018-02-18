@@ -315,6 +315,20 @@ describe("Line", () => {
                 const lineElement = fetchElementByClass(lineGraphContainer, styles.line);
                 expect(lineElement.firstChild.attributes.getNamedItem("aria-describedby").value).toBe(input.key);
             });
+            it("does not show data point if data point is null", () => {
+                graphDefault.destroy();
+                const graph = new Graph(getAxes(axisDefault));
+                const data = utils.deepClone(valuesDefault);
+                data[ 0 ].y = null;
+                input = getInput(data);
+                graph.loadContent(new Line(input));
+                const pointsGroup = fetchElementByClass(lineGraphContainer, styles.currentPointsGroup);
+                const points = fetchElementByClass(pointsGroup, styles.point);
+                const selectedPoint = fetchElementByClass(pointsGroup, styles.dataPointSelection);
+                expect(pointsGroup.children.length).toBe(3);
+                expect(points.getAttribute("style")).toContain("display: none;");
+                expect(selectedPoint.getAttribute("style")).toContain("display: none;");
+            });
             it("does not render points if shapes needs to be hidden", () => {
                 graphDefault.destroy();
                 const hiddenShapeInput = getAxes(axisDefault);
