@@ -135,14 +135,14 @@ var input = {
         },
         y: {
             label: "Some Y Label",
-            lowerLimit: "0",
-            upperLimit: "20"
+            lowerLimit: 0,
+            upperLimit: 20
         },
         y2: {
             show: false,
             label: "Some Y2 Label",
-            lowerLimit: "0",
-            upperLimit: "250"
+            lowerLimit: 0,
+            upperLimit: 250
         }
     },
     showLabel: true,
