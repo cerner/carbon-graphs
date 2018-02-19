@@ -3,8 +3,8 @@ import sinon from "sinon";
 import Line from "../../../main/js/controls/Line";
 import Graph from "../../../main/js/core/Graph/Graph";
 import {
-    getTransformScale,
-    isShapeBuiltAsAPath
+    getShape,
+    getTransformScale
 } from "../../../main/js/core/Graph/helpers/helpers";
 import Shape from "../../../main/js/core/Shape/Shape";
 import {
@@ -497,7 +497,7 @@ describe("Line", () => {
                 expect(legendItem).not.toBeNull();
                 expect(legendItem.getAttribute("aria-selected")).toBe("true");
                 expect(legendItem.children[ 1 ].className).toBe(styles.legendItemText);
-                expect(legendItem.children[ 1 ].tagName).toBe("SPAN");
+                expect(legendItem.children[ 1 ].tagName).toBe("LABEL");
                 expect(legendItem.children[ 1 ].textContent).toBe(input.label.display);
                 expect(legendItemBtn).not.toBeNull();
                 expect(legendItemBtn.getAttribute("class")).toBe(styles.legendItemBtn);
@@ -1285,9 +1285,9 @@ describe("Line", () => {
                 graphDefault.loadContent(linePrimary);
                 const criticalOuterElement = fetchElementByClass(lineGraphContainer, styles.criticalityOuterPoint);
                 const criticalInnerElement = fetchElementByClass(lineGraphContainer, styles.criticalityInnerPoint);
-                const currentShape = new Shape(isShapeBuiltAsAPath(inputPrimary));
-                expect(criticalOuterElement.getAttribute("d")).toBe(currentShape.getPathElement());
-                expect(criticalInnerElement.getAttribute("d")).toBe(currentShape.getPathElement());
+                const currentShape = new Shape(getShape(inputPrimary));
+                expect(criticalOuterElement.getAttribute("d")).toBe(currentShape.getPathDescription());
+                expect(criticalInnerElement.getAttribute("d")).toBe(currentShape.getPathDescription());
             });
             it("Translates properly", () => {
                 const valuesMutated = utils.deepClone(valuesDefault);

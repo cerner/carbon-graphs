@@ -1,12 +1,17 @@
-import Carbon from "../../main/js/controls";
+import Carbon from "../../main/js/carbon";
 import Line from "../../main/js/controls/Line";
 import PairedResult from "../../main/js/controls/PairedResult";
 import Graph from "../../main/js/core/Graph";
+import Shape from "../../main/js/core/Shape/Shape";
+import { SHAPES } from "../../main/js/helpers/constants";
 
 const LIBRARY_LIST = [
     "graph",
     "line",
     "pairedResult"
+];
+const TOOLS_LIST = [
+    "shape"
 ];
 const input = {
     bindTo: "#testGraph_carbon",
@@ -35,14 +40,20 @@ describe("Carbon", () => {
         document.body.innerHTML = "";
     });
     it("registers all graph types", () => {
-        const keys = Object.keys(Carbon);
+        const keys = Object.keys(Carbon.api);
         expect(keys).toBeDefined();
         expect(keys.every((i) => LIBRARY_LIST.indexOf(i) > -1)).toBeTruthy();
         expect(keys.length).toBe(LIBRARY_LIST.length);
     });
-    it("registers graph", () => {
-        const graph = Carbon.graph(input);
-        expect(Carbon.line).toEqual(jasmine.any(Function));
+    it("registers all graph tools", () => {
+        const keys = Object.keys(Carbon.tools);
+        expect(keys).toBeDefined();
+        expect(keys.every((i) => TOOLS_LIST.indexOf(i) > -1)).toBeTruthy();
+        expect(keys.length).toBe(TOOLS_LIST.length);
+    });
+    it("registers Graph", () => {
+        const graph = Carbon.api.graph(input);
+        expect(Carbon.api.line).toEqual(jasmine.any(Function));
         expect(graph instanceof Graph).toBeTruthy();
     });
     it("registers Line graph", () => {
@@ -58,8 +69,8 @@ describe("Carbon", () => {
                 }
             ]
         };
-        const line = Carbon.line(data);
-        expect(Carbon.line).toEqual(jasmine.any(Function));
+        const line = Carbon.api.line(data);
+        expect(Carbon.api.line).toEqual(jasmine.any(Function));
         expect(line instanceof Line).toBeTruthy();
     });
     it("registers Paired Result graph", () => {
@@ -75,8 +86,13 @@ describe("Carbon", () => {
                 }
             ]
         };
-        const paired = Carbon.pairedResult(data);
-        expect(Carbon.pairedResult).toEqual(jasmine.any(Function));
+        const paired = Carbon.api.pairedResult(data);
+        expect(Carbon.api.pairedResult).toEqual(jasmine.any(Function));
         expect(paired instanceof PairedResult).toBeTruthy();
+    });
+    it("registers Shape", () => {
+        const shape = Carbon.tools.shape(SHAPES.RHOMBUS);
+        expect(Carbon.tools.shape).toEqual(jasmine.any(Function));
+        expect(shape instanceof Shape).toBeTruthy();
     });
 });

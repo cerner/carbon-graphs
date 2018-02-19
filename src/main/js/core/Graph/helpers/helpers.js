@@ -344,7 +344,7 @@ const determineHeight = (config, dimension) => {
  * @param {Object} dataPoint - Data point containing the shape
  * @returns {Object} Shape Object if present or null
  */
-const isShapeBuiltAsAPath = (dataPoint) => {
+const getShape = (dataPoint) => {
     const shape = getShapeForTarget(dataPoint);
     return isValidCarbonShape(shape) ? shape : null;
 };
@@ -432,7 +432,7 @@ export {
     translateGraph,
     padDomain,
     determineHeight,
-    isShapeBuiltAsAPath,
+    getShape,
     getShapeForTarget,
     getColorForTarget,
     getCurrentTransform,

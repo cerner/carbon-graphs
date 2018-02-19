@@ -1,7 +1,8 @@
 "use strict";
 import d3 from "d3";
-import constants from "../../helpers/constants";
+import constants, { SHAPES } from "../../helpers/constants";
 import errors from "../../helpers/errors";
+import styles from "../../helpers/styles";
 
 /**
  * Checks if the shape is an inbuilt shape
@@ -27,23 +28,43 @@ export const isNativeShape = (shape) => shape in constants.CUSTOM_SHAPE_PATH;
 export const isValidCarbonShape = (shape) => ((isD3InbuiltShape(shape)) || (isNativeShape(shape)));
 
 /**
+ * Returns the SVG element container within which a path element is stored.
+ * viewBox sizing is "0 0 48 48"
+ * Default icon width and height is 1rem
+ * @private
+ * @param {HTMLElement} pathElement -  Path element containing the "icon" as a description
+ * @param {string} classNames - SVG element class attribute loaded by the consumer
+ * @param {string} style - Style that can be applied to the svg element
+ * @returns {HTMLElement} Returns the SVG element with the "icon" path
+ */
+const getSVGElement = (pathElement, { classNames, style }) => {
+    const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svgElement.setAttribute("viewBox", constants.VIEW_BOX_SIZE);
+    svgElement.setAttribute("style", style);
+    svgElement.setAttribute("class", `${styles.svgIcon} ${classNames}`);
+    svgElement.setAttribute("role", "img");
+    svgElement.appendChild(pathElement);
+    return svgElement;
+};
+
+/**
  * A Shape is a data point representation in a graph.
  * This is also used as a point in the legend
  * @class Shape
  */
 class Shape {
-    constructor(shape) {
+    constructor(shape = SHAPES.CIRCLE) {
         this.shape = shape;
     }
 
     /**
-     * Returns the Moveto path for the shape.
+     * Returns the path description (svg -> d attribute) for the shape.
      * @throws {module:errors.THROW_MSG_UNKNOWN_SHAPE}
      * @param {number} [size] - size of the shape. Used for d3 inbuilt shapes only.
      * Custom shapes would need separate scaling
-     * @returns {string} Moveto paths for the shape set in the Shape class
+     * @returns {string} Path description "d" value for the shape set in the Shape class
      */
-    getPathElement(size) {
+    getPathDescription(size) {
         const getCustomPath = (shape) => {
             if (isNativeShape(shape)) {
                 return constants.CUSTOM_SHAPE_PATH[ shape ];
@@ -52,8 +73,43 @@ class Shape {
         };
         const getD3Shape = (shape) =>
             d3.svg.symbol().type(constants.D3_INBUILT_SHAPE[ shape ]).size(size || constants.DEFAULT_PLOT_SIZE)();
-
         return isD3InbuiltShape(this.shape) ? getD3Shape(this.shape) : getCustomPath(this.shape);
+    }
+
+    /**
+     * Returns svg path element with path description ('d' attr)
+     * @param {string} classNames - Path element class attribute loaded by the consumer
+     * @param {string} style - Style that can be applied to the path element
+     * @returns {HTMLElement} A svg path element
+     */
+    getPathElement({ classNames, style }) {
+        const shapeProp = constants.SHAPE_PROPS[ this.shape ];
+        const pathElement = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        pathElement.setAttribute("style", style);
+        pathElement.setAttribute("class", classNames);
+        pathElement.setAttribute("d", this.getPathDescription());
+        pathElement.setAttribute("transform", `translate(${shapeProp.translate.join(",")}) scale(${shapeProp.scale})`);
+        return pathElement;
+    }
+
+    /**
+     * Returns the shape element. Shape element is an svg element containing a path element.
+     * The consumer can customize the classNames and styles for the svg and path elements accordingly
+     * using the function parameters.
+     * @param {string} svgClassNames - SVG element class attribute loaded by the consumer
+     * @param {string} svgStyles - Style that can be applied to the svg element
+     * @param {string} pathClassNames - Path element class attribute loaded by the consumer
+     * @param {string} pathStyles - Style that can be applied to the path element
+     * @returns {HTMLElement} an svg element
+     */
+    getShapeElement({ svgClassNames = "", svgStyles = "", pathClassNames = "", pathStyles = "" }) {
+        return getSVGElement(this.getPathElement({
+            classNames: pathClassNames,
+            style: pathStyles
+        }), {
+            classNames: svgClassNames,
+            style: svgStyles
+        });
     }
 }
 

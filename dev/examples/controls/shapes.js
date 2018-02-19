@@ -1,5 +1,5 @@
 import d3 from "d3";
-import { Shape } from "../../../src/main/js/core";
+import Carbon from "../../../src/main/js/carbon";
 import { isNativeShape } from "../../../src/main/js/core/Shape";
 import styles from "../../../src/main/js/helpers/styles";
 import { getShapes } from "../data";
@@ -20,7 +20,7 @@ export const renderShapesSimple = (el, id, title) => {
       .data(getShapes())
       .enter()
       .append("path")
-      .attr("d", (d) => new Shape(d).getPathElement(500))
+      .attr("d", (d) => Carbon.tools.shape(d).getPathDescription(500))
       .attr("transform", transformPoint());
 };
 export const renderCriticalityShapes = (el, id, title) => {
@@ -34,13 +34,17 @@ export const renderCriticalityShapes = (el, id, title) => {
                        .append("g");
     groupSVG.append("path")
             .classed(styles.criticalityOuterPoint, true)
-            .attr("d", (d) => new Shape(d).getPathElement(24 * 25))
+            .attr("d", (d) => Carbon.tools.shape(d).getPathDescription(24 * 25))
             .attr("transform", transformPoint(3));
     groupSVG.append("path")
             .classed(styles.criticalityInnerPoint, true)
-            .attr("d", (d) => new Shape(d).getPathElement(15 * 25))
+            .attr("d", (d) => Carbon.tools.shape(d).getPathDescription(15 * 25))
             .attr("transform", transformPoint(2));
     groupSVG.append("path")
-            .attr("d", (d) => new Shape(d).getPathElement(9 * 25))
+            .attr("d", (d) => Carbon.tools.shape(d).getPathDescription(9 * 25))
             .attr("transform", transformPoint(1.5));
+};
+export const renderShapesAsSVG = (el, id, title) => {
+    const section = shell.render(el, id, title);
+    getShapes().forEach((i) => section.appendChild(Carbon.tools.shape(i).getShapeElement({ svgClassNames: "shape--normal" })));
 };

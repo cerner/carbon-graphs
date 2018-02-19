@@ -49,10 +49,7 @@ export const loadPopup = (onCloseCB, key, index, value) => {
     }
     else {
         // Paired Result
-        createItem(pair, "X axis", `${value.high ? 
-            getPairData(value.high.x) : value.mid ? 
-                getPairData(value.mid.x) : value.low ? 
-                    getPairData(value.low.x) : "N/A"}`);
+        createItem(pair, "X axis", `${value.high ? getPairData(value.high.x) : value.mid ? getPairData(value.mid.x) : value.low ? getPairData(value.low.x) : "N/A"}`);
 
         if (value.high) {
             createItem(pair, "High", getPairData(value.high.y));

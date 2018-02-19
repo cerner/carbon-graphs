@@ -3,8 +3,8 @@ import d3 from "d3";
 import { getType } from "../../../core/BaseConfig";
 import {
     getColorForTarget,
-    getTransformScale,
-    isShapeBuiltAsAPath
+    getShape,
+    getTransformScale
 } from "../../../core/Graph/helpers/helpers";
 import Shape from "../../../core/Shape";
 import { getXAxisXPosition } from "../../../helpers/axis";
@@ -272,7 +272,7 @@ const drawDataLines = (scale, config, lineGroupSVG) =>
 const drawDataPoints = (scale, config, canvasSVG) => {
     const renderDataPointPath = (path, value) =>
         path.classed(styles.point, true)
-            .attr("d", new Shape(isShapeBuiltAsAPath(value)).getPathElement())
+            .attr("d", new Shape(getShape(value)).getPathDescription())
             .attr("transform", transformPoint(scale))
             .attr("style", `fill: ${getColorForTarget(value)}${shouldHideDataPoints(config.shownTargets, value) ? "; display: none;" : ";"}`)
             .attr("aria-describedby", value.key)
@@ -281,7 +281,7 @@ const drawDataPoints = (scale, config, canvasSVG) => {
             });
     const renderSelectionPath = (path, value) =>
         path.classed(styles.dataPointSelection, true)
-            .attr("d", new Shape(isShapeBuiltAsAPath(value)).getPathElement())
+            .attr("d", new Shape(getShape(value)).getPathDescription())
             .attr("transform", transformPoint(scale))
             .attr("r", constants.DEFAULT_SELECTED_RADIUS)
             .attr("style", `${shouldHideDataPoints(config.shownTargets, value) ? "display: none;" : ""}`)
@@ -293,7 +293,7 @@ const drawDataPoints = (scale, config, canvasSVG) => {
     const renderCriticalityPath = (path, value, cls, scaleFactor) =>
         path.classed(styles.point, true)
             .classed(cls, true)
-            .attr("d", new Shape(isShapeBuiltAsAPath(value)).getPathElement())
+            .attr("d", new Shape(getShape(value)).getPathDescription())
             .attr("transform", transformPoint(scale, scaleFactor))
             .attr("style", `${shouldHideDataPoints(config.shownTargets, value) ? "display: none;" : ""}`)
             .attr("aria-describedby", value.key)

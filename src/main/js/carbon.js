@@ -1,6 +1,7 @@
 "use strict";
 /* globals VERSION */
 import api from "./controls";
+import Shape from "./core/Shape/Shape";
 import {
     AXIS_TYPE,
     COLORS,
@@ -8,6 +9,9 @@ import {
 } from "./helpers/constants";
 import LOCALE from "./locale";
 
+const tools = {
+    shape: (...args) => new Shape(...args)
+};
 const helpers = {
     AXIS_TYPE,
     COLORS,
@@ -22,6 +26,7 @@ const helpers = {
  */
 const Carbon = {
     api,
+    tools,
     helpers,
     version: VERSION
 };

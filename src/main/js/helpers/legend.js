@@ -4,8 +4,11 @@
  */
 "use strict";
 import d3 from "d3";
-import { isShapeBuiltAsAPath } from "../core/Graph/helpers/helpers";
-import Shape, { isNativeShape } from "../core/Shape";
+import {
+    getColorForTarget,
+    getShape
+} from "../core/Graph/helpers/helpers";
+import Shape from "../core/Shape";
 import constants from "../helpers/constants";
 import styles from "../helpers/styles";
 import utils from "../helpers/utils";
@@ -33,14 +36,8 @@ const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
     if (!t.label) {
         throw new Error("Invalid Argument: label needs to be a valid string.");
     }
-    const shape = t.shape;
-    const isInBuilt = isShapeBuiltAsAPath(t);
-    const color = t.color;
     const text = utils.sanitize(t.label.display);
     const index = shownTargets.indexOf(t.key);
-    const cx = constants.DEFAULT_LEGEND_ICON_X_POS;
-    const cy = constants.DEFAULT_LEGEND_ICON_Y_POS;
-    const d3ShapeScaleFactor = 5;
     const itemPath = legendSVG.append("li")
                               .classed(styles.legendItem, true)
                               .attr("aria-selected", (!t.label.isDisabled && index > -1))
@@ -57,18 +54,14 @@ const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
     const buttonPath = itemPath.append("button")
                                .classed(styles.legendItemBtn, true)
                                .attr("tabindex", 0);
-    const iconPath = buttonPath.append("svg")
-                               .classed(styles.legendItemIcon, true)
-                               .attr("role", "img")
-                               .attr("viewBox", constants.LEGEND_ICON_SIZE);
-    iconPath.append("path")
-            .attr("d", () => new Shape(isInBuilt).getPathElement(constants.DEFAULT_LEGEND_ICON_SIZE))
-            .attr("transform", () => {
-                const scaleFactor = isNativeShape(shape) ? constants.DEFAULT_LEGEND_ICON_SCALE : d3ShapeScaleFactor;
-                return `translate(${cx},${cy}) scale(${scaleFactor})`;
-            })
-            .attr("style", color ? `fill: ${color}` : "");
-    itemPath.append("span")
+    buttonPath.node().appendChild(new Shape(getShape(t))
+        .getShapeElement({
+                svgClassNames: styles.legendItemIcon,
+                pathStyles: `fill: ${getColorForTarget(t)}`
+            }
+        )
+    );
+    itemPath.append("label")
             .classed(styles.legendItemText, true)
             .attr("tabindex", -1)
             .text(text);

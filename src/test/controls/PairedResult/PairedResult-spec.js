@@ -3,8 +3,8 @@ import sinon from "sinon";
 import PairedResult from "../../../main/js/controls/PairedResult";
 import Graph from "../../../main/js/core/Graph/Graph";
 import {
-    getTransformScale,
-    isShapeBuiltAsAPath
+    getShape,
+    getTransformScale
 } from "../../../main/js/core/Graph/helpers/helpers";
 import Shape from "../../../main/js/core/Shape/Shape";
 import {
@@ -702,7 +702,7 @@ describe("PairedResult", () => {
                 expect(legendItem).not.toBeNull();
                 expect(legendItem.getAttribute("aria-selected")).toBe("true");
                 expect(legendItem.children[ 1 ].className).toBe(styles.legendItemText);
-                expect(legendItem.children[ 1 ].tagName).toBe("SPAN");
+                expect(legendItem.children[ 1 ].tagName).toBe("LABEL");
                 expect(legendItem.children[ 1 ].textContent).toBe(input.label.high.display);
             });
             it("loads the correct shape", () => {
@@ -1601,9 +1601,9 @@ describe("PairedResult", () => {
                 graphDefault.loadContent(pairedResultPrimaryContent);
                 const criticalOuterElement = fetchElementByClass(pairedResultGraphContainer, styles.criticalityOuterPoint);
                 const criticalInnerElement = fetchElementByClass(pairedResultGraphContainer, styles.criticalityInnerPoint);
-                const currentShape = new Shape(isShapeBuiltAsAPath({ shape: SHAPES.TEAR_DROP }));
-                expect(criticalOuterElement.getAttribute("d")).toBe(currentShape.getPathElement());
-                expect(criticalInnerElement.getAttribute("d")).toBe(currentShape.getPathElement());
+                const currentShape = new Shape(getShape({ shape: SHAPES.TEAR_DROP }));
+                expect(criticalOuterElement.getAttribute("d")).toBe(currentShape.getPathDescription());
+                expect(criticalInnerElement.getAttribute("d")).toBe(currentShape.getPathDescription());
             });
             it("Adds indicators inner and outer with same shape for all pair types", () => {
                 const valuesMutated = utils.deepClone(valuesDefault);
@@ -1615,15 +1615,15 @@ describe("PairedResult", () => {
                 graphDefault.loadContent(pairedResultPrimaryContent);
                 const criticalOuterElements = pairedResultGraphContainer.querySelectorAll(`.${styles.criticalityOuterPoint}`);
                 const criticalInnerElements = pairedResultGraphContainer.querySelectorAll(`.${styles.criticalityInnerPoint}`);
-                const shapeHigh = new Shape(isShapeBuiltAsAPath({ shape: SHAPES.TEAR_DROP }));
-                const shapeMid = new Shape(isShapeBuiltAsAPath({ shape: SHAPES.RHOMBUS }));
-                const shapeLow = new Shape(isShapeBuiltAsAPath({ shape: SHAPES.TEAR_DROP }));
-                expect(criticalOuterElements[ 0 ].getAttribute("d")).toBe(shapeHigh.getPathElement());
-                expect(criticalOuterElements[ 1 ].getAttribute("d")).toBe(shapeMid.getPathElement());
-                expect(criticalOuterElements[ 2 ].getAttribute("d")).toBe(shapeLow.getPathElement());
-                expect(criticalInnerElements[ 0 ].getAttribute("d")).toBe(shapeHigh.getPathElement());
-                expect(criticalInnerElements[ 1 ].getAttribute("d")).toBe(shapeMid.getPathElement());
-                expect(criticalInnerElements[ 2 ].getAttribute("d")).toBe(shapeLow.getPathElement());
+                const shapeHigh = new Shape(getShape({ shape: SHAPES.TEAR_DROP }));
+                const shapeMid = new Shape(getShape({ shape: SHAPES.RHOMBUS }));
+                const shapeLow = new Shape(getShape({ shape: SHAPES.TEAR_DROP }));
+                expect(criticalOuterElements[ 0 ].getAttribute("d")).toBe(shapeHigh.getPathDescription());
+                expect(criticalOuterElements[ 1 ].getAttribute("d")).toBe(shapeMid.getPathDescription());
+                expect(criticalOuterElements[ 2 ].getAttribute("d")).toBe(shapeLow.getPathDescription());
+                expect(criticalInnerElements[ 0 ].getAttribute("d")).toBe(shapeHigh.getPathDescription());
+                expect(criticalInnerElements[ 1 ].getAttribute("d")).toBe(shapeMid.getPathDescription());
+                expect(criticalInnerElements[ 2 ].getAttribute("d")).toBe(shapeLow.getPathDescription());
             });
             it("Translates properly", () => {
                 const valuesMutated = utils.deepClone(valuesDefault);

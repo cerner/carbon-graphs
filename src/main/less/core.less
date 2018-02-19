@@ -5,6 +5,12 @@ svg:not(:root) {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
+.carbon-svgIcon {
+    width: 1rem;
+    height: 1rem;
+    display: inline-block;
+}
+
 .carbon-graph-container {
     display: block;
     color: @dark;
@@ -69,18 +75,19 @@ svg:not(:root) {
         & .carbon-legend-item-btn {
             font-size: inherit;
             align-self: flex-start;
+            align-content: center;
             margin-right: 0.5rem;
-            padding: 0.25rem;
+            padding: 0.5rem;
             cursor: pointer;
             border-radius: 0.25rem;
             border: 0.1rem solid @grey15;
             background-color: @grey15;
         }
         & .carbon-legend-item-icon {
-            display: inline-block;
+            display: block;
             vertical-align: middle;
-            width: 1rem;
-            height: 1rem;
+            width: 0.75rem;
+            height: 0.75rem;
         }
         & .carbon-legend-item-text {
             word-wrap: break-word;

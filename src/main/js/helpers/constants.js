@@ -72,7 +72,7 @@ export default {
     BASE_CANVAS_WIDTH_PADDING: 10,
     DEFAULT_HEIGHT: 250,
     DEFAULT_PLOT_SIZE: 60,
-    DEFAULT_PLOT_SCALE: [ 1.1, 1.1 ],
+    DEFAULT_PLOT_SCALE: [ 1, 1 ],
     DEFAULT_CRITICAL_OUTER_PLOT_SCALE: [ 1.9, 1.9 ],
     DEFAULT_CRITICAL_INNER_PLOT_SCALE: [ 1.4, 1.4 ],
     DEFAULT_LEGEND_ICON_SIZE: 30,
@@ -85,7 +85,7 @@ export default {
         MOUSE_ENTER: "enter",
         MOUSE_EXIT: "exit"
     },
-    LEGEND_ICON_SIZE: "0 0 48 48",
+    VIEW_BOX_SIZE: "0 0 48 48",
     DEFAULT_SHAPE: "circle",
     DEFAULT_COLOR: COLORS.BLACK,
     CLIP_PATH_ID: `carbon-${+new Date()}-clip`,
@@ -94,6 +94,52 @@ export default {
     Y2_AXIS: "y2",
     MIN_TICKS: 3,
     MAX_TICK_VARIANCE: 100,
+    SHAPE_PROPS: {
+        CIRCLE: {
+            translate: [ 24, 24 ],
+            scale: 5
+        },
+        TRIANGLE: {
+            translate: [ 24, 24 ],
+            scale: 4
+        },
+        SQUARE: {
+            translate: [ 24, 24 ],
+            scale: 5.5
+        },
+        X: {
+            translate: [ 24, 24 ],
+            scale: 4.5
+        },
+        DIAMOND: {
+            translate: [ 24, 24 ],
+            scale: 3.25
+        },
+        CROSS: {
+            translate: [ 24, 24 ],
+            scale: 4.5
+        },
+        VERTICAL_BAR: {
+            translate: [ 24, 24 ],
+            scale: 4.5
+        },
+        RHOMBUS: {
+            translate: [ 24, 24 ],
+            scale: 4.75
+        },
+        TEAR_DROP: {
+            translate: [ 24, 27 ],
+            scale: 4.75
+        },
+        TEAR_ALT: {
+            translate: [ 24, 25 ],
+            scale: 4.75
+        },
+        TRIANGLE_DOWN: {
+            translate: [ 24, 24 ],
+            scale: 4
+        }
+    },
     D3_INBUILT_SHAPE: {
         CIRCLE: "circle",
         CROSS: "cross",

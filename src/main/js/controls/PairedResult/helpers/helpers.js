@@ -3,8 +3,8 @@ import d3 from "d3";
 import { getType } from "../../../core/BaseConfig";
 import {
     getColorForTarget,
-    getTransformScale,
-    isShapeBuiltAsAPath
+    getShape,
+    getTransformScale
 } from "../../../core/Graph/helpers/helpers";
 import Shape from "../../../core/Shape";
 import { getXAxisXPosition } from "../../../helpers/axis";
@@ -240,8 +240,8 @@ const drawPoints = (scale, config, canvasSVG) => {
         path.classed(styles.pairedPoint, true)
             .classed(getValue(styles, type), true)
             .attr("d", (value) => {
-                const shape = isShapeBuiltAsAPath(getValue(value, type));
-                return new Shape(shape).getPathElement();
+                const shape = getShape(getValue(value, type));
+                return new Shape(shape).getPathDescription();
             })
             .attr("transform", transformPoint(scale, type))
             .attr("style", (value) =>
@@ -281,7 +281,7 @@ const drawCriticalityPoints = (scale, config, pointGroup, type, value) => {
             .classed(styles.pairedPoint, true)
             .classed(getValue(styles, type), true)
             .classed(cls, true)
-            .attr("d", new Shape(isShapeBuiltAsAPath(getValue(value, type))).getPathElement())
+            .attr("d", new Shape(getShape(getValue(value, type))).getPathDescription())
             .attr("transform", transformPoint(scale, type, scaleFactor))
             .attr("style", `${config.shownTargets.indexOf(getValue(value, type).key) < 0 ? "display: none;" : ""}`)
             .attr("aria-hidden", false)
