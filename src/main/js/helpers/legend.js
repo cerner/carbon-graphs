@@ -25,13 +25,13 @@ import utils from "../helpers/utils";
  */
 const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
     if (!utils.isFunction(eventHandlers.clickHandler)) {
-        throw new Error("Invalid Argument: eventHandlers needs a clickHandler callback function");
+        throw new Error("Invalid Argument: eventHandlers needs a clickHandler callback function.");
     }
     if (!utils.isFunction(eventHandlers.hoverHandler)) {
-        throw new Error("Invalid Argument: eventHandlers needs a hoverHandler callback function");
+        throw new Error("Invalid Argument: eventHandlers needs a hoverHandler callback function.");
     }
     if (!t.label) {
-        return null;
+        throw new Error("Invalid Argument: label needs to be a valid string.");
     }
     const shape = t.shape;
     const isInBuilt = isShapeBuiltAsAPath(t);

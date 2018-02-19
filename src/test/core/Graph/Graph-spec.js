@@ -4,6 +4,7 @@ import Graph from "../../../main/js/core/Graph";
 import { getXAxisWidth } from "../../../main/js/helpers/axis";
 import constants, { AXIS_TYPE } from "../../../main/js/helpers/constants";
 import errors from "../../../main/js/helpers/errors";
+import { loadLegendItem } from "../../../main/js/helpers/legend";
 import styles from "../../../main/js/helpers/styles";
 import utils from "../../../main/js/helpers/utils";
 import LOCALE from "../../../main/js/locale";
@@ -799,6 +800,24 @@ describe("Graph", () => {
             });
         });
         describe("legend", () => {
+            it("throws error when legend is loaded without a click handler", () => {
+                expect(() => {
+                    loadLegendItem({}, {}, {}, {});
+                }).toThrowError("Invalid Argument: eventHandlers needs a clickHandler callback function.");
+            });
+            it("throws error when legend is loaded without a hover handler", () => {
+                expect(() => {
+                    loadLegendItem({}, {}, {}, { clickHandler: Function });
+                }).toThrowError("Invalid Argument: eventHandlers needs a hoverHandler callback function.");
+            });
+            it("throws error when legend is loaded without a label value", () => {
+                expect(() => {
+                    loadLegendItem({}, { label: null }, {}, {
+                        clickHandler: Function,
+                        hoverHandler: Function
+                    });
+                }).toThrowError("Invalid Argument: label needs to be a valid string.");
+            });
             it("loads legend in separate container when bindLegendTo used", () => {
                 graph.destroy();
                 const legendContainer = document.createElement("div");
