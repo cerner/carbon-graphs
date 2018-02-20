@@ -26,7 +26,7 @@ export class RegionsExample extends ExampleControl {
     }
 }
 
-export const renderRegionsExamples = (instance, toggleSection, contentSection, setState, getState) => {
+export const renderRegionsExamples = (instance, toggleSection, contentSection, setState, getState) =>
     btn.render(toggleSection, "Regions", (event) => {
         clearContent(contentSection, getState());
         toggleSectionAsActive(event.target);
@@ -44,4 +44,3 @@ export const renderRegionsExamples = (instance, toggleSection, contentSection, s
         instance.render();
         setState(instance);
     });
-};

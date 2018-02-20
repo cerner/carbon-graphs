@@ -17,7 +17,7 @@ export class CriticalityExample extends ExampleControl {
     }
 }
 
-export const renderCriticalityExamples = (instance, toggleSection, contentSection, setState, getState) => {
+export const renderCriticalityExamples = (instance, toggleSection, contentSection, setState, getState) =>
     btn.render(toggleSection, "Criticality", (event) => {
         clearContent(contentSection, getState());
         toggleSectionAsActive(event.target);
@@ -28,4 +28,3 @@ export const renderCriticalityExamples = (instance, toggleSection, contentSectio
         instance.render();
         setState(instance);
     });
-};

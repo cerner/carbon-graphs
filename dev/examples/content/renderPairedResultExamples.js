@@ -26,7 +26,7 @@ export class PairedResultExample extends ExampleControl {
     }
 }
 
-export const renderPairedResultExamples = (instance, toggleSection, contentSection, setState, getState) => {
+export const renderPairedResultExamples = (instance, toggleSection, contentSection, setState, getState) =>
     btn.render(toggleSection, "Paired Result", (event) => {
         clearContent(contentSection, getState());
         toggleSectionAsActive(event.target);
@@ -46,4 +46,3 @@ export const renderPairedResultExamples = (instance, toggleSection, contentSecti
         instance.render();
         setState(instance);
     });
-};

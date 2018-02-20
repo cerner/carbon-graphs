@@ -29,9 +29,8 @@ export class LineExample extends ExampleControl {
     }
 }
 
-const exampleSet = (exampleInstance, contentSection, setState) => {
+const lineExampleSet = (exampleInstance, contentSection, setState) => {
     exampleInstance.load(renderLine(contentSection, "lineSimple", "Simple Line Graph"));
-    exampleInstance.load(renderMultiLine(contentSection, "multiLine", "Multi-line Graph"));
     exampleInstance.load(renderLineTimeSeries(contentSection, "lineTimeSeries", "Time-Series"));
     exampleInstance.load(renderLineY2Axis(contentSection, "lineY2", "Y2 Axis"));
     exampleInstance.load(renderLineBlankDataPoint(contentSection, "lineBlankDataPoint", "Non-Contiguous Data"));
@@ -50,10 +49,18 @@ const exampleSet = (exampleInstance, contentSection, setState) => {
     setState(exampleInstance);
     return exampleInstance;
 };
+export const renderMultiLineExamples = (instance, toggleSection, contentSection, setState, getState) =>
+    btn.render(toggleSection, "Multi-Line", (event) => {
+        clearContent(contentSection, getState());
+        toggleSectionAsActive(event.target);
+        instance.load(renderMultiLine(contentSection, "multiLine", "Multi-Line Graph"));
+        instance.render();
+        setState(instance);
+    });
 export const toggleLineAsActive = (instance, contentSection, setState, getState) => (event) => {
     clearContent(contentSection, getState());
     toggleSectionAsActive(event.target);
-    exampleSet(instance, contentSection, setState);
+    lineExampleSet(instance, contentSection, setState);
 };
 export const renderLineExamples = (instance, toggleSection, contentSection, setState, getState) =>
     btn.render(toggleSection, "Line", toggleLineAsActive(instance, contentSection, setState, getState));

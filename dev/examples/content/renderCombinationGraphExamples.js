@@ -12,7 +12,7 @@ export class CombinationExample extends ExampleControl {
     }
 }
 
-export const renderCombinationGraphExamples = (instance, toggleSection, contentSection, setState, getState) => {
+export const renderCombinationGraphExamples = (instance, toggleSection, contentSection, setState, getState) =>
     btn.render(toggleSection, "Combination Graph", (event) => {
         clearContent(contentSection, getState());
         toggleSectionAsActive(event.target);
@@ -20,4 +20,3 @@ export const renderCombinationGraphExamples = (instance, toggleSection, contentS
         instance.render();
         setState(instance);
     });
-};

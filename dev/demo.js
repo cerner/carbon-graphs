@@ -12,6 +12,7 @@ import {
 import {
     LineExample,
     renderLineExamples,
+    renderMultiLineExamples,
     toggleLineAsActive
 } from "./examples/content/renderLineExamples";
 import {
@@ -59,6 +60,7 @@ const getState = () => _state.currentSection;
 *   * Add the content function below
 */
 renderLineExamples(new LineExample(), toggleSection, contentSection, setState, getState);
+renderMultiLineExamples(new LineExample(), toggleSection, contentSection, setState, getState);
 renderPairedResultExamples(new PairedResultExample(), toggleSection, contentSection, setState, getState);
 renderCombinationGraphExamples(new CombinationExample(), toggleSection, contentSection, setState, getState);
 renderRegionsExamples(new RegionsExample(), toggleSection, contentSection, setState, getState);
