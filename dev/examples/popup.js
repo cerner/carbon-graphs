@@ -22,8 +22,8 @@ export const loadPopup = (onCloseCB, key, index, value) => {
       .remove();
 
     // Add new popup
-    d3.select(".graph-section")
-      .insert("div", "#tooltip")
+    d3.select(".root-content")
+      .append("div", "#tooltip")
       .attr("id", "overlay")
       .classed("overlay", true)
       .on("click", clickHandler);
@@ -49,7 +49,11 @@ export const loadPopup = (onCloseCB, key, index, value) => {
     }
     else {
         // Paired Result
-        createItem(pair, "X axis", `${value.high ? getPairData(value.high.x) : value.mid ? getPairData(value.mid.x) : value.low ? getPairData(value.low.x) : "N/A"}`);
+        createItem(
+            pair,
+            "X axis",
+            `${value.high ? getPairData(value.high.x) : value.mid ? getPairData(value.mid.x) : value.low ? getPairData(value.low.x) : "N/A"}`
+        );
 
         if (value.high) {
             createItem(pair, "High", getPairData(value.high.y));

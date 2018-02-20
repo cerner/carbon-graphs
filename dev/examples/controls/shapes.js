@@ -46,5 +46,5 @@ export const renderCriticalityShapes = (el, id, title) => {
 };
 export const renderShapesAsSVG = (el, id, title) => {
     const section = shell.render(el, id, title);
-    getShapes().forEach((i) => section.appendChild(Carbon.tools.shape(i).getShapeElement({ svgClassNames: "shape--normal" })));
+    getShapes().forEach((i) => section.appendChild(Carbon.tools.shape(i).getShapeElement({ svgClassNames: "svg-shape" })));
 };
