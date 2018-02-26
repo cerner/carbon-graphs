@@ -1,9 +1,5 @@
 @import "../variables.less";
 
-.carbon-data-pair {
-    cursor: pointer;
-}
-
 // We are forcing display of the hidden item for data points,
 // this is only applicable when legend toggle is applied
 // and one of the data point is selected.
@@ -11,8 +7,13 @@
     display: block !important;
 }
 
+.carbon-paired-point {
+    cursor: pointer;
+}
+
 .carbon-paired-line {
     fill: none;
+    cursor: pointer;
     stroke-width: 0.1rem;
     stroke: @dark;
 }

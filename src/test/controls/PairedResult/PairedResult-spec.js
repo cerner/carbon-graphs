@@ -22,7 +22,6 @@ import {
     axisDefault,
     axisTimeSeries,
     dataPointClickHandlerSpy,
-    delay,
     fetchElementByClass,
     getAxes,
     getInput,
@@ -574,8 +573,10 @@ describe("PairedResult", () => {
                     input.onClick = null;
                     graphDefault.loadContent(new PairedResult(input));
                     const point = fetchElementByClass(pairedResultGraphContainer, styles.pairedPoint);
-                    triggerEvent(point, "click", done);
-                    expect(dataPointClickHandlerSpy.calledOnce).toBeFalsy();
+                    triggerEvent(point, "click", () => {
+                        expect(dataPointClickHandlerSpy.calledOnce).toBeFalsy();
+                        done();
+                    });
                 });
                 it("hides data point selection when parameter callback is called", () => {
                     graphDefault.destroy();
@@ -585,49 +586,68 @@ describe("PairedResult", () => {
                         clearSelectionCallback();
                     };
                     graphDefault.loadContent(new PairedResult(input));
-                    const box = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
-                    const point = fetchElementByClass(pairedResultGraphContainer, styles.pairedPoint);
-                    triggerEvent(point, "click");
-                    expect(box.getAttribute("aria-selected")).toBe("false");
+                    triggerEvent(fetchElementByClass(pairedResultGraphContainer, styles.pairedPoint), "click");
+                    expect(fetchElementByClass(pairedResultGraphContainer, styles.pairedBox).getAttribute("aria-selected")).toBe("false");
                 });
                 it("calls onClick callback", () => {
-                    const point = fetchElementByClass(pairedResultGraphContainer, styles.pairedPoint);
-                    triggerEvent(point, "click");
+                    triggerEvent(fetchElementByClass(pairedResultGraphContainer, styles.pairedPoint), "click");
                     expect(dataPointClickHandlerSpy.calledOnce).toBeTruthy();
                 });
                 it("highlights the data point", (done) => {
-                    const box = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
-                    const point = fetchElementByClass(pairedResultGraphContainer, styles.pairedPoint);
-                    triggerEvent(point, "click", done);
-                    expect(box.getAttribute("aria-selected")).toBe("true");
+                    triggerEvent(fetchElementByClass(pairedResultGraphContainer, styles.pairedPoint), "click", () => {
+                        expect(fetchElementByClass(pairedResultGraphContainer, styles.pairedBox).getAttribute("aria-selected")).toBe("true");
+                        done();
+                    });
                 });
                 it("creates a rectangle highlight for data point", (done) => {
-                    const selectionElement = fetchElementByClass(pairedResultGraphContainer, styles.dataPointSelection);
                     const point = fetchElementByClass(pairedResultGraphContainer, styles.pairedPoint);
-                    triggerEvent(point, "click", done);
-                    expect(selectionElement).not.toBeNull();
-                    expect(selectionElement.tagName).toBe("rect");
-                    expect(selectionElement.classList).toContain(styles.dataPointSelection);
+                    triggerEvent(point, "click", () => {
+                        const selectionElement = fetchElementByClass(pairedResultGraphContainer, styles.dataPointSelection);
+                        expect(selectionElement).not.toBeNull();
+                        expect(selectionElement.tagName).toBe("rect");
+                        expect(selectionElement.classList).toContain(styles.dataPointSelection);
+                        done();
+                    });
                 });
                 it("removes highlight when data point is clicked again", (done) => {
-                    const box = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
                     const point = fetchElementByClass(pairedResultGraphContainer, styles.pairedPoint);
                     triggerEvent(point, "click");
-                    triggerEvent(point, "click", done);
-                    expect(box.getAttribute("aria-selected")).toBe("false");
+                    triggerEvent(point, "click", () => {
+                        expect(fetchElementByClass(pairedResultGraphContainer, styles.pairedBox).getAttribute("aria-selected")).toBe("false");
+                        done();
+                    });
                 });
             });
-            describe("when clicked on a paired box area", () => {
+            describe("when clicked on a pair data point", () => {
                 it("highlights the data point", (done) => {
-                    const box = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
-                    triggerEvent(box, "click", done);
-                    expect(box.getAttribute("aria-selected")).toBe("true");
+                    triggerEvent(fetchElementByClass(pairedResultGraphContainer, styles.pairedPoint), "click", () => {
+                        expect(fetchElementByClass(pairedResultGraphContainer, styles.pairedBox).getAttribute("aria-selected")).toBe("true");
+                        done();
+                    });
                 });
                 it("removes highlight when clicked again", (done) => {
-                    const box = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
-                    triggerEvent(box, "click");
-                    triggerEvent(box, "click", done);
-                    expect(box.getAttribute("aria-selected")).toBe("false");
+                    const point = fetchElementByClass(pairedResultGraphContainer, styles.pairedPoint);
+                    triggerEvent(point, "click");
+                    triggerEvent(point, "click", () => {
+                        expect(fetchElementByClass(pairedResultGraphContainer, styles.pairedBox).getAttribute("aria-selected")).toBe("false");
+                        done();
+                    });
+                });
+            });
+            describe("when clicked on a paired line", () => {
+                it("highlights the data point", (done) => {
+                    triggerEvent(fetchElementByClass(pairedResultGraphContainer, styles.pairedLine), "click", () => {
+                        expect(fetchElementByClass(pairedResultGraphContainer, styles.pairedBox).getAttribute("aria-selected")).toBe("true");
+                        done();
+                    });
+                });
+                it("removes highlight when clicked again", (done) => {
+                    const line = fetchElementByClass(pairedResultGraphContainer, styles.pairedLine);
+                    triggerEvent(line, "click");
+                    triggerEvent(line, "click", () => {
+                        expect(fetchElementByClass(pairedResultGraphContainer, styles.pairedBox).getAttribute("aria-selected")).toBe("false");
+                        done();
+                    });
                 });
             });
         });
@@ -735,10 +755,10 @@ describe("PairedResult", () => {
                 it("hides the points", () => {
                     spyOn(window, "requestAnimationFrame").and.callThrough();
                     const input = getInput(valuesDefault, false, false);
-                    const pairResultInstance = new PairedResult(input);
-                    const graph = graphDefault.loadContent(pairResultInstance);
+                    const prContent = new PairedResult(input);
+                    const graph = graphDefault.loadContent(prContent);
                     triggerEvent(fetchElementByClass(pairedResultGraphContainer, styles.legendItem), "click");
-                    pairResultInstance.redraw(graph);
+                    prContent.redraw(graph);
 
                     const high = pairedResultGraphContainer.querySelector(`.${styles.pairedPoint}.${styles.high}`);
                     const mid = pairedResultGraphContainer.querySelector(`.${styles.pairedPoint}.${styles.mid}`);
@@ -750,40 +770,40 @@ describe("PairedResult", () => {
                 });
                 it("hides the line and points, if the point is high", () => {
                     const input = getInput(valuesDefault, false, false);
-                    const pairResultInstance = new PairedResult(input);
-                    const graph = graphDefault.loadContent(pairResultInstance);
+                    const prContent = new PairedResult(input);
+                    const graph = graphDefault.loadContent(prContent);
                     triggerEvent(fetchElementByClass(pairedResultGraphContainer, styles.legendItem), "click");
-                    pairResultInstance.redraw(graph);
+                    prContent.redraw(graph);
                     expect(pairedResultGraphContainer.querySelector(`.${styles.pairedLine}`).style.display).toBe("none");
                 });
                 it("hides the line and points, if the point is low", () => {
                     const input = getInput(valuesDefault, false, false);
-                    const pairResultInstance = new PairedResult(input);
-                    const graph = graphDefault.loadContent(pairResultInstance);
+                    const prContent = new PairedResult(input);
+                    const graph = graphDefault.loadContent(prContent);
                     const legendContainer = fetchElementByClass(pairedResultGraphContainer, styles.legend);
                     triggerEvent(legendContainer.querySelector(`[aria-describedby=${input.key}_low]`), "click");
-                    pairResultInstance.redraw(graph);
+                    prContent.redraw(graph);
                     expect(pairedResultGraphContainer.querySelector(`.${styles.pairedLine}`).style.display).toBe("none");
                 });
                 it("does not hide the line and points, if the point is mid", () => {
                     const input = getInput(valuesDefault, false, false);
-                    const pairResultInstance = new PairedResult(input);
-                    const graph = graphDefault.loadContent(pairResultInstance);
+                    const prContent = new PairedResult(input);
+                    const graph = graphDefault.loadContent(prContent);
                     const legendContainer = fetchElementByClass(pairedResultGraphContainer, styles.legend);
                     triggerEvent(legendContainer.querySelector(`[aria-describedby=${input.key}_mid]`), "click");
-                    pairResultInstance.redraw(graph);
+                    prContent.redraw(graph);
                     const line = pairedResultGraphContainer.querySelector(`.${styles.pairedLine}`);
                     expect(line.getAttribute("d")).not.toBeNull();
                 });
                 it("removes the point but keeps the rest for multiple data sets", () => {
                     const inputPrimary = getInput(valuesDefault, false, false);
-                    const primaryPR = new PairedResult(inputPrimary);
-                    const secondaryPR = new PairedResult(inputSecondary);
-                    graphDefault.loadContent(primaryPR);
-                    const graph = graphDefault.loadContent(secondaryPR);
+                    const primaryPRContent = new PairedResult(inputPrimary);
+                    const secondaryPRContent = new PairedResult(inputSecondary);
+                    graphDefault.loadContent(primaryPRContent);
+                    const graph = graphDefault.loadContent(secondaryPRContent);
                     triggerEvent(fetchElementByClass(pairedResultGraphContainer, styles.legendItem), "click");
-                    primaryPR.redraw(graph);
-                    secondaryPR.redraw(graph);
+                    primaryPRContent.redraw(graph);
+                    secondaryPRContent.redraw(graph);
                     const primaryPRElement = pairedResultGraphContainer.querySelector(`.${styles.pairedBoxGroup}[aria-describedby="${inputPrimary.key}"]`);
                     const secondaryPRElement = pairedResultGraphContainer.querySelector(`.${styles.pairedBoxGroup}[aria-describedby="${inputSecondary.key}"]`);
                     expect(graph.config.shownTargets.length).toBe(5);
@@ -793,54 +813,96 @@ describe("PairedResult", () => {
                 it("on clicking twice toggles the points back to visible", () => {
                     spyOn(window, "requestAnimationFrame").and.callThrough();
                     const input = getInput(valuesDefault, false, false);
-                    const line = new PairedResult(input);
-                    const graph = graphDefault.loadContent(line);
+                    const prContent = new PairedResult(input);
+                    const graph = graphDefault.loadContent(prContent);
                     const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
                     triggerEvent(legendItem, "click");
-                    line.redraw(graph);
+                    prContent.redraw(graph);
                     triggerEvent(legendItem, "click");
-                    line.redraw(graph);
+                    prContent.redraw(graph);
                     expect(window.requestAnimationFrame).toHaveBeenCalledTimes(2);
                     expect(fetchElementByClass(pairedResultGraphContainer, styles.pairedPoint).style.display).toBe("");
                 });
                 describe("highlights the data point and shows rest of data points", () => {
+                    const input = getInput(valuesDefault);
+                    let prContent = null;
+                    let graph = null;
                     beforeEach(() => {
-                        const input = getInput(valuesDefault, false, false);
-                        const line = new PairedResult(input);
-                        const graph = graphDefault.loadContent(line);
-                        const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
-                        triggerEvent(legendItem, "click");
-                        line.redraw(graph);
+                        prContent = new PairedResult(input);
+                        graph = graphDefault.loadContent(prContent);
                     });
                     it("box is set as selected", (done) => {
-                        const box = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
-                        triggerEvent(box, "click", done);
-                        expect(box.getAttribute("aria-selected")).toBe("true");
+                        const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
+                        triggerEvent(legendItem, "click", () => {
+                            prContent.redraw(graph);
+                            const line = fetchElementByClass(pairedResultGraphContainer, styles.pairedLine);
+                            triggerEvent(line, "click", () => {
+                                const box = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
+                                expect(box.getAttribute("aria-selected")).toBe("true");
+                                done();
+                            });
+                        });
                     });
-                    it("selection element is displayed", (done) => {
-                        const box = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
-                        triggerEvent(box, "click", done);
-                        const selectionElement = fetchElementByClass(pairedResultGraphContainer, styles.dataPointSelection);
-                        expect(selectionElement).not.toBeNull();
-                        expect(selectionElement.tagName).toBe("rect");
-                        expect(selectionElement.classList).toContain(styles.dataPointSelection);
+                    it("selection element is displayed - Line", (done) => {
+                        const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
+                        triggerEvent(legendItem, "click", () => {
+                            prContent.redraw(graph);
+                            const line = fetchElementByClass(pairedResultGraphContainer, styles.pairedLine);
+                            triggerEvent(line, "click", () => {
+                                const selectionElement = fetchElementByClass(pairedResultGraphContainer, styles.dataPointSelection);
+                                expect(selectionElement).not.toBeNull();
+                                expect(selectionElement.tagName).toBe("rect");
+                                expect(selectionElement.classList).toContain(styles.dataPointSelection);
+                                expect(fetchElementByClass(pairedResultGraphContainer, styles.pairedBox).getAttribute("aria-selected")).toBe("true");
+                                done();
+                            });
+                        });
+                    });
+                    it("selection element is displayed - Point", (done) => {
+                        const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
+                        triggerEvent(legendItem, "click", () => {
+                            prContent.redraw(graph);
+                            const point = fetchElementByClass(pairedResultGraphContainer, styles.pairedPoint);
+                            triggerEvent(point, "click", () => {
+                                const selectionElement = fetchElementByClass(pairedResultGraphContainer, styles.dataPointSelection);
+                                expect(selectionElement).not.toBeNull();
+                                expect(selectionElement.tagName).toBe("rect");
+                                expect(selectionElement.classList).toContain(styles.dataPointSelection);
+                                expect(fetchElementByClass(pairedResultGraphContainer, styles.pairedBox).getAttribute("aria-selected")).toBe("true");
+                                done();
+                            });
+                        });
                     });
                     it("line is displayed to connect the pair", (done) => {
-                        const box = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
-                        triggerEvent(box, "click", done);
-                        const lineElement = fetchElementByClass(pairedResultGraphContainer, styles.pairedLine);
-                        expect(lineElement.tagName).toBe("path");
-                        expect(lineElement.classList).toContain(styles.pairedLine);
-                        expect(lineElement.classList).toContain(styles.dataPointDisplayEnable);
+                        const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
+                        triggerEvent(legendItem, "click", () => {
+                            prContent.redraw(graph);
+                            const line = fetchElementByClass(pairedResultGraphContainer, styles.pairedLine);
+                            triggerEvent(line, "click", () => {
+                                const lineElement = fetchElementByClass(pairedResultGraphContainer, styles.pairedLine);
+                                expect(lineElement.tagName).toBe("path");
+                                expect(lineElement.classList).toContain(styles.pairedLine);
+                                expect(lineElement.classList).toContain(styles.dataPointDisplayEnable);
+                                expect(fetchElementByClass(pairedResultGraphContainer, styles.pairedBox).getAttribute("aria-selected")).toBe("true");
+                                done();
+                            });
+                        });
                     });
                     it("points are displayed even if they are hidden", (done) => {
-                        const box = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
-                        triggerEvent(box, "click", done);
-                        const pointElement = fetchElementByClass(pairedResultGraphContainer, styles.pairedPoint);
-                        expect(pointElement.tagName).toBe("path");
-                        expect(pointElement.classList).toContain(styles.pairedPoint);
-                        expect(pointElement.classList).toContain(styles.high);
-                        expect(pointElement.classList).toContain(styles.dataPointDisplayEnable);
+                        const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
+                        triggerEvent(legendItem, "click", () => {
+                            prContent.redraw(graph);
+                            const line = fetchElementByClass(pairedResultGraphContainer, styles.pairedLine);
+                            triggerEvent(line, "click", () => {
+                                const pointElement = fetchElementByClass(pairedResultGraphContainer, styles.pairedPoint);
+                                expect(pointElement.tagName).toBe("path");
+                                expect(pointElement.classList).toContain(styles.pairedPoint);
+                                expect(pointElement.classList).toContain(styles.high);
+                                expect(pointElement.classList).toContain(styles.dataPointDisplayEnable);
+                                expect(fetchElementByClass(pairedResultGraphContainer, styles.pairedBox).getAttribute("aria-selected")).toBe("true");
+                                done();
+                            });
+                        });
                     });
                 });
                 describe("removes highlight when reset", () => {
@@ -849,45 +911,68 @@ describe("PairedResult", () => {
                         input.onClick = (clearSelectionCallback) => {
                             clearSelectionCallback();
                         };
-                        const line = new PairedResult(input);
-                        const graph = graphDefault.loadContent(line);
+                        const prContent = new PairedResult(input);
+                        const graph = graphDefault.loadContent(prContent);
                         const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
                         triggerEvent(legendItem, "click");
-                        line.redraw(graph);
+                        prContent.redraw(graph);
                     });
                     it("box is set as unselected", (done) => {
-                        const box = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
-                        triggerEvent(box, "click");
-                        triggerEvent(box, "click", done);
-                        expect(box.getAttribute("aria-selected")).toBe("false");
+                        const line = fetchElementByClass(pairedResultGraphContainer, styles.pairedLine);
+                        triggerEvent(line, "click");
+                        triggerEvent(line, "click", () => {
+                            expect(fetchElementByClass(pairedResultGraphContainer, styles.pairedBox).getAttribute("aria-selected")).toBe("false");
+                            done();
+                        });
                     });
-                    it("selection element is hidden", (done) => {
-                        const box = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
-                        triggerEvent(box, "click");
-                        triggerEvent(box, "click", done);
-                        const selectionElement = fetchElementByClass(pairedResultGraphContainer, styles.dataPointSelection);
-                        expect(selectionElement).not.toBeNull();
-                        expect(selectionElement.tagName).toBe("rect");
-                        expect(selectionElement.classList).toContain(styles.dataPointSelection);
+                    it("selection element is hidden - Line", (done) => {
+                        const line = fetchElementByClass(pairedResultGraphContainer, styles.pairedLine);
+                        triggerEvent(line, "click");
+                        triggerEvent(line, "click", () => {
+                            const selectionElement = fetchElementByClass(pairedResultGraphContainer, styles.dataPointSelection);
+                            expect(selectionElement).not.toBeNull();
+                            expect(selectionElement.tagName).toBe("rect");
+                            expect(selectionElement.classList).toContain(styles.dataPointSelection);
+                            expect(fetchElementByClass(pairedResultGraphContainer, styles.pairedBox).getAttribute("aria-selected")).toBe("false");
+                            done();
+                        });
+                    });
+                    it("selection element is hidden - Point", (done) => {
+                        const point = fetchElementByClass(pairedResultGraphContainer, styles.pairedPoint);
+                        triggerEvent(point, "click");
+                        triggerEvent(point, "click", () => {
+                            const selectionElement = fetchElementByClass(pairedResultGraphContainer, styles.dataPointSelection);
+                            expect(selectionElement).not.toBeNull();
+                            expect(selectionElement.tagName).toBe("rect");
+                            expect(selectionElement.classList).toContain(styles.dataPointSelection);
+                            expect(fetchElementByClass(pairedResultGraphContainer, styles.pairedBox).getAttribute("aria-selected")).toBe("false");
+                            done();
+                        });
                     });
                     it("line between the pair is hidden", (done) => {
-                        const box = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
-                        triggerEvent(box, "click");
-                        triggerEvent(box, "click", done);
-                        const lineElement = fetchElementByClass(pairedResultGraphContainer, styles.pairedLine);
-                        expect(lineElement.tagName).toBe("path");
-                        expect(lineElement.classList).toContain(styles.pairedLine);
-                        expect(lineElement.classList[ 1 ]).toBeUndefined();
+                        const line = fetchElementByClass(pairedResultGraphContainer, styles.pairedLine);
+                        triggerEvent(line, "click");
+                        triggerEvent(line, "click", () => {
+                            const lineElement = fetchElementByClass(pairedResultGraphContainer, styles.pairedLine);
+                            expect(lineElement.tagName).toBe("path");
+                            expect(lineElement.classList).toContain(styles.pairedLine);
+                            expect(lineElement.classList[ 1 ]).toBeUndefined();
+                            expect(fetchElementByClass(pairedResultGraphContainer, styles.pairedBox).getAttribute("aria-selected")).toBe("false");
+                            done();
+                        });
                     });
                     it("points are hidden that were toggled off", (done) => {
-                        const box = fetchElementByClass(pairedResultGraphContainer, styles.pairedBox);
-                        triggerEvent(box, "click");
-                        triggerEvent(box, "click", done);
-                        const pointElement = fetchElementByClass(pairedResultGraphContainer, styles.pairedPoint);
-                        expect(pointElement.tagName).toBe("path");
-                        expect(pointElement.classList).toContain(styles.pairedPoint);
-                        expect(pointElement.classList).toContain(styles.high);
-                        expect(pointElement.classList[ 2 ]).toBeUndefined();
+                        const line = fetchElementByClass(pairedResultGraphContainer, styles.pairedLine);
+                        triggerEvent(line, "click");
+                        triggerEvent(line, "click", () => {
+                            const pointElement = fetchElementByClass(pairedResultGraphContainer, styles.pairedPoint);
+                            expect(pointElement.tagName).toBe("path");
+                            expect(pointElement.classList).toContain(styles.pairedPoint);
+                            expect(pointElement.classList).toContain(styles.high);
+                            expect(pointElement.classList[ 2 ]).toBeUndefined();
+                            expect(fetchElementByClass(pairedResultGraphContainer, styles.pairedBox).getAttribute("aria-selected")).toBe("false");
+                            done();
+                        });
                     });
                 });
             });
@@ -978,7 +1063,6 @@ describe("PairedResult", () => {
             values: valuesDefault
         };
         describe("On load", () => {
-            afterEach(() => pairedResultPrimaryContent ? pairedResultPrimaryContent.unload(graphDefault) : "");
             describe("Ideally", () => {
                 beforeEach(() => {
                     data = utils.deepClone(getInput(valuesDefault, false, false));
@@ -1401,10 +1485,6 @@ describe("PairedResult", () => {
                     graphDefault.loadContent(pairedResultPrimaryContent);
                     graphDefault.loadContent(pairedResultSecondaryContent);
                 });
-                afterEach(() => {
-                    graphDefault.unloadContent(pairedResultPrimaryContent);
-                    graphDefault.unloadContent(pairedResultSecondaryContent);
-                });
                 it("Shows region on mouse enter", () => {
                     const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
                     triggerEvent(legendItem, "mouseenter");
@@ -1417,14 +1497,16 @@ describe("PairedResult", () => {
                     expect(document.querySelector(`rect[aria-describedby="region_${inputPrimary.key}_low"]`)
                                    .classList.contains(styles.regionBlur)).toBeTruthy();
                 });
-                it("Hides region on mouse exit", () => {
+                it("Hides region on mouse exit", (done) => {
                     const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
                     triggerEvent(legendItem, "mouseenter");
-                    triggerEvent(legendItem, "mouseleave");
-                    expect(document.querySelector(`rect[aria-describedby="region_${inputPrimary.key}_high"]`)
-                                   .classList.contains(styles.regionHighlight)).toBeFalsy();
-                    expect(document.querySelector(`rect[aria-describedby="region_${inputPrimary.key}_low"]`)
-                                   .classList.contains(styles.regionBlur)).toBeFalsy();
+                    triggerEvent(legendItem, "mouseleave", () => {
+                        expect(document.querySelector(`rect[aria-describedby="region_${inputPrimary.key}_high"]`)
+                                       .classList.contains(styles.regionHighlight)).toBeFalsy();
+                        expect(document.querySelector(`rect[aria-describedby="region_${inputPrimary.key}_low"]`)
+                                       .classList.contains(styles.regionBlur)).toBeFalsy();
+                        done();
+                    });
                 });
             });
             describe("When multi-paired result", () => {
@@ -1439,10 +1521,6 @@ describe("PairedResult", () => {
                     graphDefault.loadContent(pairedResultPrimaryContent);
                     graphDefault.loadContent(pairedResultSecondaryContent);
                 });
-                afterEach(() => {
-                    graphDefault.unloadContent(pairedResultPrimaryContent);
-                    graphDefault.unloadContent(pairedResultSecondaryContent);
-                });
                 it("Shows region on mouse enter", () => {
                     const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
                     triggerEvent(legendItem, "mouseenter");
@@ -1450,13 +1528,15 @@ describe("PairedResult", () => {
                     expect(regionElements[ 0 ].classList.contains(styles.regionHighlight)).toBeTruthy();
                     expect(regionElements[ 1 ].classList.contains(styles.regionHighlight)).toBeTruthy();
                 });
-                it("Hides all the regions except current", () => {
+                it("Hides all the regions except current", (done) => {
                     const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
                     triggerEvent(legendItem, "mouseenter");
-                    triggerEvent(legendItem, "mouseleave");
-                    const regionElements = document.querySelectorAll(`rect[aria-describedby="region_${inputPrimary.key}_high"]`);
-                    expect(regionElements[ 0 ].classList.contains(styles.regionHighlight)).toBeFalsy();
-                    expect(regionElements[ 1 ].classList.contains(styles.regionHighlight)).toBeFalsy();
+                    triggerEvent(legendItem, "mouseleave", () => {
+                        const regionElements = document.querySelectorAll(`rect[aria-describedby="region_${inputPrimary.key}_high"]`);
+                        expect(regionElements[ 0 ].classList.contains(styles.regionHighlight)).toBeFalsy();
+                        expect(regionElements[ 1 ].classList.contains(styles.regionHighlight)).toBeFalsy();
+                        done();
+                    });
                 });
             });
         });
@@ -1470,14 +1550,10 @@ describe("PairedResult", () => {
                 pairedResultPrimaryContent = new PairedResult(inputPrimary);
                 graphDefault.loadContent(pairedResultPrimaryContent);
             });
-            afterEach(() => {
-                graphDefault.unloadContent(pairedResultPrimaryContent);
-            });
             describe("When single-paired result", () => {
                 it("Hides region on toggle", (done) => {
                     const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
-                    triggerEvent(legendItem, "click");
-                    delay(() => {
+                    triggerEvent(legendItem, "click", () => {
                         const regionElement = document.querySelector(`rect[aria-describedby="region_${inputPrimary.key}_high"]`);
                         expect(regionElement.getAttribute("aria-hidden")).toBe("true");
                         done();
@@ -1485,8 +1561,7 @@ describe("PairedResult", () => {
                 });
                 it("Hides regions on toggle", (done) => {
                     const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
-                    triggerEvent(legendItem, "click");
-                    delay(() => {
+                    triggerEvent(legendItem, "click", () => {
                         const regionElements = document.querySelectorAll(`rect[aria-describedby="region_${inputPrimary.key}_high"]`);
                         expect(regionElements[ 0 ].getAttribute("aria-hidden")).toBe("true");
                         expect(regionElements[ 1 ].getAttribute("aria-hidden")).toBe("true");
@@ -1495,10 +1570,8 @@ describe("PairedResult", () => {
                 });
                 it("Shows region on re-toggle", (done) => {
                     const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
-                    triggerEvent(legendItem, "click");
-                    delay(() => {
-                        triggerEvent(legendItem, "click");
-                        delay(() => {
+                    triggerEvent(legendItem, "click", () => {
+                        triggerEvent(legendItem, "click", () => {
                             const regionElements = document.querySelectorAll(`rect[aria-describedby="region_${inputPrimary.key}_high"]`);
                             expect(regionElements[ 0 ].getAttribute("aria-hidden")).toBe("false");
                             expect(regionElements[ 1 ].getAttribute("aria-hidden")).toBe("false");
@@ -1514,7 +1587,6 @@ describe("PairedResult", () => {
         let pairedResultPrimaryContent = null;
         let pairedResultSecondaryContent = null;
         describe("On load", () => {
-            afterEach(() => pairedResultPrimaryContent ? pairedResultPrimaryContent.unload(graphDefault) : "");
             it("Does not add indicator if data point is not critical", () => {
                 const valuesMutated = utils.deepClone(valuesDefault);
                 pairedResultPrimaryContent = new PairedResult(getInput(valuesMutated));
@@ -1721,56 +1793,68 @@ describe("PairedResult", () => {
                     pairedResultPrimaryContent = new PairedResult(inputPrimary);
                     graphDefault.loadContent(pairedResultPrimaryContent);
                 });
-                it("Highlights the indicators on mouse-enter", () => {
+                it("Highlights the indicators on mouse-enter", (done) => {
+                    const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
+                    triggerEvent(legendItem, "mouseenter", () => {
+                        const criticalOuterElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                        const criticalInnerElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                        expect(criticalOuterElement.classList).toContain(styles.highlight);
+                        expect(criticalInnerElement.classList).toContain(styles.highlight);
+                        done();
+                    });
+                });
+                it("Removes highlights for indicators on mouse-leave", (done) => {
                     const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
                     triggerEvent(legendItem, "mouseenter");
-                    const criticalOuterElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_high"]`);
-                    const criticalInnerElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_high"]`);
-                    expect(criticalOuterElement.classList).toContain(styles.highlight);
-                    expect(criticalInnerElement.classList).toContain(styles.highlight);
+                    triggerEvent(legendItem, "mouseleave", () => {
+                        const criticalOuterElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                        const criticalInnerElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                        expect(criticalOuterElement.classList).not.toContain(styles.highlight);
+                        expect(criticalInnerElement.classList).not.toContain(styles.highlight);
+                        done();
+                    });
                 });
-                it("Removes highlights for indicators on mouse-leave", () => {
-                    const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
-                    triggerEvent(legendItem, "mouseenter");
-                    triggerEvent(legendItem, "mouseleave");
-                    const criticalOuterElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_high"]`);
-                    const criticalInnerElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_high"]`);
-                    expect(criticalOuterElement.classList).not.toContain(styles.highlight);
-                    expect(criticalInnerElement.classList).not.toContain(styles.highlight);
+                it("Highlights the indicators on mouse-enter", (done) => {
+                    const legendItem = pairedResultGraphContainer.querySelectorAll(`.${styles.legendItem}`)[ 1 ];
+                    triggerEvent(legendItem, "mouseenter", () => {
+                        const criticalOuterElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_mid"]`);
+                        const criticalInnerElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_mid"]`);
+                        expect(criticalOuterElement.classList).toContain(styles.highlight);
+                        expect(criticalInnerElement.classList).toContain(styles.highlight);
+                        done();
+                    });
                 });
-                it("Highlights the indicators on mouse-enter", () => {
+                it("Removes highlights for indicators on mouse-leave", (done) => {
                     const legendItem = pairedResultGraphContainer.querySelectorAll(`.${styles.legendItem}`)[ 1 ];
                     triggerEvent(legendItem, "mouseenter");
-                    const criticalOuterElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_mid"]`);
-                    const criticalInnerElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_mid"]`);
-                    expect(criticalOuterElement.classList).toContain(styles.highlight);
-                    expect(criticalInnerElement.classList).toContain(styles.highlight);
+                    triggerEvent(legendItem, "mouseleave", () => {
+                        const criticalOuterElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_mid"]`);
+                        const criticalInnerElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_mid"]`);
+                        expect(criticalOuterElement.classList).not.toContain(styles.highlight);
+                        expect(criticalInnerElement.classList).not.toContain(styles.highlight);
+                        done();
+                    });
                 });
-                it("Removes highlights for indicators on mouse-leave", () => {
-                    const legendItem = pairedResultGraphContainer.querySelectorAll(`.${styles.legendItem}`)[ 1 ];
-                    triggerEvent(legendItem, "mouseenter");
-                    triggerEvent(legendItem, "mouseleave");
-                    const criticalOuterElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_mid"]`);
-                    const criticalInnerElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_mid"]`);
-                    expect(criticalOuterElement.classList).not.toContain(styles.highlight);
-                    expect(criticalInnerElement.classList).not.toContain(styles.highlight);
+                it("Highlights the indicators on mouse-enter", (done) => {
+                    const legendItem = pairedResultGraphContainer.querySelectorAll(`.${styles.legendItem}`)[ 2 ];
+                    triggerEvent(legendItem, "mouseenter", () => {
+                        const criticalOuterElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_low"]`);
+                        const criticalInnerElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_low"]`);
+                        expect(criticalOuterElement.classList).toContain(styles.highlight);
+                        expect(criticalInnerElement.classList).toContain(styles.highlight);
+                        done();
+                    });
                 });
-                it("Highlights the indicators on mouse-enter", () => {
+                it("Removes highlights for indicators on mouse-leave", (done) => {
                     const legendItem = pairedResultGraphContainer.querySelectorAll(`.${styles.legendItem}`)[ 2 ];
                     triggerEvent(legendItem, "mouseenter");
-                    const criticalOuterElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_low"]`);
-                    const criticalInnerElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_low"]`);
-                    expect(criticalOuterElement.classList).toContain(styles.highlight);
-                    expect(criticalInnerElement.classList).toContain(styles.highlight);
-                });
-                it("Removes highlights for indicators on mouse-leave", () => {
-                    const legendItem = pairedResultGraphContainer.querySelectorAll(`.${styles.legendItem}`)[ 2 ];
-                    triggerEvent(legendItem, "mouseenter");
-                    triggerEvent(legendItem, "mouseleave");
-                    const criticalOuterElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_low"]`);
-                    const criticalInnerElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_low"]`);
-                    expect(criticalOuterElement.classList).not.toContain(styles.highlight);
-                    expect(criticalInnerElement.classList).not.toContain(styles.highlight);
+                    triggerEvent(legendItem, "mouseleave", () => {
+                        const criticalOuterElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_low"]`);
+                        const criticalInnerElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_low"]`);
+                        expect(criticalOuterElement.classList).not.toContain(styles.highlight);
+                        expect(criticalInnerElement.classList).not.toContain(styles.highlight);
+                        done();
+                    });
                 });
             });
             describe("On multiple data-set", () => {
@@ -1788,50 +1872,55 @@ describe("PairedResult", () => {
                     graphDefault.loadContent(pairedResultPrimaryContent);
                     graphDefault.loadContent(pairedResultSecondaryContent);
                 });
-                afterEach(() => {
-                    graphDefault.unloadContent(pairedResultSecondaryContent);
-                });
-                it("Highlights only the current indicator", () => {
+                it("Highlights only the current indicator", (done) => {
                     const legendItem = fetchElementByClass(pairedResultGraphContainer, styles.legendItem);
-                    triggerEvent(legendItem, "mouseenter");
-                    const criticalOuterElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_high"]`);
-                    const criticalInnerElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_high"]`);
-                    expect(criticalOuterElement.classList).toContain(styles.highlight);
-                    expect(criticalInnerElement.classList).toContain(styles.highlight);
+                    triggerEvent(legendItem, "mouseenter", () => {
+                        const criticalOuterElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                        const criticalInnerElement = pairedResultGraphContainer.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                        expect(criticalOuterElement.classList).toContain(styles.highlight);
+                        expect(criticalInnerElement.classList).toContain(styles.highlight);
+                        done();
+                    });
                 });
-                it("Blurs other indicators", () => {
+                it("Blurs other indicators", (done) => {
                     const legendItem = pairedResultGraphContainer.querySelector(`.${styles.legendItem}[aria-describedby="${inputSecondary.key}_high"]`);
-                    triggerEvent(legendItem, "mouseenter");
-                    const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_high"]`);
-                    const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_high"]`);
-                    const criticalOuterElementAlt = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputSecondary.key}_high"]`);
-                    const criticalInnerElementAlt = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputSecondary.key}_high"]`);
-                    expect(criticalOuterElement.classList).not.toContain(styles.highlight);
-                    expect(criticalInnerElement.classList).not.toContain(styles.highlight);
-                    expect(criticalOuterElementAlt.classList).toContain(styles.highlight);
-                    expect(criticalInnerElementAlt.classList).toContain(styles.highlight);
+                    triggerEvent(legendItem, "mouseenter", () => {
+                        const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                        const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                        const criticalOuterElementAlt = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputSecondary.key}_high"]`);
+                        const criticalInnerElementAlt = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputSecondary.key}_high"]`);
+                        expect(criticalOuterElement.classList).not.toContain(styles.highlight);
+                        expect(criticalInnerElement.classList).not.toContain(styles.highlight);
+                        expect(criticalOuterElementAlt.classList).toContain(styles.highlight);
+                        expect(criticalInnerElementAlt.classList).toContain(styles.highlight);
+                        done();
+                    });
                 });
-                it("Removes highlights on mouse-leave", () => {
+                it("Removes highlights on mouse-leave", (done) => {
                     const legendItem = pairedResultGraphContainer.querySelector(`.${styles.legendItem}[aria-describedby="${inputPrimary.key}_high"]`);
                     triggerEvent(legendItem, "mouseenter");
-                    triggerEvent(legendItem, "mouseleave");
-                    const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_high"]`);
-                    const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_high"]`);
-                    expect(criticalOuterElement.classList).not.toContain(styles.highlight);
-                    expect(criticalInnerElement.classList).not.toContain(styles.highlight);
+                    triggerEvent(legendItem, "mouseleave", () => {
+                        const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                        const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                        expect(criticalOuterElement.classList).not.toContain(styles.highlight);
+                        expect(criticalInnerElement.classList).not.toContain(styles.highlight);
+                        done();
+                    });
                 });
-                it("Removes blur for other data points on mouse-leave", () => {
+                it("Removes blur for other data points on mouse-leave", (done) => {
                     const legendItem = pairedResultGraphContainer.querySelector(`.${styles.legendItem}[aria-describedby="${inputSecondary.key}_high"]`);
                     triggerEvent(legendItem, "mouseenter");
-                    triggerEvent(legendItem, "mouseleave");
-                    const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_high"]`);
-                    const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_high"]`);
-                    const criticalOuterElementAlt = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputSecondary.key}_high"]`);
-                    const criticalInnerElementAlt = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputSecondary.key}_high"]`);
-                    expect(criticalOuterElement.classList).not.toContain(styles.highlight);
-                    expect(criticalInnerElement.classList).not.toContain(styles.highlight);
-                    expect(criticalOuterElementAlt.classList).not.toContain(styles.highlight);
-                    expect(criticalInnerElementAlt.classList).not.toContain(styles.highlight);
+                    triggerEvent(legendItem, "mouseleave", () => {
+                        const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                        const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_high"]`);
+                        const criticalOuterElementAlt = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputSecondary.key}_high"]`);
+                        const criticalInnerElementAlt = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputSecondary.key}_high"]`);
+                        expect(criticalOuterElement.classList).not.toContain(styles.highlight);
+                        expect(criticalInnerElement.classList).not.toContain(styles.highlight);
+                        expect(criticalOuterElementAlt.classList).not.toContain(styles.highlight);
+                        expect(criticalInnerElementAlt.classList).not.toContain(styles.highlight);
+                        done();
+                    });
                 });
             });
         });
@@ -1849,8 +1938,7 @@ describe("PairedResult", () => {
             describe("On single data-set", () => {
                 it("Hides indicators on toggle", (done) => {
                     const legendItem = pairedResultGraphContainer.querySelector(`.${styles.legendItem}[aria-describedby="${inputPrimary.key}_high"]`);
-                    triggerEvent(legendItem, "click");
-                    delay(() => {
+                    triggerEvent(legendItem, "click", () => {
                         const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_high"]`);
                         const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_high"]`);
                         expect(criticalOuterElement.getAttribute("style")).toBe("display: none;");
@@ -1860,10 +1948,8 @@ describe("PairedResult", () => {
                 });
                 it("Shows indicators on re-toggle", (done) => {
                     const legendItem = pairedResultGraphContainer.querySelector(`.${styles.legendItem}[aria-describedby="${inputPrimary.key}_high"]`);
-                    triggerEvent(legendItem, "click");
-                    delay(() => {
-                        triggerEvent(legendItem, "click");
-                        delay(() => {
+                    triggerEvent(legendItem, "click", () => {
+                        triggerEvent(legendItem, "click", () => {
                             const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_high"]`);
                             const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_high"]`);
                             expect(criticalOuterElement.getAttribute("style")).toBe("");
@@ -1874,10 +1960,8 @@ describe("PairedResult", () => {
                 });
                 it("Shows indicators on re-toggle low", (done) => {
                     const legendItem = pairedResultGraphContainer.querySelector(`.${styles.legendItem}[aria-describedby="${inputPrimary.key}_low"]`);
-                    triggerEvent(legendItem, "click");
-                    delay(() => {
-                        triggerEvent(legendItem, "click");
-                        delay(() => {
+                    triggerEvent(legendItem, "click", () => {
+                        triggerEvent(legendItem, "click", () => {
                             let criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}_low"]`);
                             let criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}_low"]`);
                             expect(criticalOuterElement.getAttribute("style")).toBe("");

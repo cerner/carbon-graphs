@@ -22,7 +22,6 @@ import {
     axisDefault,
     axisTimeSeries,
     dataPointClickHandlerSpy,
-    delay,
     fetchElementByClass,
     getAxes,
     getInput,
@@ -667,7 +666,6 @@ describe("Line", () => {
         let line = null;
         let data = null;
         describe("On load", () => {
-            afterEach(() => line ? line.unload(graphDefault) : "");
             describe("Ideally", () => {
                 beforeEach(() => {
                     data = utils.deepClone(getInput(valuesDefault, false, false));
@@ -1089,10 +1087,6 @@ describe("Line", () => {
                     graphDefault.loadContent(linePrimary);
                     graphDefault.loadContent(lineSecondary);
                 });
-                afterEach(() => {
-                    graphDefault.unloadContent(linePrimary);
-                    graphDefault.unloadContent(lineSecondary);
-                });
                 it("Shows region on mouse enter", () => {
                     const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
                     triggerEvent(legendItem, "mouseenter");
@@ -1127,10 +1121,6 @@ describe("Line", () => {
                     lineSecondary = new Line(inputSecondary);
                     graphDefault.loadContent(linePrimary);
                     graphDefault.loadContent(lineSecondary);
-                });
-                afterEach(() => {
-                    graphDefault.unloadContent(linePrimary);
-                    graphDefault.unloadContent(lineSecondary);
                 });
                 it("Shows region on mouse enter", () => {
                     const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
@@ -1169,14 +1159,10 @@ describe("Line", () => {
                 linePrimary = new Line(inputPrimary);
                 graphDefault.loadContent(linePrimary);
             });
-            afterEach(() => {
-                graphDefault.unloadContent(linePrimary);
-            });
             describe("When single-line", () => {
                 it("Hides region on toggle", (done) => {
                     const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
-                    triggerEvent(legendItem, "click");
-                    delay(() => {
+                    triggerEvent(legendItem, "click", () => {
                         const regionElement = document.querySelector(`rect[aria-describedby="region_${inputPrimary.key}"]`);
                         expect(regionElement.getAttribute("aria-hidden")).toBe("true");
                         done();
@@ -1184,8 +1170,7 @@ describe("Line", () => {
                 });
                 it("Hides regions on toggle", (done) => {
                     const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
-                    triggerEvent(legendItem, "click");
-                    delay(() => {
+                    triggerEvent(legendItem, "click", () => {
                         const regionElements = document.querySelectorAll(`rect[aria-describedby="region_${inputPrimary.key}"]`);
                         expect(regionElements[ 0 ].getAttribute("aria-hidden")).toBe("true");
                         expect(regionElements[ 1 ].getAttribute("aria-hidden")).toBe("true");
@@ -1194,10 +1179,8 @@ describe("Line", () => {
                 });
                 it("Shows region on re-toggle", (done) => {
                     const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
-                    triggerEvent(legendItem, "click");
-                    delay(() => {
-                        triggerEvent(legendItem, "click");
-                        delay(() => {
+                    triggerEvent(legendItem, "click", () => {
+                        triggerEvent(legendItem, "click", () => {
                             const regionElements = document.querySelectorAll(`rect[aria-describedby="region_${inputPrimary.key}"]`);
                             expect(regionElements[ 0 ].getAttribute("aria-hidden")).toBe("false");
                             expect(regionElements[ 1 ].getAttribute("aria-hidden")).toBe("false");
@@ -1211,8 +1194,7 @@ describe("Line", () => {
                     lineSecondary = new Line(inputSecondary);
                     graphDefault.loadContent(lineSecondary);
                     const legendItem = lineGraphContainer.querySelectorAll(`.${styles.legendItem}`);
-                    triggerEvent(legendItem[ 1 ], "click");
-                    delay(() => {
+                    triggerEvent(legendItem[ 1 ], "click", () => {
                         expect(document.querySelector(`rect[aria-describedby="region_${inputPrimary.key}"]`)
                                        .getAttribute("aria-hidden")).toBe("false");
                         graphDefault.unloadContent(lineSecondary);
@@ -1227,9 +1209,6 @@ describe("Line", () => {
         let linePrimary = null;
         let lineSecondary = null;
         describe("On load", () => {
-            afterEach(() => {
-                linePrimary ? graphDefault.unloadContent(linePrimary) : "";
-            });
             it("Does not add indicator if data point is not critical", () => {
                 const valuesMutated = utils.deepClone(valuesDefault);
                 linePrimary = new Line(getInput(valuesMutated));
@@ -1417,9 +1396,6 @@ describe("Line", () => {
                     graphDefault.loadContent(linePrimary);
                     graphDefault.loadContent(lineSecondary);
                 });
-                afterEach(() => {
-                    graphDefault.unloadContent(lineSecondary);
-                });
                 it("Highlights the current indicator", () => {
                     const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
                     triggerEvent(legendItem, "mouseenter");
@@ -1484,8 +1460,7 @@ describe("Line", () => {
             describe("On single data-set", () => {
                 it("Hides indicators on toggle", (done) => {
                     const legendItem = lineGraphContainer.querySelector(`.${styles.legendItem}[aria-describedby="${inputPrimary.key}"]`);
-                    triggerEvent(legendItem, "click");
-                    delay(() => {
+                    triggerEvent(legendItem, "click", () => {
                         const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}"]`);
                         const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`);
                         expect(criticalOuterElement.getAttribute("style")).toBe("display: none;");
@@ -1495,10 +1470,8 @@ describe("Line", () => {
                 });
                 it("Shows indicators on re-toggle", (done) => {
                     const legendItem = lineGraphContainer.querySelector(`.${styles.legendItem}[aria-describedby="${inputPrimary.key}"]`);
-                    triggerEvent(legendItem, "click");
-                    delay(() => {
-                        triggerEvent(legendItem, "click");
-                        delay(() => {
+                    triggerEvent(legendItem, "click", () => {
+                        triggerEvent(legendItem, "click", () => {
                             const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}"]`);
                             const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`);
                             expect(criticalOuterElement.getAttribute("style")).toBe("");
@@ -1516,8 +1489,7 @@ describe("Line", () => {
                     lineSecondary = new Line(inputSecondary);
                     graphDefault.loadContent(lineSecondary);
                     const legendItem = lineGraphContainer.querySelector(`.${styles.legendItem}[aria-describedby="${inputSecondary.key}"]`);
-                    triggerEvent(legendItem, "click");
-                    delay(() => {
+                    triggerEvent(legendItem, "click", () => {
                         const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}"]`);
                         const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`);
                         const criticalOuterElementAlt = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputSecondary.key}"]`);

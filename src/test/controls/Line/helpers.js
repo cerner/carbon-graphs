@@ -99,7 +99,6 @@ export const valuesDefault = [
         y: 35
     }
 ];
-
 export const inputSecondary = {
     key: `uid_2`,
     label: {
@@ -114,22 +113,19 @@ export const inputSecondary = {
  * @returns {HTMLElement} - DOM element
  */
 export const fetchElementByClass = (id, cls) => id.querySelector(`.${cls}`);
-
 /**
  * Triggers an event on provided element
  * @param {HTMLElement} element - DOM element
  * @param {string} eventName - event name
+ * @param {Function} [cb] - callback function that needs to be executed post event trigger
+ * @param {number} [delayDuration=100] - delay duration before calling the callback function
  * @returns {undefined} returns nothing
  */
-export const triggerEvent = (element, eventName) => {
+export const triggerEvent = (element, eventName, cb, delayDuration = 100) => {
     const event = document.createEvent("Event");
     event.initEvent(eventName, true, true);
     element.dispatchEvent(event);
+    if (cb) {
+        setTimeout(cb, delayDuration);
+    }
 };
-/**
- * Wraps the provided function inside a setTimeout
- * @param {Function} fn - function to call
- * @param {number} [time=100] - Timeout milliseconds
- * @returns {number} Timeout identifier
- */
-export const delay = (fn, time = 100) => setTimeout(fn, time);

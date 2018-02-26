@@ -11,7 +11,6 @@ import LOCALE from "../../../main/js/locale/index";
 import {
     axisDefault,
     axisTimeSeries,
-    delay,
     dimension,
     fetchElementByClass,
     getAxes,
@@ -96,7 +95,6 @@ describe("Graph", () => {
                         },
                         y: axisDefault.y
                     }));
-
                 }).toThrow(new Error(errors.THROW_MSG_INVALID_TYPE));
             });
             it("if x axis lowerLimit is not present", () => {
@@ -927,8 +925,7 @@ describe("Graph", () => {
             graph.destroy();
             graph = new Graph(throttledInput);
             graphContainer.setAttribute("style", "width: 600px; height: 200px");
-            triggerEvent(window, "resize");
-            delay(() => {
+            triggerEvent(window, "resize", () => {
                 expect(window.requestAnimationFrame).toHaveBeenCalled();
                 done();
             }, constants.RESIZE_THROTTLE);
@@ -940,8 +937,7 @@ describe("Graph", () => {
             graph.destroy();
             graph = new Graph(throttledInput);
             graphContainer.setAttribute("style", "width: 400px; height: 200px");
-            triggerEvent(window, "resize");
-            delay(() => {
+            triggerEvent(window, "resize", () => {
                 expect(window.requestAnimationFrame).toHaveBeenCalled();
                 done();
             }, throttledInput.throttle);

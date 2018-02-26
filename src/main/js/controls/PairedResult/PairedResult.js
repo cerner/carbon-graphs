@@ -42,7 +42,6 @@ const calculateValuesRange = (values, axis = constants.Y_AXIS) =>
             max: Math.max(...values.map((i) =>
                 Math.max(...Object.keys(i).map((j) =>
                     i[ j ].y))))
-
         }
     });
 

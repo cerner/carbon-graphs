@@ -141,9 +141,6 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
                      .classed(styles.pairedBox, true)
                      .attr("aria-selected", false)
                      .attr("transform", `translate(${getXAxisXPosition(config)},${PADDING.top})`)
-                     .on("click", function(value, index) {
-                         dataPointActionHandler(config, value, index, this);
-                     })
                      .call(drawBox);
 };
 /**
@@ -223,7 +220,10 @@ const drawLine = (scale, config, boxPath) =>
                  .classed(styles.pairedLine, true)
                  .attr("aria-describedby", value.key)
                  .attr("d", (value.high && value.low) ? createLine(scale, value) : "")
-                 .attr("style", (d) => `${!shouldCreateLine(d) ? "display: none;" : ""}`);
+                 .attr("style", (d) => `${!shouldCreateLine(d) ? "display: none;" : ""}`)
+                 .on("click", function(value, index) {
+                     dataPointActionHandler(config, value, index, this.parentNode);
+                 });
     });
 /**
  * Draws the points with options opted in the input JSON by the consumer for each data set.
@@ -247,7 +247,10 @@ const drawPoints = (scale, config, canvasSVG) => {
             .attr("style", (value) =>
                 `fill: ${getColorForTarget(getValue(value, type))}${
                     config.shownTargets.indexOf(getValue(value, type).key) < 0 ? "; display: none;" : ";"}`)
-            .attr("aria-describedby", (value) => getValue(value, type).key);
+            .attr("aria-describedby", (value) => getValue(value, type).key)
+            .on("click", function(value, index) {
+                dataPointActionHandler(config, value, index, this.parentNode.parentNode);
+            });
     canvasSVG.each(function(value) {
         const boxPath = d3.select(this);
         iterateOnPairType((type) => {
@@ -285,7 +288,10 @@ const drawCriticalityPoints = (scale, config, pointGroup, type, value) => {
             .attr("transform", transformPoint(scale, type, scaleFactor))
             .attr("style", `${config.shownTargets.indexOf(getValue(value, type).key) < 0 ? "display: none;" : ""}`)
             .attr("aria-hidden", false)
-            .attr("aria-describedby", getValue(value, type).key);
+            .attr("aria-describedby", getValue(value, type).key)
+            .on("click", function(value, index) {
+                dataPointActionHandler(config, value, index, this.parentNode.parentNode);
+            });
     renderPoint(pointGroup, type, value, styles.criticalityOuterPoint, constants.DEFAULT_CRITICAL_OUTER_PLOT_SCALE);
     renderPoint(pointGroup, type, value, styles.criticalityInnerPoint, constants.DEFAULT_CRITICAL_INNER_PLOT_SCALE);
 };
