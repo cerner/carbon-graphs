@@ -1,13 +1,13 @@
 "use strict";
+import Graph from "../../../main/js/controls/Graph/index";
 import Line from "../../../main/js/controls/Line/Line";
-import Graph from "../../../main/js/core/Graph";
 import { getXAxisWidth } from "../../../main/js/helpers/axis";
 import constants, { AXIS_TYPE } from "../../../main/js/helpers/constants";
 import errors from "../../../main/js/helpers/errors";
 import { loadLegendItem } from "../../../main/js/helpers/legend";
 import styles from "../../../main/js/helpers/styles";
 import utils from "../../../main/js/helpers/utils";
-import LOCALE from "../../../main/js/locale";
+import LOCALE from "../../../main/js/locale/index";
 import {
     axisDefault,
     axisTimeSeries,

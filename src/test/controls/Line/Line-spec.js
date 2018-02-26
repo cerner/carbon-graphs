@@ -1,12 +1,12 @@
 "use strict";
 import sinon from "sinon";
-import Line from "../../../main/js/controls/Line";
-import Graph from "../../../main/js/core/Graph/Graph";
+import Graph from "../../../main/js/controls/Graph/Graph";
 import {
     getShape,
     getTransformScale
-} from "../../../main/js/core/Graph/helpers/helpers";
-import Shape from "../../../main/js/core/Shape/Shape";
+} from "../../../main/js/controls/Graph/helpers/helpers";
+import Line from "../../../main/js/controls/Line";
+import { Shape } from "../../../main/js/core";
 import {
     getXAxisWidth,
     getXAxisXPosition

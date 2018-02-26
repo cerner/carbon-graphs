@@ -1,6 +1,6 @@
 "use strict";
-import { getColorForTarget } from "../../../main/js/core/Graph/helpers/helpers";
-import Shape from "../../../main/js/core/Shape";
+import { getColorForTarget } from "../../../main/js/controls/Graph/helpers/helpers";
+import { Shape } from "../../../main/js/core";
 import constants, { SHAPES } from "../../../main/js/helpers/constants";
 import styles from "../../../main/js/helpers/styles";
 

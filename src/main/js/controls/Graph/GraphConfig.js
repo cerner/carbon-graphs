@@ -1,14 +1,14 @@
 "use strict";
 import d3 from "d3";
+import BaseConfig, {
+    getDefaultValue,
+    getDomain
+} from "../../core/BaseConfig";
 import { hasY2Axis } from "../../helpers/axis";
 import constants, { AXIS_TYPE } from "../../helpers/constants";
 import errors from "../../helpers/errors";
 import utils from "../../helpers/utils";
-import { DEFAULT_LOCALE } from "../../locale";
-import BaseConfig, {
-    getDefaultValue,
-    getDomain
-} from "../BaseConfig";
+import { DEFAULT_LOCALE } from "../../locale/index";
 
 /**
  * Processes the input from the JSON and updates the config object.

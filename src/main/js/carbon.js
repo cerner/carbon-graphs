@@ -1,7 +1,7 @@
 "use strict";
 /* globals VERSION */
 import api from "./controls";
-import Shape from "./core/Shape/Shape";
+import { Shape } from "./core";
 import {
     AXIS_TYPE,
     COLORS,

@@ -1,12 +1,7 @@
 "use strict";
 import d3 from "d3";
+import { Shape } from "../../../core";
 import { getType } from "../../../core/BaseConfig";
-import {
-    getColorForTarget,
-    getShape,
-    getTransformScale
-} from "../../../core/Graph/helpers/helpers";
-import Shape from "../../../core/Shape";
 import { getXAxisXPosition } from "../../../helpers/axis";
 import constants, {
     AXIS_TYPE,
@@ -24,6 +19,11 @@ import {
 } from "../../../helpers/region";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
+import {
+    getColorForTarget,
+    getShape,
+    getTransformScale
+} from "../../Graph/helpers/helpers";
 
 const PADDING = constants.PADDING;
 

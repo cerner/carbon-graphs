@@ -1,5 +1,5 @@
 "use strict";
-import GraphContent from "../../../main/js/core/GraphContent";
+import { GraphContent } from "../../../main/js/core";
 import errors from "../../../main/js/helpers/errors";
 
 describe("GraphContent", () => {

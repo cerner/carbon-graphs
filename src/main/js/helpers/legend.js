@@ -7,8 +7,8 @@ import d3 from "d3";
 import {
     getColorForTarget,
     getShape
-} from "../core/Graph/helpers/helpers";
-import Shape from "../core/Shape";
+} from "../controls/Graph/helpers/helpers";
+import { Shape } from "../core";
 import constants from "../helpers/constants";
 import styles from "../helpers/styles";
 import utils from "../helpers/utils";

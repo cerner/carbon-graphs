@@ -1,5 +1,7 @@
 "use strict";
 import d3 from "d3";
+import { getScale } from "../../../core/BaseConfig/index";
+import { isValidCarbonShape } from "../../../core/Shape/index";
 import {
     buildAxisLabel,
     determineOutlierStretchFactor,
@@ -22,8 +24,6 @@ import {
 import constants, { SHAPES } from "../../../helpers/constants";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
-import { getScale } from "../../BaseConfig/index";
-import { isValidCarbonShape } from "../../Shape/index";
 
 const BASE_CANVAS_WIDTH_PADDING = constants.BASE_CANVAS_WIDTH_PADDING;
 const PADDING = constants.PADDING;

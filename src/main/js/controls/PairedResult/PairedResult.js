@@ -1,5 +1,5 @@
 "use strict";
-import GraphContent from "../../core/GraphContent";
+import { GraphContent } from "../../core";
 import constants from "../../helpers/constants";
 import { removeLegendItem } from "../../helpers/legend";
 import {

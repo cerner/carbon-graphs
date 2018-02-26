@@ -1,8 +1,8 @@
 import Carbon from "../../main/js/carbon";
+import Graph from "../../main/js/controls/Graph";
 import Line from "../../main/js/controls/Line";
 import PairedResult from "../../main/js/controls/PairedResult";
-import Graph from "../../main/js/core/Graph";
-import Shape from "../../main/js/core/Shape/Shape";
+import { Shape } from "../../main/js/core";
 import { SHAPES } from "../../main/js/helpers/constants";
 
 const LIBRARY_LIST = [

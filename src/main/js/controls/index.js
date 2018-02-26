@@ -1,4 +1,4 @@
-import Graph from "../core/Graph";
+import Graph from "./Graph";
 import Line from "./Line";
 import PairedResult from "./PairedResult";
 
