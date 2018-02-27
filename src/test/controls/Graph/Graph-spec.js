@@ -37,7 +37,7 @@ describe("Graph", () => {
         it("throws error on undefined input", () => {
             expect(() => {
                 graph = new Graph();
-            }).toThrow(new Error(errors.THROW_MSG_NO_AXES_DATA_LOADED));
+            }).toThrowError(errors.THROW_MSG_NO_AXES_DATA_LOADED);
         });
         it("initializes properly", () => {
             graph = new Graph(getAxes(axisDefault));
@@ -58,13 +58,13 @@ describe("Graph", () => {
                 const input = getAxes(axisDefault);
                 input.bindTo = "";
                 new Graph(input);
-            }).toThrow(new Error(errors.THROW_MSG_NO_BIND));
+            }).toThrowError(errors.THROW_MSG_NO_BIND);
         });
         describe("axis - throws error", () => {
             it("if no axis is present", () => {
                 expect(() => {
                     new Graph(getAxes({}));
-                }).toThrow(new Error(errors.THROW_MSG_NO_AXIS_INFO));
+                }).toThrowError(errors.THROW_MSG_NO_AXIS_INFO);
             });
             it("if no x axis is present", () => {
                 expect(() => {
@@ -73,7 +73,7 @@ describe("Graph", () => {
                         y: axisDefault.y
                     }));
 
-                }).toThrow(new Error(errors.THROW_MSG_NO_AXIS_INFO));
+                }).toThrowError(errors.THROW_MSG_NO_AXIS_INFO);
             });
             it("if no y axis is present", () => {
                 expect(() => {
@@ -82,7 +82,7 @@ describe("Graph", () => {
                         y: {}
                     }));
 
-                }).toThrow(new Error(errors.THROW_MSG_NO_AXIS_INFO));
+                }).toThrowError(errors.THROW_MSG_NO_AXIS_INFO);
             });
             it("if x axis type is different than allowed", () => {
                 expect(() => {
@@ -95,7 +95,7 @@ describe("Graph", () => {
                         },
                         y: axisDefault.y
                     }));
-                }).toThrow(new Error(errors.THROW_MSG_INVALID_TYPE));
+                }).toThrowError(errors.THROW_MSG_INVALID_TYPE);
             });
             it("if x axis lowerLimit is not present", () => {
                 expect(() => {
@@ -107,7 +107,7 @@ describe("Graph", () => {
                         y: axisDefault.y
                     }));
 
-                }).toThrow(new Error(errors.THROW_MSG_NO_AXIS_LIMIT_INFO));
+                }).toThrowError(errors.THROW_MSG_NO_AXIS_LIMIT_INFO);
             });
             it("if x axis upperLimit is not present", () => {
                 expect(() => {
@@ -119,7 +119,7 @@ describe("Graph", () => {
                         y: axisDefault.y
                     }));
 
-                }).toThrow(new Error(errors.THROW_MSG_NO_AXIS_LIMIT_INFO));
+                }).toThrowError(errors.THROW_MSG_NO_AXIS_LIMIT_INFO);
             });
             it("if y axis lowerLimit is not present", () => {
                 expect(() => {
@@ -131,7 +131,7 @@ describe("Graph", () => {
                         }
                     }));
 
-                }).toThrow(new Error(errors.THROW_MSG_NO_AXIS_LIMIT_INFO));
+                }).toThrowError(errors.THROW_MSG_NO_AXIS_LIMIT_INFO);
             });
             it("if y axis upperLimit is not present", () => {
                 expect(() => {
@@ -143,7 +143,7 @@ describe("Graph", () => {
                         }
                     }));
 
-                }).toThrow(new Error(errors.THROW_MSG_NO_AXIS_LIMIT_INFO));
+                }).toThrowError(errors.THROW_MSG_NO_AXIS_LIMIT_INFO);
             });
             it("if y axis label is not present", () => {
                 expect(() => {
@@ -155,7 +155,7 @@ describe("Graph", () => {
                         }
                     }));
 
-                }).toThrow(new Error(errors.THROW_MSG_NO_AXIS_LABEL_INFO));
+                }).toThrowError(errors.THROW_MSG_NO_AXIS_LABEL_INFO);
             });
             it("if y2 axis is enabled but not lowerLimit is present", () => {
                 expect(() => {
@@ -168,7 +168,7 @@ describe("Graph", () => {
                         }
                     }));
 
-                }).toThrow(new Error(errors.THROW_MSG_NO_AXIS_LIMIT_INFO));
+                }).toThrowError(errors.THROW_MSG_NO_AXIS_LIMIT_INFO);
             });
             it("if y2 axis is enabled but not upperLimit is present", () => {
                 expect(() => {
@@ -181,7 +181,7 @@ describe("Graph", () => {
                             lowerLimit: 20
                         }
                     }));
-                }).toThrow(new Error(errors.THROW_MSG_NO_AXIS_LIMIT_INFO));
+                }).toThrowError(errors.THROW_MSG_NO_AXIS_LIMIT_INFO);
             });
             it("if y2 axis is enabled but not label is present", () => {
                 expect(() => {
@@ -194,20 +194,20 @@ describe("Graph", () => {
                             upperLimit: 200
                         }
                     }));
-                }).toThrow(new Error(errors.THROW_MSG_NO_AXIS_LABEL_INFO));
+                }).toThrowError(errors.THROW_MSG_NO_AXIS_LABEL_INFO);
             });
         });
         it("throws error on empty input", () => {
             expect(() => {
                 graph = new Graph(getAxes(axisDefault));
                 graph.loadContent({});
-            }).toThrow(new Error(errors.THROW_MSG_NO_DATA_LOADED));
+            }).toThrowError(errors.THROW_MSG_NO_DATA_LOADED);
         });
         it("throws error on null input", () => {
             expect(() => {
                 graph = new Graph(getAxes(axisDefault));
                 graph.loadContent(null);
-            }).toThrow(new Error(errors.THROW_MSG_NO_DATA_LOADED));
+            }).toThrowError(errors.THROW_MSG_NO_DATA_LOADED);
         });
         it("processes the default input without any error", () => {
             expect(() => {
@@ -776,7 +776,7 @@ describe("Graph", () => {
                     labelAxisObj.y.label = "";
                     graph = new Graph(getAxes(labelAxisObj));
 
-                }).toThrow(new Error(errors.THROW_MSG_NO_AXIS_LABEL_INFO));
+                }).toThrowError(errors.THROW_MSG_NO_AXIS_LABEL_INFO);
             });
             it("sanitizes x axis label text", () => {
                 graph.destroy();
@@ -849,7 +849,7 @@ describe("Graph", () => {
                 graph.loadContent(new Line(getData(valuesDefault)));
                 expect(() => {
                     graph.loadContent(new Line(getData(valuesDefault)));
-                }).toThrow(new Error(errors.THROW_MSG_NON_UNIQUE_KEY));
+                }).toThrowError(errors.THROW_MSG_NON_UNIQUE_KEY);
             });
             it("doesn't throws error if content has unique keys", () => {
                 graph = new Graph(Object.assign(getAxes(axisDefault)));
@@ -858,7 +858,7 @@ describe("Graph", () => {
                     const uniqueData = getData(valuesDefault);
                     uniqueData.key = "uid_2";
                     graph.loadContent(new Line(uniqueData));
-                }).not.toThrow(new Error(errors.THROW_MSG_NON_UNIQUE_KEY));
+                }).not.toThrowError(errors.THROW_MSG_NON_UNIQUE_KEY);
             });
         });
         it("attaches event handlers", () => {
@@ -953,7 +953,7 @@ describe("Graph", () => {
         it("throws error when unloading a content which isnt loaded", () => {
             expect(() => {
                 graph.unloadContent(secondaryContent);
-            }).toThrow(new Error(errors.THROW_MSG_INVALID_OBJECT_PROVIDED));
+            }).toThrowError(errors.THROW_MSG_INVALID_OBJECT_PROVIDED);
         });
         it("Removes the content successfully", () => {
             graph.unloadContent(primaryContent);

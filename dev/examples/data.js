@@ -845,11 +845,7 @@ const DATA = [
         })
     }
 ];
-export const getData = (id, type) => {
-    const res = DATA.find((t) => t[ type ]);
-    return res ? res[ type ](id) : null;
-};
-export const getAxes = (id, type) => {
+export const getDemoData = (id, type) => {
     const res = DATA.find((t) => t[ type ]);
     return res ? res[ type ](id) : null;
 };

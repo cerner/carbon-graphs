@@ -17,22 +17,22 @@ describe("GraphContent", () => {
         it("throws error when load is called without being implemented", () => {
             expect(() => {
                 content.load();
-            }).toThrow(new Error(errors.THROW_MSG_CONTENT_LOAD_NOT_IMPLEMENTED));
+            }).toThrowError(errors.THROW_MSG_CONTENT_LOAD_NOT_IMPLEMENTED);
         });
         it("throws error when unload is called without being implemented", () => {
             expect(() => {
                 content.unload();
-            }).toThrow(new Error(errors.THROW_MSG_CONTENT_UNLOAD_NOT_IMPLEMENTED));
+            }).toThrowError(errors.THROW_MSG_CONTENT_UNLOAD_NOT_IMPLEMENTED);
         });
         it("throws error when resize is called without being implemented", () => {
             expect(() => {
                 content.resize();
-            }).toThrow(new Error(errors.THROW_MSG_CONTENT_RESIZE_NOT_IMPLEMENTED));
+            }).toThrowError(errors.THROW_MSG_CONTENT_RESIZE_NOT_IMPLEMENTED);
         });
         it("throws error when redraw is called without being implemented", () => {
             expect(() => {
                 content.redraw();
-            }).toThrow(new Error(errors.THROW_MSG_CONTENT_REDRAW_NOT_IMPLEMENTED));
+            }).toThrowError(errors.THROW_MSG_CONTENT_REDRAW_NOT_IMPLEMENTED);
         });
     });
 });

@@ -90,17 +90,17 @@ const createRegionContainer = (config, canvasSVG) =>
  */
 const createRegion = (scale, config, regionGroupSVG, regionList, uniqueKey, targetAxis = constants.Y_AXIS) => {
     const regionPath = regionGroupSVG.selectAll("g")
-                                        .data(regionList);
+                                     .data(regionList);
     regionPath.enter()
-                 .append("rect")
-                 .classed(styles.region, true)
-                 .attr("aria-hidden", false)
-                 .attr("aria-describedby", uniqueKey)
-                 .attr("style", (d) => d.color ? `fill: ${d.color};` : "")
-                 .each((d) => {
-                     validateRegion(d, targetAxis);
-                     translateRegion(scale, config, regionGroupSVG);
-                 });
+              .append("rect")
+              .classed(styles.region, true)
+              .attr("aria-hidden", false)
+              .attr("aria-describedby", uniqueKey)
+              .attr("style", (d) => d.color ? `fill: ${d.color};` : "")
+              .each((d) => {
+                  validateRegion(d, targetAxis);
+                  translateRegion(scale, config, regionGroupSVG);
+              });
     regionPath.exit().remove();
 };
 
