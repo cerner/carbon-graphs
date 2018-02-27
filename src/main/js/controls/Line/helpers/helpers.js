@@ -166,28 +166,24 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
     const lineGroupSVG = lineSVG.append("g")
                                 .classed(styles.currentLinesGroup, true)
                                 .attr("transform", `translate(${getXAxisXPosition(config)},${PADDING.top})`);
-    drawDataLines(
-        scale,
-        config,
-        lineGroupSVG.selectAll(`.${styles.line}`)
-                    .data([ dataTarget ])
-                    .enter()
-    );
+    const linePath = lineGroupSVG.selectAll(`.${styles.line}`)
+                                 .data([ dataTarget ]);
+    drawDataLines(scale, config, linePath.enter());
+    linePath.exit().remove();
+
     if (config.showShapes) {
-        lineSVG.selectAll(`.${styles.currentPointsGroup}`)
-               .data([ dataTarget ])
-               .enter()
-               .append("g")
-               .classed(styles.currentPointsGroup, true)
-               .attr("transform", `translate(${getXAxisXPosition(config)},${PADDING.top})`);
-        drawDataPoints(
-            scale,
-            config,
-            lineSVG.select(`.${styles.currentPointsGroup}`)
-                   .selectAll(`.${styles.point}`)
-                   .data(getDataPointValues)
-                   .enter()
-        );
+        const currentPointsPath = lineSVG.selectAll(`.${styles.currentPointsGroup}`).data([ dataTarget ]);
+        currentPointsPath.enter()
+                         .append("g")
+                         .classed(styles.currentPointsGroup, true)
+                         .attr("transform", `translate(${getXAxisXPosition(config)},${PADDING.top})`);
+        currentPointsPath.exit().remove();
+
+        const pointPath = lineSVG.select(`.${styles.currentPointsGroup}`)
+                                 .selectAll(`.${styles.point}`)
+                                 .data(getDataPointValues);
+        drawDataPoints(scale, config, pointPath.enter());
+        pointPath.exit().remove();
     }
 };
 /**

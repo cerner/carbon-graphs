@@ -134,14 +134,15 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
                                        .classed(styles.pairedBoxGroup, true)
                                        .attr("clip-path", `url(#${constants.CLIP_PATH_ID})`)
                                        .attr("aria-describedby", dataTarget.key);
-    pairedBoxGroupSVG.selectAll(`.${styles.pairedBox}`)
-                     .data(getDataPointValues(dataTarget))
-                     .enter()
-                     .append("g")
-                     .classed(styles.pairedBox, true)
-                     .attr("aria-selected", false)
-                     .attr("transform", `translate(${getXAxisXPosition(config)},${PADDING.top})`)
-                     .call(drawBox);
+    const pairedBoxPath = pairedBoxGroupSVG.selectAll(`.${styles.pairedBox}`)
+                                           .data(getDataPointValues(dataTarget));
+    pairedBoxPath.enter()
+                 .append("g")
+                 .classed(styles.pairedBox, true)
+                 .attr("aria-selected", false)
+                 .attr("transform", `translate(${getXAxisXPosition(config)},${PADDING.top})`)
+                 .call(drawBox);
+    pairedBoxPath.exit().remove();
 };
 /**
  * Processes the input JSON and adds the shapes, colors, labels etc. to each data points so that we
