@@ -115,11 +115,15 @@ const translateGrid = (axis, scale, config, canvasSVG) => {
     getAxesScale(axis, scale, config);
     canvasSVG.select(`.${styles.grid}`).attr("transform", `translate(${getXAxisXPosition(config)},${PADDING.top})`);
     if (config.showHGrid) {
-        canvasSVG.select(`.${styles.gridH}`).call(translateHGrid(axis, config));
+        canvasSVG.select(`.${styles.gridH}`)
+                 .transition(constants.d3Transition)
+                 .call(translateHGrid(axis, config));
     }
 
     if (config.showVGrid) {
-        canvasSVG.select(`.${styles.gridV}`).call(translateVGrid(axis, config));
+        canvasSVG.select(`.${styles.gridV}`)
+                 .transition(constants.d3Transition)
+                 .call(translateVGrid(axis, config));
     }
 };
 /**
@@ -132,18 +136,21 @@ const translateGrid = (axis, scale, config, canvasSVG) => {
 const translateLabel = (config, canvasSVG) => {
     if (config.axis.x.label) {
         canvasSVG.select(`.${styles.axisLabelX}`)
+                 .transition(constants.d3Transition)
                  .attr("transform", `translate(${getXAxisLabelXPosition(config)},${getXAxisLabelYPosition(config)
                      }) rotate(${getRotationForAxis(constants.X_AXIS)})`);
     }
 
     if (config.axis.y.label) {
         canvasSVG.select(`.${styles.axisLabelY}`)
+                 .transition(constants.d3Transition)
                  .attr("transform", `translate(${getYAxisLabelXPosition(config)}, ${getYAxisLabelYPosition(config)
                      }) rotate(${getRotationForAxis(constants.Y_AXIS)})`);
     }
 
     if (hasY2Axis(config.axis)) {
         canvasSVG.select(`.${styles.axisLabelY2}`)
+                 .transition(constants.d3Transition)
                  .attr("transform", `translate(${getY2AxisLabelXPosition(config)}, ${
                      getYAxisLabelYPosition(config)}) rotate(${getRotationForAxis(constants.Y2_AXIS)})`);
     }

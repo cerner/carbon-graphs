@@ -231,7 +231,7 @@ export const fetchElementByClass = (id, cls) => id.querySelector(`.${cls}`);
  * @param {number} [delayDuration=100] - delay duration before calling the callback function
  * @returns {undefined} returns nothing
  */
-export const triggerEvent = (element, eventName, cb, delayDuration) => {
+export const triggerEvent = (element, eventName, cb, delayDuration = 100) => {
     const event = document.createEvent("Event");
     event.initEvent(eventName, true, true);
     element.dispatchEvent(event);

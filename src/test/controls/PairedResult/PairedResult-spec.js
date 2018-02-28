@@ -908,7 +908,7 @@ describe("PairedResult", () => {
                                 expect(lineElement.classList).toContain(styles.dataPointDisplayEnable);
                                 expect(fetchElementByClass(pairedResultGraphContainer, styles.pairedBox).getAttribute("aria-selected")).toBe("true");
                                 done();
-                            }, 200);
+                            }, 500);
                         });
                     });
                     it("points are displayed even if they are hidden", (done) => {
@@ -924,7 +924,7 @@ describe("PairedResult", () => {
                                 expect(pointElement.classList).toContain(styles.dataPointDisplayEnable);
                                 expect(fetchElementByClass(pairedResultGraphContainer, styles.pairedBox).getAttribute("aria-selected")).toBe("true");
                                 done();
-                            }, 200);
+                            }, 500);
                         });
                     });
                 });

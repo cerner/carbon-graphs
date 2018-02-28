@@ -161,8 +161,9 @@ const updateSelectionIndicatorAttributes = (d3PairElement, scale, value) =>
  */
 export const translateSelectionBox = (scale, canvasSVG) =>
     canvasSVG.selectAll(`.${styles.pairedBoxGroup} rect.${styles.dataPointSelection}`)
+             .transition(constants.d3Transition)
              .each(function(value) {
-                 return updateSelectionIndicatorAttributes(d3.select(this), scale, value);
+                 return updateSelectionIndicatorAttributes(d3.select(this).transition(constants.d3Transition), scale, value);
              });
 /**
  * Transforms selection indicator CIRCLE for a data point set in the Paired Result graph on resize, with
@@ -175,8 +176,10 @@ export const translateSelectionBox = (scale, canvasSVG) =>
  */
 export const translateSelectionItem = (scale, canvasSVG) =>
     canvasSVG.selectAll(`.${styles.pairedBoxGroup} circle.${styles.dataPointSelection}`)
+             .transition(constants.d3Transition)
              .each(function(value) {
                  return d3.select(this)
+                          .transition(constants.d3Transition)
                           .attr("cx", (d) => scale.x(getIncompletePairObject(d).x))
                           .attr("cy", (d) => scale[ value.yAxis ](getIncompletePairObject(d).y));
              });

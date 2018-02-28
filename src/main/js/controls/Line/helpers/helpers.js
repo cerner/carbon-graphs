@@ -64,6 +64,7 @@ const transformPoint = (scale, scaleFactor = constants.DEFAULT_PLOT_SCALE) => (v
 const translateLines = (scale, canvasSVG) =>
     canvasSVG.selectAll(`.${styles.lineGraphContent} .${styles.line}`)
              .select("path")
+             .transition(constants.d3Transition)
              .attr("d", (value) => createLine(scale, value));
 /**
  * Transforms points for a data point set in the Line graph on resize
@@ -74,6 +75,7 @@ const translateLines = (scale, canvasSVG) =>
  */
 const translatePoints = (scale, canvasSVG) =>
     canvasSVG.selectAll(`.${styles.lineGraphContent} .${styles.point}`)
+             .transition(constants.d3Transition)
              .attr("transform", function(value) {
                  return transformPoint(scale, getTransformScale(this))(value);
              });
@@ -86,6 +88,7 @@ const translatePoints = (scale, canvasSVG) =>
  */
 const translateSelectedPoint = (scale, canvasSVG) =>
     canvasSVG.selectAll(`.${styles.lineGraphContent} .${styles.dataPointSelection}`)
+             .transition(constants.d3Transition)
              .attr("transform", function(value) {
                  return transformPoint(scale, getTransformScale(this))(value);
              });
@@ -169,7 +172,9 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
     const linePath = lineGroupSVG.selectAll(`.${styles.line}`)
                                  .data([ dataTarget ]);
     drawDataLines(scale, config, linePath.enter());
-    linePath.exit().remove();
+    linePath.exit()
+            .transition(constants.d3Transition)
+            .remove();
 
     if (config.showShapes) {
         const currentPointsPath = lineSVG.selectAll(`.${styles.currentPointsGroup}`).data([ dataTarget ]);
@@ -177,13 +182,17 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
                          .append("g")
                          .classed(styles.currentPointsGroup, true)
                          .attr("transform", `translate(${getXAxisXPosition(config)},${PADDING.top})`);
-        currentPointsPath.exit().remove();
+        currentPointsPath.exit()
+                         .transition(constants.d3Transition)
+                         .remove();
 
         const pointPath = lineSVG.select(`.${styles.currentPointsGroup}`)
                                  .selectAll(`.${styles.point}`)
                                  .data(getDataPointValues);
         drawDataPoints(scale, config, pointPath.enter());
-        pointPath.exit().remove();
+        pointPath.exit()
+                 .transition(constants.d3Transition)
+                 .remove();
     }
 };
 /**

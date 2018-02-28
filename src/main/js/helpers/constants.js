@@ -2,6 +2,8 @@
  * @module constants
  * @alias module:constants
  */
+import d3 from "d3";
+
 /**
  * Consumers can pick a color from this default list
  * @public
@@ -155,9 +157,10 @@ export default {
         RHOMBUS: "M-0.01-5.01 4.99-0.01-0.01 4.99-5.01-0.01Z",
         VERTICAL_BAR: "m-2.46-6.05h4.8v12h-4.8v-12"
     },
-    TRANSITION_DURATION: 100,
-    TRANSITION_FUNCTION: "linear",
     DEFAULT_INTERPOLATION: "linear",
     SELECTION_INDICATOR_X_POSITION: 10,
-    SELECTION_INDICATOR_Y_POSITION: 12.5
+    SELECTION_INDICATOR_Y_POSITION: 12.5,
+    d3Transition: d3.transition()
+                    .duration(250)
+                    .ease()
 };

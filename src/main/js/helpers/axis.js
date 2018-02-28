@@ -496,17 +496,16 @@ const hasY2Axis = (axis) => utils.isDefined(axis.y2) && axis.y2.show;
 const translateAxes = (axis, scale, config, canvasSVG) => {
     getAxesScale(axis, scale, config);
     canvasSVG.select(`.${styles.axisX}`)
+             .transition(constants.d3Transition)
              .attr("transform", `translate(${getXAxisXPosition(config)}, ${getXAxisYPosition(config)})`)
              .call(axis.x);
     canvasSVG.select(`.${styles.axisY}`)
-             .transition(constants.TRANSITION_FUNCTION)
-             .duration(constants.TRANSITION_DURATION)
+             .transition(constants.d3Transition)
              .attr("transform", `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition()})`)
              .call(axis.y);
     if (hasY2Axis(config.axis)) {
         canvasSVG.select(`.${styles.axisY2}`)
-                 .transition(constants.TRANSITION_FUNCTION)
-                 .duration(constants.TRANSITION_DURATION)
+                 .transition(constants.d3Transition)
                  .attr("transform", `translate(${getY2AxisXPosition(config)}, ${getY2AxisYPosition()})`)
                  .call(axis.y2);
     }

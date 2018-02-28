@@ -98,6 +98,7 @@ const transformPoint = (scale, type, scaleFactor = constants.DEFAULT_PLOT_SCALE)
  */
 const translateLines = (scale, config, canvasSVG) =>
     canvasSVG.selectAll(`.${styles.pairedBoxGroup} .${styles.pairedLine}`)
+             .transition(constants.d3Transition)
              .attr("d", (d) => (d.high && d.low) ? createLine(scale, d) : "");
 /**
  * Transforms points for a data point set (high, low and mid) in the Paired Result graph on resize
@@ -109,6 +110,7 @@ const translateLines = (scale, config, canvasSVG) =>
 const translatePoints = (scale, canvasSVG) =>
     iterateOnPairType((type) => {
         canvasSVG.selectAll(`.${styles.pairedBoxGroup} .${styles.pairedPoint}.${getValue(styles, type)}`)
+                 .transition(constants.d3Transition)
                  .attr("transform", function(value) {
                      return transformPoint(scale, type, getTransformScale(this))(value);
                  });
@@ -142,7 +144,9 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
                  .attr("aria-selected", false)
                  .attr("transform", `translate(${getXAxisXPosition(config)},${PADDING.top})`)
                  .call(drawBox);
-    pairedBoxPath.exit().remove();
+    pairedBoxPath.exit()
+                 .transition(constants.d3Transition)
+                 .remove();
 };
 /**
  * Processes the input JSON and adds the shapes, colors, labels etc. to each data points so that we
