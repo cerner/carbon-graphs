@@ -142,12 +142,18 @@ export const renderMultiLine = (el, id, title) => () => {
     shell.render(el, id, title);
     const lineDefault = Carbon.api.graph(getDemoData(`#${id}`, "LINE_DEFAULT"));
     lineDefault.loadContent(Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[ 0 ]));
-    setTimeout(() => lineDefault.graphContainer ? lineDefault.loadContent(Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[ 1 ])) : "", 500);
-    setTimeout(() => lineDefault.graphContainer ? lineDefault.loadContent(Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[ 2 ])) : "", 1000);
-    setTimeout(() => lineDefault.graphContainer ? lineDefault.loadContent(Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[ 3 ])) : "", 1500);
-    setTimeout(() => lineDefault.graphContainer ? lineDefault.loadContent(Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[ 4 ])) : "", 2000);
-    setTimeout(() => lineDefault.graphContainer ? lineDefault.loadContent(Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[ 5 ])) : "", 2500);
-    setTimeout(() => lineDefault.graphContainer ? lineDefault.loadContent(Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[ 6 ])) : "", 3000);
+    setTimeout(() =>
+        lineDefault.graphContainer ? lineDefault.loadContent(Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[ 1 ])) : "", 500);
+    setTimeout(() =>
+        lineDefault.graphContainer ? lineDefault.loadContent(Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[ 2 ])) : "", 1000);
+    setTimeout(() =>
+        lineDefault.graphContainer ? lineDefault.loadContent(Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[ 3 ])) : "", 1500);
+    setTimeout(() =>
+        lineDefault.graphContainer ? lineDefault.loadContent(Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[ 4 ])) : "", 2000);
+    setTimeout(() =>
+        lineDefault.graphContainer ? lineDefault.loadContent(Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[ 5 ])) : "", 2500);
+    setTimeout(() =>
+        lineDefault.graphContainer ? lineDefault.loadContent(Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[ 6 ])) : "", 3000);
     return lineDefault;
 };
 export const renderLineTimeSeries = (el, id, title) => () => {
@@ -254,7 +260,8 @@ export const renderGoalLine = (el, id, title) => () => {
 export const renderLineBlankDataPoint = (el, id, title) => () => {
     const data = utils.deepClone(getDemoData(`#${id}`, "LINE_TIMESERIES").data[ 0 ]);
     data.values[ 6 ].y = null;
-    shell.render(el, id, title);
+    shell.render(el, id, title,
+        "* A Line graph where not all data points are present. In the example below, Data point at 7.00 AM is unavailable.");
     const lineTime = Carbon.api.graph(getDemoData(`#${id}`, "LINE_TIMESERIES"));
     lineTime.loadContent(Carbon.api.line(data));
     return lineTime;

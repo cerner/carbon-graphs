@@ -33,7 +33,6 @@ const lineExampleSet = (exampleInstance, contentSection, setState) => {
     exampleInstance.load(renderLine(contentSection, "lineSimple", "Simple Line Graph"));
     exampleInstance.load(renderLineTimeSeries(contentSection, "lineTimeSeries", "Time-Series"));
     exampleInstance.load(renderLineY2Axis(contentSection, "lineY2", "Y2 Axis"));
-    exampleInstance.load(renderLineBlankDataPoint(contentSection, "lineBlankDataPoint", "Non-Contiguous Data"));
     exampleInstance.load(renderLineXHidden(contentSection, "lineXHidden", "X Axis Hidden"));
     exampleInstance.load(renderLineYHidden(contentSection, "lineYHidden", "Y Axis Hidden"));
     exampleInstance.load(renderLineXStaticTicks(contentSection, "lineXStaticTick", "Static X Axis Ticks"));
@@ -49,6 +48,14 @@ const lineExampleSet = (exampleInstance, contentSection, setState) => {
     setState(exampleInstance);
     return exampleInstance;
 };
+export const renderNonContiguousLineExamples = (instance, toggleSection, contentSection, setState, getState) =>
+    btn.render(toggleSection, "Non-Contiguous Line", (event) => {
+        clearContent(contentSection, getState());
+        toggleSectionAsActive(event.target);
+        instance.load(renderLineBlankDataPoint(contentSection, "nonContiguousLine", "Non-Contiguous Data Points"));
+        instance.render();
+        setState(instance);
+    });
 export const renderMultiLineExamples = (instance, toggleSection, contentSection, setState, getState) =>
     btn.render(toggleSection, "Multi-Line", (event) => {
         clearContent(contentSection, getState());

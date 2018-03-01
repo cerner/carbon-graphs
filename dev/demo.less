@@ -1,8 +1,8 @@
 @import "../src/main/less/variables.less";
 
 @demo-banner-bg: #3949ab;
-@demo-nav-hover-bg: #3949ab;
-@demo-nav-btn: #5c6bc0;
+@demo-nav-btn: #3949ab;
+@demo-nav-hover-bg: #5c6bc0;
 @demo-nav-bg: #e8eaf6;
 
 body {
@@ -27,15 +27,16 @@ body {
     display: flex;
     justify-content: center;
     align-content: center;
-    padding: 2rem;
+    padding: 1.5rem;
     font-size: 2rem;
     font-weight: 600;
     color: @white;
     margin: 0;
     background-color: @demo-banner-bg;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 4px 8px rgba(0, 0, 0, 0.28);
     @media screen and (max-width: 800px) {
-        padding: 1.5rem;
-        font-size: 1.5rem;
+        padding: 1rem;
+        font-size: 1.25rem;
     }
 }
 
@@ -100,7 +101,7 @@ body {
     flex-direction: column;
     min-width: 12.5%;
     max-width: 12.5%;
-    background-color: @demo-nav-bg;
+    background-color: transparent;
     font-weight: 400;
     padding: 0.5rem;
     @media screen and (max-width: 800px) {
@@ -116,22 +117,25 @@ body {
 
 .carbon-btn {
     border: 0;
-    background-color: @demo-nav-bg;
+    background-color: transparent;
     color: @demo-nav-btn;
     cursor: pointer;
     font-family: inherit;
     font-weight: 500;
-    padding: 1rem;
+    padding: 1.25rem 0.5rem;
     margin: 0.25rem 0;
-    border-radius: 0.25rem;
     &[disabled="disabled"] {
+        &:hover {
+            color: @demo-nav-btn;
+        }
         cursor: not-allowed;
-        background-color: @demo-nav-btn;
-        color: @white;
+        background-color: @demo-nav-bg;
+        border-left: 0.25rem solid @demo-nav-btn;
     }
     &:hover {
-        background: @demo-nav-hover-bg;
-        color: @white;
+        color: @dark;
+        background-color: @demo-nav-bg;
+        border-left: 0.25rem solid @demo-nav-btn;
     }
 }
 
