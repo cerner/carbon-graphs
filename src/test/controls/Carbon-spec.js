@@ -5,14 +5,8 @@ import PairedResult from "../../main/js/controls/PairedResult";
 import { Shape } from "../../main/js/core";
 import { SHAPES } from "../../main/js/helpers/constants";
 
-const LIBRARY_LIST = [
-    "graph",
-    "line",
-    "pairedResult"
-];
-const TOOLS_LIST = [
-    "shape"
-];
+const LIBRARY_LIST = ["graph", "line", "pairedResult"];
+const TOOLS_LIST = ["shape"];
 const input = {
     bindTo: "#testGraph_carbon",
     axis: {
@@ -82,7 +76,6 @@ describe("Carbon", () => {
                         x: 45,
                         y: 350
                     }
-
                 }
             ]
         };

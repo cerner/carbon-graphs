@@ -1,9 +1,6 @@
 "use strict";
 import d3 from "d3";
-import BaseConfig, {
-    getDefaultValue,
-    getDomain
-} from "../../core/BaseConfig";
+import BaseConfig, { getDefaultValue, getDomain } from "../../core/BaseConfig";
 import { hasY2Axis } from "../../helpers/axis";
 import constants, { AXIS_TYPE } from "../../helpers/constants";
 import errors from "../../helpers/errors";
@@ -25,7 +22,10 @@ export const processInput = (input, config, type) => {
     config.bindLegendTo = input.bindLegendTo;
     config.axis = _axis;
     config.locale = d3.locale(getDefaultValue(input.locale, DEFAULT_LOCALE));
-    config.throttle = getDefaultValue(input.throttle, constants.RESIZE_THROTTLE);
+    config.throttle = getDefaultValue(
+        input.throttle,
+        constants.RESIZE_THROTTLE
+    );
     config.showLabel = getDefaultValue(input.showLabel, true);
     config.showLegend = getDefaultValue(input.showLegend, true);
     config.showShapes = getDefaultValue(input.showShapes, true);
@@ -37,7 +37,11 @@ export const processInput = (input, config, type) => {
     config.axis.y.ticks = getDefaultValue(_axis.y.ticks, {});
     config.axis.x.show = getDefaultValue(_axis.x.show, true);
     config.axis.y.show = getDefaultValue(_axis.y.show, true);
-    config.axis.x.domain = getDomain(type, _axis.x.lowerLimit, _axis.x.upperLimit);
+    config.axis.x.domain = getDomain(
+        type,
+        _axis.x.lowerLimit,
+        _axis.x.upperLimit
+    );
     config.axis.y.domain = {
         lowerLimit: utils.getNumber(_axis.y.lowerLimit),
         upperLimit: utils.getNumber(_axis.y.upperLimit)
@@ -135,27 +139,35 @@ class GraphConfig extends BaseConfig {
         if (utils.isEmpty(this.input.bindTo)) {
             throw new Error(errors.THROW_MSG_NO_BIND);
         }
-        if (utils.isEmpty(this.input.axis) ||
+        if (
+            utils.isEmpty(this.input.axis) ||
             utils.isEmpty(this.input.axis.x) ||
-            utils.isEmpty(this.input.axis.y)) {
+            utils.isEmpty(this.input.axis.y)
+        ) {
             throw new Error(errors.THROW_MSG_NO_AXIS_INFO);
         }
-        if (utils.notEmpty(this.input.axis.x.type) &&
-            !(utils.hasValue(Object.values(AXIS_TYPE), this.input.axis.x.type))) {
+        if (
+            utils.notEmpty(this.input.axis.x.type) &&
+            !utils.hasValue(Object.values(AXIS_TYPE), this.input.axis.x.type)
+        ) {
             throw new Error(errors.THROW_MSG_INVALID_TYPE);
         }
-        if (utils.isEmpty(this.input.axis.x.lowerLimit) ||
+        if (
+            utils.isEmpty(this.input.axis.x.lowerLimit) ||
             utils.isEmpty(this.input.axis.x.upperLimit) ||
             utils.isEmpty(this.input.axis.y.lowerLimit) ||
-            utils.isEmpty(this.input.axis.y.upperLimit)) {
+            utils.isEmpty(this.input.axis.y.upperLimit)
+        ) {
             throw new Error(errors.THROW_MSG_NO_AXIS_LIMIT_INFO);
         }
         if (utils.isEmpty(this.input.axis.y.label)) {
             throw new Error(errors.THROW_MSG_NO_AXIS_LABEL_INFO);
         }
         if (hasY2Axis(this.input.axis)) {
-            if (utils.isEmpty(this.input.axis.y2.lowerLimit) ||
-                utils.isEmpty(this.input.axis.y2.upperLimit)) {
+            if (
+                utils.isEmpty(this.input.axis.y2.lowerLimit) ||
+                utils.isEmpty(this.input.axis.y2.upperLimit)
+            ) {
                 throw new Error(errors.THROW_MSG_NO_AXIS_LIMIT_INFO);
             }
             if (utils.isEmpty(this.input.axis.y2.label)) {

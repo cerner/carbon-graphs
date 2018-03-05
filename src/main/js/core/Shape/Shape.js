@@ -25,7 +25,8 @@ export const isNativeShape = (shape) => shape in constants.CUSTOM_SHAPE_PATH;
  * @param {string} shape - shape to display in the point
  * @returns {boolean} true if inbuilt or custom shape, false otherwise
  */
-export const isValidCarbonShape = (shape) => ((isD3InbuiltShape(shape)) || (isNativeShape(shape)));
+export const isValidCarbonShape = (shape) =>
+    isD3InbuiltShape(shape) || isNativeShape(shape);
 
 /**
  * Returns the SVG element container within which a path element is stored.
@@ -38,7 +39,10 @@ export const isValidCarbonShape = (shape) => ((isD3InbuiltShape(shape)) || (isNa
  * @returns {HTMLElement} Returns the SVG element with the "icon" path
  */
 const getSVGElement = (pathElement, { classNames, style }) => {
-    const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    const svgElement = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "svg"
+    );
     svgElement.setAttribute("viewBox", constants.VIEW_BOX_SIZE);
     svgElement.setAttribute("style", style);
     svgElement.setAttribute("class", `${styles.svgIcon} ${classNames}`);
@@ -67,13 +71,18 @@ class Shape {
     getPathDescription(size) {
         const getCustomPath = (shape) => {
             if (isNativeShape(shape)) {
-                return constants.CUSTOM_SHAPE_PATH[ shape ];
+                return constants.CUSTOM_SHAPE_PATH[shape];
             }
             throw new Error(errors.THROW_MSG_UNKNOWN_SHAPE);
         };
         const getD3Shape = (shape) =>
-            d3.svg.symbol().type(constants.D3_INBUILT_SHAPE[ shape ]).size(size || constants.DEFAULT_PLOT_SIZE)();
-        return isD3InbuiltShape(this.shape) ? getD3Shape(this.shape) : getCustomPath(this.shape);
+            d3.svg
+                .symbol()
+                .type(constants.D3_INBUILT_SHAPE[shape])
+                .size(size || constants.DEFAULT_PLOT_SIZE)();
+        return isD3InbuiltShape(this.shape)
+            ? getD3Shape(this.shape)
+            : getCustomPath(this.shape);
     }
 
     /**
@@ -83,12 +92,20 @@ class Shape {
      * @returns {HTMLElement} A svg path element
      */
     getPathElement({ classNames, style }) {
-        const shapeProp = constants.SHAPE_PROPS[ this.shape ];
-        const pathElement = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        const shapeProp = constants.SHAPE_PROPS[this.shape];
+        const pathElement = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "path"
+        );
         pathElement.setAttribute("style", style);
         pathElement.setAttribute("class", classNames);
         pathElement.setAttribute("d", this.getPathDescription());
-        pathElement.setAttribute("transform", `translate(${shapeProp.translate.join(",")}) scale(${shapeProp.scale})`);
+        pathElement.setAttribute(
+            "transform",
+            `translate(${shapeProp.translate.join(",")}) scale(${
+                shapeProp.scale
+            })`
+        );
         return pathElement;
     }
 
@@ -102,14 +119,22 @@ class Shape {
      * @param {string} pathStyles - Style that can be applied to the path element
      * @returns {HTMLElement} an svg element
      */
-    getShapeElement({ svgClassNames = "", svgStyles = "", pathClassNames = "", pathStyles = "" }) {
-        return getSVGElement(this.getPathElement({
-            classNames: pathClassNames,
-            style: pathStyles
-        }), {
-            classNames: svgClassNames,
-            style: svgStyles
-        });
+    getShapeElement({
+        svgClassNames = "",
+        svgStyles = "",
+        pathClassNames = "",
+        pathStyles = ""
+    }) {
+        return getSVGElement(
+            this.getPathElement({
+                classNames: pathClassNames,
+                style: pathStyles
+            }),
+            {
+                classNames: svgClassNames,
+                style: svgStyles
+            }
+        );
     }
 }
 

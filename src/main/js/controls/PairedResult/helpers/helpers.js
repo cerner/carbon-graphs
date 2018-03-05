@@ -3,10 +3,7 @@ import d3 from "d3";
 import { Shape } from "../../../core";
 import { getType } from "../../../core/BaseConfig";
 import { getXAxisXPosition } from "../../../helpers/axis";
-import constants, {
-    AXIS_TYPE,
-    SHAPES
-} from "../../../helpers/constants";
+import constants, { AXIS_TYPE, SHAPES } from "../../../helpers/constants";
 import errors from "../../../helpers/errors";
 import {
     legendClickHandler,
@@ -43,7 +40,7 @@ const PADDING = constants.PADDING;
  * @private
  * @returns {Object} value of the type
  */
-const getValue = (val, type) => val ? val[ type ] : "";
+const getValue = (val, type) => (val ? val[type] : "");
 /**
  * Iterates each type of a pair. High, low and mid.
  * @private
@@ -60,10 +57,11 @@ const iterateOnPairType = (fn) => constants.PAIR_ITEM_TYPES.forEach(fn);
  * @returns {undefined} - returns nothing
  */
 const createLine = (scale, d) => {
-    const newLine = d3.svg.line()
-                      .x((value) => scale.x(value.x))
-                      .y((value) => scale[ d.yAxis ](value.y))
-                      .interpolate(constants.DEFAULT_INTERPOLATION);
+    const newLine = d3.svg
+        .line()
+        .x((value) => scale.x(value.x))
+        .y((value) => scale[d.yAxis](value.y))
+        .interpolate(constants.DEFAULT_INTERPOLATION);
     return newLine([
         {
             x: d.high.x,
@@ -83,9 +81,13 @@ const createLine = (scale, d) => {
  * @param {Array<number>|number} [scaleFactor] - amount of transform needs to be done for scaling an svg
  * @returns {string} - translate string for d3 transform
  */
-const transformPoint = (scale, type, scaleFactor = constants.DEFAULT_PLOT_SCALE) => (value) => {
+const transformPoint = (
+    scale,
+    type,
+    scaleFactor = constants.DEFAULT_PLOT_SCALE
+) => (value) => {
     const getX = (val) => scale.x(getValue(val, type).x);
-    const getY = (val) => scale[ val.yAxis ](getValue(val, type).y);
+    const getY = (val) => scale[val.yAxis](getValue(val, type).y);
     return `translate(${getX(value)},${getY(value)}) scale(${scaleFactor})`;
 };
 /**
@@ -97,9 +99,10 @@ const transformPoint = (scale, type, scaleFactor = constants.DEFAULT_PLOT_SCALE)
  * @returns {Object} - d3 select object
  */
 const translateLines = (scale, config, canvasSVG) =>
-    canvasSVG.selectAll(`.${styles.pairedBoxGroup} .${styles.pairedLine}`)
-             .transition(constants.d3Transition)
-             .attr("d", (d) => (d.high && d.low) ? createLine(scale, d) : "");
+    canvasSVG
+        .selectAll(`.${styles.pairedBoxGroup} .${styles.pairedLine}`)
+        .transition(constants.d3Transition)
+        .attr("d", (d) => (d.high && d.low ? createLine(scale, d) : ""));
 /**
  * Transforms points for a data point set (high, low and mid) in the Paired Result graph on resize
  * @private
@@ -109,11 +112,21 @@ const translateLines = (scale, config, canvasSVG) =>
  */
 const translatePoints = (scale, canvasSVG) =>
     iterateOnPairType((type) => {
-        canvasSVG.selectAll(`.${styles.pairedBoxGroup} .${styles.pairedPoint}.${getValue(styles, type)}`)
-                 .transition(constants.d3Transition)
-                 .attr("transform", function(value) {
-                     return transformPoint(scale, type, getTransformScale(this))(value);
-                 });
+        canvasSVG
+            .selectAll(
+                `.${styles.pairedBoxGroup} .${styles.pairedPoint}.${getValue(
+                    styles,
+                    type
+                )}`
+            )
+            .transition(constants.d3Transition)
+            .attr("transform", function(value) {
+                return transformPoint(
+                    scale,
+                    type,
+                    getTransformScale(this)
+                )(value);
+            });
     });
 /**
  * Draws the PairedResult graph on the canvas element.
@@ -132,21 +145,28 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
         drawLine(scale, config, boxPath);
         drawPoints(scale, config, boxPath);
     };
-    const pairedBoxGroupSVG = canvasSVG.append("g")
-                                       .classed(styles.pairedBoxGroup, true)
-                                       .attr("clip-path", `url(#${constants.CLIP_PATH_ID})`)
-                                       .attr("aria-describedby", dataTarget.key);
-    const pairedBoxPath = pairedBoxGroupSVG.selectAll(`.${styles.pairedBox}`)
-                                           .data(getDataPointValues(dataTarget));
-    pairedBoxPath.enter()
-                 .append("g")
-                 .classed(styles.pairedBox, true)
-                 .attr("aria-selected", false)
-                 .attr("transform", `translate(${getXAxisXPosition(config)},${PADDING.top})`)
-                 .call(drawBox);
-    pairedBoxPath.exit()
-                 .transition(constants.d3Transition)
-                 .remove();
+    const pairedBoxGroupSVG = canvasSVG
+        .append("g")
+        .classed(styles.pairedBoxGroup, true)
+        .attr("clip-path", `url(#${constants.CLIP_PATH_ID})`)
+        .attr("aria-describedby", dataTarget.key);
+    const pairedBoxPath = pairedBoxGroupSVG
+        .selectAll(`.${styles.pairedBox}`)
+        .data(getDataPointValues(dataTarget));
+    pairedBoxPath
+        .enter()
+        .append("g")
+        .classed(styles.pairedBox, true)
+        .attr("aria-selected", false)
+        .attr(
+            "transform",
+            `translate(${getXAxisXPosition(config)},${PADDING.top})`
+        )
+        .call(drawBox);
+    pairedBoxPath
+        .exit()
+        .transition(constants.d3Transition)
+        .remove();
 };
 /**
  * Processes the input JSON and adds the shapes, colors, labels etc. to each data points so that we
@@ -159,8 +179,10 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
 const processDataPoints = (graphConfig, dataTarget) => {
     const type = graphConfig.axis.x.type;
     const getXDataValues = (x) => {
-        if ((utils.isDate(x) && getType(type) !== AXIS_TYPE.TIME_SERIES) ||
-            (!utils.isDate(x) && getType(type) === AXIS_TYPE.TIME_SERIES)) {
+        if (
+            (utils.isDate(x) && getType(type) !== AXIS_TYPE.TIME_SERIES) ||
+            (!utils.isDate(x) && getType(type) === AXIS_TYPE.TIME_SERIES)
+        ) {
             throw new Error(errors.THROW_MSG_INVALID_FORMAT_TYPE);
         }
         if (getType(type) === AXIS_TYPE.TIME_SERIES) {
@@ -176,17 +198,21 @@ const processDataPoints = (graphConfig, dataTarget) => {
         iterateOnPairType((type) => {
             if (utils.isDefined(getValue(value, type))) {
                 const currentValue = getValue(value, type);
-                subset[ type ] = {
+                subset[type] = {
                     x: getXDataValues(currentValue.x),
                     y: utils.getNumber(currentValue.y),
                     isCritical: currentValue.isCritical || false,
-                    color: getValue(dataTarget.color, type) || constants.DEFAULT_COLOR,
+                    color:
+                        getValue(dataTarget.color, type) ||
+                        constants.DEFAULT_COLOR,
                     label: getValue(dataTarget.label, type) || {},
                     shape: getValue(dataTarget.shape, type) || SHAPES.CIRCLE,
                     key: `${dataTarget.key}_${type}`
                 };
-                if (!utils.hasValue(graphConfig.shownTargets, subset[ type ].key)) {
-                    graphConfig.shownTargets.push(subset[ type ].key);
+                if (
+                    !utils.hasValue(graphConfig.shownTargets, subset[type].key)
+                ) {
+                    graphConfig.shownTargets.push(subset[type].key);
                 }
             }
         });
@@ -218,17 +244,24 @@ const getDataPointValues = (target) => target.internalValuesSubset;
  */
 const drawLine = (scale, config, boxPath) =>
     boxPath.each(function(value) {
-        const shouldCreateLine = (d) => ((d.high && d.low) &&
+        const shouldCreateLine = (d) =>
+            d.high &&
+            d.low &&
             (utils.hasValue(config.shownTargets, d.high.key) &&
-                utils.hasValue(config.shownTargets, d.low.key)));
-        return d3.select(this).append("path")
-                 .classed(styles.pairedLine, true)
-                 .attr("aria-describedby", value.key)
-                 .attr("d", (value.high && value.low) ? createLine(scale, value) : "")
-                 .attr("style", (d) => `${!shouldCreateLine(d) ? "display: none;" : ""}`)
-                 .on("click", function(value, index) {
-                     dataPointActionHandler(config, value, index, this.parentNode);
-                 });
+                utils.hasValue(config.shownTargets, d.low.key));
+        return d3
+            .select(this)
+            .append("path")
+            .classed(styles.pairedLine, true)
+            .attr("aria-describedby", value.key)
+            .attr("d", value.high && value.low ? createLine(scale, value) : "")
+            .attr(
+                "style",
+                (d) => `${!shouldCreateLine(d) ? "display: none;" : ""}`
+            )
+            .on("click", function(value, index) {
+                dataPointActionHandler(config, value, index, this.parentNode);
+            });
     });
 /**
  * Draws the points with options opted in the input JSON by the consumer for each data set.
@@ -242,30 +275,50 @@ const drawLine = (scale, config, boxPath) =>
  */
 const drawPoints = (scale, config, canvasSVG) => {
     const getDataPointPath = (path, type) =>
-        path.classed(styles.pairedPoint, true)
+        path
+            .classed(styles.pairedPoint, true)
             .classed(getValue(styles, type), true)
             .attr("d", (value) => {
                 const shape = getShape(getValue(value, type));
                 return new Shape(shape).getPathDescription();
             })
             .attr("transform", transformPoint(scale, type))
-            .attr("style", (value) =>
-                `fill: ${getColorForTarget(getValue(value, type))}${
-                    config.shownTargets.indexOf(getValue(value, type).key) < 0 ? "; display: none;" : ";"}`)
+            .attr(
+                "style",
+                (value) =>
+                    `fill: ${getColorForTarget(getValue(value, type))}${
+                        config.shownTargets.indexOf(getValue(value, type).key) <
+                        0
+                            ? "; display: none;"
+                            : ";"
+                    }`
+            )
             .attr("aria-describedby", (value) => getValue(value, type).key)
             .on("click", function(value, index) {
-                dataPointActionHandler(config, value, index, this.parentNode.parentNode);
+                dataPointActionHandler(
+                    config,
+                    value,
+                    index,
+                    this.parentNode.parentNode
+                );
             });
     canvasSVG.each(function(value) {
         const boxPath = d3.select(this);
         iterateOnPairType((type) => {
             if (utils.isDefined(getValue(value, type))) {
                 const currentValue = getValue(value, type);
-                const pointGroup = boxPath.append("g")
-                                          .classed(styles.pointGroup, true);
+                const pointGroup = boxPath
+                    .append("g")
+                    .classed(styles.pointGroup, true);
                 if (currentValue.isCritical) {
                     config.hasCriticality = true;
-                    drawCriticalityPoints(scale, config, pointGroup, type, value);
+                    drawCriticalityPoints(
+                        scale,
+                        config,
+                        pointGroup,
+                        type,
+                        value
+                    );
                 }
                 getDataPointPath(pointGroup.append("path"), type);
             }
@@ -285,20 +338,48 @@ const drawPoints = (scale, config, canvasSVG) => {
  */
 const drawCriticalityPoints = (scale, config, pointGroup, type, value) => {
     const renderPoint = (path, type, value, cls, scaleFactor) =>
-        path.append("path")
+        path
+            .append("path")
             .classed(styles.pairedPoint, true)
             .classed(getValue(styles, type), true)
             .classed(cls, true)
-            .attr("d", new Shape(getShape(getValue(value, type))).getPathDescription())
+            .attr(
+                "d",
+                new Shape(getShape(getValue(value, type))).getPathDescription()
+            )
             .attr("transform", transformPoint(scale, type, scaleFactor))
-            .attr("style", `${config.shownTargets.indexOf(getValue(value, type).key) < 0 ? "display: none;" : ""}`)
+            .attr(
+                "style",
+                `${
+                    config.shownTargets.indexOf(getValue(value, type).key) < 0
+                        ? "display: none;"
+                        : ""
+                }`
+            )
             .attr("aria-hidden", false)
             .attr("aria-describedby", getValue(value, type).key)
             .on("click", function(value, index) {
-                dataPointActionHandler(config, value, index, this.parentNode.parentNode);
+                dataPointActionHandler(
+                    config,
+                    value,
+                    index,
+                    this.parentNode.parentNode
+                );
             });
-    renderPoint(pointGroup, type, value, styles.criticalityOuterPoint, constants.DEFAULT_CRITICAL_OUTER_PLOT_SCALE);
-    renderPoint(pointGroup, type, value, styles.criticalityInnerPoint, constants.DEFAULT_CRITICAL_INNER_PLOT_SCALE);
+    renderPoint(
+        pointGroup,
+        type,
+        value,
+        styles.criticalityOuterPoint,
+        constants.DEFAULT_CRITICAL_OUTER_PLOT_SCALE
+    );
+    renderPoint(
+        pointGroup,
+        type,
+        value,
+        styles.criticalityInnerPoint,
+        constants.DEFAULT_CRITICAL_INNER_PLOT_SCALE
+    );
 };
 /**
  * Called on resize, translates the data point values.
@@ -330,9 +411,12 @@ const translatePairedResultGraph = (scale, config, canvasSVG) => {
  */
 const processRegions = (graphContext, config, canvasSVG, { key }) => {
     if (isSingleTargetDisplayed(graphContext.content)) {
-        showHideRegion(canvasSVG, `region_${key}`, (config.shownTargets.indexOf(key) > -1));
-    }
-    else {
+        showHideRegion(
+            canvasSVG,
+            `region_${key}`,
+            config.shownTargets.indexOf(key) > -1
+        );
+    } else {
         hideAllRegions(canvasSVG);
     }
 };
@@ -349,7 +433,13 @@ const processRegions = (graphContext, config, canvasSVG, { key }) => {
  * @param {string} item - paired result type unique key
  * @return {function()} callback function handler for RAF
  */
-const onAnimationHandler = (graphContext, control, config, canvasSVG, item) => () => {
+const onAnimationHandler = (
+    graphContext,
+    control,
+    config,
+    canvasSVG,
+    item
+) => () => {
     control.redraw(graphContext);
     processRegions(graphContext, config, canvasSVG, item);
 };
@@ -362,21 +452,26 @@ const onAnimationHandler = (graphContext, control, config, canvasSVG, item) => (
  * @param {Array} canvasSVG - d3 html element of canvas
  * @returns {undefined} - returns nothing
  */
-const clickHandler = (graphContext, control, config, canvasSVG) => (element, item) => {
+const clickHandler = (graphContext, control, config, canvasSVG) => (
+    element,
+    item
+) => {
     const updateShownTarget = (shownTargets, item) => {
         const index = shownTargets.indexOf(item.key);
         if (index > -1) {
             shownTargets.splice(index, 1);
-        }
-        else {
+        } else {
             shownTargets.push(item.key);
         }
     };
     legendClickHandler(element);
     updateShownTarget(config.shownTargets, item);
-    canvasSVG.selectAll(`path[aria-describedby="${item.key}"]`)
-             .attr("aria-hidden", true);
-    window.requestAnimationFrame(onAnimationHandler(graphContext, control, config, canvasSVG, item));
+    canvasSVG
+        .selectAll(`path[aria-describedby="${item.key}"]`)
+        .attr("aria-hidden", true);
+    window.requestAnimationFrame(
+        onAnimationHandler(graphContext, control, config, canvasSVG, item)
+    );
 };
 /**
  * Hover handler for legend item. Highlights current line and blurs the rest of the targets in Graph
@@ -387,14 +482,27 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (element, ite
  * @returns {undefined} - returns nothing
  */
 const hoverHandler = (config, canvasSVG) => (item, state) => {
-    const additionalHoverHandler = (shownTargets, canvasSVG, currentKey, hoverState, k) => {
-        canvasSVG.selectAll(`.${styles.region}[aria-describedby="region_${k}"]`)
-                 .classed(styles.regionBlur, (hoverState === constants.HOVER_EVENT.MOUSE_ENTER));
+    const additionalHoverHandler = (
+        shownTargets,
+        canvasSVG,
+        currentKey,
+        hoverState,
+        k
+    ) => {
+        canvasSVG
+            .selectAll(`.${styles.region}[aria-describedby="region_${k}"]`)
+            .classed(
+                styles.regionBlur,
+                hoverState === constants.HOVER_EVENT.MOUSE_ENTER
+            );
     };
-    legendHoverHandler(config.shownTargets, canvasSVG, item.key, state, [ additionalHoverHandler ]);
+    legendHoverHandler(config.shownTargets, canvasSVG, item.key, state, [
+        additionalHoverHandler
+    ]);
     // Highlight the line of the item hovered on
-    canvasSVG.selectAll(`path[aria-describedby="${item.key}"]`)
-             .classed(styles.highlight, (state === constants.HOVER_EVENT.MOUSE_ENTER));
+    canvasSVG
+        .selectAll(`path[aria-describedby="${item.key}"]`)
+        .classed(styles.highlight, state === constants.HOVER_EVENT.MOUSE_ENTER);
     // Highlight region(s) of the item hovered on, only if the graph is currently displayed
     regionLegendHoverHandler(config.shownTargets, canvasSVG, item.key, state);
 };
@@ -411,20 +519,28 @@ const hoverHandler = (config, canvasSVG) => (item, state) => {
  * @returns {undefined} - returns nothing
  */
 const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
-    const constructLegendLabels = (d, type) => Object.assign({}, {
-        shape: getValue(d.shape, type),
-        color: getValue(d.color, type),
-        label: getValue(d.label, type),
-        key: `${d.key}_${type}`
-    });
-    if (dataTarget.label && legendSVG) {
-        iterateOnPairType((type) => {
-                const label = getValue(dataTarget.label, type);
-                if (label && label.display) {
-                    loadLegendItem(legendSVG, constructLegendLabels(dataTarget, type), config.shownTargets, eventHandlers);
-                }
+    const constructLegendLabels = (d, type) =>
+        Object.assign(
+            {},
+            {
+                shape: getValue(d.shape, type),
+                color: getValue(d.color, type),
+                label: getValue(d.label, type),
+                key: `${d.key}_${type}`
             }
         );
+    if (dataTarget.label && legendSVG) {
+        iterateOnPairType((type) => {
+            const label = getValue(dataTarget.label, type);
+            if (label && label.display) {
+                loadLegendItem(
+                    legendSVG,
+                    constructLegendLabels(dataTarget, type),
+                    config.shownTargets,
+                    eventHandlers
+                );
+            }
+        });
     }
 };
 /**
@@ -448,20 +564,24 @@ const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
  */
 const renderRegion = (scale, config, canvasSVG, dataTarget) => {
     const regionGroupSVG = canvasSVG.select(`.${styles.regionGroup}`);
-    const regionPairGroup = regionGroupSVG.append("g")
-                                          .classed(styles.regionPairGroup, true)
-                                          .attr("aria-describedby", `region_${dataTarget.key}`);
+    const regionPairGroup = regionGroupSVG
+        .append("g")
+        .classed(styles.regionPairGroup, true)
+        .attr("aria-describedby", `region_${dataTarget.key}`);
     regionPairGroup.call(() => {
         iterateOnPairType((type) => {
-            if (dataTarget.regions[ type ]) {
-                if (!utils.isArray(dataTarget.regions[ type ]) || utils.isUndefined(dataTarget.regions[ type ])) {
+            if (dataTarget.regions[type]) {
+                if (
+                    !utils.isArray(dataTarget.regions[type]) ||
+                    utils.isUndefined(dataTarget.regions[type])
+                ) {
                     throw new Error(errors.THROW_MSG_REGION_EMPTY);
                 }
                 createRegion(
                     scale,
                     config,
                     regionPairGroup,
-                    dataTarget.regions[ type ],
+                    dataTarget.regions[type],
                     `region_${dataTarget.key}_${type}`,
                     dataTarget.yAxis
                 );

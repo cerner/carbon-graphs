@@ -60,14 +60,62 @@ const getState = () => _state.currentSection;
 *   * Create a "content" to tie in control to the DOM
 *   * Add the content function below
 */
-renderLineExamples(new LineExample(), toggleSection, contentSection, setState, getState);
-renderNonContiguousLineExamples(new LineExample(), toggleSection, contentSection, setState, getState);
-renderMultiLineExamples(new LineExample(), toggleSection, contentSection, setState, getState);
-renderPairedResultExamples(new PairedResultExample(), toggleSection, contentSection, setState, getState);
-renderCombinationGraphExamples(new CombinationExample(), toggleSection, contentSection, setState, getState);
-renderRegionsExamples(new RegionsExample(), toggleSection, contentSection, setState, getState);
-renderCriticalityExamples(new CriticalityExample(), toggleSection, contentSection, setState, getState);
-renderShapesExamples(new ShapesExample(), toggleSection, contentSection, setState, getState);
+renderLineExamples(
+    new LineExample(),
+    toggleSection,
+    contentSection,
+    setState,
+    getState
+);
+renderNonContiguousLineExamples(
+    new LineExample(),
+    toggleSection,
+    contentSection,
+    setState,
+    getState
+);
+renderMultiLineExamples(
+    new LineExample(),
+    toggleSection,
+    contentSection,
+    setState,
+    getState
+);
+renderPairedResultExamples(
+    new PairedResultExample(),
+    toggleSection,
+    contentSection,
+    setState,
+    getState
+);
+renderCombinationGraphExamples(
+    new CombinationExample(),
+    toggleSection,
+    contentSection,
+    setState,
+    getState
+);
+renderRegionsExamples(
+    new RegionsExample(),
+    toggleSection,
+    contentSection,
+    setState,
+    getState
+);
+renderCriticalityExamples(
+    new CriticalityExample(),
+    toggleSection,
+    contentSection,
+    setState,
+    getState
+);
+renderShapesExamples(
+    new ShapesExample(),
+    toggleSection,
+    contentSection,
+    setState,
+    getState
+);
 
 btn.render(toggleSection, "Colors", (event) => {
     clearContent(contentSection, getState());

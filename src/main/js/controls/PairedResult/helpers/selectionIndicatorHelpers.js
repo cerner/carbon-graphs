@@ -14,8 +14,7 @@ import utils from "../../../helpers/utils";
 const getIncompletePairObject = (pair) => {
     if (pair.high) {
         return pair.high;
-    }
-    else if (pair.low) {
+    } else if (pair.low) {
         return pair.low;
     }
     return pair.mid;
@@ -29,7 +28,8 @@ const getIncompletePairObject = (pair) => {
  * @param {Object} value - data point object
  * @returns {boolean} If data point high, low or mid is hidden or otherwise
  */
-const isIncompletePairHidden = (config, value) => config.shownTargets.indexOf(getIncompletePairObject(value).key) < 0;
+const isIncompletePairHidden = (config, value) =>
+    config.shownTargets.indexOf(getIncompletePairObject(value).key) < 0;
 /**
  * Although we are displaying the indicator even when the legend item
  * is toggled, we should hide all but the ones we are going to click on.
@@ -41,7 +41,8 @@ const isIncompletePairHidden = (config, value) => config.shownTargets.indexOf(ge
  * @returns {boolean} True if high or low are hidden from graph or otherwise
  */
 const isPairPartiallyHidden = (config, value) =>
-    (config.shownTargets.indexOf(value.high.key) < 0) || (config.shownTargets.indexOf(value.low.key) < 0);
+    config.shownTargets.indexOf(value.high.key) < 0 ||
+    config.shownTargets.indexOf(value.low.key) < 0;
 /**
  * Shows/hides the pair when clicked on one of the data points.
  * When the legend toggle is used one or many data points might be hidden, when
@@ -59,11 +60,16 @@ const isPairPartiallyHidden = (config, value) =>
 const showHideSiblingDataPoint = (config, value, target) => {
     // Toggle items to force show if hidden or hide, add/remove a class to force display:block
     const targetNode = d3.select(target);
-    targetNode.selectAll("path").classed(styles.dataPointDisplayEnable, function() {
-        return !d3.select(this).classed(styles.dataPointDisplayEnable);
-    });
+    targetNode
+        .selectAll("path")
+        .classed(styles.dataPointDisplayEnable, function() {
+            return !d3.select(this).classed(styles.dataPointDisplayEnable);
+        });
     const targetSelectionIndicator = targetNode.select("rect");
-    targetSelectionIndicator.classed(styles.dataPointDisplayEnable, !targetSelectionIndicator.classed(styles.dataPointDisplayEnable));
+    targetSelectionIndicator.classed(
+        styles.dataPointDisplayEnable,
+        !targetSelectionIndicator.classed(styles.dataPointDisplayEnable)
+    );
 };
 /**
  * Checks if the legend item has been toggled for the data set in graph
@@ -76,8 +82,9 @@ const showHideSiblingDataPoint = (config, value, target) => {
  * @returns {*|boolean} True if a legend item is toggled, false otherwise
  */
 const isDataPointLegendToggled = (config, value) => {
-    const isCompletePairNotPresent = () => !!(value.high && value.low) && isPairPartiallyHidden(config, value);
-    return (isCompletePairNotPresent() || isIncompletePairHidden(config, value));
+    const isCompletePairNotPresent = () =>
+        !!(value.high && value.low) && isPairPartiallyHidden(config, value);
+    return isCompletePairNotPresent() || isIncompletePairHidden(config, value);
 };
 /**
  * Toggles the selection of a data point, executes on click of a data point.
@@ -93,8 +100,14 @@ const isDataPointLegendToggled = (config, value) => {
 const toggleDataPointSelection = (config, value, target) => {
     const pairNode = d3.select(target);
     const selectedPairNode = pairNode.select(`.${styles.dataPointSelection}`);
-    pairNode.attr("aria-selected", !(pairNode.attr("aria-selected") === "true"));
-    selectedPairNode.attr("aria-hidden", !(selectedPairNode.attr("aria-hidden") === "true"));
+    pairNode.attr(
+        "aria-selected",
+        !(pairNode.attr("aria-selected") === "true")
+    );
+    selectedPairNode.attr(
+        "aria-hidden",
+        !(selectedPairNode.attr("aria-hidden") === "true")
+    );
     if (isDataPointLegendToggled(config, value)) {
         showHideSiblingDataPoint(config, value, target);
     }
@@ -122,14 +135,20 @@ export const dataPointActionHandler = (config, value, index, target) => {
         return;
     }
     toggleDataPointSelection(config, value, target).call((selectedTarget) =>
-        value.onClick(() => {
-            const selectedNodeParent = selectedTarget.node().parentNode;
-            d3.select(selectedNodeParent).attr("aria-selected", false);
-            selectedTarget.attr("aria-hidden", true);
-            if (isDataPointLegendToggled(config, value)) {
-                showHideSiblingDataPoint(config, value, selectedNodeParent);
-            }
-        }, value.key, index, value, selectedTarget)
+        value.onClick(
+            () => {
+                const selectedNodeParent = selectedTarget.node().parentNode;
+                d3.select(selectedNodeParent).attr("aria-selected", false);
+                selectedTarget.attr("aria-hidden", true);
+                if (isDataPointLegendToggled(config, value)) {
+                    showHideSiblingDataPoint(config, value, selectedNodeParent);
+                }
+            },
+            value.key,
+            index,
+            value,
+            selectedTarget
+        )
     );
 };
 /**
@@ -143,13 +162,32 @@ export const dataPointActionHandler = (config, value, index, target) => {
  * @returns {Object} - d3 append object with correct attributes for creation and translation
  */
 const updateSelectionIndicatorAttributes = (d3PairElement, scale, value) =>
-    d3PairElement.attr("x", (d) => scale.x(d.high.x) - constants.SELECTION_INDICATOR_X_POSITION)
-                 .attr("y", (d) => scale[ value.yAxis ](d.high.y) - constants.SELECTION_INDICATOR_Y_POSITION)
-                 .attr("width", (d) => (scale.x(d.low.x) - scale.x(d.high.x)
-                     + (constants.SELECTION_INDICATOR_X_POSITION * 2))
-                     || (constants.SELECTION_INDICATOR_X_POSITION * 2))
-                 .attr("height", (d) => scale[ value.yAxis ](d.low.y) - scale[ value.yAxis ](d.high.y)
-                     + (constants.SELECTION_INDICATOR_Y_POSITION * 2));
+    d3PairElement
+        .attr(
+            "x",
+            (d) => scale.x(d.high.x) - constants.SELECTION_INDICATOR_X_POSITION
+        )
+        .attr(
+            "y",
+            (d) =>
+                scale[value.yAxis](d.high.y) -
+                constants.SELECTION_INDICATOR_Y_POSITION
+        )
+        .attr(
+            "width",
+            (d) =>
+                scale.x(d.low.x) -
+                    scale.x(d.high.x) +
+                    constants.SELECTION_INDICATOR_X_POSITION * 2 ||
+                constants.SELECTION_INDICATOR_X_POSITION * 2
+        )
+        .attr(
+            "height",
+            (d) =>
+                scale[value.yAxis](d.low.y) -
+                scale[value.yAxis](d.high.y) +
+                constants.SELECTION_INDICATOR_Y_POSITION * 2
+        );
 /**
  * Transforms selection indicator RECTANGLE for a data point set in the Paired Result graph on resize, with
  * both high and low data points.
@@ -160,11 +198,18 @@ const updateSelectionIndicatorAttributes = (d3PairElement, scale, value) =>
  * @returns {Object} - d3 select object
  */
 export const translateSelectionBox = (scale, canvasSVG) =>
-    canvasSVG.selectAll(`.${styles.pairedBoxGroup} rect.${styles.dataPointSelection}`)
-             .transition(constants.d3Transition)
-             .each(function(value) {
-                 return updateSelectionIndicatorAttributes(d3.select(this).transition(constants.d3Transition), scale, value);
-             });
+    canvasSVG
+        .selectAll(
+            `.${styles.pairedBoxGroup} rect.${styles.dataPointSelection}`
+        )
+        .transition(constants.d3Transition)
+        .each(function(value) {
+            return updateSelectionIndicatorAttributes(
+                d3.select(this).transition(constants.d3Transition),
+                scale,
+                value
+            );
+        });
 /**
  * Transforms selection indicator CIRCLE for a data point set in the Paired Result graph on resize, with
  * an incomplete pair i.e. only high or low is present.
@@ -175,14 +220,20 @@ export const translateSelectionBox = (scale, canvasSVG) =>
  * @returns {Object} - d3 select object
  */
 export const translateSelectionItem = (scale, canvasSVG) =>
-    canvasSVG.selectAll(`.${styles.pairedBoxGroup} circle.${styles.dataPointSelection}`)
-             .transition(constants.d3Transition)
-             .each(function(value) {
-                 return d3.select(this)
-                          .transition(constants.d3Transition)
-                          .attr("cx", (d) => scale.x(getIncompletePairObject(d).x))
-                          .attr("cy", (d) => scale[ value.yAxis ](getIncompletePairObject(d).y));
-             });
+    canvasSVG
+        .selectAll(
+            `.${styles.pairedBoxGroup} circle.${styles.dataPointSelection}`
+        )
+        .transition(constants.d3Transition)
+        .each(function(value) {
+            return d3
+                .select(this)
+                .transition(constants.d3Transition)
+                .attr("cx", (d) => scale.x(getIncompletePairObject(d).x))
+                .attr("cy", (d) =>
+                    scale[value.yAxis](getIncompletePairObject(d).y)
+                );
+        });
 /**
  * Adds a RECT svg element for each data point pair high AND low.
  * @private
@@ -194,13 +245,20 @@ export const translateSelectionItem = (scale, canvasSVG) =>
  */
 const addRect = (d3PairElement, scale, config, value) =>
     updateSelectionIndicatorAttributes(
-        d3PairElement.append("rect")
-                     .classed(styles.dataPointSelection, true)
-                     .attr("rx", 3)
-                     .attr("ry", 3)
-                     .attr("aria-hidden", true)
-                     .attr("aria-describedby", value.key)
-                     .attr("style", (d) => `${isPairPartiallyHidden(config, d) ? "display: none;" : ""}`),
+        d3PairElement
+            .append("rect")
+            .classed(styles.dataPointSelection, true)
+            .attr("rx", 3)
+            .attr("ry", 3)
+            .attr("aria-hidden", true)
+            .attr("aria-describedby", value.key)
+            .attr(
+                "style",
+                (d) =>
+                    `${
+                        isPairPartiallyHidden(config, d) ? "display: none;" : ""
+                    }`
+            ),
         scale,
         value
     );
@@ -214,15 +272,19 @@ const addRect = (d3PairElement, scale, config, value) =>
  * @returns {undefined} - returns nothing
  */
 const addCircle = (d3PairElement, scale, config, value) =>
-    d3PairElement.append("circle")
-                 .classed(styles.dataPointSelection, true)
-                 .attr("cx", (d) => scale.x(getIncompletePairObject(d).x))
-                 .attr("cy", (d) => scale[ value.yAxis ](getIncompletePairObject(d).y))
-                 .attr("r", constants.DEFAULT_SELECTED_RADIUS)
-                 .attr("style", (d) =>
-                     `${isIncompletePairHidden(config, d) ? "display: none;" : ""}`)
-                 .attr("aria-hidden", true)
-                 .attr("aria-describedby", value.key);
+    d3PairElement
+        .append("circle")
+        .classed(styles.dataPointSelection, true)
+        .attr("cx", (d) => scale.x(getIncompletePairObject(d).x))
+        .attr("cy", (d) => scale[value.yAxis](getIncompletePairObject(d).y))
+        .attr("r", constants.DEFAULT_SELECTED_RADIUS)
+        .attr(
+            "style",
+            (d) =>
+                `${isIncompletePairHidden(config, d) ? "display: none;" : ""}`
+        )
+        .attr("aria-hidden", true)
+        .attr("aria-describedby", value.key);
 /**
  * Draws a rectangle around the 2 data points high and low. If either one of them is missing
  * then the rectangle is not drawn. A circle is allocated for any incomplete pair.

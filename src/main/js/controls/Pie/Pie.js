@@ -22,11 +22,13 @@ const getConfig = (inputJSON) => {
     if (utils.isEmpty(inputJSON)) {
         throw new Error(errors.THROW_MSG_NO_DATA_LOADED);
     }
-    return processInput(new PieConfig()
-        .setInput(inputJSON)
-        .validateInput()
-        .clone()
-        .getConfig());
+    return processInput(
+        new PieConfig()
+            .setInput(inputJSON)
+            .validateInput()
+            .clone()
+            .getConfig()
+    );
 };
 
 /**

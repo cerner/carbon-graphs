@@ -11,7 +11,8 @@ import utils from "../../helpers/utils";
  * @param {Object} defaultVal - A default value
  * @returns {Object} A defined value
  */
-export const getDefaultValue = (value, defaultVal) => utils.isUndefined(value) ? defaultVal : value;
+export const getDefaultValue = (value, defaultVal) =>
+    utils.isUndefined(value) ? defaultVal : value;
 
 /**
  * Validates if data is in correct format
@@ -21,8 +22,7 @@ export const getDefaultValue = (value, defaultVal) => utils.isUndefined(value) ?
  * @returns {boolean} True if data valid
  */
 export const isDataValidFormat = (data) =>
-    utils.notEmpty(data.key) &&
-    utils.notEmpty(data.values);
+    utils.notEmpty(data.key) && utils.notEmpty(data.values);
 
 /**
  * Checks if the keys for data points sets are unique
@@ -51,7 +51,10 @@ export const getType = (type) => getDefaultValue(type, AXIS_TYPE.DEFAULT);
  * @param {string} type - consumer passed input type
  * @returns {Object} d3 scale object
  */
-export const getScale = (type) => getType(type) === AXIS_TYPE.TIME_SERIES ? d3.time.scale() : d3.scale.linear();
+export const getScale = (type) =>
+    getType(type) === AXIS_TYPE.TIME_SERIES
+        ? d3.time.scale()
+        : d3.scale.linear();
 
 /**
  * Returns the domain for the axes. If the range is a number then the domain is treated
@@ -64,14 +67,9 @@ export const getScale = (type) => getType(type) === AXIS_TYPE.TIME_SERIES ? d3.t
  * @returns {Array} Array represented by lower and upper limit ranges.
  */
 export const getDomain = (type, lowerLimit, upperLimit) =>
-    (getType(type) === AXIS_TYPE.TIME_SERIES) ? [
-            utils.parseDateTime(lowerLimit),
-            utils.parseDateTime(upperLimit)
-        ]
-        : [
-            utils.getNumber(lowerLimit),
-            utils.getNumber(upperLimit)
-        ];
+    getType(type) === AXIS_TYPE.TIME_SERIES
+        ? [utils.parseDateTime(lowerLimit), utils.parseDateTime(upperLimit)]
+        : [utils.getNumber(lowerLimit), utils.getNumber(upperLimit)];
 
 /**
  * API to parse consumer input.

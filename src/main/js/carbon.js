@@ -2,11 +2,7 @@
 /* globals VERSION */
 import api from "./controls";
 import { Shape } from "./core";
-import {
-    AXIS_TYPE,
-    COLORS,
-    SHAPES
-} from "./helpers/constants";
+import { AXIS_TYPE, COLORS, SHAPES } from "./helpers/constants";
 import LOCALE from "./locale";
 
 const tools = {

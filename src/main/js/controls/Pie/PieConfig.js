@@ -12,22 +12,33 @@ import utils from "../../helpers/utils";
  * @returns {Object} JSON compatible with c3
  */
 export const processInput = (config) =>
-    Object.assign({}, {
-        bindto: config.bindTo,
-        pie: config.pie,
-        size: config.dimension,
-        tooltip: {
-            show: false
-        },
-        data: {
-            columns: config.data.map((i) => [ i.label, ...i.values ]),
-            type: "pie",
-            onclick: config.data[ 0 ].onClick,
-            colors: Object.assign({}, ...config.data.map((i) => Object.assign({}, {
-                [ i.label ]: i.color
-            })))
+    Object.assign(
+        {},
+        {
+            bindto: config.bindTo,
+            pie: config.pie,
+            size: config.dimension,
+            tooltip: {
+                show: false
+            },
+            data: {
+                columns: config.data.map((i) => [i.label, ...i.values]),
+                type: "pie",
+                onclick: config.data[0].onClick,
+                colors: Object.assign(
+                    {},
+                    ...config.data.map((i) =>
+                        Object.assign(
+                            {},
+                            {
+                                [i.label]: i.color
+                            }
+                        )
+                    )
+                )
+            }
         }
-    });
+    );
 /**
  * Process configuration information for Pie Chart
  * @class PieConfig

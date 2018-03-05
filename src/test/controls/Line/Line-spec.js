@@ -37,7 +37,10 @@ describe("Line", () => {
     beforeEach(() => {
         lineGraphContainer = document.createElement("div");
         lineGraphContainer.id = "testLine_carbon";
-        lineGraphContainer.setAttribute("style", "width: 1024px; height: 400px;");
+        lineGraphContainer.setAttribute(
+            "style",
+            "width: 1024px; height: 400px;"
+        );
         document.body.appendChild(lineGraphContainer);
         graphDefault = new Graph(getAxes(axisDefault));
     });
@@ -69,86 +72,150 @@ describe("Line", () => {
         it("does not throw error when datetime values have milliseconds", () => {
             expect(() => {
                 const graphTimeSeries = new Graph(getAxes(axisTimeSeries));
-                graphTimeSeries.loadContent(new Line(getInput([
-                    {
-                        x: "2016-02-03T12:00:00.000Z",
-                        y: 1
-                    }
-                ], false, false)));
+                graphTimeSeries.loadContent(
+                    new Line(
+                        getInput(
+                            [
+                                {
+                                    x: "2016-02-03T12:00:00.000Z",
+                                    y: 1
+                                }
+                            ],
+                            false,
+                            false
+                        )
+                    )
+                );
             }).not.toThrow();
             expect(() => {
                 const graphTimeSeries = new Graph(getAxes(axisTimeSeries));
-                graphTimeSeries.loadContent(new Line(getInput([
-                    {
-                        x: "2016-02-03T12:00:00Z",
-                        y: 1
-                    }
-                ], false, false)));
+                graphTimeSeries.loadContent(
+                    new Line(
+                        getInput(
+                            [
+                                {
+                                    x: "2016-02-03T12:00:00Z",
+                                    y: 1
+                                }
+                            ],
+                            false,
+                            false
+                        )
+                    )
+                );
             }).not.toThrow();
             expect(() => {
                 const graphTimeSeries = new Graph(getAxes(axisTimeSeries));
-                graphTimeSeries.loadContent(new Line(getInput([
-                    {
-                        x: "2016-02-03T12:00Z",
-                        y: 1
-                    }
-                ], false, false)));
+                graphTimeSeries.loadContent(
+                    new Line(
+                        getInput(
+                            [
+                                {
+                                    x: "2016-02-03T12:00Z",
+                                    y: 1
+                                }
+                            ],
+                            false,
+                            false
+                        )
+                    )
+                );
             }).not.toThrow();
         });
         describe("throws error when values have datetime in a different ISO8601 format", () => {
             it("on invalid millisecond value", () => {
                 expect(() => {
                     const graphTimeSeries = new Graph(getAxes(axisTimeSeries));
-                    graphTimeSeries.loadContent(new Line(getInput([
-                        {
-                            x: "2016-02-03T12:00:00:000Z",
-                            y: 1
-                        }
-                    ], false, false)));
+                    graphTimeSeries.loadContent(
+                        new Line(
+                            getInput(
+                                [
+                                    {
+                                        x: "2016-02-03T12:00:00:000Z",
+                                        y: 1
+                                    }
+                                ],
+                                false,
+                                false
+                            )
+                        )
+                    );
                 }).toThrow();
             });
             it("on invalid second value", () => {
                 expect(() => {
                     const graphTimeSeries = new Graph(getAxes(axisTimeSeries));
-                    graphTimeSeries.loadContent(new Line(getInput([
-                        {
-                            x: "2016-02-03T12:00:00:000.000Z",
-                            y: 1
-                        }
-                    ], false, false)));
+                    graphTimeSeries.loadContent(
+                        new Line(
+                            getInput(
+                                [
+                                    {
+                                        x: "2016-02-03T12:00:00:000.000Z",
+                                        y: 1
+                                    }
+                                ],
+                                false,
+                                false
+                            )
+                        )
+                    );
                 }).toThrow();
             });
             it("on no second value but with millisecond value", () => {
                 expect(() => {
                     const graphTimeSeries = new Graph(getAxes(axisTimeSeries));
-                    graphTimeSeries.loadContent(new Line(getInput([
-                        {
-                            x: "2016-02-03T12:00.00Z",
-                            y: 1
-                        }
-                    ], false, false)));
+                    graphTimeSeries.loadContent(
+                        new Line(
+                            getInput(
+                                [
+                                    {
+                                        x: "2016-02-03T12:00.00Z",
+                                        y: 1
+                                    }
+                                ],
+                                false,
+                                false
+                            )
+                        )
+                    );
                 }).toThrow();
             });
             it("on no minute or second but with Zulu time stamp", () => {
                 expect(() => {
                     const graphTimeSeries = new Graph(getAxes(axisTimeSeries));
-                    graphTimeSeries.loadContent(new Line(getInput([
-                        {
-                            x: "2016-02-03T12Z",
-                            y: 1
-                        }
-                    ], false, false)));
+                    graphTimeSeries.loadContent(
+                        new Line(
+                            getInput(
+                                [
+                                    {
+                                        x: "2016-02-03T12Z",
+                                        y: 1
+                                    }
+                                ],
+                                false,
+                                false
+                            )
+                        )
+                    );
                 }).toThrow();
             });
             it("on no hour, minute or second value but with Zulu timestamp", () => {
                 expect(() => {
                     const graphTimeSeries = new Graph(getAxes(axisTimeSeries));
-                    graphTimeSeries.loadContent(new Line(getInput([
-                        {
-                            x: "2016-02-03Z",
-                            y: 1
-                        }
-                    ], false, false)));
+                    graphTimeSeries.loadContent(
+                        new Line(
+                            getInput(
+                                [
+                                    {
+                                        x: "2016-02-03Z",
+                                        y: 1
+                                    }
+                                ],
+                                false,
+                                false
+                            )
+                        )
+                    );
                 }).toThrow();
             });
         });
@@ -161,8 +228,16 @@ describe("Line", () => {
             expect(line.config.label).toEqual(input.label);
             expect(line.config.onClick).toEqual(jasmine.any(Function));
             expect(line.config.values.length).toBe(3);
-            expect(line.config.values.every((i, index) => i.x === input.values[ index ].x)).toBeTruthy();
-            expect(line.config.values.every((i, index) => i.y === input.values[ index ].y)).toBeTruthy();
+            expect(
+                line.config.values.every(
+                    (i, index) => i.x === input.values[index].x
+                )
+            ).toBeTruthy();
+            expect(
+                line.config.values.every(
+                    (i, index) => i.y === input.values[index].y
+                )
+            ).toBeTruthy();
         });
         it("any changes to input object doesn't affect the config", () => {
             const input = getInput(valuesDefault, false, false);
@@ -217,54 +292,74 @@ describe("Line", () => {
         it("throws error when type and values are a mismatch", () => {
             expect(() => {
                 const input = getInput(valuesTimeSeries, false, false);
-                const validGraph = new Graph(getAxes(utils.deepClone(axisDefault)));
+                const validGraph = new Graph(
+                    getAxes(utils.deepClone(axisDefault))
+                );
                 validGraph.loadContent(new Line(input));
             }).toThrowError(errors.THROW_MSG_INVALID_FORMAT_TYPE);
         });
         it("internal subsets gets created correctly for each data point", () => {
-            const graph = graphDefault.loadContent(new Line(getInput(valuesDefault, false, false)));
-            const data = graph.content[ 0 ].dataTarget;
-            expect(data.internalValuesSubset.every((j) =>
-                j.onClick !== null &&
-                j.x !== null &&
-                j.y !== null &&
-                j.label !== null &&
-                j.shape &&
-                j.color &&
-                j.yAxis &&
-                j.key === data.key
-            )).toBeTruthy();
+            const graph = graphDefault.loadContent(
+                new Line(getInput(valuesDefault, false, false))
+            );
+            const data = graph.content[0].dataTarget;
+            expect(
+                data.internalValuesSubset.every(
+                    (j) =>
+                        j.onClick !== null &&
+                        j.x !== null &&
+                        j.y !== null &&
+                        j.label !== null &&
+                        j.shape &&
+                        j.color &&
+                        j.yAxis &&
+                        j.key === data.key
+                )
+            ).toBeTruthy();
             expect(graph.config.shownTargets.length).toBe(1);
         });
         it("internal subsets gets created successfully for time series", () => {
             const graphTimeSeries = new Graph(getAxes(axisTimeSeries));
-            const graph = graphTimeSeries.loadContent(new Line(getInput(valuesTimeSeries, false, false)));
-            const data = graph.content[ 0 ].dataTarget;
-            expect(data.internalValuesSubset.every((j) =>
-                typeof j.x === "object" &&
-                j.x instanceof Date
-            )).toBeTruthy();
+            const graph = graphTimeSeries.loadContent(
+                new Line(getInput(valuesTimeSeries, false, false))
+            );
+            const data = graph.content[0].dataTarget;
+            expect(
+                data.internalValuesSubset.every(
+                    (j) => typeof j.x === "object" && j.x instanceof Date
+                )
+            ).toBeTruthy();
         });
         it("defaults color to black when not provided", () => {
-            const graph = graphDefault.loadContent(new Line(getInput(valuesDefault)));
-            const data = graph.content[ 0 ].dataTarget;
-            expect(data.internalValuesSubset.every((j) =>
-                j.color === constants.DEFAULT_COLOR
-            )).toBeTruthy();
+            const graph = graphDefault.loadContent(
+                new Line(getInput(valuesDefault))
+            );
+            const data = graph.content[0].dataTarget;
+            expect(
+                data.internalValuesSubset.every(
+                    (j) => j.color === constants.DEFAULT_COLOR
+                )
+            ).toBeTruthy();
         });
         it("defaults shapes to circle when not provided", () => {
-            const graph = graphDefault.loadContent(new Line(getInput(valuesDefault)));
-            const data = graph.content[ 0 ].dataTarget;
-            expect(data.internalValuesSubset.every((j) =>
-                j.shape === "CIRCLE"
-            )).toBeTruthy();
+            const graph = graphDefault.loadContent(
+                new Line(getInput(valuesDefault))
+            );
+            const data = graph.content[0].dataTarget;
+            expect(
+                data.internalValuesSubset.every((j) => j.shape === "CIRCLE")
+            ).toBeTruthy();
         });
         it("defaults axis to Y axis when not provided", () => {
-            const graph = graphDefault.loadContent(new Line(getInput(valuesDefault)));
-            const data = graph.content[ 0 ].dataTarget;
-            expect(data.internalValuesSubset.every((j) =>
-                j.yAxis === constants.Y_AXIS
-            )).toBeTruthy();
+            const graph = graphDefault.loadContent(
+                new Line(getInput(valuesDefault))
+            );
+            const data = graph.content[0].dataTarget;
+            expect(
+                data.internalValuesSubset.every(
+                    (j) => j.yAxis === constants.Y_AXIS
+                )
+            ).toBeTruthy();
         });
         describe("draws the graph", () => {
             let input = null;
@@ -273,60 +368,106 @@ describe("Line", () => {
                 graphDefault.loadContent(new Line(input));
             });
             it("adds content container for each line", () => {
-                const lineContentContainer = fetchElementByClass(lineGraphContainer, styles.lineGraphContent);
+                const lineContentContainer = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.lineGraphContent
+                );
                 expect(lineContentContainer).not.toBeNull();
                 expect(lineContentContainer.tagName).toBe("g");
-                expect(lineContentContainer.getAttribute("aria-describedby")).toBe(input.key);
+                expect(
+                    lineContentContainer.getAttribute("aria-describedby")
+                ).toBe(input.key);
             });
             it("adds container for each data points sets for each line", () => {
                 const secInput = utils.deepClone(input);
                 secInput.key = "uid_2";
                 graphDefault.loadContent(new Line(secInput));
-                const graphContent = document.body.querySelectorAll(`.${styles.lineGraphContent}`);
+                const graphContent = document.body.querySelectorAll(
+                    `.${styles.lineGraphContent}`
+                );
                 expect(graphContent.length).toBe(2);
             });
             it("adds legend for each data points sets for each line", () => {
                 const secInput = utils.deepClone(input);
                 secInput.key = "uid_2";
                 graphDefault.loadContent(new Line(secInput));
-                const legendItems = document.body.querySelectorAll(`.${styles.legendItem}`);
+                const legendItems = document.body.querySelectorAll(
+                    `.${styles.legendItem}`
+                );
                 expect(legendItems.length).toBe(2);
             });
             it("add line group for line", () => {
-                const lineContentContainer = fetchElementByClass(lineGraphContainer, styles.lineGraphContent);
-                const lineGroup = fetchElementByClass(lineContentContainer, styles.currentLinesGroup);
+                const lineContentContainer = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.lineGraphContent
+                );
+                const lineGroup = fetchElementByClass(
+                    lineContentContainer,
+                    styles.currentLinesGroup
+                );
                 expect(lineGroup).not.toBeNull();
                 expect(lineGroup.tagName).toBe("g");
                 expect(lineGroup.getAttribute("transform")).not.toBeNull();
             });
             it("adds line path as an SVG", () => {
-                const lineContentContainer = fetchElementByClass(lineGraphContainer, styles.lineGraphContent);
-                const lineGroup = fetchElementByClass(lineContentContainer, styles.currentLinesGroup);
+                const lineContentContainer = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.lineGraphContent
+                );
+                const lineGroup = fetchElementByClass(
+                    lineContentContainer,
+                    styles.currentLinesGroup
+                );
                 expect(lineGroup.firstChild.tagName).toBe("g");
-                expect(lineGroup.firstChild.classList.contains(styles.line)).toBeTruthy();
+                expect(
+                    lineGroup.firstChild.classList.contains(styles.line)
+                ).toBeTruthy();
             });
             it("adds line with correct color", () => {
-                const lineElement = fetchElementByClass(lineGraphContainer, styles.line);
+                const lineElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.line
+                );
                 expect(lineElement.firstChild.tagName).toBe("path");
-                expect(lineElement.firstChild.attributes.getNamedItem("style").value).toBe("stroke: #007cc3;");
+                expect(
+                    lineElement.firstChild.attributes.getNamedItem("style")
+                        .value
+                ).toBe("stroke: #007cc3;");
             });
             it("adds line with correct unique key", () => {
-                const lineElement = fetchElementByClass(lineGraphContainer, styles.line);
-                expect(lineElement.firstChild.attributes.getNamedItem("aria-describedby").value).toBe(input.key);
+                const lineElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.line
+                );
+                expect(
+                    lineElement.firstChild.attributes.getNamedItem(
+                        "aria-describedby"
+                    ).value
+                ).toBe(input.key);
             });
             it("does not show data point if data point is null", () => {
                 graphDefault.destroy();
                 const graph = new Graph(getAxes(axisDefault));
                 const data = utils.deepClone(valuesDefault);
-                data[ 0 ].y = null;
+                data[0].y = null;
                 input = getInput(data);
                 graph.loadContent(new Line(input));
-                const pointsGroup = fetchElementByClass(lineGraphContainer, styles.currentPointsGroup);
+                const pointsGroup = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.currentPointsGroup
+                );
                 const points = fetchElementByClass(pointsGroup, styles.point);
-                const selectedPoint = fetchElementByClass(pointsGroup, styles.dataPointSelection);
+                const selectedPoint = fetchElementByClass(
+                    pointsGroup,
+                    styles.dataPointSelection
+                );
                 expect(pointsGroup.children.length).toBe(3);
-                expect(points.getAttribute("style")).toContain("display: none;");
-                expect(selectedPoint.getAttribute("style")).toContain("display: none;");
+                expect(points.getAttribute("style")).toContain(
+                    "display: none;"
+                );
+                expect(selectedPoint.getAttribute("style")).toContain(
+                    "display: none;"
+                );
             });
             it("does not render points if shapes needs to be hidden", () => {
                 graphDefault.destroy();
@@ -335,50 +476,90 @@ describe("Line", () => {
                 const hiddenShapeGraph = new Graph(hiddenShapeInput);
                 input = getInput(valuesDefault, false, false);
                 hiddenShapeGraph.loadContent(new Line(input));
-                expect(fetchElementByClass(lineGraphContainer, styles.currentPointsGroup)).toBeNull();
+                expect(
+                    fetchElementByClass(
+                        lineGraphContainer,
+                        styles.currentPointsGroup
+                    )
+                ).toBeNull();
             });
             it("add points group for data points", () => {
-                const pointsGroup = fetchElementByClass(lineGraphContainer, styles.currentPointsGroup);
+                const pointsGroup = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.currentPointsGroup
+                );
                 expect(pointsGroup).not.toBeNull();
                 expect(pointsGroup.tagName).toBe("g");
                 expect(pointsGroup.getAttribute("transform")).not.toBeNull();
             });
             it("adds points for each data point", () => {
-                const pointsGroup = fetchElementByClass(lineGraphContainer, styles.currentPointsGroup);
+                const pointsGroup = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.currentPointsGroup
+                );
                 const points = pointsGroup.querySelectorAll(`.${styles.point}`);
                 expect(points.length).toBe(valuesDefault.length);
             });
             it("points have correct color", () => {
-                const pointsGroup = fetchElementByClass(lineGraphContainer, styles.currentPointsGroup);
+                const pointsGroup = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.currentPointsGroup
+                );
                 const points = fetchElementByClass(pointsGroup, styles.point);
-                expect(points.attributes.getNamedItem("style").value).toBe("fill: #007cc3;");
+                expect(points.attributes.getNamedItem("style").value).toBe(
+                    "fill: #007cc3;"
+                );
             });
             it("points have correct shape", () => {
-                const pointsGroup = fetchElementByClass(lineGraphContainer, styles.currentPointsGroup);
+                const pointsGroup = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.currentPointsGroup
+                );
                 const points = fetchElementByClass(pointsGroup, styles.point);
-                expect(points.attributes.getNamedItem("d").value).toBe(constants.CUSTOM_SHAPE_PATH.RHOMBUS);
+                expect(points.attributes.getNamedItem("d").value).toBe(
+                    constants.CUSTOM_SHAPE_PATH.RHOMBUS
+                );
             });
             it("points have correct unique key assigned", () => {
-                const pointsGroup = fetchElementByClass(lineGraphContainer, styles.currentPointsGroup);
+                const pointsGroup = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.currentPointsGroup
+                );
                 const points = fetchElementByClass(pointsGroup, styles.point);
                 expect(points.getAttribute("aria-describedby")).toBe(input.key);
             });
             it("adds a selected data point for each point", () => {
-                const pointsGroup = fetchElementByClass(lineGraphContainer, styles.currentPointsGroup);
-                const selectedPoints = pointsGroup.querySelectorAll(`.${styles.dataPointSelection}`);
+                const pointsGroup = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.currentPointsGroup
+                );
+                const selectedPoints = pointsGroup.querySelectorAll(
+                    `.${styles.dataPointSelection}`
+                );
                 expect(selectedPoints.length).toBe(valuesDefault.length);
             });
             it("selected data point is hidden by default", () => {
-                const selectedPoints = fetchElementByClass(lineGraphContainer, styles.dataPointSelection);
+                const selectedPoints = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.dataPointSelection
+                );
                 expect(selectedPoints.getAttribute("aria-hidden")).toBe("true");
             });
             it("selected data point has circle as shape", () => {
-                const selectedPoints = fetchElementByClass(lineGraphContainer, styles.dataPointSelection);
+                const selectedPoints = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.dataPointSelection
+                );
                 expect(selectedPoints.tagName).toBe("circle");
             });
             it("selected data point has correct unique key assigned", () => {
-                const selectedPoints = fetchElementByClass(lineGraphContainer, styles.dataPointSelection);
-                expect(selectedPoints.getAttribute("aria-describedby")).toBe(input.key);
+                const selectedPoints = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.dataPointSelection
+                );
+                expect(selectedPoints.getAttribute("aria-describedby")).toBe(
+                    input.key
+                );
             });
             describe("when clicked on a data point", () => {
                 it("does not do anything if no onClick callback is provided", (done) => {
@@ -387,7 +568,10 @@ describe("Line", () => {
                     input = getInput(valuesDefault, false, false);
                     input.onClick = null;
                     graphDefault.loadContent(new Line(input));
-                    const point = fetchElementByClass(lineGraphContainer, styles.point);
+                    const point = fetchElementByClass(
+                        lineGraphContainer,
+                        styles.point
+                    );
                     triggerEvent(point, "click", () => {
                         expect(dataPointClickHandlerSpy.calledOnce).toBeFalsy();
                         done();
@@ -401,34 +585,63 @@ describe("Line", () => {
                         clearSelectionCallback();
                     };
                     graphDefault.loadContent(new Line(input));
-                    const point = fetchElementByClass(lineGraphContainer, styles.point);
+                    const point = fetchElementByClass(
+                        lineGraphContainer,
+                        styles.point
+                    );
                     triggerEvent(point, "click", () => {
-                        const selectionPoint = fetchElementByClass(lineGraphContainer, styles.dataPointSelection);
-                        expect(selectionPoint.getAttribute("aria-hidden")).toBe("true");
+                        const selectionPoint = fetchElementByClass(
+                            lineGraphContainer,
+                            styles.dataPointSelection
+                        );
+                        expect(selectionPoint.getAttribute("aria-hidden")).toBe(
+                            "true"
+                        );
                         done();
                     });
                 });
                 it("calls onClick callback", (done) => {
-                    const point = fetchElementByClass(lineGraphContainer, styles.point);
+                    const point = fetchElementByClass(
+                        lineGraphContainer,
+                        styles.point
+                    );
                     triggerEvent(point, "click", () => {
-                        expect(dataPointClickHandlerSpy.calledOnce).toBeTruthy();
+                        expect(
+                            dataPointClickHandlerSpy.calledOnce
+                        ).toBeTruthy();
                         done();
                     });
                 });
                 it("highlights the data point", (done) => {
-                    const selectionPoint = fetchElementByClass(lineGraphContainer, styles.dataPointSelection);
-                    const point = fetchElementByClass(lineGraphContainer, styles.point);
+                    const selectionPoint = fetchElementByClass(
+                        lineGraphContainer,
+                        styles.dataPointSelection
+                    );
+                    const point = fetchElementByClass(
+                        lineGraphContainer,
+                        styles.point
+                    );
                     triggerEvent(point, "click", () => {
-                        expect(selectionPoint.getAttribute("aria-hidden")).toBe("false");
+                        expect(selectionPoint.getAttribute("aria-hidden")).toBe(
+                            "false"
+                        );
                         done();
                     });
                 });
                 it("removes highlight when data point is clicked again", (done) => {
-                    const selectionPoint = fetchElementByClass(lineGraphContainer, styles.dataPointSelection);
-                    const point = fetchElementByClass(lineGraphContainer, styles.point);
+                    const selectionPoint = fetchElementByClass(
+                        lineGraphContainer,
+                        styles.dataPointSelection
+                    );
+                    const point = fetchElementByClass(
+                        lineGraphContainer,
+                        styles.point
+                    );
                     triggerEvent(point, "click", () => {
                         triggerEvent(point, "click", () => {
-                            expect(selectionPoint.getAttribute("aria-hidden")).toBe("true");
+                            expect(
+                                selectionPoint.getAttribute("aria-hidden")
+                            ).toBe("true");
                             done();
                         });
                     });
@@ -436,17 +649,27 @@ describe("Line", () => {
             });
             describe("when clicked on a data point's near surrounding area", () => {
                 it("highlights the data point", (done) => {
-                    const selectionPoint = fetchElementByClass(lineGraphContainer, styles.dataPointSelection);
+                    const selectionPoint = fetchElementByClass(
+                        lineGraphContainer,
+                        styles.dataPointSelection
+                    );
                     triggerEvent(selectionPoint, "click", () => {
-                        expect(selectionPoint.getAttribute("aria-hidden")).toBe("false");
+                        expect(selectionPoint.getAttribute("aria-hidden")).toBe(
+                            "false"
+                        );
                         done();
                     });
                 });
                 it("removes highlight when clicked again", (done) => {
-                    const selectionPoint = fetchElementByClass(lineGraphContainer, styles.dataPointSelection);
+                    const selectionPoint = fetchElementByClass(
+                        lineGraphContainer,
+                        styles.dataPointSelection
+                    );
                     triggerEvent(selectionPoint, "click", () => {
                         triggerEvent(selectionPoint, "click", () => {
-                            expect(selectionPoint.getAttribute("aria-hidden")).toBe("true");
+                            expect(
+                                selectionPoint.getAttribute("aria-hidden")
+                            ).toBe("true");
                             done();
                         });
                     });
@@ -460,7 +683,10 @@ describe("Line", () => {
                 input.showLegend = false;
                 const noLegendGraph = new Graph(input);
                 noLegendGraph.loadContent(new Line(getInput(valuesDefault)));
-                const legendContainer = fetchElementByClass(lineGraphContainer, styles.legend);
+                const legendContainer = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.legend
+                );
                 expect(legendContainer).toBeNull();
                 noLegendGraph.destroy();
             });
@@ -468,7 +694,10 @@ describe("Line", () => {
                 const input = getInput(valuesDefault);
                 input.label = null;
                 graphDefault.loadContent(new Line(input));
-                const legendContainer = fetchElementByClass(lineGraphContainer, styles.legend);
+                const legendContainer = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.legend
+                );
                 const legendItems = legendContainer.children;
                 expect(legendContainer).not.toBeNull();
                 expect(legendContainer.tagName).toBe("UL");
@@ -478,7 +707,10 @@ describe("Line", () => {
                 const input = getInput(valuesDefault);
                 input.label = {};
                 graphDefault.loadContent(new Line(input));
-                const legendContainer = fetchElementByClass(lineGraphContainer, styles.legend);
+                const legendContainer = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.legend
+                );
                 const legendItems = legendContainer.children;
                 expect(legendContainer).not.toBeNull();
                 expect(legendContainer.tagName).toBe("UL");
@@ -488,7 +720,10 @@ describe("Line", () => {
                 const input = getInput(valuesDefault);
                 input.label.display = "";
                 graphDefault.loadContent(new Line(input));
-                const legendContainer = fetchElementByClass(lineGraphContainer, styles.legend);
+                const legendContainer = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.legend
+                );
                 const legendItems = legendContainer.children;
                 expect(legendContainer).not.toBeNull();
                 expect(legendContainer.tagName).toBe("UL");
@@ -498,7 +733,10 @@ describe("Line", () => {
                 const input = getInput(valuesDefault);
                 input.label.display = "<HELLO DUMMY X LABEL>";
                 graphDefault.loadContent(new Line(input));
-                const legendContainer = fetchElementByClass(lineGraphContainer, styles.legend);
+                const legendContainer = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.legend
+                );
                 const legendItems = legendContainer.children;
                 expect(legendContainer).not.toBeNull();
                 expect(legendContainer.tagName).toBe("UL");
@@ -507,43 +745,74 @@ describe("Line", () => {
             it("loads item with a shape and text", () => {
                 const input = getInput(valuesDefault, false, false);
                 graphDefault.loadContent(new Line(input));
-                const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
-                const legendItemBtn = fetchElementByClass(lineGraphContainer, styles.legendItemBtn);
+                const legendItem = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.legendItem
+                );
+                const legendItemBtn = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.legendItemBtn
+                );
                 expect(legendItem).not.toBeNull();
                 expect(legendItem.getAttribute("aria-selected")).toBe("true");
-                expect(legendItem.children[ 1 ].className).toBe(styles.legendItemText);
-                expect(legendItem.children[ 1 ].tagName).toBe("LABEL");
-                expect(legendItem.children[ 1 ].textContent).toBe(input.label.display);
+                expect(legendItem.children[1].className).toBe(
+                    styles.legendItemText
+                );
+                expect(legendItem.children[1].tagName).toBe("LABEL");
+                expect(legendItem.children[1].textContent).toBe(
+                    input.label.display
+                );
                 expect(legendItemBtn).not.toBeNull();
-                expect(legendItemBtn.getAttribute("class")).toBe(styles.legendItemBtn);
-                expect(legendItemBtn.children[ 0 ].tagName).toBe("svg");
-                expect(legendItemBtn.children[ 0 ].classList.contains(styles.legendItemIcon)).toBeTruthy();
+                expect(legendItemBtn.getAttribute("class")).toBe(
+                    styles.legendItemBtn
+                );
+                expect(legendItemBtn.children[0].tagName).toBe("svg");
+                expect(
+                    legendItemBtn.children[0].classList.contains(
+                        styles.legendItemIcon
+                    )
+                ).toBeTruthy();
             });
             it("loads the correct shape", () => {
                 const input = getInput(valuesDefault, false, false);
                 graphDefault.loadContent(new Line(input));
-                const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
+                const legendItem = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.legendItem
+                );
                 const iconPath = legendItem.querySelector("path");
                 expect(iconPath).not.toBeNull();
                 expect(iconPath.getAttribute("d")).not.toBeNull();
-                expect(iconPath.getAttribute("d")).toBe(constants.CUSTOM_SHAPE_PATH.RHOMBUS);
+                expect(iconPath.getAttribute("d")).toBe(
+                    constants.CUSTOM_SHAPE_PATH.RHOMBUS
+                );
                 expect(iconPath.getAttribute("transform")).not.toBeNull();
             });
             it("loads the correct color", () => {
                 const input = getInput(valuesDefault, false, false);
                 graphDefault.loadContent(new Line(input));
-                const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
+                const legendItem = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.legendItem
+                );
                 const iconPath = legendItem.querySelector("path");
                 expect(iconPath).not.toBeNull();
                 expect(iconPath.getAttribute("d")).not.toBeNull();
-                expect(iconPath.getAttribute("style")).toBe(`fill: ${COLORS.BLUE}`);
+                expect(iconPath.getAttribute("style")).toBe(
+                    `fill: ${COLORS.BLUE}`
+                );
             });
             it("attaches click event handlers correctly", (done) => {
                 const input = getInput(valuesDefault, false, false);
                 graphDefault.loadContent(new Line(input));
-                const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
+                const legendItem = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.legendItem
+                );
                 triggerEvent(legendItem, "click", () => {
-                    expect(legendItem.getAttribute("aria-selected")).toBe("false");
+                    expect(legendItem.getAttribute("aria-selected")).toBe(
+                        "false"
+                    );
                     done();
                 });
             });
@@ -552,14 +821,33 @@ describe("Line", () => {
                 const input = getInput(valuesDefault, false, false);
                 const line = new Line(input);
                 const graph = graphDefault.loadContent(line);
-                triggerEvent(fetchElementByClass(lineGraphContainer, styles.legendItem), "click", () => {
-                    line.redraw(graph);
-                    expect(window.requestAnimationFrame).toHaveBeenCalledTimes(1);
-                    expect(fetchElementByClass(lineGraphContainer, styles.point).style.display).toBe("none");
-                    expect(fetchElementByClass(lineGraphContainer, styles.dataPointSelection).style.display).toBe("none");
-                    expect(fetchElementByClass(lineGraphContainer, styles.line).firstChild.style.display).toBe("none");
-                    done();
-                });
+                triggerEvent(
+                    fetchElementByClass(lineGraphContainer, styles.legendItem),
+                    "click",
+                    () => {
+                        line.redraw(graph);
+                        expect(
+                            window.requestAnimationFrame
+                        ).toHaveBeenCalledTimes(1);
+                        expect(
+                            fetchElementByClass(
+                                lineGraphContainer,
+                                styles.point
+                            ).style.display
+                        ).toBe("none");
+                        expect(
+                            fetchElementByClass(
+                                lineGraphContainer,
+                                styles.dataPointSelection
+                            ).style.display
+                        ).toBe("none");
+                        expect(
+                            fetchElementByClass(lineGraphContainer, styles.line)
+                                .firstChild.style.display
+                        ).toBe("none");
+                        done();
+                    }
+                );
             });
             it("on click, removes the first line but keeps the rest", (done) => {
                 const inputPrimary = getInput(valuesDefault, false, false);
@@ -574,35 +862,93 @@ describe("Line", () => {
                 const secondaryLine = new Line(inputSecondary);
                 graphDefault.loadContent(primaryLine);
                 const graph = graphDefault.loadContent(secondaryLine);
-                triggerEvent(fetchElementByClass(lineGraphContainer, styles.legendItem), "click", () => {
-                    primaryLine.redraw(graph);
-                    secondaryLine.redraw(graph);
-                    const primaryLineElement = lineGraphContainer.querySelector(`.${styles.lineGraphContent}[aria-describedby="${inputPrimary.key}"]`);
-                    const secondaryLineElement = lineGraphContainer.querySelector(`.${styles.lineGraphContent}[aria-describedby="${inputSecondary.key}"]`);
-                    expect(graph.config.shownTargets.length).toBe(1);
-                    expect(fetchElementByClass(primaryLineElement, styles.point).style.display).toBe("none");
-                    expect(fetchElementByClass(primaryLineElement, styles.dataPointSelection).style.display).toBe("none");
-                    expect(fetchElementByClass(primaryLineElement, styles.line).firstChild.style.display).toBe("none");
-                    expect(fetchElementByClass(secondaryLineElement, styles.point).style.display).toBe("");
-                    expect(fetchElementByClass(secondaryLineElement, styles.dataPointSelection).style.display).toBe("");
-                    expect(fetchElementByClass(secondaryLineElement, styles.line).firstChild.style.display).toBe("");
-                    done();
-                });
+                triggerEvent(
+                    fetchElementByClass(lineGraphContainer, styles.legendItem),
+                    "click",
+                    () => {
+                        primaryLine.redraw(graph);
+                        secondaryLine.redraw(graph);
+                        const primaryLineElement = lineGraphContainer.querySelector(
+                            `.${styles.lineGraphContent}[aria-describedby="${
+                                inputPrimary.key
+                            }"]`
+                        );
+                        const secondaryLineElement = lineGraphContainer.querySelector(
+                            `.${styles.lineGraphContent}[aria-describedby="${
+                                inputSecondary.key
+                            }"]`
+                        );
+                        expect(graph.config.shownTargets.length).toBe(1);
+                        expect(
+                            fetchElementByClass(
+                                primaryLineElement,
+                                styles.point
+                            ).style.display
+                        ).toBe("none");
+                        expect(
+                            fetchElementByClass(
+                                primaryLineElement,
+                                styles.dataPointSelection
+                            ).style.display
+                        ).toBe("none");
+                        expect(
+                            fetchElementByClass(primaryLineElement, styles.line)
+                                .firstChild.style.display
+                        ).toBe("none");
+                        expect(
+                            fetchElementByClass(
+                                secondaryLineElement,
+                                styles.point
+                            ).style.display
+                        ).toBe("");
+                        expect(
+                            fetchElementByClass(
+                                secondaryLineElement,
+                                styles.dataPointSelection
+                            ).style.display
+                        ).toBe("");
+                        expect(
+                            fetchElementByClass(
+                                secondaryLineElement,
+                                styles.line
+                            ).firstChild.style.display
+                        ).toBe("");
+                        done();
+                    }
+                );
             });
             it("on clicking twice toggles the line and points back to visible", (done) => {
                 spyOn(window, "requestAnimationFrame").and.callThrough();
                 const input = getInput(valuesDefault, false, false);
                 const line = new Line(input);
                 const graph = graphDefault.loadContent(line);
-                const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
+                const legendItem = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.legendItem
+                );
                 triggerEvent(legendItem, "click", () => {
                     line.redraw(graph);
                     triggerEvent(legendItem, "click", () => {
                         line.redraw(graph);
-                        expect(window.requestAnimationFrame).toHaveBeenCalledTimes(2);
-                        expect(fetchElementByClass(lineGraphContainer, styles.point).style.display).toBe("");
-                        expect(fetchElementByClass(lineGraphContainer, styles.dataPointSelection).style.display).toBe("");
-                        expect(fetchElementByClass(lineGraphContainer, styles.line).firstChild.style.display).toBe("");
+                        expect(
+                            window.requestAnimationFrame
+                        ).toHaveBeenCalledTimes(2);
+                        expect(
+                            fetchElementByClass(
+                                lineGraphContainer,
+                                styles.point
+                            ).style.display
+                        ).toBe("");
+                        expect(
+                            fetchElementByClass(
+                                lineGraphContainer,
+                                styles.dataPointSelection
+                            ).style.display
+                        ).toBe("");
+                        expect(
+                            fetchElementByClass(lineGraphContainer, styles.line)
+                                .firstChild.style.display
+                        ).toBe("");
                         done();
                     });
                 });
@@ -610,15 +956,22 @@ describe("Line", () => {
             it("shown targets are removed from Graph", (done) => {
                 const input = getInput(valuesDefault, false, false);
                 const graph = graphDefault.loadContent(new Line(input));
-                triggerEvent(fetchElementByClass(lineGraphContainer, styles.legendItem), "click", () => {
-                    expect(graph.config.shownTargets.length).toBe(0);
-                    done();
-                });
+                triggerEvent(
+                    fetchElementByClass(lineGraphContainer, styles.legendItem),
+                    "click",
+                    () => {
+                        expect(graph.config.shownTargets.length).toBe(0);
+                        done();
+                    }
+                );
             });
             it("shown targets are updated back when toggled", (done) => {
                 const input = getInput(valuesDefault, false, false);
                 const graph = graphDefault.loadContent(new Line(input));
-                const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
+                const legendItem = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.legendItem
+                );
                 triggerEvent(legendItem, "click", () => {
                     triggerEvent(legendItem, "click", () => {
                         expect(graph.config.shownTargets.length).toBe(1);
@@ -637,12 +990,43 @@ describe("Line", () => {
                 };
                 graphDefault.loadContent(new Line(inputPrimary));
                 graphDefault.loadContent(new Line(inputSecondary));
-                const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
+                const legendItem = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.legendItem
+                );
                 triggerEvent(legendItem, "mouseenter", () => {
-                    expect(document.querySelector(`path[aria-describedby="${inputPrimary.key}"]`).classList.contains(styles.highlight)).toBeTruthy();
-                    expect(document.querySelector(`.${styles.point}[aria-describedby="${inputPrimary.key}"]`).classList.contains(styles.highlight)).toBeTruthy();
-                    expect(document.querySelector(`path[aria-describedby="${inputSecondary.key}"]`).classList.contains(styles.blur)).toBeTruthy();
-                    expect(document.querySelector(`.${styles.point}[aria-describedby="${inputSecondary.key}"]`).classList.contains(styles.blur)).toBeTruthy();
+                    expect(
+                        document
+                            .querySelector(
+                                `path[aria-describedby="${inputPrimary.key}"]`
+                            )
+                            .classList.contains(styles.highlight)
+                    ).toBeTruthy();
+                    expect(
+                        document
+                            .querySelector(
+                                `.${styles.point}[aria-describedby="${
+                                    inputPrimary.key
+                                }"]`
+                            )
+                            .classList.contains(styles.highlight)
+                    ).toBeTruthy();
+                    expect(
+                        document
+                            .querySelector(
+                                `path[aria-describedby="${inputSecondary.key}"]`
+                            )
+                            .classList.contains(styles.blur)
+                    ).toBeTruthy();
+                    expect(
+                        document
+                            .querySelector(
+                                `.${styles.point}[aria-describedby="${
+                                    inputSecondary.key
+                                }"]`
+                            )
+                            .classList.contains(styles.blur)
+                    ).toBeTruthy();
                     done();
                 });
             });
@@ -657,12 +1041,43 @@ describe("Line", () => {
                 };
                 graphDefault.loadContent(new Line(inputPrimary));
                 graphDefault.loadContent(new Line(inputSecondary));
-                const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
+                const legendItem = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.legendItem
+                );
                 triggerEvent(legendItem, "mouseleave", () => {
-                    expect(document.querySelector(`path[aria-describedby="${inputPrimary.key}"]`).classList.contains(styles.highlight)).toBeFalsy();
-                    expect(document.querySelector(`.${styles.point}[aria-describedby="${inputPrimary.key}"]`).classList.contains(styles.highlight)).toBeFalsy();
-                    expect(document.querySelector(`path[aria-describedby="${inputSecondary.key}"]`).classList.contains(styles.blur)).toBeFalsy();
-                    expect(document.querySelector(`.${styles.point}[aria-describedby="${inputSecondary.key}"]`).classList.contains(styles.blur)).toBeFalsy();
+                    expect(
+                        document
+                            .querySelector(
+                                `path[aria-describedby="${inputPrimary.key}"]`
+                            )
+                            .classList.contains(styles.highlight)
+                    ).toBeFalsy();
+                    expect(
+                        document
+                            .querySelector(
+                                `.${styles.point}[aria-describedby="${
+                                    inputPrimary.key
+                                }"]`
+                            )
+                            .classList.contains(styles.highlight)
+                    ).toBeFalsy();
+                    expect(
+                        document
+                            .querySelector(
+                                `path[aria-describedby="${inputSecondary.key}"]`
+                            )
+                            .classList.contains(styles.blur)
+                    ).toBeFalsy();
+                    expect(
+                        document
+                            .querySelector(
+                                `.${styles.point}[aria-describedby="${
+                                    inputSecondary.key
+                                }"]`
+                            )
+                            .classList.contains(styles.blur)
+                    ).toBeFalsy();
                     done();
                 });
             });
@@ -679,12 +1094,21 @@ describe("Line", () => {
             const line = new Line(getInput(valuesDefault, false, false));
             graphDefault.loadContent(line);
             line.unload(graphDefault);
-            const lineContentContainer = fetchElementByClass(lineGraphContainer, styles.lineGraphContent);
+            const lineContentContainer = fetchElementByClass(
+                lineGraphContainer,
+                styles.lineGraphContent
+            );
             expect(lineContentContainer).toBeNull();
         });
         it("removes the legend from graph", () => {
-            const graphLegend = fetchElementByClass(lineGraphContainer, styles.legend);
-            const lineLegendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
+            const graphLegend = fetchElementByClass(
+                lineGraphContainer,
+                styles.legend
+            );
+            const lineLegendItem = fetchElementByClass(
+                lineGraphContainer,
+                styles.legendItem
+            );
             expect(graphLegend).not.toBeNull();
             expect(lineLegendItem).toBeNull();
         });
@@ -702,7 +1126,9 @@ describe("Line", () => {
         describe("On load", () => {
             describe("Ideally", () => {
                 beforeEach(() => {
-                    data = utils.deepClone(getInput(valuesDefault, false, false));
+                    data = utils.deepClone(
+                        getInput(valuesDefault, false, false)
+                    );
                     data.regions = [
                         {
                             axis: constants.Y_AXIS,
@@ -715,19 +1141,34 @@ describe("Line", () => {
                     graphDefault.loadContent(line);
                 });
                 it("Creates region when present", () => {
-                    const regionGroupElement = fetchElementByClass(lineGraphContainer, styles.regionGroup);
-                    const regionElement = fetchElementByClass(regionGroupElement, styles.region);
+                    const regionGroupElement = fetchElementByClass(
+                        lineGraphContainer,
+                        styles.regionGroup
+                    );
+                    const regionElement = fetchElementByClass(
+                        regionGroupElement,
+                        styles.region
+                    );
                     expect(regionGroupElement.childNodes.length).toBe(1);
                     expect(regionElement.nodeName).toBe("rect");
                 });
                 it("shows region by default", () => {
                     const regionElement = fetchElementByClass(
-                        fetchElementByClass(lineGraphContainer, styles.regionGroup),
+                        fetchElementByClass(
+                            lineGraphContainer,
+                            styles.regionGroup
+                        ),
                         styles.region
                     );
-                    expect(regionElement.getAttribute("class")).toBe(styles.region);
-                    expect(regionElement.getAttribute("aria-hidden")).toBe("false");
-                    expect(regionElement.getAttribute("aria-describedby")).toBe(`region_${data.key}`);
+                    expect(regionElement.getAttribute("class")).toBe(
+                        styles.region
+                    );
+                    expect(regionElement.getAttribute("aria-hidden")).toBe(
+                        "false"
+                    );
+                    expect(regionElement.getAttribute("aria-describedby")).toBe(
+                        `region_${data.key}`
+                    );
                 });
             });
             it("Creates region only if present", () => {
@@ -735,14 +1176,22 @@ describe("Line", () => {
                 data.regions = null;
                 line = new Line(data);
                 graphDefault.loadContent(line);
-                const regionGroupElement = fetchElementByClass(lineGraphContainer, styles.regionGroup);
-                const regionElement = fetchElementByClass(regionGroupElement, styles.region);
+                const regionGroupElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.regionGroup
+                );
+                const regionElement = fetchElementByClass(
+                    regionGroupElement,
+                    styles.region
+                );
                 expect(regionGroupElement.childNodes.length).toBe(0);
                 expect(regionElement).toBeNull();
             });
             describe("Creates region when there are multiple regions", () => {
                 beforeEach(() => {
-                    data = utils.deepClone(getInput(valuesDefault, false, false));
+                    data = utils.deepClone(
+                        getInput(valuesDefault, false, false)
+                    );
                     data.regions = [
                         {
                             axis: constants.Y_AXIS,
@@ -759,29 +1208,47 @@ describe("Line", () => {
                     graphDefault.loadContent(line);
                 });
                 it("Correctly renders", () => {
-                    const regionGroupElement = fetchElementByClass(lineGraphContainer, styles.regionGroup);
-                    const regionElement = fetchElementByClass(regionGroupElement, styles.region);
+                    const regionGroupElement = fetchElementByClass(
+                        lineGraphContainer,
+                        styles.regionGroup
+                    );
+                    const regionElement = fetchElementByClass(
+                        regionGroupElement,
+                        styles.region
+                    );
                     expect(regionGroupElement.childNodes.length).toBe(2);
                     expect(regionElement.nodeName).toBe("rect");
                 });
                 it("shows multiple regions face-up by default", () => {
-                    const regionsElement = document.querySelectorAll(`.${styles.region}`);
+                    const regionsElement = document.querySelectorAll(
+                        `.${styles.region}`
+                    );
                     expect(regionsElement.length).toBe(2);
-                    expect(regionsElement[ 0 ].getAttribute("aria-hidden")).toBe("false");
-                    expect(regionsElement[ 1 ].getAttribute("aria-hidden")).toBe("false");
-                    expect(regionsElement[ 0 ].getAttribute("aria-describedby")).toBe(`region_${data.key}`);
-                    expect(regionsElement[ 1 ].getAttribute("aria-describedby")).toBe(`region_${data.key}`);
+                    expect(regionsElement[0].getAttribute("aria-hidden")).toBe(
+                        "false"
+                    );
+                    expect(regionsElement[1].getAttribute("aria-hidden")).toBe(
+                        "false"
+                    );
+                    expect(
+                        regionsElement[0].getAttribute("aria-describedby")
+                    ).toBe(`region_${data.key}`);
+                    expect(
+                        regionsElement[1].getAttribute("aria-describedby")
+                    ).toBe(`region_${data.key}`);
                 });
             });
             describe("Validates each region", () => {
                 beforeEach(() => {
-                    data = utils.deepClone(getInput(valuesDefault, false, false));
+                    data = utils.deepClone(
+                        getInput(valuesDefault, false, false)
+                    );
                 });
                 afterEach(() => {
                     data = null;
                 });
                 it("Throws error when empty", () => {
-                    data.regions = [ {} ];
+                    data.regions = [{}];
                     line = new Line(data);
                     expect(() => {
                         graphDefault.loadContent(line);
@@ -810,10 +1277,14 @@ describe("Line", () => {
                     line = new Line(data);
                     expect(() => {
                         graphDefault.loadContent(line);
-                    }).toThrowError(errors.THROW_MSG_REGION_INVALID_AXIS_PROVIDED);
+                    }).toThrowError(
+                        errors.THROW_MSG_REGION_INVALID_AXIS_PROVIDED
+                    );
                 });
                 it("Throws error when axis info is invalid for Y2 axis", () => {
-                    data = utils.deepClone(getInput(valuesDefault, false, false, true));
+                    data = utils.deepClone(
+                        getInput(valuesDefault, false, false, true)
+                    );
                     data.regions = [
                         {
                             axis: "x",
@@ -824,10 +1295,14 @@ describe("Line", () => {
                     line = new Line(data);
                     expect(() => {
                         graphDefault.loadContent(line);
-                    }).toThrowError(errors.THROW_MSG_REGION_INVALID_AXIS_PROVIDED);
+                    }).toThrowError(
+                        errors.THROW_MSG_REGION_INVALID_AXIS_PROVIDED
+                    );
                 });
                 it("Throws error when axis provided is different than data-set axis", () => {
-                    data = utils.deepClone(getInput(valuesDefault, false, false, true));
+                    data = utils.deepClone(
+                        getInput(valuesDefault, false, false, true)
+                    );
                     data.regions = [
                         {
                             axis: constants.Y_AXIS,
@@ -838,10 +1313,14 @@ describe("Line", () => {
                     line = new Line(data);
                     expect(() => {
                         graphDefault.loadContent(line);
-                    }).toThrowError(errors.THROW_MSG_REGION_INVALID_AXIS_PROVIDED);
+                    }).toThrowError(
+                        errors.THROW_MSG_REGION_INVALID_AXIS_PROVIDED
+                    );
                 });
                 it("Throws error when axis is not and data-set axis is Y2", () => {
-                    data = utils.deepClone(getInput(valuesDefault, false, false, true));
+                    data = utils.deepClone(
+                        getInput(valuesDefault, false, false, true)
+                    );
                     data.regions = [
                         {
                             start: 10,
@@ -851,7 +1330,9 @@ describe("Line", () => {
                     line = new Line(data);
                     expect(() => {
                         graphDefault.loadContent(line);
-                    }).toThrowError(errors.THROW_MSG_REGION_INVALID_AXIS_PROVIDED);
+                    }).toThrowError(
+                        errors.THROW_MSG_REGION_INVALID_AXIS_PROVIDED
+                    );
                 });
                 it("Throws error when start value is invalid", () => {
                     data.regions = [
@@ -864,7 +1345,9 @@ describe("Line", () => {
                     line = new Line(data);
                     expect(() => {
                         graphDefault.loadContent(line);
-                    }).toThrowError(errors.THROW_MSG_REGION_INVALID_VALUE_TYPE_PROVIDED);
+                    }).toThrowError(
+                        errors.THROW_MSG_REGION_INVALID_VALUE_TYPE_PROVIDED
+                    );
                 });
                 it("Throws error when end value is invalid", () => {
                     data.regions = [
@@ -877,7 +1360,9 @@ describe("Line", () => {
                     line = new Line(data);
                     expect(() => {
                         graphDefault.loadContent(line);
-                    }).toThrowError(errors.THROW_MSG_REGION_INVALID_VALUE_TYPE_PROVIDED);
+                    }).toThrowError(
+                        errors.THROW_MSG_REGION_INVALID_VALUE_TYPE_PROVIDED
+                    );
                 });
                 it("Throws error when start is more than end", () => {
                     data.regions = [
@@ -917,10 +1402,17 @@ describe("Line", () => {
                 ];
                 line = new Line(data);
                 graphDefault.loadContent(line);
-                const regionElement = fetchElementByClass(lineGraphContainer, styles.region);
+                const regionElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.region
+                );
                 expect(regionElement.nodeName).toBe("rect");
-                expect(+regionElement.getAttribute("x")).toBe(getXAxisXPosition(graphDefault.config));
-                expect(+regionElement.getAttribute("y")).toBe(graphDefault.scale.y(15) + constants.PADDING.top);
+                expect(+regionElement.getAttribute("x")).toBe(
+                    getXAxisXPosition(graphDefault.config)
+                );
+                expect(+regionElement.getAttribute("y")).toBe(
+                    graphDefault.scale.y(15) + constants.PADDING.top
+                );
             });
             it("Does not hide regions is graph has only 1 data-set", () => {
                 data = utils.deepClone(getInput(valuesDefault));
@@ -932,10 +1424,18 @@ describe("Line", () => {
                 ];
                 line = new Line(data);
                 graphDefault.loadContent(line);
-                const regionGroupElement = fetchElementByClass(lineGraphContainer, styles.regionGroup);
-                const regionElement = fetchElementByClass(regionGroupElement, styles.region);
+                const regionGroupElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.regionGroup
+                );
+                const regionElement = fetchElementByClass(
+                    regionGroupElement,
+                    styles.region
+                );
                 expect(regionGroupElement.childNodes.length).toBe(1);
-                expect(regionElement.getAttribute("aria-describedby")).toBe(`region_${data.key}`);
+                expect(regionElement.getAttribute("aria-describedby")).toBe(
+                    `region_${data.key}`
+                );
                 expect(regionElement.getAttribute("aria-hidden")).toBe("false");
             });
             it("Hides all the regions if graph has more than 1 data-set", () => {
@@ -961,12 +1461,27 @@ describe("Line", () => {
                 const lineContent = new Line(inputSecondary);
                 graphDefault.loadContent(line);
                 graphDefault.loadContent(lineContent);
-                const regionGroupElement = fetchElementByClass(lineGraphContainer, styles.regionGroup);
+                const regionGroupElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.regionGroup
+                );
                 expect(regionGroupElement.childNodes.length).toBe(2);
-                expect(regionGroupElement.childNodes[ 0 ].getAttribute("aria-describedby")).toBe(`region_${data.key}`);
-                expect(regionGroupElement.childNodes[ 1 ].getAttribute("aria-describedby")).toBe(`region_${data.key}`);
-                expect(regionGroupElement.childNodes[ 0 ].getAttribute("aria-hidden")).toBe("true");
-                expect(regionGroupElement.childNodes[ 1 ].getAttribute("aria-hidden")).toBe("true");
+                expect(
+                    regionGroupElement.childNodes[0].getAttribute(
+                        "aria-describedby"
+                    )
+                ).toBe(`region_${data.key}`);
+                expect(
+                    regionGroupElement.childNodes[1].getAttribute(
+                        "aria-describedby"
+                    )
+                ).toBe(`region_${data.key}`);
+                expect(
+                    regionGroupElement.childNodes[0].getAttribute("aria-hidden")
+                ).toBe("true");
+                expect(
+                    regionGroupElement.childNodes[1].getAttribute("aria-hidden")
+                ).toBe("true");
                 graphDefault.unloadContent(lineContent);
             });
             it("Sets the width correctly", () => {
@@ -980,8 +1495,13 @@ describe("Line", () => {
                 ];
                 line = new Line(data);
                 graphDefault.loadContent(line);
-                const regionElement = fetchElementByClass(lineGraphContainer, styles.region);
-                expect(+regionElement.getAttribute("width")).toBe(getXAxisWidth(graphDefault.config));
+                const regionElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.region
+                );
+                expect(+regionElement.getAttribute("width")).toBe(
+                    getXAxisWidth(graphDefault.config)
+                );
             });
             it("Sets the height correctly", () => {
                 data = utils.deepClone(getInput(valuesDefault));
@@ -994,8 +1514,13 @@ describe("Line", () => {
                 ];
                 line = new Line(data);
                 graphDefault.loadContent(line);
-                const regionElement = fetchElementByClass(lineGraphContainer, styles.region);
-                expect(+regionElement.getAttribute("height")).toBeGreaterThan(constants.PADDING.top);
+                const regionElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.region
+                );
+                expect(+regionElement.getAttribute("height")).toBeGreaterThan(
+                    constants.PADDING.top
+                );
             });
             it("Creates a goal line when start and end are same", () => {
                 data = utils.deepClone(getInput(valuesDefault));
@@ -1008,8 +1533,13 @@ describe("Line", () => {
                 ];
                 line = new Line(data);
                 graphDefault.loadContent(line);
-                const regionElement = fetchElementByClass(lineGraphContainer, styles.region);
-                expect(+regionElement.getAttribute("height")).toBe(constants.PADDING.top);
+                const regionElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.region
+                );
+                expect(+regionElement.getAttribute("height")).toBe(
+                    constants.PADDING.top
+                );
             });
             it("Creates region correctly when start is not provided", () => {
                 data = utils.deepClone(getInput(valuesDefault));
@@ -1020,10 +1550,19 @@ describe("Line", () => {
                 ];
                 line = new Line(data);
                 graphDefault.loadContent(line);
-                const regionElement = fetchElementByClass(lineGraphContainer, styles.region);
-                expect(+regionElement.getAttribute("x")).toBe(getXAxisXPosition(graphDefault.config));
-                expect(+regionElement.getAttribute("y")).toBeGreaterThan(constants.PADDING.top);
-                expect(+regionElement.getAttribute("y")).toBeLessThan(graphDefault.config.height);
+                const regionElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.region
+                );
+                expect(+regionElement.getAttribute("x")).toBe(
+                    getXAxisXPosition(graphDefault.config)
+                );
+                expect(+regionElement.getAttribute("y")).toBeGreaterThan(
+                    constants.PADDING.top
+                );
+                expect(+regionElement.getAttribute("y")).toBeLessThan(
+                    graphDefault.config.height
+                );
             });
             it("Creates region correctly when end is not provided", () => {
                 data = utils.deepClone(getInput(valuesDefault));
@@ -1034,12 +1573,21 @@ describe("Line", () => {
                 ];
                 line = new Line(data);
                 graphDefault.loadContent(line);
-                const regionElement = fetchElementByClass(lineGraphContainer, styles.region);
-                expect(+regionElement.getAttribute("x")).toBe(getXAxisXPosition(graphDefault.config));
-                expect(+regionElement.getAttribute("y")).toBe(constants.PADDING.top);
+                const regionElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.region
+                );
+                expect(+regionElement.getAttribute("x")).toBe(
+                    getXAxisXPosition(graphDefault.config)
+                );
+                expect(+regionElement.getAttribute("y")).toBe(
+                    constants.PADDING.top
+                );
             });
             it("Creates region correctly for y2 axis", () => {
-                data = utils.deepClone(getInput(valuesDefault, false, false, true));
+                data = utils.deepClone(
+                    getInput(valuesDefault, false, false, true)
+                );
                 data.regions = [
                     {
                         axis: constants.Y2_AXIS,
@@ -1049,10 +1597,17 @@ describe("Line", () => {
                 ];
                 line = new Line(data);
                 graphDefault.loadContent(line);
-                const regionElement = fetchElementByClass(lineGraphContainer, styles.region);
+                const regionElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.region
+                );
                 expect(regionElement.nodeName).toBe("rect");
-                expect(+regionElement.getAttribute("x")).toBe(getXAxisXPosition(graphDefault.config));
-                expect(+regionElement.getAttribute("y")).toBe(graphDefault.scale.y2(15) + constants.PADDING.top);
+                expect(+regionElement.getAttribute("x")).toBe(
+                    getXAxisXPosition(graphDefault.config)
+                );
+                expect(+regionElement.getAttribute("y")).toBe(
+                    graphDefault.scale.y2(15) + constants.PADDING.top
+                );
             });
             it("Creates region with correct, color if provided", () => {
                 data = utils.deepClone(getInput(valuesDefault));
@@ -1065,8 +1620,13 @@ describe("Line", () => {
                 ];
                 line = new Line(data);
                 graphDefault.loadContent(line);
-                const regionElement = fetchElementByClass(lineGraphContainer, styles.region);
-                expect(regionElement.getAttribute("style")).toBe('fill: #f44444;');
+                const regionElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.region
+                );
+                expect(regionElement.getAttribute("style")).toBe(
+                    "fill: #f44444;"
+                );
             });
         });
         describe("On unload", () => {
@@ -1081,7 +1641,10 @@ describe("Line", () => {
                 line = new Line(data);
                 graphDefault.loadContent(line);
                 graphDefault.unloadContent(line);
-                const regionGroupElement = fetchElementByClass(lineGraphContainer, styles.regionGroup);
+                const regionGroupElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.regionGroup
+                );
                 expect(regionGroupElement.childNodes.length).toBe(0);
             });
             it("Removes all regions", () => {
@@ -1099,7 +1662,10 @@ describe("Line", () => {
                 line = new Line(data);
                 graphDefault.loadContent(line);
                 graphDefault.unloadContent(line);
-                const regionGroupElement = fetchElementByClass(lineGraphContainer, styles.regionGroup);
+                const regionGroupElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.regionGroup
+                );
                 expect(regionGroupElement.childNodes.length).toBe(0);
             });
         });
@@ -1122,19 +1688,39 @@ describe("Line", () => {
                     graphDefault.loadContent(lineSecondary);
                 });
                 it("Shows region on mouse enter", (done) => {
-                    const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
+                    const legendItem = fetchElementByClass(
+                        lineGraphContainer,
+                        styles.legendItem
+                    );
                     triggerEvent(legendItem, "mouseenter", () => {
-                        expect(document.querySelector(`rect[aria-describedby="region_${inputPrimary.key}"]`)
-                                       .classList.contains(styles.regionHighlight)).toBeTruthy();
+                        expect(
+                            document
+                                .querySelector(
+                                    `rect[aria-describedby="region_${
+                                        inputPrimary.key
+                                    }"]`
+                                )
+                                .classList.contains(styles.regionHighlight)
+                        ).toBeTruthy();
                         done();
                     });
                 });
                 it("Hides region on mouse exit", (done) => {
-                    const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
+                    const legendItem = fetchElementByClass(
+                        lineGraphContainer,
+                        styles.legendItem
+                    );
                     triggerEvent(legendItem, "mouseenter", () => {
                         triggerEvent(legendItem, "mouseleave", () => {
-                            expect(document.querySelector(`rect[aria-describedby="region_${inputPrimary.key}"]`)
-                                           .classList.contains(styles.regionHighlight)).toBeFalsy();
+                            expect(
+                                document
+                                    .querySelector(
+                                        `rect[aria-describedby="region_${
+                                            inputPrimary.key
+                                        }"]`
+                                    )
+                                    .classList.contains(styles.regionHighlight)
+                            ).toBeFalsy();
                             done();
                         });
                     });
@@ -1162,21 +1748,51 @@ describe("Line", () => {
                     graphDefault.loadContent(lineSecondary);
                 });
                 it("Shows region on mouse enter", (done) => {
-                    const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
+                    const legendItem = fetchElementByClass(
+                        lineGraphContainer,
+                        styles.legendItem
+                    );
                     triggerEvent(legendItem, "mouseenter", () => {
-                        const regionElements = document.querySelectorAll(`rect[aria-describedby="region_${inputPrimary.key}"]`);
-                        expect(regionElements[ 0 ].classList.contains(styles.regionHighlight)).toBeTruthy();
-                        expect(regionElements[ 1 ].classList.contains(styles.regionHighlight)).toBeTruthy();
+                        const regionElements = document.querySelectorAll(
+                            `rect[aria-describedby="region_${
+                                inputPrimary.key
+                            }"]`
+                        );
+                        expect(
+                            regionElements[0].classList.contains(
+                                styles.regionHighlight
+                            )
+                        ).toBeTruthy();
+                        expect(
+                            regionElements[1].classList.contains(
+                                styles.regionHighlight
+                            )
+                        ).toBeTruthy();
                         done();
                     });
                 });
                 it("Hides all the regions except current", (done) => {
-                    const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
+                    const legendItem = fetchElementByClass(
+                        lineGraphContainer,
+                        styles.legendItem
+                    );
                     triggerEvent(legendItem, "mouseenter", () => {
                         triggerEvent(legendItem, "mouseleave", () => {
-                            const regionElements = document.querySelectorAll(`rect[aria-describedby="region_${inputPrimary.key}"]`);
-                            expect(regionElements[ 0 ].classList.contains(styles.regionHighlight)).toBeFalsy();
-                            expect(regionElements[ 1 ].classList.contains(styles.regionHighlight)).toBeFalsy();
+                            const regionElements = document.querySelectorAll(
+                                `rect[aria-describedby="region_${
+                                    inputPrimary.key
+                                }"]`
+                            );
+                            expect(
+                                regionElements[0].classList.contains(
+                                    styles.regionHighlight
+                                )
+                            ).toBeFalsy();
+                            expect(
+                                regionElements[1].classList.contains(
+                                    styles.regionHighlight
+                                )
+                            ).toBeFalsy();
                             done();
                         });
                     });
@@ -1205,31 +1821,71 @@ describe("Line", () => {
             });
             describe("When single-line", () => {
                 it("Hides region on toggle", (done) => {
-                    const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
+                    const legendItem = fetchElementByClass(
+                        lineGraphContainer,
+                        styles.legendItem
+                    );
                     triggerEvent(legendItem, "click", () => {
-                        const regionElement = document.querySelector(`rect[aria-describedby="region_${inputPrimary.key}"]`);
-                        expect(regionElement.getAttribute("aria-hidden")).toBe("true");
+                        const regionElement = document.querySelector(
+                            `rect[aria-describedby="region_${
+                                inputPrimary.key
+                            }"]`
+                        );
+                        expect(regionElement.getAttribute("aria-hidden")).toBe(
+                            "true"
+                        );
                         done();
                     });
                 });
                 it("Hides regions on toggle", (done) => {
-                    const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
+                    const legendItem = fetchElementByClass(
+                        lineGraphContainer,
+                        styles.legendItem
+                    );
                     triggerEvent(legendItem, "click", () => {
-                        const regionElements = document.querySelectorAll(`rect[aria-describedby="region_${inputPrimary.key}"]`);
-                        expect(regionElements[ 0 ].getAttribute("aria-hidden")).toBe("true");
-                        expect(regionElements[ 1 ].getAttribute("aria-hidden")).toBe("true");
+                        const regionElements = document.querySelectorAll(
+                            `rect[aria-describedby="region_${
+                                inputPrimary.key
+                            }"]`
+                        );
+                        expect(
+                            regionElements[0].getAttribute("aria-hidden")
+                        ).toBe("true");
+                        expect(
+                            regionElements[1].getAttribute("aria-hidden")
+                        ).toBe("true");
                         done();
                     });
                 });
                 it("Shows region on re-toggle", (done) => {
-                    const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
+                    const legendItem = fetchElementByClass(
+                        lineGraphContainer,
+                        styles.legendItem
+                    );
                     triggerEvent(legendItem, "click", () => {
-                        triggerEvent(legendItem, "click", () => {
-                            const regionElements = document.querySelectorAll(`rect[aria-describedby="region_${inputPrimary.key}"]`);
-                            expect(regionElements[ 0 ].getAttribute("aria-hidden")).toBe("false");
-                            expect(regionElements[ 1 ].getAttribute("aria-hidden")).toBe("false");
-                            done();
-                        }, 200);
+                        triggerEvent(
+                            legendItem,
+                            "click",
+                            () => {
+                                const regionElements = document.querySelectorAll(
+                                    `rect[aria-describedby="region_${
+                                        inputPrimary.key
+                                    }"]`
+                                );
+                                expect(
+                                    regionElements[0].getAttribute(
+                                        "aria-hidden"
+                                    )
+                                ).toBe("false");
+                                expect(
+                                    regionElements[1].getAttribute(
+                                        "aria-hidden"
+                                    )
+                                ).toBe("false");
+                                done();
+                            },
+                            200
+                        );
                     });
                 });
             });
@@ -1237,10 +1893,19 @@ describe("Line", () => {
                 it("Shows when data-sets shown === 1", (done) => {
                     lineSecondary = new Line(inputSecondary);
                     graphDefault.loadContent(lineSecondary);
-                    const legendItem = lineGraphContainer.querySelectorAll(`.${styles.legendItem}`);
-                    triggerEvent(legendItem[ 1 ], "click", () => {
-                        expect(document.querySelector(`rect[aria-describedby="region_${inputPrimary.key}"]`)
-                                       .getAttribute("aria-hidden")).toBe("false");
+                    const legendItem = lineGraphContainer.querySelectorAll(
+                        `.${styles.legendItem}`
+                    );
+                    triggerEvent(legendItem[1], "click", () => {
+                        expect(
+                            document
+                                .querySelector(
+                                    `rect[aria-describedby="region_${
+                                        inputPrimary.key
+                                    }"]`
+                                )
+                                .getAttribute("aria-hidden")
+                        ).toBe("false");
                         graphDefault.unloadContent(lineSecondary);
                         done();
                     });
@@ -1257,105 +1922,168 @@ describe("Line", () => {
                 const valuesMutated = utils.deepClone(valuesDefault);
                 linePrimary = new Line(getInput(valuesMutated));
                 graphDefault.loadContent(linePrimary);
-                const criticalOuterElement = fetchElementByClass(lineGraphContainer, styles.criticalityOuterPoint);
-                const criticalInnerElement = fetchElementByClass(lineGraphContainer, styles.criticalityInnerPoint);
+                const criticalOuterElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.criticalityOuterPoint
+                );
+                const criticalInnerElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.criticalityInnerPoint
+                );
                 expect(criticalOuterElement).toBeNull();
                 expect(criticalInnerElement).toBeNull();
             });
             it("Does not add indicator if data point is critical false", () => {
                 const valuesMutated = utils.deepClone(valuesDefault);
-                valuesMutated[ 0 ].isCritical = false;
+                valuesMutated[0].isCritical = false;
                 linePrimary = new Line(getInput(valuesMutated));
                 graphDefault.loadContent(linePrimary);
-                const criticalOuterElement = fetchElementByClass(lineGraphContainer, styles.criticalityOuterPoint);
-                const criticalInnerElement = fetchElementByClass(lineGraphContainer, styles.criticalityInnerPoint);
+                const criticalOuterElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.criticalityOuterPoint
+                );
+                const criticalInnerElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.criticalityInnerPoint
+                );
                 expect(criticalOuterElement).toBeNull();
                 expect(criticalInnerElement).toBeNull();
             });
             it("Adds outer indicator - Red", () => {
                 const valuesMutated = utils.deepClone(valuesDefault);
-                valuesMutated[ 0 ].isCritical = true;
+                valuesMutated[0].isCritical = true;
                 inputPrimary = getInput(valuesMutated);
                 linePrimary = new Line(inputPrimary);
                 graphDefault.loadContent(linePrimary);
-                const criticalOuterElement = fetchElementByClass(lineGraphContainer, styles.criticalityOuterPoint);
+                const criticalOuterElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.criticalityOuterPoint
+                );
                 expect(criticalOuterElement).not.toBeNull();
                 expect(criticalOuterElement.nodeName).toBe("path");
                 expect(criticalOuterElement.classList).toContain(styles.point);
-                expect(criticalOuterElement.classList).toContain(styles.criticalityOuterPoint);
+                expect(criticalOuterElement.classList).toContain(
+                    styles.criticalityOuterPoint
+                );
                 expect(criticalOuterElement.getAttribute("style")).toBe("");
-                expect(criticalOuterElement.getAttribute("aria-describedby")).toBe(inputPrimary.key);
+                expect(
+                    criticalOuterElement.getAttribute("aria-describedby")
+                ).toBe(inputPrimary.key);
             });
             it("Adds inner indicator - White", () => {
                 const valuesMutated = utils.deepClone(valuesDefault);
-                valuesMutated[ 0 ].isCritical = true;
+                valuesMutated[0].isCritical = true;
                 inputPrimary = getInput(valuesMutated);
                 linePrimary = new Line(inputPrimary);
                 graphDefault.loadContent(linePrimary);
-                const criticalInnerElement = fetchElementByClass(lineGraphContainer, styles.criticalityInnerPoint);
+                const criticalInnerElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.criticalityInnerPoint
+                );
                 expect(criticalInnerElement).not.toBeNull();
                 expect(criticalInnerElement.nodeName).toBe("path");
                 expect(criticalInnerElement.classList).toContain(styles.point);
-                expect(criticalInnerElement.classList).toContain(styles.criticalityInnerPoint);
+                expect(criticalInnerElement.classList).toContain(
+                    styles.criticalityInnerPoint
+                );
                 expect(criticalInnerElement.getAttribute("style")).toBe("");
-                expect(criticalInnerElement.getAttribute("aria-describedby")).toBe(inputPrimary.key);
+                expect(
+                    criticalInnerElement.getAttribute("aria-describedby")
+                ).toBe(inputPrimary.key);
             });
             it("Adds indicators inner and outer with same shape", () => {
                 const valuesMutated = utils.deepClone(valuesDefault);
-                valuesMutated[ 0 ].isCritical = true;
+                valuesMutated[0].isCritical = true;
                 inputPrimary = getInput(valuesMutated, false, false);
                 linePrimary = new Line(inputPrimary);
                 graphDefault.loadContent(linePrimary);
-                const criticalOuterElement = fetchElementByClass(lineGraphContainer, styles.criticalityOuterPoint);
-                const criticalInnerElement = fetchElementByClass(lineGraphContainer, styles.criticalityInnerPoint);
+                const criticalOuterElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.criticalityOuterPoint
+                );
+                const criticalInnerElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.criticalityInnerPoint
+                );
                 const currentShape = new Shape(getShape(inputPrimary));
-                expect(criticalOuterElement.getAttribute("d")).toBe(currentShape.getPathDescription());
-                expect(criticalInnerElement.getAttribute("d")).toBe(currentShape.getPathDescription());
+                expect(criticalOuterElement.getAttribute("d")).toBe(
+                    currentShape.getPathDescription()
+                );
+                expect(criticalInnerElement.getAttribute("d")).toBe(
+                    currentShape.getPathDescription()
+                );
             });
             it("Translates properly", () => {
                 const valuesMutated = utils.deepClone(valuesDefault);
-                valuesMutated[ 0 ].isCritical = true;
+                valuesMutated[0].isCritical = true;
                 inputPrimary = getInput(valuesMutated, false, false);
                 linePrimary = new Line(inputPrimary);
                 graphDefault.loadContent(linePrimary);
-                const criticalOuterElement = fetchElementByClass(lineGraphContainer, styles.criticalityOuterPoint);
-                const criticalInnerElement = fetchElementByClass(lineGraphContainer, styles.criticalityInnerPoint);
+                const criticalOuterElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.criticalityOuterPoint
+                );
+                const criticalInnerElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.criticalityInnerPoint
+                );
 
-                expect(criticalOuterElement.getAttribute("transform")).not.toBeNull();
-                expect(criticalInnerElement.getAttribute("transform")).not.toBeNull();
-                expect(getTransformScale(criticalOuterElement)[ 0 ]).toBe(constants.DEFAULT_CRITICAL_OUTER_PLOT_SCALE[ 0 ]);
-                expect(getTransformScale(criticalInnerElement)[ 0 ]).toBe(constants.DEFAULT_CRITICAL_INNER_PLOT_SCALE[ 0 ]);
+                expect(
+                    criticalOuterElement.getAttribute("transform")
+                ).not.toBeNull();
+                expect(
+                    criticalInnerElement.getAttribute("transform")
+                ).not.toBeNull();
+                expect(getTransformScale(criticalOuterElement)[0]).toBe(
+                    constants.DEFAULT_CRITICAL_OUTER_PLOT_SCALE[0]
+                );
+                expect(getTransformScale(criticalInnerElement)[0]).toBe(
+                    constants.DEFAULT_CRITICAL_INNER_PLOT_SCALE[0]
+                );
             });
             it("Shows even on multiple data-set", () => {
                 const valuesMutated = utils.deepClone(valuesDefault);
-                valuesMutated[ 0 ].isCritical = true;
+                valuesMutated[0].isCritical = true;
                 inputPrimary = getInput(valuesMutated, false, false);
                 linePrimary = new Line(inputPrimary);
                 graphDefault.loadContent(linePrimary);
                 lineSecondary = new Line(inputSecondary);
                 graphDefault.loadContent(lineSecondary);
-                const criticalOuterElement = fetchElementByClass(lineGraphContainer, styles.criticalityOuterPoint);
-                const criticalInnerElement = fetchElementByClass(lineGraphContainer, styles.criticalityInnerPoint);
+                const criticalOuterElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.criticalityOuterPoint
+                );
+                const criticalInnerElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.criticalityInnerPoint
+                );
                 expect(criticalOuterElement).not.toBeNull();
                 expect(criticalOuterElement.nodeName).toBe("path");
                 expect(criticalOuterElement.classList).toContain(styles.point);
-                expect(criticalOuterElement.classList).toContain(styles.criticalityOuterPoint);
+                expect(criticalOuterElement.classList).toContain(
+                    styles.criticalityOuterPoint
+                );
                 expect(criticalOuterElement.getAttribute("style")).toBe("");
                 expect(criticalInnerElement).not.toBeNull();
                 expect(criticalInnerElement.nodeName).toBe("path");
                 expect(criticalInnerElement.classList).toContain(styles.point);
-                expect(criticalInnerElement.classList).toContain(styles.criticalityInnerPoint);
+                expect(criticalInnerElement.classList).toContain(
+                    styles.criticalityInnerPoint
+                );
                 expect(criticalInnerElement.getAttribute("style")).toBe("");
             });
             it("Selects data point when clicked on outer indicator", (done) => {
                 const criticalOuterPointSpy = sinon.spy();
                 const valuesMutated = utils.deepClone(valuesDefault);
-                valuesMutated[ 0 ].isCritical = true;
+                valuesMutated[0].isCritical = true;
                 inputPrimary = getInput(valuesMutated);
                 inputPrimary.onClick = criticalOuterPointSpy;
                 linePrimary = new Line(inputPrimary);
                 graphDefault.loadContent(linePrimary);
-                const point = fetchElementByClass(lineGraphContainer, styles.criticalityOuterPoint);
+                const point = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.criticalityOuterPoint
+                );
                 triggerEvent(point, "click", () => {
                     expect(criticalOuterPointSpy.calledOnce).toBeTruthy();
                     done();
@@ -1364,12 +2092,15 @@ describe("Line", () => {
             it("Selects data point when clicked on inner indicator", (done) => {
                 const criticalInnerPointSpy = sinon.spy();
                 const valuesMutated = utils.deepClone(valuesDefault);
-                valuesMutated[ 0 ].isCritical = true;
+                valuesMutated[0].isCritical = true;
                 inputPrimary = getInput(valuesMutated);
                 inputPrimary.onClick = criticalInnerPointSpy;
                 linePrimary = new Line(inputPrimary);
                 graphDefault.loadContent(linePrimary);
-                const point = fetchElementByClass(lineGraphContainer, styles.criticalityInnerPoint);
+                const point = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.criticalityInnerPoint
+                );
                 triggerEvent(point, "click", () => {
                     expect(criticalInnerPointSpy.calledOnce).toBeTruthy();
                     done();
@@ -1379,18 +2110,24 @@ describe("Line", () => {
         describe("On unload", () => {
             beforeEach(() => {
                 const valuesMutated = utils.deepClone(valuesDefault);
-                valuesMutated[ 0 ].isCritical = true;
+                valuesMutated[0].isCritical = true;
                 inputPrimary = getInput(valuesMutated, false, false);
                 linePrimary = new Line(inputPrimary);
                 graphDefault.loadContent(linePrimary);
                 graphDefault.unloadContent(linePrimary);
             });
             it("Removes outer indicator", () => {
-                const criticalOuterElement = fetchElementByClass(lineGraphContainer, styles.criticalityOuterPoint);
+                const criticalOuterElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.criticalityOuterPoint
+                );
                 expect(criticalOuterElement).toBeNull();
             });
             it("Removes inner indicator", () => {
-                const criticalInnerElement = fetchElementByClass(lineGraphContainer, styles.criticalityInnerPoint);
+                const criticalInnerElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.criticalityInnerPoint
+                );
                 expect(criticalInnerElement).toBeNull();
             });
         });
@@ -1398,33 +2135,71 @@ describe("Line", () => {
             describe("On single data-set", () => {
                 beforeEach(() => {
                     const valuesMutated = utils.deepClone(valuesDefault);
-                    valuesMutated[ 0 ].isCritical = true;
+                    valuesMutated[0].isCritical = true;
                     inputPrimary = getInput(valuesMutated, false, false);
                     linePrimary = new Line(inputPrimary);
                     graphDefault.loadContent(linePrimary);
                 });
                 it("Highlights the indicators on mouse-enter", (done) => {
-                    const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
+                    const legendItem = fetchElementByClass(
+                        lineGraphContainer,
+                        styles.legendItem
+                    );
                     triggerEvent(legendItem, "mouseenter", () => {
-                        const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}"]`);
-                        const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`);
-                        expect(criticalOuterElement.getAttribute("style")).toBe("");
-                        expect(criticalOuterElement.classList).toContain(styles.highlight);
-                        expect(criticalInnerElement.getAttribute("style")).toBe("");
-                        expect(criticalInnerElement.classList).toContain(styles.highlight);
+                        const criticalOuterElement = document.querySelector(
+                            `path.${
+                                styles.criticalityOuterPoint
+                            }[aria-describedby="${inputPrimary.key}"]`
+                        );
+                        const criticalInnerElement = document.querySelector(
+                            `path.${
+                                styles.criticalityInnerPoint
+                            }[aria-describedby="${inputPrimary.key}"]`
+                        );
+                        expect(criticalOuterElement.getAttribute("style")).toBe(
+                            ""
+                        );
+                        expect(criticalOuterElement.classList).toContain(
+                            styles.highlight
+                        );
+                        expect(criticalInnerElement.getAttribute("style")).toBe(
+                            ""
+                        );
+                        expect(criticalInnerElement.classList).toContain(
+                            styles.highlight
+                        );
                         done();
                     });
                 });
                 it("Removes highlights for indicators on mouse-leave", (done) => {
-                    const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
+                    const legendItem = fetchElementByClass(
+                        lineGraphContainer,
+                        styles.legendItem
+                    );
                     triggerEvent(legendItem, "mouseenter", () => {
                         triggerEvent(legendItem, "mouseleave", () => {
-                            const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}"]`);
-                            const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`);
-                            expect(criticalOuterElement.getAttribute("style")).toBe("");
-                            expect(criticalOuterElement.classList).not.toContain(styles.highlight);
-                            expect(criticalInnerElement.getAttribute("style")).toBe("");
-                            expect(criticalInnerElement.classList).not.toContain(styles.highlight);
+                            const criticalOuterElement = document.querySelector(
+                                `path.${
+                                    styles.criticalityOuterPoint
+                                }[aria-describedby="${inputPrimary.key}"]`
+                            );
+                            const criticalInnerElement = document.querySelector(
+                                `path.${
+                                    styles.criticalityInnerPoint
+                                }[aria-describedby="${inputPrimary.key}"]`
+                            );
+                            expect(
+                                criticalOuterElement.getAttribute("style")
+                            ).toBe("");
+                            expect(
+                                criticalOuterElement.classList
+                            ).not.toContain(styles.highlight);
+                            expect(
+                                criticalInnerElement.getAttribute("style")
+                            ).toBe("");
+                            expect(
+                                criticalInnerElement.classList
+                            ).not.toContain(styles.highlight);
                             done();
                         });
                     });
@@ -1440,8 +2215,8 @@ describe("Line", () => {
                 beforeEach(() => {
                     const valuesMutated = utils.deepClone(valuesDefault);
                     const valuesMutatedAlt = utils.deepClone(valuesDefault);
-                    valuesMutated[ 0 ].isCritical = true;
-                    valuesMutatedAlt[ 1 ].isCritical = true;
+                    valuesMutated[0].isCritical = true;
+                    valuesMutatedAlt[1].isCritical = true;
                     inputPrimary = getInput(valuesMutated);
                     inputSecondary.values = utils.deepClone(valuesMutatedAlt);
                     linePrimary = new Line(inputPrimary);
@@ -1450,55 +2225,146 @@ describe("Line", () => {
                     graphDefault.loadContent(lineSecondary);
                 });
                 it("Highlights the current indicator", (done) => {
-                    const legendItem = fetchElementByClass(lineGraphContainer, styles.legendItem);
+                    const legendItem = fetchElementByClass(
+                        lineGraphContainer,
+                        styles.legendItem
+                    );
                     triggerEvent(legendItem, "mouseenter", () => {
-                        const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}"]`);
-                        const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`);
-                        expect(criticalOuterElement.getAttribute("style")).toBe("");
-                        expect(criticalInnerElement.getAttribute("style")).toBe("");
-                        expect(criticalOuterElement.classList).toContain(styles.highlight);
-                        expect(criticalInnerElement.classList).toContain(styles.highlight);
+                        const criticalOuterElement = document.querySelector(
+                            `path.${
+                                styles.criticalityOuterPoint
+                            }[aria-describedby="${inputPrimary.key}"]`
+                        );
+                        const criticalInnerElement = document.querySelector(
+                            `path.${
+                                styles.criticalityInnerPoint
+                            }[aria-describedby="${inputPrimary.key}"]`
+                        );
+                        expect(criticalOuterElement.getAttribute("style")).toBe(
+                            ""
+                        );
+                        expect(criticalInnerElement.getAttribute("style")).toBe(
+                            ""
+                        );
+                        expect(criticalOuterElement.classList).toContain(
+                            styles.highlight
+                        );
+                        expect(criticalInnerElement.classList).toContain(
+                            styles.highlight
+                        );
                         done();
                     });
                 });
                 it("Blurs other indicators", (done) => {
-                    const legendItem = lineGraphContainer.querySelector(`.${styles.legendItem}[aria-describedby="${inputSecondary.key}"]`);
+                    const legendItem = lineGraphContainer.querySelector(
+                        `.${styles.legendItem}[aria-describedby="${
+                            inputSecondary.key
+                        }"]`
+                    );
                     triggerEvent(legendItem, "mouseenter", () => {
-                        const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}"]`);
-                        const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`);
-                        const criticalOuterElementAlt = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputSecondary.key}"]`);
-                        const criticalInnerElementAlt = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputSecondary.key}"]`);
-                        expect(criticalOuterElement.classList).not.toContain(styles.highlight);
-                        expect(criticalInnerElement.classList).not.toContain(styles.highlight);
-                        expect(criticalOuterElementAlt.classList).toContain(styles.highlight);
-                        expect(criticalInnerElementAlt.classList).toContain(styles.highlight);
+                        const criticalOuterElement = document.querySelector(
+                            `path.${
+                                styles.criticalityOuterPoint
+                            }[aria-describedby="${inputPrimary.key}"]`
+                        );
+                        const criticalInnerElement = document.querySelector(
+                            `path.${
+                                styles.criticalityInnerPoint
+                            }[aria-describedby="${inputPrimary.key}"]`
+                        );
+                        const criticalOuterElementAlt = document.querySelector(
+                            `path.${
+                                styles.criticalityOuterPoint
+                            }[aria-describedby="${inputSecondary.key}"]`
+                        );
+                        const criticalInnerElementAlt = document.querySelector(
+                            `path.${
+                                styles.criticalityInnerPoint
+                            }[aria-describedby="${inputSecondary.key}"]`
+                        );
+                        expect(criticalOuterElement.classList).not.toContain(
+                            styles.highlight
+                        );
+                        expect(criticalInnerElement.classList).not.toContain(
+                            styles.highlight
+                        );
+                        expect(criticalOuterElementAlt.classList).toContain(
+                            styles.highlight
+                        );
+                        expect(criticalInnerElementAlt.classList).toContain(
+                            styles.highlight
+                        );
                         done();
                     });
                 });
                 it("Removes highlights on mouse-leave", (done) => {
-                    const legendItem = lineGraphContainer.querySelector(`.${styles.legendItem}[aria-describedby="${inputPrimary.key}"]`);
+                    const legendItem = lineGraphContainer.querySelector(
+                        `.${styles.legendItem}[aria-describedby="${
+                            inputPrimary.key
+                        }"]`
+                    );
                     triggerEvent(legendItem, "mouseenter", () => {
                         triggerEvent(legendItem, "mouseleave", () => {
-                            const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}"]`);
-                            const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`);
-                            expect(criticalOuterElement.classList).not.toContain(styles.highlight);
-                            expect(criticalInnerElement.classList).not.toContain(styles.highlight);
+                            const criticalOuterElement = document.querySelector(
+                                `path.${
+                                    styles.criticalityOuterPoint
+                                }[aria-describedby="${inputPrimary.key}"]`
+                            );
+                            const criticalInnerElement = document.querySelector(
+                                `path.${
+                                    styles.criticalityInnerPoint
+                                }[aria-describedby="${inputPrimary.key}"]`
+                            );
+                            expect(
+                                criticalOuterElement.classList
+                            ).not.toContain(styles.highlight);
+                            expect(
+                                criticalInnerElement.classList
+                            ).not.toContain(styles.highlight);
                             done();
                         });
                     });
                 });
                 it("Removes blur for other data points on mouse-leave", (done) => {
-                    const legendItem = lineGraphContainer.querySelector(`.${styles.legendItem}[aria-describedby="${inputSecondary.key}"]`);
+                    const legendItem = lineGraphContainer.querySelector(
+                        `.${styles.legendItem}[aria-describedby="${
+                            inputSecondary.key
+                        }"]`
+                    );
                     triggerEvent(legendItem, "mouseenter", () => {
                         triggerEvent(legendItem, "mouseleave", () => {
-                            const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}"]`);
-                            const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`);
-                            const criticalOuterElementAlt = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputSecondary.key}"]`);
-                            const criticalInnerElementAlt = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputSecondary.key}"]`);
-                            expect(criticalOuterElement.classList).not.toContain(styles.highlight);
-                            expect(criticalInnerElement.classList).not.toContain(styles.highlight);
-                            expect(criticalOuterElementAlt.classList).not.toContain(styles.highlight);
-                            expect(criticalInnerElementAlt.classList).not.toContain(styles.highlight);
+                            const criticalOuterElement = document.querySelector(
+                                `path.${
+                                    styles.criticalityOuterPoint
+                                }[aria-describedby="${inputPrimary.key}"]`
+                            );
+                            const criticalInnerElement = document.querySelector(
+                                `path.${
+                                    styles.criticalityInnerPoint
+                                }[aria-describedby="${inputPrimary.key}"]`
+                            );
+                            const criticalOuterElementAlt = document.querySelector(
+                                `path.${
+                                    styles.criticalityOuterPoint
+                                }[aria-describedby="${inputSecondary.key}"]`
+                            );
+                            const criticalInnerElementAlt = document.querySelector(
+                                `path.${
+                                    styles.criticalityInnerPoint
+                                }[aria-describedby="${inputSecondary.key}"]`
+                            );
+                            expect(
+                                criticalOuterElement.classList
+                            ).not.toContain(styles.highlight);
+                            expect(
+                                criticalInnerElement.classList
+                            ).not.toContain(styles.highlight);
+                            expect(
+                                criticalOuterElementAlt.classList
+                            ).not.toContain(styles.highlight);
+                            expect(
+                                criticalInnerElementAlt.classList
+                            ).not.toContain(styles.highlight);
                             done();
                         });
                     });
@@ -1515,52 +2381,117 @@ describe("Line", () => {
             beforeEach(() => {
                 spyOn(window, "requestAnimationFrame").and.callThrough();
                 const valuesMutated = utils.deepClone(valuesDefault);
-                valuesMutated[ 0 ].isCritical = true;
+                valuesMutated[0].isCritical = true;
                 inputPrimary = getInput(valuesMutated);
                 linePrimary = new Line(inputPrimary);
                 graphDefault.loadContent(linePrimary);
             });
             describe("On single data-set", () => {
                 it("Hides indicators on toggle", (done) => {
-                    const legendItem = lineGraphContainer.querySelector(`.${styles.legendItem}[aria-describedby="${inputPrimary.key}"]`);
+                    const legendItem = lineGraphContainer.querySelector(
+                        `.${styles.legendItem}[aria-describedby="${
+                            inputPrimary.key
+                        }"]`
+                    );
                     triggerEvent(legendItem, "click", () => {
-                        const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}"]`);
-                        const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`);
-                        expect(criticalOuterElement.getAttribute("style")).toBe("display: none;");
-                        expect(criticalInnerElement.getAttribute("style")).toBe("display: none;");
+                        const criticalOuterElement = document.querySelector(
+                            `path.${
+                                styles.criticalityOuterPoint
+                            }[aria-describedby="${inputPrimary.key}"]`
+                        );
+                        const criticalInnerElement = document.querySelector(
+                            `path.${
+                                styles.criticalityInnerPoint
+                            }[aria-describedby="${inputPrimary.key}"]`
+                        );
+                        expect(criticalOuterElement.getAttribute("style")).toBe(
+                            "display: none;"
+                        );
+                        expect(criticalInnerElement.getAttribute("style")).toBe(
+                            "display: none;"
+                        );
                         done();
                     });
                 });
                 it("Shows indicators on re-toggle", (done) => {
-                    const legendItem = lineGraphContainer.querySelector(`.${styles.legendItem}[aria-describedby="${inputPrimary.key}"]`);
+                    const legendItem = lineGraphContainer.querySelector(
+                        `.${styles.legendItem}[aria-describedby="${
+                            inputPrimary.key
+                        }"]`
+                    );
                     triggerEvent(legendItem, "click", () => {
-                        triggerEvent(legendItem, "click", () => {
-                            const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}"]`);
-                            const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`);
-                            expect(criticalOuterElement.getAttribute("style")).toBe("");
-                            expect(criticalInnerElement.getAttribute("style")).toBe("");
-                            done();
-                        }, 200);
+                        triggerEvent(
+                            legendItem,
+                            "click",
+                            () => {
+                                const criticalOuterElement = document.querySelector(
+                                    `path.${
+                                        styles.criticalityOuterPoint
+                                    }[aria-describedby="${inputPrimary.key}"]`
+                                );
+                                const criticalInnerElement = document.querySelector(
+                                    `path.${
+                                        styles.criticalityInnerPoint
+                                    }[aria-describedby="${inputPrimary.key}"]`
+                                );
+                                expect(
+                                    criticalOuterElement.getAttribute("style")
+                                ).toBe("");
+                                expect(
+                                    criticalInnerElement.getAttribute("style")
+                                ).toBe("");
+                                done();
+                            },
+                            200
+                        );
                     });
                 });
             });
             describe("On multiple data-set", () => {
                 it("Shows when data-sets shown === 1", (done) => {
                     const valuesMutatedAlt = utils.deepClone(valuesDefault);
-                    valuesMutatedAlt[ 1 ].isCritical = true;
+                    valuesMutatedAlt[1].isCritical = true;
                     inputSecondary.values = utils.deepClone(valuesMutatedAlt);
                     lineSecondary = new Line(inputSecondary);
                     graphDefault.loadContent(lineSecondary);
-                    const legendItem = lineGraphContainer.querySelector(`.${styles.legendItem}[aria-describedby="${inputSecondary.key}"]`);
+                    const legendItem = lineGraphContainer.querySelector(
+                        `.${styles.legendItem}[aria-describedby="${
+                            inputSecondary.key
+                        }"]`
+                    );
                     triggerEvent(legendItem, "click", () => {
-                        const criticalOuterElement = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}"]`);
-                        const criticalInnerElement = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`);
-                        const criticalOuterElementAlt = document.querySelector(`path.${styles.criticalityOuterPoint}[aria-describedby="${inputSecondary.key}"]`);
-                        const criticalInnerElementAlt = document.querySelector(`path.${styles.criticalityInnerPoint}[aria-describedby="${inputSecondary.key}"]`);
-                        expect(criticalOuterElement.getAttribute("style")).toBe("");
-                        expect(criticalInnerElement.getAttribute("style")).toBe("");
-                        expect(criticalOuterElementAlt.getAttribute("style")).toBe("display: none;");
-                        expect(criticalInnerElementAlt.getAttribute("style")).toBe("display: none;");
+                        const criticalOuterElement = document.querySelector(
+                            `path.${
+                                styles.criticalityOuterPoint
+                            }[aria-describedby="${inputPrimary.key}"]`
+                        );
+                        const criticalInnerElement = document.querySelector(
+                            `path.${
+                                styles.criticalityInnerPoint
+                            }[aria-describedby="${inputPrimary.key}"]`
+                        );
+                        const criticalOuterElementAlt = document.querySelector(
+                            `path.${
+                                styles.criticalityOuterPoint
+                            }[aria-describedby="${inputSecondary.key}"]`
+                        );
+                        const criticalInnerElementAlt = document.querySelector(
+                            `path.${
+                                styles.criticalityInnerPoint
+                            }[aria-describedby="${inputSecondary.key}"]`
+                        );
+                        expect(criticalOuterElement.getAttribute("style")).toBe(
+                            ""
+                        );
+                        expect(criticalInnerElement.getAttribute("style")).toBe(
+                            ""
+                        );
+                        expect(
+                            criticalOuterElementAlt.getAttribute("style")
+                        ).toBe("display: none;");
+                        expect(
+                            criticalInnerElementAlt.getAttribute("style")
+                        ).toBe("display: none;");
                         graphDefault.unloadContent(lineSecondary);
                         done();
                     });

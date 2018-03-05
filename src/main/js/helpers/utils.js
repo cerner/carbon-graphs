@@ -58,7 +58,10 @@ const isDefined = not(isUndefined);
  * @returns {boolean} true if empty
  */
 const isEmpty = (o) =>
-    typeof o === "undefined" || o === null || (isString(o) && o.length === 0) || (typeof o === "object" && Object.keys(o).length === 0);
+    typeof o === "undefined" ||
+    o === null ||
+    (isString(o) && o.length === 0) ||
+    (typeof o === "object" && Object.keys(o).length === 0);
 /**
  * Checks if parameter is not empty
  * @private
@@ -73,14 +76,18 @@ const notEmpty = not(isEmpty);
  * @param {*} value -  value to be searched
  * @returns {boolean} true if present
  */
-const hasValue = (dict, value) => Object.keys(dict).some((o) => dict[ o ] === value);
+const hasValue = (dict, value) =>
+    Object.keys(dict).some((o) => dict[o] === value);
 /**
  * Sanitizes the string of < and >
  * @private
  * @param {string} str - input string
  * @returns {string} sanitized string
  */
-const sanitize = (str) => ((typeof str === "string") ? (str.replace(/</g, "&lt;").replace(/>/g, "&gt;")) : str);
+const sanitize = (str) =>
+    typeof str === "string"
+        ? str.replace(/</g, "&lt;").replace(/>/g, "&gt;")
+        : str;
 /**
  * Deep clones the provided object
  * @private
@@ -90,16 +97,14 @@ const sanitize = (str) => ((typeof str === "string") ? (str.replace(/</g, "&lt;"
 const deepClone = (o) => {
     if (isArray(o)) {
         return o.map(deepClone);
-    }
-    else if (o && typeof o === "object") {
+    } else if (o && typeof o === "object") {
         return Object.keys(o).reduce((acc, key) => {
-            if (isDefined(o[ key ])) {
-                acc[ key ] = deepClone(o[ key ]);
+            if (isDefined(o[key])) {
+                acc[key] = deepClone(o[key]);
             }
             return acc;
         }, {});
-    }
-    else {
+    } else {
         return o;
     }
 };
@@ -125,7 +130,7 @@ const parseDateTime = (value) => new Date(value);
  * @param {string} n - source string
  * @returns {number} if not undefined or null return Number, 0 otherwise
  */
-const getNumber = (n) => n ? Number(n) : 0;
+const getNumber = (n) => (n ? Number(n) : 0);
 /**
  * Checks if input is a number or not
  * @private

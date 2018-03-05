@@ -33,17 +33,16 @@ import PairedResultConfig from "./PairedResultConfig";
  * @param {string} axis - y or y2
  * @returns {Object} - Contains min and max values for the data points
  */
-const calculateValuesRange = (values, axis = constants.Y_AXIS) =>
-    ({
-        [ axis ]: {
-            min: Math.min(...values.map((i) =>
-                Math.min(...Object.keys(i).map((j) =>
-                    i[ j ].y)))),
-            max: Math.max(...values.map((i) =>
-                Math.max(...Object.keys(i).map((j) =>
-                    i[ j ].y))))
-        }
-    });
+const calculateValuesRange = (values, axis = constants.Y_AXIS) => ({
+    [axis]: {
+        min: Math.min(
+            ...values.map((i) => Math.min(...Object.keys(i).map((j) => i[j].y)))
+        ),
+        max: Math.max(
+            ...values.map((i) => Math.max(...Object.keys(i).map((j) => i[j].y)))
+        )
+    }
+});
 
 /**
  * Data point sets can be loaded using this function.
@@ -104,7 +103,10 @@ class PairedResult extends GraphContent {
     constructor(input) {
         super();
         this.config = loadInput(input);
-        this.valuesRange = calculateValuesRange(this.config.values, this.config.yAxis);
+        this.valuesRange = calculateValuesRange(
+            this.config.values,
+            this.config.yAxis
+        );
         this.dataTarget = {};
     }
 
@@ -112,15 +114,28 @@ class PairedResult extends GraphContent {
      * @inheritDoc
      */
     load(graph) {
-        this.dataTarget = processDataPoints(graph.config, utils.deepClone(this.config));
+        this.dataTarget = processDataPoints(
+            graph.config,
+            utils.deepClone(this.config)
+        );
         draw(graph.scale, graph.config, graph.svg, this.dataTarget);
         if (utils.notEmpty(this.dataTarget.regions)) {
             renderRegion(graph.scale, graph.config, graph.svg, this.dataTarget);
         }
-        prepareLegendItems(graph.config, {
-            clickHandler: clickHandler(graph, this, graph.config, graph.svg),
-            hoverHandler: hoverHandler(graph.config, graph.svg)
-        }, this.dataTarget, graph.legendSVG);
+        prepareLegendItems(
+            graph.config,
+            {
+                clickHandler: clickHandler(
+                    graph,
+                    this,
+                    graph.config,
+                    graph.svg
+                ),
+                hoverHandler: hoverHandler(graph.config, graph.svg)
+            },
+            this.dataTarget,
+            graph.legendSVG
+        );
         return this;
     }
 
@@ -129,7 +144,10 @@ class PairedResult extends GraphContent {
      */
     unload(graph) {
         clear(graph.svg, this.dataTarget);
-        removeRegion(graph.svg.select(`.${styles.regionGroup}`), this.dataTarget);
+        removeRegion(
+            graph.svg.select(`.${styles.regionGroup}`),
+            this.dataTarget
+        );
         removeLegendItem(graph.legendSVG, this.dataTarget);
         this.dataTarget = {};
         this.config = {};
@@ -148,7 +166,9 @@ class PairedResult extends GraphContent {
             translateRegion(
                 graph.scale,
                 graph.config,
-                graph.svg.select(`g[aria-describedby="region_${this.dataTarget.key}"]`)
+                graph.svg.select(
+                    `g[aria-describedby="region_${this.dataTarget.key}"]`
+                )
             );
         }
         translatePairedResultGraph(graph.scale, graph.config, graph.svg);

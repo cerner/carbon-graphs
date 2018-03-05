@@ -4,10 +4,7 @@
  */
 "use strict";
 import d3 from "d3";
-import {
-    getColorForTarget,
-    getShape
-} from "../controls/Graph/helpers/helpers";
+import { getColorForTarget, getShape } from "../controls/Graph/helpers/helpers";
 import { Shape } from "../core";
 import constants from "../helpers/constants";
 import styles from "../helpers/styles";
@@ -28,43 +25,54 @@ import utils from "../helpers/utils";
  */
 const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
     if (!utils.isFunction(eventHandlers.clickHandler)) {
-        throw new Error("Invalid Argument: eventHandlers needs a clickHandler callback function.");
+        throw new Error(
+            "Invalid Argument: eventHandlers needs a clickHandler callback function."
+        );
     }
     if (!utils.isFunction(eventHandlers.hoverHandler)) {
-        throw new Error("Invalid Argument: eventHandlers needs a hoverHandler callback function.");
+        throw new Error(
+            "Invalid Argument: eventHandlers needs a hoverHandler callback function."
+        );
     }
     if (!t.label) {
         throw new Error("Invalid Argument: label needs to be a valid string.");
     }
     const text = utils.sanitize(t.label.display);
     const index = shownTargets.indexOf(t.key);
-    const itemPath = legendSVG.append("li")
-                              .classed(styles.legendItem, true)
-                              .attr("aria-selected", (!t.label.isDisabled && index > -1))
-                              .attr("role", "listitem")
-                              .attr("aria-labelledby", text)
-                              .attr("aria-describedby", t.key);
+    const itemPath = legendSVG
+        .append("li")
+        .classed(styles.legendItem, true)
+        .attr("aria-selected", !t.label.isDisabled && index > -1)
+        .attr("role", "listitem")
+        .attr("aria-labelledby", text)
+        .attr("aria-describedby", t.key);
     if (!t.label.isDisabled && index > -1) {
-        itemPath.on("click", function() {
-                    return eventHandlers.clickHandler(this, t);
-                })
-                .on("mouseenter", () => eventHandlers.hoverHandler(t, constants.HOVER_EVENT.MOUSE_ENTER))
-                .on("mouseleave", () => eventHandlers.hoverHandler(t, constants.HOVER_EVENT.MOUSE_EXIT));
+        itemPath
+            .on("click", function() {
+                return eventHandlers.clickHandler(this, t);
+            })
+            .on("mouseenter", () =>
+                eventHandlers.hoverHandler(t, constants.HOVER_EVENT.MOUSE_ENTER)
+            )
+            .on("mouseleave", () =>
+                eventHandlers.hoverHandler(t, constants.HOVER_EVENT.MOUSE_EXIT)
+            );
     }
-    const buttonPath = itemPath.append("button")
-                               .classed(styles.legendItemBtn, true)
-                               .attr("tabindex", 0);
-    buttonPath.node().appendChild(new Shape(getShape(t))
-        .getShapeElement({
-                svgClassNames: styles.legendItemIcon,
-                pathStyles: `fill: ${getColorForTarget(t)}`
-            }
-        )
+    const buttonPath = itemPath
+        .append("button")
+        .classed(styles.legendItemBtn, true)
+        .attr("tabindex", 0);
+    buttonPath.node().appendChild(
+        new Shape(getShape(t)).getShapeElement({
+            svgClassNames: styles.legendItemIcon,
+            pathStyles: `fill: ${getColorForTarget(t)}`
+        })
     );
-    itemPath.append("label")
-            .classed(styles.legendItemText, true)
-            .attr("tabindex", -1)
-            .text(text);
+    itemPath
+        .append("label")
+        .classed(styles.legendItemText, true)
+        .attr("tabindex", -1)
+        .text(text);
     return legendSVG;
 };
 /**
@@ -74,7 +82,10 @@ const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
  * @param {Object} dataTarget - Data points object
  * @returns {Object} - d3 svg object
  */
-const removeLegendItem = (legendSVG, dataTarget) => legendSVG ? legendSVG.select(`li[aria-describedby="${dataTarget.key}"]`).remove() : "";
+const removeLegendItem = (legendSVG, dataTarget) =>
+    legendSVG
+        ? legendSVG.select(`li[aria-describedby="${dataTarget.key}"]`).remove()
+        : "";
 /**
  * Creates the legend item list and appends into the container. The container consists of
  * the canvas which houses the graph itself, and the legend <ul> which contains the list of data points labels and
@@ -84,9 +95,11 @@ const removeLegendItem = (legendSVG, dataTarget) => legendSVG ? legendSVG.select
  * @param {Object} container - d3 Container svg
  * @returns {Object} - d3 svg object
  */
-const createLegend = (container) => container.append("ul")
-                                             .classed(styles.legend, true)
-                                             .attr("role", "list");
+const createLegend = (container) =>
+    container
+        .append("ul")
+        .classed(styles.legend, true)
+        .attr("role", "list");
 /**
  * Handler that will need to be called when a legend item is clicked along
  * with any other operations that will be need to taken care of by the parent
@@ -111,15 +124,31 @@ const legendClickHandler = (element) => {
  * top of the base hover handler
  * @returns {undefined} - returns nothing
  */
-const legendHoverHandler = (shownTargets, canvasSVG, key, hoverState, additionalHandlers = []) => {
+const legendHoverHandler = (
+    shownTargets,
+    canvasSVG,
+    key,
+    hoverState,
+    additionalHandlers = []
+) => {
     // Blur everything except the item hovered
-    shownTargets.filter((target) => (target !== key)).forEach((k) => {
-        canvasSVG.selectAll(`path[aria-describedby="${k}"]`)
-                 .classed(styles.blur, (hoverState === constants.HOVER_EVENT.MOUSE_ENTER));
-        canvasSVG.selectAll(`.${styles.pairedLine}`)
-                 .classed(styles.blur, (hoverState === constants.HOVER_EVENT.MOUSE_ENTER));
+    shownTargets.filter((target) => target !== key).forEach((k) => {
+        canvasSVG
+            .selectAll(`path[aria-describedby="${k}"]`)
+            .classed(
+                styles.blur,
+                hoverState === constants.HOVER_EVENT.MOUSE_ENTER
+            );
+        canvasSVG
+            .selectAll(`.${styles.pairedLine}`)
+            .classed(
+                styles.blur,
+                hoverState === constants.HOVER_EVENT.MOUSE_ENTER
+            );
         if (utils.notEmpty(additionalHandlers)) {
-            additionalHandlers.forEach((fn) => fn(shownTargets, canvasSVG, key, hoverState, k));
+            additionalHandlers.forEach((fn) =>
+                fn(shownTargets, canvasSVG, key, hoverState, k)
+            );
         }
     });
 };

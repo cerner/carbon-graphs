@@ -25,24 +25,40 @@ const DEFAULT_HEIGHT = constants.DEFAULT_HEIGHT;
  */
 const createAxes = (axis, scale, config, canvasSVG) => {
     getAxesScale(axis, scale, config);
-    canvasSVG.append("g")
-             .classed(styles.axis, true)
-             .classed(styles.axisX, true)
-             .attr("aria-hidden", !config.axis.x.show)
-             .attr("transform", `translate(${getXAxisXPosition(config)}, ${getXAxisYPosition(config)})`)
-             .call(axis.x);
-    canvasSVG.append("g")
-             .classed(styles.axis, true)
-             .classed(styles.axisY, true)
-             .attr("aria-hidden", !config.axis.y.show)
-             .attr("transform", `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition()})`)
-             .call(axis.y);
+    canvasSVG
+        .append("g")
+        .classed(styles.axis, true)
+        .classed(styles.axisX, true)
+        .attr("aria-hidden", !config.axis.x.show)
+        .attr(
+            "transform",
+            `translate(${getXAxisXPosition(config)}, ${getXAxisYPosition(
+                config
+            )})`
+        )
+        .call(axis.x);
+    canvasSVG
+        .append("g")
+        .classed(styles.axis, true)
+        .classed(styles.axisY, true)
+        .attr("aria-hidden", !config.axis.y.show)
+        .attr(
+            "transform",
+            `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition()})`
+        )
+        .call(axis.y);
     if (hasY2Axis(config.axis)) {
-        canvasSVG.append("g")
-                 .classed(styles.axis, true)
-                 .classed(styles.axisY2, true)
-                 .attr("transform", `translate(${getY2AxisXPosition(config)}, ${getY2AxisYPosition()})`)
-                 .call(axis.y2);
+        canvasSVG
+            .append("g")
+            .classed(styles.axis, true)
+            .classed(styles.axisY2, true)
+            .attr(
+                "transform",
+                `translate(${getY2AxisXPosition(
+                    config
+                )}, ${getY2AxisYPosition()})`
+            )
+            .call(axis.y2);
     }
 };
 /**
@@ -55,16 +71,28 @@ const createAxes = (axis, scale, config, canvasSVG) => {
  */
 const getAxesScale = (axis, scale, config) => {
     axis.x = prepareXAxis(
-        scale.x, config.axis.x.ticks.values, getXAxisWidth(config),
-        getAxisTickFormat(config.locale, config.axis.x.ticks.format, config.axis.x.type)
+        scale.x,
+        config.axis.x.ticks.values,
+        getXAxisWidth(config),
+        getAxisTickFormat(
+            config.locale,
+            config.axis.x.ticks.format,
+            config.axis.x.type
+        )
     );
     axis.y = prepareYAxis(
-        scale.y, config.axis.y.ticks.values, config.height,
+        scale.y,
+        config.axis.y.ticks.values,
+        config.height,
         getAxisTickFormat(config.locale, config.axis.y.ticks.format)
     );
     if (hasY2Axis(config.axis)) {
-        axis.y2 = prepareY2Axis(scale.y2, config.axis.y2.ticks.values, config.height,
-            getAxisTickFormat(config.locale, config.axis.y2.ticks.format));
+        axis.y2 = prepareY2Axis(
+            scale.y2,
+            config.axis.y2.ticks.values,
+            config.height,
+            getAxisTickFormat(config.locale, config.axis.y2.ticks.format)
+        );
     }
     return axis;
 };
@@ -86,8 +114,7 @@ const getAxisTickFormat = (locale, format, type = AXIS_TYPE.DEFAULT) => {
     }
     if (type === AXIS_TYPE.TIME_SERIES) {
         return locale.timeFormat(format);
-    }
-    else {
+    } else {
         return locale.numberFormat(format);
     }
 };
@@ -103,7 +130,7 @@ const processTickValues = (ticks) => {
     if (utils.isEmpty(ticks)) {
         return null;
     }
-    return ticks.map((t) => utils.isDate(t) ? utils.parseDateTime(t) : t);
+    return ticks.map((t) => (utils.isDate(t) ? utils.parseDateTime(t) : t));
 };
 /**
  * Creates the axis using the scale provided for X Axis using d3 svg axis.
@@ -117,11 +144,15 @@ const processTickValues = (ticks) => {
  * @returns {Object} d3 object which forms the x-axis scale
  */
 const prepareXAxis = (scale, tickValues, width, format) =>
-    d3.svg.axis().scale(scale)
-      .orient("bottom")
-      .ticks(Math.max((width / constants.MAX_TICK_VARIANCE), constants.MIN_TICKS))
-      .tickValues(processTickValues(tickValues))
-      .tickFormat(format);
+    d3.svg
+        .axis()
+        .scale(scale)
+        .orient("bottom")
+        .ticks(
+            Math.max(width / constants.MAX_TICK_VARIANCE, constants.MIN_TICKS)
+        )
+        .tickValues(processTickValues(tickValues))
+        .tickFormat(format);
 /**
  * Creates the axis using the scale provided for Y Axis using d3 svg axis
  * @private
@@ -132,11 +163,13 @@ const prepareXAxis = (scale, tickValues, width, format) =>
  * @returns {Object} d3 object which forms the y-axis scale
  */
 const prepareYAxis = (scale, tickValues, height, format) =>
-    d3.svg.axis().scale(scale)
-      .orient("left")
-      .ticks((height / constants.DEFAULT_Y_AXIS_SPACING))
-      .tickValues(processTickValues(tickValues))
-      .tickFormat(format);
+    d3.svg
+        .axis()
+        .scale(scale)
+        .orient("left")
+        .ticks(height / constants.DEFAULT_Y_AXIS_SPACING)
+        .tickValues(processTickValues(tickValues))
+        .tickFormat(format);
 /**
  * Creates the axis using the scale provided for Y2 Axis using d3 svg axis
  * @private
@@ -147,11 +180,13 @@ const prepareYAxis = (scale, tickValues, height, format) =>
  * @returns {Object} d3 object which forms the y2-axis scale
  */
 const prepareY2Axis = (scale, tickValues, height, format) =>
-    d3.svg.axis().scale(scale)
-      .orient("right")
-      .ticks((height / constants.DEFAULT_Y_AXIS_SPACING))
-      .tickValues(processTickValues(tickValues))
-      .tickFormat(format);
+    d3.svg
+        .axis()
+        .scale(scale)
+        .orient("right")
+        .ticks(height / constants.DEFAULT_Y_AXIS_SPACING)
+        .tickValues(processTickValues(tickValues))
+        .tickFormat(format);
 /**
  * Returns the number of degrees the rotation of axis needs to be performed based on axis
  * @private
@@ -175,7 +210,7 @@ const getRotationForAxis = (axis) => {
  * @returns {number} Position for the label
  */
 const getXAxisLabelXPosition = (config) =>
-    getXAxisXPosition(config) + (getXAxisWidth(config) / 2);
+    getXAxisXPosition(config) + getXAxisWidth(config) / 2;
 /**
  * X Axis label's position vertically below the graph
  * @private
@@ -183,7 +218,7 @@ const getXAxisLabelXPosition = (config) =>
  * @returns {number} Position for the label
  */
 const getXAxisLabelYPosition = (config) =>
-    getXAxisYPosition(config) + (config.axisLabelHeights.x * 2) + PADDING.bottom;
+    getXAxisYPosition(config) + config.axisLabelHeights.x * 2 + PADDING.bottom;
 /**
  * Y Axis label's starting position vertically beside the graph
  * @private
@@ -199,8 +234,10 @@ const getYAxisLabelXPosition = (config) =>
  * @returns {number} Position for the label
  */
 const getYAxisLabelYPosition = (config) =>
-    getYAxisYPosition() + ((DEFAULT_HEIGHT - PADDING.top - PADDING.bottom) / 2) *
-    config.outlierStretchFactor.upperLimit;
+    getYAxisYPosition() +
+    (DEFAULT_HEIGHT - PADDING.top - PADDING.bottom) /
+        2 *
+        config.outlierStretchFactor.upperLimit;
 /**
  * Y2 Axis label's starting position vertically beside the graph
  * @private
@@ -208,7 +245,9 @@ const getYAxisLabelYPosition = (config) =>
  * @returns {number} Position for the label
  */
 const getY2AxisLabelXPosition = (config) =>
-    getY2AxisXPosition(config) + config.axisSizes.y2 - PADDING.right +
+    getY2AxisXPosition(config) +
+    config.axisSizes.y2 -
+    PADDING.right +
     config.axisLabelWidths.y2;
 /**
  * X Axis's starting position within the canvas
@@ -216,7 +255,8 @@ const getY2AxisLabelXPosition = (config) =>
  * @param {Object} config - config object derived from input JSON
  * @returns {number} Position for the axis
  */
-const getXAxisXPosition = (config) => config.axisSizes.y + config.axisLabelWidths.y;
+const getXAxisXPosition = (config) =>
+    config.axisSizes.y + config.axisLabelWidths.y;
 /**
  * X Axis's position vertically relative to the canvas
  * @private
@@ -243,7 +283,8 @@ const getYAxisYPosition = () => PADDING.top;
  * @param {Object} config - config object derived from input JSON
  * @returns {number} Position for the axis
  */
-const getY2AxisXPosition = (config) => getYAxisXPosition(config) + getXAxisWidth(config);
+const getY2AxisXPosition = (config) =>
+    getYAxisXPosition(config) + getXAxisWidth(config);
 /**
  * Y2 Axis's position vertically relative to the canvas
  * @private
@@ -256,8 +297,12 @@ const getY2AxisYPosition = () => PADDING.top;
  * @param {Object} config - config object derived from input JSON
  * @returns {number} X Axis width
  */
-const getXAxisWidth = (config) => config.canvasWidth - config.axisSizes.y - config.axisSizes.y2 -
-    config.axisLabelWidths.y - config.axisLabelWidths.y2;
+const getXAxisWidth = (config) =>
+    config.canvasWidth -
+    config.axisSizes.y -
+    config.axisSizes.y2 -
+    config.axisLabelWidths.y -
+    config.axisLabelWidths.y2;
 /**
  * Y Axis height for the axis and canvas region to clip the chart within
  * @private
@@ -272,8 +317,13 @@ const getYAxisHeight = (config) => config.height;
  * @returns {Number} Height of the X Axis ticks, labels and numbers/datetimes
  */
 const getXAxisHeight = (config) => {
-    const scale = getScale(config.axis.x.type).domain(config.axis.x.domain).range([ 0, config.canvasWidth ]);
-    const axis = d3.svg.axis().scale(scale).orient("bottom");
+    const scale = getScale(config.axis.x.type)
+        .domain(config.axis.x.domain)
+        .range([0, config.canvasWidth]);
+    const axis = d3.svg
+        .axis()
+        .scale(scale)
+        .orient("bottom");
     const dummy = d3.select("body").append("div");
     const svg = dummy.append("svg");
     svg.append("g").call(axis);
@@ -287,14 +337,14 @@ const getXAxisHeight = (config) => {
  * @param {Object} config - config object derived from input JSON
  * @returns {Array} lower and upper bound forming the range
  */
-const getXAxisRange = (config) => [ 0, getXAxisWidth(config) ];
+const getXAxisRange = (config) => [0, getXAxisWidth(config)];
 /**
  * Y Axis range used to instruct d3 when creating a scale
  * @private
  * @param {Object} config - config object derived from input JSON
  * @returns {Array} lower and upper bound forming the range
  */
-const getYAxisRange = (config) => [ getYAxisHeight(config), 0 ];
+const getYAxisRange = (config) => [getYAxisHeight(config), 0];
 /**
  * Dynamically generate the label width for axes
  * @private
@@ -305,7 +355,9 @@ const getYAxisRange = (config) => [ getYAxisHeight(config), 0 ];
 const getAxisLabelWidth = (label, axis) => {
     const dummy = d3.select("body").append("div");
     const svg = dummy.append("svg");
-    const grouper = svg.append("g").attr("transform", `rotate(${getRotationForAxis(axis)})`);
+    const grouper = svg
+        .append("g")
+        .attr("transform", `rotate(${getRotationForAxis(axis)})`);
     buildAxisLabel(grouper, label);
     const width = grouper.node().getBoundingClientRect().width;
     dummy.remove();
@@ -334,10 +386,17 @@ const getAxisLabelHeight = (label) => {
  * @returns {Number} label width
  */
 const getYAxisWidth = (id, config) => {
-    const scale = d3.scale.linear()
-                    .domain([ config.axis[ id ].domain.lowerLimit, config.axis[ id ].domain.upperLimit ])
-                    .range([ config.height, 0 ]);
-    const axis = d3.svg.axis().scale(scale).orient("left");
+    const scale = d3.scale
+        .linear()
+        .domain([
+            config.axis[id].domain.lowerLimit,
+            config.axis[id].domain.upperLimit
+        ])
+        .range([config.height, 0]);
+    const axis = d3.svg
+        .axis()
+        .scale(scale)
+        .orient("left");
     const dummy = d3.select("body").append("div");
     const svg = dummy.append("svg");
     const yAxisSVG = svg.append("g").call(axis);
@@ -357,7 +416,10 @@ const getYAxisWidth = (id, config) => {
 const calculateAxesSize = (config) => {
     config.axisSizes = {};
     config.axisSizes.y = getYAxisWidth(constants.Y_AXIS, config) + PADDING.left;
-    config.axisSizes.y2 = (hasY2Axis(config.axis) ? getYAxisWidth(constants.Y2_AXIS, config) : 20) + PADDING.right;
+    config.axisSizes.y2 =
+        (hasY2Axis(config.axis)
+            ? getYAxisWidth(constants.Y2_AXIS, config)
+            : 20) + PADDING.right;
     config.axisSizes.x = getXAxisHeight(config);
 };
 /**
@@ -380,11 +442,15 @@ const calculateAxesLabelSize = (config) => {
             config.axisLabelHeights.x = getAxisLabelHeight(config.axis.x.label);
         }
         if (config.axis.y.label) {
-            config.axisLabelWidths.y = getAxisLabelWidth(config.axis.y.label, constants.Y_AXIS);
+            config.axisLabelWidths.y = getAxisLabelWidth(
+                config.axis.y.label,
+                constants.Y_AXIS
+            );
         }
         if (hasY2Axis(config.axis) && config.axis.y2.label) {
-            config.axisLabelWidths.y2 =
-                hasY2Axis(config.axis) ? getAxisLabelWidth(config.axis.y2.label, constants.Y2_AXIS) : 0;
+            config.axisLabelWidths.y2 = hasY2Axis(config.axis)
+                ? getAxisLabelWidth(config.axis.y2.label, constants.Y2_AXIS)
+                : 0;
         }
     }
 };
@@ -396,8 +462,11 @@ const calculateAxesLabelSize = (config) => {
  * @returns {number} returns a number representing the mid value of y axes domain
  */
 const getMidPoint = (config, yAxis) => {
-    const axisMidValue = (config.axis[ yAxis ].domain.upperLimit - config.axis[ yAxis ].domain.lowerLimit) / 2;
-    return config.axis[ yAxis ].domain.lowerLimit + axisMidValue;
+    const axisMidValue =
+        (config.axis[yAxis].domain.upperLimit -
+            config.axis[yAxis].domain.lowerLimit) /
+        2;
+    return config.axis[yAxis].domain.lowerLimit + axisMidValue;
 };
 /**
  * Calculates the lower part of the outlier based on data points.
@@ -410,13 +479,18 @@ const getMidPoint = (config, yAxis) => {
 const getLowerOutlierStretchFactorList = (config) => {
     const lowerStretchFactors = [];
     const getMinValue = (config, yAxis, axisMinValue) => {
-        const dataRangeMinValue = config.axis[ yAxis ].dataRange.min;
-        return dataRangeMinValue < axisMinValue ? dataRangeMinValue : axisMinValue;
+        const dataRangeMinValue = config.axis[yAxis].dataRange.min;
+        return dataRangeMinValue < axisMinValue
+            ? dataRangeMinValue
+            : axisMinValue;
     };
     const getLowerStretchFactor = (yAxis) => {
-        const axisMinValue = config.axis[ yAxis ].domain.lowerLimit;
+        const axisMinValue = config.axis[yAxis].domain.lowerLimit;
         const axisMidPoint = getMidPoint(config, yAxis);
-        const lowerStretchFactor = Math.abs((axisMidPoint - getMinValue(config, yAxis, axisMinValue)) / (axisMidPoint - axisMinValue));
+        const lowerStretchFactor = Math.abs(
+            (axisMidPoint - getMinValue(config, yAxis, axisMinValue)) /
+                (axisMidPoint - axisMinValue)
+        );
         return lowerStretchFactor > 1 ? lowerStretchFactor : 1;
     };
     lowerStretchFactors.push(getLowerStretchFactor(constants.Y_AXIS));
@@ -436,13 +510,18 @@ const getLowerOutlierStretchFactorList = (config) => {
 const getUpperOutlierStretchFactorList = (config) => {
     const upperStretchFactors = [];
     const getMaxValue = (config, yAxis, axisMaxValue) => {
-        const dataRangeMaxValue = config.axis[ yAxis ].dataRange.max;
-        return dataRangeMaxValue > axisMaxValue ? dataRangeMaxValue : axisMaxValue;
+        const dataRangeMaxValue = config.axis[yAxis].dataRange.max;
+        return dataRangeMaxValue > axisMaxValue
+            ? dataRangeMaxValue
+            : axisMaxValue;
     };
     const getUpperStretchFactor = (yAxis) => {
-        const axisMaxValue = config.axis[ yAxis ].domain.upperLimit;
+        const axisMaxValue = config.axis[yAxis].domain.upperLimit;
         const axisMidPoint = getMidPoint(config, yAxis);
-        const upperStretchFactor = Math.abs((getMaxValue(config, yAxis, axisMaxValue) - axisMidPoint) / (axisMaxValue - axisMidPoint));
+        const upperStretchFactor = Math.abs(
+            (getMaxValue(config, yAxis, axisMaxValue) - axisMidPoint) /
+                (axisMaxValue - axisMidPoint)
+        );
         return upperStretchFactor > 1 ? upperStretchFactor : 1;
     };
     upperStretchFactors.push(getUpperStretchFactor(constants.Y_AXIS));
@@ -462,8 +541,12 @@ const getUpperOutlierStretchFactorList = (config) => {
 const determineOutlierStretchFactor = (config) => {
     const sortOutlier = (firstValue, secondValue) => secondValue - firstValue;
     return {
-        upperLimit: getUpperOutlierStretchFactorList(config).sort(sortOutlier)[ 0 ],
-        lowerLimit: getLowerOutlierStretchFactorList(config).sort(sortOutlier)[ 0 ]
+        upperLimit: getUpperOutlierStretchFactorList(config).sort(
+            sortOutlier
+        )[0],
+        lowerLimit: getLowerOutlierStretchFactorList(config).sort(
+            sortOutlier
+        )[0]
     };
 };
 /**
@@ -473,10 +556,12 @@ const determineOutlierStretchFactor = (config) => {
  * @param {string} label - Label text
  * @returns {Array} d3 html element
  */
-const buildAxisLabel = (grouper, label) => grouper.append("text")
-                                                  .attr("text-anchor", "middle")
-                                                  .append("tspan")
-                                                  .text(label);
+const buildAxisLabel = (grouper, label) =>
+    grouper
+        .append("text")
+        .attr("text-anchor", "middle")
+        .append("tspan")
+        .text(label);
 /**
  * Decides true if the input JSON y2.show is enabled and if y2 axis points are provided
  * @private
@@ -495,19 +580,35 @@ const hasY2Axis = (axis) => utils.isDefined(axis.y2) && axis.y2.show;
  */
 const translateAxes = (axis, scale, config, canvasSVG) => {
     getAxesScale(axis, scale, config);
-    canvasSVG.select(`.${styles.axisX}`)
-             .transition(constants.d3Transition)
-             .attr("transform", `translate(${getXAxisXPosition(config)}, ${getXAxisYPosition(config)})`)
-             .call(axis.x);
-    canvasSVG.select(`.${styles.axisY}`)
-             .transition(constants.d3Transition)
-             .attr("transform", `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition()})`)
-             .call(axis.y);
+    canvasSVG
+        .select(`.${styles.axisX}`)
+        .transition(constants.d3Transition)
+        .attr(
+            "transform",
+            `translate(${getXAxisXPosition(config)}, ${getXAxisYPosition(
+                config
+            )})`
+        )
+        .call(axis.x);
+    canvasSVG
+        .select(`.${styles.axisY}`)
+        .transition(constants.d3Transition)
+        .attr(
+            "transform",
+            `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition()})`
+        )
+        .call(axis.y);
     if (hasY2Axis(config.axis)) {
-        canvasSVG.select(`.${styles.axisY2}`)
-                 .transition(constants.d3Transition)
-                 .attr("transform", `translate(${getY2AxisXPosition(config)}, ${getY2AxisYPosition()})`)
-                 .call(axis.y2);
+        canvasSVG
+            .select(`.${styles.axisY2}`)
+            .transition(constants.d3Transition)
+            .attr(
+                "transform",
+                `translate(${getY2AxisXPosition(
+                    config
+                )}, ${getY2AxisYPosition()})`
+            )
+            .call(axis.y2);
     }
 };
 /**
@@ -522,7 +623,11 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
  * @param {Object} config - config object derived from input JSON
  * @returns {undefined} - returns nothing
  */
-const getAxesDataRange = (valuesRange = {}, axis = constants.Y_AXIS, config) => {
+const getAxesDataRange = (
+    valuesRange = {},
+    axis = constants.Y_AXIS,
+    config
+) => {
     if (utils.isEmpty(config.axis.y.dataRange)) {
         config.axis.y.dataRange = {};
     }
@@ -532,15 +637,17 @@ const getAxesDataRange = (valuesRange = {}, axis = constants.Y_AXIS, config) => 
     if (utils.isEmpty(valuesRange)) {
         return;
     }
-    const prevMin = config.axis[ axis ].dataRange.oldMin;
-    const prevMax = config.axis[ axis ].dataRange.oldMax;
-    const isRangeModified = (!(prevMin && prevMax) || !(prevMin <= valuesRange[ axis ].min || prevMax >= valuesRange[ axis ].max));
-    config.axis[ axis ].dataRange.isRangeModified = isRangeModified;
+    const prevMin = config.axis[axis].dataRange.oldMin;
+    const prevMax = config.axis[axis].dataRange.oldMax;
+    const isRangeModified =
+        !(prevMin && prevMax) ||
+        !(prevMin <= valuesRange[axis].min || prevMax >= valuesRange[axis].max);
+    config.axis[axis].dataRange.isRangeModified = isRangeModified;
     if (isRangeModified) {
-        config.axis[ axis ].dataRange.oldMin = config.axis[ axis ].dataRange.min;
-        config.axis[ axis ].dataRange.oldMax = config.axis[ axis ].dataRange.max;
-        config.axis[ axis ].dataRange.min = valuesRange[ axis ].min;
-        config.axis[ axis ].dataRange.max = valuesRange[ axis ].max;
+        config.axis[axis].dataRange.oldMin = config.axis[axis].dataRange.min;
+        config.axis[axis].dataRange.oldMax = config.axis[axis].dataRange.max;
+        config.axis[axis].dataRange.min = valuesRange[axis].min;
+        config.axis[axis].dataRange.max = valuesRange[axis].max;
     }
 };
 

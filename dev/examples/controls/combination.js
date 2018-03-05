@@ -4,17 +4,29 @@ import { shell } from "../helpers";
 
 export const renderCombinationSimple = (el, id, title) => () => {
     shell.render(el, id, title);
-    const combGraph = Carbon.api.graph(getDemoData(`#${id}`, "LINE_PAIR_COMB_DEFAULT"));
-    combGraph.loadContent(Carbon.api.line(getDemoData(`#${id}`, "LINE_PAIR_COMB_DEFAULT").data[ 0 ]));
-    combGraph.loadContent(Carbon.api.pairedResult(getDemoData(`#${id}`, "LINE_PAIR_COMB_DEFAULT").data[ 1 ]));
+    const combGraph = Carbon.api.graph(
+        getDemoData(`#${id}`, "LINE_PAIR_COMB_DEFAULT")
+    );
+    combGraph.loadContent(
+        Carbon.api.line(getDemoData(`#${id}`, "LINE_PAIR_COMB_DEFAULT").data[0])
+    );
+    combGraph.loadContent(
+        Carbon.api.pairedResult(
+            getDemoData(`#${id}`, "LINE_PAIR_COMB_DEFAULT").data[1]
+        )
+    );
     return combGraph;
 };
 export const renderCombinationRegion = (el, id, title) => () => {
-    shell.render(el, id, title,
+    shell.render(
+        el,
+        id,
+        title,
         "* A Combination graph containing Line and Paired Result. Regions are provided for Line data set, " +
-        "High and Low data types for Paired Result. " +
-        "By default, region is hidden unless hovered upon in the legend.");
-    const lineData = getDemoData(`#${id}`, "LINE_PAIR_COMB_DEFAULT").data[ 0 ];
+            "High and Low data types for Paired Result. " +
+            "By default, region is hidden unless hovered upon in the legend."
+    );
+    const lineData = getDemoData(`#${id}`, "LINE_PAIR_COMB_DEFAULT").data[0];
     lineData.regions = [
         {
             axis: "y",
@@ -22,7 +34,7 @@ export const renderCombinationRegion = (el, id, title) => () => {
             end: 18
         }
     ];
-    const pairedData = getDemoData(`#${id}`, "LINE_PAIR_COMB_DEFAULT").data[ 1 ];
+    const pairedData = getDemoData(`#${id}`, "LINE_PAIR_COMB_DEFAULT").data[1];
     pairedData.regions = {
         high: [
             {
@@ -40,7 +52,9 @@ export const renderCombinationRegion = (el, id, title) => () => {
             }
         ]
     };
-    const combGraph = Carbon.api.graph(getDemoData(`#${id}`, "LINE_PAIR_COMB_DEFAULT"));
+    const combGraph = Carbon.api.graph(
+        getDemoData(`#${id}`, "LINE_PAIR_COMB_DEFAULT")
+    );
     combGraph.loadContent(Carbon.api.line(lineData));
     combGraph.loadContent(Carbon.api.pairedResult(pairedData));
     return combGraph;

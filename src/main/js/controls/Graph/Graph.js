@@ -13,10 +13,7 @@ import { createLegend } from "../../helpers/legend";
 import { createRegionContainer } from "../../helpers/region";
 import styles from "../../helpers/styles";
 import utils from "../../helpers/utils";
-import GraphConfig, {
-    processInput,
-    validateContent
-} from "./GraphConfig";
+import GraphConfig, { processInput, validateContent } from "./GraphConfig";
 import {
     attachEventHandlers,
     createDefs,
@@ -55,7 +52,8 @@ const setCanvasWidth = (container, config) => {
  * @returns {undefined} - returns nothing
  */
 const setCanvasHeight = (config) => {
-    config.canvasHeight = getYAxisHeight(config) +
+    config.canvasHeight =
+        getYAxisHeight(config) +
         (PADDING.bottom + PADDING.top + config.axisLabelHeights.x) * 2;
 };
 
@@ -66,7 +64,8 @@ const setCanvasHeight = (config) => {
  * @param {string} yAxis - y or y2
  * @returns {boolean} true if min-max range changed
  */
-const isRangeModified = (config, yAxis = constants.Y_AXIS) => config.axis[ yAxis ].dataRange.isRangeModified;
+const isRangeModified = (config, yAxis = constants.Y_AXIS) =>
+    config.axis[yAxis].dataRange.isRangeModified;
 
 /**
  * Data point sets can be loaded using this function.
@@ -142,7 +141,10 @@ const initConfig = (control) => {
  * @returns {Graph} Graph instance
  */
 const init = (control) => {
-    control.config.height = determineHeight(control.config, control.config.dimension);
+    control.config.height = determineHeight(
+        control.config,
+        control.config.dimension
+    );
     setCanvasWidth(control.graphContainer, control.config);
     calculateAxesSize(control.config);
     calculateAxesLabelSize(control.config);
@@ -197,9 +199,10 @@ class Graph {
         processInput(input, this.config, this.config.axis.x.type);
         beforeInit(this);
         init(this);
-        const containerSVG = d3.select(this.config.bindTo)
-                               .append("div")
-                               .classed(styles.container, true);
+        const containerSVG = d3
+            .select(this.config.bindTo)
+            .append("div")
+            .classed(styles.container, true);
         this.svg = containerSVG
             .insert("svg", ":first-child")
             .classed(styles.canvas, true)
@@ -218,7 +221,11 @@ class Graph {
             The consumer can also choose to render legend into another container
             using "bindLegendTo" property
             */
-            this.legendSVG = createLegend(this.config.bindLegendTo ? d3.select(this.config.bindLegendTo) : containerSVG);
+            this.legendSVG = createLegend(
+                this.config.bindLegendTo
+                    ? d3.select(this.config.bindLegendTo)
+                    : containerSVG
+            );
         }
         attachEventHandlers(this);
         return this.svg;
@@ -251,7 +258,11 @@ class Graph {
         validateContent(this.content, content);
         this.content.push(content);
         this.contentTargets.push(content.config);
-        getAxesDataRange(content.valuesRange, content.config.yAxis, this.config);
+        getAxesDataRange(
+            content.valuesRange,
+            content.config.yAxis,
+            this.config
+        );
         if (isRangeModified(this.config, content.config.yAxis)) {
             updateAxesDomain(this.config);
         }

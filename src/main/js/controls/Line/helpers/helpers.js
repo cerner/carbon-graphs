@@ -3,10 +3,7 @@ import d3 from "d3";
 import { Shape } from "../../../core";
 import { getType } from "../../../core/BaseConfig";
 import { getXAxisXPosition } from "../../../helpers/axis";
-import constants, {
-    AXIS_TYPE,
-    SHAPES
-} from "../../../helpers/constants";
+import constants, { AXIS_TYPE, SHAPES } from "../../../helpers/constants";
 import errors from "../../../helpers/errors";
 import {
     legendClickHandler,
@@ -35,11 +32,12 @@ const PADDING = constants.PADDING;
  * @returns {Object} d3 line object
  */
 const createLine = (scale, d) => {
-    const newLine = d3.svg.line()
-                      .defined((value) => value.y !== null)
-                      .x((value) => scale.x(value.x))
-                      .y((value) => scale[ value.yAxis ](value.y))
-                      .interpolate(constants.DEFAULT_INTERPOLATION);
+    const newLine = d3.svg
+        .line()
+        .defined((value) => value.y !== null)
+        .x((value) => scale.x(value.x))
+        .y((value) => scale[value.yAxis](value.y))
+        .interpolate(constants.DEFAULT_INTERPOLATION);
     return newLine(getDataPointValues(d));
 };
 /**
@@ -49,9 +47,11 @@ const createLine = (scale, d) => {
  * @param {Array<number>|number} [scaleFactor] - amount of transform needs to be done for scaling an svg
  * @returns {string} - translate string for d3 transform
  */
-const transformPoint = (scale, scaleFactor = constants.DEFAULT_PLOT_SCALE) => (value) => {
+const transformPoint = (scale, scaleFactor = constants.DEFAULT_PLOT_SCALE) => (
+    value
+) => {
     const getX = (val) => scale.x(val.x);
-    const getY = (val) => scale[ val.yAxis ](val.y);
+    const getY = (val) => scale[val.yAxis](val.y);
     return `translate(${getX(value)},${getY(value)}) scale(${scaleFactor})`;
 };
 /**
@@ -62,10 +62,11 @@ const transformPoint = (scale, scaleFactor = constants.DEFAULT_PLOT_SCALE) => (v
  * @returns {Object} d3 select object
  */
 const translateLines = (scale, canvasSVG) =>
-    canvasSVG.selectAll(`.${styles.lineGraphContent} .${styles.line}`)
-             .select("path")
-             .transition(constants.d3Transition)
-             .attr("d", (value) => createLine(scale, value));
+    canvasSVG
+        .selectAll(`.${styles.lineGraphContent} .${styles.line}`)
+        .select("path")
+        .transition(constants.d3Transition)
+        .attr("d", (value) => createLine(scale, value));
 /**
  * Transforms points for a data point set in the Line graph on resize
  * @private
@@ -74,11 +75,12 @@ const translateLines = (scale, canvasSVG) =>
  * @returns {Object} d3 select object
  */
 const translatePoints = (scale, canvasSVG) =>
-    canvasSVG.selectAll(`.${styles.lineGraphContent} .${styles.point}`)
-             .transition(constants.d3Transition)
-             .attr("transform", function(value) {
-                 return transformPoint(scale, getTransformScale(this))(value);
-             });
+    canvasSVG
+        .selectAll(`.${styles.lineGraphContent} .${styles.point}`)
+        .transition(constants.d3Transition)
+        .attr("transform", function(value) {
+            return transformPoint(scale, getTransformScale(this))(value);
+        });
 /**
  * Transforms selected data point element for a data point in the Line graph on resize
  * @private
@@ -87,11 +89,12 @@ const translatePoints = (scale, canvasSVG) =>
  * @returns {Object} d3 select object
  */
 const translateSelectedPoint = (scale, canvasSVG) =>
-    canvasSVG.selectAll(`.${styles.lineGraphContent} .${styles.dataPointSelection}`)
-             .transition(constants.d3Transition)
-             .attr("transform", function(value) {
-                 return transformPoint(scale, getTransformScale(this))(value);
-             });
+    canvasSVG
+        .selectAll(`.${styles.lineGraphContent} .${styles.dataPointSelection}`)
+        .transition(constants.d3Transition)
+        .attr("transform", function(value) {
+            return transformPoint(scale, getTransformScale(this))(value);
+        });
 /**
  * Toggles the selection of a data point, executes on click of a data point.
  * @private
@@ -99,9 +102,13 @@ const translateSelectedPoint = (scale, canvasSVG) =>
  * @returns {Array} d3 html element of the selected point
  */
 const toggleDataPointSelection = (target) => {
-    const selectedPointNode = d3.select(target.parentNode)
-                                .select(`.${styles.dataPointSelection}`);
-    selectedPointNode.attr("aria-hidden", !(selectedPointNode.attr("aria-hidden") === "true"));
+    const selectedPointNode = d3
+        .select(target.parentNode)
+        .select(`.${styles.dataPointSelection}`);
+    selectedPointNode.attr(
+        "aria-hidden",
+        !(selectedPointNode.attr("aria-hidden") === "true")
+    );
     return selectedPointNode;
 };
 /**
@@ -125,9 +132,15 @@ const dataPointActionHandler = (value, index, target) => {
         return;
     }
     toggleDataPointSelection(target).call((selectedTarget) =>
-        value.onClick(() => {
-            selectedTarget.attr("aria-hidden", true);
-        }, value.key, index, value, selectedTarget)
+        value.onClick(
+            () => {
+                selectedTarget.attr("aria-hidden", true);
+            },
+            value.key,
+            index,
+            value,
+            selectedTarget
+        )
     );
 };
 /**
@@ -161,38 +174,54 @@ const translateLineGraph = (scale, canvasSVG) => {
  * @returns {undefined} - returns nothing
  */
 const draw = (scale, config, canvasSVG, dataTarget) => {
-    const lineSVG = canvasSVG.append("g")
-                             .classed(styles.lineGraphContent, true)
-                             .attr("clip-path", `url(#${constants.CLIP_PATH_ID})`)
-                             .attr("aria-hidden", config.shownTargets.indexOf(dataTarget.key) < 0)
-                             .attr("aria-describedby", dataTarget.key);
-    const lineGroupSVG = lineSVG.append("g")
-                                .classed(styles.currentLinesGroup, true)
-                                .attr("transform", `translate(${getXAxisXPosition(config)},${PADDING.top})`);
-    const linePath = lineGroupSVG.selectAll(`.${styles.line}`)
-                                 .data([ dataTarget ]);
+    const lineSVG = canvasSVG
+        .append("g")
+        .classed(styles.lineGraphContent, true)
+        .attr("clip-path", `url(#${constants.CLIP_PATH_ID})`)
+        .attr("aria-hidden", config.shownTargets.indexOf(dataTarget.key) < 0)
+        .attr("aria-describedby", dataTarget.key);
+    const lineGroupSVG = lineSVG
+        .append("g")
+        .classed(styles.currentLinesGroup, true)
+        .attr(
+            "transform",
+            `translate(${getXAxisXPosition(config)},${PADDING.top})`
+        );
+    const linePath = lineGroupSVG
+        .selectAll(`.${styles.line}`)
+        .data([dataTarget]);
     drawDataLines(scale, config, linePath.enter());
-    linePath.exit()
+    linePath
+        .exit()
+        .transition(constants.d3Transition)
+        .remove();
+
+    if (config.showShapes) {
+        const currentPointsPath = lineSVG
+            .selectAll(`.${styles.currentPointsGroup}`)
+            .data([dataTarget]);
+        currentPointsPath
+            .enter()
+            .append("g")
+            .classed(styles.currentPointsGroup, true)
+            .attr(
+                "transform",
+                `translate(${getXAxisXPosition(config)},${PADDING.top})`
+            );
+        currentPointsPath
+            .exit()
             .transition(constants.d3Transition)
             .remove();
 
-    if (config.showShapes) {
-        const currentPointsPath = lineSVG.selectAll(`.${styles.currentPointsGroup}`).data([ dataTarget ]);
-        currentPointsPath.enter()
-                         .append("g")
-                         .classed(styles.currentPointsGroup, true)
-                         .attr("transform", `translate(${getXAxisXPosition(config)},${PADDING.top})`);
-        currentPointsPath.exit()
-                         .transition(constants.d3Transition)
-                         .remove();
-
-        const pointPath = lineSVG.select(`.${styles.currentPointsGroup}`)
-                                 .selectAll(`.${styles.point}`)
-                                 .data(getDataPointValues);
+        const pointPath = lineSVG
+            .select(`.${styles.currentPointsGroup}`)
+            .selectAll(`.${styles.point}`)
+            .data(getDataPointValues);
         drawDataPoints(scale, config, pointPath.enter());
-        pointPath.exit()
-                 .transition(constants.d3Transition)
-                 .remove();
+        pointPath
+            .exit()
+            .transition(constants.d3Transition)
+            .remove();
     }
 };
 /**
@@ -206,8 +235,10 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
 const processDataPoints = (graphConfig, dataTarget) => {
     const type = graphConfig.axis.x.type;
     const getXDataValues = (x) => {
-        if ((utils.isDate(x) && getType(type) !== AXIS_TYPE.TIME_SERIES) ||
-            (!utils.isDate(x) && getType(type) === AXIS_TYPE.TIME_SERIES)) {
+        if (
+            (utils.isDate(x) && getType(type) !== AXIS_TYPE.TIME_SERIES) ||
+            (!utils.isDate(x) && getType(type) === AXIS_TYPE.TIME_SERIES)
+        ) {
             throw new Error(errors.THROW_MSG_INVALID_FORMAT_TYPE);
         }
         if (getType(type) === AXIS_TYPE.TIME_SERIES) {
@@ -246,7 +277,8 @@ const getDataPointValues = (target) => target.internalValuesSubset;
  * @param {object} value - data point value object
  * @return {boolean} true if data point needs to be hidden, false otherwise
  */
-const shouldHideDataPoints = (shownTargets, value) => (shownTargets.indexOf(value.key) < 0 || value.y === null);
+const shouldHideDataPoints = (shownTargets, value) =>
+    shownTargets.indexOf(value.key) < 0 || value.y === null;
 /**
  * Draws lines using the data point values.
  * Lines are created using d3 svg line with linear interpolation.
@@ -257,13 +289,21 @@ const shouldHideDataPoints = (shownTargets, value) => (shownTargets.indexOf(valu
  * @returns {undefined} - returns nothing
  */
 const drawDataLines = (scale, config, lineGroupSVG) =>
-    lineGroupSVG.append("g")
-                .classed(styles.line, true)
-                .append("path")
-                .attr("d", (value) => createLine(scale, value))
-                .attr("style", (value) => `stroke: ${getColorForTarget(value)
-                    }${config.shownTargets.indexOf(value.key) < 0 ? "; display: none;" : ";"}`)
-                .attr("aria-describedby", (target) => target.key);
+    lineGroupSVG
+        .append("g")
+        .classed(styles.line, true)
+        .append("path")
+        .attr("d", (value) => createLine(scale, value))
+        .attr(
+            "style",
+            (value) =>
+                `stroke: ${getColorForTarget(value)}${
+                    config.shownTargets.indexOf(value.key) < 0
+                        ? "; display: none;"
+                        : ";"
+                }`
+        )
+        .attr("aria-describedby", (target) => target.key);
 /**
  * Draws the points with options opted in the input JSON by the consumer for each data set.
  *  Render the point with appropriate color, shape, x and y co-ordinates, label etc.
@@ -276,47 +316,85 @@ const drawDataLines = (scale, config, lineGroupSVG) =>
  */
 const drawDataPoints = (scale, config, canvasSVG) => {
     const renderDataPointPath = (path, value) =>
-        path.classed(styles.point, true)
+        path
+            .classed(styles.point, true)
             .attr("d", new Shape(getShape(value)).getPathDescription())
             .attr("transform", transformPoint(scale))
-            .attr("style", `fill: ${getColorForTarget(value)}${shouldHideDataPoints(config.shownTargets, value) ? "; display: none;" : ";"}`)
+            .attr(
+                "style",
+                `fill: ${getColorForTarget(value)}${
+                    shouldHideDataPoints(config.shownTargets, value)
+                        ? "; display: none;"
+                        : ";"
+                }`
+            )
             .attr("aria-describedby", value.key)
             .on("click", function(value, index) {
                 dataPointActionHandler(value, index, this);
             });
     const renderSelectionPath = (path, value) =>
-        path.classed(styles.dataPointSelection, true)
+        path
+            .classed(styles.dataPointSelection, true)
             .attr("d", new Shape(getShape(value)).getPathDescription())
             .attr("transform", transformPoint(scale))
             .attr("r", constants.DEFAULT_SELECTED_RADIUS)
-            .attr("style", `${shouldHideDataPoints(config.shownTargets, value) ? "display: none;" : ""}`)
+            .attr(
+                "style",
+                `${
+                    shouldHideDataPoints(config.shownTargets, value)
+                        ? "display: none;"
+                        : ""
+                }`
+            )
             .attr("aria-hidden", true)
             .attr("aria-describedby", value.key)
             .on("click", function(value, index) {
                 dataPointActionHandler(value, index, this);
             });
     const renderCriticalityPath = (path, value, cls, scaleFactor) =>
-        path.classed(styles.point, true)
+        path
+            .classed(styles.point, true)
             .classed(cls, true)
             .attr("d", new Shape(getShape(value)).getPathDescription())
             .attr("transform", transformPoint(scale, scaleFactor))
-            .attr("style", `${shouldHideDataPoints(config.shownTargets, value) ? "display: none;" : ""}`)
+            .attr(
+                "style",
+                `${
+                    shouldHideDataPoints(config.shownTargets, value)
+                        ? "display: none;"
+                        : ""
+                }`
+            )
             .attr("aria-describedby", value.key)
             .on("click", function(value, index) {
                 dataPointActionHandler(value, index, this);
             });
-    canvasSVG.append("g")
-             .classed(styles.pointGroup, true)
-             .each(function(d) {
-                 const dataPointSVG = d3.select(this);
-                 renderSelectionPath(dataPointSVG.append(constants.DEFAULT_SHAPE), d);
-                 if (d.isCritical) {
-                     config.hasCriticality = true;
-                     renderCriticalityPath(dataPointSVG.append("path"), d, styles.criticalityOuterPoint, constants.DEFAULT_CRITICAL_OUTER_PLOT_SCALE);
-                     renderCriticalityPath(dataPointSVG.append("path"), d, styles.criticalityInnerPoint, constants.DEFAULT_CRITICAL_INNER_PLOT_SCALE);
-                 }
-                 renderDataPointPath(dataPointSVG.append("path"), d);
-             });
+    canvasSVG
+        .append("g")
+        .classed(styles.pointGroup, true)
+        .each(function(d) {
+            const dataPointSVG = d3.select(this);
+            renderSelectionPath(
+                dataPointSVG.append(constants.DEFAULT_SHAPE),
+                d
+            );
+            if (d.isCritical) {
+                config.hasCriticality = true;
+                renderCriticalityPath(
+                    dataPointSVG.append("path"),
+                    d,
+                    styles.criticalityOuterPoint,
+                    constants.DEFAULT_CRITICAL_OUTER_PLOT_SCALE
+                );
+                renderCriticalityPath(
+                    dataPointSVG.append("path"),
+                    d,
+                    styles.criticalityInnerPoint,
+                    constants.DEFAULT_CRITICAL_INNER_PLOT_SCALE
+                );
+            }
+            renderDataPointPath(dataPointSVG.append("path"), d);
+        });
 };
 /**
  * Handler for Request animation frame, executes on resize.
@@ -343,23 +421,29 @@ const onAnimationHandler = (graphContext, control, config, canvasSVG) => () => {
  * @param {Array} canvasSVG - d3 html element of canvas
  * @returns {function} - returns callback function that handles click action on legend item
  */
-const clickHandler = (graphContext, control, config, canvasSVG) => (element, item) => {
+const clickHandler = (graphContext, control, config, canvasSVG) => (
+    element,
+    item
+) => {
     const updateShownTarget = (shownTargets, item) => {
         const index = shownTargets.indexOf(item.key);
         if (index > -1) {
             shownTargets.splice(index, 1);
-        }
-        else {
+        } else {
             shownTargets.push(item.key);
         }
     };
     legendClickHandler(element);
     updateShownTarget(config.shownTargets, item);
-    canvasSVG.selectAll(`path[aria-describedby="${item.key}"]`)
-             .attr("aria-hidden", true);
-    canvasSVG.selectAll(`.${styles.point}[aria-describedby="${item.key}"]`)
-             .attr("aria-hidden", true);
-    window.requestAnimationFrame(onAnimationHandler(graphContext, control, config, canvasSVG));
+    canvasSVG
+        .selectAll(`path[aria-describedby="${item.key}"]`)
+        .attr("aria-hidden", true);
+    canvasSVG
+        .selectAll(`.${styles.point}[aria-describedby="${item.key}"]`)
+        .attr("aria-hidden", true);
+    window.requestAnimationFrame(
+        onAnimationHandler(graphContext, control, config, canvasSVG)
+    );
 };
 /**
  * Hover handler for legend item. Highlights current line and blurs the rest of the targets in Graph
@@ -370,14 +454,24 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (element, ite
  * @returns {function} - returns callback function that handles hover action on legend item
  */
 const hoverHandler = (graphTargets, canvasSVG) => (item, state) => {
-    const additionalHoverHandler = (shownTargets, canvasSVG, currentKey, hoverState, k) => {
-        canvasSVG.selectAll(`.${styles.point}[aria-describedby="${k}"]`)
-                 .classed(styles.blur, (state === constants.HOVER_EVENT.MOUSE_ENTER));
+    const additionalHoverHandler = (
+        shownTargets,
+        canvasSVG,
+        currentKey,
+        hoverState,
+        k
+    ) => {
+        canvasSVG
+            .selectAll(`.${styles.point}[aria-describedby="${k}"]`)
+            .classed(styles.blur, state === constants.HOVER_EVENT.MOUSE_ENTER);
     };
-    legendHoverHandler(graphTargets, canvasSVG, item.key, state, [ additionalHoverHandler ]);
+    legendHoverHandler(graphTargets, canvasSVG, item.key, state, [
+        additionalHoverHandler
+    ]);
     // Highlight the line of the item hovered on
-    canvasSVG.selectAll(`path[aria-describedby="${item.key}"]`)
-             .classed(styles.highlight, (state === constants.HOVER_EVENT.MOUSE_ENTER));
+    canvasSVG
+        .selectAll(`path[aria-describedby="${item.key}"]`)
+        .classed(styles.highlight, state === constants.HOVER_EVENT.MOUSE_ENTER);
     // Highlight region(s) of the item hovered on, only if the content is currently displayed
     regionLegendHoverHandler(graphTargets, canvasSVG, item.key, state);
 };
@@ -395,7 +489,12 @@ const hoverHandler = (graphTargets, canvasSVG) => (item, state) => {
  */
 const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
     if (dataTarget.label && dataTarget.label.display && legendSVG) {
-        loadLegendItem(legendSVG, dataTarget, config.shownTargets, eventHandlers);
+        loadLegendItem(
+            legendSVG,
+            dataTarget,
+            config.shownTargets,
+            eventHandlers
+        );
     }
 };
 /**

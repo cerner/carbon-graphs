@@ -31,13 +31,14 @@ export const getAxes = (axis = {}) => ({
  * @param {Array} values - x and y co-ordinate values
  * @returns {Object} input JSON
  */
-export const getData = (values = []) => (utils.deepClone({
-    key: "uid_1",
-    label: {
-        display: "Data Label 1"
-    },
-    values
-}));
+export const getData = (values = []) =>
+    utils.deepClone({
+        key: "uid_1",
+        label: {
+            display: "Data Label 1"
+        },
+        values
+    });
 
 export const dimension = {
     height: 200

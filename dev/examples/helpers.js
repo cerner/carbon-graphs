@@ -16,10 +16,14 @@ export class ExampleControl {
     }
 
     render() {
-        Promise.all(this.exampleSet.map((fn) => new Promise((resolve) => {
-                   resolve(fn);
-               })))
-               .then((fn) => fn.map((i) => this.instanceList.push(i())));
+        Promise.all(
+            this.exampleSet.map(
+                (fn) =>
+                    new Promise((resolve) => {
+                        resolve(fn);
+                    })
+            )
+        ).then((fn) => fn.map((i) => this.instanceList.push(i())));
         return this;
     }
 
@@ -38,8 +42,9 @@ export const clearContent = (target, instance) => {
 };
 export const toggleSectionAsActive = (target) => {
     const parentElement = target.parentElement;
-    Array.from(parentElement.querySelectorAll(".carbon-btn"))
-         .forEach((i) => i.removeAttribute("disabled"));
+    Array.from(parentElement.querySelectorAll(".carbon-btn")).forEach((i) =>
+        i.removeAttribute("disabled")
+    );
     target.setAttribute("disabled", "disabled");
 };
 export const header = {
@@ -67,7 +72,9 @@ export const div = {
 };
 export const vector = {
     render: (el, id, vb) => {
-        const elem = el.appendChild(document.createElementNS("http://www.w3.org/2000/svg", "svg"));
+        const elem = el.appendChild(
+            document.createElementNS("http://www.w3.org/2000/svg", "svg")
+        );
         elem.id = id;
         elem.setAttribute("viewBox", vb);
         return elem;
@@ -115,7 +122,6 @@ export const small = {
 };
 export const renderRoot = (el) => {
     header.render(el, "Carbon");
-
 };
 export const renderTooltip = (el) => {
     div.render(el, "tooltip", "tooltip", "display: none;");

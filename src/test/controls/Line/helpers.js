@@ -1,8 +1,5 @@
 import sinon from "sinon";
-import {
-    AXIS_TYPE,
-    COLORS
-} from "../../../main/js/helpers/constants";
+import { AXIS_TYPE, COLORS } from "../../../main/js/helpers/constants";
 import utils from "../../../main/js/helpers/utils";
 
 export const SHAPES = {
@@ -18,19 +15,22 @@ export const dataPointClickHandlerSpy = sinon.spy();
  * @param {boolean} isY2Axis - if true, then "y2"
  * @returns {Object} input JSON
  */
-export const getInput = (values = [], isDefaultColor = true, isDefaultShape = true, isY2Axis = false) => (
-    {
-        key: `uid_1`,
-        color: !isDefaultColor ? COLORS[ Object.keys(COLORS)[ 1 ] ] : "",
-        shape: !isDefaultShape ? SHAPES.RHOMBUS : "",
-        onClick: dataPointClickHandlerSpy,
-        yAxis: isY2Axis ? "y2" : "y",
-        label: {
-            display: "Data Label A"
-        },
-        values
-    }
-);
+export const getInput = (
+    values = [],
+    isDefaultColor = true,
+    isDefaultShape = true,
+    isY2Axis = false
+) => ({
+    key: `uid_1`,
+    color: !isDefaultColor ? COLORS[Object.keys(COLORS)[1]] : "",
+    shape: !isDefaultShape ? SHAPES.RHOMBUS : "",
+    onClick: dataPointClickHandlerSpy,
+    yAxis: isY2Axis ? "y2" : "y",
+    label: {
+        display: "Data Label A"
+    },
+    values
+});
 /**
  * Creates and returns an example input with custom axis
  * @param {Object} axis - X and Y axis data

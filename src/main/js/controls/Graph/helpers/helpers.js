@@ -37,8 +37,9 @@ const DEFAULT_HEIGHT = constants.DEFAULT_HEIGHT;
  * @returns {Object} d3 svg path
  */
 const translateCanvas = (config, canvasSVG) =>
-    canvasSVG.attr("height", config.canvasHeight)
-             .attr("width", config.canvasWidth - BASE_CANVAS_WIDTH_PADDING);
+    canvasSVG
+        .attr("height", config.canvasHeight)
+        .attr("width", config.canvasWidth - BASE_CANVAS_WIDTH_PADDING);
 /**
  * Updates clipPath rectangle width and height on resize.
  * `clipPath` updates are necessary since the clip-path URL needs to get
@@ -49,10 +50,11 @@ const translateCanvas = (config, canvasSVG) =>
  * @returns {Object} d3 svg path
  */
 const translateDefs = (config, canvasSVG) =>
-    canvasSVG.select(`clipPath#${constants.CLIP_PATH_ID}`)
-             .selectAll("rect")
-             .attr("height", config.height)
-             .attr("width", getXAxisWidth(config));
+    canvasSVG
+        .select(`clipPath#${constants.CLIP_PATH_ID}`)
+        .selectAll("rect")
+        .attr("height", config.height)
+        .attr("width", getXAxisWidth(config));
 /**
  * Translates the horizontal grid on the canvas, grids are only applicable to standard
  * X and Y Axis.
@@ -67,13 +69,14 @@ const translateHGrid = (axis, config) => {
     let yAxisGrid;
     if (utils.notEmpty(config.axis.y.ticks.values)) {
         const ticks = config.axis.y.ticks.values;
-        yAxisGrid = axis.y.tickValues(processTickValues(ticks))
-                        .tickSize((getXAxisWidth(config) * -1), 0, 0)
-                        .tickFormat("");
-    }
-    else {
-        yAxisGrid = axis.y.tickSize((getXAxisWidth(config) * -1), 0, 0)
-                        .tickFormat("");
+        yAxisGrid = axis.y
+            .tickValues(processTickValues(ticks))
+            .tickSize(getXAxisWidth(config) * -1, 0, 0)
+            .tickFormat("");
+    } else {
+        yAxisGrid = axis.y
+            .tickSize(getXAxisWidth(config) * -1, 0, 0)
+            .tickFormat("");
     }
     return yAxisGrid;
 };
@@ -91,13 +94,14 @@ const translateVGrid = (axis, config) => {
     let xAxisGrid;
     if (utils.notEmpty(config.axis.x.ticks.values)) {
         const ticks = config.axis.x.ticks.values;
-        xAxisGrid = axis.x.tickValues(processTickValues(ticks))
-                        .tickSize((getYAxisHeight(config)), 0, 0)
-                        .tickFormat("");
-    }
-    else {
-        xAxisGrid = axis.x.tickSize((getYAxisHeight(config)), 0, 0)
-                        .tickFormat("");
+        xAxisGrid = axis.x
+            .tickValues(processTickValues(ticks))
+            .tickSize(getYAxisHeight(config), 0, 0)
+            .tickFormat("");
+    } else {
+        xAxisGrid = axis.x
+            .tickSize(getYAxisHeight(config), 0, 0)
+            .tickFormat("");
     }
     return xAxisGrid;
 };
@@ -113,17 +117,24 @@ const translateVGrid = (axis, config) => {
  */
 const translateGrid = (axis, scale, config, canvasSVG) => {
     getAxesScale(axis, scale, config);
-    canvasSVG.select(`.${styles.grid}`).attr("transform", `translate(${getXAxisXPosition(config)},${PADDING.top})`);
+    canvasSVG
+        .select(`.${styles.grid}`)
+        .attr(
+            "transform",
+            `translate(${getXAxisXPosition(config)},${PADDING.top})`
+        );
     if (config.showHGrid) {
-        canvasSVG.select(`.${styles.gridH}`)
-                 .transition(constants.d3Transition)
-                 .call(translateHGrid(axis, config));
+        canvasSVG
+            .select(`.${styles.gridH}`)
+            .transition(constants.d3Transition)
+            .call(translateHGrid(axis, config));
     }
 
     if (config.showVGrid) {
-        canvasSVG.select(`.${styles.gridV}`)
-                 .transition(constants.d3Transition)
-                 .call(translateVGrid(axis, config));
+        canvasSVG
+            .select(`.${styles.gridV}`)
+            .transition(constants.d3Transition)
+            .call(translateVGrid(axis, config));
     }
 };
 /**
@@ -135,24 +146,45 @@ const translateGrid = (axis, scale, config, canvasSVG) => {
  */
 const translateLabel = (config, canvasSVG) => {
     if (config.axis.x.label) {
-        canvasSVG.select(`.${styles.axisLabelX}`)
-                 .transition(constants.d3Transition)
-                 .attr("transform", `translate(${getXAxisLabelXPosition(config)},${getXAxisLabelYPosition(config)
-                     }) rotate(${getRotationForAxis(constants.X_AXIS)})`);
+        canvasSVG
+            .select(`.${styles.axisLabelX}`)
+            .transition(constants.d3Transition)
+            .attr(
+                "transform",
+                `translate(${getXAxisLabelXPosition(
+                    config
+                )},${getXAxisLabelYPosition(
+                    config
+                )}) rotate(${getRotationForAxis(constants.X_AXIS)})`
+            );
     }
 
     if (config.axis.y.label) {
-        canvasSVG.select(`.${styles.axisLabelY}`)
-                 .transition(constants.d3Transition)
-                 .attr("transform", `translate(${getYAxisLabelXPosition(config)}, ${getYAxisLabelYPosition(config)
-                     }) rotate(${getRotationForAxis(constants.Y_AXIS)})`);
+        canvasSVG
+            .select(`.${styles.axisLabelY}`)
+            .transition(constants.d3Transition)
+            .attr(
+                "transform",
+                `translate(${getYAxisLabelXPosition(
+                    config
+                )}, ${getYAxisLabelYPosition(
+                    config
+                )}) rotate(${getRotationForAxis(constants.Y_AXIS)})`
+            );
     }
 
     if (hasY2Axis(config.axis)) {
-        canvasSVG.select(`.${styles.axisLabelY2}`)
-                 .transition(constants.d3Transition)
-                 .attr("transform", `translate(${getY2AxisLabelXPosition(config)}, ${
-                     getYAxisLabelYPosition(config)}) rotate(${getRotationForAxis(constants.Y2_AXIS)})`);
+        canvasSVG
+            .select(`.${styles.axisLabelY2}`)
+            .transition(constants.d3Transition)
+            .attr(
+                "transform",
+                `translate(${getY2AxisLabelXPosition(
+                    config
+                )}, ${getYAxisLabelYPosition(
+                    config
+                )}) rotate(${getRotationForAxis(constants.Y2_AXIS)})`
+            );
     }
 };
 /**
@@ -172,13 +204,21 @@ const updateAxesDomain = (config) => {
         const halfDomain = (upperLimit - lowerLimit) / 2;
         const midPoint = (upperLimit + lowerLimit) / 2;
         return padDomain({
-            lowerLimit: midPoint - (halfDomain * outlierStretchFactor.lowerLimit),
-            upperLimit: midPoint + (halfDomain * outlierStretchFactor.upperLimit)
+            lowerLimit: midPoint - halfDomain * outlierStretchFactor.lowerLimit,
+            upperLimit: midPoint + halfDomain * outlierStretchFactor.upperLimit
         });
     };
-    config.axis.y.domain = setDomain(config.outlierStretchFactor, config.axis.y.domain.lowerLimit, config.axis.y.domain.upperLimit);
+    config.axis.y.domain = setDomain(
+        config.outlierStretchFactor,
+        config.axis.y.domain.lowerLimit,
+        config.axis.y.domain.upperLimit
+    );
     if (hasY2Axis(config.axis)) {
-        config.axis.y2.domain = setDomain(config.outlierStretchFactor, config.axis.y2.domain.lowerLimit, config.axis.y2.domain.upperLimit);
+        config.axis.y2.domain = setDomain(
+            config.outlierStretchFactor,
+            config.axis.y2.domain.lowerLimit,
+            config.axis.y2.domain.upperLimit
+        );
     }
     return config;
 };
@@ -190,14 +230,15 @@ const updateAxesDomain = (config) => {
  * @returns {Object} d3 svg path
  */
 const createDefs = (config, canvasSVG) =>
-    canvasSVG.append("defs")
-             .append("clipPath")
-             .attr("id", constants.CLIP_PATH_ID)
-             .append("rect")
-             .attr(constants.X_AXIS, getXAxisXPosition(config))
-             .attr(constants.Y_AXIS, PADDING.top)
-             .attr("width", getXAxisWidth(config))
-             .attr("height", config.height);
+    canvasSVG
+        .append("defs")
+        .append("clipPath")
+        .attr("id", constants.CLIP_PATH_ID)
+        .append("rect")
+        .attr(constants.X_AXIS, getXAxisXPosition(config))
+        .attr(constants.Y_AXIS, PADDING.top)
+        .attr("width", getXAxisWidth(config))
+        .attr("height", config.height);
 /**
  * Create the d3 grid - horizontal and vertical and append into the canvas.
  * Only performed if the flags for showHGrid and showVGrid are enabled
@@ -210,18 +251,24 @@ const createDefs = (config, canvasSVG) =>
  */
 const createGrid = (axis, scale, config, canvasSVG) => {
     getAxesScale(axis, scale, config);
-    const gridSVG = canvasSVG.append("g")
-                             .classed(styles.grid, true)
-                             .attr("transform", `translate(${getXAxisXPosition(config)},${PADDING.top})`);
+    const gridSVG = canvasSVG
+        .append("g")
+        .classed(styles.grid, true)
+        .attr(
+            "transform",
+            `translate(${getXAxisXPosition(config)},${PADDING.top})`
+        );
     if (config.showHGrid) {
-        gridSVG.append("g")
-               .classed(styles.gridH, true)
-               .call(translateHGrid(axis, config));
+        gridSVG
+            .append("g")
+            .classed(styles.gridH, true)
+            .call(translateHGrid(axis, config));
     }
     if (config.showVGrid) {
-        gridSVG.append("g")
-               .classed(styles.gridV, true)
-               .call(translateVGrid(axis, config));
+        gridSVG
+            .append("g")
+            .classed(styles.gridV, true)
+            .call(translateVGrid(axis, config));
     }
 };
 /**
@@ -239,24 +286,45 @@ const createGrid = (axis, scale, config, canvasSVG) => {
 const createLabel = (config, canvasSVG) => {
     if (config.showLabel) {
         if (config.axis.x.label) {
-            const labelPath = canvasSVG.append("g")
-                                       .classed(styles.axisLabelX, true)
-                                       .attr("transform", `translate(${getXAxisLabelXPosition(config)},${getXAxisLabelYPosition(config)
-                                           }) rotate(${getRotationForAxis(constants.X_AXIS)})`);
+            const labelPath = canvasSVG
+                .append("g")
+                .classed(styles.axisLabelX, true)
+                .attr(
+                    "transform",
+                    `translate(${getXAxisLabelXPosition(
+                        config
+                    )},${getXAxisLabelYPosition(
+                        config
+                    )}) rotate(${getRotationForAxis(constants.X_AXIS)})`
+                );
             buildAxisLabel(labelPath, utils.sanitize(config.axis.x.label));
         }
         if (config.axis.y.label) {
-            const labelPath = canvasSVG.append("g")
-                                       .classed(styles.axisLabelY, true)
-                                       .attr("transform", `translate(${getYAxisLabelXPosition(config)}, ${getYAxisLabelYPosition(config)
-                                           }) rotate(${getRotationForAxis(constants.Y_AXIS)})`);
+            const labelPath = canvasSVG
+                .append("g")
+                .classed(styles.axisLabelY, true)
+                .attr(
+                    "transform",
+                    `translate(${getYAxisLabelXPosition(
+                        config
+                    )}, ${getYAxisLabelYPosition(
+                        config
+                    )}) rotate(${getRotationForAxis(constants.Y_AXIS)})`
+                );
             buildAxisLabel(labelPath, utils.sanitize(config.axis.y.label));
         }
         if (hasY2Axis(config.axis)) {
-            const labelPath = canvasSVG.append("g")
-                                       .classed(styles.axisLabelY2, true)
-                                       .attr("transform", `translate(${getY2AxisLabelXPosition(config)}, ${
-                                           getYAxisLabelYPosition(config)}) rotate(${getRotationForAxis(constants.Y2_AXIS)})`);
+            const labelPath = canvasSVG
+                .append("g")
+                .classed(styles.axisLabelY2, true)
+                .attr(
+                    "transform",
+                    `translate(${getY2AxisLabelXPosition(
+                        config
+                    )}, ${getYAxisLabelYPosition(
+                        config
+                    )}) rotate(${getRotationForAxis(constants.Y2_AXIS)})`
+                );
             buildAxisLabel(labelPath, utils.sanitize(config.axis.y2.label));
         }
     }
@@ -278,15 +346,23 @@ const scaleGraph = (scale, config) => {
         .domain(config.axis.x.domain)
         .range(getXAxisRange(config))
         .nice();
-    scale.y = d3.scale.linear()
-                .domain([ config.axis.y.domain.lowerLimit, config.axis.y.domain.upperLimit ])
-                .range(getYAxisRange(config))
-                .nice();
+    scale.y = d3.scale
+        .linear()
+        .domain([
+            config.axis.y.domain.lowerLimit,
+            config.axis.y.domain.upperLimit
+        ])
+        .range(getYAxisRange(config))
+        .nice();
     if (hasY2Axis(config.axis)) {
-        scale.y2 = d3.scale.linear()
-                     .domain([ config.axis.y2.domain.lowerLimit, config.axis.y2.domain.upperLimit ])
-                     .range(getYAxisRange(config))
-                     .nice();
+        scale.y2 = d3.scale
+            .linear()
+            .domain([
+                config.axis.y2.domain.lowerLimit,
+                config.axis.y2.domain.upperLimit
+            ])
+            .range(getYAxisRange(config))
+            .nice();
     }
 };
 /**
@@ -342,8 +418,10 @@ const determineHeight = (config, dimension) => {
         return dimension.height;
     }
     const halfHeight = (DEFAULT_HEIGHT - PADDING.top - PADDING.bottom) / 2;
-    return (halfHeight * config.outlierStretchFactor.upperLimit +
-        halfHeight * config.outlierStretchFactor.lowerLimit);
+    return (
+        halfHeight * config.outlierStretchFactor.upperLimit +
+        halfHeight * config.outlierStretchFactor.lowerLimit
+    );
 };
 /**
  * Checks if the shape is part of inbuilt d3 shapes list or otherwise.
@@ -362,7 +440,7 @@ const getShape = (dataPoint) => {
  * @param {Object} dataPoint - Data point containing x, y co-ordinate points, color and shape.
  * @returns {string} provided shape or a circle.
  */
-const getShapeForTarget = (dataPoint) => (dataPoint.shape || SHAPES.CIRCLE);
+const getShapeForTarget = (dataPoint) => dataPoint.shape || SHAPES.CIRCLE;
 /**
  * Returns the color property from the data point.
  * If the shape is not provided then the default color is #1C1F21 {black}.
@@ -370,7 +448,8 @@ const getShapeForTarget = (dataPoint) => (dataPoint.shape || SHAPES.CIRCLE);
  * @param {Object} dataPoint - Data point containing x, y co-ordinate points, color and shape.
  * @returns {string} provided shape or a circle.
  */
-const getColorForTarget = (dataPoint) => (dataPoint.color || constants.DEFAULT_COLOR);
+const getColorForTarget = (dataPoint) =>
+    dataPoint.color || constants.DEFAULT_COLOR;
 /**
  * Returns the current d3 transform attribute object from context object
  * @private
@@ -395,7 +474,10 @@ const round2Decimals = (v) => Math.round((v + 0.00001) * 100) / 100;
  * @param {Object} context - d3 element
  * @returns {Array<number>} returns the scale from d3 element
  */
-const getTransformScale = (context) => d3.transform(getCurrentTransform(context)).scale.map((v) => round2Decimals(v));
+const getTransformScale = (context) =>
+    d3
+        .transform(getCurrentTransform(context))
+        .scale.map((v) => round2Decimals(v));
 /**
  * Attach event handlers for Line graph.
  * requestAnimationFrame will be used if consumer doesn't need
@@ -408,7 +490,8 @@ const getTransformScale = (context) => d3.transform(getCurrentTransform(context)
 const attachEventHandlers = (control) => {
     let resizeTimeout = 0;
     const boundResize = control.resize.bind(control);
-    const setRequestAnimationFrame = () => window.requestAnimationFrame(boundResize);
+    const setRequestAnimationFrame = () =>
+        window.requestAnimationFrame(boundResize);
     const getConfig = (control, config) => () => {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(setRequestAnimationFrame, config.throttle);

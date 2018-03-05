@@ -68,15 +68,15 @@ export default {
         left: 30,
         right: 30
     },
-    PAIR_ITEM_TYPES: [ "high", "mid", "low" ],
+    PAIR_ITEM_TYPES: ["high", "mid", "low"],
     ISO8601_DATE_TIME_MILLI: /(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}(:\d{2}(\.\d+)*)*)Z/,
-    RESIZE_THROTTLE: (1000 / 60),
+    RESIZE_THROTTLE: 1000 / 60,
     BASE_CANVAS_WIDTH_PADDING: 10,
     DEFAULT_HEIGHT: 250,
     DEFAULT_PLOT_SIZE: 60,
-    DEFAULT_PLOT_SCALE: [ 1, 1 ],
-    DEFAULT_CRITICAL_OUTER_PLOT_SCALE: [ 1.9, 1.9 ],
-    DEFAULT_CRITICAL_INNER_PLOT_SCALE: [ 1.4, 1.4 ],
+    DEFAULT_PLOT_SCALE: [1, 1],
+    DEFAULT_CRITICAL_OUTER_PLOT_SCALE: [1.9, 1.9],
+    DEFAULT_CRITICAL_INNER_PLOT_SCALE: [1.4, 1.4],
     DEFAULT_LEGEND_ICON_SIZE: 30,
     DEFAULT_LEGEND_ICON_SCALE: 4,
     DEFAULT_LEGEND_ICON_X_POS: 25,
@@ -98,47 +98,47 @@ export default {
     MAX_TICK_VARIANCE: 100,
     SHAPE_PROPS: {
         CIRCLE: {
-            translate: [ 24, 24 ],
+            translate: [24, 24],
             scale: 5
         },
         TRIANGLE: {
-            translate: [ 24, 24 ],
+            translate: [24, 24],
             scale: 4
         },
         SQUARE: {
-            translate: [ 24, 24 ],
+            translate: [24, 24],
             scale: 5.5
         },
         X: {
-            translate: [ 24, 24 ],
+            translate: [24, 24],
             scale: 4.5
         },
         DIAMOND: {
-            translate: [ 24, 24 ],
+            translate: [24, 24],
             scale: 3.25
         },
         CROSS: {
-            translate: [ 24, 24 ],
+            translate: [24, 24],
             scale: 4.5
         },
         VERTICAL_BAR: {
-            translate: [ 24, 24 ],
+            translate: [24, 24],
             scale: 4.5
         },
         RHOMBUS: {
-            translate: [ 24, 24 ],
+            translate: [24, 24],
             scale: 4.75
         },
         TEAR_DROP: {
-            translate: [ 24, 27 ],
+            translate: [24, 27],
             scale: 4.75
         },
         TEAR_ALT: {
-            translate: [ 24, 25 ],
+            translate: [24, 25],
             scale: 4.75
         },
         TRIANGLE_DOWN: {
-            translate: [ 24, 24 ],
+            translate: [24, 24],
             scale: 4
         }
     },
@@ -151,16 +151,20 @@ export default {
         TRIANGLE: "triangle-up"
     },
     CUSTOM_SHAPE_PATH: {
-        TEAR_DROP: "m0.05-5.59q0 0 3.05 3.66a3.9 3.9 0 1 1-6.1 0q3.05-3.66 3.05-3.66z",
-        TEAR_ALT: "m0.01 4.72q0 0-3.05-3.66a3.9 3.9 0 1 1 6.1 0q-3.05 3.66-3.05 3.66z",
-        X: "m-5.01-2.47 2.5-2.5 2.5 2.5 2.5-2.5 2.5 2.5-2.5 2.5 2.5 2.5-2.5 2.5-2.5-2.5-2.5 2.5-2.5-2.5 2.5-2.5z",
+        TEAR_DROP:
+            "m0.05-5.59q0 0 3.05 3.66a3.9 3.9 0 1 1-6.1 0q3.05-3.66 3.05-3.66z",
+        TEAR_ALT:
+            "m0.01 4.72q0 0-3.05-3.66a3.9 3.9 0 1 1 6.1 0q-3.05 3.66-3.05 3.66z",
+        X:
+            "m-5.01-2.47 2.5-2.5 2.5 2.5 2.5-2.5 2.5 2.5-2.5 2.5 2.5 2.5-2.5 2.5-2.5-2.5-2.5 2.5-2.5-2.5 2.5-2.5z",
         RHOMBUS: "M-0.01-5.01 4.99-0.01-0.01 4.99-5.01-0.01Z",
         VERTICAL_BAR: "m-2.46-6.05h4.8v12h-4.8v-12"
     },
     DEFAULT_INTERPOLATION: "linear",
     SELECTION_INDICATOR_X_POSITION: 10,
     SELECTION_INDICATOR_Y_POSITION: 12.5,
-    d3Transition: d3.transition()
-                    .duration(250)
-                    .ease()
+    d3Transition: d3
+        .transition()
+        .duration(250)
+        .ease()
 };

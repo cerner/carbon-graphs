@@ -1,5 +1,3 @@
 import GraphContent from "./GraphContent";
 
-export {
-    GraphContent as default
-};
+export { GraphContent as default };

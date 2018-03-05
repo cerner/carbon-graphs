@@ -1,9 +1,6 @@
 "use strict";
 import d3 from "d3";
-import {
-    getXAxisWidth,
-    getXAxisXPosition
-} from "./axis";
+import { getXAxisWidth, getXAxisXPosition } from "./axis";
 import constants from "./constants";
 import errors from "./errors";
 import styles from "./styles";
@@ -29,16 +26,21 @@ const validateRegion = (region, targetAxis) => {
     if (utils.isEmpty(region.start) && utils.isEmpty(region.end)) {
         throw new Error(errors.THROW_MSG_REGION_START_END_MISSING);
     }
-    if (utils.notEmpty(region.axis) &&
-        ((region.axis !== constants.Y_AXIS && region.axis !== constants.Y2_AXIS) ||
-            (region.axis !== targetAxis))) {
+    if (
+        utils.notEmpty(region.axis) &&
+        ((region.axis !== constants.Y_AXIS &&
+            region.axis !== constants.Y2_AXIS) ||
+            region.axis !== targetAxis)
+    ) {
         throw new Error(errors.THROW_MSG_REGION_INVALID_AXIS_PROVIDED);
     }
     if (utils.isEmpty(region.axis) && constants.Y_AXIS !== targetAxis) {
         throw new Error(errors.THROW_MSG_REGION_INVALID_AXIS_PROVIDED);
     }
-    if ((region.start && !utils.isNumber(region.start)) ||
-        (region.end && !utils.isNumber(region.end))) {
+    if (
+        (region.start && !utils.isNumber(region.start)) ||
+        (region.end && !utils.isNumber(region.end))
+    ) {
         throw new Error(errors.THROW_MSG_REGION_INVALID_VALUE_TYPE_PROVIDED);
     }
     if (Number(region.start) > Number(region.end)) {
@@ -53,7 +55,11 @@ const validateRegion = (region, targetAxis) => {
  * @returns {Object} - d3 svg object
  */
 const removeRegion = (regionGroupSVG, dataTarget) =>
-    regionGroupSVG ? regionGroupSVG.selectAll(`[aria-describedby="region_${dataTarget.key}"]`).remove() : "";
+    regionGroupSVG
+        ? regionGroupSVG
+              .selectAll(`[aria-describedby="region_${dataTarget.key}"]`)
+              .remove()
+        : "";
 /**
  * Creates container for regions to be rendered within.
  * Since regions are supposed to be rendered beneath grids,
@@ -68,8 +74,7 @@ const removeRegion = (regionGroupSVG, dataTarget) =>
  * @returns {Object} d3 svg path
  */
 const createRegionContainer = (config, canvasSVG) =>
-    canvasSVG.append("g")
-             .classed(styles.regionGroup, true);
+    canvasSVG.append("g").classed(styles.regionGroup, true);
 /**
  * Creates regions based on input object provided. Region can be one or many.
  * Regions are rendered based on the content.
@@ -87,25 +92,33 @@ const createRegionContainer = (config, canvasSVG) =>
  * @param {string} targetAxis - Axis for which region needs to be shown
  * @returns {Object} d3 svg path
  */
-const createRegion = (scale, config, regionGroupSVG, regionList, uniqueKey, targetAxis = constants.Y_AXIS) => {
-    const regionPath = regionGroupSVG.selectAll("g")
-                                     .data(regionList);
-    regionPath.enter()
-              .append("rect")
-              .each((d) => validateRegion(d, targetAxis))
-              .classed(styles.region, true)
-              .attr("aria-hidden", false)
-              .attr("aria-describedby", uniqueKey)
-              .attr("style", (d) => d.color ? `fill: ${d.color};` : "")
-              .attr(constants.X_AXIS, getXAxisXPosition(config))
-              .attr(constants.Y_AXIS, getYAxisRangePosition(scale))
-              .attr("width", getXAxisWidth(config))
-              .attr("height", function(d) {
-                  return getRegionHeight(d3.select(this), d, scale, config.height);
-              });
-    regionPath.exit()
-              .transition(constants.d3Transition)
-              .remove();
+const createRegion = (
+    scale,
+    config,
+    regionGroupSVG,
+    regionList,
+    uniqueKey,
+    targetAxis = constants.Y_AXIS
+) => {
+    const regionPath = regionGroupSVG.selectAll("g").data(regionList);
+    regionPath
+        .enter()
+        .append("rect")
+        .each((d) => validateRegion(d, targetAxis))
+        .classed(styles.region, true)
+        .attr("aria-hidden", false)
+        .attr("aria-describedby", uniqueKey)
+        .attr("style", (d) => (d.color ? `fill: ${d.color};` : ""))
+        .attr(constants.X_AXIS, getXAxisXPosition(config))
+        .attr(constants.Y_AXIS, getYAxisRangePosition(scale))
+        .attr("width", getXAxisWidth(config))
+        .attr("height", function(d) {
+            return getRegionHeight(d3.select(this), d, scale, config.height);
+        });
+    regionPath
+        .exit()
+        .transition(constants.d3Transition)
+        .remove();
 };
 
 /**
@@ -114,7 +127,7 @@ const createRegion = (scale, config, regionGroupSVG, regionList, uniqueKey, targ
  * @param {Object} region - Region to be shown within graph
  * @returns {string} Region axis or "y" as default
  */
-const getRegionAxis = (region) => (region.axis || constants.Y_AXIS);
+const getRegionAxis = (region) => region.axis || constants.Y_AXIS;
 /**
  * Returns the function which returns Y Axis Vertical position for Range
  * @private
@@ -122,7 +135,9 @@ const getRegionAxis = (region) => (region.axis || constants.Y_AXIS);
  * @returns {function(*=): number} Function which returns Y Axis Vertical position for Range
  */
 const getYAxisRangePosition = (scale) => (bounds) =>
-    (bounds.end ? (scale[ getRegionAxis(bounds) ](bounds.end) + constants.PADDING.top) : constants.PADDING.top);
+    bounds.end
+        ? scale[getRegionAxis(bounds)](bounds.end) + constants.PADDING.top
+        : constants.PADDING.top;
 /**
  * Returns the height for range based on Y Axes, start and end bounds
  * If start and end bounds arent provided then a "goal line" number is returned with
@@ -136,10 +151,12 @@ const getYAxisRangePosition = (scale) => (bounds) =>
  */
 const getRegionHeight = (regionPath, bounds, scale, graphHeight) => {
     const upperBound = regionPath.attr(constants.Y_AXIS);
-    const lowerBound = bounds.start ? (scale[ getRegionAxis(bounds) ](bounds.start) + constants.PADDING.top) : (graphHeight + constants.PADDING.top);
+    const lowerBound = bounds.start
+        ? scale[getRegionAxis(bounds)](bounds.start) + constants.PADDING.top
+        : graphHeight + constants.PADDING.top;
     // If start and end are the same then `padding.top` worth of height is
     // applied to make it seem like a goal line
-    return ((lowerBound - upperBound) || constants.PADDING.top);
+    return lowerBound - upperBound || constants.PADDING.top;
 };
 /**
  * Translates region. Moves the "rect" according the new scale generated on-resize.
@@ -151,14 +168,15 @@ const getRegionHeight = (regionPath, bounds, scale, graphHeight) => {
  * @returns {Object} d3 svg path
  */
 const translateRegion = (scale, config, regionGroupSVG) =>
-    regionGroupSVG.selectAll(`.${styles.region}`)
-                  .attr(constants.X_AXIS, getXAxisXPosition(config))
-                  .attr(constants.Y_AXIS, getYAxisRangePosition(scale))
-                  .transition(constants.d3Transition)
-                  .attr("width", getXAxisWidth(config))
-                  .attr("height", function(d) {
-                      return getRegionHeight(d3.select(this), d, scale, config.height);
-                  });
+    regionGroupSVG
+        .selectAll(`.${styles.region}`)
+        .attr(constants.X_AXIS, getXAxisXPosition(config))
+        .attr(constants.Y_AXIS, getYAxisRangePosition(scale))
+        .transition(constants.d3Transition)
+        .attr("width", getXAxisWidth(config))
+        .attr("height", function(d) {
+            return getRegionHeight(d3.select(this), d, scale, config.height);
+        });
 /**
  * Decides if regions needs to be hidden based on count of displayed targets in graph
  * @private
@@ -182,8 +200,7 @@ const isSingleTargetDisplayed = (graphTargets) => graphTargets.length === 1;
  * @returns {Object} d3 svg path
  */
 const hideAllRegions = (canvasSVG) =>
-    canvasSVG.selectAll(`.${styles.region}`)
-             .attr("aria-hidden", true);
+    canvasSVG.selectAll(`.${styles.region}`).attr("aria-hidden", true);
 /**
  * Hides/shows the region given the region path and unique identifier of the region
  * @private
@@ -193,8 +210,9 @@ const hideAllRegions = (canvasSVG) =>
  * @returns {Object} d3 svg path
  */
 const showHideRegion = (canvasSVG, key, shouldShow) =>
-    canvasSVG.selectAll(`.${styles.region}[aria-describedby="${key}"]`)
-             .attr("aria-hidden", !shouldShow);
+    canvasSVG
+        .selectAll(`.${styles.region}[aria-describedby="${key}"]`)
+        .attr("aria-hidden", !shouldShow);
 /**
  * Toggles region based on current display status for that region.
  * @private
@@ -203,10 +221,11 @@ const showHideRegion = (canvasSVG, key, shouldShow) =>
  * @returns {Object} d3 svg path
  */
 const toggleRegion = (canvasSVG, key) =>
-    canvasSVG.selectAll(`.${styles.region}[aria-describedby="region_${key}"]`)
-             .attr("aria-hidden", function() {
-                 return !(d3.select(this).attr("aria-hidden") === "true");
-             });
+    canvasSVG
+        .selectAll(`.${styles.region}[aria-describedby="region_${key}"]`)
+        .attr("aria-hidden", function() {
+            return !(d3.select(this).attr("aria-hidden") === "true");
+        });
 /**
  * Show/hide regions based on the following criteria:
  * * If more than 1 target is displayed -> Hide regions
@@ -217,7 +236,9 @@ const toggleRegion = (canvasSVG, key) =>
  * @returns {Object} d3 svg path
  */
 const processRegions = (shownTargets, canvasSVG) =>
-    isSingleTargetDisplayed(shownTargets) ? toggleRegion(canvasSVG, ...shownTargets) : hideAllRegions(canvasSVG);
+    isSingleTargetDisplayed(shownTargets)
+        ? toggleRegion(canvasSVG, ...shownTargets)
+        : hideAllRegions(canvasSVG);
 /**
  * Handler for show/hide region(s) when hovered over a legend item
  * @private
@@ -228,9 +249,12 @@ const processRegions = (shownTargets, canvasSVG) =>
  * @returns {undefined} - returns nothing
  */
 const regionLegendHoverHandler = (shownTargets, canvasSVG, key, hoverState) => {
-    const shouldShow = (hoverState === constants.HOVER_EVENT.MOUSE_ENTER && shownTargets.indexOf(key) > -1);
-    canvasSVG.selectAll(`.${styles.region}[aria-describedby="region_${key}"]`)
-             .classed(styles.regionHighlight, shouldShow);
+    const shouldShow =
+        hoverState === constants.HOVER_EVENT.MOUSE_ENTER &&
+        shownTargets.indexOf(key) > -1;
+    canvasSVG
+        .selectAll(`.${styles.region}[aria-describedby="region_${key}"]`)
+        .classed(styles.regionHighlight, shouldShow);
 };
 
 /**

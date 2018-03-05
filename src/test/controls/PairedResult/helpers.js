@@ -1,8 +1,5 @@
 import sinon from "sinon";
-import {
-    AXIS_TYPE,
-    COLORS
-} from "../../../main/js/helpers/constants";
+import { AXIS_TYPE, COLORS } from "../../../main/js/helpers/constants";
 import utils from "../../../main/js/helpers/utils";
 
 export const SHAPES = {
@@ -18,35 +15,38 @@ export const dataPointClickHandlerSpy = sinon.spy();
  * @param {boolean} isY2Axis - if true, then "y2"
  * @returns {Object} input JSON
  */
-export const getInput = (values = [], isDefaultColor = true, isDefaultShape = true, isY2Axis = false) => (
-    {
-        key: `uid_1`,
-        shape: {
-            high: isDefaultShape ? "" : SHAPES.TEAR_DROP,
-            mid: isDefaultShape ? "" : SHAPES.RHOMBUS,
-            low: isDefaultShape ? "" : SHAPES.TEAR_DROP
+export const getInput = (
+    values = [],
+    isDefaultColor = true,
+    isDefaultShape = true,
+    isY2Axis = false
+) => ({
+    key: `uid_1`,
+    shape: {
+        high: isDefaultShape ? "" : SHAPES.TEAR_DROP,
+        mid: isDefaultShape ? "" : SHAPES.RHOMBUS,
+        low: isDefaultShape ? "" : SHAPES.TEAR_DROP
+    },
+    color: {
+        high: isDefaultColor ? "" : COLORS[Object.keys(COLORS)[1]],
+        mid: isDefaultColor ? "" : COLORS[Object.keys(COLORS)[2]],
+        low: isDefaultColor ? "" : COLORS[Object.keys(COLORS)[1]]
+    },
+    onClick: dataPointClickHandlerSpy,
+    yAxis: isY2Axis ? "y2" : "y",
+    label: {
+        high: {
+            display: "Data Label High"
         },
-        color: {
-            high: isDefaultColor ? "" : COLORS[ Object.keys(COLORS)[ 1 ] ],
-            mid: isDefaultColor ? "" : COLORS[ Object.keys(COLORS)[ 2 ] ],
-            low: isDefaultColor ? "" : COLORS[ Object.keys(COLORS)[ 1 ] ]
+        mid: {
+            display: "Data Label Median"
         },
-        onClick: dataPointClickHandlerSpy,
-        yAxis: isY2Axis ? "y2" : "y",
-        label: {
-            high: {
-                display: "Data Label High"
-            },
-            mid: {
-                display: "Data Label Median"
-            },
-            low: {
-                display: "Data Label Low"
-            }
-        },
-        values
-    }
-);
+        low: {
+            display: "Data Label Low"
+        }
+    },
+    values
+});
 /**
  * Creates and returns an example input with custom axis
  * @param {Object} axis - X and Y axis data

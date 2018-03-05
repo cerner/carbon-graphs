@@ -2,13 +2,17 @@ import d3 from "d3";
 
 export const loadPopup = (onCloseCB, key, index, value) => {
     const tip = document.querySelector("#tooltip");
-    const getPairData = (value) => value ? (checkDate(value) ? new Date(value).toLocaleString() : value) : null;
+    const getPairData = (value) =>
+        value
+            ? checkDate(value) ? new Date(value).toLocaleString() : value
+            : null;
     const checkDate = (date) => date instanceof Date;
     const clickHandler = () => {
-        d3.select(tip)
-          .attr("style", "display:none;")
-          .selectAll("g")
-          .remove();
+        d3
+            .select(tip)
+            .attr("style", "display:none;")
+            .selectAll("g")
+            .remove();
         onCloseCB();
         d3.select("#overlay").remove();
         tip.removeEventListener("click", clickHandler);
@@ -16,27 +20,31 @@ export const loadPopup = (onCloseCB, key, index, value) => {
     };
     // Remove old popup
     d3.select("#overlay").remove();
-    d3.select(tip)
-      .attr("style", "")
-      .selectAll("g")
-      .remove();
+    d3
+        .select(tip)
+        .attr("style", "")
+        .selectAll("g")
+        .remove();
 
     // Add new popup
-    d3.select(".root-content")
-      .append("div", "#tooltip")
-      .attr("id", "overlay")
-      .classed("overlay", true)
-      .on("click", clickHandler);
-    const path = d3.select(tip)
-                   .style("left", `${d3.event.pageX + 5}px`)
-                   .style("top", `${d3.event.pageY + 5}px`);
+    d3
+        .select(".root-content")
+        .append("div", "#tooltip")
+        .attr("id", "overlay")
+        .classed("overlay", true)
+        .on("click", clickHandler);
+    const path = d3
+        .select(tip)
+        .style("left", `${d3.event.pageX + 5}px`)
+        .style("top", `${d3.event.pageY + 5}px`);
     const createItem = (pair, label, value) => {
-        const item = pair.append("g")
-                         .classed("popup-item", true);
-        item.append("label")
+        const item = pair.append("g").classed("popup-item", true);
+        item
+            .append("label")
             .classed("popup-label", true)
             .text(label);
-        item.append("g")
+        item
+            .append("g")
             .classed("popup-text", true)
             .text(value);
     };
@@ -44,15 +52,28 @@ export const loadPopup = (onCloseCB, key, index, value) => {
     const pair = path.append("g");
     if (value.x) {
         // Line
-        createItem(pair, "X axis", `${checkDate(value.x) ? new Date(value.x).toLocaleString() : value.x}`);
+        createItem(
+            pair,
+            "X axis",
+            `${
+                checkDate(value.x)
+                    ? new Date(value.x).toLocaleString()
+                    : value.x
+            }`
+        );
         createItem(pair, `${value.label.display}`, value.y);
-    }
-    else {
+    } else {
         // Paired Result
         createItem(
             pair,
             "X axis",
-            `${value.high ? getPairData(value.high.x) : value.mid ? getPairData(value.mid.x) : value.low ? getPairData(value.low.x) : "N/A"}`
+            `${
+                value.high
+                    ? getPairData(value.high.x)
+                    : value.mid
+                        ? getPairData(value.mid.x)
+                        : value.low ? getPairData(value.low.x) : "N/A"
+            }`
         );
 
         if (value.high) {

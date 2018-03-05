@@ -3,10 +3,7 @@
         "jasmine": true
     },
     "rules": {
-        "max-nested-callbacks": [
-            2,
-            10
-        ],
+        "max-nested-callbacks": [2, 10],
         "max-len": [
             2,
             250,

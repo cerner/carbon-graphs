@@ -1,5 +1,3 @@
 import Graph from "./Graph";
 
-export {
-    Graph as default
-};
+export { Graph as default };

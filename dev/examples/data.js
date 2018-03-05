@@ -339,7 +339,6 @@ const DATA = [
                                 x: 20,
                                 y: 10
                             }
-
                         },
                         {
                             high: {
@@ -466,7 +465,6 @@ const DATA = [
                                 x: 45,
                                 y: 75
                             }
-
                         },
                         {
                             high: {
@@ -775,7 +773,6 @@ const DATA = [
                                 x: 45,
                                 y: 75
                             }
-
                         },
                         {
                             high: {
@@ -826,15 +823,14 @@ const DATA = [
                     key: "uid_1",
                     label: "Apple",
                     color: Carbon.helpers.COLORS.BLUE,
-                    onClick: (d, i) => {
-                    },
-                    values: [ 100, 100 ]
+                    onClick: (d, i) => {},
+                    values: [100, 100]
                 },
                 {
                     key: "uid_2",
                     label: "Orange",
                     color: Carbon.helpers.COLORS.GREEN,
-                    values: [ 50, 25 ]
+                    values: [50, 25]
                 }
             ],
             pie: {
@@ -846,7 +842,7 @@ const DATA = [
     }
 ];
 export const getDemoData = (id, type) => {
-    const res = DATA.find((t) => t[ type ]);
-    return res ? res[ type ](id) : null;
+    const res = DATA.find((t) => t[type]);
+    return res ? res[type](id) : null;
 };
 export const getShapes = () => Object.keys(Carbon.helpers.SHAPES);

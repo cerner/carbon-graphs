@@ -34,13 +34,12 @@ import LineConfig from "./LineConfig";
  * @param {string} axis - y or y2
  * @returns {Object} - Contains min and max values for the data points
  */
-const calculateValuesRange = (values, axis = constants.Y_AXIS) =>
-    ({
-        [ axis ]: {
-            min: Math.min(...values.map((i) => i.y)),
-            max: Math.max(...values.map((i) => i.y))
-        }
-    });
+const calculateValuesRange = (values, axis = constants.Y_AXIS) => ({
+    [axis]: {
+        min: Math.min(...values.map((i) => i.y)),
+        max: Math.max(...values.map((i) => i.y))
+    }
+});
 
 /**
  * Data point sets can be loaded using this function.
@@ -76,7 +75,10 @@ class Line extends GraphContent {
     constructor(input) {
         super();
         this.config = loadInput(input);
-        this.valuesRange = calculateValuesRange(this.config.values, this.config.yAxis);
+        this.valuesRange = calculateValuesRange(
+            this.config.values,
+            this.config.yAxis
+        );
         this.dataTarget = {};
     }
 
@@ -84,7 +86,10 @@ class Line extends GraphContent {
      * @inheritDoc
      */
     load(graph) {
-        this.dataTarget = processDataPoints(graph.config, utils.deepClone(this.config));
+        this.dataTarget = processDataPoints(
+            graph.config,
+            utils.deepClone(this.config)
+        );
         draw(graph.scale, graph.config, graph.svg, this.dataTarget);
         if (utils.notEmpty(this.dataTarget.regions)) {
             createRegion(
@@ -96,10 +101,20 @@ class Line extends GraphContent {
                 this.config.yAxis
             );
         }
-        prepareLegendItems(graph.config, {
-            clickHandler: clickHandler(graph, this, graph.config, graph.svg),
-            hoverHandler: hoverHandler(graph.config.shownTargets, graph.svg)
-        }, this.dataTarget, graph.legendSVG);
+        prepareLegendItems(
+            graph.config,
+            {
+                clickHandler: clickHandler(
+                    graph,
+                    this,
+                    graph.config,
+                    graph.svg
+                ),
+                hoverHandler: hoverHandler(graph.config.shownTargets, graph.svg)
+            },
+            this.dataTarget,
+            graph.legendSVG
+        );
         return this;
     }
 
@@ -108,7 +123,10 @@ class Line extends GraphContent {
      */
     unload(graph) {
         clear(graph.svg, this.dataTarget);
-        removeRegion(graph.svg.select(`.${styles.regionGroup}`), this.dataTarget);
+        removeRegion(
+            graph.svg.select(`.${styles.regionGroup}`),
+            this.dataTarget
+        );
         removeLegendItem(graph.legendSVG, this.dataTarget);
         this.dataTarget = {};
         this.config = {};
@@ -119,7 +137,12 @@ class Line extends GraphContent {
      * @inheritDoc
      */
     resize(graph) {
-        if (shouldHideAllRegions(this.dataTarget.regions, graph.config.shownTargets)) {
+        if (
+            shouldHideAllRegions(
+                this.dataTarget.regions,
+                graph.config.shownTargets
+            )
+        ) {
             hideAllRegions(graph.svg);
         }
         translateRegion(
