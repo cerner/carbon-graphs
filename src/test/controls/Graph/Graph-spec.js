@@ -1057,7 +1057,7 @@ describe("Graph", () => {
                 graph.loadContent(new Line(getData(valuesDefault)));
                 expect(() => {
                     graph.loadContent(new Line(getData(valuesDefault)));
-                }).toThrowError(errors.THROW_MSG_NON_UNIQUE_KEY);
+                }).toThrowError(errors.THROW_MSG_NON_UNIQUE_PROPERTY);
             });
             it("doesn't throws error if content has unique keys", () => {
                 graph = new Graph(Object.assign(getAxes(axisDefault)));
@@ -1066,7 +1066,7 @@ describe("Graph", () => {
                     const uniqueData = getData(valuesDefault);
                     uniqueData.key = "uid_2";
                     graph.loadContent(new Line(uniqueData));
-                }).not.toThrowError(errors.THROW_MSG_NON_UNIQUE_KEY);
+                }).not.toThrowError(errors.THROW_MSG_NON_UNIQUE_PROPERTY);
             });
         });
         it("attaches event handlers", () => {

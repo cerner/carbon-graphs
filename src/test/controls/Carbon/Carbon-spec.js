@@ -1,27 +1,11 @@
-import Carbon from "../../main/js/carbon";
-import Graph from "../../main/js/controls/Graph";
-import Line from "../../main/js/controls/Line";
-import PairedResult from "../../main/js/controls/PairedResult";
-import { Shape } from "../../main/js/core";
-import { SHAPES } from "../../main/js/helpers/constants";
+import Carbon from "../../../main/js/carbon";
+import Graph from "../../../main/js/controls/Graph";
+import Line from "../../../main/js/controls/Line";
+import PairedResult from "../../../main/js/controls/PairedResult";
+import Shape from "../../../main/js/core/Shape/Shape";
+import { SHAPES } from "../../../main/js/helpers/constants";
+import { LIBRARY_LIST, nativeInput, TOOLS_LIST } from "./helpers";
 
-const LIBRARY_LIST = ["graph", "line", "pairedResult"];
-const TOOLS_LIST = ["shape"];
-const input = {
-    bindTo: "#testGraph_carbon",
-    axis: {
-        x: {
-            label: "Some X Label",
-            lowerLimit: 0,
-            upperLimit: 100
-        },
-        y: {
-            label: "Some Y Label",
-            lowerLimit: 0,
-            upperLimit: 20
-        }
-    }
-};
 describe("Carbon", () => {
     let graphContainer;
     beforeEach(() => {
@@ -46,7 +30,7 @@ describe("Carbon", () => {
         expect(keys.length).toBe(TOOLS_LIST.length);
     });
     it("registers Graph", () => {
-        const graph = Carbon.api.graph(input);
+        const graph = Carbon.api.graph(nativeInput);
         expect(Carbon.api.line).toEqual(jasmine.any(Function));
         expect(graph instanceof Graph).toBeTruthy();
     });

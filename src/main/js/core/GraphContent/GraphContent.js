@@ -2,7 +2,7 @@
 import errors from "../../helpers/errors";
 
 /**
- * The base content class from which all graph controls can inherit.
+ * The base content interface from which all graph controls can inherit.
  * @interface
  * @class GraphContent
  */

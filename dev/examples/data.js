@@ -517,14 +517,6 @@ const DATA = [
             data: [
                 {
                     key: "uid_1",
-                    regions: [
-                        {
-                            axis: "y",
-                            start: 0,
-                            end: 50,
-                            color: Carbon.helpers.COLORS.BLACK
-                        }
-                    ],
                     label: {
                         high: {
                             display: "High"
@@ -821,16 +813,10 @@ const DATA = [
             data: [
                 {
                     key: "uid_1",
-                    label: "Apple",
-                    color: Carbon.helpers.COLORS.BLUE,
+                    label: "Banana",
+                    color: Carbon.helpers.COLORS.LIGHT_YELLOW,
                     onClick: (d, i) => {},
                     values: [100, 100]
-                },
-                {
-                    key: "uid_2",
-                    label: "Orange",
-                    color: Carbon.helpers.COLORS.GREEN,
-                    values: [50, 25]
                 }
             ],
             pie: {

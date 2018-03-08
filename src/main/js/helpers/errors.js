@@ -9,7 +9,18 @@
  * @enum {String}
  */
 export default {
-    THROW_MSG_UNKNOWN_SHAPE: "Unknown shape type provided for data point",
+    THROW_MSG_CONSTRUCT_GENERATE_NOT_IMPLEMENTED:
+        "Generate function not implemented from Construct.",
+    THROW_MSG_CONSTRUCT_LOAD_NOT_IMPLEMENTED:
+        "LoadContent function not implemented from Construct.",
+    THROW_MSG_CONSTRUCT_UNLOAD_NOT_IMPLEMENTED:
+        "UnloadContent function not implemented from Construct.",
+    THROW_MSG_CONSTRUCT_RESIZE_NOT_IMPLEMENTED:
+        "Resize function not implemented from Construct.",
+    THROW_MSG_CONSTRUCT_DESTROY_NOT_IMPLEMENTED:
+        "Destroy function not implemented from Construct.",
+    THROW_MSG_UNKNOWN_SHAPE: "Unknown shape type provided for data point.",
+    THROW_MSG_INVALID_INPUT: "Invalid input provided.",
     THROW_MSG_NO_BIND: "Invalid input format, graph DOM id must be provided.",
     THROW_MSG_NO_AXES_DATA_LOADED: "Graph axes data needs to be loaded.",
     THROW_MSG_NO_DATA_LOADED: "Graph data needs to be loaded.",
@@ -18,7 +29,10 @@ export default {
         "Invalid input format, data points must be provided.",
     THROW_MSG_INVALID_DATA_PROPERTY:
         "Invalid input format, all data object properties must be provided.",
-    THROW_MSG_NON_UNIQUE_KEY: "Invalid input format, key must be unique.",
+    THROW_MSG_NON_UNIQUE_PROPERTY:
+        "Invalid input format, label and key must be unique.",
+    THROW_MSG_UNIQUE_KEY_NOT_PROVIDED:
+        "Invalid input format, unique key and unique label must be provided.",
     THROW_MSG_NO_AXIS_INFO: "Invalid input format, axis must be provided.",
     THROW_MSG_NO_AXIS_LIMIT_INFO:
         "Invalid input format, axis limits must be provided.",
@@ -36,6 +50,10 @@ export default {
         "Resize function has not been implemented for this graph type.",
     THROW_MSG_CONTENT_REDRAW_NOT_IMPLEMENTED:
         "Redraw function has not been implemented for this graph type.",
+    THROW_MSG_CONFIG_GET_CONFIG_NOT_IMPLEMENTED:
+        "GetInput not been implemented for BaseConfig.",
+    THROW_MSG_CONFIG_SET_INPUT_NOT_IMPLEMENTED:
+        "SetInput not been implemented for BaseConfig.",
     THROW_MSG_CONFIG_VALIDATE_INPUT_NOT_IMPLEMENTED:
         "Input validation has not been implemented.",
     THROW_MSG_CONFIG_CLONE_INPUT_NOT_IMPLEMENTED:

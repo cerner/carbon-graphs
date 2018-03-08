@@ -83,7 +83,7 @@ export const validateContent = (content, input) => {
         throw new Error(errors.THROW_MSG_NO_DATA_LOADED);
     }
     if (!isUniqueKey(content, input.config.key)) {
-        throw new Error(errors.THROW_MSG_NON_UNIQUE_KEY);
+        throw new Error(errors.THROW_MSG_NON_UNIQUE_PROPERTY);
     }
 };
 
@@ -102,17 +102,14 @@ class GraphConfig extends BaseConfig {
     }
 
     /**
-     * Returns the config object
-     * @returns {Object} config object
+     * @inheritDoc
      */
     getConfig() {
         return this.config;
     }
 
     /**
-     * Sets the input object
-     * @param {Object} inputJSON - Input JSON
-     * @returns {GraphConfig} instance object
+     * @inheritDoc
      */
     setInput(inputJSON) {
         this.input = inputJSON;
@@ -136,6 +133,9 @@ class GraphConfig extends BaseConfig {
      * @returns {GraphConfig} instance object
      */
     validateInput() {
+        if (utils.isEmpty(this.input)) {
+            throw new Error(errors.THROW_MSG_NO_AXES_DATA_LOADED);
+        }
         if (utils.isEmpty(this.input.bindTo)) {
             throw new Error(errors.THROW_MSG_NO_BIND);
         }

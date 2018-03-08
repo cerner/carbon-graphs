@@ -1,5 +1,6 @@
 "use strict";
 import d3 from "d3";
+import Construct from "../../core/Construct";
 import {
     calculateAxesLabelSize,
     calculateAxesSize,
@@ -12,7 +13,6 @@ import errors from "../../helpers/errors";
 import { createLegend } from "../../helpers/legend";
 import { createRegionContainer } from "../../helpers/region";
 import styles from "../../helpers/styles";
-import utils from "../../helpers/utils";
 import GraphConfig, { processInput, validateContent } from "./GraphConfig";
 import {
     attachEventHandlers,
@@ -75,17 +75,12 @@ const isRangeModified = (config, yAxis = constants.Y_AXIS) =>
  * @param {Object} inputJSON - Input JSON provided by the consumer
  * @returns {Object} config object containing consumer data
  */
-const loadInput = (inputJSON) => {
-    if (utils.isEmpty(inputJSON)) {
-        throw new Error(errors.THROW_MSG_NO_AXES_DATA_LOADED);
-    }
-    return new GraphConfig()
+const loadInput = (inputJSON) =>
+    new GraphConfig()
         .setInput(inputJSON)
         .validateInput()
         .clone()
         .getConfig();
-};
-
 /**
  * Executes the before init process checklist, needs to be called by parent control.
  *  Binds the chart id provided in the input JSON to graph container.
@@ -168,12 +163,13 @@ const init = (control) => {
  *
  * @class Graph
  */
-class Graph {
+class Graph extends Construct {
     /**
      * @constructor
      * @param {GraphConfig} input - Input JSON instance created using GraphConfig
      */
     constructor(input) {
+        super();
         initConfig(this);
         this.generate(input);
     }

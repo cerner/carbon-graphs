@@ -25,17 +25,6 @@ export const isDataValidFormat = (data) =>
     utils.notEmpty(data.key) && utils.notEmpty(data.values);
 
 /**
- * Checks if the keys for data points sets are unique
- * @private
- * @param {Object} data - Input JSON
- * @returns {boolean} True if unique
- */
-export const isUniqueKey = (data) => {
-    const keyList = data.map((i) => i.key);
-    return keyList.length === new Set(keyList).size;
-};
-
-/**
  * Type can be default (Number based) or timeseries
  * @private
  * @param {string} type - consumer passed input type
@@ -77,6 +66,29 @@ export const getDomain = (type, lowerLimit, upperLimit) =>
  * @class BaseConfig
  */
 export default class BaseConfig {
+    /**
+     * Returns the config object
+     * @abstract
+     * @function BaseConfig#getConfig
+     * @throws {module:errors.THROW_MSG_CONFIG_GET_CONFIG_NOT_IMPLEMENTED}
+     * @returns {Object} - inherited class instance
+     */
+    getConfig() {
+        throw new Error(errors.THROW_MSG_CONFIG_GET_CONFIG_NOT_IMPLEMENTED);
+    }
+
+    /**
+     * Sets the input object
+     * @abstract
+     * @function BaseConfig#setInput
+     * @throws {module:errors.THROW_MSG_CONFIG_SET_INPUT_NOT_IMPLEMENTED}
+     * @param {Object} inputJSON - Input JSON
+     * @returns {Object} - inherited class instance
+     */
+    setInput(inputJSON) {
+        throw new Error(errors.THROW_MSG_CONFIG_SET_INPUT_NOT_IMPLEMENTED);
+    }
+
     /**
      * Validates and verifies the input JSON object
      * @abstract
