@@ -5,9 +5,21 @@ import { Shape } from "./core";
 import { AXIS_TYPE, COLORS, SHAPES } from "./helpers/constants";
 import LOCALE from "./locale";
 
+/**
+ * Carbon tools for generating reusable items like different shapes
+ * @enum {{Object: Function}}
+ */
 const tools = {
     shape: (...args) => new Shape(...args)
 };
+/**
+ * Carbon helper constants
+ * @public
+ * @property {Object} AXIS_TYPE Carbon API axis types constants
+ * @property {Object} COLORS Carbon API color constants
+ * @property {Object} LOCALE Carbon API locale objects
+ * @property {Object} SHAPES Carbon API shape constants
+ */
 const helpers = {
     AXIS_TYPE,
     COLORS,
@@ -18,6 +30,10 @@ const helpers = {
  * Carbon
  * @public
  * @module Carbon
+ * @property {Object} api Carbon API controls
+ * @property {Object} tools Tools such as Shapes
+ * @property {Object} helpers Helper constants such as colors and shapes
+ * @property {Object} version Current version
  * @enum {Object}
  */
 const Carbon = {

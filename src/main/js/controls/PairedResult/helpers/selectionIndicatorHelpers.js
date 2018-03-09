@@ -156,6 +156,7 @@ export const dataPointActionHandler = (config, value, index, target) => {
  * Result. When a pair is clicked the rectangle shall be toggled visible.
  * The attributes width and height are calculated using x,y and x1,y1 co-ordinates from
  * high and low pair values. They are converted to appropriate "scale" using the parameter.
+ * @private
  * @param {Object} d3PairElement - d3 appended object
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} value - data point object

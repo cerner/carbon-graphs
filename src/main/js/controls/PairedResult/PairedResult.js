@@ -92,7 +92,7 @@ const loadInput = (inputJSON) =>
  *  * Generate
  *  * Unload
  *  * Destroy
- *
+ * @module PairedResult
  * @class PairedResult
  */
 class PairedResult extends GraphContent {

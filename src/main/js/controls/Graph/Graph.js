@@ -160,7 +160,7 @@ const init = (control) => {
  *  * Init
  *  * Render
  *  * AfterInit
- *
+ * @module Graph
  * @class Graph
  */
 class Graph extends Construct {

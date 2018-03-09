@@ -123,6 +123,7 @@ const getAxisTickFormat = (locale, format, type = AXIS_TYPE.DEFAULT) => {
  * * If there are no tick values provided then null is returned
  * * If the ticks values are in a ISO8601 format then a date object is returned
  * * No processing is done, otherwise
+ * @private
  * @param {Array} ticks - Array of values that represent the tick values
  * @returns {(Array|null)} returns processed ticks, null otherwise
  */

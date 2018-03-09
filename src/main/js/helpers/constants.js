@@ -7,10 +7,19 @@ import d3 from "d3";
 /**
  * Consumers can pick a color from this default list
  * @public
- * @enum {{BLACK: string, BLUE: string,
- * GREEN: string, LIGHT_PURPLE: string, ORANGE: string,
- * YELLOW: string, GREY: string, LIGHT_BLUE: string,
- * LIGHT_GREEN: string, PURPLE: string, LIGHT_ORANGE: string, LIGHT_YELLOW: string}}
+ * @property {string} BLACK "#1c1f21"
+ * @property {string} BLUE "#007cc3"
+ * @property {string} GREEN "#78c346"
+ * @property {string} LIGHT_PURPLE "#c985da"
+ * @property {string} ORANGE "#ffc20a"
+ * @property {string} YELLOW "#ffc20a"
+ * @property {string} GREY "#a7aaab"
+ * @property {string} LIGHT_BLUE "#26a2e5"
+ * @property {string} LIGHT_GREEN "#a5d784"
+ * @property {string} PURPLE "#78288c"
+ * @property {string} LIGHT_ORANGE "#ff7d00"
+ * @property {string} LIGHT_YELLOW "#ffda6c"
+ * @enum {{Object: String}}
  */
 export const COLORS = {
     BLACK: "#1c1f21",
@@ -29,10 +38,18 @@ export const COLORS = {
 /**
  * Consumers can pick a shape from this default list
  * @public
- * @enum {{CIRCLE: string, TRIANGLE: string,
- * SQUARE: string, X: string, DIAMOND: string,
- * CROSS: string, VERTICAL_BAR: string, RHOMBUS: string,
- * TEAR_DROP: string, TEAR_ALT: string, TRIANGLE_DOWN: string}}
+ * @property {string} CIRCLE "CIRCLE"
+ * @property {string} TRIANGLE "TRIANGLE"
+ * @property {string} SQUARE "SQUARE"
+ * @property {string} X "X"
+ * @property {string} DIAMOND "DIAMOND"
+ * @property {string} CROSS "CROSS"
+ * @property {string} VERTICAL_BAR "VERTICAL_BAR"
+ * @property {string} RHOMBUS "RHOMBUS"
+ * @property {string} TEAR_DROP "TEAR_DROP"
+ * @property {string} TEAR_ALT "TEAR_ALT"
+ * @property {string} TRIANGLE_DOWN "TRIANGLE_DOWN"
+ * @enum {{Object: String}}
  */
 export const SHAPES = {
     CIRCLE: "CIRCLE",
@@ -52,6 +69,8 @@ export const SHAPES = {
  * DEFAULT is enabled by default. This represents number based axes
  * TIMESERIES is time based axes. For now it only reflects on x-Axis
  * @public
+ * @property {string} DEFAULT "default"
+ * @property {string} TIME_SERIES "timeseries"
  * @enum {{DEFAULT: string, TIME_SERIES: string}}
  */
 export const AXIS_TYPE = {
@@ -59,7 +78,7 @@ export const AXIS_TYPE = {
     TIME_SERIES: "timeseries"
 };
 /**
- * @enum {String}
+ * @enum {Object}
  */
 export default {
     PADDING: {

@@ -24,7 +24,7 @@
         "verbose": false
     },
     "templates": {
-        "cleverLinks": false,
+        "cleverLinks": true,
         "monospaceLinks": true,
         "useLongnameInNav": false,
         "showInheritedInNav": true,
@@ -35,6 +35,6 @@
     },
     "docdash": {
         "static": true,
-        "sort": true
+        "sort": false
     }
 }

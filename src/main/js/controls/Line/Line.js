@@ -64,7 +64,7 @@ const loadInput = (inputJSON) =>
  *  * Generate
  *  * Unload
  *  * Destroy
- *
+ * @module Line
  * @class Line
  */
 class Line extends GraphContent {

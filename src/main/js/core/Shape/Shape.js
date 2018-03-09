@@ -21,7 +21,7 @@ export const isNativeShape = (shape) => shape in constants.CUSTOM_SHAPE_PATH;
 
 /**
  * Checks if the shape is a d3 inbuilt shape or one of the Carbon custom shapes.
- * @protected
+ * @private
  * @param {string} shape - shape to display in the point
  * @returns {boolean} true if inbuilt or custom shape, false otherwise
  */
