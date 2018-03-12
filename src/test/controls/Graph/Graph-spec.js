@@ -517,11 +517,11 @@ describe("Graph", () => {
                 .childNodes[1];
             const gridElement = fetchElementByClass(styles.canvas)
                 .childNodes[2];
-            const axisXElement = fetchElementByClass(styles.canvas)
-                .childNodes[3];
-            const axisYElement = fetchElementByClass(styles.canvas)
-                .childNodes[4];
             const contentContainer = fetchElementByClass(styles.canvas)
+                .childNodes[3];
+            const axisXElement = fetchElementByClass(styles.canvas)
+                .childNodes[4];
+            const axisYElement = fetchElementByClass(styles.canvas)
                 .childNodes[5];
             const axisXLabelElement = fetchElementByClass(styles.canvas)
                 .childNodes[6];
