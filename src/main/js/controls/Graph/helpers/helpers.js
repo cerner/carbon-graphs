@@ -105,7 +105,6 @@ const translateVGrid = (axis, config) => {
     }
     return xAxisGrid;
 };
-
 /**
  * Updates the horizontal and vertical grid sizes/positions on resize
  * @private
@@ -137,6 +136,19 @@ const translateGrid = (axis, scale, config, canvasSVG) => {
             .call(translateVGrid(axis, config));
     }
 };
+/**
+ * Translates the rectangle which forms the container for graph content
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @param {Array} canvasSVG - d3 object of canvas svg
+ * @returns {Object} d3 svg path
+ */
+const translateContentContainer = (config, canvasSVG) =>
+    canvasSVG
+        .select(`.${styles.contentContainer}`)
+        .transition(constants.d3Transition)
+        .attr("width", getXAxisWidth(config))
+        .attr("height", config.height);
 /**
  * Updates the x, y, y2 axes label positions on resize
  * @private
@@ -330,12 +342,31 @@ const createLabel = (config, canvasSVG) => {
     }
 };
 /**
+ * Creates a container for graph content (evident when there are no boundary ticks)
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @param {Array} canvasSVG - d3 object of canvas svg
+ * @returns {Object} d3 svg path
+ */
+const createContentContainer = (config, canvasSVG) =>
+    canvasSVG
+        .append("rect")
+        .classed(styles.contentContainer, true)
+        .attr(constants.X_AXIS, getXAxisXPosition(config))
+        .attr(constants.Y_AXIS, PADDING.top);
+/**
  * Creates and sets the d3 scale for the Graph. Once the scale is created
  * we can create the axes. To create a d3 scale, we need domain and range.
  * To create an axis we need scale, orientation and tick values, if needed
  *
- * The range function uses d3.linear.nice which rounds the values in the axes.
+ * The scale function uses d3.linear.nice which rounds the values in the axes.
  * i.e. [0.20147987687960267, 0.996679553296417] will get translated to [0.2, 1]
+ *
+ * The scale function uses d3.linear.clamp which "clamps" the scale so that any
+ * input provided will clamp between the domain.
+ * i.e. Before, If you have domain 0 to 20 (input lower and upper bounds) and range 0 to 100 (Width in px).
+ * When input 20 is provided then the scale returns the px positioning as 200, which would put the point outside the graph.
+ * Instead we clamp it within the graph as an upper bound using clamp. Now, it will return 100px.
  * @private
  * @param {Object} scale - d3 scale taking into account the input parameters
  * @param {Object} config - config object derived from input JSON
@@ -345,6 +376,7 @@ const scaleGraph = (scale, config) => {
     scale.x = getScale(config.axis.x.type)
         .domain(config.axis.x.domain)
         .range(getXAxisRange(config))
+        .clamp(true)
         .nice();
     scale.y = d3.scale
         .linear()
@@ -353,6 +385,7 @@ const scaleGraph = (scale, config) => {
             config.axis.y.domain.upperLimit
         ])
         .range(getYAxisRange(config))
+        .clamp(true)
         .nice();
     if (hasY2Axis(config.axis)) {
         scale.y2 = d3.scale
@@ -362,6 +395,7 @@ const scaleGraph = (scale, config) => {
                 config.axis.y2.domain.upperLimit
             ])
             .range(getYAxisRange(config))
+            .clamp(true)
             .nice();
     }
 };
@@ -381,6 +415,7 @@ const translateGraph = (control) => {
     translateDefs(control.config, control.svg);
     translateAxes(control.axis, control.scale, control.config, control.svg);
     translateGrid(control.axis, control.scale, control.config, control.svg);
+    translateContentContainer(control.config, control.svg);
     translateLabel(control.config, control.svg);
 };
 /**
@@ -518,6 +553,7 @@ export {
     createDefs,
     createGrid,
     createLabel,
+    createContentContainer,
     scaleGraph,
     translateGraph,
     padDomain,

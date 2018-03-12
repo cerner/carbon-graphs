@@ -52,5 +52,6 @@ export default {
     regionBlur: "carbon-region-blur",
     criticalityOuterPoint: "carbon-criticality-outer",
     criticalityInnerPoint: "carbon-criticality-inner",
-    svgIcon: "carbon-svgIcon"
+    svgIcon: "carbon-svgIcon",
+    contentContainer: "carbon-content-container"
 };

@@ -181,7 +181,7 @@ export const renderMultiLine = (el, id, title) => () => {
                       )
                   )
                 : "",
-        500
+        750
     );
     setTimeout(
         () =>
@@ -192,7 +192,7 @@ export const renderMultiLine = (el, id, title) => () => {
                       )
                   )
                 : "",
-        1000
+        750 * 2
     );
     setTimeout(
         () =>
@@ -203,7 +203,7 @@ export const renderMultiLine = (el, id, title) => () => {
                       )
                   )
                 : "",
-        1500
+        750 * 3
     );
     setTimeout(
         () =>
@@ -214,7 +214,7 @@ export const renderMultiLine = (el, id, title) => () => {
                       )
                   )
                 : "",
-        2000
+        750 * 4
     );
     setTimeout(
         () =>
@@ -225,7 +225,7 @@ export const renderMultiLine = (el, id, title) => () => {
                       )
                   )
                 : "",
-        2500
+        750 * 5
     );
     setTimeout(
         () =>
@@ -236,7 +236,7 @@ export const renderMultiLine = (el, id, title) => () => {
                       )
                   )
                 : "",
-        3000
+        750 * 6
     );
     return lineDefault;
 };

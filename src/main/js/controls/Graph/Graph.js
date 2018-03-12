@@ -16,6 +16,7 @@ import styles from "../../helpers/styles";
 import GraphConfig, { processInput, validateContent } from "./GraphConfig";
 import {
     attachEventHandlers,
+    createContentContainer,
     createDefs,
     createGrid,
     createLabel,
@@ -209,6 +210,7 @@ class Graph extends Construct {
         createRegionContainer(this.config, this.svg);
         createGrid(this.axis, this.scale, this.config, this.svg);
         createAxes(this.axis, this.scale, this.config, this.svg);
+        createContentContainer(this.config, this.svg);
         createLabel(this.config, this.svg);
         if (this.config.showLegend) {
             /*

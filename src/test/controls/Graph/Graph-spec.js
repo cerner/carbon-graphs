@@ -521,15 +521,18 @@ describe("Graph", () => {
                 .childNodes[3];
             const axisYElement = fetchElementByClass(styles.canvas)
                 .childNodes[4];
-            const axisXLabelElement = fetchElementByClass(styles.canvas)
+            const contentContainer = fetchElementByClass(styles.canvas)
                 .childNodes[5];
-            const axisYLabelElement = fetchElementByClass(styles.canvas)
+            const axisXLabelElement = fetchElementByClass(styles.canvas)
                 .childNodes[6];
+            const axisYLabelElement = fetchElementByClass(styles.canvas)
+                .childNodes[7];
             expect(defsElement).not.toBeNull();
             expect(regionElement).not.toBeNull();
             expect(gridElement).not.toBeNull();
             expect(axisXElement).not.toBeNull();
             expect(axisYElement).not.toBeNull();
+            expect(contentContainer).not.toBeNull();
             expect(axisXLabelElement).not.toBeNull();
             expect(axisYLabelElement).not.toBeNull();
 
@@ -538,6 +541,7 @@ describe("Graph", () => {
             expect(gridElement.nodeName).toBe("g");
             expect(axisXElement.nodeName).toBe("g");
             expect(axisYElement.nodeName).toBe("g");
+            expect(contentContainer.nodeName).toBe("rect");
             expect(axisXLabelElement.nodeName).toBe("g");
             expect(axisYLabelElement.nodeName).toBe("g");
 
@@ -549,6 +553,9 @@ describe("Graph", () => {
             expect(axisXElement.classList).toContain(styles.axisX);
             expect(axisYElement.classList).toContain(styles.axis);
             expect(axisYElement.classList).toContain(styles.axisY);
+            expect(contentContainer.classList).toContain(
+                styles.contentContainer
+            );
             expect(axisXLabelElement.getAttribute("class")).toBe(
                 styles.axisLabelX
             );
@@ -885,6 +892,22 @@ describe("Graph", () => {
                 ).toBeNull();
             });
         });
+        describe("content container", () => {
+            it("creates the container markup", () => {
+                const canvasElement = fetchElementByClass(styles.canvas);
+                const containerElement = canvasElement.querySelector(
+                    `.${styles.contentContainer}`
+                );
+                expect(containerElement).not.toBeNull();
+                expect(containerElement.nodeName).toBe("rect");
+                expect(+containerElement.getAttribute("x")).toBe(
+                    graph.config.axisSizes.y + graph.config.axisLabelWidths.y
+                );
+                expect(+containerElement.getAttribute("y")).toBe(
+                    constants.PADDING.top
+                );
+            });
+        });
         describe("label", () => {
             it("hides the label when not enabled", () => {
                 graph.destroy();
@@ -1120,6 +1143,22 @@ describe("Graph", () => {
             expect(
                 +fetchElementByClass(styles.canvas).getAttribute("width")
             ).toBe(790);
+        });
+        it("sets the content container width and height correctly", (done) => {
+            graphContainer.setAttribute("style", "width: 800px; height: 200px");
+            graph.resize();
+            triggerEvent(window, "resize", () => {
+                const contentContainer = fetchElementByClass(
+                    styles.contentContainer
+                );
+                expect(+contentContainer.getAttribute("height")).toBe(
+                    graph.config.height
+                );
+                expect(+contentContainer.getAttribute("width")).toBe(
+                    getXAxisWidth(graph.config)
+                );
+                done();
+            });
         });
         it("sets the throttle correctly, if undefined", () => {
             const throttledInput = getAxes(axisDefault);

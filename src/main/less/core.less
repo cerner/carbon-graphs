@@ -34,7 +34,8 @@ svg:not(:root) {
 }
 
 .carbon-axis,
-.carbon-grid line {
+.carbon-grid line,
+.carbon-content-container {
     shape-rendering: crispEdges;
 }
 
@@ -148,4 +149,9 @@ svg:not(:root) {
     &.carbon-region-highlight {
         .opacity-show();
     }
+}
+
+.carbon-content-container {
+    fill: none;
+    stroke: @grey10;
 }
