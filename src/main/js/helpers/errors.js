@@ -87,5 +87,20 @@ export default {
     THROW_MSG_REGION_START_END_MISSING:
         "Region cannot have both 'start' and 'end' empty.",
     THROW_MSG_REGION_START_MORE_END:
-        "Region 'start' cannot be larger than 'end'."
+        "Region 'start' cannot be larger than 'end'.",
+    /**
+     * @description Tasks
+     */
+    THROW_MSG_TASKS_NOT_PROVIDED:
+        "Invalid input format, task(s) must be provided for a track.",
+    THROW_MSG_TASKS_UNIQUE_KEY_NOT_PROVIDED:
+        "Invalid input format; unique key must be provided for each task.",
+    THROW_MSG_TASKS_START_AND_END_NOT_PROVIDED:
+        "Invalid input format; start and end must be provided for each task.",
+    THROW_MSG_TASKS_START_AND_END_TYPE_NOT_VALID:
+        "Input type invalid, start and end needs to be in ISO8601 datetime format.",
+    THROW_MSG_TASKS_DURATION_NOT_FUNCTION:
+        "Invalid property: duration; Duration needs to be a function.",
+    THROW_MSG_TASKS_DURATION_NOT_VALID:
+        "Invalid property: duration; Duration needs to return a number."
 };

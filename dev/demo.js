@@ -10,6 +10,10 @@ import {
     renderCriticalityExamples
 } from "./examples/content/renderCriticalityExamples";
 import {
+    GanttExample,
+    renderGanttExamples
+} from "./examples/content/renderGanttExamples";
+import {
     LineExample,
     renderLineExamples,
     renderMultiLineExamples,
@@ -101,6 +105,13 @@ renderPairedResultExamples(
 );
 renderCombinationGraphExamples(
     new CombinationExample(),
+    toggleSection,
+    contentSection,
+    setState,
+    getState
+);
+renderGanttExamples(
+    new GanttExample(),
     toggleSection,
     contentSection,
     setState,

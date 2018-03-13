@@ -1,10 +1,11 @@
 import Carbon from "../../../main/js/carbon";
+import Gantt from "../../../main/js/controls/Gantt";
 import Graph from "../../../main/js/controls/Graph";
 import Line from "../../../main/js/controls/Line";
 import PairedResult from "../../../main/js/controls/PairedResult";
 import Shape from "../../../main/js/core/Shape/Shape";
 import { SHAPES } from "../../../main/js/helpers/constants";
-import { LIBRARY_LIST, nativeInput, TOOLS_LIST } from "./helpers";
+import { ganttInput, LIBRARY_LIST, nativeInput, TOOLS_LIST } from "./helpers";
 
 describe("Carbon", () => {
     let graphContainer;
@@ -31,7 +32,7 @@ describe("Carbon", () => {
     });
     it("registers Graph", () => {
         const graph = Carbon.api.graph(nativeInput);
-        expect(Carbon.api.line).toEqual(jasmine.any(Function));
+        expect(Carbon.api.graph).toEqual(jasmine.any(Function));
         expect(graph instanceof Graph).toBeTruthy();
     });
     it("registers Line graph", () => {
@@ -71,5 +72,10 @@ describe("Carbon", () => {
         const shape = Carbon.tools.shape(SHAPES.RHOMBUS);
         expect(Carbon.tools.shape).toEqual(jasmine.any(Function));
         expect(shape instanceof Shape).toBeTruthy();
+    });
+    it("registers Gantt", () => {
+        const gantt = Carbon.api.gantt(ganttInput);
+        expect(Carbon.api.gantt).toEqual(jasmine.any(Function));
+        expect(gantt instanceof Gantt).toBeTruthy();
     });
 });

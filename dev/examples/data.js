@@ -3,6 +3,8 @@ import d3 from "d3";
 import Carbon from "../../src/main/js/carbon";
 import { loadPopup } from "./popup";
 
+const daysToMilliseconds = (d) =>
+    new Date().getTime() + 24 * 60 * 60 * 1000 * d;
 const DATA = [
     {
         LINE_DEFAULT: (id) => ({
@@ -827,6 +829,116 @@ const DATA = [
                     format: (value, ratio, id) => d3.format("$")(value)
                 }
             }
+        })
+    },
+    {
+        GANTT: (id) => ({
+            bindTo: id,
+            axis: {
+                x: {
+                    show: true,
+                    lowerLimit: new Date(2018, 1, 1, 12).toISOString(),
+                    upperLimit: new Date(2019, 1, 1, 12).toISOString()
+                }
+            },
+            dimension: {
+                height: 250,
+                barHeight: 60,
+                trackHeight: 80
+            },
+            tracks: [
+                {
+                    key: "track 1",
+                    label: {
+                        display: "Project A"
+                    },
+                    color: "#007cc3",
+                    onClick: () => {
+                        // Call consumer implementation here or NOP
+                    },
+                    tasks: [
+                        {
+                            key: "task1",
+                            label: {
+                                display: "Story A"
+                            },
+                            startDate: new Date(2018, 1, 1).toISOString(),
+                            endDate: new Date(2018, 1, 10).toISOString(),
+                            duration: () => new Date(daysToMilliseconds(10)),
+                            percentage: 40,
+                            dependencies: null, // TODO FUTURE implementation
+                            style: {
+                                isDotted: true,
+                                isFilled: true,
+                                isHashed: true,
+                                isHollow: true
+                            }
+                        }
+                    ],
+                    activities: [
+                        // Optional, consumer can skip this to get a valid gantt chart.
+                        {
+                            key: "activity1",
+                            label: {
+                                display: "Support"
+                            },
+                            startDate: new Date(2018, 1, 1).toISOString(),
+                            endDate: new Date(2018, 1, 10).toISOString(),
+                            duration: () => new Date(daysToMilliseconds(12)),
+                            style: {
+                                isFilled: true,
+                                isHashed: true
+                            }
+                        }
+                    ],
+                    milestones: [
+                        // Optional, will create a legend item
+                        // For now throw error when providing the same key for
+                        // track id. But in the future, we need to load dynamically
+                        {
+                            label: {
+                                display: "Track A -> Milestone A"
+                            },
+                            shape: Carbon.helpers.SHAPES.CIRCLE,
+                            color: Carbon.helpers.COLORS.BLUE,
+                            value: new Date(2018, 2, 1, 6, 15).toISOString()
+                        },
+                        {
+                            label: {
+                                display: "Track A -> Milestone B"
+                            },
+                            shape: Carbon.helpers.SHAPES.TRIANGLE,
+                            color: Carbon.helpers.COLORS.BLUE,
+                            value: new Date(2018, 3, 1, 7, 0).toISOString()
+                        },
+                        {
+                            label: {
+                                display: "Track A -> Milestone C"
+                            },
+                            shape: Carbon.helpers.SHAPES.TRIANGLE,
+                            color: Carbon.helpers.COLORS.BLUE,
+                            value: new Date(2018, 4, 1, 8, 15).toISOString()
+                        },
+                        {
+                            label: {
+                                display: "Track A -> Milestone D"
+                            },
+                            shape: Carbon.helpers.SHAPES.TRIANGLE,
+                            color: Carbon.helpers.COLORS.BLUE,
+                            value: new Date(2018, 6, 1, 9, 45).toISOString()
+                        }
+                    ]
+                }
+            ],
+            datelines: [
+                {
+                    label: {
+                        display: "Release A"
+                    },
+                    value: new Date(2018, 1, 28).toISOString()
+                }
+            ],
+            showDateLines: true
         })
     }
 ];
