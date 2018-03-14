@@ -7,6 +7,14 @@ import errors from "../../helpers/errors";
 import utils from "../../helpers/utils";
 import { DEFAULT_LOCALE } from "../../locale/index";
 
+const initialAxisInfo = {
+    ticks: {},
+    show: false,
+    domain: {
+        lowerLimit: 0,
+        upperLimit: 0
+    }
+};
 /**
  * Processes the input from the JSON and updates the config object.
  * d3 domain and ranges are stored based on the upper and lower x, y and y2 limits.
@@ -18,6 +26,18 @@ import { DEFAULT_LOCALE } from "../../locale/index";
  */
 export const processInput = (input, config, type) => {
     const _axis = utils.deepClone(input.axis);
+    const getAxisDomain = (config, yAxis, axisObj, showAxis = false) => {
+        config.axis[yAxis].ticks = getDefaultValue(axisObj[yAxis].ticks, {});
+        config.axis[yAxis].show = getDefaultValue(
+            axisObj[yAxis].show,
+            showAxis
+        );
+        config.axis[yAxis].domain = {
+            lowerLimit: utils.getNumber(axisObj[yAxis].lowerLimit),
+            upperLimit: utils.getNumber(axisObj[yAxis].upperLimit)
+        };
+        return config;
+    };
     config.bindTo = input.bindTo;
     config.bindLegendTo = input.bindLegendTo;
     config.axis = _axis;
@@ -34,27 +54,21 @@ export const processInput = (input, config, type) => {
     config.dimension = getDefaultValue(input.dimension, {});
     config.axis.x.type = getDefaultValue(_axis.x.type, AXIS_TYPE.DEFAULT);
     config.axis.x.ticks = getDefaultValue(_axis.x.ticks, {});
-    config.axis.y.ticks = getDefaultValue(_axis.y.ticks, {});
     config.axis.x.show = getDefaultValue(_axis.x.show, true);
-    config.axis.y.show = getDefaultValue(_axis.y.show, true);
     config.axis.x.domain = getDomain(
         type,
         _axis.x.lowerLimit,
         _axis.x.upperLimit
     );
-    config.axis.y.domain = {
-        lowerLimit: utils.getNumber(_axis.y.lowerLimit),
-        upperLimit: utils.getNumber(_axis.y.upperLimit)
-    };
+    if (input.axis.y) {
+        getAxisDomain(config, constants.Y_AXIS, _axis, true);
+    } else {
+        config.axis.y = initialAxisInfo;
+    }
     if (input.axis.y2) {
-        config.axis.y2.ticks = getDefaultValue(input.axis.y2.ticks, {});
-        config.axis.y2.show = getDefaultValue(input.axis.y2.show, false);
-        if (config.axis.y2.show) {
-            config.axis.y2.domain = {
-                lowerLimit: utils.getNumber(input.axis.y2.lowerLimit),
-                upperLimit: utils.getNumber(input.axis.y2.upperLimit)
-            };
-        }
+        getAxisDomain(config, constants.Y2_AXIS, _axis);
+    } else {
+        config.axis.y2 = initialAxisInfo;
     }
     config.shownTargets = [];
     config.hasCriticality = false;

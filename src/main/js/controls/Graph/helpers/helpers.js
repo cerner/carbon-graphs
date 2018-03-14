@@ -546,6 +546,9 @@ const detachEventHandlers = (control) => {
 };
 
 export {
+    translateAxes,
+    translateContentContainer,
+    translateDefs,
     translateLabel,
     translateGrid,
     translateCanvas,

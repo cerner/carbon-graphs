@@ -142,13 +142,20 @@ const processTickValues = (ticks) => {
  * @param {number} width - Width of the canvas which will be used to tell d3 how many ticks to
  * keep in the X axis
  * @param {Object} format - d3 locale object formatted to represent the tick.
+ * @param {string} [orientation] - Axis orientation
  * @returns {Object} d3 object which forms the x-axis scale
  */
-const prepareXAxis = (scale, tickValues, width, format) =>
+const prepareXAxis = (
+    scale,
+    tickValues,
+    width,
+    format,
+    orientation = "bottom"
+) =>
     d3.svg
         .axis()
         .scale(scale)
-        .orient("bottom")
+        .orient(orientation)
         .ticks(
             Math.max(width / constants.MAX_TICK_VARIANCE, constants.MIN_TICKS)
         )
@@ -659,6 +666,7 @@ export {
     prepareXAxis,
     prepareYAxis,
     prepareY2Axis,
+    getAxisTickFormat,
     getRotationForAxis,
     getXAxisLabelXPosition,
     getXAxisLabelYPosition,

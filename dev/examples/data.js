@@ -15,9 +15,8 @@ const DATA = [
                     lowerLimit: 80,
                     upperLimit: 280,
                     ticks: {
-                        // TODO Future implementation
-                        show: true,
-                        count: 10,
+                        show: true, // TODO Future implementation
+                        count: 10, // TODO Future implementation
                         format: "",
                         values: []
                     }

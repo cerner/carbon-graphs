@@ -118,12 +118,19 @@ const isDate = (str) => constants.ISO8601_DATE_TIME_MILLI.test(str);
 /**
  * Converts ISO8601 datetime string to Date
  * @private
- * @param {string} value - ISO8601 datetime string
+ * @param {number|string} value - ISO8601 datetime string
  * @todo Handle DST
  * @todo Convert UTC dates to local date
  * @returns {Date} new Date object
  */
 const parseDateTime = (value) => new Date(value);
+/**
+ * Converts ISO8601 date string to a number
+ * @private
+ * @param {string} value - ISO8601 datetime string
+ * @returns {number} Date as a number
+ */
+const getTime = (value) => parseDateTime(value).getTime();
 /**
  * Case converts to number
  * @private
@@ -154,5 +161,6 @@ export default {
     getNumber,
     isDate,
     isNumber,
-    parseDateTime
+    parseDateTime,
+    getTime
 };

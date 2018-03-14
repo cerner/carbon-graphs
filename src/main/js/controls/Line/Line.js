@@ -86,10 +86,7 @@ class Line extends GraphContent {
      * @inheritDoc
      */
     load(graph) {
-        this.dataTarget = processDataPoints(
-            graph.config,
-            utils.deepClone(this.config)
-        );
+        this.dataTarget = processDataPoints(graph.config, this.config);
         draw(graph.scale, graph.config, graph.svg, this.dataTarget);
         if (utils.notEmpty(this.dataTarget.regions)) {
             createRegion(

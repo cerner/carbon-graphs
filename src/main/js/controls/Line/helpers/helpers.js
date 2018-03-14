@@ -275,7 +275,7 @@ const getDataPointValues = (target) => target.internalValuesSubset;
  * @private
  * @param {Object} shownTargets - graph targets config object
  * @param {object} value - data point value object
- * @return {boolean} true if data point needs to be hidden, false otherwise
+ * @returns {boolean} true if data point needs to be hidden, false otherwise
  */
 const shouldHideDataPoints = (shownTargets, value) =>
     shownTargets.indexOf(value.key) < 0 || value.y === null;
@@ -406,7 +406,7 @@ const drawDataPoints = (scale, config, canvasSVG) => {
  * @param {Line} control - Line instance
  * @param {Object} config - Graph config object derived from input JSON
  * @param {Array} canvasSVG - d3 html element of canvas
- * @return {function()} callback function handler for RAF
+ * @returns {function()} callback function handler for RAF
  */
 const onAnimationHandler = (graphContext, control, config, canvasSVG) => () => {
     control.redraw(graphContext);

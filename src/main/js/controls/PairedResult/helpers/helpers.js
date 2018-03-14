@@ -431,7 +431,7 @@ const processRegions = (graphContext, config, canvasSVG, { key }) => {
  * @param {Object} config - Graph config object derived from input JSON
  * @param {Array} canvasSVG - d3 html element of canvas
  * @param {string} item - paired result type unique key
- * @return {function()} callback function handler for RAF
+ * @returns {function()} callback function handler for RAF
  */
 const onAnimationHandler = (
     graphContext,
