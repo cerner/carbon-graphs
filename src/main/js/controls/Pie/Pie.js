@@ -1,34 +1,26 @@
 import c3 from "c3";
+import Construct from "../../core/Construct/Construct";
 import errors from "../../helpers/errors";
-import utils from "../../helpers/utils";
-import PieConfig, { processInput } from "./PieConfig";
+import PieConfig, {
+    processContent,
+    processInput,
+    validateContent
+} from "./PieConfig";
 /**
- * TODO: NOT INCLUDED IN DIST, PROOF OF CONCEPT only.
- *  * Add unit tests
- *  * Validation
- *  * Extend from GraphContent
- *  * Remove this TODO
+ * @typedef {Object} Pie
+ * @typedef {Object} PieConfig
  */
-
 /**
- * Data point sets can be loaded using this function.
- * Load function validates, clones and stores the input onto a config object.
+ * Initializes the necessary Pie constructor objects
  * @private
- * @throws {module:errors.THROW_MSG_NO_DATA_LOADED}
- * @param {Object} inputJSON - Input JSON provided by the consumer
- * @returns {Object} configuration JSON
+ * @param {Pie} control - Pie instance
+ * @returns {Pie} Pie instance
  */
-const getConfig = (inputJSON) => {
-    if (utils.isEmpty(inputJSON)) {
-        throw new Error(errors.THROW_MSG_NO_DATA_LOADED);
-    }
-    return processInput(
-        new PieConfig()
-            .setInput(inputJSON)
-            .validateInput()
-            .clone()
-            .getConfig()
-    );
+const initConfig = (control) => {
+    control.config = {};
+    control.content = [];
+    control.c3Context = null;
+    return control;
 };
 
 /**
@@ -43,7 +35,9 @@ const getConfig = (inputJSON) => {
 	 data: [
 		 {
 			 key: "uid_1",
-			 label: "Apple",
+			 label: {
+			    display: "Apple"
+			 },
 			 color: COLORS.BLUE,
 			 onClick: (d) => {},
 			 values: [100]
@@ -58,48 +52,68 @@ const getConfig = (inputJSON) => {
 	 }
  }
  */
-class Pie {
-    constructor() {
-        this.config = {};
-        this.context = null;
+class Pie extends Construct {
+    /**
+     * @constructor
+     * @param {PieConfig} input - Input JSON instance created using PieConfig
+     */
+    constructor(input) {
+        super();
+        initConfig(this);
+        this.generate(input);
     }
 
     /**
-     * Generates the pie chart
-     * @param {Object} input - Input JSON
-     * @returns {Object} c3 object
+     * @inheritDoc
      */
     generate(input) {
-        this.context = c3.generate(getConfig(input));
-        return this.context;
+        this.config = new PieConfig()
+            .setInput(input)
+            .validateInput()
+            .clone()
+            .getConfig();
+        this.c3Context = c3.generate(processInput(this.config));
+        this.content.push(...this.config.data);
+        return this;
     }
 
     /**
-     * Loads data points
-     * @todo Implement load function
-     * @param {Object} input - Input JSON
-     * @returns {Object} c3 object
+     * @inheritDoc
      */
-    load(input) {
-        return c3.load(input, this);
+    loadContent(input) {
+        validateContent(this.content, input);
+        this.c3Context.load(processContent(this.content, input), this);
+        this.content.push(input);
+        return this;
     }
 
     /**
-     * Unloads data points
-     * @todo Implement unload function
-     * @param {Object} input - Input JSON
-     * @returns {Object} c3 object
+     * @inheritDoc
      */
-    unload(input) {
-        return c3.unload(input, this);
+    unloadContent(input) {
+        const targetContent = this.content.filter(
+            (k) => k.key === input.key
+        )[0];
+        if (!targetContent) {
+            throw new Error(errors.THROW_MSG_UNIQUE_KEY_NOT_PROVIDED);
+        }
+        this.c3Context.unload(
+            {
+                ids: targetContent.label.display
+            },
+            this
+        );
+        this.content.splice(this.content.indexOf(targetContent), 1);
+        return this;
     }
 
     /**
-     * Destroys the rendered pie chart
-     * @returns {undefined} returns nothing
+     * @inheritDoc
      */
     destroy() {
-        this.context.destroy();
+        this.c3Context.destroy();
+        initConfig(this);
+        return this;
     }
 }
 

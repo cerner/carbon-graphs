@@ -812,9 +812,13 @@ const DATA = [
             data: [
                 {
                     key: "uid_1",
-                    label: "Banana",
+                    label: {
+                        display: "Banana"
+                    },
                     color: Carbon.helpers.COLORS.LIGHT_YELLOW,
-                    onClick: (d, i) => {},
+                    onClick: (d, i) => {
+                        // Load a popup
+                    },
                     values: [100, 100]
                 }
             ],

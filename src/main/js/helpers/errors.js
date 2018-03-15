@@ -9,6 +9,9 @@
  * @enum {String}
  */
 export default {
+    /**
+     * @description Construct
+     */
     THROW_MSG_CONSTRUCT_GENERATE_NOT_IMPLEMENTED:
         "Generate function not implemented from Construct.",
     THROW_MSG_CONSTRUCT_LOAD_NOT_IMPLEMENTED:
@@ -19,7 +22,13 @@ export default {
         "Resize function not implemented from Construct.",
     THROW_MSG_CONSTRUCT_DESTROY_NOT_IMPLEMENTED:
         "Destroy function not implemented from Construct.",
+    /**
+     * @description Shapes
+     */
     THROW_MSG_UNKNOWN_SHAPE: "Unknown shape type provided for data point.",
+    /**
+     * @description Graph
+     */
     THROW_MSG_INVALID_INPUT: "Invalid input provided.",
     THROW_MSG_NO_BIND: "Invalid input format, graph DOM id must be provided.",
     THROW_MSG_NO_AXES_DATA_LOADED: "Graph axes data needs to be loaded.",
@@ -32,16 +41,26 @@ export default {
     THROW_MSG_NON_UNIQUE_PROPERTY:
         "Invalid input format, label and key must be unique.",
     THROW_MSG_UNIQUE_KEY_NOT_PROVIDED:
-        "Invalid input format, unique key and unique label must be provided.",
+        "Invalid input format, unique key must be provided.",
+    THROW_MSG_UNIQUE_LABEL_NOT_PROVIDED:
+        "Invalid input format, unique label must be provided.",
+    /**
+     * @description Axes
+     */
     THROW_MSG_NO_AXIS_INFO: "Invalid input format, axis must be provided.",
     THROW_MSG_NO_AXIS_LIMIT_INFO:
         "Invalid input format, axis limits must be provided.",
     THROW_MSG_NO_AXIS_LABEL_INFO:
         "Invalid input format, axis labels must be provided.",
     THROW_MSG_INVALID_TYPE: "Invalid input format, type must be valid.",
+    THROW_MSG_INVALID_AXIS_TYPE_VALUES:
+        "Axis type invalid, bounds need to be in ISO8601 datetime format.",
     THROW_MSG_INVALID_FORMAT_TYPE:
         "Type cannot be default, if data-points are in date time format.",
     THROW_MSG_INVALID_OBJECT_PROVIDED: "Invalid object provided as argument.",
+    /**
+     * @description Content
+     */
     THROW_MSG_CONTENT_LOAD_NOT_IMPLEMENTED:
         "Load function has not been implemented for this graph type.",
     THROW_MSG_CONTENT_UNLOAD_NOT_IMPLEMENTED:
@@ -58,6 +77,9 @@ export default {
         "Input validation has not been implemented.",
     THROW_MSG_CONFIG_CLONE_INPUT_NOT_IMPLEMENTED:
         "Clone input function has not been implemented.",
+    /**
+     * @description Region
+     */
     THROW_MSG_REGION_EMPTY: "Region in data object cannot be empty.",
     THROW_MSG_REGION_INVALID_AXIS_PROVIDED: "Region axis provided is invalid.",
     THROW_MSG_REGION_INVALID_VALUE_TYPE_PROVIDED:
