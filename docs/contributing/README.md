@@ -87,11 +87,19 @@ Follow [Semantic Versioning](https://semver.org/) when preparing for a release.
 npm run release:<patch, minor or major>
 ```
 
+**Ensure released version is present in [cernerrepos](https://cernerrepos.net)**
+
 ### Deploying the site to GitHub
 
 Once the PR is merged, you need to ensure that the site is up-to-date with your latest changes.
 To deploy the site to the GitHub pages, run the deploy-site script:
 
 ```
-npm run deploy-site
+npm run deploy:site
 ```
+
+## Breaking changes
+
+For any breaking changes, add information on how to migrate from previous version along with changes that was provided.
+Create an issue and add any stakeholders to that issue.
+This issue will be closed once you have :+1: from all of the stakeholders (or subsequent issues are created within their own git repo queues).
