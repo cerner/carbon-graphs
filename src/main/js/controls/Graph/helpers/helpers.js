@@ -498,7 +498,7 @@ const getCurrentTransform = (context) => d3.select(context).attr("transform");
  * adding 0.00001 and then rounding it to 2 decimal places.
  * @private
  * @param {number} v - A long decimal
- * @return {number} decimal rounded to 2 decimal places
+ * @returns {number} decimal rounded to 2 decimal places
  */
 const round2Decimals = (v) => Math.round((v + 0.00001) * 100) / 100;
 /**

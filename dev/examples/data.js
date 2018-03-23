@@ -800,7 +800,6 @@ const DATA = [
             ],
             showLabel: true,
             showLegend: true,
-            showShapes: true,
             showVGrid: true,
             showHGrid: true
         })
@@ -841,16 +840,17 @@ const DATA = [
                     upperLimit: new Date(2019, 1, 1, 12).toISOString()
                 }
             },
-            dimension: {
-                height: 250,
-                barHeight: 60,
-                trackHeight: 80
-            },
             tracks: [
                 {
                     key: "track 1",
-                    label: {
-                        display: "Project A"
+                    dimension: {
+                        trackHeight: 80
+                    },
+                    trackLabel: {
+                        display: "Project A",
+                        onClick: () => {
+                            // Call consumer implementation here or NOP
+                        }
                     },
                     color: "#007cc3",
                     onClick: () => {
@@ -938,7 +938,8 @@ const DATA = [
                     value: new Date(2018, 1, 28).toISOString()
                 }
             ],
-            showDateLines: true
+            showDateLines: true,
+            showLegend: true
         })
     }
 ];

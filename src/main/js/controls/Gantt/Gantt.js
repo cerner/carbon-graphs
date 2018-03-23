@@ -6,9 +6,10 @@ import constants from "../../helpers/constants";
 import errors from "../../helpers/errors";
 import { createLegend } from "../../helpers/legend";
 import styles from "../../helpers/styles";
-import GanttConfig, { processInput, validateContent } from "./GanttConfig";
+import GanttConfig, { processInput } from "./GanttConfig";
 import {
     attachEventHandlers,
+    calculateAxesLabelSize,
     calculateAxesSize,
     createAxes,
     createContentContainer,
@@ -16,9 +17,11 @@ import {
     createGrid,
     detachEventHandlers,
     determineHeight,
-    scaleGraph
+    scaleGraph,
+    updateAxesDomain
 } from "./helpers/creationHelpers";
 import { translateGraph } from "./helpers/translateHelpers";
+import Track from "./Track";
 
 /**
  * @typedef {Object} Gantt
@@ -26,6 +29,7 @@ import { translateGraph } from "./helpers/translateHelpers";
  */
 
 const PADDING = constants.PADDING;
+const BASE_CANVAS_HEIGHT_PADDING = (PADDING.bottom * 2 + PADDING.top) * 2;
 const BASE_CANVAS_WIDTH_PADDING = constants.BASE_CANVAS_WIDTH_PADDING;
 /**
  * Sets the canvas width
@@ -46,8 +50,7 @@ const setCanvasWidth = (container, config) => {
  * @returns {undefined} - returns nothing
  */
 const setCanvasHeight = (config) => {
-    config.canvasHeight =
-        getYAxisHeight(config) + (PADDING.bottom + PADDING.top) * 2;
+    config.canvasHeight = getYAxisHeight(config) + BASE_CANVAS_HEIGHT_PADDING;
 };
 
 /**
@@ -73,6 +76,8 @@ const loadInput = (inputJSON) =>
  */
 const beforeInit = (control) => {
     control.graphContainer = d3.select(control.config.bindTo);
+    updateAxesDomain(control.config);
+    control.config.height = determineHeight(control.config);
     return control;
 };
 
@@ -95,8 +100,9 @@ const initConfig = (control) => {
     control.scale = {};
     control.svg = null;
     control.legendSVG = null;
-    control.content = [];
-    control.contentTargets = [];
+    control.tracks = [];
+    control.datelines = [];
+    control.trackConfig = [];
     control.resizeHandler = null;
     return control;
 };
@@ -114,12 +120,9 @@ const initConfig = (control) => {
  * @returns {Gantt} Gantt instance
  */
 const init = (control) => {
-    control.config.height = determineHeight(
-        control.config,
-        control.config.dimension
-    );
     setCanvasWidth(control.graphContainer, control.config);
     calculateAxesSize(control.config);
+    calculateAxesLabelSize(control.config);
     setCanvasHeight(control.config);
     scaleGraph(control.scale, control.config);
     return control;
@@ -151,15 +154,15 @@ class Gantt extends Construct {
     }
 
     /**
-     * Draw function that is called by the parent control. This draws the Axes, grid, legend and
-     * labels for the chart construct.
+     * Draw function that is called by the parent control. This draws the x-axis, grid, legend and
+     * trackLabels for the chart construct.
      * @description Since we dont have the concept of z-index in visualization,
      * the order of rendering should be following:
      *  * SVG container
      *  * Grid
      *  * X-Axis
      *  * Y-Axis
-     *  * Labels
+     *  * Track Labels
      *  * Legend
      *  * Data [In our case we have load and unload]
      * @param {Object} input - Input JSON
@@ -196,17 +199,16 @@ class Gantt extends Construct {
     /**
      * Resizes the graph canvas. Uses the clipPath def.
      * It scales the graph on resize, and translates the graph elements:
-     *  Axes
+     *  X-Axis
      *  Grid
-     *  Labels
+     *  Track Labels
      *  @returns {Gantt} - Gantt instance
      */
     resize() {
         setCanvasWidth(this.graphContainer, this.config);
         scaleGraph(this.scale, this.config);
         translateGraph(this);
-        // TODO need to implement this
-        this.content.forEach((control) => control.resize(this));
+        this.trackConfig.forEach((control) => control.resize(this));
         return this;
     }
 
@@ -218,12 +220,15 @@ class Gantt extends Construct {
      * @returns {Gantt} - Gantt instance
      */
     loadContent(content) {
-        validateContent(this.content, content);
-        this.content.push(content);
-        this.contentTargets.push(content.config);
-        // TODO need to implement this
-        content.load(this);
+        const track = new Track(content);
+        this.trackConfig.push(track);
+        track.load(this);
+        this.tracks.push(content.key);
+        updateAxesDomain(this.config);
+        this.config.height = determineHeight(this.config);
+        setCanvasHeight(this.config);
         this.resize();
+        this.trackConfig.forEach((control) => control.redraw(this));
         return this;
     }
 
@@ -235,14 +240,16 @@ class Gantt extends Construct {
      * @returns {Gantt} - Gantt instance
      */
     unloadContent(content) {
-        const index = this.content.indexOf(content);
+        const index = this.tracks.indexOf(content.key);
         if (index < 0) {
             throw new Error(errors.THROW_MSG_INVALID_OBJECT_PROVIDED);
         }
-        this.content.splice(index, 1);
-        this.contentTargets.splice(index, 1);
-        // TODO need to implement this
-        content.unload(this);
+        this.trackConfig[index].unload(this);
+        updateAxesDomain(this.config);
+        this.config.height = determineHeight(this.config);
+        setCanvasHeight(this.config);
+        this.tracks.splice(index, 1);
+        this.trackConfig.splice(index, 1);
         this.resize();
         return this;
     }

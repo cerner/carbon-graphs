@@ -37,6 +37,7 @@ export default {
     axisLabelY2: "carbon-y2-axis-label",
     axisLabelRow: "carbon-axis-label-row",
     axisLabel: "carbon-axis-label-item",
+    axisYTrackLabel: "carbon-y-axis-track-label",
     legend: "carbon-legend",
     legendItem: "carbon-legend-item",
     legendItemBtn: "carbon-legend-item-btn",

@@ -1,0 +1,1202 @@
+"use strict";
+import Gantt from "../../../main/js/controls/Gantt";
+import { getXAxisWidth } from "../../../main/js/controls/Gantt/helpers/creationHelpers";
+import Track from "../../../main/js/controls/Gantt/Track";
+import constants, { AXIS_TYPE } from "../../../main/js/helpers/constants";
+import errors from "../../../main/js/helpers/errors";
+import { loadLegendItem } from "../../../main/js/helpers/legend";
+import styles from "../../../main/js/helpers/styles";
+import utils from "../../../main/js/helpers/utils";
+import LOCALE from "../../../main/js/locale/index";
+import {
+    axisJSON,
+    BASE_CANVAS_HEIGHT_PADDING,
+    fetchElementByClass,
+    getAxes,
+    getData,
+    taskValuesJSON,
+    trackDimension,
+    TRANSITION_DELAY,
+    triggerEvent
+} from "./helpers";
+
+describe("Gantt", () => {
+    let gantt = null;
+    let ganttChartContainer;
+    beforeEach(() => {
+        ganttChartContainer = document.createElement("div");
+        ganttChartContainer.id = "testCarbonGantt";
+        ganttChartContainer.setAttribute(
+            "style",
+            "width: 1024px; height: 400px;"
+        );
+        ganttChartContainer.setAttribute("class", "carbon-test-class");
+        document.body.appendChild(ganttChartContainer);
+    });
+    afterEach(() => {
+        document.body.innerHTML = "";
+    });
+    describe("When constructed", () => {
+        it("Throws error on undefined input", () => {
+            expect(() => {
+                gantt = new Gantt();
+            }).toThrowError(errors.THROW_MSG_NO_AXES_DATA_LOADED);
+        });
+        it("Throws error on null input", () => {
+            expect(() => {
+                gantt = new Gantt(null);
+            }).toThrowError(errors.THROW_MSG_NO_AXES_DATA_LOADED);
+        });
+        it("Throws error on [] input", () => {
+            expect(() => {
+                gantt = new Gantt([]);
+            }).toThrowError(errors.THROW_MSG_NO_AXES_DATA_LOADED);
+        });
+        it("Throws error on '' input", () => {
+            expect(() => {
+                gantt = new Gantt("");
+            }).toThrowError(errors.THROW_MSG_NO_AXES_DATA_LOADED);
+        });
+        it("Throws error on {} input", () => {
+            expect(() => {
+                gantt = new Gantt({});
+            }).toThrowError(errors.THROW_MSG_NO_AXES_DATA_LOADED);
+        });
+        it("Initializes properly", () => {
+            gantt = new Gantt(getAxes(axisJSON));
+            expect(gantt.graphContainer).not.toBeNull();
+            expect(gantt.config).not.toBeNull();
+            expect(gantt.axis).not.toBeNull();
+            expect(gantt.scale).not.toBeNull();
+            expect(gantt.legendSVG).not.toBeNull();
+            expect(gantt.svg).not.toBeNull();
+            expect(gantt.tracks).toEqual([]);
+            expect(gantt.datelines).toEqual([]);
+            expect(gantt.trackConfig).toEqual([]);
+            expect(gantt.resizeHandler).toEqual(jasmine.any(Function));
+        });
+    });
+    describe("When input is loaded", () => {
+        it("Throws error if no bind is present", () => {
+            expect(() => {
+                const input = getAxes(axisJSON);
+                input.bindTo = "";
+                new Gantt(input);
+            }).toThrowError(errors.THROW_MSG_NO_BIND);
+        });
+        describe("Axis - throws error", () => {
+            it("if no axis is present", () => {
+                expect(() => {
+                    new Gantt(getAxes({}));
+                }).toThrowError(errors.THROW_MSG_NO_AXIS_INFO);
+            });
+            it("if no x axis is present", () => {
+                expect(() => {
+                    new Gantt(
+                        getAxes({
+                            x: {}
+                        })
+                    );
+                }).toThrowError(errors.THROW_MSG_NO_AXIS_INFO);
+            });
+            it("if x axis lowerLimit is not present", () => {
+                expect(() => {
+                    new Gantt(
+                        getAxes({
+                            x: {
+                                upperLimit: new Date(
+                                    2019,
+                                    1,
+                                    1,
+                                    12
+                                ).toISOString()
+                            }
+                        })
+                    );
+                }).toThrowError(errors.THROW_MSG_NO_AXIS_LIMIT_INFO);
+            });
+            it("if x axis upperLimit is not present", () => {
+                expect(() => {
+                    new Gantt(
+                        getAxes({
+                            x: {
+                                lowerLimit: new Date(
+                                    2019,
+                                    1,
+                                    1,
+                                    12
+                                ).toISOString()
+                            }
+                        })
+                    );
+                }).toThrowError(errors.THROW_MSG_NO_AXIS_LIMIT_INFO);
+            });
+            it("if x axis lowerLimit is not valid", () => {
+                expect(() => {
+                    new Gantt(
+                        getAxes({
+                            x: {
+                                lowerLimit: 10,
+                                upperLimit: new Date(
+                                    2019,
+                                    1,
+                                    1,
+                                    12
+                                ).toISOString()
+                            }
+                        })
+                    );
+                }).toThrowError(errors.THROW_MSG_INVALID_AXIS_TYPE_VALUES);
+            });
+            it("if x axis upperLimit is not valid", () => {
+                expect(() => {
+                    new Gantt(
+                        getAxes({
+                            x: {
+                                lowerLimit: new Date(
+                                    2018,
+                                    1,
+                                    1,
+                                    12
+                                ).toISOString(),
+                                upperLimit: 10
+                            }
+                        })
+                    );
+                }).toThrowError(errors.THROW_MSG_INVALID_AXIS_TYPE_VALUES);
+            });
+        });
+        it("Throws error on empty input", () => {
+            expect(() => {
+                gantt = new Gantt(getAxes(axisJSON));
+                gantt.loadContent({});
+            }).toThrowError(errors.THROW_MSG_NO_DATA_LOADED);
+        });
+        it("Throws error on null input", () => {
+            expect(() => {
+                gantt = new Gantt(getAxes(axisJSON));
+                gantt.loadContent(null);
+            }).toThrowError(errors.THROW_MSG_NO_DATA_LOADED);
+        });
+        it("Processes the default input without any error", () => {
+            expect(() => {
+                gantt = new Gantt(getAxes(axisJSON));
+                gantt.loadContent(getData(taskValuesJSON));
+            }).not.toThrow();
+        });
+        it("Loads the content correctly", () => {
+            const primaryContent = getData(taskValuesJSON);
+            gantt = new Gantt(getAxes(axisJSON));
+            gantt.loadContent(primaryContent);
+            expect(gantt.tracks).toEqual([primaryContent.key]);
+            expect(gantt.trackConfig).toEqual([new Track(primaryContent)]);
+            expect(gantt.tracks.length).toBe(1);
+            expect(gantt.trackConfig.length).toBe(1);
+        });
+        it("Throws error when duplicate key is provided for content", () => {
+            expect(() => {
+                const primaryContent = getData(taskValuesJSON);
+                gantt = new Gantt(getAxes(axisJSON));
+                gantt.loadContent(primaryContent);
+                gantt.loadContent(primaryContent);
+            }).toThrowError(errors.THROW_MSG_UNIQUE_KEY_NOT_PROVIDED);
+        });
+        it("Changes to new object has no impact on base object", () => {
+            const data = getData(taskValuesJSON);
+            const input = getAxes(axisJSON);
+            gantt = new Gantt(input);
+            gantt.loadContent(data);
+            input.bindTo = "";
+            input.axis = {};
+            input.tracks = null;
+            data.tasks = [];
+            const cfg = gantt.config;
+            expect(input.bindTo).toBe("");
+            expect(input.axis).toEqual({});
+            expect(data.tasks).toEqual([]);
+            expect(cfg.bindTo).toBe("#testCarbonGantt");
+            expect(cfg.axis.x.lowerLimit).toBe(axisJSON.x.lowerLimit);
+            expect(cfg.axis.x.upperLimit).toBe(axisJSON.x.upperLimit);
+            expect(gantt.trackConfig.length).toBe(1);
+            expect(gantt.trackConfig[0].config.key).toBe(data.key);
+        });
+        it("Processes the default input correctly", () => {
+            const input = getAxes(axisJSON);
+            gantt = new Gantt(input);
+            expect(gantt.config.bindTo).toEqual(input.bindTo);
+            expect(gantt.config.bindLegendTo).toEqual(input.bindLegendTo);
+            expect(gantt.config.axis).not.toBeNull();
+            expect(gantt.config.locale).not.toBeNull();
+            expect(gantt.config.throttle).toEqual(constants.RESIZE_THROTTLE);
+            expect(gantt.config.datelines).toEqual(input.datelines);
+            expect(gantt.config.showDateLines).toEqual(true);
+            expect(gantt.config.axis.x.type).toEqual(AXIS_TYPE.TIME_SERIES);
+            expect(gantt.config.axis.x.ticks).toEqual({});
+            expect(gantt.config.axis.x.domain[0]).toEqual(
+                utils.parseDateTime(input.axis.x.lowerLimit)
+            );
+            expect(gantt.config.axis.x.domain[1]).toEqual(
+                utils.parseDateTime(input.axis.x.upperLimit)
+            );
+            expect(gantt.config.axis.x.show).toEqual(true);
+            expect(gantt.config.axis.y.show).toEqual(true);
+            expect(gantt.config.shownTargets).toEqual([]);
+        });
+        it("Processes bindLegendTo correctly", () => {
+            const input = utils.deepClone(getAxes(axisJSON));
+            input.bindLegendTo = "#ganttChartLegendContainer";
+            gantt = new Gantt(input);
+            expect(gantt.config.bindLegendTo).toEqual(input.bindLegendTo);
+        });
+    });
+    describe("When beforeInit is called", () => {
+        describe("With normal type values", () => {
+            beforeEach(() => {
+                gantt = new Gantt(getAxes(axisJSON));
+            });
+            it("Sets the gantt container correctly", () => {
+                expect(gantt.graphContainer).not.toBeNull();
+                expect(gantt.graphContainer.node()).not.toBeNull();
+            });
+            it("Gets the min bound for Y Axis correctly", () => {
+                expect(gantt.config.axis.y.domain.lowerLimit).toBe(0);
+            });
+            it("Gets the max bound for Y Axis correctly", () => {
+                expect(gantt.config.axis.y.domain.upperLimit).toBe(1);
+            });
+            it("Sets the height correctly", () => {
+                expect(gantt.config.height).toBe(0);
+            });
+        });
+        describe("With input loaded", () => {
+            beforeEach(() => {
+                gantt = new Gantt(getAxes(axisJSON));
+                gantt.loadContent(getData(taskValuesJSON));
+            });
+            it("Sets the gantt container correctly", () => {
+                expect(gantt.graphContainer).not.toBeNull();
+                expect(gantt.graphContainer.node()).not.toBeNull();
+            });
+            it("Gets the min bound for Y Axis correctly", () => {
+                expect(gantt.config.axis.y.domain.lowerLimit).toBe(0);
+            });
+            it("Gets the max bound for Y Axis correctly", () => {
+                expect(gantt.config.axis.y.domain.upperLimit).toBe(1);
+            });
+            it("Sets the height correctly", () => {
+                expect(gantt.config.height).toBe(
+                    constants.DEFAULT_GANTT_TRACK_HEIGHT
+                );
+            });
+        });
+    });
+    describe("When init is called", () => {
+        describe("Without content loaded", () => {
+            beforeEach(() => {
+                gantt = new Gantt(getAxes(axisJSON));
+            });
+            it("Sets canvas width", () => {
+                expect(gantt.config.canvasWidth).not.toBe(0);
+                expect(gantt.config.canvasWidth).toBe(1024);
+            });
+            it("Sets canvas height", () => {
+                expect(gantt.config.canvasHeight).toBe(
+                    BASE_CANVAS_HEIGHT_PADDING
+                );
+            });
+            it("Calculates X axis height", () => {
+                expect(gantt.config.axisSizes.x).toBeGreaterThan(0);
+            });
+            it("Calculates Y Axis width", () => {
+                expect(gantt.config.axisSizes.y).toBeGreaterThan(0);
+            });
+            it("Calculates Y axis label width", () => {
+                expect(gantt.config.axisLabelWidths.y).toBeGreaterThan(0);
+                expect(gantt.config.axisLabelWidths.y).toBe(
+                    constants.PADDING.trackLabel
+                );
+            });
+            it("Calculates X axis d3 scale using domain and range", () => {
+                expect(gantt.scale.x).not.toBeNull();
+                expect(gantt.scale.x).toEqual(jasmine.any(Function));
+                expect(gantt.scale.x.range()).toEqual([
+                    0,
+                    getXAxisWidth(gantt.config)
+                ]);
+            });
+            it("Calculates Y axis d3 scale using domain and range", () => {
+                expect(gantt.scale.y).not.toBeNull();
+                expect(gantt.scale.y).toEqual(jasmine.any(Function));
+                expect(gantt.scale.y.domain()).toEqual([]);
+                expect(gantt.scale.y.range()).toEqual([0]);
+            });
+        });
+        describe("With content loaded", () => {
+            beforeEach(() => {
+                gantt = new Gantt(getAxes(axisJSON));
+                gantt.loadContent(getData(taskValuesJSON));
+            });
+            it("Calculates X axis d3 scale using domain and range", () => {
+                expect(gantt.scale.x).not.toBeNull();
+                expect(gantt.scale.x).toEqual(jasmine.any(Function));
+                expect(gantt.scale.x.range()).toEqual([
+                    0,
+                    getXAxisWidth(gantt.config)
+                ]);
+            });
+            it("Calculates Y axis d3 scale using domain and range", () => {
+                expect(gantt.scale.y).not.toBeNull();
+                expect(gantt.scale.y).toEqual(jasmine.any(Function));
+                expect(gantt.scale.y.domain()).toEqual([null, "Project A"]);
+                expect(gantt.scale.y.range()).toEqual([0, 41]);
+            });
+        });
+    });
+    describe("When generate is called", () => {
+        beforeEach(() => {
+            gantt = new Gantt(getAxes(axisJSON));
+        });
+        it("Creates the container svg", () => {
+            const graphElem = document.querySelector(gantt.config.bindTo);
+            expect(graphElem).not.toBeNull();
+            expect(graphElem.children[0].nodeName).toBe("DIV");
+            expect(graphElem.children[0].getAttribute("class")).toBe(
+                styles.container
+            );
+        });
+        it("Creates gantt elements in order", () => {
+            const canvas = fetchElementByClass(styles.container).childNodes[0];
+            const legend = fetchElementByClass(styles.container).childNodes[1];
+            expect(canvas).not.toBeNull();
+            expect(canvas.getAttribute("class")).toBe(styles.canvas);
+            expect(canvas.nodeName).toBe("svg");
+            expect(canvas.getAttribute("role")).toBe("img");
+            expect(legend).not.toBeNull();
+            expect(legend.getAttribute("class")).toBe(styles.legend);
+            expect(legend.getAttribute("role")).toBe("list");
+        });
+        it("Creates canvas elements in order", () => {
+            const defsElement = fetchElementByClass(styles.canvas)
+                .childNodes[0];
+            const gridElement = fetchElementByClass(styles.canvas)
+                .childNodes[1];
+            const contentContainer = fetchElementByClass(styles.canvas)
+                .childNodes[2];
+            const axisXElement = fetchElementByClass(styles.canvas)
+                .childNodes[3];
+            const axisYElement = fetchElementByClass(styles.canvas)
+                .childNodes[4];
+            expect(defsElement).not.toBeNull();
+            expect(gridElement).not.toBeNull();
+            expect(axisXElement).not.toBeNull();
+            expect(axisYElement).not.toBeNull();
+            expect(contentContainer).not.toBeNull();
+
+            expect(defsElement.nodeName).toBe("defs");
+            expect(gridElement.nodeName).toBe("g");
+            expect(axisXElement.nodeName).toBe("g");
+            expect(axisYElement.nodeName).toBe("g");
+            expect(contentContainer.nodeName).toBe("rect");
+            expect(gridElement.getAttribute("class")).toBe(styles.grid);
+            expect(axisXElement.classList).toContain(styles.axis);
+            expect(axisXElement.classList).toContain(styles.axisX);
+            expect(axisYElement.classList).toContain(styles.axis);
+            expect(axisYElement.classList).toContain(styles.axisY);
+            expect(contentContainer.classList).toContain(
+                styles.contentContainer
+            );
+        });
+        it("Creates the canvas svg", () => {
+            const canvas = fetchElementByClass(styles.container).firstChild;
+            expect(canvas).not.toBeNull();
+            expect(canvas.nodeName).toBe("svg");
+            expect(canvas.getAttribute("class")).toBe(styles.canvas);
+            expect(+canvas.getAttribute("height")).toBe(
+                gantt.config.canvasHeight
+            );
+            expect(+canvas.getAttribute("width")).toBe(
+                gantt.config.canvasWidth - constants.BASE_CANVAS_WIDTH_PADDING
+            );
+        });
+        it("Creates defs element with height and width", () => {
+            const currentWidth =
+                gantt.config.axisSizes.y +
+                gantt.config.axisLabelWidths.y +
+                (constants.PADDING.top + constants.PADDING.bottom) * 2;
+            const defsElement = fetchElementByClass(styles.canvas).firstChild;
+            expect(defsElement.nodeName).toBe("defs");
+            expect(defsElement.firstChild.nodeName).toBe("clipPath");
+            expect(defsElement.firstChild.firstChild.nodeName).toBe("rect");
+            expect(
+                defsElement.firstChild.firstChild.getAttribute("width")
+            ).toBe(`${1024 - currentWidth}`);
+            expect(
+                +defsElement.firstChild.firstChild.getAttribute("height")
+            ).toBe(gantt.config.height);
+        });
+        describe("Grid", () => {
+            it("Creates the grid markup", () => {
+                const canvasElement = fetchElementByClass(styles.canvas);
+                expect(
+                    canvasElement.querySelector(`.${styles.grid}`)
+                ).not.toBeNull();
+                const gridElement = fetchElementByClass(styles.grid);
+                expect(gridElement.childElementCount).toBe(2);
+            });
+            it("Creates the grid markup with tick values provided", () => {
+                gantt.destroy();
+                const localeAxisObj = utils.deepClone(axisJSON);
+                localeAxisObj.x.ticks = {
+                    values: [
+                        new Date(2018, 2, 1, 12).toISOString(),
+                        new Date(2018, 4, 1, 12).toISOString(),
+                        new Date(2018, 6, 1, 12).toISOString()
+                    ]
+                };
+                gantt = new Gantt(getAxes(localeAxisObj));
+                gantt.loadContent(getData(taskValuesJSON));
+
+                const gridElement = fetchElementByClass(styles.grid);
+                const gridHElement = fetchElementByClass(styles.gridH);
+                const gridVElement = fetchElementByClass(styles.gridV);
+                expect(gridElement.childElementCount).toBe(2);
+                expect(gridHElement.querySelectorAll(".tick").length).toBe(2); // null and Project A
+                expect(gridVElement.querySelectorAll(".tick").length).toBe(3);
+            });
+            it("Creates the horizontal grid markup", () => {
+                gantt.destroy();
+                gantt = new Gantt(getAxes(axisJSON));
+                gantt.loadContent(getData(taskValuesJSON));
+                const gridElement = fetchElementByClass(styles.grid);
+                expect(
+                    gridElement.querySelector(`.${styles.gridH}`)
+                ).not.toBeNull();
+                expect(
+                    gridElement.querySelector(`.${styles.gridH}`).nodeName
+                ).toBe("g");
+            });
+            it("Creates the vertical grid markup", () => {
+                gantt.destroy();
+                gantt = new Gantt(getAxes(axisJSON));
+                gantt.loadContent(getData(taskValuesJSON));
+                const gridElement = fetchElementByClass(styles.grid);
+                expect(
+                    gridElement.querySelector(`.${styles.gridV}`)
+                ).not.toBeNull();
+                expect(
+                    gridElement.querySelector(`.${styles.gridV}`).nodeName
+                ).toBe("g");
+            });
+        });
+        describe("Content container", () => {
+            it("Creates the container markup", () => {
+                const canvasElement = fetchElementByClass(styles.canvas);
+                const containerElement = canvasElement.querySelector(
+                    `.${styles.contentContainer}`
+                );
+                expect(containerElement).not.toBeNull();
+                expect(containerElement.nodeName).toBe("rect");
+                expect(+containerElement.getAttribute("x")).toBe(
+                    gantt.config.axisSizes.y + gantt.config.axisLabelWidths.y
+                );
+                expect(+containerElement.getAttribute("y")).toBe(
+                    (constants.PADDING.top + constants.PADDING.bottom) * 2
+                );
+                expect(+containerElement.getAttribute("height")).toBe(0);
+            });
+        });
+        describe("Axes", () => {
+            it("Creates the x axis markup", () => {
+                const xAxisElement = fetchElementByClass(styles.axisX);
+                expect(xAxisElement.getAttribute("class")).toBe(
+                    `${styles.axis} ${styles.axisX}`
+                );
+            });
+            it("Creates the y axis markup", () => {
+                const yAxisElement = fetchElementByClass(styles.axisY);
+                expect(yAxisElement.getAttribute("class")).toBe(
+                    `${styles.axis} ${styles.axisY} ${styles.axisYTrackLabel}`
+                );
+            });
+            it("Creates correct text for each track", () => {
+                gantt.destroy();
+                gantt = new Gantt(getAxes(axisJSON));
+                gantt.loadContent(getData(taskValuesJSON));
+                const yAxisElement = fetchElementByClass(
+                    styles.axisYTrackLabel
+                );
+                const textElementList = yAxisElement.querySelectorAll(
+                    ".tick text"
+                );
+                expect(textElementList[0].getAttribute("transform")).toBeNull(); // null
+                expect(
+                    textElementList[1].getAttribute("transform")
+                ).not.toBeNull(); // Project A
+                expect(textElementList[1].innerHTML).toBe("Project A"); // Project A
+            });
+            it("Hides x axis when not enabled", () => {
+                gantt.destroy();
+                const hiddenAxisObj = utils.deepClone(axisJSON);
+                hiddenAxisObj.x.show = false;
+                gantt = new Gantt(getAxes(hiddenAxisObj));
+                gantt.loadContent(getData(taskValuesJSON));
+                const xAxisElement = fetchElementByClass(styles.axisX);
+                expect(xAxisElement.getAttribute("class")).toBe(
+                    `${styles.axis} ${styles.axisX}`
+                );
+                expect(xAxisElement.getAttribute("aria-hidden")).toBe("true");
+            });
+            it("Hides y axis when not enabled", () => {
+                gantt.destroy();
+                const hiddenAxisObj = utils.deepClone(axisJSON);
+                hiddenAxisObj.y.show = false;
+                gantt = new Gantt(getAxes(hiddenAxisObj));
+                gantt.loadContent(getData(taskValuesJSON));
+                const yAxisElement = fetchElementByClass(styles.axisY);
+                expect(yAxisElement.getAttribute("class")).toBe(
+                    `${styles.axis} ${styles.axisY} ${styles.axisYTrackLabel}`
+                );
+                expect(yAxisElement.getAttribute("aria-hidden")).toBe("true");
+            });
+            it("Hides x and y axis when not enabled", () => {
+                gantt.destroy();
+                const hiddenAxisObj = utils.deepClone(axisJSON);
+                hiddenAxisObj.x.show = false;
+                hiddenAxisObj.y.show = false;
+                gantt = new Gantt(getAxes(hiddenAxisObj));
+                gantt.loadContent(getData(taskValuesJSON));
+                expect(
+                    fetchElementByClass(styles.axisY).getAttribute("class")
+                ).toBe(
+                    `${styles.axis} ${styles.axisY} ${styles.axisYTrackLabel}`
+                );
+                expect(
+                    fetchElementByClass(styles.axisX).getAttribute("class")
+                ).toBe(`${styles.axis} ${styles.axisX}`);
+                expect(
+                    fetchElementByClass(styles.axisY).getAttribute(
+                        "aria-hidden"
+                    )
+                ).toBe("true");
+                expect(
+                    fetchElementByClass(styles.axisX).getAttribute(
+                        "aria-hidden"
+                    )
+                ).toBe("true");
+            });
+            describe("Locale", () => {
+                it("Creates x axis with ticks in default locale", () => {
+                    gantt.destroy();
+                    const localeAxisObj = utils.deepClone(axisJSON);
+                    localeAxisObj.x.ticks = {
+                        format: "%b %Y"
+                    };
+                    gantt = new Gantt(getAxes(localeAxisObj));
+                    const xAxisElement = fetchElementByClass(styles.axisX);
+                    const tick = xAxisElement
+                        .querySelector(".tick")
+                        .querySelector("text");
+                    expect(tick.textContent).toBe("Jan 2018");
+                });
+                it("Creates x axis with ticks in provided locale - DE", () => {
+                    gantt.destroy();
+                    const localeAxisObj = utils.deepClone(axisJSON);
+                    localeAxisObj.x.ticks = {
+                        format: "%b %Y"
+                    };
+                    gantt = new Gantt(
+                        Object.assign(
+                            { locale: LOCALE.de_DE },
+                            getAxes(localeAxisObj)
+                        )
+                    );
+
+                    const xAxisElement = fetchElementByClass(styles.axisX);
+                    const tick = xAxisElement
+                        .querySelector(".tick")
+                        .querySelector("text");
+                    expect(tick.textContent).toBe("Jan 2018");
+                });
+                it("Creates x axis with ticks in provided locale - FR", () => {
+                    gantt.destroy();
+                    const localeAxisObj = utils.deepClone(axisJSON);
+                    localeAxisObj.x.ticks = {
+                        format: "%b %Y"
+                    };
+                    gantt = new Gantt(
+                        Object.assign(
+                            { locale: LOCALE.fr_FR },
+                            getAxes(localeAxisObj)
+                        )
+                    );
+
+                    const xAxisElement = fetchElementByClass(styles.axisX);
+                    const tick = xAxisElement
+                        .querySelector(".tick")
+                        .querySelector("text");
+                    expect(tick.textContent).toBe("janv. 2018");
+                });
+                it("Creates x axis with ticks in provided locale - ES", () => {
+                    gantt.destroy();
+                    const localeAxisObj = utils.deepClone(axisJSON);
+                    localeAxisObj.x.ticks = {
+                        format: "%b %Y"
+                    };
+                    gantt = new Gantt(
+                        Object.assign(
+                            { locale: LOCALE.es_ES },
+                            getAxes(localeAxisObj)
+                        )
+                    );
+                    const xAxisElement = fetchElementByClass(styles.axisX);
+                    const tick = xAxisElement
+                        .querySelector(".tick")
+                        .querySelector("text");
+                    expect(tick.textContent).toBe("ene 2018");
+                });
+                it("Creates x axis with ticks in provided locale - PT_BR", () => {
+                    gantt.destroy();
+                    const localeAxisObj = utils.deepClone(axisJSON);
+                    localeAxisObj.x.ticks = {
+                        format: "%b %Y"
+                    };
+                    gantt = new Gantt(
+                        Object.assign(
+                            { locale: LOCALE.pt_BR },
+                            getAxes(localeAxisObj)
+                        )
+                    );
+                    const xAxisElement = fetchElementByClass(styles.axisX);
+                    const tick = xAxisElement
+                        .querySelector(".tick")
+                        .querySelector("text");
+                    expect(tick.textContent).toBe("Jan 2018");
+                });
+            });
+        });
+        describe("Legend", () => {
+            it("Throws error when legend is loaded without a click handler", () => {
+                expect(() => {
+                    loadLegendItem({}, {}, {}, {});
+                }).toThrowError(
+                    "Invalid Argument: eventHandlers needs a clickHandler callback function."
+                );
+            });
+            it("Throws error when legend is loaded without a hover handler", () => {
+                expect(() => {
+                    loadLegendItem({}, {}, {}, { clickHandler: Function });
+                }).toThrowError(
+                    "Invalid Argument: eventHandlers needs a hoverHandler callback function."
+                );
+            });
+            it("Throws error when legend is loaded without a label value", () => {
+                expect(() => {
+                    loadLegendItem(
+                        {},
+                        { label: null },
+                        {},
+                        {
+                            clickHandler: Function,
+                            hoverHandler: Function
+                        }
+                    );
+                }).toThrowError(
+                    "Invalid Argument: label needs to be a valid string."
+                );
+            });
+            it("Loads legend in separate container when bindLegendTo used", () => {
+                gantt.destroy();
+                const legendContainer = document.createElement("div");
+                legendContainer.setAttribute("id", "ganttChartLegendContainer");
+                legendContainer.setAttribute("class", "legend-container");
+                ganttChartContainer.appendChild(legendContainer);
+                const input = utils.deepClone(getAxes(axisJSON));
+                input.bindLegendTo = "#ganttChartLegendContainer";
+                gantt = new Gantt(input);
+                const container = fetchElementByClass(styles.container);
+                const parentContainer = fetchElementByClass(
+                    "carbon-test-class"
+                );
+                expect(gantt.config.bindLegendTo).toEqual(input.bindLegendTo);
+                expect(container.childNodes.length).toEqual(1);
+                expect(parentContainer.childNodes.length).toEqual(2);
+                expect(
+                    parentContainer.childNodes[0].getAttribute("id")
+                ).toEqual("ganttChartLegendContainer");
+                expect(
+                    parentContainer.childNodes[0].getAttribute("class")
+                ).toEqual("legend-container");
+                expect(
+                    parentContainer.childNodes[1].getAttribute("class")
+                ).toEqual(styles.container);
+            });
+            it("Hides legend when not enabled", () => {
+                gantt.destroy();
+                gantt = new Gantt(
+                    Object.assign(
+                        {
+                            showLegend: false
+                        },
+                        getAxes(axisJSON)
+                    )
+                );
+                const canvasElement = fetchElementByClass(styles.canvas);
+                expect(
+                    canvasElement.querySelector(`.${styles.legend}`)
+                ).toBeNull();
+            });
+        });
+        it("Attaches event handlers", () => {
+            gantt.resizeHandler();
+            expect(gantt.resizeHandler).not.toBeNull();
+            expect(gantt.resizeHandler).toEqual(jasmine.any(Function));
+        });
+    });
+    describe("When load is called", () => {
+        const primaryContent = getData(taskValuesJSON);
+        const secondaryContent = utils.deepClone(getData(taskValuesJSON));
+        secondaryContent.key = "uid_2";
+        beforeEach(() => {
+            gantt = new Gantt(getAxes(axisJSON));
+            gantt.loadContent(primaryContent);
+        });
+        describe("Single Track input", () => {
+            it("Creates a new Track instance for each content", () => {
+                expect(gantt.trackConfig[0] instanceof Track).toBeTruthy();
+            });
+            it("Saves track instance", () => {
+                expect(gantt.trackConfig[0]).not.toBeNull();
+                expect(gantt.tracks[0]).not.toBeNull();
+                expect(gantt.tracks[0]).toBe(primaryContent.key);
+            });
+            it("Update axes domain", () => {
+                expect(gantt.config.axis.y.domain.lowerLimit).toBe(0);
+                expect(gantt.config.axis.y.domain.upperLimit).toBe(1);
+            });
+            it("Updates the height", () => {
+                expect(gantt.config.height).toBe(41);
+            });
+            it("Sets canvas height", () => {
+                expect(gantt.config.canvasHeight).toBe(
+                    41 + BASE_CANVAS_HEIGHT_PADDING
+                );
+            });
+            it("Resizes the graph", () => {
+                gantt.destroy();
+                gantt = new Gantt(getAxes(axisJSON));
+                spyOn(gantt, "resize");
+                gantt.loadContent(primaryContent);
+                expect(gantt.resize).toHaveBeenCalled();
+            });
+            it("Moves track label to middle", () => {
+                const trackLabelElement = document.querySelectorAll(
+                    ".carbon-axis.carbon-axis-y .tick text"
+                );
+                expect(
+                    trackLabelElement[0].getAttribute("transform")
+                ).toBeNull(); // null
+                expect(
+                    trackLabelElement[1].getAttribute("transform")
+                ).not.toBeNull(); // Project A
+            });
+        });
+        describe("Multiple Track inputs", () => {
+            beforeEach(() => {
+                gantt.loadContent(secondaryContent);
+            });
+            it("Loads content correctly", () => {
+                expect(gantt.trackConfig[0] instanceof Track).toBeTruthy();
+                expect(gantt.trackConfig[1] instanceof Track).toBeTruthy();
+                expect(gantt.tracks[0]).toBe(primaryContent.key);
+                expect(gantt.tracks[1]).toBe(secondaryContent.key);
+                expect(gantt.config.axis.y.domain.lowerLimit).toBe(0);
+                expect(gantt.config.axis.y.domain.upperLimit).toBe(2);
+                expect(gantt.config.height).toBe(82);
+                expect(gantt.config.canvasHeight).toBe(
+                    82 + BASE_CANVAS_HEIGHT_PADDING
+                );
+            });
+            it("Loads content correctly with different heights", () => {
+                const primaryContent = getData(taskValuesJSON);
+                const secondaryContent = utils.deepClone(
+                    getData(taskValuesJSON)
+                );
+                secondaryContent.key = "uid_2";
+                gantt.destroy();
+                gantt = new Gantt(getAxes(axisJSON));
+                primaryContent.dimension = trackDimension.dimension;
+                secondaryContent.dimension = trackDimension.dimension;
+                gantt.loadContent(primaryContent);
+                gantt.loadContent(secondaryContent);
+
+                expect(gantt.trackConfig[0] instanceof Track).toBeTruthy();
+                expect(gantt.trackConfig[1] instanceof Track).toBeTruthy();
+                expect(gantt.tracks[0]).toBe(primaryContent.key);
+                expect(gantt.tracks[1]).toBe(secondaryContent.key);
+                expect(gantt.config.axis.y.domain.lowerLimit).toBe(0);
+                expect(gantt.config.axis.y.domain.upperLimit).toBe(2);
+                expect(gantt.config.height).toBe(200);
+                expect(gantt.config.canvasHeight).toBe(
+                    200 + BASE_CANVAS_HEIGHT_PADDING
+                );
+            });
+            it("Loads content correctly with different heights", () => {
+                const primaryContent = getData(taskValuesJSON);
+                const secondaryContent = utils.deepClone(
+                    getData(taskValuesJSON)
+                );
+                secondaryContent.key = "uid_2";
+                const tertiaryContent = utils.deepClone(
+                    getData(taskValuesJSON)
+                );
+                tertiaryContent.key = "uid_3";
+                gantt.destroy();
+                gantt = new Gantt(getAxes(axisJSON));
+                primaryContent.dimension = trackDimension.dimension;
+                secondaryContent.dimension = trackDimension.dimension;
+                gantt.loadContent(primaryContent);
+                gantt.loadContent(secondaryContent);
+                gantt.loadContent(tertiaryContent);
+                expect(gantt.trackConfig[0] instanceof Track).toBeTruthy();
+                expect(gantt.trackConfig[1] instanceof Track).toBeTruthy();
+                expect(gantt.trackConfig[2] instanceof Track).toBeTruthy();
+                expect(gantt.tracks[0]).toBe(primaryContent.key);
+                expect(gantt.tracks[1]).toBe(secondaryContent.key);
+                expect(gantt.tracks[2]).toBe(tertiaryContent.key);
+                expect(gantt.config.axis.y.domain.lowerLimit).toBe(0);
+                expect(gantt.config.axis.y.domain.upperLimit).toBe(3);
+                expect(gantt.config.height).toBe(241);
+                expect(gantt.config.canvasHeight).toBe(
+                    241 + BASE_CANVAS_HEIGHT_PADDING
+                );
+            });
+        });
+        describe("Validates content for unique keys", () => {
+            it("Throws error if content doesn't have a unique key", () => {
+                gantt = new Gantt(Object.assign(getAxes(axisJSON)));
+                gantt.loadContent(getData(taskValuesJSON));
+                expect(() => {
+                    gantt.loadContent(getData(taskValuesJSON));
+                }).toThrowError(errors.THROW_MSG_UNIQUE_KEY_NOT_PROVIDED);
+            });
+            it("doesn't throws error if content has unique keys", () => {
+                gantt = new Gantt(Object.assign(getAxes(axisJSON)));
+                gantt.loadContent(getData(taskValuesJSON));
+                expect(() => {
+                    const uniqueData = getData(taskValuesJSON);
+                    uniqueData.key = "uid_2";
+                    gantt.loadContent(uniqueData);
+                }).not.toThrowError(errors.THROW_MSG_UNIQUE_KEY_NOT_PROVIDED);
+            });
+        });
+        describe("Content container", () => {
+            it("Increases the height when content is loaded dynamically", (done) => {
+                const canvasElement = fetchElementByClass(styles.canvas);
+                setTimeout(() => {
+                    const containerElement = canvasElement.querySelector(
+                        `.${styles.contentContainer}`
+                    );
+                    expect(+containerElement.getAttribute("height")).toBe(41);
+                    done();
+                }, TRANSITION_DELAY);
+            });
+            it("Increases the height when content is loaded dynamically with different height", (done) => {
+                gantt.destroy();
+                gantt = new Gantt(getAxes(axisJSON));
+                const data = utils.deepClone(getData(taskValuesJSON));
+                data.dimension = trackDimension.dimension;
+                gantt.loadContent(data);
+                const canvasElement = fetchElementByClass(styles.canvas);
+                setTimeout(() => {
+                    const containerElement = canvasElement.querySelector(
+                        `.${styles.contentContainer}`
+                    );
+                    expect(+containerElement.getAttribute("height")).toBe(100);
+                    done();
+                }, TRANSITION_DELAY);
+            });
+        });
+    });
+    describe("When resize is called", () => {
+        beforeEach(() => {
+            gantt = new Gantt(getAxes(axisJSON));
+            gantt.loadContent(getData(taskValuesJSON));
+        });
+        it("Sets the canvas width correctly", (done) => {
+            const currentWidth = gantt.config.canvasWidth;
+            expect(currentWidth).toBe(1024);
+            ganttChartContainer.setAttribute(
+                "style",
+                "width: 800px; height: 200px"
+            );
+            triggerEvent(
+                window,
+                "resize",
+                () => {
+                    expect(gantt.config.canvasWidth).toBe(800);
+                    done();
+                },
+                TRANSITION_DELAY
+            );
+        });
+        it("Sets the defs clipPath width and height correctly", (done) => {
+            ganttChartContainer.setAttribute(
+                "style",
+                "width: 800px; height: 200px"
+            );
+            triggerEvent(window, "resize", () => {
+                const defsElement = fetchElementByClass(styles.canvas)
+                    .firstChild;
+                const clipPathRect = defsElement.firstChild.firstChild;
+                expect(+clipPathRect.getAttribute("height")).toBe(
+                    gantt.config.height
+                );
+                expect(+clipPathRect.getAttribute("width")).toBe(
+                    getXAxisWidth(gantt.config)
+                );
+                done();
+            });
+        });
+        it("Calculates X axis d3 scale using domain and range", (done) => {
+            triggerEvent(window, "resize", () => {
+                expect(gantt.scale.x).not.toBeNull();
+                expect(gantt.scale.x).toEqual(jasmine.any(Function));
+                done();
+            });
+        });
+        it("Calculates Y axis d3 scale using domain and range", (done) => {
+            triggerEvent(window, "resize", () => {
+                expect(gantt.scale.y).not.toBeNull();
+                expect(gantt.scale.y).toEqual(jasmine.any(Function));
+                done();
+            });
+        });
+        it("Translates the canvas", (done) => {
+            ganttChartContainer.setAttribute(
+                "style",
+                "width: 800px; height: 200px"
+            );
+            triggerEvent(window, "resize", () => {
+                expect(
+                    +fetchElementByClass(styles.canvas).getAttribute("height")
+                ).toBe(41 + BASE_CANVAS_HEIGHT_PADDING);
+                expect(
+                    +fetchElementByClass(styles.canvas).getAttribute("width")
+                ).toBe(790);
+                done();
+            });
+        });
+        it("Sets the content container width and height correctly", (done) => {
+            ganttChartContainer.setAttribute(
+                "style",
+                "width: 800px; height: 200px"
+            );
+            triggerEvent(
+                window,
+                "resize",
+                () => {
+                    const contentContainer = fetchElementByClass(
+                        styles.contentContainer
+                    );
+                    expect(+contentContainer.getAttribute("height")).toBe(
+                        gantt.config.height
+                    );
+                    expect(+contentContainer.getAttribute("width")).toBe(
+                        getXAxisWidth(gantt.config)
+                    );
+                    done();
+                },
+                TRANSITION_DELAY
+            );
+        });
+        it("Sets the throttle correctly, if undefined", () => {
+            const throttledInput = getAxes(axisJSON);
+            throttledInput.throttle = undefined;
+            gantt.destroy();
+            gantt = new Gantt(throttledInput);
+            expect(gantt.config.throttle).toEqual(constants.RESIZE_THROTTLE);
+        });
+        it("Sets the throttle correctly", () => {
+            const throttledInput = getAxes(axisJSON);
+            throttledInput.throttle = 400;
+            gantt.destroy();
+            gantt = new Gantt(throttledInput);
+            expect(gantt.config.throttle).toEqual(400);
+            expect(gantt.config.throttle).not.toEqual(
+                constants.RESIZE_THROTTLE
+            );
+        });
+        it("Throttles based on delay", (done) => {
+            spyOn(window, "requestAnimationFrame");
+            const throttledInput = getAxes(axisJSON);
+            throttledInput.throttle = undefined;
+            gantt.destroy();
+            gantt = new Gantt(throttledInput);
+            ganttChartContainer.setAttribute(
+                "style",
+                "width: 600px; height: 200px"
+            );
+            triggerEvent(
+                window,
+                "resize",
+                () => {
+                    expect(window.requestAnimationFrame).toHaveBeenCalled();
+                    done();
+                },
+                constants.RESIZE_THROTTLE
+            );
+        });
+        it("Throttles based on delay provided in the input", (done) => {
+            spyOn(window, "requestAnimationFrame");
+            const throttledInput = getAxes(axisJSON);
+            throttledInput.throttle = 500;
+            gantt.destroy();
+            gantt = new Gantt(throttledInput);
+            ganttChartContainer.setAttribute(
+                "style",
+                "width: 400px; height: 200px"
+            );
+            triggerEvent(
+                window,
+                "resize",
+                () => {
+                    expect(window.requestAnimationFrame).toHaveBeenCalled();
+                    done();
+                },
+                throttledInput.throttle
+            );
+        });
+    });
+    describe("When unload is called", () => {
+        const primaryContent = getData(taskValuesJSON);
+        const secondaryContent = utils.deepClone(getData(taskValuesJSON));
+        const tertiaryContent = utils.deepClone(getData(taskValuesJSON));
+        secondaryContent.key = "uid_2";
+        tertiaryContent.key = "uid_3";
+        beforeEach(() => {
+            gantt = new Gantt(getAxes(axisJSON));
+            gantt.loadContent(primaryContent);
+        });
+        it("Throws error when unloading a content which is not loaded", () => {
+            expect(() => {
+                gantt.unloadContent(secondaryContent);
+            }).toThrowError(errors.THROW_MSG_INVALID_OBJECT_PROVIDED);
+        });
+        it("Removes the content successfully", (done) => {
+            gantt.unloadContent(primaryContent);
+            setTimeout(() => {
+                expect(gantt.tracks).toEqual([]);
+                expect(gantt.trackConfig).toEqual([]);
+                expect(gantt.tracks.length).toBe(0);
+                expect(gantt.trackConfig.length).toBe(0);
+                expect(gantt.config.height).toBe(0);
+                expect(gantt.config.axis.y.domain.lowerLimit).toBe(0);
+                expect(gantt.config.axis.y.domain.upperLimit).toBe(1);
+                expect(gantt.config.canvasHeight).toBe(
+                    BASE_CANVAS_HEIGHT_PADDING
+                );
+                done();
+            }, TRANSITION_DELAY);
+        });
+        it("Removes the grid and track", (done) => {
+            gantt.unloadContent(primaryContent);
+            setTimeout(() => {
+                expect(gantt.scale.y.domain()).toEqual([]);
+                expect(gantt.scale.y.range()).toEqual([0]);
+                done();
+            }, TRANSITION_DELAY);
+        });
+        it("Adjusts the defs height", (done) => {
+            gantt.unloadContent(primaryContent);
+            setTimeout(() => {
+                const defsContainerElement = document.querySelector(
+                    `clipPath#${constants.CLIP_PATH_ID}`
+                );
+                expect(+defsContainerElement.getAttribute("height")).toBe(0);
+                done();
+            }, TRANSITION_DELAY);
+        });
+        it("Adjusts the content container height", (done) => {
+            gantt.unloadContent(primaryContent);
+            setTimeout(() => {
+                const contentContainerElement = fetchElementByClass(
+                    styles.contentContainer
+                );
+                expect(+contentContainerElement.getAttribute("height")).toBe(0);
+                done();
+            }, TRANSITION_DELAY);
+        });
+        it("Updates track props", (done) => {
+            gantt.unloadContent(primaryContent);
+            setTimeout(() => {
+                expect(gantt.config.axis.y.trackCount).toBe(0);
+                expect(
+                    gantt.config.axis.y.trackList[primaryContent.key]
+                ).toBeUndefined();
+                done();
+            }, TRANSITION_DELAY);
+        });
+        it("Unloads content correctly with different heights", () => {
+            const primaryContent = getData(taskValuesJSON);
+            const secondaryContent = utils.deepClone(getData(taskValuesJSON));
+            secondaryContent.key = "uid_2";
+            const tertiaryContent = utils.deepClone(getData(taskValuesJSON));
+            tertiaryContent.key = "uid_3";
+
+            gantt.destroy();
+            gantt = new Gantt(getAxes(axisJSON));
+            primaryContent.dimension = trackDimension.dimension;
+            secondaryContent.dimension = trackDimension.dimension;
+            gantt.loadContent(primaryContent);
+            gantt.loadContent(secondaryContent);
+            gantt.loadContent(tertiaryContent);
+            gantt.unloadContent(secondaryContent);
+            expect(gantt.trackConfig[0] instanceof Track).toBeTruthy();
+            expect(gantt.trackConfig[1] instanceof Track).toBeTruthy();
+            expect(gantt.trackConfig[2]).toBeUndefined();
+            expect(gantt.tracks[0]).toBe(primaryContent.key);
+            expect(gantt.tracks[1]).toBe(tertiaryContent.key);
+            expect(gantt.tracks[2]).toBeUndefined();
+            expect(gantt.config.axis.y.domain.lowerLimit).toBe(0);
+            expect(gantt.config.axis.y.domain.upperLimit).toBe(2);
+            expect(gantt.config.height).toBe(141);
+            expect(gantt.config.canvasHeight).toBe(
+                141 + BASE_CANVAS_HEIGHT_PADDING
+            );
+        });
+    });
+    describe("When destruct is called", () => {
+        beforeEach(() => {
+            gantt = new Gantt(getAxes(axisJSON));
+            gantt.loadContent(getData(taskValuesJSON));
+            gantt.destroy();
+        });
+        it("Removes the canvas content", () => {
+            expect(fetchElementByClass(styles.canvas)).toBeNull();
+        });
+        it("Removes the legend content", () => {
+            expect(fetchElementByClass(styles.legend)).toBeNull();
+        });
+        it("Removes the container content", () => {
+            expect(fetchElementByClass(styles.container)).toBeNull();
+        });
+        it("Resets the API objects", () => {
+            expect(gantt.config).toEqual({
+                axis: Object({
+                    x: Object({}),
+                    y: Object({})
+                }),
+                shownTargets: Object({})
+            });
+            expect(gantt.axis).toEqual({});
+            expect(gantt.scale).toEqual({});
+            expect(gantt.svg).toBeNull();
+            expect(gantt.graphContainer).toBeNull();
+            expect(gantt.legendSVG).toBeNull();
+            expect(gantt.tracks).toEqual([]);
+            expect(gantt.datelines).toEqual([]);
+            expect(gantt.trackConfig).toEqual([]);
+            expect(gantt.resizeHandler).toBeNull();
+        });
+    });
+});

@@ -41,15 +41,15 @@ Add `dist/js/carbon-graphs.js` and `dist/css/carbon-graphs.css` in your page and
 
 ## Potential features
 * [ ] Gantt charts
+* [ ] Timeline graph
 * [ ] Axes labelling along with shapes
 * [ ] Bar graphs
 * [ ] Area graphs
 * [ ] Area spline graphs
 * [ ] Datetime formatting
+* [ ] DST
 * [ ] Tick counts
 * [ ] Show/hide ticks
-* [ ] Axes label text overflow
-* [ ] Timeline graph
 * [ ] Zoom
 * [ ] Pan
 

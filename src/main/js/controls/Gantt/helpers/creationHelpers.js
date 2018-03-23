@@ -3,10 +3,14 @@ import d3 from "d3";
 import {
     getAxisTickFormat,
     getXAxisHeight,
+    getXAxisXPosition,
+    getYAxisXPosition,
     prepareXAxis
 } from "../../../helpers/axis";
 import constants from "../../../helpers/constants";
+import { shouldTruncateLabel, truncateLabel } from "../../../helpers/label";
 import styles from "../../../helpers/styles";
+import utils from "../../../helpers/utils";
 import {
     attachEventHandlers,
     detachEventHandlers,
@@ -17,30 +21,133 @@ import {
     getTransformScale,
     translateCanvas
 } from "../../Graph/helpers/helpers";
-import { translateVGrid } from "./translateHelpers";
+import { translateHGrid, translateVGrid } from "./translateHelpers";
 
 const PADDING = constants.PADDING;
 /**
  * Calculates the height for Y and Y2 axes.
  * If dimensions are provided in the input, then they are given priority.
- * NOTE: For height calculations, we are providing contingency for values that are
- * outside the range of y and y2 axes upper and lower bounds. This is called an outlier stretch factor.
- * When default height is used then this stretch factor is applied and they wont be applicable when
- * an input of dimension.height is provided
  * @private
  * @param {Object} config - config object derived from input JSON
- * @param {number} dimension - number in pixels for height
  * @returns {number} Height for the axes
  */
-const determineHeight = (config, dimension) => {
-    if (dimension.height) {
-        return dimension.height;
+const determineHeight = (config) =>
+    utils.isEmpty(config.axis.y.trackList)
+        ? 0
+        : parseInt(getYAxisRange(config.axis.y.trackList).pop(), 10);
+/**
+ * Updates the track count based on load or unload of content into gantt chart
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @param {boolean} [isLoad=false] True if load workflow, false if unload
+ * @returns {number} current track count within the graph
+ */
+const updateTrackCount = (config, isLoad = false) =>
+    isLoad ? config.axis.y.trackCount++ : config.axis.y.trackCount--;
+/**
+ * Updates the unique track key into a dictionary for loading and unloading
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @param {string} key - Unique key for each track
+ * @param {boolean} [isLoad] True if load workflow, false if unload
+ * @returns {undefined} - returns nothing
+ */
+const updateTrackKeyList = (config, key, isLoad) => {
+    if (isLoad) {
+        Object.assign(config.axis.y.trackList, {
+            [key]: {
+                trackLabel: "",
+                trackHeight: constants.DEFAULT_GANTT_TRACK_HEIGHT
+            }
+        });
+    } else {
+        delete config.axis.y.trackList[key];
     }
-    return constants.DEFAULT_HEIGHT - PADDING.top - PADDING.bottom;
 };
+/**
+ * Updates the unique track label display values into a dictionary for loading and unloading
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @param {string} trackLabel - Unique label for each track
+ * @param {string} key - Unique key for each track
+ * @returns {undefined} - returns nothing
+ */
+const updateTrackLabel = (config, trackLabel, key) => {
+    config.axis.y.trackList[key].trackLabel = trackLabel;
+};
+/**
+ * Updates the array which contains the list of track height needed to compute the
+ * range for the Y Axis. Using this range we can compute the domain for the graph.
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @param {number} height - custom track height provided by consumer
+ * @param {string} key - Unique key for each track
+ * @returns {undefined} - returns nothing
+ */
+const updateTrackHeight = (config, height, key) => {
+    config.axis.y.trackList[key].trackHeight = height;
+};
+/**
+ * Updates the track properties such as label, key and height lists.
+ * Required props:
+ *  * trackLabel
+ *  * key
+ *
+ *  Optional:
+ *  * Height - by default: constants.DEFAULT_GANTT_TRACK_HEIGHT
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @param {Object} content - input JSON provided by consumer
+ * @param {boolean} [isLoad=false] True if load workflow, false if unload
+ * @returns {undefined} - returns nothing
+ */
+const updateTrackProps = (config, content, isLoad = false) => {
+    updateTrackCount(config, isLoad);
+    updateTrackKeyList(config, content.key, isLoad);
+    if (isLoad) {
+        updateTrackLabel(config, content.trackLabel.display, content.key);
+        updateTrackHeight(
+            config,
+            content.dimension
+                ? content.dimension.trackHeight
+                : constants.DEFAULT_GANTT_TRACK_HEIGHT,
+            content.key
+        );
+    }
+};
+/**
+ * Determines the domain for x and y axes.
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @returns {Object} config - config object derived from input JSON
+ */
+const updateAxesDomain = (config) => {
+    config.axis.y.domain = {
+        lowerLimit: 0,
+        upperLimit: config.axis.y.trackCount || 1
+    };
+    return config;
+};
+/**
+ * Creates the axis using the scale provided for Y Axis using d3 svg axis
+ * @private
+ * @param {Object} scale - d3 scale calculated using domain and range
+ * @param {number} height - Height of the Y Axis to calculate the number of Y Axis ticks
+ * @returns {Object} d3 object which forms the y-axis scale
+ */
+const prepareYAxis = (scale, height) =>
+    d3.svg
+        .axis()
+        .scale(scale)
+        .orient("left")
+        .ticks(height / constants.DEFAULT_Y_AXIS_SPACING)
+        .tickPadding(8);
 /**
  * Calculates axes sizes, specifically:
  *  X Axis: Height
+ *  Y Axis: Width
+ *  Padding is provided enough to accommodate around 15 characters.
+ *  Beyond which we would need to apply truncation (ellipsis)
  *  @private
  *  @param {Object} config - config object derived from input JSON
  *  @returns {undefined} - returns nothing
@@ -48,29 +155,65 @@ const determineHeight = (config, dimension) => {
 const calculateAxesSize = (config) => {
     config.axisSizes = {};
     config.axisSizes.x = getXAxisHeight(config);
+    config.axisSizes.y = getYAxisWidth(constants.Y_AXIS, config);
+};
+/**
+ *  Calculates the label size needed for each axes.
+ *  Y Axis: Width
+ *  @private
+ *  @param {Object} config - config object derived from input JSON
+ *  @returns {undefined} - returns nothing
+ */
+const calculateAxesLabelSize = (config) => {
+    config.axisLabelWidths = {};
+    config.axisLabelWidths.y = PADDING.trackLabel;
+};
+/**
+ * Dynamically generate the label width for y axes
+ * @private
+ * @param {string} id - y or y2
+ * @param {Object} config - config object derived from input JSON
+ * @returns {Number} label width
+ */
+const getYAxisWidth = (id, config) => {
+    const scale = d3.scale
+        .ordinal()
+        .domain(getYAxisDomain(config.axis.y.trackList))
+        .range([0, ...getYAxisRange(config.axis.y.trackList)]);
+    const axis = d3.svg
+        .axis()
+        .scale(scale)
+        .orient("left");
+    const dummy = d3.select("body").append("div");
+    const svg = dummy.append("svg");
+    const yAxisSVG = svg.append("g").call(axis);
+    const width = yAxisSVG.node().getBoundingClientRect().width;
+    dummy.remove();
+    return width;
 };
 /**
  * X Axis's width that will hold equally spaced ticks
  * @private
  * @param {Object} config - config object derived from input JSON
- * @todo Check if the axis sizes are refreshed when tracks are added.
  * @returns {number} X Axis width
  */
 const getXAxisWidth = (config) =>
     config.canvasWidth -
-    (config.axisSizes.y || PADDING.left * 2 + PADDING.right);
-/**
- * X Axis's starting position within the canvas
- * @private
- * @returns {number} Position for the axis
- */
-const getXAxisXPosition = () => constants.PADDING.left;
+    config.axisSizes.y -
+    config.axisLabelWidths.y -
+    getXAxisYPosition();
 /**
  * X Axis's position vertically relative to the canvas
  * @private
  * @returns {number} Position for the axis
  */
-const getXAxisYPosition = () => PADDING.top * 2 + PADDING.bottom;
+const getXAxisYPosition = () => (PADDING.top + PADDING.bottom) * 2;
+/**
+ * Y Axis's position vertically relative to the canvas
+ * @private
+ * @returns {number} Position for the axis
+ */
+const getYAxisYPosition = () => getXAxisYPosition();
 /**
  * Prepares X,Y and Y2 Axes according to their scale and available container width and height
  * @private
@@ -91,8 +234,54 @@ const getAxesScale = (axis, scale, config) => {
         ),
         "top"
     );
+    axis.y = prepareYAxis(scale.y, config.height);
     return axis;
 };
+/**
+ * Checks if the track label needs to be truncated and returns the truncated value
+ * @private
+ * @param {string} label - Track label display property
+ * @returns {string} if more than constants.DEFAULT_LABEL_CHARACTER_LIMIT then truncates,
+ * normal label otherwise
+ */
+const getTrackLabel = (label) =>
+    shouldTruncateLabel(label) ? truncateLabel(label) : label;
+/**
+ * Returns an array containing the current domain for Y Axis.
+ * If there are no labels or the graph has no content then the domain is empty array,
+ * but if the data is provided then the domain will be 'null' as the first item
+ * followed by the content labels. We add the null to ensure that the first track does not
+ * coincide with the X Axis.
+ * @private
+ * @param {Object} trackList - Y Axis trackList config object
+ * @returns {Array} array containing the current domain for Y Axis
+ */
+const getYAxisDomain = (trackList) =>
+    utils.isEmpty(trackList)
+        ? []
+        : [
+              null,
+              ...Object.keys(trackList).map((k) =>
+                  getTrackLabel(trackList[k].trackLabel)
+              )
+          ];
+/**
+ * Computes the Y Axis range by adding the track heights provided by consumer for each track
+ * If the track height for 3 tracks are [80, null, 50]
+ * then they will be [80, 80+<DEFAULT_TRACK_HEIGHT>, 80+<DEFAULT_TRACK_HEIGHT>+50]
+ * @private
+ * @param {Object} trackList - Y Axis trackList config object
+ * @returns {Array} array containing the current range for Y Axis
+ */
+const getYAxisRange = (trackList) =>
+    Object.keys(trackList)
+        .map((o) => trackList[o].trackHeight)
+        .map(
+            (h, index, arr) =>
+                index > 0
+                    ? h + arr.slice(0, index).reduce((a, b) => a + b, 0)
+                    : h
+        );
 /**
  * Creates and sets the d3 scale for the Graph. Once the scale is created
  * we can create the axes. To create a d3 scale, we need domain and range.
@@ -111,13 +300,18 @@ const getAxesScale = (axis, scale, config) => {
  * @param {Object} config - config object derived from input JSON
  * @returns {undefined} - returns nothing
  */
-const scaleGraph = (scale, config) =>
-    (scale.x = d3.time
+const scaleGraph = (scale, config) => {
+    scale.x = d3.time
         .scale()
         .domain(config.axis.x.domain)
         .range([0, getXAxisWidth(config)])
         .clamp(true)
-        .nice());
+        .nice();
+    scale.y = d3.scale
+        .ordinal()
+        .domain(getYAxisDomain(config.axis.y.trackList))
+        .range([0, ...getYAxisRange(config.axis.y.trackList)]);
+};
 /**
  * Added defs element for the canvas. This currently holds the clip paths for the entire chart.
  * @private
@@ -131,8 +325,8 @@ const createDefs = (config, canvasSVG) =>
         .append("clipPath")
         .attr("id", constants.CLIP_PATH_ID)
         .append("rect")
-        .attr(constants.X_AXIS, getXAxisXPosition())
-        .attr(constants.Y_AXIS, getXAxisYPosition())
+        .attr(constants.X_AXIS, getXAxisXPosition(config))
+        .attr(constants.Y_AXIS, getYAxisYPosition())
         .attr("width", getXAxisWidth(config))
         .attr("height", config.height);
 /**
@@ -152,9 +346,12 @@ const createGrid = (axis, scale, config, canvasSVG) => {
         .classed(styles.grid, true)
         .attr(
             "transform",
-            `translate(${getXAxisXPosition()},${getXAxisYPosition()})`
+            `translate(${getXAxisXPosition(config)},${getXAxisYPosition()})`
         );
-    gridSVG.append("g").classed(styles.gridH, true);
+    gridSVG
+        .append("g")
+        .classed(styles.gridH, true)
+        .call(translateHGrid(axis, config));
     gridSVG
         .append("g")
         .classed(styles.gridV, true)
@@ -180,9 +377,20 @@ const createAxes = (axis, scale, config, canvasSVG) => {
         .attr("aria-hidden", !config.axis.x.show)
         .attr(
             "transform",
-            `translate(${getXAxisXPosition()}, ${getXAxisYPosition()})`
+            `translate(${getXAxisXPosition(config)}, ${getXAxisYPosition()})`
         )
         .call(axis.x);
+    canvasSVG
+        .append("g")
+        .classed(styles.axis, true)
+        .classed(styles.axisY, true)
+        .classed(styles.axisYTrackLabel, true)
+        .attr("aria-hidden", !config.axis.y.show)
+        .attr(
+            "transform",
+            `translate(${getYAxisXPosition(config)}, ${getXAxisYPosition()})`
+        )
+        .call(axis.y);
 };
 /**
  * Creates a container for graph content (evident when there are no boundary ticks)
@@ -195,7 +403,7 @@ const createContentContainer = (config, canvasSVG) =>
     canvasSVG
         .append("rect")
         .classed(styles.contentContainer, true)
-        .attr(constants.X_AXIS, getXAxisXPosition())
+        .attr(constants.X_AXIS, getXAxisXPosition(config))
         .attr(constants.Y_AXIS, getXAxisYPosition())
         .attr("width", getXAxisWidth(config))
         .attr("height", config.height);
@@ -204,8 +412,10 @@ export {
     getXAxisWidth,
     getXAxisXPosition,
     getXAxisYPosition,
+    getYAxisYPosition,
     getAxesScale,
     calculateAxesSize,
+    calculateAxesLabelSize,
     translateCanvas,
     createAxes,
     createDefs,
@@ -218,6 +428,9 @@ export {
     getColorForTarget,
     getCurrentTransform,
     getTransformScale,
+    getTrackLabel,
     attachEventHandlers,
-    detachEventHandlers
+    detachEventHandlers,
+    updateAxesDomain,
+    updateTrackProps
 };

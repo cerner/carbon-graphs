@@ -4,8 +4,7 @@ import BaseConfig, {
     getScale,
     getType,
     getInterpolationType,
-    isDataValidFormat,
-    isUniqueKey
+    isDataValidFormat
 } from "./BaseConfig";
 
 export {
@@ -15,6 +14,5 @@ export {
     getScale,
     getType,
     getInterpolationType,
-    isDataValidFormat,
-    isUniqueKey
+    isDataValidFormat
 };

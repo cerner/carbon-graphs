@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * @module constants
  * @alias module:constants
@@ -95,7 +97,8 @@ export default {
         top: 5,
         bottom: 10,
         left: 30,
-        right: 30
+        right: 30,
+        trackLabel: 100
     },
     PAIR_ITEM_TYPES: ["high", "mid", "low"],
     ISO8601_DATE_TIME_MILLI: /(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}(:\d{2}(\.\d+)*)*)Z/,
@@ -111,6 +114,10 @@ export default {
     DEFAULT_LEGEND_ICON_X_POS: 25,
     DEFAULT_LEGEND_ICON_Y_POS: 22.5,
     DEFAULT_SELECTED_RADIUS: 9,
+    DEFAULT_LABEL_CHARACTER_LIMIT: 12,
+    DEFAULT_GANTT_TRACK_HEIGHT: 41,
+    DEFAULT_GANTT_TASK_HEIGHT: 23,
+    DEFAULT_GANTT_ACTIVITY_HEIGHT: 31,
     DEFAULT_Y_AXIS_SPACING: 30,
     HOVER_EVENT: {
         MOUSE_ENTER: "enter",

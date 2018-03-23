@@ -50,15 +50,21 @@ export const processInput = (input, config) => {
     config.datelines = utils.deepClone(input.datelines);
     config.showDateLines = getDefaultValue(input.showDateLines, true);
     config.dimension = getDefaultValue(input.dimension, {});
-    config.axis.x.type = AXIS_TYPE.TIME_SERIES;
-    config.axis.x.ticks = getDefaultValue(_axis.x.ticks, {});
-    config.axis.x.show = getDefaultValue(_axis.x.show, true);
-    config.axis.y.show = _axis.y ? getDefaultValue(_axis.y.show, true) : true;
-    config.axis.x.domain = getDomain(
-        AXIS_TYPE.TIME_SERIES,
-        _axis.x.lowerLimit,
-        _axis.x.upperLimit
-    );
+    config.axis.x = Object.assign(_axis.x, {
+        type: AXIS_TYPE.TIME_SERIES,
+        show: getDefaultValue(_axis.x.show, true),
+        ticks: getDefaultValue(_axis.x.ticks, {}),
+        domain: getDomain(
+            AXIS_TYPE.TIME_SERIES,
+            _axis.x.lowerLimit,
+            _axis.x.upperLimit
+        )
+    });
+    config.axis.y = {
+        show: _axis.y ? getDefaultValue(_axis.y.show, true) : true,
+        trackCount: 0,
+        trackList: {}
+    };
     config.shownTargets = [];
     return config;
 };
@@ -70,38 +76,7 @@ export const processInput = (input, config) => {
  * @param {string} key - unique key for the newly added content
  * @returns {boolean} false if not unique
  */
-export const isUniqueKey = (dictionary, key) =>
-    !utils.hasValue(dictionary.map((i) => i.config.key), key);
-
-/**
- * Validates the newly added content into the graph before rendering
- * @private
- * @throws {module:errors.THROW_MSG_NO_DATA_LOADED}
- * @throws {module:errors.THROW_MSG_UNIQUE_KEY_NOT_PROVIDED}
- * @throws {module:errors.THROW_MSG_UNIQUE_LABEL_NOT_PROVIDED}
- * @throws {module:errors.THROW_MSG_NON_UNIQUE_PROPERTY}
- * @throws {module:errors.THROW_MSG_TASKS_NOT_PROVIDED}
- * @param {Array} content - Current set of graph contents, already rendered
- * @param {Object} input - Newly added graph content
- * @returns {undefined} - returns nothing
- */
-export const validateContent = (content, input) => {
-    if (utils.isEmpty(input)) {
-        throw new Error(errors.THROW_MSG_NO_DATA_LOADED);
-    }
-    if (utils.isEmpty(input.key)) {
-        throw new Error(errors.THROW_MSG_UNIQUE_KEY_NOT_PROVIDED);
-    }
-    if (utils.isEmpty(input.label)) {
-        throw new Error(errors.THROW_MSG_UNIQUE_LABEL_NOT_PROVIDED);
-    }
-    if (!isUniqueKey(content, input.config.key)) {
-        throw new Error(errors.THROW_MSG_NON_UNIQUE_PROPERTY);
-    }
-    if (utils.isEmpty(input.tasks)) {
-        throw new Error(errors.THROW_MSG_TASKS_NOT_PROVIDED);
-    }
-};
+export const isUniqueKey = (dictionary, key) => dictionary.indexOf(key) < 0;
 
 /**
  * API to parse consumer input for Graph
