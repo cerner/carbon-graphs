@@ -11,7 +11,6 @@ import utils from "../helpers/utils";
 import { DEFAULT_TICK_FORMAT } from "../locale";
 
 const PADDING = constants.PADDING;
-const DEFAULT_HEIGHT = constants.DEFAULT_HEIGHT;
 /**
  * Create the d3 Axes - X, Y and Y2 and append into the canvas.
  * If axis.x.show, axis.y.show or axis.y2.show is set to false:
@@ -243,7 +242,7 @@ const getYAxisLabelXPosition = (config) =>
  */
 const getYAxisLabelYPosition = (config) =>
     getYAxisYPosition() +
-    (DEFAULT_HEIGHT - PADDING.top - PADDING.bottom) /
+    (getYAxisHeight(config) - PADDING.top - PADDING.bottom) /
         2 *
         config.outlierStretchFactor.upperLimit;
 /**

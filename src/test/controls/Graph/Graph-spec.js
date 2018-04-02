@@ -959,6 +959,26 @@ describe("Graph", () => {
                 expect(yLabelElement.querySelector("tspan").textContent).toBe(
                     axisDefault.y.label
                 );
+                expect(yLabelElement.getAttribute("transform")).toContain(
+                    "rotate(-90)"
+                );
+                expect(yLabelElement.getAttribute("transform")).toContain(
+                    "translate(34, 115)"
+                );
+            });
+            it("changes label y axis position when height proprty of graph is set to custom value", () => {
+                graph.destroy();
+                const axes = getAxes(axisDefault);
+                axes.dimension = { height: 100 };
+                graph = new Graph(axes);
+
+                const yLabelElement = fetchElementByClass(styles.axisLabelY);
+                expect(yLabelElement.getAttribute("transform")).not.toContain(
+                    "translate(34, 115)"
+                );
+                expect(yLabelElement.getAttribute("transform")).toContain(
+                    "translate(34, 47.5)"
+                );
             });
             it("doesnt create label x axis when text is not present", () => {
                 graph.destroy();
