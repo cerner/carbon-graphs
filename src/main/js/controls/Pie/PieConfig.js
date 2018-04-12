@@ -60,7 +60,7 @@ export const validateContent = (content, data) => {
  * @private
  * @param {Array<Object>} content - Existing list of graph content already generated
  * @param {Object} data - Newly added graph content
- * @return {{columns: *[], colors: {}}} - JSON compatible with c3 load
+ * @return {Object} - JSON compatible with c3 load
  */
 export const processContent = (content, data) => ({
     columns: [[data.label.display, ...data.values]],

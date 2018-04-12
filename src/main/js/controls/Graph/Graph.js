@@ -20,6 +20,7 @@ import {
     createDefs,
     createGrid,
     createLabel,
+    d3RemoveElement,
     detachEventHandlers,
     determineHeight,
     scaleGraph,
@@ -294,8 +295,8 @@ class Graph extends Construct {
      */
     destroy() {
         detachEventHandlers(this);
-        this.graphContainer.select(`.${styles.canvas}`).remove();
-        this.graphContainer.select(`.${styles.container}`).remove();
+        d3RemoveElement(this.graphContainer, `.${styles.canvas}`);
+        d3RemoveElement(this.graphContainer, `.${styles.container}`);
         initConfig(this);
         return this;
     }

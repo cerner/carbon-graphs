@@ -1257,6 +1257,11 @@ describe("Graph", () => {
             graph = new Graph(getAxes(axisDefault));
             graph.destroy();
         });
+        it("Does not throw error if graph container does not exist", () => {
+            expect(() => {
+                graph.destroy();
+            }).not.toThrow();
+        });
         it("removes the canvas content", () => {
             expect(fetchElementByClass(styles.canvas)).toBeNull();
         });

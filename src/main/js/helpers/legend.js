@@ -2,9 +2,14 @@
  * @module legend
  * @alias module:legend
  */
+
 "use strict";
 import d3 from "d3";
-import { getColorForTarget, getShape } from "../controls/Graph/helpers/helpers";
+import {
+    d3RemoveElement,
+    getColorForTarget,
+    getShape
+} from "../controls/Graph/helpers/helpers";
 import { Shape } from "../core";
 import constants from "../helpers/constants";
 import styles from "../helpers/styles";
@@ -83,9 +88,7 @@ const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
  * @returns {Object} - d3 svg object
  */
 const removeLegendItem = (legendSVG, dataTarget) =>
-    legendSVG
-        ? legendSVG.select(`li[aria-describedby="${dataTarget.key}"]`).remove()
-        : "";
+    d3RemoveElement(legendSVG, `li[aria-describedby="${dataTarget.key}"]`);
 /**
  * Creates the legend item list and appends into the container. The container consists of
  * the canvas which houses the graph itself, and the legend <ul> which contains the list of data points labels and

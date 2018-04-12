@@ -1,5 +1,6 @@
 "use strict";
 import d3 from "d3";
+import { d3RemoveElement } from "../controls/Graph/helpers/helpers";
 import { getXAxisWidth, getXAxisXPosition } from "./axis";
 import constants from "./constants";
 import errors from "./errors";
@@ -55,11 +56,11 @@ const validateRegion = (region, targetAxis) => {
  * @returns {Object} - d3 svg object
  */
 const removeRegion = (regionGroupSVG, dataTarget) =>
-    regionGroupSVG
-        ? regionGroupSVG
-              .selectAll(`[aria-describedby="region_${dataTarget.key}"]`)
-              .remove()
-        : "";
+    d3RemoveElement(
+        regionGroupSVG,
+        `[aria-describedby="region_${dataTarget.key}"]`,
+        true
+    );
 /**
  * Creates container for regions to be rendered within.
  * Since regions are supposed to be rendered beneath grids,

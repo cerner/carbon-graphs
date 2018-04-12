@@ -544,6 +544,23 @@ const attachEventHandlers = (control) => {
 const detachEventHandlers = (control) => {
     window.removeEventListener("resize", control.resizeHandler, true);
 };
+/**
+ * Removes the element with provided selector using d3
+ * @param {Selection|Object} el - d3 selection element
+ * @param {string} selector - attribute to query the element, typically a class or id
+ * @param {boolean} [isBatchSelect] - enables `selectAll` rather than default `select`
+ * @returns {undefined} - returns nothing
+ */
+const d3RemoveElement = (el, selector, isBatchSelect = false) => {
+    if (!el) {
+        return;
+    }
+    if (isBatchSelect) {
+        el.selectAll(selector).remove();
+    } else {
+        el.select(selector).remove();
+    }
+};
 
 export {
     translateAxes,
@@ -567,5 +584,6 @@ export {
     getCurrentTransform,
     getTransformScale,
     attachEventHandlers,
-    detachEventHandlers
+    detachEventHandlers,
+    d3RemoveElement
 };

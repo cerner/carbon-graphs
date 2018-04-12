@@ -20,6 +20,7 @@ import {
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 import {
+    d3RemoveElement,
     getColorForTarget,
     getShape,
     getTransformScale
@@ -600,7 +601,7 @@ const renderRegion = (scale, config, canvasSVG, dataTarget) => {
  * @returns {Object} - d3 select object
  */
 const clear = (canvasSVG, dataTarget) =>
-    canvasSVG.select(`g[aria-describedby="${dataTarget.key}"]`).remove();
+    d3RemoveElement(canvasSVG, `g[aria-describedby="${dataTarget.key}"]`);
 
 export {
     translatePoints,
