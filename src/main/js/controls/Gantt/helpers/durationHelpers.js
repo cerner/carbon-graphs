@@ -3,6 +3,7 @@ import utils from "../../../helpers/utils";
 
 /**
  * Returns the appropriate bar based on the task style settings
+ * @private
  * @param {Object} styles - Style setting for task bar
  * @returns {string} A style constant
  */

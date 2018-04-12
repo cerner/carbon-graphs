@@ -3,3 +3,12 @@
         cursor: pointer;
     }
 }
+
+.carbon-data-track-group {
+    .carbon-point,
+    .carbon-selected-data-point {
+        &[aria-hidden="true"] {
+            .opacity-hide();
+        }
+    }
+}

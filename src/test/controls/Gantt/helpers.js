@@ -1,4 +1,5 @@
 import sinon from "sinon";
+import Carbon from "../../../main/js/carbon";
 import constants from "../../../main/js/helpers/constants";
 import utils from "../../../main/js/helpers/utils";
 
@@ -6,6 +7,24 @@ export const onClickFunctionSpy = sinon.spy();
 export const TRANSITION_DELAY = 500;
 export const BASE_CANVAS_HEIGHT_PADDING =
     (constants.PADDING.bottom * 2 + constants.PADDING.top) * 2;
+export const legendJSON = [
+    {
+        key: "uid_action_1",
+        label: {
+            display: "Action A"
+        },
+        shape: Carbon.helpers.SHAPES.CIRCLE,
+        color: Carbon.helpers.COLORS.BLUE
+    },
+    {
+        key: "uid_action_2",
+        label: {
+            display: "Action B"
+        },
+        shape: Carbon.helpers.SHAPES.TRIANGLE,
+        color: Carbon.helpers.COLORS.GREEN
+    }
+];
 export const axisJSON = {
     x: {
         lowerLimit: new Date(2018, 0, 1, 12).toISOString(),
@@ -30,7 +49,7 @@ export const trackDimension = {
 };
 /**
  * Triggers an event on provided element
- * @param {HTMLElement} element - DOM element
+ * @param {HTMLElement|Node} element - DOM element
  * @param {string} eventName - event name
  * @param {Function} [cb] - callback function that needs to be executed post event trigger
  * @param {number} [delayDuration=100] - delay duration before calling the callback function
@@ -56,9 +75,17 @@ export const getAxes = (axis = {}) => ({
 /**
  * Creates and returns an example input with data point values
  * @param {Object} tasks - task values
+ * @param {Object} activities - activities values
+ * @param {Object} events - events values
+ * @param {Object} actions - actions values
  * @returns {Object} input JSON
  */
-export const getData = (tasks = []) =>
+export const getData = (
+    tasks = [],
+    activities = [],
+    events = [],
+    actions = []
+) =>
     utils.deepClone({
         key: "track 1",
         /**
@@ -69,7 +96,10 @@ export const getData = (tasks = []) =>
             display: "Project A",
             onClick: onClickFunctionSpy
         },
-        tasks
+        tasks,
+        activities,
+        events,
+        actions
     });
 /**
  * Returns the DOM element queried by Class

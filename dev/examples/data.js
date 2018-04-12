@@ -852,16 +852,14 @@ const DATA = [
                             // Call consumer implementation here or NOP
                         }
                     },
-                    color: "#007cc3",
-                    onClick: () => {
-                        // Call consumer implementation here or NOP
-                    },
                     tasks: [
                         {
                             key: "task1",
                             label: {
                                 display: "Story A"
                             },
+                            onClick: () => {},
+                            color: "#007cc3",
                             startDate: new Date(2018, 1, 1).toISOString(),
                             endDate: new Date(2018, 1, 10).toISOString(),
                             duration: () => new Date(daysToMilliseconds(10)),
@@ -882,6 +880,8 @@ const DATA = [
                             label: {
                                 display: "Support"
                             },
+                            onClick: () => {},
+                            color: "#007cc3",
                             startDate: new Date(2018, 1, 1).toISOString(),
                             endDate: new Date(2018, 1, 10).toISOString(),
                             duration: () => new Date(daysToMilliseconds(12)),
@@ -891,43 +891,53 @@ const DATA = [
                             }
                         }
                     ],
-                    milestones: [
-                        // Optional, will create a legend item
-                        // For now throw error when providing the same key for
-                        // track id. But in the future, we need to load dynamically
+                    events: [
                         {
                             label: {
-                                display: "Track A -> Milestone A"
+                                display: "Defect A"
                             },
+                            onClick: () => {},
                             shape: Carbon.helpers.SHAPES.CIRCLE,
                             color: Carbon.helpers.COLORS.BLUE,
-                            value: new Date(2018, 2, 1, 6, 15).toISOString()
+                            value: {
+                                x: new Date(2018, 3, 1, 7, 0).toISOString()
+                            }
+                        }
+                    ],
+                    actions: [
+                        {
+                            key: "uid_action_1",
+                            onClick: () => {},
+                            values: [
+                                new Date(2018, 2, 1, 6, 15).toISOString(),
+                                new Date(2018, 3, 1, 6, 15).toISOString(),
+                                new Date(2018, 4, 1, 6, 15).toISOString()
+                            ]
                         },
                         {
-                            label: {
-                                display: "Track A -> Milestone B"
-                            },
-                            shape: Carbon.helpers.SHAPES.TRIANGLE,
-                            color: Carbon.helpers.COLORS.BLUE,
-                            value: new Date(2018, 3, 1, 7, 0).toISOString()
-                        },
-                        {
-                            label: {
-                                display: "Track A -> Milestone C"
-                            },
-                            shape: Carbon.helpers.SHAPES.TRIANGLE,
-                            color: Carbon.helpers.COLORS.BLUE,
-                            value: new Date(2018, 4, 1, 8, 15).toISOString()
-                        },
-                        {
-                            label: {
-                                display: "Track A -> Milestone D"
-                            },
-                            shape: Carbon.helpers.SHAPES.TRIANGLE,
-                            color: Carbon.helpers.COLORS.BLUE,
-                            value: new Date(2018, 6, 1, 9, 45).toISOString()
+                            key: "uid_action_2",
+                            onClick: () => {},
+                            values: [new Date(2018, 6, 1, 6, 15).toISOString()]
                         }
                     ]
+                }
+            ],
+            actionLegend: [
+                {
+                    key: "uid_action_1",
+                    label: {
+                        display: "Action A"
+                    },
+                    shape: Carbon.helpers.SHAPES.CIRCLE,
+                    color: Carbon.helpers.COLORS.BLUE
+                },
+                {
+                    key: "uid_action_2",
+                    label: {
+                        display: "Action B"
+                    },
+                    shape: Carbon.helpers.SHAPES.TRIANGLE,
+                    color: Carbon.helpers.COLORS.GREEN
                 }
             ],
             datelines: [
@@ -935,11 +945,14 @@ const DATA = [
                     label: {
                         display: "Release A"
                     },
+                    onClick: () => {
+                        // Call consumer implementation here or NOP
+                    },
                     value: new Date(2018, 1, 28).toISOString()
                 }
             ],
             showDateLines: true,
-            showLegend: true
+            showActionLegend: true
         })
     }
 ];

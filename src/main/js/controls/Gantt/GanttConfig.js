@@ -47,8 +47,13 @@ export const processInput = (input, config) => {
         input.throttle,
         constants.RESIZE_THROTTLE
     );
-    config.datelines = utils.deepClone(input.datelines);
+    config.datelines = getDefaultValue(utils.deepClone(input.datelines), []);
     config.showDateLines = getDefaultValue(input.showDateLines, true);
+    config.actionLegend = getDefaultValue(
+        utils.deepClone(input.actionLegend),
+        []
+    );
+    config.showActionLegend = getDefaultValue(input.showActionLegend, false);
     config.dimension = getDefaultValue(input.dimension, {});
     config.axis.x = Object.assign(_axis.x, {
         type: AXIS_TYPE.TIME_SERIES,

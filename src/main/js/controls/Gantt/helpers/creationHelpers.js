@@ -15,12 +15,11 @@ import {
     attachEventHandlers,
     detachEventHandlers,
     getColorForTarget,
-    getCurrentTransform,
     getShape,
     getShapeForTarget,
-    getTransformScale,
     translateCanvas
 } from "../../Graph/helpers/helpers";
+import Track from "../Track";
 import { translateHGrid, translateVGrid } from "./translateHelpers";
 
 const PADDING = constants.PADDING;
@@ -259,12 +258,9 @@ const getTrackLabel = (label) =>
 const getYAxisDomain = (trackList) =>
     utils.isEmpty(trackList)
         ? []
-        : [
-              null,
-              ...Object.keys(trackList).map((k) =>
-                  getTrackLabel(trackList[k].trackLabel)
-              )
-          ];
+        : Object.keys(trackList).map((k) =>
+              getTrackLabel(trackList[k].trackLabel)
+          );
 /**
  * Computes the Y Axis range by adding the track heights provided by consumer for each track
  * If the track height for 3 tracks are [80, null, 50]
@@ -388,7 +384,7 @@ const createAxes = (axis, scale, config, canvasSVG) => {
         .attr("aria-hidden", !config.axis.y.show)
         .attr(
             "transform",
-            `translate(${getYAxisXPosition(config)}, ${getXAxisYPosition()})`
+            `translate(${getYAxisXPosition(config)},${getXAxisYPosition()})`
         )
         .call(axis.y);
 };
@@ -407,6 +403,40 @@ const createContentContainer = (config, canvasSVG) =>
         .attr(constants.Y_AXIS, getXAxisYPosition())
         .attr("width", getXAxisWidth(config))
         .attr("height", config.height);
+/**
+ * Creates a container for gantt chart content
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @param {Array} canvasSVG - d3 object of canvas svg
+ * @returns {Object} d3 svg path
+ */
+const createGanttContent = (config, canvasSVG) =>
+    canvasSVG
+        .append("g")
+        .classed(styles.ganttChartContent, true)
+        .attr("clip-path", `url(#${constants.CLIP_PATH_ID})`);
+/**
+ * Creates a new Track instance
+ * @private
+ * @param {Object} content - input JSON for creating a track
+ * @returns {Track} track instance
+ */
+const createTrack = (content) => new Track(content);
+/**
+ * Creates a container for track contents
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {Object} trackConfig - track's config object
+ * @returns {Object} d3 svg path
+ */
+const createTrackContainer = (config, canvasSVG, trackConfig) =>
+    canvasSVG
+        .select(`.${styles.ganttChartContent}`)
+        .append("g")
+        .classed(styles.trackGroup, true)
+        .attr("aria-labelledby", trackConfig.trackLabel.display)
+        .attr("aria-describedby", trackConfig.key);
 
 export {
     getXAxisWidth,
@@ -414,6 +444,7 @@ export {
     getXAxisYPosition,
     getYAxisYPosition,
     getAxesScale,
+    createTrack,
     calculateAxesSize,
     calculateAxesLabelSize,
     translateCanvas,
@@ -421,13 +452,13 @@ export {
     createDefs,
     createGrid,
     createContentContainer,
+    createGanttContent,
+    createTrackContainer,
     scaleGraph,
     determineHeight,
     getShape,
     getShapeForTarget,
     getColorForTarget,
-    getCurrentTransform,
-    getTransformScale,
     getTrackLabel,
     attachEventHandlers,
     detachEventHandlers,

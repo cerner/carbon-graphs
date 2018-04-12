@@ -14,7 +14,7 @@ import {
     fetchElementByClass,
     getAxes,
     getData,
-    taskValuesJSON,
+    legendJSON,
     trackDimension,
     TRANSITION_DELAY,
     triggerEvent
@@ -68,7 +68,7 @@ describe("Gantt", () => {
             expect(gantt.config).not.toBeNull();
             expect(gantt.axis).not.toBeNull();
             expect(gantt.scale).not.toBeNull();
-            expect(gantt.legendSVG).not.toBeNull();
+            expect(gantt.legendSVG).toBeNull();
             expect(gantt.svg).not.toBeNull();
             expect(gantt.tracks).toEqual([]);
             expect(gantt.datelines).toEqual([]);
@@ -166,43 +166,36 @@ describe("Gantt", () => {
                 }).toThrowError(errors.THROW_MSG_INVALID_AXIS_TYPE_VALUES);
             });
         });
-        it("Throws error on empty input", () => {
-            expect(() => {
-                gantt = new Gantt(getAxes(axisJSON));
-                gantt.loadContent({});
-            }).toThrowError(errors.THROW_MSG_NO_DATA_LOADED);
-        });
-        it("Throws error on null input", () => {
-            expect(() => {
-                gantt = new Gantt(getAxes(axisJSON));
-                gantt.loadContent(null);
-            }).toThrowError(errors.THROW_MSG_NO_DATA_LOADED);
-        });
         it("Processes the default input without any error", () => {
             expect(() => {
                 gantt = new Gantt(getAxes(axisJSON));
-                gantt.loadContent(getData(taskValuesJSON));
+                gantt.loadContent(getData());
             }).not.toThrow();
         });
         it("Loads the content correctly", () => {
-            const primaryContent = getData(taskValuesJSON);
+            const primaryContent = getData();
+            const mockTrack = new Track(primaryContent);
             gantt = new Gantt(getAxes(axisJSON));
             gantt.loadContent(primaryContent);
             expect(gantt.tracks).toEqual([primaryContent.key]);
-            expect(gantt.trackConfig).toEqual([new Track(primaryContent)]);
+            expect(gantt.trackConfig[0].key).toEqual(mockTrack.key);
+            expect(gantt.trackConfig[0].trackLabel).toEqual(
+                mockTrack.trackLabel
+            );
+            expect(gantt.trackConfig[0].tasks).toEqual(mockTrack.tasks);
             expect(gantt.tracks.length).toBe(1);
             expect(gantt.trackConfig.length).toBe(1);
         });
         it("Throws error when duplicate key is provided for content", () => {
             expect(() => {
-                const primaryContent = getData(taskValuesJSON);
+                const primaryContent = getData();
                 gantt = new Gantt(getAxes(axisJSON));
                 gantt.loadContent(primaryContent);
                 gantt.loadContent(primaryContent);
             }).toThrowError(errors.THROW_MSG_UNIQUE_KEY_NOT_PROVIDED);
         });
         it("Changes to new object has no impact on base object", () => {
-            const data = getData(taskValuesJSON);
+            const data = getData();
             const input = getAxes(axisJSON);
             gantt = new Gantt(input);
             gantt.loadContent(data);
@@ -228,7 +221,8 @@ describe("Gantt", () => {
             expect(gantt.config.axis).not.toBeNull();
             expect(gantt.config.locale).not.toBeNull();
             expect(gantt.config.throttle).toEqual(constants.RESIZE_THROTTLE);
-            expect(gantt.config.datelines).toEqual(input.datelines);
+            expect(gantt.config.datelines).toEqual(input.datelines || []);
+            expect(gantt.config.actionLegend).toEqual(input.actionLegend || []);
             expect(gantt.config.showDateLines).toEqual(true);
             expect(gantt.config.axis.x.type).toEqual(AXIS_TYPE.TIME_SERIES);
             expect(gantt.config.axis.x.ticks).toEqual({});
@@ -271,7 +265,7 @@ describe("Gantt", () => {
         describe("With input loaded", () => {
             beforeEach(() => {
                 gantt = new Gantt(getAxes(axisJSON));
-                gantt.loadContent(getData(taskValuesJSON));
+                gantt.loadContent(getData());
             });
             it("Sets the gantt container correctly", () => {
                 expect(gantt.graphContainer).not.toBeNull();
@@ -334,7 +328,7 @@ describe("Gantt", () => {
         describe("With content loaded", () => {
             beforeEach(() => {
                 gantt = new Gantt(getAxes(axisJSON));
-                gantt.loadContent(getData(taskValuesJSON));
+                gantt.loadContent(getData());
             });
             it("Calculates X axis d3 scale using domain and range", () => {
                 expect(gantt.scale.x).not.toBeNull();
@@ -347,7 +341,7 @@ describe("Gantt", () => {
             it("Calculates Y axis d3 scale using domain and range", () => {
                 expect(gantt.scale.y).not.toBeNull();
                 expect(gantt.scale.y).toEqual(jasmine.any(Function));
-                expect(gantt.scale.y.domain()).toEqual([null, "Project A"]);
+                expect(gantt.scale.y.domain()).toEqual(["Project A"]);
                 expect(gantt.scale.y.range()).toEqual([0, 41]);
             });
         });
@@ -364,7 +358,16 @@ describe("Gantt", () => {
                 styles.container
             );
         });
-        it("Creates gantt elements in order", () => {
+        it("Creates gantt elements in order - with showActionLegend", () => {
+            gantt.destroy();
+            gantt = new Gantt(
+                Object.assign(
+                    {
+                        showActionLegend: true
+                    },
+                    getAxes(axisJSON)
+                )
+            );
             const canvas = fetchElementByClass(styles.container).childNodes[0];
             const legend = fetchElementByClass(styles.container).childNodes[1];
             expect(canvas).not.toBeNull();
@@ -374,6 +377,15 @@ describe("Gantt", () => {
             expect(legend).not.toBeNull();
             expect(legend.getAttribute("class")).toBe(styles.legend);
             expect(legend.getAttribute("role")).toBe("list");
+        });
+        it("Creates gantt elements in order - without showActionLegend", () => {
+            const canvas = fetchElementByClass(styles.container).childNodes[0];
+            const legend = fetchElementByClass(styles.container).childNodes[1];
+            expect(canvas).not.toBeNull();
+            expect(canvas.getAttribute("class")).toBe(styles.canvas);
+            expect(canvas.nodeName).toBe("svg");
+            expect(canvas.getAttribute("role")).toBe("img");
+            expect(legend).toBeUndefined();
         });
         it("Creates canvas elements in order", () => {
             const defsElement = fetchElementByClass(styles.canvas)
@@ -454,19 +466,19 @@ describe("Gantt", () => {
                     ]
                 };
                 gantt = new Gantt(getAxes(localeAxisObj));
-                gantt.loadContent(getData(taskValuesJSON));
+                gantt.loadContent(getData());
 
                 const gridElement = fetchElementByClass(styles.grid);
                 const gridHElement = fetchElementByClass(styles.gridH);
                 const gridVElement = fetchElementByClass(styles.gridV);
                 expect(gridElement.childElementCount).toBe(2);
-                expect(gridHElement.querySelectorAll(".tick").length).toBe(2); // null and Project A
+                expect(gridHElement.querySelectorAll(".tick").length).toBe(1);
                 expect(gridVElement.querySelectorAll(".tick").length).toBe(3);
             });
             it("Creates the horizontal grid markup", () => {
                 gantt.destroy();
                 gantt = new Gantt(getAxes(axisJSON));
-                gantt.loadContent(getData(taskValuesJSON));
+                gantt.loadContent(getData());
                 const gridElement = fetchElementByClass(styles.grid);
                 expect(
                     gridElement.querySelector(`.${styles.gridH}`)
@@ -478,7 +490,7 @@ describe("Gantt", () => {
             it("Creates the vertical grid markup", () => {
                 gantt.destroy();
                 gantt = new Gantt(getAxes(axisJSON));
-                gantt.loadContent(getData(taskValuesJSON));
+                gantt.loadContent(getData());
                 const gridElement = fetchElementByClass(styles.grid);
                 expect(
                     gridElement.querySelector(`.${styles.gridV}`)
@@ -521,25 +533,24 @@ describe("Gantt", () => {
             it("Creates correct text for each track", () => {
                 gantt.destroy();
                 gantt = new Gantt(getAxes(axisJSON));
-                gantt.loadContent(getData(taskValuesJSON));
+                gantt.loadContent(getData());
                 const yAxisElement = fetchElementByClass(
                     styles.axisYTrackLabel
                 );
                 const textElementList = yAxisElement.querySelectorAll(
                     ".tick text"
                 );
-                expect(textElementList[0].getAttribute("transform")).toBeNull(); // null
                 expect(
-                    textElementList[1].getAttribute("transform")
+                    textElementList[0].getAttribute("transform")
                 ).not.toBeNull(); // Project A
-                expect(textElementList[1].innerHTML).toBe("Project A"); // Project A
+                expect(textElementList[0].innerHTML).toBe("Project A"); // Project A
             });
             it("Hides x axis when not enabled", () => {
                 gantt.destroy();
                 const hiddenAxisObj = utils.deepClone(axisJSON);
                 hiddenAxisObj.x.show = false;
                 gantt = new Gantt(getAxes(hiddenAxisObj));
-                gantt.loadContent(getData(taskValuesJSON));
+                gantt.loadContent(getData());
                 const xAxisElement = fetchElementByClass(styles.axisX);
                 expect(xAxisElement.getAttribute("class")).toBe(
                     `${styles.axis} ${styles.axisX}`
@@ -551,7 +562,7 @@ describe("Gantt", () => {
                 const hiddenAxisObj = utils.deepClone(axisJSON);
                 hiddenAxisObj.y.show = false;
                 gantt = new Gantt(getAxes(hiddenAxisObj));
-                gantt.loadContent(getData(taskValuesJSON));
+                gantt.loadContent(getData());
                 const yAxisElement = fetchElementByClass(styles.axisY);
                 expect(yAxisElement.getAttribute("class")).toBe(
                     `${styles.axis} ${styles.axisY} ${styles.axisYTrackLabel}`
@@ -564,7 +575,7 @@ describe("Gantt", () => {
                 hiddenAxisObj.x.show = false;
                 hiddenAxisObj.y.show = false;
                 gantt = new Gantt(getAxes(hiddenAxisObj));
-                gantt.loadContent(getData(taskValuesJSON));
+                gantt.loadContent(getData());
                 expect(
                     fetchElementByClass(styles.axisY).getAttribute("class")
                 ).toBe(
@@ -730,20 +741,71 @@ describe("Gantt", () => {
                     parentContainer.childNodes[1].getAttribute("class")
                 ).toEqual(styles.container);
             });
-            it("Hides legend when not enabled", () => {
+            it("Hides legend by default", () => {
+                gantt.destroy();
+                gantt = new Gantt(getAxes(axisJSON));
+                const containerElement = fetchElementByClass(
+                    "carbon-test-class"
+                );
+                expect(
+                    containerElement.querySelector(`.${styles.legend}`)
+                ).toBeNull();
+            });
+            it("Shows legend when enabled", () => {
                 gantt.destroy();
                 gantt = new Gantt(
                     Object.assign(
                         {
-                            showLegend: false
+                            showActionLegend: true
                         },
                         getAxes(axisJSON)
                     )
                 );
-                const canvasElement = fetchElementByClass(styles.canvas);
+                const containerElement = fetchElementByClass(
+                    "carbon-test-class"
+                );
+                const legendElement = containerElement.querySelector(
+                    `.${styles.legend}`
+                );
+                expect(legendElement).not.toBeNull();
+                expect(legendElement.nodeName).toBe("UL");
+                expect(legendElement.getAttribute("role")).toBe("list");
+            });
+            it("Shows legend items correctly", () => {
+                gantt.destroy();
+                gantt = new Gantt(
+                    Object.assign(
+                        {
+                            showActionLegend: true,
+                            actionLegend: legendJSON
+                        },
+                        getAxes(axisJSON)
+                    )
+                );
+                const legendElement = fetchElementByClass(styles.legend);
+                expect(legendElement.children.length).toBe(2);
+                expect(legendElement.children[0].nodeName).toBe("LI");
+                expect(legendElement.children[0].getAttribute("class")).toBe(
+                    `${styles.legendItem}`
+                );
                 expect(
-                    canvasElement.querySelector(`.${styles.legend}`)
-                ).toBeNull();
+                    legendElement.children[0].getAttribute("aria-selected")
+                ).toBeTruthy();
+                expect(legendElement.children[0].getAttribute("role")).toBe(
+                    "listitem"
+                );
+                expect(
+                    legendElement.children[0].getAttribute("aria-labelledby")
+                ).toBe(legendJSON[0].label.display);
+                expect(
+                    legendElement.children[1].getAttribute("aria-labelledby")
+                ).toBe(legendJSON[1].label.display);
+                expect(
+                    legendElement.children[0].getAttribute("aria-describedby")
+                ).toBe(legendJSON[0].key);
+                expect(
+                    legendElement.children[1].getAttribute("aria-describedby")
+                ).toBe(legendJSON[1].key);
             });
         });
         it("Attaches event handlers", () => {
@@ -753,8 +815,8 @@ describe("Gantt", () => {
         });
     });
     describe("When load is called", () => {
-        const primaryContent = getData(taskValuesJSON);
-        const secondaryContent = utils.deepClone(getData(taskValuesJSON));
+        const primaryContent = getData();
+        const secondaryContent = utils.deepClone(getData());
         secondaryContent.key = "uid_2";
         beforeEach(() => {
             gantt = new Gantt(getAxes(axisJSON));
@@ -794,17 +856,12 @@ describe("Gantt", () => {
                 );
                 expect(
                     trackLabelElement[0].getAttribute("transform")
-                ).toBeNull(); // null
-                expect(
-                    trackLabelElement[1].getAttribute("transform")
-                ).not.toBeNull(); // Project A
+                ).not.toBeNull();
             });
         });
         describe("Multiple Track inputs", () => {
-            beforeEach(() => {
-                gantt.loadContent(secondaryContent);
-            });
             it("Loads content correctly", () => {
+                gantt.loadContent(secondaryContent);
                 expect(gantt.trackConfig[0] instanceof Track).toBeTruthy();
                 expect(gantt.trackConfig[1] instanceof Track).toBeTruthy();
                 expect(gantt.tracks[0]).toBe(primaryContent.key);
@@ -816,11 +873,9 @@ describe("Gantt", () => {
                     82 + BASE_CANVAS_HEIGHT_PADDING
                 );
             });
-            it("Loads content correctly with different heights", () => {
-                const primaryContent = getData(taskValuesJSON);
-                const secondaryContent = utils.deepClone(
-                    getData(taskValuesJSON)
-                );
+            it("Loads content correctly with different heights - 2", () => {
+                const primaryContent = getData();
+                const secondaryContent = utils.deepClone(getData());
                 secondaryContent.key = "uid_2";
                 gantt.destroy();
                 gantt = new Gantt(getAxes(axisJSON));
@@ -840,15 +895,11 @@ describe("Gantt", () => {
                     200 + BASE_CANVAS_HEIGHT_PADDING
                 );
             });
-            it("Loads content correctly with different heights", () => {
-                const primaryContent = getData(taskValuesJSON);
-                const secondaryContent = utils.deepClone(
-                    getData(taskValuesJSON)
-                );
+            it("Loads content correctly with different heights - 3", () => {
+                const primaryContent = getData();
+                const secondaryContent = utils.deepClone(getData());
                 secondaryContent.key = "uid_2";
-                const tertiaryContent = utils.deepClone(
-                    getData(taskValuesJSON)
-                );
+                const tertiaryContent = utils.deepClone(getData());
                 tertiaryContent.key = "uid_3";
                 gantt.destroy();
                 gantt = new Gantt(getAxes(axisJSON));
@@ -874,16 +925,16 @@ describe("Gantt", () => {
         describe("Validates content for unique keys", () => {
             it("Throws error if content doesn't have a unique key", () => {
                 gantt = new Gantt(Object.assign(getAxes(axisJSON)));
-                gantt.loadContent(getData(taskValuesJSON));
+                gantt.loadContent(getData());
                 expect(() => {
-                    gantt.loadContent(getData(taskValuesJSON));
+                    gantt.loadContent(getData());
                 }).toThrowError(errors.THROW_MSG_UNIQUE_KEY_NOT_PROVIDED);
             });
             it("doesn't throws error if content has unique keys", () => {
                 gantt = new Gantt(Object.assign(getAxes(axisJSON)));
-                gantt.loadContent(getData(taskValuesJSON));
+                gantt.loadContent(getData());
                 expect(() => {
-                    const uniqueData = getData(taskValuesJSON);
+                    const uniqueData = getData();
                     uniqueData.key = "uid_2";
                     gantt.loadContent(uniqueData);
                 }).not.toThrowError(errors.THROW_MSG_UNIQUE_KEY_NOT_PROVIDED);
@@ -903,7 +954,7 @@ describe("Gantt", () => {
             it("Increases the height when content is loaded dynamically with different height", (done) => {
                 gantt.destroy();
                 gantt = new Gantt(getAxes(axisJSON));
-                const data = utils.deepClone(getData(taskValuesJSON));
+                const data = utils.deepClone(getData());
                 data.dimension = trackDimension.dimension;
                 gantt.loadContent(data);
                 const canvasElement = fetchElementByClass(styles.canvas);
@@ -920,7 +971,7 @@ describe("Gantt", () => {
     describe("When resize is called", () => {
         beforeEach(() => {
             gantt = new Gantt(getAxes(axisJSON));
-            gantt.loadContent(getData(taskValuesJSON));
+            gantt.loadContent(getData());
         });
         it("Sets the canvas width correctly", (done) => {
             const currentWidth = gantt.config.canvasWidth;
@@ -965,26 +1016,40 @@ describe("Gantt", () => {
             });
         });
         it("Calculates Y axis d3 scale using domain and range", (done) => {
-            triggerEvent(window, "resize", () => {
-                expect(gantt.scale.y).not.toBeNull();
-                expect(gantt.scale.y).toEqual(jasmine.any(Function));
-                done();
-            });
+            triggerEvent(
+                window,
+                "resize",
+                () => {
+                    expect(gantt.scale.y).not.toBeNull();
+                    expect(gantt.scale.y).toEqual(jasmine.any(Function));
+                    done();
+                },
+                TRANSITION_DELAY
+            );
         });
         it("Translates the canvas", (done) => {
             ganttChartContainer.setAttribute(
                 "style",
                 "width: 800px; height: 200px"
             );
-            triggerEvent(window, "resize", () => {
-                expect(
-                    +fetchElementByClass(styles.canvas).getAttribute("height")
-                ).toBe(41 + BASE_CANVAS_HEIGHT_PADDING);
-                expect(
-                    +fetchElementByClass(styles.canvas).getAttribute("width")
-                ).toBe(790);
-                done();
-            });
+            triggerEvent(
+                window,
+                "resize",
+                () => {
+                    expect(
+                        +fetchElementByClass(styles.canvas).getAttribute(
+                            "height"
+                        )
+                    ).toBe(41 + BASE_CANVAS_HEIGHT_PADDING);
+                    expect(
+                        +fetchElementByClass(styles.canvas).getAttribute(
+                            "width"
+                        )
+                    ).toBe(790);
+                    done();
+                },
+                TRANSITION_DELAY
+            );
         });
         it("Sets the content container width and height correctly", (done) => {
             ganttChartContainer.setAttribute(
@@ -1068,9 +1133,9 @@ describe("Gantt", () => {
         });
     });
     describe("When unload is called", () => {
-        const primaryContent = getData(taskValuesJSON);
-        const secondaryContent = utils.deepClone(getData(taskValuesJSON));
-        const tertiaryContent = utils.deepClone(getData(taskValuesJSON));
+        const primaryContent = getData();
+        const secondaryContent = utils.deepClone(getData());
+        const tertiaryContent = utils.deepClone(getData());
         secondaryContent.key = "uid_2";
         tertiaryContent.key = "uid_3";
         beforeEach(() => {
@@ -1137,10 +1202,10 @@ describe("Gantt", () => {
             }, TRANSITION_DELAY);
         });
         it("Unloads content correctly with different heights", () => {
-            const primaryContent = getData(taskValuesJSON);
-            const secondaryContent = utils.deepClone(getData(taskValuesJSON));
+            const primaryContent = getData();
+            const secondaryContent = utils.deepClone(getData());
             secondaryContent.key = "uid_2";
-            const tertiaryContent = utils.deepClone(getData(taskValuesJSON));
+            const tertiaryContent = utils.deepClone(getData());
             tertiaryContent.key = "uid_3";
 
             gantt.destroy();
@@ -1168,7 +1233,7 @@ describe("Gantt", () => {
     describe("When destruct is called", () => {
         beforeEach(() => {
             gantt = new Gantt(getAxes(axisJSON));
-            gantt.loadContent(getData(taskValuesJSON));
+            gantt.loadContent(getData());
             gantt.destroy();
         });
         it("Removes the canvas content", () => {
@@ -1186,7 +1251,9 @@ describe("Gantt", () => {
                     x: Object({}),
                     y: Object({})
                 }),
-                shownTargets: Object({})
+                shownTargets: Object({}),
+                actionLegend: [],
+                datelines: []
             });
             expect(gantt.axis).toEqual({});
             expect(gantt.scale).toEqual({});

@@ -102,5 +102,10 @@ export default {
     THROW_MSG_TASKS_DURATION_NOT_FUNCTION:
         "Invalid property: duration; Duration needs to be a function.",
     THROW_MSG_TASKS_DURATION_NOT_VALID:
-        "Invalid property: duration; Duration needs to return a number."
+        "Invalid property: duration; Duration needs to return a number.",
+    /**
+     * @description Actions
+     */
+    THROW_MSG_UNIQUE_ACTION_KEY_NOT_PROVIDED:
+        "Invalid property, a valid unique action key must be provided matching the legend key."
 };

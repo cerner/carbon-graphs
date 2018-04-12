@@ -1,4 +1,8 @@
-import { renderGantt } from "../controls/gantt";
+import {
+    renderGantt,
+    renderGanttAction,
+    renderGanttTruncate
+} from "../controls/gantt";
 import {
     btn,
     clearContent,
@@ -24,6 +28,16 @@ export const renderGanttExamples = (
         toggleSectionAsActive(event.target);
         instance.load(
             renderGantt(contentSection, "ganttSimple", "Simple Gantt")
+        );
+        instance.load(
+            renderGanttAction(contentSection, "ganttAction", "Actions")
+        );
+        instance.load(
+            renderGanttTruncate(
+                contentSection,
+                "ganttTruncate",
+                "Label Truncation"
+            )
         );
         instance.render();
         setState(instance);

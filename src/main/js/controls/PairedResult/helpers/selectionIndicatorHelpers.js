@@ -242,7 +242,7 @@ export const translateSelectionItem = (scale, canvasSVG) =>
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} config - Graph config object derived from input JSON
  * @param {Object} value - data point object
- * @returns {undefined} - returns nothing
+ * @returns {Object} - d3 append object
  */
 const addRect = (d3PairElement, scale, config, value) =>
     updateSelectionIndicatorAttributes(

@@ -10,8 +10,16 @@ import errors from "../../helpers/errors";
 import styles from "../../helpers/styles";
 import utils from "../../helpers/utils";
 import { isUniqueKey } from "./GanttConfig";
-import { getTrackLabel, updateTrackProps } from "./helpers/creationHelpers";
-import { translateLabelText } from "./helpers/translateHelpers";
+import { loadActions, unloadActions } from "./helpers/actionHelpers";
+import {
+    createTrackContainer,
+    getTrackLabel,
+    updateTrackProps
+} from "./helpers/creationHelpers";
+import {
+    translateActionPoints,
+    translateLabelText
+} from "./helpers/translateHelpers";
 
 /**
  * Validates the newly added content into the graph before rendering
@@ -36,9 +44,6 @@ export const validateContent = (content) => {
         utils.isEmpty(content.trackLabel.display)
     ) {
         throw new Error(errors.THROW_MSG_UNIQUE_LABEL_NOT_PROVIDED);
-    }
-    if (utils.isEmpty(content.tasks)) {
-        throw new Error(errors.THROW_MSG_TASKS_NOT_PROVIDED);
     }
 };
 /**
@@ -84,7 +89,7 @@ const addTrackLabelEventHandler = (canvasSVG, labelObj) =>
  * Load function validates, clones and stores the input onto a config object.
  * @private
  * @param {Object} inputJSON - Input JSON provided by the consumer
- * @returns {GanttConfig} config object containing consumer data
+ * @returns {Object} config object containing consumer data
  */
 const loadInput = (inputJSON) => {
     validateContent(inputJSON);
@@ -104,6 +109,7 @@ class Track extends GraphContent {
     constructor(input) {
         super();
         this.config = loadInput(input);
+        this.trackGroupPath = null;
     }
 
     /**
@@ -112,6 +118,19 @@ class Track extends GraphContent {
     load(graph) {
         if (!isUniqueKey(graph.tracks, this.config.key)) {
             throw new Error(errors.THROW_MSG_UNIQUE_KEY_NOT_PROVIDED);
+        }
+        this.trackGroupPath = createTrackContainer(
+            graph.config,
+            graph.svg,
+            this.config
+        );
+        if (utils.notEmpty(this.config.actions)) {
+            loadActions(
+                graph,
+                this.trackGroupPath,
+                this.config.trackLabel,
+                this.config.actions
+            );
         }
         updateTrackProps(graph.config, this.config, true);
         return this;
@@ -122,6 +141,9 @@ class Track extends GraphContent {
      */
     unload(graph) {
         updateTrackProps(graph.config, this.config);
+        if (utils.notEmpty(this.config.actions)) {
+            unloadActions(graph, this.trackGroupPath);
+        }
         this.config = {};
         return this;
     }
@@ -130,7 +152,14 @@ class Track extends GraphContent {
      * @inheritDoc
      */
     resize(graph) {
-        translateLabelText(graph.scale, graph.svg);
+        translateLabelText(graph.scale, graph.config, graph.svg);
+        if (utils.notEmpty(this.config.actions)) {
+            translateActionPoints(
+                graph.scale,
+                graph.config,
+                this.trackGroupPath
+            );
+        }
         return this;
     }
 

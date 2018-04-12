@@ -8,20 +8,25 @@ import { createLegend } from "../../helpers/legend";
 import styles from "../../helpers/styles";
 import GanttConfig, { processInput } from "./GanttConfig";
 import {
+    prepareLegendEventHandlers,
+    renderLegendItems
+} from "./helpers/actionHelpers";
+import {
     attachEventHandlers,
     calculateAxesLabelSize,
     calculateAxesSize,
     createAxes,
     createContentContainer,
     createDefs,
+    createGanttContent,
     createGrid,
+    createTrack,
     detachEventHandlers,
     determineHeight,
     scaleGraph,
     updateAxesDomain
 } from "./helpers/creationHelpers";
 import { translateGraph } from "./helpers/translateHelpers";
-import Track from "./Track";
 
 /**
  * @typedef {Object} Gantt
@@ -41,7 +46,6 @@ const BASE_CANVAS_WIDTH_PADDING = constants.BASE_CANVAS_WIDTH_PADDING;
 const setCanvasWidth = (container, config) => {
     config.canvasWidth = parseInt(container.style("width"), 10);
 };
-
 /**
  * Sets the canvas width. Canvas rests within a container.
  * On resize, the canvas is subjected to resizing but its sibling: Legend isnt.
@@ -52,7 +56,6 @@ const setCanvasWidth = (container, config) => {
 const setCanvasHeight = (config) => {
     config.canvasHeight = getYAxisHeight(config) + BASE_CANVAS_HEIGHT_PADDING;
 };
-
 /**
  * Data point sets can be loaded using this function.
  * Load function validates, clones and stores the input onto a config object.
@@ -80,7 +83,6 @@ const beforeInit = (control) => {
     control.config.height = determineHeight(control.config);
     return control;
 };
-
 /**
  * Initializes the necessary Gantt constructor objects
  * @private
@@ -94,7 +96,9 @@ const initConfig = (control) => {
             x: {},
             y: {}
         },
-        shownTargets: {}
+        shownTargets: {},
+        actionLegend: [],
+        datelines: []
     };
     control.axis = {};
     control.scale = {};
@@ -106,7 +110,6 @@ const initConfig = (control) => {
     control.resizeHandler = null;
     return control;
 };
-
 /**
  * Executes the init process checklist, needs to be called by parent control.
  * Needs to be called post calling beforeInit
@@ -187,11 +190,30 @@ class Gantt extends Construct {
         createGrid(this.axis, this.scale, this.config, this.svg);
         createContentContainer(this.config, this.svg);
         createAxes(this.axis, this.scale, this.config, this.svg);
-        this.legendSVG = createLegend(
-            this.config.bindLegendTo
-                ? d3.select(this.config.bindLegendTo)
-                : containerSVG
-        );
+        createGanttContent(this.config, this.svg);
+        if (this.config.showActionLegend) {
+            this.legendSVG = createLegend(
+                this.config.bindLegendTo
+                    ? d3.select(this.config.bindLegendTo)
+                    : containerSVG
+            );
+            this.config.shownTargets = this.config.actionLegend.map(
+                (legendItem) => legendItem.key
+            );
+            this.config.actionLegend.forEach((item) =>
+                renderLegendItems(
+                    this.config,
+                    prepareLegendEventHandlers(
+                        this,
+                        this.config,
+                        this.svg,
+                        this.config.shownTargets
+                    ),
+                    item,
+                    this.legendSVG
+                )
+            );
+        }
         attachEventHandlers(this);
         return this.svg;
     }
@@ -220,7 +242,7 @@ class Gantt extends Construct {
      * @returns {Gantt} - Gantt instance
      */
     loadContent(content) {
-        const track = new Track(content);
+        const track = createTrack(content);
         this.trackConfig.push(track);
         track.load(this);
         this.tracks.push(content.key);
