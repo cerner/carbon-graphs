@@ -4,7 +4,9 @@ export const loadPopup = (onCloseCB, key, index, value) => {
     const tip = document.querySelector("#tooltip");
     const getPairData = (value) =>
         value
-            ? checkDate(value) ? new Date(value).toLocaleString() : value
+            ? checkDate(value)
+                ? new Date(value).toLocaleString()
+                : value
             : null;
     const checkDate = (date) => date instanceof Date;
     const clickHandler = () => {
@@ -72,7 +74,9 @@ export const loadPopup = (onCloseCB, key, index, value) => {
                     ? getPairData(value.high.x)
                     : value.mid
                         ? getPairData(value.mid.x)
-                        : value.low ? getPairData(value.low.x) : "N/A"
+                        : value.low
+                            ? getPairData(value.low.x)
+                            : "N/A"
             }`
         );
 
