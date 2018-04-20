@@ -37,6 +37,10 @@ import {
     renderTooltip,
     toggleSectionAsActive
 } from "./examples/helpers";
+import {
+    SplineExample,
+    renderSplineExamples
+} from "./examples/content/renderSplineExamples";
 
 const root = document.querySelector("#root");
 
@@ -76,6 +80,13 @@ renderNonContiguousLineExamples(
 );
 renderMultiLineExamples(
     new LineExample(),
+    toggleSection,
+    contentSection,
+    setState,
+    getState
+);
+renderSplineExamples(
+    new SplineExample(),
     toggleSection,
     contentSection,
     setState,

@@ -13,7 +13,8 @@ import {
 } from "../../../main/js/helpers/axis";
 import constants, {
     AXIS_TYPE,
-    COLORS
+    COLORS,
+    LINE_TYPE
 } from "../../../main/js/helpers/constants";
 import errors from "../../../main/js/helpers/errors";
 import styles from "../../../main/js/helpers/styles";
@@ -340,6 +341,13 @@ describe("Line", () => {
                     (j) => j.color === constants.DEFAULT_COLOR
                 )
             ).toBeTruthy();
+        });
+        it("defaults interpolation to linear when not provided", () => {
+            const graph = graphDefault.loadContent(
+                new Line(getInput(valuesDefault))
+            );
+            const data = graph.content[0].dataTarget;
+            expect(data.interpolationType).toBe(LINE_TYPE.LINEAR);
         });
         it("defaults shapes to circle when not provided", () => {
             const graph = graphDefault.loadContent(
@@ -673,6 +681,17 @@ describe("Line", () => {
                             done();
                         });
                     });
+                });
+            });
+            describe("When interpolation type is provided", () => {
+                it("Displays graph properly", () => {
+                    graphDefault.destroy();
+                    const graph = new Graph(getAxes(axisDefault));
+                    const input = getInput(valuesDefault);
+                    input.type = LINE_TYPE.SPLINE;
+                    graph.loadContent(new Line(input));
+                    const data = graph.content[0].dataTarget;
+                    expect(data.interpolationType).toBe(LINE_TYPE.SPLINE);
                 });
             });
         });

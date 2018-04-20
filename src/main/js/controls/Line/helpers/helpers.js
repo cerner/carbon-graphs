@@ -1,7 +1,7 @@
 "use strict";
 import d3 from "d3";
 import { Shape } from "../../../core";
-import { getType } from "../../../core/BaseConfig";
+import { getType, getInterpolationType } from "../../../core/BaseConfig";
 import { getXAxisXPosition } from "../../../helpers/axis";
 import constants, { AXIS_TYPE, SHAPES } from "../../../helpers/constants";
 import errors from "../../../helpers/errors";
@@ -38,7 +38,7 @@ const createLine = (scale, d) => {
         .defined((value) => value.y !== null)
         .x((value) => scale.x(value.x))
         .y((value) => scale[value.yAxis](value.y))
-        .interpolate(constants.DEFAULT_INTERPOLATION);
+        .interpolate(d.interpolationType);
     return newLine(getDataPointValues(d));
 };
 /**
@@ -247,6 +247,9 @@ const processDataPoints = (graphConfig, dataTarget) => {
         }
         return utils.getNumber(x);
     };
+    // Update the interpolation type
+    dataTarget.interpolationType = getInterpolationType(dataTarget.type);
+
     graphConfig.shownTargets.push(dataTarget.key);
     dataTarget.internalValuesSubset = dataTarget.values.map((value) => ({
         onClick: dataTarget.onClick,

@@ -78,6 +78,16 @@ export const AXIS_TYPE = {
     TIME_SERIES: "timeseries"
 };
 /**
+ * Consumers can pick line type from default list
+ * Linear is default
+ * @public
+ * @enum {{LINEAR: string, SPLINE: string}}
+ */
+export const LINE_TYPE = {
+    LINEAR: "linear",
+    SPLINE: "cardinal"
+};
+/**
  * @enum {Object}
  */
 export default {

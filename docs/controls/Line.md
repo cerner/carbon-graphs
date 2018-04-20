@@ -105,14 +105,15 @@ Each axis - X, Y and Y2 should have the following properties:
 
 #### Optional
 
-| Property Name | Expected | Default       |
-| ------------- | -------- | ------------- |
-| yAxis         | string   | "y"           |
-| regions       | array    | []            |
-| label         | object   | {}            |
-| color         | string   | COLORS.BLACK  |
-| shape         | string   | SHAPES.CIRCLE |
-| onClick       | Function | null          |
+| Property Name | Expected | Default          |
+| ------------- | -------- | ---------------- |
+| yAxis         | string   | "y"              |
+| regions       | array    | []               |
+| label         | object   | {}               |
+| color         | string   | COLORS.BLACK     |
+| shape         | string   | SHAPES.CIRCLE    |
+| onClick       | Function | null             |
+| type          | string   | LINE_TYPE.LINEAR |
 
 ### Values
 

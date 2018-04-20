@@ -2,7 +2,7 @@
 /* globals VERSION */
 import api from "./controls";
 import { Shape } from "./core";
-import { AXIS_TYPE, COLORS, SHAPES } from "./helpers/constants";
+import { AXIS_TYPE, COLORS, LINE_TYPE, SHAPES } from "./helpers/constants";
 import LOCALE from "./locale";
 
 /**
@@ -17,12 +17,14 @@ const tools = {
  * @public
  * @property {Object} AXIS_TYPE Carbon API axis types constants
  * @property {Object} COLORS Carbon API color constants
+ * @property {Object} LINE_TYPE Carbon API line type constants
  * @property {Object} LOCALE Carbon API locale objects
  * @property {Object} SHAPES Carbon API shape constants
  */
 const helpers = {
     AXIS_TYPE,
     COLORS,
+    LINE_TYPE,
     LOCALE,
     SHAPES
 };

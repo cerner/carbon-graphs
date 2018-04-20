@@ -3,6 +3,7 @@ import BaseConfig, {
     getDomain,
     getScale,
     getType,
+    getInterpolationType,
     isDataValidFormat,
     isUniqueKey
 } from "./BaseConfig";
@@ -13,6 +14,7 @@ export {
     getDomain,
     getScale,
     getType,
+    getInterpolationType,
     isDataValidFormat,
     isUniqueKey
 };

@@ -25,6 +25,7 @@ Add `dist/js/carbon-graphs.js` and `dist/css/carbon-graphs.css` in your page and
     * Line graph
     * Multi-line graph
     * Paired Result graph
+    * Spline line graph
 * Criticality indicators for data point
 * Non-contiguous data point Line graph
 * Default theme for data points
@@ -39,7 +40,6 @@ Add `dist/js/carbon-graphs.js` and `dist/css/carbon-graphs.css` in your page and
     * Object.values
 
 ## Potential features
-* [ ] Spline line graphs
 * [ ] Gantt charts
 * [ ] Axes labelling along with shapes
 * [ ] Bar graphs

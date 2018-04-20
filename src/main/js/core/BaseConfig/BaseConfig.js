@@ -1,6 +1,6 @@
 "use strict";
 import d3 from "d3";
-import { AXIS_TYPE } from "../../helpers/constants";
+import { AXIS_TYPE, LINE_TYPE } from "../../helpers/constants";
 import errors from "../../helpers/errors";
 import utils from "../../helpers/utils";
 
@@ -32,6 +32,16 @@ export const isDataValidFormat = (data) =>
  */
 export const getType = (type) => getDefaultValue(type, AXIS_TYPE.DEFAULT);
 
+/**
+ * Interpolation type can be:
+ * * Linear (default)
+ * * Spline
+ * @private
+ * @param {string} type - consumer passed interpolation type
+ * @returns {Object} Interpolation type property from line type or "linear"
+ */
+export const getInterpolationType = (type) =>
+    getDefaultValue(type, LINE_TYPE.LINEAR);
 /**
  * Gets the scale for X Axis. If the data points are linear then
  * linear scale is provided but if the data points are datetime then
