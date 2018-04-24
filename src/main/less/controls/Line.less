@@ -6,10 +6,18 @@
     fill: none;
     stroke-width: 0.075rem;
     // To counteract the opacity change when blur is used on a line
-    .basic-transition(opacity, @line-transition-duration, @default-transition-timing);
+    .basic-transition(
+        opacity,
+        @line-transition-duration,
+        @default-transition-timing
+    );
     &.carbon-highlight {
         stroke-width: 0.15rem;
-        .transform-transition(stroke-width, @default-transition-duration, @default-transition-timing);
+        .transform-transition(
+            stroke-width,
+            @default-transition-duration,
+            @default-transition-timing
+        );
     }
 }
 

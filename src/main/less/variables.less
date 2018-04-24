@@ -48,11 +48,19 @@ We quickly accelerate at the beginning of the animation and slowly decelerate by
 .opacity-hide() {
     opacity: 0;
     visibility: hidden;
-    .transform-transition(opacity, @default-transition-duration, @default-transition-timing);
+    .transform-transition(
+        opacity,
+        @default-transition-duration,
+        @default-transition-timing
+    );
 }
 
 .opacity-show() {
     opacity: 1;
     visibility: visible;
-    .transform-transition(opacity, @default-transition-duration, @default-transition-timing);
+    .transform-transition(
+        opacity,
+        @default-transition-duration,
+        @default-transition-timing
+    );
 }

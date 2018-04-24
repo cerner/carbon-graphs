@@ -32,6 +32,10 @@ import {
     renderShapesExamples,
     ShapesExample
 } from "./examples/content/renderShapesExamples";
+import {
+    renderSplineExamples,
+    SplineExample
+} from "./examples/content/renderSplineExamples";
 import { renderColorsExample } from "./examples/controls/colors";
 import {
     btn,
@@ -41,10 +45,6 @@ import {
     renderTooltip,
     toggleSectionAsActive
 } from "./examples/helpers";
-import {
-    SplineExample,
-    renderSplineExamples
-} from "./examples/content/renderSplineExamples";
 
 const root = document.querySelector("#root");
 
