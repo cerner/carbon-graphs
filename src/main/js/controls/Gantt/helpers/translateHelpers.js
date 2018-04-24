@@ -1,4 +1,5 @@
 "use strict";
+import d3 from "d3";
 import {
     getYAxisHeight,
     getYAxisXPosition,
@@ -19,6 +20,7 @@ import {
     getXAxisYPosition,
     getYAxisYPosition
 } from "./creationHelpers";
+import { calculatePercentage } from "./durationHelpers";
 
 /**
  * Returns the Y co-ordinate translate value for Y axis transform based on its scale. Since the
@@ -274,11 +276,54 @@ const translateActionPoints = (scale, config, trackPath) => {
     translatePoints(scale, config, trackPath, `.${styles.point}`);
     translatePoints(scale, config, trackPath, `.${styles.dataPointSelection}`);
 };
+/**
+ * Translates tasks based on container width.
+ * @private
+ * @param {Object} scale - d3 scale for Graph
+ * @param {Object} config - config object derived from input JSON
+ * @param {Array} trackPath - d3 object of track
+ * @returns {Selection} - d3 Track selection
+ */
+const translateTasks = (scale, config, trackPath) =>
+    trackPath
+        .selectAll(`g.${styles.task}`)
+        .transition(constants.d3Transition)
+        .selectAll("rect")
+        .attr("x", (val) => scale.x(val.startDate))
+        .attr(
+            "y",
+            (val) => scale.y(val.y) + constants.DEFAULT_GANTT_TASK_PADDING.top
+        )
+        .attr("width", function(val) {
+            // If its a percentage bar then we would need to translate multiple bars
+            // Since we have 2 rectangles in a percentage bar, one which shows how much percentage
+            // has been finished and the other is the total length of the task time taken, we would need
+            // to process this separately based on the style.
+            // The Completion Bar will need to be translated based on the percentage provided,
+            // however the other bar will be subjected to normal translation.
+            if (val.percentage) {
+                return d3.select(this).classed(styles.completionBar)
+                    ? calculatePercentage(
+                          scale.x(val.startDate),
+                          scale.x(val.endDate),
+                          val.percentage
+                      )
+                    : scale.x(val.endDate) - scale.x(val.startDate);
+            } else {
+                // Otherwise, its either a chunk or bar
+                return (
+                    scale.x(val.endDate) - scale.x(val.startDate) ||
+                    `${constants.DEFAULT_GANTT_TASK_CHUNK_WIDTH}px`
+                );
+            }
+        });
+
 export {
     translateGraph,
     translateHGrid,
     translateVGrid,
     translateLabelText,
     transformPoint,
-    translateActionPoints
+    translateActionPoints,
+    translateTasks
 };

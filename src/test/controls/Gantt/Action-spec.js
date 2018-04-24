@@ -18,7 +18,6 @@ import {
 describe("Gantt -> Track -> Action", () => {
     let gantt = null;
     let ganttChartContainer;
-    let trackData = null;
     const axisData = Object.assign(getAxes(axisJSON), {
         showActionLegend: true,
         actionLegend: legendJSON
@@ -53,25 +52,6 @@ describe("Gantt -> Track -> Action", () => {
         ganttChartContainer.setAttribute("class", "carbon-test-class");
         document.body.appendChild(ganttChartContainer);
         gantt = new Gantt(axisData);
-        trackData = getData();
-        Object.assign(trackData, {
-            actions: [
-                {
-                    key: "uid_action_1",
-                    onClick: () => {},
-                    values: [
-                        new Date(2018, 2, 1, 6, 15).toISOString(),
-                        new Date(2018, 3, 1, 6, 15).toISOString(),
-                        new Date(2018, 4, 1, 6, 15).toISOString()
-                    ]
-                },
-                {
-                    key: "uid_action_2",
-                    onClick: () => {},
-                    values: [new Date(2018, 6, 1, 6, 15).toISOString()]
-                }
-            ]
-        });
     });
     afterEach(() => {
         document.body.innerHTML = "";

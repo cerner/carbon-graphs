@@ -21,6 +21,7 @@ import d3 from "d3";
  * @property {string} PURPLE "#78288c"
  * @property {string} LIGHT_ORANGE "#ff7d00"
  * @property {string} LIGHT_YELLOW "#ffda6c"
+ * @property {string} WHITE "#ffffff"
  * @enum {{Object: String}}
  */
 export const COLORS = {
@@ -35,7 +36,8 @@ export const COLORS = {
     LIGHT_GREEN: "#a5d784",
     PURPLE: "#78288c",
     LIGHT_ORANGE: "#ff7d00",
-    LIGHT_YELLOW: "#ffda6c"
+    LIGHT_YELLOW: "#ffda6c",
+    WHITE: "#ffffff"
 };
 /**
  * Consumers can pick a shape from this default list
@@ -117,7 +119,16 @@ export default {
     DEFAULT_LABEL_CHARACTER_LIMIT: 12,
     DEFAULT_GANTT_TRACK_HEIGHT: 41,
     DEFAULT_GANTT_TASK_HEIGHT: 23,
+    DEFAULT_GANTT_TASK_PADDING: {
+        top: 9,
+        bottom: 9
+    },
+    DEFAULT_GANTT_TASK_CHUNK_WIDTH: 5,
     DEFAULT_GANTT_ACTIVITY_HEIGHT: 31,
+    DEFAULT_GANTT_ACTIVITY_PADDING: {
+        top: 5,
+        bottom: 5
+    },
     DEFAULT_Y_AXIS_SPACING: 30,
     HOVER_EVENT: {
         MOUSE_ENTER: "enter",

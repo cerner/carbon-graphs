@@ -1,14 +1,32 @@
+import { COLORS } from "../../../helpers/constants";
 import errors from "../../../helpers/errors";
 import utils from "../../../helpers/utils";
 
 /**
- * Returns the appropriate bar based on the task style settings
+ * Returns the appropriate bar based on the task style settings.
+ * For Percentage Bar: Since we have multiple rectangle for a percentage
+ * bar, we dont want to apply settings based on style property.
+ * For Normal Bar and chunk, we apply the settings below in the
+ * `rect` element style attribute.
  * @private
- * @param {Object} styles - Style setting for task bar
+ * @param {Object} data - data associated to the task
  * @returns {string} A style constant
  */
-export const getTaskStyle = (styles) => {
-    // TODO Return style constants for each of the case
+const getTaskStyle = (data = {}) => {
+    const color = data.color || COLORS.BLUE;
+    let currentStyle = `fill: ${color}; stroke: ${color};`;
+
+    // If style property is not provided then we use treat it as filled.
+    if (utils.isEmpty(data.style)) {
+        return currentStyle;
+    }
+    if (data.style.isDotted === true) {
+        currentStyle = `${currentStyle} stroke-dasharray: 2, 2;`;
+    }
+    if (data.style.isHollow === true) {
+        currentStyle = `${currentStyle} fill: ${COLORS.WHITE};`;
+    }
+    return currentStyle;
 };
 /**
  * Executes the function sent by consumer to get the duration.
@@ -19,8 +37,8 @@ export const getTaskStyle = (styles) => {
  * @param {Function} duration - Duration function which returns a Date as a number
  * @returns {number} a datetime number
  */
-export const getDuration = (duration) => {
-    if (!utils.isFunction(duration)) {
+const getDuration = (duration) => {
+    if (duration && !utils.isFunction(duration)) {
         throw new Error(errors.THROW_MSG_TASKS_DURATION_NOT_FUNCTION);
     }
     const durationTime = duration();
@@ -37,7 +55,7 @@ export const getDuration = (duration) => {
  * @param {string} end - end date string
  * @returns {Date} start, if start datetime is provided, otherwise calculated datetime
  */
-export const getStartDuration = (duration, start, end) =>
+const getStartDuration = (duration = 0, start, end) =>
     utils.isEmpty(start)
         ? utils.parseDateTime(utils.getTime(end) - duration)
         : utils.parseDateTime(start);
@@ -49,7 +67,36 @@ export const getStartDuration = (duration, start, end) =>
  * @param {string} end - end date string
  * @returns {Date} end, if end datetime is provided, otherwise calculated datetime
  */
-export const getEndDuration = (duration, start, end) =>
+const getEndDuration = (duration = 0, start, end) =>
     utils.isEmpty(end)
         ? utils.parseDateTime(utils.getTime(start) + duration)
         : utils.parseDateTime(end);
+/**
+ *
+ * Checks if the bar is a chunk (Fixed width bar) or otherwise.
+ * It is a chunk if the startDate and endDate is the same.
+ * @private
+ * @param {string} start - start date string
+ * @param {string} end - end date string
+ * @returns {boolean} true if chunk, false otherwise
+ */
+const isAChunk = (start, end) =>
+    utils.getTime(end) - utils.getTime(start) === 0;
+/**
+ * Calculates the percentage of pixels based on start and end scales.
+ * @param {number} start - Start date scaled in pixels
+ * @param {number} end - End date scaled in pixels
+ * @param {number} percent - Percent complete
+ * @returns {number} Width for the completion bar in Pixels
+ */
+const calculatePercentage = (start, end, percent = 100) =>
+    percent * (end - start) / 100;
+
+export {
+    calculatePercentage,
+    isAChunk,
+    getEndDuration,
+    getStartDuration,
+    getDuration,
+    getTaskStyle
+};

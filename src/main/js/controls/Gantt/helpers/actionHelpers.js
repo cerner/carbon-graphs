@@ -390,7 +390,7 @@ export const loadActions = (graphContext, trackPathSVG, trackLabel, actions) =>
  * @private
  * @param {Object} graphContext - Gantt instance
  * @param {Object} trackPathSVG - Track container element
- * @returns {undefined} - returns nothing
+ * @returns {Selection} - track container element
  */
 export const unloadActions = (graphContext, trackPathSVG) =>
     trackPathSVG.selectAll(`g.${styles.currentPointsGroup}`).remove();

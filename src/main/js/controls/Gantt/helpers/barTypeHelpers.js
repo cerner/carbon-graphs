@@ -1,0 +1,121 @@
+"use strict";
+import d3 from "d3";
+import constants, { COLORS } from "../../../helpers/constants";
+import styles from "../../../helpers/styles";
+
+/**
+ * Creates a SVG rect and appends to the d3 element provided
+ * @private
+ * @param {Selection} path - d3 selection path for the SVG group element
+ * @param {number} x - Scaled x co-ordinate
+ * @param {number} y - Scaled y co-ordinate
+ * @param {number} width - width in scaled pixels
+ * @param {number} height - fixed pixel height as a number
+ * @returns {Selection} d3 selection path after appending rect
+ */
+const getRect = (path, x, y, width, height) =>
+    path
+        .append("rect")
+        .attr("x", x)
+        .attr("y", y)
+        .attr("width", width)
+        .attr("height", height);
+/**
+ * Creates a rect and appends it to the d3 selection element provided in the argument
+ * @private
+ * @param {Selection} path - d3 selection path for the SVG group element
+ * @param {number} x - Scaled x co-ordinate
+ * @param {number} y - Scaled y co-ordinate
+ * @param {number} width - width in scaled pixels
+ * @param {number} height - fixed pixel height as a number
+ * @param {string} style - inline styling for the bar
+ * @returns {Selection} d3 selection path
+ */
+const getBar = (path, x, y, width, height, style) => {
+    getRect(path, x, y, width, height)
+        .classed(styles.taskBar, true)
+        .attr("style", style);
+    return path;
+};
+
+/**
+ * Creates a rect and appends it to the d3 selection element provided in the argument.
+ * A chunk is a bar with fixed width. Uses: DEFAULT_GANTT_TASK_CHUNK_WIDTH
+ * @private
+ * @param {Selection} path - d3 selection path for the SVG group element
+ * @param {number} x - Scaled x co-ordinate
+ * @param {number} y - Scaled y co-ordinate
+ * @param {number} width - width in scaled pixels
+ * @param {number} height - fixed pixel height as a number
+ * @param {string} style - inline styling for the bar
+ * @returns {Selection} d3 selection path
+ */
+const getChunk = (path, x, y, width, height, style) => {
+    getBar(path, x, y, constants.DEFAULT_GANTT_TASK_CHUNK_WIDTH, height, style);
+    return path;
+};
+/**
+ * Creates 2 rect:
+ * * Full width bar
+ * * Completion bar with width as much as the percentage provided
+ * We render the Completion bar on top of the Full width bar to give an illusion of
+ * a percentage bar. If percentage is 100 then the Completion bar will overlap the Full width bar
+ * @private
+ * @param {Selection} path - d3 selection path for the SVG group element
+ * @param {number} x - Scaled x co-ordinate
+ * @param {number} y - Scaled y co-ordinate
+ * @param {number} width - width in scaled pixels
+ * @param {number} height - fixed pixel height as a number
+ * @param {number} percent - percent value for percentage completion
+ * @param {string} color - hexa value denoting the color of the bar
+ * @returns {Selection} d3 selection path
+ */
+const getPercentageBar = (path, x, y, width, height, percent, color) => {
+    getRect(path, x, y, width, height)
+        .classed(styles.taskBar, true)
+        .attr(
+            "style",
+            `fill: ${COLORS.WHITE}; stroke: ${color}; stroke-width: 1px;`
+        );
+    getRect(path, x, y, percent, height)
+        .classed(styles.completionBar, true)
+        .attr("style", `fill: ${color};`);
+    return path;
+};
+/**
+ * Creates a patterned bar with forward backslashes
+ * @private
+ * @param {Selection} defs - d3 selection path for defs element in the graph
+ * @param {Selection} path - d3 selection path for the SVG group element
+ * @param {number} x - Scaled x co-ordinate
+ * @param {number} y - Scaled y co-ordinate
+ * @param {number} width - width in scaled pixels
+ * @param {number} height - fixed pixel height as a number
+ * @param {string} color - hexa value denoting the color of the bar
+ * @returns {Selection} d3 selection path
+ */
+const getHashedBar = (defs, path, x, y, width, height, color) => {
+    const patternId = "pattern-stripe";
+    if (d3.select(`#${patternId}`).empty()) {
+        defs
+            .append("pattern")
+            .attr("id", patternId)
+            .attr("patternUnits", "userSpaceOnUse")
+            .attr("patternTransform", "rotate(-45)")
+            .attr("width", "12")
+            .attr("height", "16")
+            .append("rect")
+            .attr("width", "3")
+            .attr("height", "16")
+            .attr("style", "fill: #fff");
+    }
+    getRect(path, x, y, width, height)
+        .classed(styles.taskBar, true)
+        .attr("style", `fill: ${color};`);
+    getRect(path, x, y, width, height)
+        .classed(styles.taskBar, true)
+        .attr("style", `fill: url(#${patternId}); opacity: 0.4;`);
+    return path;
+};
+
+export { getBar, getChunk, getPercentageBar, getHashedBar };

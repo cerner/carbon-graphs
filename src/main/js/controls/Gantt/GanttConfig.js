@@ -10,20 +10,38 @@ import { DEFAULT_LOCALE } from "../../locale/index";
  * Validates the newly added task into the graph before rendering
  * @private
  * @param {Object} input - Newly added graph tasks
+ * @throws {module:errors.THROW_MSG_NO_DATA_LOADED}
  * @throws {module:errors.THROW_MSG_TASKS_UNIQUE_KEY_NOT_PROVIDED}
  * @throws {module:errors.THROW_MSG_TASKS_START_AND_END_NOT_PROVIDED}
+ * @throws {module:errors.THROW_MSG_TASKS_DURATION_NOT_PROVIDED}
  * @throws {module:errors.THROW_MSG_TASKS_START_AND_END_TYPE_NOT_VALID}
+ * @throws {module:errors.THROW_MSG_TASKS_START_MORE_END}
  * @returns {undefined} - returns nothing
  */
 const validateData = (input) => {
+    if (utils.isEmpty(input)) {
+        throw new Error(errors.THROW_MSG_NO_DATA_LOADED);
+    }
     if (utils.isEmpty(input.key)) {
         throw new Error(errors.THROW_MSG_TASKS_UNIQUE_KEY_NOT_PROVIDED);
     }
-    if (utils.isEmpty(input.start) && utils.isEmpty(input.end)) {
+    if (utils.isEmpty(input.startDate) && utils.isEmpty(input.endDate)) {
         throw new Error(errors.THROW_MSG_TASKS_START_AND_END_NOT_PROVIDED);
     }
-    if (!utils.isDate(input.start) || !utils.isDate(input.end)) {
+    if (
+        (utils.isEmpty(input.startDate) || utils.isEmpty(input.endDate)) &&
+        utils.isEmpty(input.duration)
+    ) {
+        throw new Error(errors.THROW_MSG_TASKS_DURATION_NOT_PROVIDED);
+    }
+    if (
+        (input.startDate && !utils.isDate(input.startDate)) ||
+        (input.endDate && !utils.isDate(input.endDate))
+    ) {
         throw new Error(errors.THROW_MSG_TASKS_START_AND_END_TYPE_NOT_VALID);
+    }
+    if (utils.getTime(input.startDate) > utils.getTime(input.endDate)) {
+        throw new Error(errors.THROW_MSG_TASKS_START_MORE_END);
     }
 };
 /**

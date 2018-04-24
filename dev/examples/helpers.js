@@ -71,18 +71,27 @@ export const div = {
     }
 };
 export const vector = {
-    render: (el, id, vb) => {
+    render: (el, id, vb = "", style = "") => {
         const elem = el.appendChild(
             document.createElementNS("http://www.w3.org/2000/svg", "svg")
         );
         elem.id = id;
-        elem.setAttribute("viewBox", vb);
+        elem.setAttribute("style", style);
+        vb ? elem.setAttribute("viewBox", vb) : "";
         return elem;
     }
 };
 export const h2 = {
     render: (el, content) => {
         const elem = el.appendChild(document.createElement("h2"));
+        elem.innerHTML = content;
+        elem.setAttribute("class", "graph-header");
+        return elem;
+    }
+};
+export const h3 = {
+    render: (el, content) => {
+        const elem = el.appendChild(document.createElement("h3"));
         elem.innerHTML = content;
         elem.setAttribute("class", "graph-header");
         return elem;

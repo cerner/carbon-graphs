@@ -3,8 +3,7 @@ import d3 from "d3";
 import Carbon from "../../src/main/js/carbon";
 import { loadPopup } from "./popup";
 
-const daysToMilliseconds = (d) =>
-    new Date().getTime() + 24 * 60 * 60 * 1000 * d;
+const daysToMilliseconds = (d) => 24 * 60 * 60 * 1000 * d;
 const DATA = [
     {
         LINE_DEFAULT: (id) => ({
@@ -862,13 +861,11 @@ const DATA = [
                             color: "#007cc3",
                             startDate: new Date(2018, 1, 1).toISOString(),
                             endDate: new Date(2018, 1, 10).toISOString(),
-                            duration: () => new Date(daysToMilliseconds(10)),
+                            duration: () => daysToMilliseconds(10),
                             percentage: 40,
                             dependencies: null, // TODO FUTURE implementation
                             style: {
                                 isDotted: true,
-                                isFilled: true,
-                                isHashed: true,
                                 isHollow: true
                             }
                         }
@@ -884,10 +881,10 @@ const DATA = [
                             color: "#007cc3",
                             startDate: new Date(2018, 1, 1).toISOString(),
                             endDate: new Date(2018, 1, 10).toISOString(),
-                            duration: () => new Date(daysToMilliseconds(12)),
+                            duration: () => daysToMilliseconds(12),
                             style: {
-                                isFilled: true,
-                                isHashed: true
+                                isDotted: false,
+                                isHollow: false
                             }
                         }
                     ],
@@ -899,9 +896,7 @@ const DATA = [
                             onClick: () => {},
                             shape: Carbon.helpers.SHAPES.CIRCLE,
                             color: Carbon.helpers.COLORS.BLUE,
-                            value: {
-                                x: new Date(2018, 3, 1, 7, 0).toISOString()
-                            }
+                            value: new Date(2018, 3, 1, 7, 0).toISOString()
                         }
                     ],
                     actions: [
@@ -927,9 +922,7 @@ const DATA = [
                     key: "uid_action_1",
                     label: {
                         display: "Action A"
-                    },
-                    shape: Carbon.helpers.SHAPES.CIRCLE,
-                    color: Carbon.helpers.COLORS.BLUE
+                    }
                 },
                 {
                     key: "uid_action_2",
@@ -945,9 +938,7 @@ const DATA = [
                     label: {
                         display: "Release A"
                     },
-                    onClick: () => {
-                        // Call consumer implementation here or NOP
-                    },
+                    onClick: () => {},
                     value: new Date(2018, 1, 28).toISOString()
                 }
             ],

@@ -1,5 +1,6 @@
 import {
     renderCriticalityShapes,
+    renderGanttBarTypes,
     renderShapesSimple
 } from "../controls/shapes";
 import {
@@ -31,5 +32,6 @@ export const renderShapesExamples = (
             "criticalityShapes",
             "Criticality"
         );
+        renderGanttBarTypes(contentSection, "GanttBars", "Bar types");
         setState(instance);
     });

@@ -1,6 +1,8 @@
 import {
     renderGantt,
     renderGanttAction,
+    renderGanttPercentage,
+    renderGanttStyle,
     renderGanttTruncate
 } from "../controls/gantt";
 import {
@@ -30,7 +32,17 @@ export const renderGanttExamples = (
             renderGantt(contentSection, "ganttSimple", "Simple Gantt")
         );
         instance.load(
+            renderGanttPercentage(
+                contentSection,
+                "ganttPercentage",
+                "Percentage"
+            )
+        );
+        instance.load(
             renderGanttAction(contentSection, "ganttAction", "Actions")
+        );
+        instance.load(
+            renderGanttStyle(contentSection, "ganttStyles", "Bar types")
         );
         instance.load(
             renderGanttTruncate(

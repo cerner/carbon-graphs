@@ -4,6 +4,8 @@ import constants from "../../../main/js/helpers/constants";
 import utils from "../../../main/js/helpers/utils";
 
 export const onClickFunctionSpy = sinon.spy();
+export const taskStartDate = new Date(2018, 2, 1).toISOString();
+export const taskEndDate = new Date(2018, 5, 10).toISOString();
 export const TRANSITION_DELAY = 500;
 export const BASE_CANVAS_HEIGHT_PADDING =
     (constants.PADDING.bottom * 2 + constants.PADDING.top) * 2;
@@ -34,12 +36,32 @@ export const axisJSON = {
 };
 export const taskValuesJSON = [
     {
-        key: "task1",
+        key: "taskNormal",
+        onClick: sinon.spy(),
         label: {
-            display: "Story A"
+            display: "Story Apex Task Something"
         },
-        startDate: new Date(2018, 1, 1).toISOString(),
-        endDate: new Date(2018, 1, 10).toISOString()
+        startDate: taskStartDate,
+        endDate: taskEndDate
+    },
+    {
+        key: "taskChunk",
+        onClick: sinon.spy(),
+        label: {
+            display: "Story Broccoli"
+        },
+        startDate: taskStartDate,
+        endDate: taskStartDate
+    },
+    {
+        key: "taskPercentage",
+        onClick: sinon.spy(),
+        label: {
+            display: "Story Charming"
+        },
+        percentage: 50,
+        startDate: taskStartDate,
+        endDate: taskEndDate
     }
 ];
 export const trackDimension = {

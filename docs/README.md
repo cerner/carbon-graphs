@@ -70,6 +70,7 @@ Consumers can generate one of the following graphs:
 | PURPLE       | ![#78288c](https://placehold.it/15/78288c/000000?text=+) `#78288c` |
 | LIGHT_ORANGE | ![#ff7d00](https://placehold.it/15/ff7d00/000000?text=+) `#ff7d00` |
 | LIGHT_YELLOW | ![#ffda6c](https://placehold.it/15/ffda6c/000000?text=+) `#ffda6c` |
+| WHITE        | ![#ffffff](https://placehold.it/15/ffffff/000000?text=+) `#ffffff` |
 
 ## Shapes
 

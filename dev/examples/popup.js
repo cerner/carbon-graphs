@@ -1,6 +1,21 @@
 import d3 from "d3";
 import utils from "../../src/main/js/helpers/utils";
 
+const getDate = (d) => new Date(d).toLocaleString();
+const getPairData = (value) =>
+    value ? (checkDate(value) ? getDate(value) : value) : null;
+const checkDate = (date) => date instanceof Date;
+const createItem = (pair, label, value) => {
+    const item = pair.append("g").classed("popup-item", true);
+    item
+        .append("label")
+        .classed("popup-label", true)
+        .text(label);
+    item
+        .append("g")
+        .classed("popup-text", true)
+        .text(value);
+};
 const renderPopup = (fn) => {
     const tip = document.querySelector("#tooltip");
     const clickHandler = () => {
@@ -39,27 +54,7 @@ const removeOldPopup = () => {
         .remove();
 };
 export const loadPopup = (onCloseCB, key, index, value) => {
-    const getPairData = (value) =>
-        value
-            ? checkDate(value)
-                ? new Date(value).toLocaleString()
-                : value
-            : null;
-    const checkDate = (date) => date instanceof Date;
-    const createItem = (pair, label, value) => {
-        const item = pair.append("g").classed("popup-item", true);
-        item
-            .append("label")
-            .classed("popup-label", true)
-            .text(label);
-        item
-            .append("g")
-            .classed("popup-text", true)
-            .text(value);
-    };
-
     removeOldPopup();
-
     const path = renderPopup(onCloseCB);
     const pair = path.append("g");
     if (value.x) {
@@ -67,11 +62,7 @@ export const loadPopup = (onCloseCB, key, index, value) => {
         createItem(
             pair,
             "X axis",
-            `${
-                checkDate(value.x)
-                    ? new Date(value.x).toLocaleString()
-                    : value.x
-            }`
+            `${checkDate(value.x) ? getDate(value.x) : value.x}`
         );
         createItem(pair, `${value.label.display}`, value.y);
     } else {
@@ -111,4 +102,18 @@ export const loadTrackLabelPopup = (d) => {
         .append("g")
         .classed("popup-text", true)
         .text(d);
+};
+export const loadTaskPopup = (onCloseCB, key, index, value) => {
+    removeOldPopup();
+    const path = renderPopup(onCloseCB);
+    const pair = path.append("g");
+    if (value.label) {
+        createItem(pair, "Task Name", value.label.display);
+    }
+    createItem(pair, "Track", value.y);
+    createItem(pair, "Start Date", getDate(value.startDate));
+    createItem(pair, "End Date", getDate(value.endDate));
+    if (value.percentage) {
+        createItem(pair, "Percentage", value.percentage);
+    }
 };
