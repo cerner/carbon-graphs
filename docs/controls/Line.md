@@ -27,57 +27,45 @@ lineDefault.loadContent(Carbon.api.line(/* Data array D */));
 
 #### Required
 
-| Property Name | Expected |
-| ------------- | -------- |
-| bindTo        | string   |
-| axis          | object   |
-| data          | array    |
+| Property Name | Expected | Description                   |
+| ------------- | -------- | ----------------------------- |
+| bindTo        | string   | DOM id to bind the graph into |
+| axis          | object   | Refer [Axis](#axis)           |
+| data          | array    | Refer [Data](#data)           |
 
 #### Optional
 
-| Property Name | Expected | Default                              |
-| ------------- | -------- | ------------------------------------ |
-| bindLegendTo  | string   | null (Example: `"#legendContainer"`) |
-| locale        | object   | LOCALE.en_US                         |
-| dimension     | object   | {}                                   |
-| throttle      | number   | (1000/60) => time in ms              |
-| showLabel     | boolean  | true                                 |
-| showLegend    | boolean  | true                                 |
-| showShapes    | boolean  | true                                 |
-| showVGrid     | boolean  | true                                 |
-| showHGrid     | boolean  | true                                 |
-
-### Dimension
-
-#### Required
-
-`N/A`
-
-#### Optional
-
-| Property Name | Expected | Default |
-| ------------- | -------- | ------- |
-| height        | number   | 250     |
+| Property Name | Expected | Default                 | Description                                                                          |
+| ------------- | -------- | ----------------------- | ------------------------------------------------------------------------------------ |
+| bindLegendTo  | string   | null                    | If DOM id provided, binds legend into that container (Example: `"#legendContainer"`) |
+| locale        | object   | LOCALE.en_US            | Locale object for X-Axis tick values                                                 |
+| dimension     | object   | {}                      | Refer [Dimension](#dimension)                                                        |
+| throttle      | number   | (1000/60) => time in ms | Delay between resize of a browser window                                             |
+| showLabel     | boolean  | true                    | Toggle to show axes labels                                                           |
+| showLegend    | boolean  | true                    | Toggle to show graph legend                                                          |
+| showShapes    | boolean  | true                    | Toggle to show shapes in the line graph                                              |
+| showVGrid     | boolean  | true                    | Toggle to show vertical grid                                                         |
+| showHGrid     | boolean  | true                    | Toggle to show horizontal grid                                                       |
 
 ### Axis
 
 #### Required
 
-| Property Name | Expected |
-| ------------- | -------- |
-| lowerLimit    | string   |
-| upperLimit    | string   |
-| label         | string   | "" |
+| Property Name | Expected | Description                                                   |
+| ------------- | -------- | ------------------------------------------------------------- |
+| lowerLimit    | string   | Upper bound for the axis. This is inclusive                   |
+| upperLimit    | string   | Lower bound for the axis. This is inclusive                   |
+| label         | string   | Axis label value. Will not be rendered if nothing is provided |
 
 #### Optional
 
 Each axis - X, Y and Y2 should have the following properties:
 
-| Property Name | Expected | Default           |
-| ------------- | -------- | ----------------- |
-| type          | string   | AXIS_TYPE.DEFAULT |
-| show          | boolean  | true              |
-| ticks         | object   | null              |
+| Property Name | Expected | Default           | Description                       |
+| ------------- | -------- | ----------------- | --------------------------------- |
+| type          | string   | AXIS_TYPE.DEFAULT | Normal number value or time-based |
+| show          | boolean  | true              | Toggle for showing the axis       |
+| ticks         | object   | null              | Refer [Ticks](#ticks)             |
 
 `Note` _y2 axis is mandatory if the **y2.show** is enabled_
 
@@ -89,68 +77,80 @@ Each axis - X, Y and Y2 should have the following properties:
 
 #### Optional
 
-| Property Name                                                                | Expected | Default |
-| ---------------------------------------------------------------------------- | -------- | ------- |
-| [format](https://github.com/d3/d3-time-format/blob/master/README.md#locales) | string   | ""      |
-| values                                                                       | array    | []      |
+| Property Name | Expected | Default | Description                                                                                                                                       |
+| ------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| format        | string   | ""      | [Formatter](https://github.com/d3/d3-time-format/blob/master/README.md#locales) for tick values. `Note:` This is mandatory if values are provided |
+| values        | array    | []      | Ticks values in the axis. Each tick will have an associated grid line                                                                             |
 
 ### Data
 
 #### Required
 
-| Property Name | Expected      |
-| ------------- | ------------- |
-| key           | unique string |
-| values        | Array         |
+| Property Name | Expected | Description                             |
+| ------------- | -------- | --------------------------------------- |
+| key           | string   | Unique id which represents the data set |
+| values        | Array    | [Values](#values)                       |
 
 #### Optional
 
-| Property Name | Expected | Default          |
-| ------------- | -------- | ---------------- |
-| yAxis         | string   | "y"              |
-| regions       | array    | []               |
-| label         | object   | {}               |
-| color         | string   | COLORS.BLACK     |
-| shape         | string   | SHAPES.CIRCLE    |
-| onClick       | Function | null             |
-| type          | string   | LINE_TYPE.LINEAR |
+| Property Name | Expected | Default          | Description                                                           |
+| ------------- | -------- | ---------------- | --------------------------------------------------------------------- |
+| yAxis         | string   | "y"              | Setting for using different Y based axis. For now: its either Y or Y2 |
+| type          | string   | LINE_TYPE.LINEAR | Nature of line that needs to be drawn (Linear or Cardinal)            |
+| regions       | array    | []               | Refer [Regions](#regions)                                             |
+| label         | object   | {}               | Display value for the data set which the data points belong to        |
+| color         | string   | COLORS.BLACK     | Color for the data point and line                                     |
+| shape         | string   | SHAPES.CIRCLE    | Shape for representing the data points                                |
+| onClick       | Function | null             | Any action that can be performed when clicking on the data point      |
+
+### Dimension
+
+#### Required
+
+`N/A`
+
+#### Optional
+
+| Property Name | Expected | Default | Description                           |
+| ------------- | -------- | ------- | ------------------------------------- |
+| height        | number   | 250     | Sets the height for the graph content |
 
 ### Values
 
 #### Required
 
-| Property Name | Expected |
-| ------------- | -------- |
-| x             | string   |
-| y             | string   |
+| Property Name | Expected | Description                                |
+| ------------- | -------- | ------------------------------------------ |
+| x             | string   | Co-ordinate x, for plotting the data point |
+| y             | string   | Co-ordinate y, for plotting the data point |
 
 #### Optional
 
-| Property Name | Expected | Default |
-| ------------- | -------- | ------- |
-| isCritical    | boolean  | `false` |
+| Property Name | Expected | Default | Description                                                |
+| ------------- | -------- | ------- | ---------------------------------------------------------- |
+| isCritical    | boolean  | `false` | Shows an indicator surrounding the data point when enabled |
 
 ### Regions
 
-Each data-set can have 1 or more regions. `start` and `end` is necessary for rendering a horizontal region.
+Each data-set can have 1 or more regions. `start` and `end` is necessary for rendering a horizontal area.
 
 #### Required
 
-| Property Name | Expected |
-| ------------- | -------- |
-| start         | number   |
-| end           | number   |
+| Property Name | Expected | Description         |
+| ------------- | -------- | ------------------- |
+| start         | number   | Start of the region |
+| end           | number   | End of the region   |
 
 #### Optional
 
-| Property Name | Expected | Default                                                            |
-| ------------- | -------- | ------------------------------------------------------------------ |
-| axis          | string   | "y"                                                                |
-| color         | string   | ![#f4f4f4](https://placehold.it/15/f4f4f4/000000?text=+) `#f4f4f4` |
+| Property Name | Expected | Default                                                            | Description                           |
+| ------------- | -------- | ------------------------------------------------------------------ | ------------------------------------- |
+| axis          | string   | "y"                                                                | Defines which axis if represents from |
+| color         | string   | ![#f4f4f4](https://placehold.it/15/f4f4f4/000000?text=+) `#f4f4f4` | Default color of the region area      |
 
 ### Constraints
 
-*   If `label` display is not provided then the legend item will not be shown as well
+*   If data-set `label` display is not provided then the legend item will not be shown as well
 
 ### Structure
 
