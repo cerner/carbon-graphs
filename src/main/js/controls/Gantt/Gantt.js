@@ -6,6 +6,7 @@ import constants from "../../helpers/constants";
 import errors from "../../helpers/errors";
 import { createLegend } from "../../helpers/legend";
 import styles from "../../helpers/styles";
+import utils from "../../helpers/utils";
 import GanttConfig, { processInput } from "./GanttConfig";
 import {
     prepareLegendEventHandlers,
@@ -17,6 +18,7 @@ import {
     calculateAxesSize,
     createAxes,
     createContentContainer,
+    createDateline,
     createDefs,
     createGanttContent,
     createGrid,
@@ -98,14 +100,13 @@ const initConfig = (control) => {
         },
         shownTargets: {},
         actionLegend: [],
-        datelines: []
+        dateline: {}
     };
     control.axis = {};
     control.scale = {};
     control.svg = null;
     control.legendSVG = null;
     control.tracks = [];
-    control.datelines = [];
     control.trackConfig = [];
     control.resizeHandler = null;
     return control;
@@ -191,6 +192,9 @@ class Gantt extends Construct {
         createContentContainer(this.config, this.svg);
         createAxes(this.axis, this.scale, this.config, this.svg);
         createGanttContent(this.config, this.svg);
+        if (utils.notEmpty(this.config.dateline)) {
+            createDateline(this.scale, this.config, this.svg);
+        }
         if (this.config.showActionLegend) {
             this.legendSVG = createLegend(
                 this.config.bindLegendTo

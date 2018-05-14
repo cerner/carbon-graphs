@@ -1,13 +1,15 @@
 "use strict";
 import d3 from "d3";
+import { Shape } from "../../../core";
 import {
     getAxisTickFormat,
     getXAxisHeight,
     getXAxisXPosition,
+    getYAxisHeight,
     getYAxisXPosition,
     prepareXAxis
 } from "../../../helpers/axis";
-import constants from "../../../helpers/constants";
+import constants, { SHAPES } from "../../../helpers/constants";
 import { shouldTruncateLabel, truncateLabel } from "../../../helpers/label";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
@@ -233,7 +235,7 @@ const getAxesScale = (axis, scale, config) => {
         ),
         "top"
     );
-    axis.y = prepareYAxis(scale.y, config.height);
+    axis.y = prepareYAxis(scale.y, getYAxisHeight(config));
     return axis;
 };
 /**
@@ -324,7 +326,7 @@ const createDefs = (config, canvasSVG) =>
         .attr(constants.X_AXIS, getXAxisXPosition(config))
         .attr(constants.Y_AXIS, getYAxisYPosition())
         .attr("width", getXAxisWidth(config))
-        .attr("height", config.height);
+        .attr("height", getYAxisHeight(config));
 /**
  * Create the d3 grid - horizontal and vertical and append into the canvas.
  * Only performed if the flags for showHGrid and showVGrid are enabled
@@ -402,7 +404,7 @@ const createContentContainer = (config, canvasSVG) =>
         .attr(constants.X_AXIS, getXAxisXPosition(config))
         .attr(constants.Y_AXIS, getXAxisYPosition())
         .attr("width", getXAxisWidth(config))
-        .attr("height", config.height);
+        .attr("height", getYAxisHeight(config));
 /**
  * Creates a container for gantt chart content
  * @private
@@ -416,6 +418,69 @@ const createGanttContent = (config, canvasSVG) =>
         .classed(styles.ganttChartContent, true)
         .attr("clip-path", `url(#${constants.CLIP_PATH_ID})`);
 /**
+ * Toggles the selection of a dateline indicator, executes on click of a data point.
+ * @private
+ * @param {Object} target - DOM element of the data point clicked
+ * @returns {Array} d3 html element of the selected point
+ */
+const toggleDataPointSelection = (target) => {
+    const selectedPointNode = d3.select(target.parentNode);
+    selectedPointNode.attr(
+        "aria-selected",
+        !(selectedPointNode.attr("aria-selected") === "true")
+    );
+    return selectedPointNode;
+};
+/**
+ * Handler for the dateline point on click. If the click property is present for the point
+ * then the callback is executed other wise it is NOP.
+ * @private
+ * @param {Object} value - data point object
+ * @param {Object} target - DOM object of the clicked point
+ * @returns {undefined} - returns nothing
+ */
+const datelineClickHandler = (value, target) => {
+    if (utils.isEmpty(value.onClick)) {
+        return;
+    }
+    toggleDataPointSelection(target).call((selectedTarget) =>
+        value.onClick(
+            () => {
+                selectedTarget.attr("aria-selected", false);
+            },
+            value,
+            selectedTarget
+        )
+    );
+};
+/**
+ * Creates a dateline for gantt chart. We are not adding
+ * x1, x2, y1, y2 co-ordinates for the straight line since they will be adjusted when
+ * content is loaded.
+ * @note: Dateline point is shown only when showDatelineIndicator is enabled
+ * @private
+ * @param {Object} scale - d3 scale taking into account the input parameters
+ * @param {Object} config - config object derived from input JSON
+ * @param {Array} canvasSVG - d3 object of canvas svg
+ * @returns {Object} d3 svg path
+ */
+const createDateline = (scale, config, canvasSVG) => {
+    const datelineGroup = canvasSVG
+        .append("g")
+        .datum(config.dateline)
+        .classed(styles.ganttDatelineGroup, true)
+        .attr("aria-selected", false);
+    datelineGroup
+        .append("path")
+        .classed(styles.ganttDatelinePoint, true)
+        .attr("aria-hidden", !config.dateline.showDatelineIndicator)
+        .attr("d", new Shape(SHAPES.SQUARE).getPathDescription())
+        .on("click", function(value) {
+            datelineClickHandler(value, this);
+        });
+    datelineGroup.append("line").classed(styles.ganttDateline, true);
+};
+/**
  * Creates a new Track instance
  * @private
  * @param {Object} content - input JSON for creating a track
@@ -428,7 +493,7 @@ const createTrack = (content) => new Track(content);
  * @param {Object} config - config object derived from input JSON
  * @param {Array} canvasSVG - d3 object of canvas svg
  * @param {Object} trackConfig - track's config object
- * @returns {Object} d3 svg path
+ * @returns {Selection} d3 svg path
  */
 const createTrackContainer = (config, canvasSVG, trackConfig) =>
     canvasSVG
@@ -454,6 +519,7 @@ export {
     createContentContainer,
     createGanttContent,
     createTrackContainer,
+    createDateline,
     scaleGraph,
     determineHeight,
     getShape,

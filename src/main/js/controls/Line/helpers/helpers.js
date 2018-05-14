@@ -1,7 +1,7 @@
 "use strict";
 import d3 from "d3";
 import { Shape } from "../../../core";
-import { getType, getInterpolationType } from "../../../core/BaseConfig";
+import { getInterpolationType, getType } from "../../../core/BaseConfig";
 import { getXAxisXPosition } from "../../../helpers/axis";
 import constants, { AXIS_TYPE, SHAPES } from "../../../helpers/constants";
 import errors from "../../../helpers/errors";

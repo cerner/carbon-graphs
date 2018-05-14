@@ -13,8 +13,36 @@
     }
 }
 
-.carbon-data-task {
+.carbon-data-completion-bar,
+.carbon-data-bar {
     user-select: none;
     shape-rendering: crispEdges;
     cursor: pointer;
+}
+
+.carbon-data-selected-bar {
+    display: block;
+    stroke-width: 0.075rem;
+    stroke: @blue30;
+    fill: @blue10;
+    fill-opacity: 0.25;
+    shape-rendering: geometricPrecision;
+    &[aria-hidden="true"] {
+        .opacity-hide();
+    }
+}
+
+.carbon-gantt-dateline-group {
+    stroke: @yellow60;
+    .carbon-gantt-dateline {
+        stroke-width: 3px;
+        stroke-opacity: 0.5;
+    }
+    .carbon-gantt-dateline-point {
+        cursor: pointer;
+        fill: @yellow60;
+        &[aria-hidden="true"] {
+            .opacity-hide();
+        }
+    }
 }

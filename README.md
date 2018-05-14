@@ -2,6 +2,11 @@
 Carbon is a graphing library built using d3 visualization library. It provides an API for generating native graphs such as Line and Paired Result graphs based on design standards.
 Carbon provides an abstraction for c3 and d3. 
 
+## Install
+* `npm install`
+* `npm run dev`
+* [http://localhost:9991/](http://localhost:9991/)
+
 ## Usage
 For convenience, there are 2 sets of distributions provided. 
 * `lib/js` - [default] Only `core`. Does not contain any dependencies, consumers need to provide the items listed in the `Dependencies` section before loading the graph.
@@ -26,6 +31,7 @@ Add `dist/js/carbon-graphs.js` and `dist/css/carbon-graphs.css` in your page and
     * Multi-line graph
     * Paired Result graph
     * Spline line graph
+    * Gantt charts
 * Criticality indicators for data point
 * Non-contiguous data point Line graph
 * Default theme for data points
@@ -40,7 +46,6 @@ Add `dist/js/carbon-graphs.js` and `dist/css/carbon-graphs.css` in your page and
     * Object.values
 
 ## Potential features
-* [ ] Gantt charts
 * [ ] Timeline graph
 * [ ] Axes labelling along with shapes
 * [ ] Bar graphs
@@ -52,11 +57,6 @@ Add `dist/js/carbon-graphs.js` and `dist/css/carbon-graphs.css` in your page and
 * [ ] Show/hide ticks
 * [ ] Zoom
 * [ ] Pan
-
-## Install
-* `npm install`
-* `npm run dev`
-* [http://localhost:9991/](http://localhost:9991/)
 
 ## Browser support
 * Android >= 4.4

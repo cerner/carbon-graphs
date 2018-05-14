@@ -1,7 +1,7 @@
 "use strict";
 import d3 from "d3";
 import Carbon from "../../src/main/js/carbon";
-import { loadPopup } from "./popup";
+import { loadDatelinePopup, loadPopup } from "./popup";
 
 const daysToMilliseconds = (d) => 24 * 60 * 60 * 1000 * d;
 const DATA = [
@@ -873,7 +873,7 @@ const DATA = [
                     activities: [
                         // Optional, consumer can skip this to get a valid gantt chart.
                         {
-                            key: "activity1",
+                            key: "uid_activity_1",
                             label: {
                                 display: "Support"
                             },
@@ -890,6 +890,7 @@ const DATA = [
                     ],
                     events: [
                         {
+                            key: "uid_event_1",
                             label: {
                                 display: "Defect A"
                             },
@@ -933,16 +934,14 @@ const DATA = [
                     color: Carbon.helpers.COLORS.GREEN
                 }
             ],
-            datelines: [
-                {
-                    label: {
-                        display: "Release A"
-                    },
-                    onClick: () => {},
-                    value: new Date(2018, 1, 28).toISOString()
-                }
-            ],
-            showDateLines: true,
+            dateline: {
+                showDatelineIndicator: true,
+                label: {
+                    display: "Release A"
+                },
+                onClick: loadDatelinePopup,
+                value: new Date(2018, 5, 1).toISOString()
+            },
             showActionLegend: true
         })
     }

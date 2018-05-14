@@ -1,9 +1,9 @@
 import BaseConfig, {
     getDefaultValue,
     getDomain,
+    getInterpolationType,
     getScale,
     getType,
-    getInterpolationType,
     isDataValidFormat
 } from "./BaseConfig";
 

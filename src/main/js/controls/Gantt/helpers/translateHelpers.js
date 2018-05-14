@@ -77,7 +77,7 @@ const translateDefs = (config, canvasSVG) =>
     canvasSVG
         .select(`clipPath#${constants.CLIP_PATH_ID}`)
         .selectAll("rect")
-        .attr("height", config.height)
+        .attr("height", getYAxisHeight(config))
         .attr("width", getXAxisWidth(config));
 /**
  * Updates the x, y and y2 (if enabled) positions on resize
@@ -184,7 +184,40 @@ const translateContentContainer = (config, canvasSVG) =>
         .select(`.${styles.contentContainer}`)
         .transition(constants.d3Transition)
         .attr("width", getXAxisWidth(config))
-        .attr("height", config.height);
+        .attr("height", getYAxisHeight(config));
+/**
+ * Translates the dateline, based on each content loaded.
+ * When a new content is loaded, the height of the graph changes
+ * since the height is consumer provided value. We would need to
+ * translate the straight line based on the new height.
+ * @private
+ * @param {Object} scale - d3 scale taking into account the input parameters
+ * @param {Object} config - config object derived from input JSON
+ * @param {Array} canvasSVG - d3 object of canvas svg
+ * @returns {undefined} - returns nothing
+ */
+const translateDateline = (scale, config, canvasSVG) => {
+    if (!config.dateline.value) {
+        return;
+    }
+    const xVal = scale.x(utils.parseDateTime(config.dateline.value));
+    const datelineGroup = canvasSVG
+        .select(`.${styles.ganttDatelineGroup}`)
+        .transition(constants.d3Transition)
+        .attr(
+            "transform",
+            `translate(${getXAxisXPosition(config)},${getXAxisYPosition()})`
+        );
+    datelineGroup
+        .select(`.${styles.ganttDatelinePoint}`)
+        .attr("transform", `translate(${xVal},0)`);
+    datelineGroup
+        .select(`.${styles.ganttDateline}`)
+        .attr("x1", xVal)
+        .attr("y1", 0)
+        .attr("x2", xVal)
+        .attr("y2", getYAxisHeight(config));
+};
 /**
  * Translates label to center of each track. Normally a tick text is aligned to the grid/tick,
  * but we want to move it to the center position to better associate it to the track.
@@ -260,6 +293,7 @@ const translateGraph = (control) => {
     translateAxes(control.axis, control.scale, control.config, control.svg);
     translateGrid(control.axis, control.scale, control.config, control.svg);
     translateContentContainer(control.config, control.svg);
+    translateDateline(control.scale, control.config, control.svg);
 };
 /**
  * Called on resize, translates the data point values.
@@ -277,32 +311,30 @@ const translateActionPoints = (scale, config, trackPath) => {
     translatePoints(scale, config, trackPath, `.${styles.dataPointSelection}`);
 };
 /**
- * Translates tasks based on container width.
+ * Translates task bars when resized.
+ * @note:
+ * When translating the width of a bar:
+ * If its a percentage bar then we would need to translate multiple bars
+ * Since we have 2 rectangles in a percentage bar, one which shows how much percentage
+ * has been finished and the other is the total length of the task time taken, we would need
+ * to process this separately based on the style.
+ * The Completion Bar will need to be translated based on the percentage provided,
+ * however the other bar will be subjected to normal translation.
  * @private
  * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - config object derived from input JSON
- * @param {Array} trackPath - d3 object of track
- * @returns {Selection} - d3 Track selection
+ * @param {Selection} path - d3 object of track
+ * @returns {undefined} - returns nothing
  */
-const translateTasks = (scale, config, trackPath) =>
-    trackPath
-        .selectAll(`g.${styles.task}`)
-        .transition(constants.d3Transition)
-        .selectAll("rect")
+const translateTaskBar = (scale, path) =>
+    path
         .attr("x", (val) => scale.x(val.startDate))
         .attr(
             "y",
             (val) => scale.y(val.y) + constants.DEFAULT_GANTT_TASK_PADDING.top
         )
         .attr("width", function(val) {
-            // If its a percentage bar then we would need to translate multiple bars
-            // Since we have 2 rectangles in a percentage bar, one which shows how much percentage
-            // has been finished and the other is the total length of the task time taken, we would need
-            // to process this separately based on the style.
-            // The Completion Bar will need to be translated based on the percentage provided,
-            // however the other bar will be subjected to normal translation.
             if (val.percentage) {
-                return d3.select(this).classed(styles.completionBar)
+                return d3.select(this).classed(styles.taskBarCompletion)
                     ? calculatePercentage(
                           scale.x(val.startDate),
                           scale.x(val.endDate),
@@ -313,9 +345,64 @@ const translateTasks = (scale, config, trackPath) =>
                 // Otherwise, its either a chunk or bar
                 return (
                     scale.x(val.endDate) - scale.x(val.startDate) ||
-                    `${constants.DEFAULT_GANTT_TASK_CHUNK_WIDTH}px`
+                    constants.DEFAULT_GANTT_TASK_CHUNK_WIDTH
                 );
             }
+        });
+/**
+ * Translates task selection indicators when resized.
+ * This is also called on initial creation, sets the positioning for
+ * x, y, width and height attributes based on current task bar positioning.
+ * If the current task is from Unit 3 to Unit 7 then we position the selection
+ * indicator from 3 to 7 and add some padding to the indicator so that it provides
+ * an illusion of enclosing the task
+ * @private
+ * @param {Object} scale - d3 scale for Graph
+ * @param {Selection} path - d3 object of track
+ * @returns {undefined} - returns nothing
+ */
+const translateTaskIndicator = (scale, path) => {
+    const padding = Math.floor(
+        constants.DEFAULT_GANTT_TASK_SELECTION_PADDING / 2
+    );
+    const positionAdjustment = Math.floor(
+        constants.DEFAULT_GANTT_TASK_SELECTION_PADDING / 4
+    );
+    path
+        .attr("x", (val) => scale.x(val.startDate) - positionAdjustment)
+        .attr(
+            "y",
+            (val) =>
+                scale.y(val.y) +
+                constants.DEFAULT_GANTT_TASK_PADDING.top -
+                positionAdjustment
+        )
+        .attr(
+            "width",
+            (val) =>
+                (scale.x(val.endDate) - scale.x(val.startDate) ||
+                    constants.DEFAULT_GANTT_TASK_CHUNK_WIDTH) + padding
+        )
+        .attr("height", constants.DEFAULT_GANTT_TASK_HEIGHT + padding);
+};
+/**
+ * Translates tasks based on container width.
+ * @private
+ * @param {Object} scale - d3 scale for Graph
+ * @param {Object} config - config object derived from input JSON
+ * @param {Selection} trackPath - d3 object of track
+ * @returns {Selection} - d3 Track selection
+ */
+const translateTasks = (scale, config, trackPath) =>
+    trackPath
+        .selectAll(`g.${styles.task}`)
+        .transition(constants.d3Transition)
+        .selectAll("rect")
+        .each(function() {
+            const path = d3.select(this);
+            path.classed(styles.taskBarSelection)
+                ? translateTaskIndicator(scale, path)
+                : translateTaskBar(scale, path);
         });
 
 export {

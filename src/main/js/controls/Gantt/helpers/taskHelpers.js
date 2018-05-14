@@ -6,7 +6,7 @@ import constants, { COLORS } from "../../../helpers/constants";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 import { validateTask } from "../GanttConfig";
-import { getBar, getChunk, getPercentageBar } from "./barTypeHelpers";
+import { getBar, getChunk, getPercentageBar, getRect } from "./barTypeHelpers";
 import { getTrackLabel, getXAxisYPosition } from "./creationHelpers";
 import {
     calculatePercentage,
@@ -24,12 +24,17 @@ import {
  * @returns {Array} d3 html element of the task
  */
 const toggleTaskSelection = (target) => {
-    const selectTaskNode = d3.select(target);
-    selectTaskNode.attr(
+    const taskNode = d3.select(target);
+    const selectionTaskNode = taskNode.select(`.${styles.taskBarSelection}`);
+    taskNode.attr(
         "aria-selected",
-        !(selectTaskNode.attr("aria-selected") === "true")
+        !(taskNode.attr("aria-selected") === "true")
     );
-    return selectTaskNode;
+    selectionTaskNode.attr(
+        "aria-hidden",
+        !(selectionTaskNode.attr("aria-hidden") === "true")
+    );
+    return taskNode;
 };
 /**
  * Handler for a task click action. If the content property is present for the task
@@ -49,13 +54,22 @@ const taskClickActionHandler = (value, index, target) => {
     if (utils.isEmpty(value.onClick)) {
         return;
     }
-    toggleTaskSelection(target).call((selectedTarget) =>
+    toggleTaskSelection(target).call((d3TargetNode) =>
         value.onClick(
-            () => selectedTarget.attr("aria-selected", false),
+            () => {
+                const d3SelectionNode = d3TargetNode.select(
+                    `.${styles.taskBarSelection}`
+                );
+                d3SelectionNode.attr(
+                    "aria-hidden",
+                    !(d3SelectionNode.attr("aria-hidden") === "true")
+                );
+                d3TargetNode.attr("aria-selected", false);
+            },
             value.key,
             index,
             value,
-            selectedTarget
+            d3TargetNode
         )
     );
 };
@@ -95,6 +109,98 @@ const processTask = (graphConfig, trackLabel, dataTarget) => {
     };
 };
 /**
+ * Generates arguments for creating task rectangles
+ * @private
+ * @param {Object} scale - d3 scale for Graph
+ * @param {Object} taskData - Current task data
+ * @param {Selection} taskPath - d3 task bar selection element
+ * @returns {Object} List of arguments - target element, x, y, width, height
+ */
+const generatorArgs = (scale, taskData, taskPath) => ({
+    path: d3.select(taskPath),
+    x: scale.x(taskData.startDate),
+    y: scale.y(taskData.y) + constants.DEFAULT_GANTT_TASK_PADDING.top,
+    width:
+        scale.x(taskData.endDate) - scale.x(taskData.startDate) ||
+        constants.DEFAULT_GANTT_TASK_CHUNK_WIDTH,
+    height: constants.DEFAULT_GANTT_TASK_HEIGHT
+});
+/**
+ * Renders the selection indicator for a task bar. Its hidden by default, displays when
+ * a task is clicked
+ * @private
+ * @param {Object} indicatorArgs - arguments needed for generating rect for selection indicator
+ * @returns {Selection} d3 selection element with selection indicator rect
+ */
+const renderSelectionIndicator = (indicatorArgs) => {
+    getRect(
+        indicatorArgs.path,
+        indicatorArgs.x,
+        indicatorArgs.y,
+        indicatorArgs.width,
+        indicatorArgs.height
+    )
+        .classed(styles.taskBarSelection, true)
+        .attr("rx", 3)
+        .attr("ry", 3)
+        .attr("aria-hidden", true);
+};
+/**
+ * Renders the percentage bar group for the task. This consists of
+ * * Percentage bar
+ * * Selection indicator for the percentage Bar
+ * @private
+ * @param {Object} scale - d3 scale for Graph
+ * @param {Object} taskData - Current task data
+ * @param {Selection} taskPath - d3 task bar selection element
+ * @returns {undefined} - returns nothing
+ */
+const renderPercentageBarGroup = (scale, taskData, taskPath) => {
+    const _args = generatorArgs(scale, taskData, taskPath);
+    // Create Selection indicator for Percentage Task
+    renderSelectionIndicator(_args);
+    // Create Percentage Task
+    getPercentageBar(
+        _args.path,
+        _args.x,
+        _args.y,
+        _args.width,
+        _args.height,
+        calculatePercentage(
+            scale.x(taskData.startDate),
+            scale.x(taskData.endDate),
+            taskData.percentage
+        ),
+        taskData.color
+    ).on("click", (value, index) =>
+        taskClickActionHandler(taskData, index, taskPath)
+    );
+};
+/**
+ * Based on startDate and endDate, we either render a chunk or a normal bar.
+ * If the startDate and endDate is same, render a Chunk with 5px width
+ * else render a normal bar with width based on start and end parameters provided.
+ * @private
+ * @param {Object} scale - d3 scale for Graph
+ * @param {Object} taskData - Current task data
+ * @param {Selection} taskPath - d3 task bar selection element
+ * @returns {undefined} - returns nothing
+ */
+const renderForegroundBarGroup = (scale, taskData, taskPath) => {
+    const _args = generatorArgs(scale, taskData, taskPath);
+    renderSelectionIndicator(_args);
+    (isAChunk(taskData.startDate, taskData.endDate) ? getChunk : getBar)(
+        _args.path,
+        _args.x,
+        _args.y,
+        _args.width,
+        _args.height,
+        taskData.style
+    ).on("click", (value, index) =>
+        taskClickActionHandler(taskData, index, taskPath)
+    );
+};
+/**
  * Renders the tasks for a track. Each task is created based on start and end datetime.
  * Values needs to be in ISO8601 datetime format, along with the unique key for each task.
  * @private
@@ -120,36 +226,9 @@ const drawTasks = (scale, config, trackLabel, taskGroupPath, tasks) => {
         .attr("aria-selected", false)
         .attr("aria-describedby", (d) => d.key)
         .each(function(d) {
-            if (d.percentage) {
-                return getPercentageBar(
-                    d3.select(this),
-                    scale.x(d.startDate),
-                    scale.y(d.y) + constants.DEFAULT_GANTT_TASK_PADDING.top,
-                    scale.x(d.endDate) - scale.x(d.startDate),
-                    constants.DEFAULT_GANTT_TASK_HEIGHT,
-                    calculatePercentage(
-                        scale.x(d.startDate),
-                        scale.x(d.endDate),
-                        d.percentage
-                    ),
-                    d.color
-                ).on("click", function(value, index) {
-                    taskClickActionHandler(d, index, this);
-                });
-            }
-            // Based on startDate and endDate, we either render a chunk or a normal bar.
-            // If the startDate and endDate is same, render a Chunk with 5px width
-            // else render a normal bar with width based on start and end parameters provided
-            return (isAChunk(d.startDate, d.endDate) ? getChunk : getBar)(
-                d3.select(this),
-                scale.x(d.startDate),
-                scale.y(d.y) + constants.DEFAULT_GANTT_TASK_PADDING.top,
-                scale.x(d.endDate) - scale.x(d.startDate),
-                constants.DEFAULT_GANTT_TASK_HEIGHT,
-                d.style
-            ).on("click", function(value, index) {
-                taskClickActionHandler(d, index, this);
-            });
+            d.percentage
+                ? renderPercentageBarGroup(scale, d, this)
+                : renderForegroundBarGroup(scale, d, this);
         });
     taskPath
         .exit()

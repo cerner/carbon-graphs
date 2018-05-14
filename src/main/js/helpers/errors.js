@@ -111,5 +111,12 @@ export default {
      * @description Actions
      */
     THROW_MSG_UNIQUE_ACTION_KEY_NOT_PROVIDED:
-        "Invalid property, a valid unique action key must be provided matching the legend key."
+        "Invalid property, a valid unique action key must be provided matching the legend key.",
+    /**
+     * @description Dateline
+     */
+    THROW_MSG_DATELINE_NOT_PROVIDED:
+        "Invalid property, a valid dateline value must be provided.",
+    THROW_MSG_DATELINE_TYPE_NOT_VALID:
+        "Invalid property, dateline value type must be in ISO8601 datetime format."
 };

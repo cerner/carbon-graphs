@@ -75,6 +75,9 @@ export default {
     taskGroup: "carbon-data-task-group",
     task: "carbon-data-task",
     taskBar: "carbon-data-bar",
-    completionBar: "carbon-data-completion-bar",
-    taskSelection: "carbon-selected-task"
+    taskBarSelection: "carbon-data-selected-bar",
+    taskBarCompletion: "carbon-data-completion-bar",
+    ganttDatelineGroup: "carbon-gantt-dateline-group",
+    ganttDatelinePoint: "carbon-gantt-dateline-point",
+    ganttDateline: "carbon-gantt-dateline"
 };

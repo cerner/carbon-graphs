@@ -8,6 +8,7 @@ Consumers can generate one of the following graphs:
 
 *   [Line](./controls/Line.md)
 *   [Paired Result](./controls/PairedResult.md)
+*   [Gantt](./controls/Gantt.md)
 
 ## Important information
 

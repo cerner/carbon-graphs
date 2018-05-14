@@ -78,7 +78,7 @@ const getPercentageBar = (path, x, y, width, height, percent, color) => {
             `fill: ${COLORS.WHITE}; stroke: ${color}; stroke-width: 1px;`
         );
     getRect(path, x, y, percent, height)
-        .classed(styles.completionBar, true)
+        .classed(styles.taskBarCompletion, true)
         .attr("style", `fill: ${color};`);
     return path;
 };
@@ -118,4 +118,4 @@ const getHashedBar = (defs, path, x, y, width, height, color) => {
     return path;
 };
 
-export { getBar, getChunk, getPercentageBar, getHashedBar };
+export { getRect, getBar, getChunk, getPercentageBar, getHashedBar };

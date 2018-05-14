@@ -312,28 +312,32 @@ describe("Gantt -> Track -> Task", () => {
             expect(taskElement.getAttribute("aria-describedby")).toBe(
                 taskValuesJSON[0].key
             );
-            expect(taskElement.childNodes.length).toBe(1);
-            expect(taskElement.firstChild).not.toBeNull();
-            expect(taskElement.firstChild.nodeName).toBe("rect");
-            expect(taskElement.firstChild.getAttribute("class")).toBe(
+            expect(taskElement.childNodes.length).toBe(2);
+            expect(taskElement.childNodes[1]).not.toBeNull();
+            expect(taskElement.childNodes[1].nodeName).toBe("rect");
+            expect(taskElement.childNodes[1].getAttribute("class")).toBe(
                 styles.taskBar
             );
-            expect(taskElement.firstChild.getAttribute("style")).toContain(
+            expect(taskElement.childNodes[1].getAttribute("style")).toContain(
                 COLORS.BLUE
             );
-            expect(taskElement.firstChild.getAttribute("style")).toContain(
+            expect(taskElement.childNodes[1].getAttribute("style")).toContain(
                 "fill"
             );
-            expect(taskElement.firstChild.getAttribute("style")).toContain(
+            expect(taskElement.childNodes[1].getAttribute("style")).toContain(
                 "stroke"
             );
-            expect(taskElement.firstChild.getAttribute("x")).toBeGreaterThan(0);
-            expect(taskElement.firstChild.getAttribute("y")).toBeGreaterThan(0);
+            expect(taskElement.childNodes[1].getAttribute("x")).toBeGreaterThan(
+                0
+            );
+            expect(taskElement.childNodes[1].getAttribute("y")).toBeGreaterThan(
+                0
+            );
             expect(
-                taskElement.firstChild.getAttribute("width")
+                taskElement.childNodes[1].getAttribute("width")
             ).toBeGreaterThan(0);
             expect(
-                taskElement.firstChild.getAttribute("height")
+                taskElement.childNodes[1].getAttribute("height")
             ).toBeGreaterThan(0);
         });
         it("Renders chunk correctly", () => {
@@ -345,26 +349,30 @@ describe("Gantt -> Track -> Task", () => {
             expect(taskElement.getAttribute("aria-describedby")).toBe(
                 taskValuesJSON[1].key
             );
-            expect(taskElement.childNodes.length).toBe(1);
-            expect(taskElement.firstChild).not.toBeNull();
-            expect(taskElement.firstChild.nodeName).toBe("rect");
-            expect(taskElement.firstChild.getAttribute("class")).toBe(
+            expect(taskElement.childNodes.length).toBe(2);
+            expect(taskElement.childNodes[1]).not.toBeNull();
+            expect(taskElement.childNodes[1].nodeName).toBe("rect");
+            expect(taskElement.childNodes[1].getAttribute("class")).toBe(
                 styles.taskBar
             );
-            expect(taskElement.firstChild.getAttribute("style")).toContain(
+            expect(taskElement.childNodes[1].getAttribute("style")).toContain(
                 COLORS.BLUE
             );
-            expect(taskElement.firstChild.getAttribute("style")).toContain(
+            expect(taskElement.childNodes[1].getAttribute("style")).toContain(
                 "fill"
             );
-            expect(taskElement.firstChild.getAttribute("style")).toContain(
+            expect(taskElement.childNodes[1].getAttribute("style")).toContain(
                 "stroke"
             );
-            expect(taskElement.firstChild.getAttribute("x")).toBeGreaterThan(0);
-            expect(taskElement.firstChild.getAttribute("y")).toBeGreaterThan(0);
-            expect(taskElement.firstChild.getAttribute("width")).toBe("5");
+            expect(taskElement.childNodes[1].getAttribute("x")).toBeGreaterThan(
+                0
+            );
+            expect(taskElement.childNodes[1].getAttribute("y")).toBeGreaterThan(
+                0
+            );
+            expect(taskElement.childNodes[1].getAttribute("width")).toBe("5");
             expect(
-                taskElement.firstChild.getAttribute("height")
+                taskElement.childNodes[1].getAttribute("height")
             ).toBeGreaterThan(0);
         });
         it("Renders percentage bar correctly", () => {
@@ -376,48 +384,35 @@ describe("Gantt -> Track -> Task", () => {
                 taskValuesJSON[2].key
             );
             expect(taskElement.getAttribute("aria-selected")).toBe("false");
-            expect(taskElement.childNodes.length).toBe(2);
-            expect(taskElement.childNodes[0]).not.toBeNull();
+            expect(taskElement.childNodes.length).toBe(3);
             expect(taskElement.childNodes[1]).not.toBeNull();
+            expect(taskElement.childNodes[2]).not.toBeNull();
 
-            expect(taskElement.childNodes[0].nodeName).toBe("rect");
             expect(taskElement.childNodes[1].nodeName).toBe("rect");
+            expect(taskElement.childNodes[2].nodeName).toBe("rect");
 
-            expect(taskElement.childNodes[0].getAttribute("class")).toBe(
+            expect(taskElement.childNodes[1].getAttribute("class")).toBe(
                 styles.taskBar
             );
-            expect(taskElement.childNodes[1].getAttribute("class")).toBe(
-                styles.completionBar
+            expect(taskElement.childNodes[2].getAttribute("class")).toBe(
+                styles.taskBarCompletion
             );
 
-            expect(taskElement.childNodes[0].getAttribute("style")).toContain(
+            expect(taskElement.childNodes[1].getAttribute("style")).toContain(
                 COLORS.WHITE
             );
-            expect(taskElement.childNodes[0].getAttribute("style")).toContain(
+            expect(taskElement.childNodes[2].getAttribute("style")).toContain(
                 "fill"
             );
-            expect(taskElement.childNodes[0].getAttribute("style")).toContain(
+            expect(taskElement.childNodes[1].getAttribute("style")).toContain(
                 "stroke"
             );
-            expect(taskElement.childNodes[0].getAttribute("style")).toContain(
+            expect(taskElement.childNodes[1].getAttribute("style")).toContain(
                 "stroke-width"
             );
-            expect(taskElement.childNodes[1].getAttribute("style")).toContain(
+            expect(taskElement.childNodes[2].getAttribute("style")).toContain(
                 COLORS.BLUE
             );
-
-            expect(taskElement.childNodes[0].getAttribute("x")).toBeGreaterThan(
-                0
-            );
-            expect(taskElement.childNodes[0].getAttribute("y")).toBeGreaterThan(
-                0
-            );
-            expect(
-                taskElement.childNodes[0].getAttribute("width")
-            ).toBeGreaterThan(0);
-            expect(
-                taskElement.childNodes[0].getAttribute("height")
-            ).toBeGreaterThan(0);
 
             expect(taskElement.childNodes[1].getAttribute("x")).toBeGreaterThan(
                 0
@@ -432,13 +427,102 @@ describe("Gantt -> Track -> Task", () => {
                 taskElement.childNodes[1].getAttribute("height")
             ).toBeGreaterThan(0);
 
+            expect(taskElement.childNodes[2].getAttribute("x")).toBeGreaterThan(
+                0
+            );
+            expect(taskElement.childNodes[2].getAttribute("y")).toBeGreaterThan(
+                0
+            );
             expect(
-                taskElement.childNodes[1].getAttribute("width")
-            ).toBeLessThan(taskElement.childNodes[0].getAttribute("width"));
-
+                taskElement.childNodes[2].getAttribute("width")
+            ).toBeGreaterThan(0);
+            expect(
+                taskElement.childNodes[2].getAttribute("height")
+            ).toBeGreaterThan(0);
+            expect(
+                taskElement.childNodes[2].getAttribute("width")
+            ).toBeLessThan(taskElement.childNodes[1].getAttribute("width"));
             //Check if the percentage is actually 50% of the entire bar
-            expect(+taskElement.childNodes[1].getAttribute("width")).toEqual(
-                taskElement.childNodes[0].getAttribute("width") / 2
+            expect(+taskElement.childNodes[2].getAttribute("width")).toEqual(
+                taskElement.childNodes[1].getAttribute("width") / 2
+            );
+        });
+        it("Renders selection for bar correctly", () => {
+            loadData(gantt);
+            const taskElement = fetchElementByClass(styles.task);
+            const indicatorElement = taskElement.childNodes[0];
+            const taskBarElement = taskElement.childNodes[1];
+            expect(indicatorElement).not.toBeNull();
+            expect(indicatorElement.nodeName).toBe("rect");
+            expect(indicatorElement.getAttribute("aria-hidden")).toBe("true");
+            expect(indicatorElement.getAttribute("rx")).toBe("3");
+            expect(indicatorElement.getAttribute("ry")).toBe("3");
+            expect(indicatorElement.getAttribute("class")).toBe(
+                styles.taskBarSelection
+            );
+            expect(+indicatorElement.getAttribute("x")).toBeLessThan(
+                +taskBarElement.getAttribute("x")
+            );
+            expect(+indicatorElement.getAttribute("y")).toBeLessThan(
+                +taskBarElement.getAttribute("y")
+            );
+            expect(+indicatorElement.getAttribute("width")).toBeGreaterThan(
+                +taskBarElement.getAttribute("width")
+            );
+            expect(+indicatorElement.getAttribute("height")).toBeGreaterThan(
+                +taskBarElement.getAttribute("height")
+            );
+        });
+        it("Renders selection for chunk correctly", () => {
+            loadData(gantt);
+            const taskElement = document.querySelectorAll(`.${styles.task}`)[1];
+            const indicatorElement = taskElement.childNodes[0];
+            const taskBarElement = taskElement.childNodes[1];
+            expect(indicatorElement).not.toBeNull();
+            expect(indicatorElement.nodeName).toBe("rect");
+            expect(indicatorElement.getAttribute("aria-hidden")).toBe("true");
+            expect(indicatorElement.getAttribute("rx")).toBe("3");
+            expect(indicatorElement.getAttribute("ry")).toBe("3");
+            expect(indicatorElement.getAttribute("class")).toBe(
+                styles.taskBarSelection
+            );
+            expect(+indicatorElement.getAttribute("x")).toBeLessThan(
+                +taskBarElement.getAttribute("x")
+            );
+            expect(+indicatorElement.getAttribute("y")).toBeLessThan(
+                +taskBarElement.getAttribute("y")
+            );
+            expect(+indicatorElement.getAttribute("width")).toBeGreaterThan(
+                +taskBarElement.getAttribute("width")
+            );
+            expect(+indicatorElement.getAttribute("height")).toBeGreaterThan(
+                +taskBarElement.getAttribute("height")
+            );
+        });
+        it("Renders selection for percentage bar correctly", () => {
+            loadData(gantt);
+            const taskElement = document.querySelectorAll(`.${styles.task}`)[2];
+            const indicatorElement = taskElement.childNodes[0];
+            const taskBarElement = taskElement.childNodes[1];
+            expect(indicatorElement).not.toBeNull();
+            expect(indicatorElement.nodeName).toBe("rect");
+            expect(indicatorElement.getAttribute("aria-hidden")).toBe("true");
+            expect(indicatorElement.getAttribute("rx")).toBe("3");
+            expect(indicatorElement.getAttribute("ry")).toBe("3");
+            expect(indicatorElement.getAttribute("class")).toBe(
+                styles.taskBarSelection
+            );
+            expect(+indicatorElement.getAttribute("x")).toBeLessThan(
+                +taskBarElement.getAttribute("x")
+            );
+            expect(+indicatorElement.getAttribute("y")).toBeLessThan(
+                +taskBarElement.getAttribute("y")
+            );
+            expect(+indicatorElement.getAttribute("width")).toBeGreaterThan(
+                +taskBarElement.getAttribute("width")
+            );
+            expect(+indicatorElement.getAttribute("height")).toBeGreaterThan(
+                +taskBarElement.getAttribute("height")
             );
         });
         describe("When clicked on a task", () => {
@@ -500,6 +584,50 @@ describe("Gantt -> Track -> Task", () => {
                                 "aria-selected"
                             )
                         ).toBe("true");
+                        expect(
+                            fetchElementByClass(
+                                styles.taskBarSelection
+                            ).getAttribute("aria-hidden")
+                        ).toBe("false");
+                        done();
+                    }
+                );
+            });
+            it("Calls onClick callback for a chunk", (done) => {
+                const onClickFunctionSpy = sinon.spy();
+                gantt.loadContent(
+                    Object.assign(getData(), {
+                        trackLabel: {
+                            display: "A"
+                        },
+                        tasks: [
+                            {
+                                key: "taskChunk",
+                                onClick: onClickFunctionSpy,
+                                label: {
+                                    display: "Story Apex"
+                                },
+                                startDate: taskStartDate,
+                                endDate: taskStartDate
+                            }
+                        ]
+                    })
+                );
+                triggerEvent(
+                    fetchElementByClass(styles.taskBar),
+                    "click",
+                    () => {
+                        expect(onClickFunctionSpy.calledOnce).toBeTruthy();
+                        expect(
+                            fetchElementByClass(styles.task).getAttribute(
+                                "aria-selected"
+                            )
+                        ).toBe("true");
+                        expect(
+                            fetchElementByClass(
+                                styles.taskBarSelection
+                            ).getAttribute("aria-hidden")
+                        ).toBe("false");
                         done();
                     }
                 );
@@ -535,6 +663,11 @@ describe("Gantt -> Track -> Task", () => {
                                 "aria-selected"
                             )
                         ).toBe("true");
+                        expect(
+                            fetchElementByClass(
+                                styles.taskBarSelection
+                            ).getAttribute("aria-hidden")
+                        ).toBe("false");
                         done();
                     }
                 );
@@ -561,7 +694,7 @@ describe("Gantt -> Track -> Task", () => {
                     })
                 );
                 triggerEvent(
-                    fetchElementByClass(styles.completionBar),
+                    fetchElementByClass(styles.taskBarCompletion),
                     "click",
                     () => {
                         expect(onClickFunctionSpy.calledOnce).toBeTruthy();
@@ -570,6 +703,11 @@ describe("Gantt -> Track -> Task", () => {
                                 "aria-selected"
                             )
                         ).toBe("true");
+                        expect(
+                            fetchElementByClass(
+                                styles.taskBarSelection
+                            ).getAttribute("aria-hidden")
+                        ).toBe("false");
                         done();
                     }
                 );
@@ -602,6 +740,11 @@ describe("Gantt -> Track -> Task", () => {
                                 "aria-selected"
                             )
                         ).toBe("false");
+                        expect(
+                            fetchElementByClass(
+                                styles.taskBarSelection
+                            ).getAttribute("aria-hidden")
+                        ).toBe("true");
                         done();
                     });
                 });
@@ -634,6 +777,11 @@ describe("Gantt -> Track -> Task", () => {
                         expect(
                             taskElement.getAttribute("aria-describedby")
                         ).toBe("taskNormal");
+                        expect(
+                            fetchElementByClass(
+                                styles.taskBarSelection
+                            ).getAttribute("aria-hidden")
+                        ).toBe("true");
                         done();
                     },
                     TRANSITION_DELAY
@@ -703,7 +851,7 @@ describe("Gantt -> Track -> Task", () => {
             const percentageBar = document.querySelectorAll(
                 `.${styles.task} rect`
             )[2];
-            const completionBar = fetchElementByClass(styles.completionBar);
+            const completionBar = fetchElementByClass(styles.taskBarCompletion);
             const currentTaskPosX = percentageBar.getAttribute("x");
             const currentTaskPosWidth = percentageBar.getAttribute("width");
             const completionTaskPosX = completionBar.getAttribute("x");
@@ -717,10 +865,10 @@ describe("Gantt -> Track -> Task", () => {
                 "resize",
                 () => {
                     const resizedBarElement = ganttChartContainer.querySelectorAll(
-                        `.${styles.task} rect`
+                        `.${styles.taskBar}`
                     )[2];
                     const resizedCompletionBarElement = ganttChartContainer.querySelector(
-                        `.${styles.completionBar}`
+                        `.${styles.taskBarCompletion}`
                     );
                     expect(resizedBarElement.getAttribute("x")).not.toEqual(
                         currentTaskPosX
@@ -885,7 +1033,7 @@ describe("Gantt -> Track -> Task", () => {
                 getTaskStyle()
             );
             const taskBar = fetchElementByClass(styles.taskBar);
-            const completionBar = fetchElementByClass(styles.completionBar);
+            const completionBar = fetchElementByClass(styles.taskBarCompletion);
             expect(taskBar.nodeName).toBe("RECT");
             expect(taskBar.getAttribute("x")).toEqual("0");
             expect(taskBar.getAttribute("y")).toEqual("0");

@@ -1,4 +1,6 @@
 "use strict";
+import d3 from "d3";
+import sinon from "sinon";
 import Gantt from "../../../main/js/controls/Gantt";
 import { getXAxisWidth } from "../../../main/js/controls/Gantt/helpers/creationHelpers";
 import Track from "../../../main/js/controls/Gantt/Track";
@@ -11,6 +13,7 @@ import LOCALE from "../../../main/js/locale/index";
 import {
     axisJSON,
     BASE_CANVAS_HEIGHT_PADDING,
+    datelineJSON,
     fetchElementByClass,
     getAxes,
     getData,
@@ -71,7 +74,6 @@ describe("Gantt", () => {
             expect(gantt.legendSVG).toBeNull();
             expect(gantt.svg).not.toBeNull();
             expect(gantt.tracks).toEqual([]);
-            expect(gantt.datelines).toEqual([]);
             expect(gantt.trackConfig).toEqual([]);
             expect(gantt.resizeHandler).toEqual(jasmine.any(Function));
         });
@@ -221,9 +223,8 @@ describe("Gantt", () => {
             expect(gantt.config.axis).not.toBeNull();
             expect(gantt.config.locale).not.toBeNull();
             expect(gantt.config.throttle).toEqual(constants.RESIZE_THROTTLE);
-            expect(gantt.config.datelines).toEqual(input.datelines || []);
+            expect(gantt.config.dateline).toEqual(input.dateline || {});
             expect(gantt.config.actionLegend).toEqual(input.actionLegend || []);
-            expect(gantt.config.showDateLines).toEqual(true);
             expect(gantt.config.axis.x.type).toEqual(AXIS_TYPE.TIME_SERIES);
             expect(gantt.config.axis.x.ticks).toEqual({});
             expect(gantt.config.axis.x.domain[0]).toEqual(
@@ -808,6 +809,144 @@ describe("Gantt", () => {
                 ).toBe(legendJSON[1].key);
             });
         });
+        describe("Dateline", () => {
+            let axisObj;
+            beforeEach(() => {
+                gantt.destroy();
+                axisObj = utils.deepClone(getAxes(axisJSON));
+            });
+            it("Throws error when dateline value is not provided", () => {
+                axisObj.dateline = utils.deepClone(datelineJSON);
+                axisObj.dateline.value = "";
+                expect(() => {
+                    gantt = new Gantt(axisObj);
+                }).toThrowError(errors.THROW_MSG_DATELINE_NOT_PROVIDED);
+            });
+            it("Throws error when dateline value is not provided", () => {
+                axisObj.dateline = utils.deepClone(datelineJSON);
+                axisObj.dateline.value = "HELLO";
+                expect(() => {
+                    gantt = new Gantt(axisObj);
+                }).toThrowError(errors.THROW_MSG_DATELINE_TYPE_NOT_VALID);
+            });
+            it("Creates dateline group element", () => {
+                axisObj.dateline = utils.deepClone(datelineJSON);
+                gantt = new Gantt(axisObj);
+                const datelineGroupElement = fetchElementByClass(
+                    styles.ganttDatelineGroup
+                );
+                expect(d3.select(datelineGroupElement).datum().value).toBe(
+                    datelineJSON.value
+                );
+                expect(datelineGroupElement.getAttribute("aria-selected")).toBe(
+                    "false"
+                );
+                expect(
+                    datelineGroupElement.getAttribute("transform")
+                ).toBeNull();
+                expect(datelineGroupElement.childNodes.length).toBe(2);
+            });
+            it("Creates dateline correctly", () => {
+                axisObj.dateline = utils.deepClone(datelineJSON);
+                gantt = new Gantt(axisObj);
+                const dateline = fetchElementByClass(styles.ganttDateline);
+                expect(dateline).not.toBeNull();
+            });
+            it("Creates dateline point correctly", () => {
+                axisObj.dateline = utils.deepClone(datelineJSON);
+                gantt = new Gantt(axisObj);
+                const datelinePoint = fetchElementByClass(
+                    styles.ganttDatelinePoint
+                );
+                expect(datelinePoint).not.toBeNull();
+                expect(datelinePoint.getAttribute("aria-hidden")).toBe("false");
+                expect(datelinePoint.getAttribute("d")).not.toBeNull();
+            });
+            it("Hides dateline point on consumer disable", () => {
+                axisObj.dateline = utils.deepClone(datelineJSON);
+                axisObj.dateline.showDatelineIndicator = false;
+                gantt = new Gantt(axisObj);
+                const datelinePoint = fetchElementByClass(
+                    styles.ganttDatelinePoint
+                );
+                const datelineGroupElement = fetchElementByClass(
+                    styles.ganttDatelineGroup
+                );
+                expect(datelineGroupElement.childNodes.length).toBe(2);
+                expect(datelinePoint).not.toBeNull();
+                expect(datelinePoint.getAttribute("aria-hidden")).toBe("true");
+            });
+            describe("when clicked on dateline", () => {
+                it("Does not do anything if no onClick callback is provided", (done) => {
+                    axisObj.dateline = utils.deepClone(datelineJSON);
+                    gantt = new Gantt(axisObj);
+                    const onClickFunctionSpy = sinon.spy();
+                    triggerEvent(
+                        fetchElementByClass(styles.ganttDatelinePoint),
+                        "click",
+                        () => {
+                            expect(onClickFunctionSpy.calledOnce).toBeFalsy();
+                            done();
+                        }
+                    );
+                });
+                it("Calls onClick callback", (done) => {
+                    const onClickFunctionSpy = sinon.spy();
+                    axisObj.dateline = utils.deepClone(datelineJSON);
+                    axisObj.dateline.onClick = onClickFunctionSpy;
+                    gantt = new Gantt(axisObj);
+                    triggerEvent(
+                        fetchElementByClass(styles.ganttDatelinePoint),
+                        "click",
+                        () => {
+                            expect(onClickFunctionSpy.calledOnce).toBeTruthy();
+                            expect(
+                                fetchElementByClass(
+                                    styles.ganttDatelineGroup
+                                ).getAttribute("aria-selected")
+                            ).toBe("true");
+                            done();
+                        }
+                    );
+                });
+                it("Removes selection when task bar is clicked again", (done) => {
+                    const onClickFunctionSpy = sinon.spy();
+                    axisObj.dateline = utils.deepClone(datelineJSON);
+                    axisObj.dateline.onClick = onClickFunctionSpy;
+                    gantt = new Gantt(axisObj);
+                    const point = fetchElementByClass(
+                        styles.ganttDatelinePoint
+                    );
+                    triggerEvent(point, "click", () => {
+                        triggerEvent(point, "click", () => {
+                            expect(
+                                fetchElementByClass(
+                                    styles.ganttDatelineGroup
+                                ).getAttribute("aria-selected")
+                            ).toBe("false");
+                            done();
+                        });
+                    });
+                });
+                it("Removes task bar selection when parameter callback is called", (done) => {
+                    axisObj.dateline = utils.deepClone(datelineJSON);
+                    axisObj.dateline.onClick = (clearSelectionCallback) =>
+                        clearSelectionCallback();
+                    gantt = new Gantt(axisObj);
+                    const point = fetchElementByClass(
+                        styles.ganttDatelinePoint
+                    );
+                    triggerEvent(point, "click", () => {
+                        expect(
+                            fetchElementByClass(
+                                styles.ganttDatelineGroup
+                            ).getAttribute("aria-selected")
+                        ).toBe("false");
+                        done();
+                    });
+                });
+            });
+        });
         it("Attaches event handlers", () => {
             gantt.resizeHandler();
             expect(gantt.resizeHandler).not.toBeNull();
@@ -1253,7 +1392,7 @@ describe("Gantt", () => {
                 }),
                 shownTargets: Object({}),
                 actionLegend: [],
-                datelines: []
+                dateline: {}
             });
             expect(gantt.axis).toEqual({});
             expect(gantt.scale).toEqual({});
@@ -1261,7 +1400,6 @@ describe("Gantt", () => {
             expect(gantt.graphContainer).toBeNull();
             expect(gantt.legendSVG).toBeNull();
             expect(gantt.tracks).toEqual([]);
-            expect(gantt.datelines).toEqual([]);
             expect(gantt.trackConfig).toEqual([]);
             expect(gantt.resizeHandler).toBeNull();
         });

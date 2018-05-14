@@ -65,14 +65,12 @@ export const processInput = (input, config) => {
         input.throttle,
         constants.RESIZE_THROTTLE
     );
-    config.datelines = getDefaultValue(utils.deepClone(input.datelines), []);
-    config.showDateLines = getDefaultValue(input.showDateLines, true);
+    config.dateline = getDefaultValue(utils.deepClone(input.dateline), {});
     config.actionLegend = getDefaultValue(
         utils.deepClone(input.actionLegend),
         []
     );
     config.showActionLegend = getDefaultValue(input.showActionLegend, false);
-    config.dimension = getDefaultValue(input.dimension, {});
     config.axis.x = Object.assign(_axis.x, {
         type: AXIS_TYPE.TIME_SERIES,
         show: getDefaultValue(_axis.x.show, true),
@@ -141,6 +139,8 @@ class GraphConfig extends BaseConfig {
      * @throws {module:errors.THROW_MSG_NO_AXIS_INFO}
      * @throws {module:errors.THROW_MSG_NO_AXIS_LIMIT_INFO}
      * @throws {module:errors.THROW_MSG_INVALID_AXIS_TYPE_VALUES}
+     * @throws {module:errors.THROW_MSG_DATELINE_NOT_PROVIDED}
+     * @throws {module:errors.THROW_MSG_DATELINE_TYPE_NOT_VALID}
      * @returns {GraphConfig} instance object
      */
     validateInput() {
@@ -167,6 +167,18 @@ class GraphConfig extends BaseConfig {
             !utils.isDate(this.input.axis.x.upperLimit)
         ) {
             throw new Error(errors.THROW_MSG_INVALID_AXIS_TYPE_VALUES);
+        }
+        if (
+            utils.notEmpty(this.input.dateline) &&
+            utils.isEmpty(this.input.dateline.value)
+        ) {
+            throw new Error(errors.THROW_MSG_DATELINE_NOT_PROVIDED);
+        }
+        if (
+            utils.notEmpty(this.input.dateline) &&
+            !utils.isDate(this.input.dateline.value)
+        ) {
+            throw new Error(errors.THROW_MSG_DATELINE_TYPE_NOT_VALID);
         }
         return this;
     }

@@ -117,3 +117,12 @@ export const loadTaskPopup = (onCloseCB, key, index, value) => {
         createItem(pair, "Percentage", value.percentage);
     }
 };
+export const loadDatelinePopup = (onCloseCB, payload) => {
+    removeOldPopup();
+    const path = renderPopup(onCloseCB);
+    const pair = path.append("g");
+    if (payload.label) {
+        createItem(pair, "Milestone", payload.label.display);
+    }
+    createItem(pair, "Date", getDate(payload.value));
+};
