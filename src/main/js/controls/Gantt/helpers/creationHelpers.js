@@ -457,7 +457,7 @@ const datelineClickHandler = (value, target) => {
  * Creates a dateline for gantt chart. We are not adding
  * x1, x2, y1, y2 co-ordinates for the straight line since they will be adjusted when
  * content is loaded.
- * @note: Dateline point is shown only when showDatelineIndicator is enabled
+ * @description Dateline point is shown only when showDatelineIndicator is enabled
  * @private
  * @param {Object} scale - d3 scale taking into account the input parameters
  * @param {Object} config - config object derived from input JSON

@@ -312,8 +312,7 @@ const translateActionPoints = (scale, config, trackPath) => {
 };
 /**
  * Translates task bars when resized.
- * @note:
- * When translating the width of a bar:
+ * @description When translating the width of a bar:
  * If its a percentage bar then we would need to translate multiple bars
  * Since we have 2 rectangles in a percentage bar, one which shows how much percentage
  * has been finished and the other is the total length of the task time taken, we would need
