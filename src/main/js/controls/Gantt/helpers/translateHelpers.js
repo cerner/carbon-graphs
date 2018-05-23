@@ -23,9 +23,10 @@ import {
 import { calculatePercentage } from "./durationHelpers";
 
 /**
- * Returns the Y co-ordinate translate value for Y axis transform based on its scale. Since the
+ * Returns the Y co-ordinate translate value for Y axis transform based on its domain. Since the
  * Y Axis for gantt is a text and not conventional number system. We need to
  * Calculate the pixel region for that label and get the current d3 range value.
+ * @note Use this to move the contents to the center of the track
  * @private
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} config - config object derived from input JSON
@@ -34,7 +35,17 @@ import { calculatePercentage } from "./durationHelpers";
  */
 const getTransformYCoordinate = (scale, config, yVal) => {
     const index = scale.y.domain().indexOf(yVal);
-    if (index < 0 || utils.isEmpty(config.axis.y.trackList)) {
+    /*
+    * Cases include:
+    * When TrackLabel is not present in the domain
+    * When TrackList is empty i.e. No content is loaded yet
+    * When domain has more items than trackList. i.e. This is a result of using transition
+    * */
+    if (
+        index < 0 ||
+        utils.isEmpty(config.axis.y.trackList) ||
+        scale.y.domain().length > Object.keys(config.axis.y.trackList).length
+    ) {
         return 0;
     }
     const getCurrentTrackHeightList = (trackList) =>
@@ -51,6 +62,17 @@ const getTransformYCoordinate = (scale, config, yVal) => {
  */
 const getTransformXCoordinate = (scale, xVal) => (!scale ? 0 : scale.x(xVal));
 /**
+ * Uses the scale to move track content to the correct track position and center it relative to the track
+ * @private
+ * @param {Object} scale - d3 scale for Graph
+ * @param {Object} config - config object derived from input JSON
+ * @param {string} yVal - Current track label
+ * @returns {number} y co-ordinate transform translate
+ */
+const getTransformYCoordinateWithScale = (scale, config, yVal) =>
+    (!scale ? 0 : scale.y(yVal)) +
+    getTransformYCoordinate(scale, config, getTrackLabel(yVal));
+/**
  * Returns the Transform string for a given d3 domain. This can be used to translate the
  * graph/track elements
  * @private
@@ -58,7 +80,7 @@ const getTransformXCoordinate = (scale, xVal) => (!scale ? 0 : scale.x(xVal));
  * @param {Object} config - config object derived from input JSON
  * @returns {function(*=): string} Transform property of translate
  */
-const getTransformProperty = (scale, config) => (trackName) =>
+const getTrackLabelTransformProperty = (scale, config) => (trackName) =>
     `translate(${getTransformXCoordinate()}, ${getTransformYCoordinate(
         scale,
         config,
@@ -234,7 +256,7 @@ const translateDateline = (scale, config, canvasSVG) => {
 const translateLabelText = (scale, config, canvasSVG) =>
     canvasSVG
         .selectAll(".carbon-axis.carbon-axis-y .tick text")
-        .attr("transform", getTransformProperty(scale, config));
+        .attr("transform", getTrackLabelTransformProperty(scale, config));
 /**
  * Transforms the point in the gantt graph on resize
  * @private
@@ -251,10 +273,10 @@ const transformPoint = (
     `translate(${getTransformXCoordinate(
         scale,
         value.x
-    )},${getTransformYCoordinate(
+    )},${getTransformYCoordinateWithScale(
         scale,
         config,
-        getTrackLabel(value.y)
+        value.y
     )}) scale(${scaleFactor})`;
 /**
  * Transforms points for a data point set in the gantt graph on resize

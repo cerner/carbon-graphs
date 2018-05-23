@@ -194,7 +194,26 @@ export const renderGanttAction = (el, id, title) => () => {
     ganttDefault.loadContent({
         key: "track 1",
         trackLabel: {
-            display: "Project Action",
+            display: "Day 1",
+            onClick: loadTrackLabelPopup
+        },
+        actions: [
+            {
+                key: "uid_action_1",
+                onClick: loadPopup,
+                values: [new Date(2018, 2, 1, 6, 15).toISOString()]
+            },
+            {
+                key: "uid_action_2",
+                onClick: loadPopup,
+                values: [new Date(2018, 7, 1, 6, 15).toISOString()]
+            }
+        ]
+    });
+    ganttDefault.loadContent({
+        key: "track 2",
+        trackLabel: {
+            display: "Day 2",
             onClick: loadTrackLabelPopup
         },
         actions: [
@@ -203,7 +222,6 @@ export const renderGanttAction = (el, id, title) => () => {
                 onClick: loadPopup,
                 values: [
                     new Date(2018, 2, 1, 6, 15).toISOString(),
-                    new Date(2018, 3, 1, 6, 15).toISOString(),
                     new Date(2018, 4, 1, 6, 15).toISOString()
                 ]
             },
@@ -212,8 +230,7 @@ export const renderGanttAction = (el, id, title) => () => {
                 onClick: loadPopup,
                 values: [new Date(2018, 7, 1, 6, 15).toISOString()]
             }
-        ],
-        tasks: tasks[2]
+        ]
     });
     return ganttDefault;
 };
