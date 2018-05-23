@@ -26,8 +26,8 @@ import { calculatePercentage } from "./durationHelpers";
  * Returns the Y co-ordinate translate value for Y axis transform based on its domain. Since the
  * Y Axis for gantt is a text and not conventional number system. We need to
  * Calculate the pixel region for that label and get the current d3 range value.
- * @note Use this to move the contents to the center of the track
  * @private
+ * @description Use this to move the contents to the center of the track
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} config - config object derived from input JSON
  * @param {string} yVal - Current track label

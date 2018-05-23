@@ -38,8 +38,8 @@ ganttInstance.loadContent(/* Data Object D */);
 | bindLegendTo     | string   | null                    | If DOM id provided, binds legend into that container (Example: `"#legendContainer"`) |
 | locale           | object   | LOCALE.en_US            | Locale object for X-Axis tick values                                                 |
 | throttle         | number   | (1000/60) => time in ms | Delay between resize of a browser window                                             |
-| dateline         | object   | {}                      | Refer [Data](#dateline)                                                              |
-| actionLegend     | array    | []                      | Refer [Data](#action-legend)                                                         |
+| dateline         | object   | {}                      | Refer [Dateline](#dateline)                                                          |
+| actionLegend     | array    | []                      | Refer [Action Legend](#action-legend)                                                |
 | showActionLegend | boolean  | true                    | Toggle to show graph legend                                                          |
 
 ### Axis
@@ -59,6 +59,12 @@ X (Timeseries) axis should have the following properties:
 | ------------- | -------- | ------- | --------------------------- |
 | show          | boolean  | true    | Toggle for showing the axis |
 | ticks         | object   | null    | Refer [Ticks](#ticks)       |
+
+Y Axis should have the following properties:
+
+| Property Name | Expected | Default | Description                 |
+| ------------- | -------- | ------- | --------------------------- |
+| show          | boolean  | true    | Toggle for showing the axis |
 
 ### Ticks
 
@@ -80,7 +86,7 @@ X (Timeseries) axis should have the following properties:
 | Property Name | Expected | Description                            |
 | ------------- | -------- | -------------------------------------- |
 | key           | string   | Unique id which represents the content |
-| trackLabel    | object   | Refer [Dimension](#track-label)        |
+| trackLabel    | object   | Refer [Track Label](#track-label)      |
 
 #### Optional
 
