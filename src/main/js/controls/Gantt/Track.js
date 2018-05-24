@@ -82,7 +82,7 @@ const addTrackLabelEventHandler = (canvasSVG, labelObj) =>
                 return;
             }
             d3.select(this).on("click", () => {
-                labelObj.onClick(labelObj.display);
+                labelObj.onClick(labelObj.display, d3.select(this));
             });
         });
 
