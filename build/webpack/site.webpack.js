@@ -45,7 +45,7 @@ const webpackConfig = (env) => ({
             title: "Carbon",
             filename: "index.html",
             inject: "body",
-            favicon: "build/icon.png"
+            favicon: "build/assets/icons/Carbon_48.png"
         })
     ],
     stats: {
