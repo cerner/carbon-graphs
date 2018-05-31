@@ -150,7 +150,7 @@ Each data-set can have 1 or more regions. `start` and `end` is necessary for ren
 
 ### Constraints
 
-*   If data-set `label` display is not provided then the legend item will not be shown as well
+-   If data-set `label` display is not provided then the legend item will not be shown as well
 
 ### Structure
 

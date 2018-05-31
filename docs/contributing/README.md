@@ -45,13 +45,13 @@ This will generate `dist` and `lib` folders with `core + packaged dependencies` 
 
 ### Development
 
-*   Follow the [UX Design Standards](https://wiki.ucern.com/display/UserExperience/Standard+Graphs).
-*   Ensure no unit tests are broken.
-*   Ensure there are no linting errors.
-*   Ensure your code is thoroughly unit tested.
-*   Write documentation in Markdown, following the existing documentation pattern.
-*   Include screenshots and animated GIFs in your pull request whenever possible.
-*   End files with a newline.
+-   Follow the [UX Design Standards](https://wiki.ucern.com/display/UserExperience/Standard+Graphs).
+-   Ensure no unit tests are broken.
+-   Ensure there are no linting errors.
+-   Ensure your code is thoroughly unit tested.
+-   Write documentation in Markdown, following the existing documentation pattern.
+-   Include screenshots and animated GIFs in your pull request whenever possible.
+-   End files with a newline.
 
 ### Commit message format
 
@@ -63,14 +63,14 @@ The first line of the commit message (the summary) must have a specific format. 
 
 The `Tag` is one of the following:
 
-*   `Fix` - for a bug fix.
-*   `Update` - for a backwards-compatible enhancement.
-*   `New` - implemented a new feature.
-*   `Breaking` - for a backwards-incompatible enhancement or feature.
-*   `Docs` - changes to documentation only.
-*   `Build` - changes to build process only.
-*   `Upgrade` - for a dependency upgrade.
-*   `Chore` - for refactoring, adding tests, etc. (anything that isn't user-facing).
+-   `Fix` - for a bug fix.
+-   `Update` - for a backwards-compatible enhancement.
+-   `New` - implemented a new feature.
+-   `Breaking` - for a backwards-incompatible enhancement or feature.
+-   `Docs` - changes to documentation only.
+-   `Build` - changes to build process only.
+-   `Upgrade` - for a dependency upgrade.
+-   `Chore` - for refactoring, adding tests, etc. (anything that isn't user-facing).
 
 The message summary should be a one-sentence description of the change, and it must be 72 characters in length or shorter.
 The issue number should be mentioned at the end.

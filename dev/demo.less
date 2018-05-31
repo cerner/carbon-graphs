@@ -23,19 +23,36 @@ body {
 }
 
 .graph-banner {
-    font-family: inherit;
     display: flex;
-    justify-content: center;
     align-content: center;
-    padding: 1.5rem;
-    font-size: 2rem;
-    font-weight: 600;
-    color: @white;
+    padding: 1.25rem;
     margin: 0;
     background-color: @demo-banner-bg;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 4px 8px rgba(0, 0, 0, 0.28);
     @media screen and (max-width: 800px) {
         padding: 1rem;
+    }
+}
+
+.graph-banner-icon {
+    width: 64px;
+    height: 64px;
+    @media screen and (max-width: 800px) {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+.graph-banner-content {
+    display: flex;
+    flex: 1 1 0;
+    justify-content: center;
+    align-self: center;
+    font-family: inherit;
+    font-size: 2rem;
+    font-weight: 600;
+    color: @white;
+    @media screen and (max-width: 800px) {
         font-size: 1.25rem;
     }
 }

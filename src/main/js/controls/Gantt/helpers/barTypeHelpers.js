@@ -97,8 +97,7 @@ const getPercentageBar = (path, x, y, width, height, percent, color) => {
 const getHashedBar = (defs, path, x, y, width, height, color) => {
     const patternId = "pattern-stripe";
     if (d3.select(`#${patternId}`).empty()) {
-        defs
-            .append("pattern")
+        defs.append("pattern")
             .attr("id", patternId)
             .attr("patternUnits", "userSpaceOnUse")
             .attr("patternTransform", "rotate(-45)")

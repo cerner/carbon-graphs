@@ -6,9 +6,9 @@ For documentation on code: [**JSDocs**](https://pages.github.cerner.com/Geneva/c
 
 Consumers can generate one of the following graphs:
 
-*   [Line](./controls/Line.md)
-*   [Paired Result](./controls/PairedResult.md)
-*   [Gantt](./controls/Gantt.md)
+-   [Line](./controls/Line.md)
+-   [Paired Result](./controls/PairedResult.md)
+-   [Gantt](./controls/Gantt.md)
 
 ## Important information
 
@@ -16,44 +16,44 @@ Consumers can generate one of the following graphs:
 
 #### Input
 
-*   No bind id is provided
-*   No axes information is provided [x, y]
-*   No lower and upper limits are provided for axes
-*   No Y axis label is provided
-*   No data is provided
-*   No data key is provided
-*   Data keys are not unique (If multiple data sets are provided)
-*   No data values are not provided
+-   No bind id is provided
+-   No axes information is provided [x, y]
+-   No lower and upper limits are provided for axes
+-   No Y axis label is provided
+-   No data is provided
+-   No data key is provided
+-   Data keys are not unique (If multiple data sets are provided)
+-   No data values are not provided
 
 #### Axis Type: Timeseries
 
-*   Data points are type `timeseries` but the x-axis bounds are `default`
-*   Data points are type `default` but the x-axis bounds are `timeseries`
-*   Data point values provided should be in UTC
-*   Data point values provided should be in [RFC 3339](http://www.faqs.org/rfcs/rfc3339.html) format
+-   Data points are type `timeseries` but the x-axis bounds are `default`
+-   Data points are type `default` but the x-axis bounds are `timeseries`
+-   Data point values provided should be in UTC
+-   Data point values provided should be in [RFC 3339](http://www.faqs.org/rfcs/rfc3339.html) format
 
 ### Constraints
 
 #### Legend
 
-*   `Legend` only loads if the data-set label is provided
-*   `Graph` and `Legend` can be loaded in a separate containers when `bindTo` and `bindLegendTo` element id's are provided respectively
+-   `Legend` only loads if the data-set label is provided
+-   `Graph` and `Legend` can be loaded in a separate containers when `bindTo` and `bindLegendTo` element id's are provided respectively
 
 #### Axis
 
-*   If `y2` axis is enabled, then the data-sets expect the `yAxis: "y2"` property
+-   If `y2` axis is enabled, then the data-sets expect the `yAxis: "y2"` property
 
 #### Data-point OnClick
 
-*   For click events on the data point, the `onClick` property needs to be a callback to load the popup
+-   For click events on the data point, the `onClick` property needs to be a callback to load the popup
 
 #### Locale
 
-*   If `locale` is provided, `ticks.format` is expected to be provided as well otherwise there is no effect on the graph itself.
+-   If `locale` is provided, `ticks.format` is expected to be provided as well otherwise there is no effect on the graph itself.
 
 #### Data-point values
 
-*   `values` will not be subjected to any kind of pre-processing before generating the graph. `values` co-ordinates are expected to be linear/sorted.
+-   `values` will not be subjected to any kind of pre-processing before generating the graph. `values` co-ordinates are expected to be linear/sorted.
 
 ## Colors
 
@@ -158,8 +158,8 @@ const locale_custom = {
 
 Resources on locale based tick formatting:
 
-*   [Number formatting](https://github.com/d3/d3-time-format/blob/master/README.md#locale_format)
-*   [Datetime formatting](https://github.com/d3/d3-time-format/blob/master/README.md#timeFormatLocale)
+-   [Number formatting](https://github.com/d3/d3-time-format/blob/master/README.md#locale_format)
+-   [Datetime formatting](https://github.com/d3/d3-time-format/blob/master/README.md#timeFormatLocale)
 
 ## API Reference
 

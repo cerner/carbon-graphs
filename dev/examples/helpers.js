@@ -1,4 +1,5 @@
 import utils from "../../src/main/js/helpers/utils";
+import carbonIcon from "../../build/assets/icons/Carbon.svg";
 
 const init = (instance) => {
     instance.instanceList = [];
@@ -49,8 +50,15 @@ export const toggleSectionAsActive = (target) => {
 };
 export const header = {
     render: (el, content) => {
-        const elem = el.appendChild(document.createElement("h1"));
-        elem.innerHTML = content;
+        const elem = el.appendChild(document.createElement("div"));
+        const icon = document.createElement("img");
+        const headerContent = document.createElement("span");
+        headerContent.innerText = content;
+        headerContent.setAttribute("class", "graph-banner-content");
+        icon.setAttribute("src", carbonIcon);
+        icon.setAttribute("class", "graph-banner-icon");
+        elem.appendChild(icon);
+        elem.appendChild(headerContent);
         elem.setAttribute("class", "graph-banner");
     }
 };

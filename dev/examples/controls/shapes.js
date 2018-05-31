@@ -19,8 +19,7 @@ const transformPoint = (scaleFactor = 3) => (d, i) =>
 export const renderShapesSimple = (el, id, title) => {
     shell.render(el, id, title);
     vector.render(document.querySelector(`#${id}`), `${id}Items`, viewBoxSize);
-    d3
-        .select(`#${id}Items`)
+    d3.select(`#${id}Items`)
         .append("g")
         .selectAll("path")
         .data(getShapes())
@@ -66,7 +65,7 @@ export const renderShapesAsSVG = (el, id, title) => {
 };
 export const renderGanttBarTypes = (el, id, title) => {
     shell.render(el, id, title);
-    const getPercentage = (p, w) => p * w / 100;
+    const getPercentage = (p, w) => (p * w) / 100;
     const shellElementId = document.querySelector(`#${id}`);
     h3.render(shellElementId, "Normal Bar");
     const barSVG = d3.select(

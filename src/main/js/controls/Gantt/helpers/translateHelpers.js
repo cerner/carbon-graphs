@@ -389,8 +389,7 @@ const translateTaskIndicator = (scale, path) => {
     const positionAdjustment = Math.floor(
         constants.DEFAULT_GANTT_TASK_SELECTION_PADDING / 4
     );
-    path
-        .attr("x", (val) => scale.x(val.startDate) - positionAdjustment)
+    path.attr("x", (val) => scale.x(val.startDate) - positionAdjustment)
         .attr(
             "y",
             (val) =>

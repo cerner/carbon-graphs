@@ -1022,7 +1022,7 @@ describe("Gantt -> Track -> Task", () => {
         });
         it("Renders Percentage bar correctly", () => {
             gantt.destroy();
-            const percentageWidth = 50 * 400 / 100;
+            const percentageWidth = (50 * 400) / 100;
             getPercentageBar(
                 d3.select(ganttChartContainer),
                 0,

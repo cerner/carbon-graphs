@@ -126,16 +126,16 @@ Y Axis should have the following properties:
 
 A Task is a `bar` along the track.
 
-*   A `task` needs a start and end date.
-*   If start date is not provided, a `duration` needs to be provided
-*   If end date is not provided, a `duration` needs to be provided
-*   Providing a `percentage` transforms a `bar` into a Percentage Bar
-*   If start and end date are same then a fixed width `chunk` is created
+-   A `task` needs a start and end date.
+-   If start date is not provided, a `duration` needs to be provided
+-   If end date is not provided, a `duration` needs to be provided
+-   Providing a `percentage` transforms a `bar` into a Percentage Bar
+-   If start and end date are same then a fixed width `chunk` is created
 
 A task can be styled as follows:
 
-*   A `bar` can be `Hollow`
-*   A `bar` can be `Dotted`
+-   A `bar` can be `Hollow`
+-   A `bar` can be `Dotted`
 
 #### Required
 
@@ -193,8 +193,8 @@ If Dateline is provided then the `value` property is mandatory.
 
 Loads the legend for `actions`.
 
-*   Hovering over the legend item will blur other actions within the graph.
-*   Clicking on the legend item will remove the action from the graph.
+-   Hovering over the legend item will blur other actions within the graph.
+-   Clicking on the legend item will remove the action from the graph.
 
 #### Required
 

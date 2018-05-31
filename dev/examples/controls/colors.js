@@ -6,8 +6,7 @@ export const renderColorsExample = (el, id, title) => {
     const sect = section.render(el);
     h2.render(sect, title);
     vector.render(sect, id, "0 0 1050 200");
-    d3
-        .select(`#${id}`)
+    d3.select(`#${id}`)
         .append("g")
         .selectAll("circle")
         .data(Object.keys(Carbon.helpers.COLORS))

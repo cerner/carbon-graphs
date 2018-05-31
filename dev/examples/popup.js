@@ -7,20 +7,17 @@ const getPairData = (value) =>
 const checkDate = (date) => date instanceof Date;
 const createItem = (pair, label, value) => {
     const item = pair.append("g").classed("popup-item", true);
-    item
-        .append("label")
+    item.append("label")
         .classed("popup-label", true)
         .text(label);
-    item
-        .append("g")
+    item.append("g")
         .classed("popup-text", true)
         .text(value);
 };
 const renderPopup = (fn) => {
     const tip = document.querySelector("#tooltip");
     const clickHandler = () => {
-        d3
-            .select(tip)
+        d3.select(tip)
             .attr("style", "display:none;")
             .selectAll("g")
             .remove();
@@ -32,8 +29,7 @@ const renderPopup = (fn) => {
         window.removeEventListener("resize", clickHandler);
     };
     // Add new popup
-    d3
-        .select(".root-content")
+    d3.select(".root-content")
         .append("div", "#tooltip")
         .attr("id", "overlay")
         .classed("overlay", true)
@@ -47,8 +43,7 @@ const renderPopup = (fn) => {
 const removeOldPopup = () => {
     // Remove old popup
     d3.select("#overlay").remove();
-    d3
-        .select("#tooltip")
+    d3.select("#tooltip")
         .attr("style", "")
         .selectAll("g")
         .remove();
@@ -95,8 +90,7 @@ export const loadPopup = (onCloseCB, key, index, value) => {
 export const loadTrackLabelPopup = (d) => {
     removeOldPopup();
     const path = renderPopup();
-    path
-        .append("g")
+    path.append("g")
         .append("g")
         .classed("popup-item", true)
         .append("g")

@@ -90,7 +90,7 @@ const isAChunk = (start, end) =>
  * @returns {number} Width for the completion bar in Pixels
  */
 const calculatePercentage = (start, end, percent = 100) =>
-    percent * (end - start) / 100;
+    (percent * (end - start)) / 100;
 
 export {
     calculatePercentage,

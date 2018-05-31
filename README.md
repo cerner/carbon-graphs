@@ -1,3 +1,9 @@
+<div align="center">
+  <a href="https://pages.github.cerner.com/Geneva/carbon-graphs/">
+    <img alt="Click for demo" src="https://raw.github.cerner.com/Geneva/carbon-graphs/master/build/assets/icons/Carbon_256.png">
+  </a>
+</div>
+
 # Carbon (carbon-graphs)
 
 Carbon is a graphing library built using d3 visualization library. It provides an API for generating native graphs such as Line and Paired Result graphs based on design standards.
@@ -18,7 +24,7 @@ For convenience, there are 2 sets of distributions provided.
 
 Add `dist/js/carbon-graphs.js` and `dist/css/carbon-graphs.css` in your page and call appropriate graph type declarations mentioned in below documentation.
 
-### [Consumer documentation](./docs/README.md)
+### [Consumer documentation](docs/README.md)
 
 ### [Demo](https://pages.github.cerner.com/Geneva/carbon-graphs/)
 

@@ -22,6 +22,10 @@ const compiler = webpack({
     module: {
         rules: [
             {
+                test: /\.(png|svg)$/,
+                use: "url-loader"
+            },
+            {
                 test: /\.(js|jsx)$/,
                 include: [
                     path.join(__dirname, "../..", "src"),
@@ -35,9 +39,7 @@ const compiler = webpack({
             }
         ]
     },
-    plugins: [
-        new webpack.optimize.ModuleConcatenationPlugin()
-    ]
+    plugins: [ new webpack.optimize.ModuleConcatenationPlugin() ]
 });
 const port = Number(process.env.PORT || 9991);
 

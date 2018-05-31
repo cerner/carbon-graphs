@@ -24,6 +24,10 @@ const webpackConfig = (env) => ({
     module: {
         rules: [
             {
+                test: /\.(png|svg)$/,
+                use: "url-loader"
+            },
+            {
                 test: /\.(less|css)$/,
                 loader: ExtractTextPlugin.extract(cssOptions(env.TYPE))
             },

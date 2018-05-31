@@ -122,15 +122,15 @@ Each axis - X, Y and Y2 should have the following properties:
 
 `Note:`
 
-*   `isCritical` toggle is disabled by default
-*   When `isCritical` toggle is enabled, an indicator will be shown surrounding the data point
+-   `isCritical` toggle is disabled by default
+-   When `isCritical` toggle is enabled, an indicator will be shown surrounding the data point
 
 ### Regions
 
 Draws a Horizontal area along the X-Axis
 
-*   Each data-set can have 1 or more regions for `high`, `low` and/or `mid`
-*   Each pair type mentioned above needs to have a `start` and `end`
+-   Each data-set can have 1 or more regions for `high`, `low` and/or `mid`
+-   Each pair type mentioned above needs to have a `start` and `end`
 
 #### Required
 
@@ -154,7 +154,7 @@ Draws a Horizontal area along the X-Axis
 
 ### Constraints
 
-*   If data-set `label` display is not provided for `high`, `low` and `mid`, the legend item will not be shown as well
+-   If data-set `label` display is not provided for `high`, `low` and `mid`, the legend item will not be shown as well
 
 ### Structure
 
