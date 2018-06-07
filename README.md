@@ -60,6 +60,7 @@ Add `dist/js/carbon-graphs.js` and `dist/css/carbon-graphs.css` in your page and
 ## Potential features
 
 *   [ ] Timeline graph
+*   [ ] Sparkline graph
 *   [ ] Axes labelling along with shapes
 *   [ ] Bar graphs
 *   [ ] Area graphs

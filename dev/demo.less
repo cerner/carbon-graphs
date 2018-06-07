@@ -113,14 +113,12 @@ body {
 }
 
 .nav-section {
-    display: inline-flex;
-    flex: 1;
-    flex-direction: column;
+    display: block;
     min-width: 12.5%;
     max-width: 12.5%;
-    background-color: transparent;
-    font-weight: 400;
     padding: 0.5rem;
+    width: 100%;
+    overflow-y: auto;
     @media screen and (max-width: 800px) {
         display: none;
     }
@@ -141,6 +139,7 @@ body {
     font-weight: 500;
     padding: 1.25rem 0.5rem;
     margin: 0.25rem 0;
+    width: 100%;
     &[disabled="disabled"] {
         &:hover {
             color: @demo-nav-btn;
