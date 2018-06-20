@@ -269,7 +269,7 @@ const getXAxisXPosition = (config) =>
  * @param {Object} config - config object derived from input JSON
  * @returns {number} Position for the axis
  */
-const getXAxisYPosition = (config) => getYAxisHeight(config) + PADDING.bottom;
+const getXAxisYPosition = (config) => getYAxisHeight(config) + PADDING.top;
 /**
  * Y Axis's starting position relative to the canvas
  * @private
