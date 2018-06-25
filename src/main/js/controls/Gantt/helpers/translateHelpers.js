@@ -23,6 +23,32 @@ import {
 import { calculatePercentage } from "./durationHelpers";
 
 /**
+ * Returns the track label position in D3 scale's domain
+ * @private
+ * @param {Object} scale - d3 scale for Graph
+ * @param {string} yVal - Current track label
+ * @returns {number} Track label index
+ */
+const getLabelIndexFromDomain = (scale, yVal) => scale.y.domain().indexOf(yVal);
+/**
+ *
+ * Validates track label to get the Y Co-ordinate before figuring out the translation
+ * Cases include:
+ * When TrackLabel is not present in the domain
+ * When TrackList is empty i.e. No content is loaded yet
+ * When domain has more items than trackList. i.e. This is a result of using transition
+ * @private
+ * @param {Object} scale - d3 scale for Graph
+ * @param {Object} config - config object derived from input JSON
+ * @param {string} yVal - Current track label
+ * @param {number} index - label index in domain
+ * @returns {boolean} true if y co-ordinate transform translate is not needed, false otherwise
+ */
+const validateLabelBeforeTranslation = (scale, config, yVal, index) =>
+    index < 0 ||
+    utils.isEmpty(config.axis.y.trackList) ||
+    scale.y.domain().length > Object.keys(config.axis.y.trackList).length;
+/**
  * Returns the Y co-ordinate translate value for Y axis transform based on its domain. Since the
  * Y Axis for gantt is a text and not conventional number system. We need to
  * Calculate the pixel region for that label and get the current d3 range value.
@@ -34,19 +60,12 @@ import { calculatePercentage } from "./durationHelpers";
  * @returns {number} y co-ordinate transform translate
  */
 const getTransformYCoordinate = (scale, config, yVal) => {
-    const index = scale.y.domain().indexOf(yVal);
-    /*
-    * Cases include:
-    * When TrackLabel is not present in the domain
-    * When TrackList is empty i.e. No content is loaded yet
-    * When domain has more items than trackList. i.e. This is a result of using transition
-    * */
-    if (
-        index < 0 ||
-        utils.isEmpty(config.axis.y.trackList) ||
-        scale.y.domain().length > Object.keys(config.axis.y.trackList).length
-    ) {
+    if (!scale) {
         return 0;
+    }
+    const index = getLabelIndexFromDomain(scale, yVal);
+    if (validateLabelBeforeTranslation(scale, config, yVal, index)) {
+        return scale.y(yVal) / 2;
     }
     const getCurrentTrackHeightList = (trackList) =>
         Object.keys(trackList).map((o) => trackList[o].trackHeight);
@@ -69,9 +88,12 @@ const getTransformXCoordinate = (scale, xVal) => (!scale ? 0 : scale.x(xVal));
  * @param {string} yVal - Current track label
  * @returns {number} y co-ordinate transform translate
  */
-const getTransformYCoordinateWithScale = (scale, config, yVal) =>
-    (!scale ? 0 : scale.y(yVal)) +
-    getTransformYCoordinate(scale, config, getTrackLabel(yVal));
+const getTransformYCoordinateWithScale = (scale, config, yVal) => {
+    const label = getTrackLabel(yVal);
+    const offset = !scale ? 0 : scale.y(label);
+    const yPosBasedOnHeight = getTransformYCoordinate(scale, config, label);
+    return offset + yPosBasedOnHeight;
+};
 /**
  * Returns the Transform string for a given d3 domain. This can be used to translate the
  * graph/track elements

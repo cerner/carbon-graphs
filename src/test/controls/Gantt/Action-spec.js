@@ -175,6 +175,71 @@ describe("Gantt -> Track -> Action", () => {
             );
             expect(pointElement.getAttribute("aria-hidden")).toBe("false");
         });
+        it("Renders multiple data sets correctly", () => {
+            gantt.loadContent(
+                Object.assign(getData(), {
+                    actions: [
+                        {
+                            key: "uid_action_1",
+                            onClick: sinon.spy(),
+                            values: [new Date(2018, 4, 1).toISOString()]
+                        },
+                        {
+                            key: "uid_action_2",
+                            onClick: sinon.spy(),
+                            values: [new Date(2018, 4, 10).toISOString()]
+                        }
+                    ]
+                })
+            );
+            const pointElements = document.querySelectorAll(`.${styles.point}`);
+            expect(pointElements.length).toBe(2);
+            expect(pointElements[0].getAttribute("aria-describedby")).toBe(
+                "uid_action_1"
+            );
+            expect(pointElements[1].getAttribute("aria-describedby")).toBe(
+                "uid_action_2"
+            );
+            expect(pointElements[0].getAttribute("transform")).not.toBe(
+                pointElements[1].getAttribute("transform")
+            );
+        });
+        it("Renders data points in different tracks correctly", () => {
+            gantt.loadContent(
+                Object.assign(getData(), {
+                    actions: [
+                        {
+                            key: "uid_action_1",
+                            onClick: sinon.spy(),
+                            values: [new Date(2018, 4, 1).toISOString()]
+                        }
+                    ]
+                })
+            );
+            gantt.loadContent(
+                Object.assign(getData(), {
+                    key: "track 2",
+                    actions: [
+                        {
+                            key: "uid_action_2",
+                            onClick: sinon.spy(),
+                            values: [new Date(2018, 4, 1).toISOString()]
+                        }
+                    ]
+                })
+            );
+            const pointElements = document.querySelectorAll(`.${styles.point}`);
+            expect(pointElements.length).toBe(2);
+            expect(pointElements[0].getAttribute("aria-describedby")).toBe(
+                "uid_action_1"
+            );
+            expect(pointElements[1].getAttribute("aria-describedby")).toBe(
+                "uid_action_2"
+            );
+            expect(pointElements[0].getAttribute("transform")).not.toBe(
+                pointElements[1].getAttribute("transform")
+            );
+        });
         it("Renders selection data points correctly", () => {
             loadData(gantt);
             const selectionPointElement = fetchElementByClass(
