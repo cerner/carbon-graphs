@@ -2,6 +2,7 @@ import Gantt from "./Gantt/Gantt";
 import Graph from "./Graph";
 import Line from "./Line";
 import PairedResult from "./PairedResult";
+import Timeline from "./Timeline/Timeline";
 
 /**
  * @module api
@@ -9,11 +10,13 @@ import PairedResult from "./PairedResult";
  * @property {Object} graph Graph based on Construct
  * @property {Object} line Line graph based on Graph
  * @property {Object} pairedResult Paired Result graph based on Graph
+ * @property {Object} timeline Timeline graph based on Construct
  * @enum {Object}
  */
 export default {
     gantt: (input) => new Gantt(input),
     graph: (input) => new Graph(input),
     line: (input) => new Line(input),
-    pairedResult: (input) => new PairedResult(input)
+    pairedResult: (input) => new PairedResult(input),
+    timeline: (input) => new Timeline(input)
 };

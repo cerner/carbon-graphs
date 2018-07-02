@@ -11,16 +11,16 @@ Carbon provides an abstraction for c3 and d3.
 
 ## Install
 
-*   `npm install`
-*   `npm run dev`
-*   [http://localhost:9991/](http://localhost:9991/)
+-   `npm install`
+-   `npm run dev`
+-   [http://localhost:9991/](http://localhost:9991/)
 
 ## Usage
 
 For convenience, there are 2 sets of distributions provided.
 
-*   `lib/js` - [default] Only `core`. Does not contain any dependencies, consumers need to provide the items listed in the `Dependencies` section before loading the graph.
-*   `dist/js` - Contains core + `d3` + `c3` + all the necessary polyfills needed to load the graphs.
+-   `lib/js` - [default] Only `core`. Does not contain any dependencies, consumers need to provide the items listed in the `Dependencies` section before loading the graph.
+-   `dist/js` - Contains core + `d3` + `c3` + all the necessary polyfills needed to load the graphs.
 
 Add `dist/js/carbon-graphs.js` and `dist/css/carbon-graphs.css` in your page and call appropriate graph type declarations mentioned in below documentation.
 
@@ -30,54 +30,54 @@ Add `dist/js/carbon-graphs.js` and `dist/css/carbon-graphs.css` in your page and
 
 ## Features
 
-*   Adheres to Cerner standard design template
-*   Toggles:
-    *   Legend
-    *   Labels
-    *   Grid `Vertical & Horizontal`
-    *   Axes `x, y or y2`
-    *   Regions `Horizontal`
-*   Native graphs
-    *   Line graph
-    *   Multi-line graph
-    *   Paired Result graph
-    *   Spline line graph
-    *   Gantt charts
-*   Criticality indicators for data point
-*   Non-contiguous data point Line graph
-*   Default theme for data points
-*   Locale support for axes ticks
-*   Responsive
+-   Adheres to Cerner standard design template
+-   Toggles:
+    -   Legend
+    -   Labels
+    -   Grid `Vertical & Horizontal`
+    -   Axes `x, y or y2`
+    -   Regions `Horizontal`
+-   Native graphs
+    -   Line graph
+    -   Multi-line graph
+    -   Paired Result graph
+    -   Spline line graph
+    -   Timeline graph
+    -   Gantt charts
+-   Criticality indicators for data point
+-   Non-contiguous data point Line graph
+-   Default theme for data points
+-   Locale support for axes ticks
+-   Responsive
 
 ## Dependencies
 
-*   **d3** [_v3.5.17_]
-*   **c3** [_v0.4.18_] - For non-native graphs
-*   Polyfills:
-    *   Object.assign
-    *   Object.values
+-   **d3** [_v3.5.17_]
+-   **c3** [_v0.4.18_] - For non-native graphs
+-   Polyfills:
+    -   Object.assign
+    -   Object.values
 
 ## Potential features
 
-*   [ ] Timeline graph
-*   [ ] Sparkline graph
-*   [ ] Axes labelling along with shapes
-*   [ ] Bar graphs
-*   [ ] Area graphs
-*   [ ] Area spline graphs
-*   [ ] Datetime formatting
-*   [ ] DST
-*   [ ] Tick counts
-*   [ ] Show/hide ticks
-*   [ ] Zoom
-*   [ ] Pan
+-   [ ] Sparkline graph
+-   [ ] Axes labelling along with shapes
+-   [ ] Bar graphs
+-   [ ] Area graphs
+-   [ ] Area spline graphs
+-   [ ] Datetime formatting
+-   [ ] DST
+-   [ ] Tick counts
+-   [ ] Show/hide ticks
+-   [ ] Zoom
+-   [ ] Pan
 
 ## Browser support
 
-*   Android >= 4.4
-*   Chrome >= 35
-*   Firefox >= 31
-*   Internet Explorer >= 10
-*   iOS >= 7
-*   Opera >= 12
-*   Safari >= 7.1
+-   Android >= 4.4
+-   Chrome >= 35
+-   Firefox >= 31
+-   Internet Explorer >= 10
+-   iOS >= 7
+-   Opera >= 12
+-   Safari >= 7.1

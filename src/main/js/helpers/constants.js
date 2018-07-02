@@ -85,6 +85,8 @@ export const AXIS_TYPE = {
  * Consumers can pick line type from default list
  * Linear is default
  * @public
+ * @property {string} LINEAR "linear"
+ * @property {string} SPLINE "cardinal"
  * @enum {{LINEAR: string, SPLINE: string}}
  */
 export const LINE_TYPE = {
@@ -106,6 +108,7 @@ export default {
     ISO8601_DATE_TIME_MILLI: /(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}(:\d{2}(\.\d+)*)*)Z/,
     RESIZE_THROTTLE: 1000 / 60,
     BASE_CANVAS_WIDTH_PADDING: 10,
+    TIMELINE_HEIGHT: 40,
     DEFAULT_HEIGHT: 250,
     DEFAULT_PLOT_SIZE: 60,
     DEFAULT_PLOT_SCALE: [1, 1],

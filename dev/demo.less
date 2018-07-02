@@ -1,9 +1,12 @@
 @import "../src/main/less/variables.less";
 
-@demo-banner-bg: #3949ab;
-@demo-nav-btn: #3949ab;
-@demo-nav-hover-bg: #5c6bc0;
-@demo-nav-bg: #e8eaf6;
+@demo-font-color: #212121;
+@demo-banner-bg: #f1f1f2;
+@demo-banner-font-color: #303f9f;
+@demo-nav-btn: #3f51b5;
+@demo-nav-hover-bg: #c5cae9;
+@demo-nav-bg: #c5cae9;
+@demo-nav-border: #bdbdbd;
 
 body {
     margin: 0;
@@ -11,11 +14,12 @@ body {
     font-family: "Segoe UI", sans-serif;
     line-height: 1.4;
     font-size: 0.75em;
+    color: #212121;
 }
 
 .graph-section {
     font-family: inherit;
-    padding: 0 0.5rem;
+    padding: 0.5rem 0.5rem 0;
     background-color: transparent;
     &.hidden {
         display: none;
@@ -25,8 +29,10 @@ body {
 .graph-banner {
     display: flex;
     align-content: center;
-    padding: 1.25rem;
-    margin: 0;
+    justify-content: center;
+    padding: 0.5rem;
+    margin: 0.5rem;
+    border-radius: 0.25rem;
     background-color: @demo-banner-bg;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 4px 8px rgba(0, 0, 0, 0.28);
     @media screen and (max-width: 800px) {
@@ -45,15 +51,14 @@ body {
 
 .graph-banner-content {
     display: flex;
-    flex: 1 1 0;
+    flex: 1;
     justify-content: center;
-    align-self: center;
     font-family: inherit;
-    font-size: 2rem;
+    font-size: 3rem;
     font-weight: 600;
-    color: @white;
+    color: @demo-banner-font-color;
     @media screen and (max-width: 800px) {
-        font-size: 1.25rem;
+        font-size: 1.5rem;
     }
 }
 
@@ -109,7 +114,7 @@ body {
     flex-flow: row nowrap;
     flex: 1 1 auto;
     overflow-y: auto;
-    height: ~"calc(90vh - 1rem)";
+    height: 89vh;
 }
 
 .nav-section {
@@ -137,9 +142,11 @@ body {
     cursor: pointer;
     font-family: inherit;
     font-weight: 500;
-    padding: 1.25rem 0.5rem;
+    padding: 1rem 0.5rem;
+    border-radius: 0.25rem;
     margin: 0.25rem 0;
     width: 100%;
+    border-left: 0.25rem solid transparent;
     &[disabled="disabled"] {
         &:hover {
             color: @demo-nav-btn;

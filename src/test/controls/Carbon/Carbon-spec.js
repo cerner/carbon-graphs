@@ -3,9 +3,16 @@ import Gantt from "../../../main/js/controls/Gantt";
 import Graph from "../../../main/js/controls/Graph";
 import Line from "../../../main/js/controls/Line";
 import PairedResult from "../../../main/js/controls/PairedResult";
+import Timeline from "../../../main/js/controls/Timeline";
 import Shape from "../../../main/js/core/Shape/Shape";
 import { SHAPES } from "../../../main/js/helpers/constants";
-import { ganttInput, LIBRARY_LIST, nativeInput, TOOLS_LIST } from "./helpers";
+import {
+    ganttInput,
+    LIBRARY_LIST,
+    nativeInput,
+    timelineInput,
+    TOOLS_LIST
+} from "./helpers";
 
 describe("Carbon", () => {
     let graphContainer;
@@ -77,5 +84,10 @@ describe("Carbon", () => {
         const gantt = Carbon.api.gantt(ganttInput);
         expect(Carbon.api.gantt).toEqual(jasmine.any(Function));
         expect(gantt instanceof Gantt).toBeTruthy();
+    });
+    it("registers Timeline", () => {
+        const timeline = Carbon.api.timeline(timelineInput);
+        expect(Carbon.api.timeline).toEqual(jasmine.any(Function));
+        expect(timeline instanceof Timeline).toBeTruthy();
     });
 });

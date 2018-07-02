@@ -546,6 +546,7 @@ const detachEventHandlers = (control) => {
 };
 /**
  * Removes the element with provided selector using d3
+ * @private
  * @param {Selection|Object} el - d3 selection element
  * @param {string} selector - attribute to query the element, typically a class or id
  * @param {boolean} [isBatchSelect] - enables `selectAll` rather than default `select`

@@ -84,6 +84,7 @@ const isAChunk = (start, end) =>
     utils.getTime(end) - utils.getTime(start) === 0;
 /**
  * Calculates the percentage of pixels based on start and end scales.
+ * @private
  * @param {number} start - Start date scaled in pixels
  * @param {number} end - End date scaled in pixels
  * @param {number} percent - Percent complete

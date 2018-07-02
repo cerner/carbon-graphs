@@ -1,6 +1,12 @@
 import Carbon from "../../../main/js/carbon";
 
-export const LIBRARY_LIST = ["gantt", "graph", "line", "pairedResult"];
+export const LIBRARY_LIST = [
+    "gantt",
+    "graph",
+    "line",
+    "pairedResult",
+    "timeline"
+];
 export const TOOLS_LIST = ["shape"];
 export const nativeInput = {
     bindTo: "#testGraph_carbon",
@@ -40,6 +46,15 @@ export const pieInput = {
     ]
 };
 export const ganttInput = {
+    bindTo: "#testGraph_carbon",
+    axis: {
+        x: {
+            lowerLimit: "2016-01-01T12:00:00Z",
+            upperLimit: "2017-01-01T12:00:00Z"
+        }
+    }
+};
+export const timelineInput = {
     bindTo: "#testGraph_carbon",
     axis: {
         x: {

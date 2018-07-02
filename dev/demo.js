@@ -36,6 +36,10 @@ import {
     renderSplineExamples,
     SplineExample
 } from "./examples/content/renderSplineExamples";
+import {
+    renderTimelineExamples,
+    TimelineExample
+} from "./examples/content/renderTimelineExamples";
 import { renderColorsExample } from "./examples/controls/colors";
 import {
     btn,
@@ -112,6 +116,13 @@ renderCombinationGraphExamples(
 );
 renderGanttExamples(
     new GanttExample(),
+    toggleSection,
+    contentSection,
+    setState,
+    getState
+);
+renderTimelineExamples(
+    new TimelineExample(),
     toggleSection,
     contentSection,
     setState,

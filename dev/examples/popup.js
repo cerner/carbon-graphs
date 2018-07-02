@@ -120,3 +120,14 @@ export const loadDatelinePopup = (onCloseCB, payload) => {
     }
     createItem(pair, "Date", getDate(payload.value));
 };
+export const loadTimelinePopup = (onCloseCB, key, index, value) => {
+    removeOldPopup();
+    const path = renderPopup(onCloseCB);
+    const pair = path.append("g");
+    createItem(
+        pair,
+        "X axis",
+        `${checkDate(value.x) ? getDate(value.x) : value.x}`
+    );
+    createItem(pair, `${value.label.display}`, value.content);
+};

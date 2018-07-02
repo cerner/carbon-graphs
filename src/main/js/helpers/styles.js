@@ -79,5 +79,10 @@ export default {
     taskBarCompletion: "carbon-data-completion-bar",
     ganttDatelineGroup: "carbon-gantt-dateline-group",
     ganttDatelinePoint: "carbon-gantt-dateline-point",
-    ganttDateline: "carbon-gantt-dateline"
+    ganttDateline: "carbon-gantt-dateline",
+    /**
+     * Timeline
+     */
+    timelineGraphContent: "carbon-timeline-graph-content",
+    timelineContentGroup: "carbon-timeline-content-group"
 };
