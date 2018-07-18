@@ -1302,21 +1302,20 @@ describe("Timeline", () => {
             timeline.loadContent(getData(valuesJSON));
         });
         it("Sets the canvas width correctly", (done) => {
+            spyOn(window, "requestAnimationFrame");
             const currentWidth = timeline.config.canvasWidth;
             expect(currentWidth).toBe(1024);
             TimelineGraphContainer.setAttribute(
                 "style",
                 "width: 800px; height: 200px"
             );
-            triggerEvent(
-                window,
-                "resize",
-                () => {
+            triggerEvent(window, "resize", () => {
+                timeline.resize();
+                setTimeout(() => {
                     expect(timeline.config.canvasWidth).toBe(800);
                     done();
-                },
-                TRANSITION_DELAY
-            );
+                }, TRANSITION_DELAY);
+            });
         });
         it("Sets the defs clipPath width and height correctly", (done) => {
             TimelineGraphContainer.setAttribute(

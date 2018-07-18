@@ -73,7 +73,7 @@ const loadInput = (inputJSON) =>
  */
 const beforeInit = (control) => {
     control.graphContainer = d3.select(control.config.bindTo);
-    control.config.height = determineHeight(control.config);
+    control.config.height = determineHeight();
     return control;
 };
 /**
@@ -121,9 +121,16 @@ const init = (control) => {
 };
 
 /**
- * A common API used to plot everything except the datapoints and legend themselves.
- * * Axes - X axis
+ * Timeline graph is a graph with no Y Axis. This is primarily used to denote an action
+ * at a given point of time. It also accepts/supplies a content property which can be used to
+ * display non-numeric values which typically cannot be represented using traditional graphs like
+ * Line or Paired Result.
+ *
+ * * Axes - X axis only
  * * X Axis ticks
+ * * Legend
+ * * X Axis label
+ * * Data points
  *
  * Lifecycle functions include:
  *  * BeforeInit

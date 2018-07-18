@@ -33,15 +33,10 @@ const DEFAULT_HEIGHT = constants.TIMELINE_HEIGHT;
 
 /**
  * Calculates the height for graph
- * If dimensions are provided in the input, then they are given priority.
  * @private
- * @param {number} dimension - number in pixels for height
  * @returns {number} Height for the axes
  */
-const determineHeight = (dimension) =>
-    dimension.height
-        ? dimension.height
-        : DEFAULT_HEIGHT + PADDING.top - PADDING.bottom;
+const determineHeight = () => DEFAULT_HEIGHT + PADDING.top - PADDING.bottom;
 /**
  * Calculates axes label sizes, specifically:
  *  X Axis Label: Height
