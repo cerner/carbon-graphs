@@ -79,9 +79,10 @@ const translateLabel = (config, canvasSVG) => {
  * @param {Array<number>|number} [scaleFactor] - amount of transform needs to be done for scaling an svg
  * @returns {Function} - function that returns translate string for d3 transform
  */
-const transformPoint = (scale, scaleFactor = constants.DEFAULT_PLOT_SCALE) => (
-    value
-) => {
+const transformPoint = (
+    scale,
+    scaleFactor = constants.DEFAULT_TIMELINE_SCALE
+) => (value) => {
     const getX = (val) => scale.x(val.x);
     return `translate(${getX(
         value

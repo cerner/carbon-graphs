@@ -120,7 +120,7 @@ const getAxesScale = (axis, scale, config) => {
             config.axis.x.ticks.format,
             config.axis.x.type
         )
-    ).tickSize(12);
+    ).tickSize(constants.DEFAULT_TIMELINE_TICK_LENGTH);
     return axis;
 };
 /**
