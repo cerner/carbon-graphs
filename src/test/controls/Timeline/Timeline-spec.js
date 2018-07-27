@@ -984,6 +984,35 @@ describe("Timeline", () => {
                         done();
                     });
                 });
+                it("Emits correct parameters", (done) => {
+                    let args = {};
+                    timeline.destroy();
+                    timeline = new Timeline(getAxes(axisJSON));
+                    input = getData(valuesJSON, false, false);
+                    input.onClick = (cb, key, index, val, target) => {
+                        args = {
+                            cb,
+                            key,
+                            index,
+                            val,
+                            target
+                        };
+                    };
+                    timeline.loadContent(input);
+                    const point = document.querySelectorAll(
+                        `.${styles.point}`
+                    )[1];
+                    triggerEvent(point, "click", () => {
+                        expect(args).not.toBeNull();
+                        expect(args.cb).toEqual(jasmine.any(Function));
+                        expect(args.key).toBe("uid_1");
+                        expect(args.index).toBe(1);
+                        expect(args.val).not.toBeNull();
+                        expect(args.val.x).toEqual(new Date(valuesJSON[1].x));
+                        expect(args.target).not.toBeNull();
+                        done();
+                    });
+                });
                 it("Highlights the data point", (done) => {
                     const selectionPoint = fetchElementByClass(
                         styles.dataPointSelection
@@ -1034,6 +1063,35 @@ describe("Timeline", () => {
                             ).toBe("true");
                             done();
                         });
+                    });
+                });
+                it("Emits correct parameters", (done) => {
+                    let args = {};
+                    timeline.destroy();
+                    timeline = new Timeline(getAxes(axisJSON));
+                    input = getData(valuesJSON, false, false);
+                    input.onClick = (cb, key, index, val, target) => {
+                        args = {
+                            cb,
+                            key,
+                            index,
+                            val,
+                            target
+                        };
+                    };
+                    timeline.loadContent(input);
+                    const point = document.querySelectorAll(
+                        `.${styles.dataPointSelection}`
+                    )[1];
+                    triggerEvent(point, "click", () => {
+                        expect(args).not.toBeNull();
+                        expect(args.cb).toEqual(jasmine.any(Function));
+                        expect(args.key).toBe("uid_1");
+                        expect(args.index).toBe(1);
+                        expect(args.val).not.toBeNull();
+                        expect(args.val.x).toEqual(new Date(valuesJSON[1].x));
+                        expect(args.target).not.toBeNull();
+                        done();
                     });
                 });
             });

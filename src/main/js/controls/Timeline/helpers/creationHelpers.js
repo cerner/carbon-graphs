@@ -301,7 +301,7 @@ const dataPointActionHandler = (value, index, target) => {
  * @returns {undefined} - returns nothing
  */
 const createPoints = (scale, config, canvasSVG) => {
-    const renderDataPointPath = (path, value) =>
+    const renderDataPointPath = (path, value, index) =>
         path
             .classed(styles.point, true)
             .attr("d", new Shape(getShape(value)).getPathDescription())
@@ -309,10 +309,10 @@ const createPoints = (scale, config, canvasSVG) => {
             .attr("style", `fill: ${getColorForTarget(value)};`)
             .attr("aria-describedby", value.key)
             .attr("aria-hidden", config.shownTargets.indexOf(value.key) < 0)
-            .on("click", function(value, index) {
+            .on("click", function() {
                 dataPointActionHandler(value, index, this);
             });
-    const renderSelectionPath = (path, value) =>
+    const renderSelectionPath = (path, value, index) =>
         path
             .classed(styles.dataPointSelection, true)
             .attr("d", new Shape(getShape(value)).getPathDescription())
@@ -320,19 +320,20 @@ const createPoints = (scale, config, canvasSVG) => {
             .attr("r", constants.DEFAULT_SELECTED_RADIUS)
             .attr("aria-hidden", true)
             .attr("aria-describedby", value.key)
-            .on("click", function(value, index) {
+            .on("click", function() {
                 dataPointActionHandler(value, index, this);
             });
     canvasSVG
         .append("g")
         .classed(styles.pointGroup, true)
-        .each(function(d) {
+        .each(function(d, i) {
             const dataPointSVG = d3.select(this);
             renderSelectionPath(
                 dataPointSVG.append(constants.DEFAULT_SHAPE),
-                d
+                d,
+                i
             );
-            renderDataPointPath(dataPointSVG.append("path"), d);
+            renderDataPointPath(dataPointSVG.append("path"), d, i);
         });
 };
 /**

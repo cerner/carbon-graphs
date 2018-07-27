@@ -252,9 +252,10 @@ const shouldHideDataPoints = (shownTargets, value) =>
  * @param {Object} config - Graph config object derived from input JSON
  * @param {SVGElement} path - svg Path element
  * @param {Object} dataPoint - data point properties such as shape, color and onClick callback function
+ * @param {number} index - data point index
  * @returns {Object} - d3 selection object
  */
-const renderDataPointPath = (scale, config, path, dataPoint) =>
+const renderDataPointPath = (scale, config, path, dataPoint, index) =>
     path
         .classed(styles.point, true)
         .attr("d", new Shape(getShape(dataPoint)).getPathDescription())
@@ -269,8 +270,8 @@ const renderDataPointPath = (scale, config, path, dataPoint) =>
         )
         .attr("aria-hidden", false)
         .attr("aria-describedby", dataPoint.key)
-        .on("click", function(value, index) {
-            dataPointActionHandler(value, index, this);
+        .on("click", function() {
+            dataPointActionHandler(dataPoint, index, this);
         });
 /**
  * Renders the circle svg element which shows up when clicked on the data point.
@@ -280,9 +281,10 @@ const renderDataPointPath = (scale, config, path, dataPoint) =>
  * @param {Object} config - Graph config object derived from input JSON
  * @param {SVGElement} path - svg circle element
  * @param {Object} dataPoint - data point properties such as shape, color and onClick callback function
+ * @param {number} index - data point index
  * @returns {Object} - d3 selection object
  */
-const renderSelectionPath = (scale, config, path, dataPoint) =>
+const renderSelectionPath = (scale, config, path, dataPoint, index) =>
     path
         .classed(styles.dataPointSelection, true)
         .attr("d", new Shape(getShape(dataPoint)).getPathDescription())
@@ -298,8 +300,8 @@ const renderSelectionPath = (scale, config, path, dataPoint) =>
         )
         .attr("aria-hidden", true)
         .attr("aria-describedby", dataPoint.key)
-        .on("click", function(value, index) {
-            dataPointActionHandler(value, index, this);
+        .on("click", function() {
+            dataPointActionHandler(dataPoint, index, this);
         });
 /**
  * Draws the points with options opted in the input JSON by the consumer for each data set.
@@ -315,19 +317,21 @@ const drawDataPoints = (scale, config, canvasSVG) =>
     canvasSVG
         .append("g")
         .classed(styles.pointGroup, true)
-        .each(function(dataPoint) {
+        .each(function(dataPoint, index) {
             const dataPointSVG = d3.select(this);
             renderSelectionPath(
                 scale,
                 config,
                 dataPointSVG.append(constants.DEFAULT_SHAPE),
-                dataPoint
+                dataPoint,
+                index
             );
             renderDataPointPath(
                 scale,
                 config,
                 dataPointSVG.append("path"),
-                dataPoint
+                dataPoint,
+                index
             );
         });
 /**

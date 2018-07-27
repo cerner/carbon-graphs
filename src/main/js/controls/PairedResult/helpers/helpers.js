@@ -244,7 +244,7 @@ const getDataPointValues = (target) => target.internalValuesSubset;
  * @returns {Object} - d3 append object
  */
 const drawLine = (scale, config, boxPath) =>
-    boxPath.each(function(value) {
+    boxPath.each(function(value, index) {
         const shouldCreateLine = (d) =>
             d.high &&
             d.low &&
@@ -260,7 +260,7 @@ const drawLine = (scale, config, boxPath) =>
                 "style",
                 (d) => `${!shouldCreateLine(d) ? "display: none;" : ""}`
             )
-            .on("click", function(value, index) {
+            .on("click", function() {
                 dataPointActionHandler(config, value, index, this.parentNode);
             });
     });
@@ -275,7 +275,7 @@ const drawLine = (scale, config, boxPath) =>
  * @returns {undefined} - returns nothing
  */
 const drawPoints = (scale, config, canvasSVG) => {
-    const getDataPointPath = (path, type) =>
+    const getDataPointPath = (path, type, value, index) =>
         path
             .classed(styles.pairedPoint, true)
             .classed(getValue(styles, type), true)
@@ -295,7 +295,7 @@ const drawPoints = (scale, config, canvasSVG) => {
                     }`
             )
             .attr("aria-describedby", (value) => getValue(value, type).key)
-            .on("click", function(value, index) {
+            .on("click", function() {
                 dataPointActionHandler(
                     config,
                     value,
@@ -303,7 +303,7 @@ const drawPoints = (scale, config, canvasSVG) => {
                     this.parentNode.parentNode
                 );
             });
-    canvasSVG.each(function(value) {
+    canvasSVG.each(function(value, index) {
         const boxPath = d3.select(this);
         iterateOnPairType((type) => {
             if (utils.isDefined(getValue(value, type))) {
@@ -318,10 +318,11 @@ const drawPoints = (scale, config, canvasSVG) => {
                         config,
                         pointGroup,
                         type,
-                        value
+                        value,
+                        index
                     );
                 }
-                getDataPointPath(pointGroup.append("path"), type);
+                getDataPointPath(pointGroup.append("path"), type, value, index);
             }
         });
     });
@@ -335,10 +336,18 @@ const drawPoints = (scale, config, canvasSVG) => {
  * @param {Array} pointGroup - d3 html element of the point group (high, mid or low)
  * @param {string} type - High, mid or low
  * @param {Object} value - A value
+ * @param {number} index - Value index
  * @returns {undefined} - returns nothing
  */
-const drawCriticalityPoints = (scale, config, pointGroup, type, value) => {
-    const renderPoint = (path, type, value, cls, scaleFactor) =>
+const drawCriticalityPoints = (
+    scale,
+    config,
+    pointGroup,
+    type,
+    value,
+    index
+) => {
+    const renderPoint = (path, type, value, index, cls, scaleFactor) =>
         path
             .append("path")
             .classed(styles.pairedPoint, true)
@@ -359,7 +368,7 @@ const drawCriticalityPoints = (scale, config, pointGroup, type, value) => {
             )
             .attr("aria-hidden", false)
             .attr("aria-describedby", getValue(value, type).key)
-            .on("click", function(value, index) {
+            .on("click", function() {
                 dataPointActionHandler(
                     config,
                     value,
@@ -371,6 +380,7 @@ const drawCriticalityPoints = (scale, config, pointGroup, type, value) => {
         pointGroup,
         type,
         value,
+        index,
         styles.criticalityOuterPoint,
         constants.DEFAULT_CRITICAL_OUTER_PLOT_SCALE
     );
@@ -378,6 +388,7 @@ const drawCriticalityPoints = (scale, config, pointGroup, type, value) => {
         pointGroup,
         type,
         value,
+        index,
         styles.criticalityInnerPoint,
         constants.DEFAULT_CRITICAL_INNER_PLOT_SCALE
     );

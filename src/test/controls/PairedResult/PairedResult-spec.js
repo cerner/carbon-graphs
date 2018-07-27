@@ -962,6 +962,47 @@ describe("PairedResult", () => {
                         }
                     );
                 });
+                it("calls onClick callback with parameters", (done) => {
+                    let args = {};
+                    graphDefault.destroy();
+                    graphDefault = new Graph(getAxes(axisDefault));
+                    input = getInput(valuesDefault, false, false);
+                    input.onClick = (cb, key, index, val, target) => {
+                        args = {
+                            cb,
+                            key,
+                            index,
+                            val,
+                            target
+                        };
+                    };
+                    graphDefault.loadContent(new PairedResult(input));
+                    triggerEvent(
+                        pairedResultGraphContainer.querySelectorAll(
+                            `.${styles.pairedPoint}`
+                        )[3],
+                        "click",
+                        () => {
+                            expect(args).not.toBeNull();
+                            expect(args.cb).toEqual(jasmine.any(Function));
+                            expect(args.key).toBe("uid_1");
+                            expect(args.index).toBe(1);
+                            expect(args.val).not.toBeNull();
+                            expect(args.val.high.x).toBe(
+                                input.values[1].high.x
+                            );
+                            expect(args.val.high.y).toBe(
+                                input.values[1].high.y
+                            );
+                            expect(args.val.low.x).toBe(input.values[1].low.x);
+                            expect(args.val.low.y).toBe(input.values[1].low.y);
+                            expect(args.val.mid.x).toBe(input.values[1].mid.x);
+                            expect(args.val.mid.y).toBe(input.values[1].mid.y);
+                            expect(args.target).not.toBeNull();
+                            done();
+                        }
+                    );
+                });
                 it("highlights the data point", (done) => {
                     triggerEvent(
                         fetchElementByClass(
@@ -1103,6 +1144,47 @@ describe("PairedResult", () => {
                             200
                         );
                     });
+                });
+                it("emits correct parameters", (done) => {
+                    let args = {};
+                    graphDefault.destroy();
+                    graphDefault = new Graph(getAxes(axisDefault));
+                    input = getInput(valuesDefault, false, false);
+                    input.onClick = (cb, key, index, val, target) => {
+                        args = {
+                            cb,
+                            key,
+                            index,
+                            val,
+                            target
+                        };
+                    };
+                    graphDefault.loadContent(new PairedResult(input));
+                    triggerEvent(
+                        pairedResultGraphContainer.querySelectorAll(
+                            `.${styles.pairedLine}`
+                        )[1],
+                        "click",
+                        () => {
+                            expect(args).not.toBeNull();
+                            expect(args.cb).toEqual(jasmine.any(Function));
+                            expect(args.key).toBe("uid_1");
+                            expect(args.index).toBe(1);
+                            expect(args.val).not.toBeNull();
+                            expect(args.val.high.x).toBe(
+                                input.values[1].high.x
+                            );
+                            expect(args.val.high.y).toBe(
+                                input.values[1].high.y
+                            );
+                            expect(args.val.low.x).toBe(input.values[1].low.x);
+                            expect(args.val.low.y).toBe(input.values[1].low.y);
+                            expect(args.val.mid.x).toBe(input.values[1].mid.x);
+                            expect(args.val.mid.y).toBe(input.values[1].mid.y);
+                            expect(args.target).not.toBeNull();
+                            done();
+                        }
+                    );
                 });
             });
         });
@@ -3154,6 +3236,57 @@ describe("PairedResult", () => {
                     done();
                 });
             });
+            it("emits correct parameters when clicked on outer indicator", (done) => {
+                let args = {};
+                const valuesMutated = utils.deepClone(valuesDefault);
+                valuesMutated[1].high.isCritical = true;
+                valuesMutated[1].mid.isCritical = true;
+                valuesMutated[1].low.isCritical = true;
+                inputPrimary = getInput(valuesMutated);
+                inputPrimary.onClick = (cb, key, index, val, target) => {
+                    args = {
+                        cb,
+                        key,
+                        index,
+                        val,
+                        target
+                    };
+                };
+                graphDefault.loadContent(new PairedResult(inputPrimary));
+                triggerEvent(
+                    pairedResultGraphContainer.querySelector(
+                        `.${styles.criticalityOuterPoint}`
+                    ),
+                    "click",
+                    () => {
+                        expect(args).not.toBeNull();
+                        expect(args.cb).toEqual(jasmine.any(Function));
+                        expect(args.key).toBe("uid_1");
+                        expect(args.index).toBe(1);
+                        expect(args.val).not.toBeNull();
+                        expect(args.val.high.x).toBe(
+                            inputPrimary.values[1].high.x
+                        );
+                        expect(args.val.high.y).toBe(
+                            inputPrimary.values[1].high.y
+                        );
+                        expect(args.val.low.x).toBe(
+                            inputPrimary.values[1].low.x
+                        );
+                        expect(args.val.low.y).toBe(
+                            inputPrimary.values[1].low.y
+                        );
+                        expect(args.val.mid.x).toBe(
+                            inputPrimary.values[1].mid.x
+                        );
+                        expect(args.val.mid.y).toBe(
+                            inputPrimary.values[1].mid.y
+                        );
+                        expect(args.target).not.toBeNull();
+                        done();
+                    }
+                );
+            });
             it("selects data point when clicked on inner indicator", (done) => {
                 const criticalInnerPointSpy = sinon.spy();
                 const valuesMutated = utils.deepClone(valuesDefault);
@@ -3172,6 +3305,57 @@ describe("PairedResult", () => {
                     expect(criticalInnerPointSpy.calledOnce).toBeTruthy();
                     done();
                 });
+            });
+            it("emits correct parameters when clicked on inner indicator", (done) => {
+                let args = {};
+                const valuesMutated = utils.deepClone(valuesDefault);
+                valuesMutated[1].high.isCritical = true;
+                valuesMutated[1].mid.isCritical = true;
+                valuesMutated[1].low.isCritical = true;
+                inputPrimary = getInput(valuesMutated);
+                inputPrimary.onClick = (cb, key, index, val, target) => {
+                    args = {
+                        cb,
+                        key,
+                        index,
+                        val,
+                        target
+                    };
+                };
+                graphDefault.loadContent(new PairedResult(inputPrimary));
+                triggerEvent(
+                    pairedResultGraphContainer.querySelector(
+                        `.${styles.criticalityInnerPoint}`
+                    ),
+                    "click",
+                    () => {
+                        expect(args).not.toBeNull();
+                        expect(args.cb).toEqual(jasmine.any(Function));
+                        expect(args.key).toBe("uid_1");
+                        expect(args.index).toBe(1);
+                        expect(args.val).not.toBeNull();
+                        expect(args.val.high.x).toBe(
+                            inputPrimary.values[1].high.x
+                        );
+                        expect(args.val.high.y).toBe(
+                            inputPrimary.values[1].high.y
+                        );
+                        expect(args.val.low.x).toBe(
+                            inputPrimary.values[1].low.x
+                        );
+                        expect(args.val.low.y).toBe(
+                            inputPrimary.values[1].low.y
+                        );
+                        expect(args.val.mid.x).toBe(
+                            inputPrimary.values[1].mid.x
+                        );
+                        expect(args.val.mid.y).toBe(
+                            inputPrimary.values[1].mid.y
+                        );
+                        expect(args.target).not.toBeNull();
+                        done();
+                    }
+                );
             });
         });
         describe("On unload", () => {

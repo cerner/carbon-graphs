@@ -593,6 +593,57 @@ describe("Gantt -> Track -> Task", () => {
                     }
                 );
             });
+            it("Emits correct parameters for a normal bar", (done) => {
+                let args = {};
+                gantt.loadContent(
+                    Object.assign(getData(), {
+                        trackLabel: {
+                            display: "A"
+                        },
+                        tasks: [
+                            {
+                                key: "taskNormal",
+                                label: {
+                                    display: "Story Apex"
+                                },
+                                startDate: taskStartDate,
+                                endDate: taskEndDate
+                            },
+                            {
+                                key: "taskNormal_2",
+                                label: {
+                                    display: "Story Beta"
+                                },
+                                onClick: (cb, key, index, val, target) => {
+                                    args = {
+                                        cb,
+                                        key,
+                                        index,
+                                        val,
+                                        target
+                                    };
+                                },
+                                startDate: new Date(2018, 3, 1).toISOString(),
+                                endDate: new Date(2018, 6, 1).toISOString()
+                            }
+                        ]
+                    })
+                );
+                triggerEvent(
+                    document.querySelectorAll(`.${styles.taskBar}`)[1],
+                    "click",
+                    () => {
+                        expect(args).not.toBeNull();
+                        expect(args.cb).toEqual(jasmine.any(Function));
+                        expect(args.key).toBe("taskNormal_2");
+                        expect(args.index).toBe(1);
+                        expect(args.val).not.toBeNull();
+                        expect(args.val.label.display).toEqual("Story Beta");
+                        expect(args.target).not.toBeNull();
+                        done();
+                    }
+                );
+            });
             it("Calls onClick callback for a chunk", (done) => {
                 const onClickFunctionSpy = sinon.spy();
                 gantt.loadContent(
@@ -628,6 +679,57 @@ describe("Gantt -> Track -> Task", () => {
                                 styles.taskBarSelection
                             ).getAttribute("aria-hidden")
                         ).toBe("false");
+                        done();
+                    }
+                );
+            });
+            it("Emits correct parameters for a chunk", (done) => {
+                let args = {};
+                gantt.loadContent(
+                    Object.assign(getData(), {
+                        trackLabel: {
+                            display: "A"
+                        },
+                        tasks: [
+                            {
+                                key: "taskNormal",
+                                label: {
+                                    display: "Story Apex"
+                                },
+                                startDate: taskStartDate,
+                                endDate: taskStartDate
+                            },
+                            {
+                                key: "taskNormal_2",
+                                label: {
+                                    display: "Story Beta"
+                                },
+                                onClick: (cb, key, index, val, target) => {
+                                    args = {
+                                        cb,
+                                        key,
+                                        index,
+                                        val,
+                                        target
+                                    };
+                                },
+                                startDate: new Date(2018, 3, 1).toISOString(),
+                                endDate: new Date(2018, 3, 1).toISOString()
+                            }
+                        ]
+                    })
+                );
+                triggerEvent(
+                    document.querySelectorAll(`.${styles.taskBar}`)[1],
+                    "click",
+                    () => {
+                        expect(args).not.toBeNull();
+                        expect(args.cb).toEqual(jasmine.any(Function));
+                        expect(args.key).toBe("taskNormal_2");
+                        expect(args.index).toBe(1);
+                        expect(args.val).not.toBeNull();
+                        expect(args.val.label.display).toEqual("Story Beta");
+                        expect(args.target).not.toBeNull();
                         done();
                     }
                 );
@@ -668,6 +770,58 @@ describe("Gantt -> Track -> Task", () => {
                                 styles.taskBarSelection
                             ).getAttribute("aria-hidden")
                         ).toBe("false");
+                        done();
+                    }
+                );
+            });
+            it("Emits correct parameters for a percentage bar", (done) => {
+                let args = {};
+                gantt.loadContent(
+                    Object.assign(getData(), {
+                        trackLabel: {
+                            display: "A"
+                        },
+                        tasks: [
+                            {
+                                key: "taskPercentage_1",
+                                label: {
+                                    display: "Story Apex"
+                                },
+                                startDate: taskStartDate,
+                                endDate: taskStartDate
+                            },
+                            {
+                                key: "taskPercentage_2",
+                                label: {
+                                    display: "Story Beta"
+                                },
+                                onClick: (cb, key, index, val, target) => {
+                                    args = {
+                                        cb,
+                                        key,
+                                        index,
+                                        val,
+                                        target
+                                    };
+                                },
+                                percentage: 30,
+                                startDate: new Date(2018, 3, 1).toISOString(),
+                                endDate: new Date(2018, 6, 1).toISOString()
+                            }
+                        ]
+                    })
+                );
+                triggerEvent(
+                    document.querySelectorAll(`.${styles.taskBar}`)[1],
+                    "click",
+                    () => {
+                        expect(args).not.toBeNull();
+                        expect(args.cb).toEqual(jasmine.any(Function));
+                        expect(args.key).toBe("taskPercentage_2");
+                        expect(args.index).toBe(1);
+                        expect(args.val).not.toBeNull();
+                        expect(args.val.label.display).toEqual("Story Beta");
+                        expect(args.target).not.toBeNull();
                         done();
                     }
                 );

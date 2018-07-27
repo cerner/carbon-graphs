@@ -315,11 +315,11 @@ const drawDataLines = (scale, config, lineGroupSVG) =>
  * @private
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} config - Graph config object derived from input JSON
- * @param {Array} canvasSVG - d3 html element of the canvas
+ * @param {Array} pointGroupPath - d3 html element of the points group
  * @returns {undefined} - returns nothing
  */
-const drawDataPoints = (scale, config, canvasSVG) => {
-    const renderDataPointPath = (path, value) =>
+const drawDataPoints = (scale, config, pointGroupPath) => {
+    const renderDataPointPath = (path, value, index) =>
         path
             .classed(styles.point, true)
             .attr("d", new Shape(getShape(value)).getPathDescription())
@@ -333,10 +333,10 @@ const drawDataPoints = (scale, config, canvasSVG) => {
                 }`
             )
             .attr("aria-describedby", value.key)
-            .on("click", function(value, index) {
+            .on("click", function() {
                 dataPointActionHandler(value, index, this);
             });
-    const renderSelectionPath = (path, value) =>
+    const renderSelectionPath = (path, value, index) =>
         path
             .classed(styles.dataPointSelection, true)
             .attr("d", new Shape(getShape(value)).getPathDescription())
@@ -352,10 +352,10 @@ const drawDataPoints = (scale, config, canvasSVG) => {
             )
             .attr("aria-hidden", true)
             .attr("aria-describedby", value.key)
-            .on("click", function(value, index) {
+            .on("click", function() {
                 dataPointActionHandler(value, index, this);
             });
-    const renderCriticalityPath = (path, value, cls, scaleFactor) =>
+    const renderCriticalityPath = (path, value, index, cls, scaleFactor) =>
         path
             .classed(styles.point, true)
             .classed(cls, true)
@@ -370,34 +370,37 @@ const drawDataPoints = (scale, config, canvasSVG) => {
                 }`
             )
             .attr("aria-describedby", value.key)
-            .on("click", function(value, index) {
+            .on("click", function() {
                 dataPointActionHandler(value, index, this);
             });
-    canvasSVG
+    pointGroupPath
         .append("g")
         .classed(styles.pointGroup, true)
-        .each(function(d) {
+        .each(function(d, i) {
             const dataPointSVG = d3.select(this);
             renderSelectionPath(
                 dataPointSVG.append(constants.DEFAULT_SHAPE),
-                d
+                d,
+                i
             );
             if (d.isCritical) {
                 config.hasCriticality = true;
                 renderCriticalityPath(
                     dataPointSVG.append("path"),
                     d,
+                    i,
                     styles.criticalityOuterPoint,
                     constants.DEFAULT_CRITICAL_OUTER_PLOT_SCALE
                 );
                 renderCriticalityPath(
                     dataPointSVG.append("path"),
                     d,
+                    i,
                     styles.criticalityInnerPoint,
                     constants.DEFAULT_CRITICAL_INNER_PLOT_SCALE
                 );
             }
-            renderDataPointPath(dataPointSVG.append("path"), d);
+            renderDataPointPath(dataPointSVG.append("path"), d, i);
         });
 };
 /**

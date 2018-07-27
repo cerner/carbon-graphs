@@ -25,6 +25,7 @@ describe("Gantt -> Track -> Action", () => {
     const getTranslate = (el) =>
         d3.transform(d3.select(el).attr("transform")).translate;
     const xVal = new Date(2018, 4, 1, 6, 15).toISOString();
+    const xValAlt = new Date(2018, 4, 1, 9, 15).toISOString();
     const loadData = (gantt) =>
         gantt.loadContent(
             Object.assign(getData(), {
@@ -374,6 +375,42 @@ describe("Gantt -> Track -> Action", () => {
                     done();
                 });
             });
+            it("Emits correct parameters", (done) => {
+                let args = {};
+                gantt.loadContent(
+                    Object.assign(getData(), {
+                        actions: [
+                            {
+                                key: "uid_action_1",
+                                onClick: (cb, key, index, val, target) => {
+                                    args = {
+                                        cb,
+                                        key,
+                                        index,
+                                        val,
+                                        target
+                                    };
+                                },
+                                values: [xVal, xValAlt]
+                            }
+                        ]
+                    })
+                );
+                triggerEvent(
+                    document.querySelectorAll(`.${styles.point}`)[1],
+                    "click",
+                    () => {
+                        expect(args).not.toBeNull();
+                        expect(args.cb).toEqual(jasmine.any(Function));
+                        expect(args.key).toBe("uid_action_1");
+                        expect(args.index).toBe(1);
+                        expect(args.val).not.toBeNull();
+                        expect(args.val.x).toEqual(new Date(xValAlt));
+                        expect(args.target).not.toBeNull();
+                        done();
+                    }
+                );
+            });
             it("Highlights the data point", (done) => {
                 const onClickFunctionSpy = sinon.spy();
                 gantt.loadContent(
@@ -473,6 +510,44 @@ describe("Gantt -> Track -> Action", () => {
                                 styles.dataPointSelection
                             ).getAttribute("aria-hidden")
                         ).toBe("false");
+                        done();
+                    }
+                );
+            });
+            it("Emits correct parameters", (done) => {
+                let args = {};
+                gantt.loadContent(
+                    Object.assign(getData(), {
+                        actions: [
+                            {
+                                key: "uid_action_1",
+                                onClick: (cb, key, index, val, target) => {
+                                    args = {
+                                        cb,
+                                        key,
+                                        index,
+                                        val,
+                                        target
+                                    };
+                                },
+                                values: [xVal, xValAlt]
+                            }
+                        ]
+                    })
+                );
+                triggerEvent(
+                    document.querySelectorAll(
+                        `.${styles.dataPointSelection}`
+                    )[1],
+                    "click",
+                    () => {
+                        expect(args).not.toBeNull();
+                        expect(args.cb).toEqual(jasmine.any(Function));
+                        expect(args.key).toBe("uid_action_1");
+                        expect(args.index).toBe(1);
+                        expect(args.val).not.toBeNull();
+                        expect(args.val.x).toEqual(new Date(xValAlt));
+                        expect(args.target).not.toBeNull();
                         done();
                     }
                 );

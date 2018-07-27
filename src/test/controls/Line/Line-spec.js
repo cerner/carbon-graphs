@@ -620,6 +620,36 @@ describe("Line", () => {
                         done();
                     });
                 });
+                it("calls onClick callback with parameters", (done) => {
+                    let args = {};
+                    graphDefault.destroy();
+                    graphDefault = new Graph(getAxes(axisDefault));
+                    input = getInput(valuesDefault, false, false);
+                    input.onClick = (cb, key, index, val, target) => {
+                        args = {
+                            cb,
+                            key,
+                            index,
+                            val,
+                            target
+                        };
+                    };
+                    graphDefault.loadContent(new Line(input));
+                    const point = lineGraphContainer.querySelectorAll(
+                        `.${styles.point}`
+                    )[1];
+                    triggerEvent(point, "click", () => {
+                        expect(args).not.toBeNull();
+                        expect(args.cb).toEqual(jasmine.any(Function));
+                        expect(args.key).toBe("uid_1");
+                        expect(args.index).toBe(1);
+                        expect(args.val).not.toBeNull();
+                        expect(args.val.x).toBe(input.values[1].x);
+                        expect(args.val.y).toBe(input.values[1].y);
+                        expect(args.target).not.toBeNull();
+                        done();
+                    });
+                });
                 it("highlights the data point", (done) => {
                     const selectionPoint = fetchElementByClass(
                         lineGraphContainer,
@@ -665,6 +695,36 @@ describe("Line", () => {
                         expect(selectionPoint.getAttribute("aria-hidden")).toBe(
                             "false"
                         );
+                        done();
+                    });
+                });
+                it("calls onClick callback with parameters", (done) => {
+                    let args = {};
+                    graphDefault.destroy();
+                    graphDefault = new Graph(getAxes(axisDefault));
+                    input = getInput(valuesDefault, false, false);
+                    input.onClick = (cb, key, index, val, target) => {
+                        args = {
+                            cb,
+                            key,
+                            index,
+                            val,
+                            target
+                        };
+                    };
+                    graphDefault.loadContent(new Line(input));
+                    const selectionPoint = lineGraphContainer.querySelectorAll(
+                        `.${styles.dataPointSelection}`
+                    )[1];
+                    triggerEvent(selectionPoint, "click", () => {
+                        expect(args).not.toBeNull();
+                        expect(args.cb).toEqual(jasmine.any(Function));
+                        expect(args.key).toBe("uid_1");
+                        expect(args.index).toBe(1);
+                        expect(args.val).not.toBeNull();
+                        expect(args.val.x).toBe(input.values[1].x);
+                        expect(args.val.y).toBe(input.values[1].y);
+                        expect(args.target).not.toBeNull();
                         done();
                     });
                 });
@@ -2108,6 +2168,36 @@ describe("Line", () => {
                     done();
                 });
             });
+            it("Emits correct parameters when clicked on outer indicator", (done) => {
+                let args = {};
+                const valuesMutated = utils.deepClone(valuesDefault);
+                valuesMutated[1].isCritical = true;
+                inputPrimary = getInput(valuesMutated);
+                inputPrimary.onClick = (cb, key, index, val, target) => {
+                    args = {
+                        cb,
+                        key,
+                        index,
+                        val,
+                        target
+                    };
+                };
+                graphDefault.loadContent(new Line(inputPrimary));
+                const point = lineGraphContainer.querySelector(
+                    `.${styles.criticalityOuterPoint}`
+                );
+                triggerEvent(point, "click", () => {
+                    expect(args).not.toBeNull();
+                    expect(args.cb).toEqual(jasmine.any(Function));
+                    expect(args.key).toBe("uid_1");
+                    expect(args.index).toBe(1);
+                    expect(args.val).not.toBeNull();
+                    expect(args.val.x).toBe(inputPrimary.values[1].x);
+                    expect(args.val.y).toBe(inputPrimary.values[1].y);
+                    expect(args.target).not.toBeNull();
+                    done();
+                });
+            });
             it("Selects data point when clicked on inner indicator", (done) => {
                 const criticalInnerPointSpy = sinon.spy();
                 const valuesMutated = utils.deepClone(valuesDefault);
@@ -2122,6 +2212,36 @@ describe("Line", () => {
                 );
                 triggerEvent(point, "click", () => {
                     expect(criticalInnerPointSpy.calledOnce).toBeTruthy();
+                    done();
+                });
+            });
+            it("Emits correct parameters when clicked on inner point", (done) => {
+                let args = {};
+                const valuesMutated = utils.deepClone(valuesDefault);
+                valuesMutated[1].isCritical = true;
+                inputPrimary = getInput(valuesMutated);
+                inputPrimary.onClick = (cb, key, index, val, target) => {
+                    args = {
+                        cb,
+                        key,
+                        index,
+                        val,
+                        target
+                    };
+                };
+                graphDefault.loadContent(new Line(inputPrimary));
+                const point = lineGraphContainer.querySelector(
+                    `.${styles.criticalityInnerPoint}`
+                );
+                triggerEvent(point, "click", () => {
+                    expect(args).not.toBeNull();
+                    expect(args.cb).toEqual(jasmine.any(Function));
+                    expect(args.key).toBe("uid_1");
+                    expect(args.index).toBe(1);
+                    expect(args.val).not.toBeNull();
+                    expect(args.val.x).toBe(inputPrimary.values[1].x);
+                    expect(args.val.y).toBe(inputPrimary.values[1].y);
+                    expect(args.target).not.toBeNull();
                     done();
                 });
             });

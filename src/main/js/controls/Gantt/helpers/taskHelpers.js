@@ -152,10 +152,11 @@ const renderSelectionIndicator = (indicatorArgs) => {
  * @private
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} taskData - Current task data
+ * @param {number} index - Current task data index
  * @param {Selection} taskPath - d3 task bar selection element
  * @returns {undefined} - returns nothing
  */
-const renderPercentageBarGroup = (scale, taskData, taskPath) => {
+const renderPercentageBarGroup = (scale, taskData, index, taskPath) => {
     const _args = generatorArgs(scale, taskData, taskPath);
     // Create Selection indicator for Percentage Task
     renderSelectionIndicator(_args);
@@ -172,9 +173,7 @@ const renderPercentageBarGroup = (scale, taskData, taskPath) => {
             taskData.percentage
         ),
         taskData.color
-    ).on("click", (value, index) =>
-        taskClickActionHandler(taskData, index, taskPath)
-    );
+    ).on("click", () => taskClickActionHandler(taskData, index, taskPath));
 };
 /**
  * Based on startDate and endDate, we either render a chunk or a normal bar.
@@ -183,10 +182,11 @@ const renderPercentageBarGroup = (scale, taskData, taskPath) => {
  * @private
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} taskData - Current task data
+ * @param {number} index - Current task data index
  * @param {Selection} taskPath - d3 task bar selection element
  * @returns {undefined} - returns nothing
  */
-const renderForegroundBarGroup = (scale, taskData, taskPath) => {
+const renderForegroundBarGroup = (scale, taskData, index, taskPath) => {
     const _args = generatorArgs(scale, taskData, taskPath);
     renderSelectionIndicator(_args);
     (isAChunk(taskData.startDate, taskData.endDate) ? getChunk : getBar)(
@@ -196,9 +196,7 @@ const renderForegroundBarGroup = (scale, taskData, taskPath) => {
         _args.width,
         _args.height,
         taskData.style
-    ).on("click", (value, index) =>
-        taskClickActionHandler(taskData, index, taskPath)
-    );
+    ).on("click", () => taskClickActionHandler(taskData, index, taskPath));
 };
 /**
  * Renders the tasks for a track. Each task is created based on start and end datetime.
@@ -225,10 +223,10 @@ const drawTasks = (scale, config, trackLabel, taskGroupPath, tasks) => {
         .classed(styles.task, true)
         .attr("aria-selected", false)
         .attr("aria-describedby", (d) => d.key)
-        .each(function(d) {
+        .each(function(d, i) {
             d.percentage
-                ? renderPercentageBarGroup(scale, d, this)
-                : renderForegroundBarGroup(scale, d, this);
+                ? renderPercentageBarGroup(scale, d, i, this)
+                : renderForegroundBarGroup(scale, d, i, this);
         });
     taskPath
         .exit()
