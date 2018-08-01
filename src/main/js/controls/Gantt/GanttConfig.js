@@ -100,10 +100,10 @@ export const processInput = (input, config) => {
 export const isUniqueKey = (dictionary, key) => dictionary.indexOf(key) < 0;
 
 /**
- * API to parse consumer input for Graph
- * @class GraphConfig
+ * API to parse consumer input for Gantt
+ * @class GanttConfig
  */
-class GraphConfig extends BaseConfig {
+class GanttConfig extends BaseConfig {
     /**
      * @inheritDoc
      */
@@ -141,7 +141,7 @@ class GraphConfig extends BaseConfig {
      * @throws {module:errors.THROW_MSG_INVALID_AXIS_TYPE_VALUES}
      * @throws {module:errors.THROW_MSG_DATELINE_NOT_PROVIDED}
      * @throws {module:errors.THROW_MSG_DATELINE_TYPE_NOT_VALID}
-     * @returns {GraphConfig} instance object
+     * @returns {GanttConfig} instance object
      */
     validateInput() {
         if (utils.isEmpty(this.input)) {
@@ -185,7 +185,7 @@ class GraphConfig extends BaseConfig {
 
     /**
      * Clones the input JSON into the config object
-     * @returns {GraphConfig} instance object
+     * @returns {GanttConfig} instance object
      */
     clone() {
         this.config = utils.deepClone(this.input);
@@ -193,6 +193,6 @@ class GraphConfig extends BaseConfig {
     }
 }
 
-export default GraphConfig;
+export default GanttConfig;
 export const validateTask = validateData;
 export const validateActivity = validateData;

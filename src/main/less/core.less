@@ -40,9 +40,17 @@ svg:not(:root) {
 }
 
 .carbon-axis-x,
-.carbon-axis-y {
+.carbon-axis-y,
+.carbon-axis-y2 {
     &[aria-hidden="true"] {
         display: none;
+    }
+}
+
+.carbon-axis {
+    &.carbon-axis-reference-line {
+        stroke-width: 0.0625rem;
+        stroke: @grey30;
     }
 }
 

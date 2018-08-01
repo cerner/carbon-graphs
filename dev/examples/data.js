@@ -155,7 +155,7 @@ const DATA = [
                 },
                 y: {
                     label: "Line Set A",
-                    lowerLimit: 0,
+                    lowerLimit: 5,
                     upperLimit: 30
                 },
                 y2: {
@@ -176,7 +176,7 @@ const DATA = [
                     values: [
                         {
                             x: new Date(2016, 0, 1, 1, 5).toISOString(),
-                            y: 1,
+                            y: 5,
                             isCritical: false
                         },
                         {
@@ -221,15 +221,15 @@ const DATA = [
                         },
                         {
                             x: new Date(2016, 0, 1, 14, 15).toISOString(),
-                            y: 2
+                            y: 12
                         },
                         {
                             x: new Date(2016, 0, 1, 19, 45).toISOString(),
-                            y: 3
+                            y: 13
                         },
                         {
                             x: new Date(2016, 0, 1, 21, 15).toISOString(),
-                            y: 4
+                            y: 14
                         }
                     ],
                     yAxis: "y" // Default is "y", only need to specify if "y2"

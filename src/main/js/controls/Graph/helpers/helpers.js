@@ -19,7 +19,8 @@ import {
     getYAxisRange,
     hasY2Axis,
     processTickValues,
-    translateAxes
+    translateAxes,
+    translateAxisReferenceLine
 } from "../../../helpers/axis";
 import constants, { SHAPES } from "../../../helpers/constants";
 import styles from "../../../helpers/styles";
@@ -417,6 +418,12 @@ const translateGraph = (control) => {
     translateGrid(control.axis, control.scale, control.config, control.svg);
     translateContentContainer(control.config, control.svg);
     translateLabel(control.config, control.svg);
+    translateAxisReferenceLine(
+        control.axis,
+        control.scale,
+        control.config,
+        control.svg
+    );
 };
 /**
  * Pads the domain with some buffer that gets calculated based on input values.

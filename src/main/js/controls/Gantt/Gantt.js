@@ -133,10 +133,10 @@ const init = (control) => {
 };
 
 /**
- * A common API used to plot everything except the datapoints and legend themselves.
- * * Axes - X, Y axis
- * * Grid - Horizontal and vertical
- * * X,Y Axis ticks
+ * Gantt chart construct
+ * * Axis - X
+ * * X ticks
+ * * Content that serves as Tracks (Rows). Tracks are Y axis. Y axis labels are clickable
  *
  * Lifecycle functions include:
  *  * BeforeInit

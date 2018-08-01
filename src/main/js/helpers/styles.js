@@ -15,6 +15,7 @@ export default {
     axisX: "carbon-axis-x",
     axisY: "carbon-axis-y",
     axisY2: "carbon-axis-y2",
+    axisReferenceLine: "carbon-axis-reference-line",
     grid: "carbon-grid",
     gridH: "carbon-horizontal-grid",
     gridV: "carbon-vertical-grid",

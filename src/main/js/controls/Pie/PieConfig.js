@@ -117,7 +117,7 @@ export default class PieConfig extends BaseConfig {
 
     /**
      * Clones the input JSON into the config object
-     * @returns {GraphConfig} instance object
+     * @returns {PieConfig} instance object
      */
     clone() {
         this.config = utils.deepClone(this.input);

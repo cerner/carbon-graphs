@@ -5,6 +5,7 @@ import {
     calculateAxesLabelSize,
     calculateAxesSize,
     createAxes,
+    createAxisReferenceLine,
     getAxesDataRange,
     getYAxisHeight
 } from "../../helpers/axis";
@@ -188,6 +189,7 @@ class Graph extends Construct {
      *  * Y-Axes
      *  * Labels
      *  * Legend
+     *  * Reference line when Y Axis shows/pads negative values
      *  * Data [In our case we have load and unload]
      * @param {Object} input - Input JSON
      * @returns {HTMLElement} d3 HTML element SVG.
@@ -213,6 +215,7 @@ class Graph extends Construct {
         createContentContainer(this.config, this.svg);
         createAxes(this.axis, this.scale, this.config, this.svg);
         createLabel(this.config, this.svg);
+        createAxisReferenceLine(this.axis, this.scale, this.config, this.svg);
         if (this.config.showLegend) {
             /*
             If the consumer doesn't wish to show legend item then they can pass blank.

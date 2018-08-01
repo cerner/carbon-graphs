@@ -12,6 +12,38 @@ import { DEFAULT_TICK_FORMAT } from "../locale";
 
 const PADDING = constants.PADDING;
 /**
+ * Checks if Y or Y2 axis starts from Origin
+ * @private
+ * @param {Object} scale - d3 scale taking into account the input parameters
+ * @param {string} yAxis - Y, Y2 etc
+ * @returns {boolean} True if axis does not start from origin, false otherwise
+ */
+const hasNegativeLowerBound = (scale, yAxis = constants.Y_AXIS) =>
+    d3.min(scale[yAxis].domain()) < 0 && d3.max(scale[yAxis].domain()) >= 0;
+/**
+ * Parses the Y Axis lower and upper limits and returns it as an array for Y Axis reference line
+ * @private
+ * @param {Object} scale - d3 scale taking into account the input parameters
+ * @returns {{x: *, y: number}[]} x and y co-ordinate data for drawing a reference line
+ */
+const getReferenceLineData = (scale) => [
+    { x: scale.x.domain()[0], y: 0 },
+    { x: scale.x.domain()[1], y: 0 }
+];
+
+/**
+ * Creates a simple reference line with x and y attributes
+ * @private
+ * @param {Object} scale - d3 scale taking into account the input parameters
+ * @param {string} yAxis - Y, Y2 etc
+ * @returns {d3.Line} A d3 line
+ */
+const createReferenceLine = (scale, yAxis) =>
+    d3.svg
+        .line()
+        .x((value) => scale.x(value.x))
+        .y((value) => scale[yAxis](value.y));
+/**
  * Create the d3 Axes - X, Y and Y2 and append into the canvas.
  * If axis.x.show, axis.y.show or axis.y2.show is set to false:
  * then the axis will be hidden
@@ -58,6 +90,37 @@ const createAxes = (axis, scale, config, canvasSVG) => {
                 )}, ${getY2AxisYPosition()})`
             )
             .call(axis.y2);
+    }
+};
+/**
+ * Creates a horizontal reference line at 0, when Y Axis does not start at 0.
+ * @private
+ * @param {Object} axis - Axis scaled according to input parameters
+ * @param {Object} scale - d3 scale taking into account the input parameters
+ * @param {Object} config - config object derived from input JSON
+ * @param {Array} canvasSVG - d3 object of canvas svg
+ * @returns {undefined} - returns nothing
+ */
+const createAxisReferenceLine = (axis, scale, config, canvasSVG) => {
+    const transformAttribute = `translate(${getYAxisXPosition(
+        config
+    )}, ${getYAxisYPosition()})`;
+    const setReferenceLineAttributes = (path, style) =>
+        path
+            .classed(styles.axisReferenceLine, true)
+            .attr("aria-hidden", !hasNegativeLowerBound(scale, style))
+            .attr("transform", transformAttribute)
+            .attr(
+                "d",
+                createReferenceLine(scale, style)(getReferenceLineData(scale))
+            );
+    setReferenceLineAttributes(canvasSVG.append("path"), constants.Y_AXIS)
+        .classed(styles.axis, true)
+        .classed(styles.axisY, true);
+    if (hasY2Axis(config.axis)) {
+        setReferenceLineAttributes(canvasSVG.append("path"), constants.Y2_AXIS)
+            .classed(styles.axis, true)
+            .classed(styles.axisY2, true);
     }
 };
 /**
@@ -618,6 +681,49 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
     }
 };
 /**
+ * Updates the Y axis reference line when resized. This is also called
+ * when a content is loaded.
+ * @private
+ * @param {Object} axis - Axis scaled according to input parameters
+ * @param {Object} scale - d3 scale taking into account the input parameters
+ * @param {Object} config - config object derived from input JSON
+ * @param {Array} canvasSVG - d3 object of canvas svg
+ * @returns {undefined} - returns nothing
+ */
+const translateAxisReferenceLine = (axis, scale, config, canvasSVG) => {
+    const setTranslate = (path, style) =>
+        path
+            .transition(constants.d3Transition)
+            .attr("aria-hidden", false)
+            .attr(
+                "d",
+                createReferenceLine(scale, style)(getReferenceLineData(scale))
+            );
+    if (hasNegativeLowerBound(scale, constants.Y_AXIS)) {
+        setTranslate(
+            canvasSVG.select(
+                `path.${styles.axis}.${styles.axisY}.${
+                    styles.axisReferenceLine
+                }`
+            ),
+            constants.Y_AXIS
+        );
+    }
+    if (
+        hasY2Axis(config.axis) &&
+        hasNegativeLowerBound(scale, constants.Y2_AXIS)
+    ) {
+        setTranslate(
+            canvasSVG.select(
+                `path.${styles.axis}.${styles.axisY2}.${
+                    styles.axisReferenceLine
+                }`
+            ),
+            constants.Y2_AXIS
+        );
+    }
+};
+/**
  * Calculates the axes - x, y and y2 data range.
  * For each data point provided, we need to set the min and max ranges.
  * Data point sets [n]
@@ -691,8 +797,10 @@ export {
     buildAxisLabel,
     getAxesScale,
     createAxes,
+    createAxisReferenceLine,
     getAxesDataRange,
     processTickValues,
     hasY2Axis,
-    translateAxes
+    translateAxes,
+    translateAxisReferenceLine
 };

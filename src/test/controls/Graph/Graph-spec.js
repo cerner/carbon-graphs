@@ -527,6 +527,8 @@ describe("Graph", () => {
                 .childNodes[6];
             const axisYLabelElement = fetchElementByClass(styles.canvas)
                 .childNodes[7];
+            const axisReferenceLintElement = fetchElementByClass(styles.canvas)
+                .childNodes[8];
             expect(defsElement).not.toBeNull();
             expect(regionElement).not.toBeNull();
             expect(gridElement).not.toBeNull();
@@ -535,6 +537,7 @@ describe("Graph", () => {
             expect(contentContainer).not.toBeNull();
             expect(axisXLabelElement).not.toBeNull();
             expect(axisYLabelElement).not.toBeNull();
+            expect(axisReferenceLintElement).not.toBeNull();
 
             expect(defsElement.nodeName).toBe("defs");
             expect(regionElement.nodeName).toBe("g");
@@ -544,6 +547,7 @@ describe("Graph", () => {
             expect(contentContainer.nodeName).toBe("rect");
             expect(axisXLabelElement.nodeName).toBe("g");
             expect(axisYLabelElement.nodeName).toBe("g");
+            expect(axisReferenceLintElement.nodeName).toBe("path");
 
             expect(regionElement.getAttribute("class")).toBe(
                 styles.regionGroup
@@ -562,6 +566,11 @@ describe("Graph", () => {
             expect(axisYLabelElement.getAttribute("class")).toBe(
                 styles.axisLabelY
             );
+            expect(
+                axisReferenceLintElement.classList.contains(
+                    styles.axisReferenceLine
+                )
+            ).toBeTruthy();
         });
         it("creates the canvas svg", () => {
             const canvas = fetchElementByClass(styles.container).firstChild;
@@ -613,6 +622,59 @@ describe("Graph", () => {
                     `${styles.axis} ${styles.axisY}`
                 );
             });
+            it("creates the y axis reference line markup", () => {
+                const referenceElement = fetchElementByClass(
+                    styles.axisReferenceLine
+                );
+                expect(
+                    referenceElement.classList.contains(styles.axis)
+                ).toBeTruthy();
+                expect(
+                    referenceElement.classList.contains(
+                        styles.axisReferenceLine
+                    )
+                ).toBeTruthy();
+                expect(
+                    referenceElement.classList.contains(styles.axisY)
+                ).toBeTruthy();
+                expect(referenceElement.getAttribute("aria-hidden")).toBe(
+                    "false"
+                );
+                expect(referenceElement.getAttribute("d")).not.toBeNull();
+            });
+            it("creates the y2 axis reference line markup", () => {
+                graph.destroy();
+                new Graph(
+                    getAxes({
+                        x: axisDefault.x,
+                        y: axisDefault.y,
+                        y2: {
+                            show: true,
+                            label: "Some Y2 label",
+                            lowerLimit: 0,
+                            upperLimit: 200
+                        }
+                    })
+                );
+                const referenceElement = document.querySelector(
+                    `.${styles.axisReferenceLine}.${styles.axisY2}`
+                );
+                expect(
+                    referenceElement.classList.contains(styles.axis)
+                ).toBeTruthy();
+                expect(
+                    referenceElement.classList.contains(
+                        styles.axisReferenceLine
+                    )
+                ).toBeTruthy();
+                expect(
+                    referenceElement.classList.contains(styles.axisY2)
+                ).toBeTruthy();
+                expect(referenceElement.getAttribute("aria-hidden")).toBe(
+                    "false"
+                );
+                expect(referenceElement.getAttribute("d")).not.toBeNull();
+            });
             it("hides x axis when not enabled", () => {
                 graph.destroy();
                 const hiddenAxisObj = utils.deepClone(axisTimeSeries);
@@ -634,6 +696,18 @@ describe("Graph", () => {
                     `${styles.axis} ${styles.axisY}`
                 );
                 expect(yAxisElement.getAttribute("aria-hidden")).toBe("true");
+            });
+            it("creates the y axis reference line markup even when hidden", () => {
+                graph.destroy();
+                const hiddenAxisObj = utils.deepClone(axisTimeSeries);
+                hiddenAxisObj.y.show = false;
+                graph = new Graph(getAxes(hiddenAxisObj));
+                const referenceElement = fetchElementByClass(
+                    styles.axisReferenceLine
+                );
+                expect(referenceElement.getAttribute("aria-hidden")).toBe(
+                    "false"
+                );
             });
             it("hides x and y axis when not enabled", () => {
                 graph.destroy();
