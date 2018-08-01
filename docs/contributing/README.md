@@ -49,7 +49,7 @@ This will generate `dist` and `lib` folders with `core + packaged dependencies` 
 -   Ensure no unit tests are broken.
 -   Ensure there are no linting errors.
 -   Ensure your code is thoroughly unit tested.
--   Write documentation in Markdown, following the existing documentation pattern.
+-   Write documentation in `Markdown`, following the existing documentation pattern.
 -   Include screenshots and animated GIFs in your pull request whenever possible.
 -   End files with a newline.
 

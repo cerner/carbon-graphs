@@ -24,7 +24,7 @@ const hasNegativeLowerBound = (scale, yAxis = constants.Y_AXIS) =>
  * Parses the Y Axis lower and upper limits and returns it as an array for Y Axis reference line
  * @private
  * @param {Object} scale - d3 scale taking into account the input parameters
- * @returns {{x: *, y: number}[]} x and y co-ordinate data for drawing a reference line
+ * @returns {Array}{x: number, y: number} x and y co-ordinate data for drawing a reference line
  */
 const getReferenceLineData = (scale) => [
     { x: scale.x.domain()[0], y: 0 },
