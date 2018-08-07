@@ -2,14 +2,23 @@
 
 Thanks for contributing to Carbon. :1st_place_medal: :1st_place_medal:
 
-This project uses NPM for dependency management, and provides NPM scripts to call on Grunt to run tasks on the project.
+This project uses NPM for dependency management, and provides NPM scripts to call on `Webpack` to run tasks on the project.
 To get started, you will need to checkout this project.
 
 ## Submitting Issues
 
+We use `Github` issues to track progress.
+Any large project needs to be split into **releasable chunks** which can be _developed_, _tested_, _reviewed_ and _released_.
+
 ### Creating Issues
 
 You can create an issue [here](https://github.cerner.com/Geneva/carbon-graphs/issues)
+
+### Closing Issues
+
+Close the issue when the PR is merged.
+
+**Note:** This process is automatic when PR commit message has `(fixes #<issue number>)` and that PR gets merged.
 
 ## Development
 
@@ -75,11 +84,18 @@ The `Tag` is one of the following:
 The message summary should be a one-sentence description of the change, and it must be 72 characters in length or shorter.
 The issue number should be mentioned at the end.
 
+## Code Review
+
 ### Pull Request
 
-Provide the PR with all the information necessary to ease the code review process.
+-   Provide the PR with all necessary information to ease code review process in the `Description`, for instance:
+    -   Screenshots of the working prototype.
+    -   Coverage for the files modified. (Check `carbon-graphs\.coverage\html\index.html`)
+    -   Files you want the reviewer to focus on.
+-   Respond to all comments.
+-   Do **not** rebase with master and force push until you reach `ready to merge` status.
 
-### Release
+## Release
 
 Follow [Semantic Versioning](https://semver.org/) when preparing for a release.
 
@@ -89,7 +105,7 @@ npm run release:<patch, minor or major>
 
 **Ensure released version is present in [cernerrepos](https://cernerrepos.net)**
 
-### Deploying the site to GitHub
+## Deploying the site to GitHub
 
 Once the PR is merged, you need to ensure that the site is up-to-date with your latest changes.
 To deploy the site to the GitHub pages, run the deploy-site script:
@@ -98,7 +114,7 @@ To deploy the site to the GitHub pages, run the deploy-site script:
 npm run deploy:site
 ```
 
-## Breaking changes
+# Breaking changes
 
 For any breaking changes, add information on how to migrate from previous version along with changes that was provided.
 Create an issue and add any stakeholders to that issue.
