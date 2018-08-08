@@ -1,13 +1,14 @@
-import BaseConfig, {
+import BaseConfig from "./BaseConfig";
+
+import {
     getDefaultValue,
     getDomain,
     getInterpolationType,
     getScale,
     getType,
-    isDataValidFormat
-} from "./BaseConfig";
-
-import { validateBaseInput } from "./helper";
+    isDataValidFormat,
+    validateBaseInput
+} from "./helper";
 
 export {
     BaseConfig as default,

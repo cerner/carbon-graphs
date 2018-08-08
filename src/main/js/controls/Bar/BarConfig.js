@@ -36,15 +36,7 @@ class BarConfig extends BaseConfig {
     }
 
     /**
-     * Validates and verifies the input JSON object
-     * Checks if the following properties are present:
-     *      data
-     *      label
-     * Validates for:
-     *      values
-     *      unique keys
-     * @throws module:module:errors.THROW_MSG_NO_DATA_POINTS
-     * @throws module:errors.THROW_MSG_INVALID_DATA_PROPERTY
+     * Validates and verifies the input JSON object.
      * @returns {BarConfig} instance object
      */
     validateInput() {

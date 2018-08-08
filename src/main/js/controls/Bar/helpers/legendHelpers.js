@@ -1,9 +1,9 @@
+import constants from "../../../helpers/constants";
 import {
     legendClickHandler,
     legendHoverHandler
 } from "../../../helpers/legend";
 import styles from "../../../helpers/styles";
-import constants from "../../../helpers/constants";
 
 /**
  * Handler for Request animation frame, executes on resize.
@@ -13,11 +13,9 @@ import constants from "../../../helpers/constants";
  * @private
  * @param {Object} graphContext - Graph instance
  * @param {Line} control - Line instance
- * @param {Object} config - Graph config object derived from input JSON
- * @param {Array} canvasSVG - d3 html element of canvas
  * @returns {function()} callback function handler for RAF
  */
-const onAnimationHandler = (graphContext, control, config, canvasSVG) => () => {
+const onAnimationHandler = (graphContext, control) => () => {
     control.redraw(graphContext);
     graphContext.resize();
 };
@@ -47,9 +45,7 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
     canvasSVG
         .selectAll(`g[aria-describedby="${item.key}"]`)
         .attr("aria-hidden", true);
-    window.requestAnimationFrame(
-        onAnimationHandler(graphContext, control, config, canvasSVG)
-    );
+    window.requestAnimationFrame(onAnimationHandler(graphContext, control));
 };
 /**
  * Hover handler for legend item. Highlights current bar and blurs the rest of the targets in Graph
@@ -74,7 +70,6 @@ const hoverHandler = (graphTargets, canvasSVG) => (item, state) => {
                 hoverState === constants.HOVER_EVENT.MOUSE_ENTER
             );
     };
-
     legendHoverHandler(graphTargets, canvasSVG, item.key, state, [
         additionalHoverHandler
     ]);

@@ -1,18 +1,18 @@
 "use strict";
 import { GraphContent } from "../../core";
 import constants from "../../helpers/constants";
-import BarConfig from "./BarConfig";
 import { removeLegendItem } from "../../helpers/legend";
+import BarConfig from "./BarConfig";
 import {
-    processDataPoints,
-    draw,
     clear,
-    setGroupName,
-    prepareLegendItems
+    draw,
+    prepareLegendItems,
+    processDataPoints,
+    setGroupName
 } from "./helpers/creationHelpers";
-import { setBarOffsets, scaleOrdinalAxis } from "./helpers/resizeHelpers";
-import { translateBarGraph } from "./helpers/translateHelpers";
 import { clickHandler, hoverHandler } from "./helpers/legendHelpers";
+import { scaleOrdinalAxis, setBarOffsets } from "./helpers/resizeHelpers";
+import { translateBarGraph } from "./helpers/translateHelpers";
 
 /**
  * Calculates the min and max values for Y Axis or Y2 Axis
@@ -61,6 +61,7 @@ const initConfig = (control) => {
     control.valuesRange = {};
     return control;
 };
+
 /**
  * A bar graph is a graph used to represent numerical values of data by
  * height or length of lines or rectangles of equal width

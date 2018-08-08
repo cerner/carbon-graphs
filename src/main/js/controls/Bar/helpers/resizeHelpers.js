@@ -1,9 +1,9 @@
 "use strict";
-import Bar from "../Bar";
 import d3 from "d3";
-import utils from "../../../helpers/utils";
 import { getXAxisRange } from "../../../helpers/axis";
 import constants from "../../../helpers/constants";
+import utils from "../../../helpers/utils";
+import Bar from "../Bar";
 
 /**
  * Filters and returns number of groups available for a unit bandwidth (for each x-axis tick)

@@ -1,7 +1,7 @@
+import Bar from "./Bar";
 import Gantt from "./Gantt/Gantt";
 import Graph from "./Graph";
 import Line from "./Line";
-import Bar from "./Bar";
 import PairedResult from "./PairedResult";
 import Timeline from "./Timeline/Timeline";
 

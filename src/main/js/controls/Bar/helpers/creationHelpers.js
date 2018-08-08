@@ -1,17 +1,17 @@
 "use strict";
 import d3 from "d3";
+import { getType } from "../../../core/BaseConfig";
+import { getBarStyle, getHashedBar, getRect } from "../../../helpers/barType";
 import constants, {
-    COLORS,
     AXIS_TYPE,
+    COLORS,
     SHAPES
 } from "../../../helpers/constants";
-import { getType } from "../../../core/BaseConfig";
 import errors from "../../../helpers/errors";
-import utils from "../../../helpers/utils";
-import styles from "../../../helpers/styles";
-import { getBarStyle, getRect, getHashedBar } from "../../../helpers/barType";
-import { d3RemoveElement } from "../../Graph/helpers/helpers";
 import { loadLegendItem } from "../../../helpers/legend";
+import styles from "../../../helpers/styles";
+import utils from "../../../helpers/utils";
+import { d3RemoveElement } from "../../Graph/helpers/helpers";
 
 const PADDING = constants.PADDING;
 
@@ -46,6 +46,9 @@ const hasInvalidTypes = (type, inputValues) =>
  * @private
  * @param {Object} graphConfig - config object of Graph API
  * @param {Object} dataTarget - Data points object
+ * @throws module:errors.THROW_MSG_EMPTY_X_AXIS_TICK_VALUES
+ * @throws module:errors.THROW_MSG_INVALID_FORMAT_TYPE
+ * @throws module:errors.THROW_MSG_INVALID_X_AXIS_TICK_VALUES
  * @returns {Object} dataTarget - Updated data target object
  */
 const processDataPoints = (graphConfig, dataTarget) => {
@@ -126,7 +129,7 @@ const getXAxisXPosition = (config) =>
  * @param {Object} ordinalScale - bar x-axis ordinal scale
  * @param {Object} config - config object derived from input JSON
  * @param {Array} canvasSVG - d3 object of canvas svg
- * @param {Array} dataTarget - Data points
+ * @param {Object} dataTarget - Data points
  * @returns {undefined} - returns nothing
  */
 const draw = (scale, ordinalScale, config, canvasSVG, dataTarget) => {
