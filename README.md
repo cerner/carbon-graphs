@@ -43,6 +43,7 @@ Add `dist/js/carbon-graphs.js` and `dist/css/carbon-graphs.css` in your page and
     -   Paired Result graph
     -   Spline line graph
     -   Timeline graph
+    -   Bar graph
     -   Gantt charts
 -   Criticality indicators for data point
 -   Non-contiguous data point Line graph
@@ -62,7 +63,6 @@ Add `dist/js/carbon-graphs.js` and `dist/css/carbon-graphs.css` in your page and
 
 -   [ ] Sparkline graph
 -   [ ] Axes labelling along with shapes
--   [ ] Bar graphs
 -   [ ] Area graphs
 -   [ ] Area spline graphs
 -   [ ] Datetime formatting

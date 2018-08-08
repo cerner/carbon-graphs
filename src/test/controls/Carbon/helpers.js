@@ -5,7 +5,8 @@ export const LIBRARY_LIST = [
     "graph",
     "line",
     "pairedResult",
-    "timeline"
+    "timeline",
+    "bar"
 ];
 export const TOOLS_LIST = ["shape"];
 export const nativeInput = {

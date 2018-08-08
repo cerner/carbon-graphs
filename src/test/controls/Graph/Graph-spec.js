@@ -331,15 +331,15 @@ describe("Graph", () => {
                     graph.config.axis[constants.Y_AXIS].dataRange.max
                 ).toBeUndefined();
             });
-            it("extends Y Axis domain, if lower bound is less", () => {
+            it("does not extends Y Axis domain lower limit", () => {
                 expect(
                     graph.config.axis[constants.Y_AXIS].domain.lowerLimit
-                ).toBeLessThan(0);
+                ).toEqual(0);
             });
-            it("extends Y Axis domain, if upper bound is less", () => {
+            it("does not extends Y Axis domain upper limit", () => {
                 expect(
                     graph.config.axis[constants.Y_AXIS].domain.upperLimit
-                ).toBeGreaterThan(20);
+                ).toEqual(20);
             });
         });
         describe("with timeseries type values", () => {
@@ -638,7 +638,7 @@ describe("Graph", () => {
                     referenceElement.classList.contains(styles.axisY)
                 ).toBeTruthy();
                 expect(referenceElement.getAttribute("aria-hidden")).toBe(
-                    "false"
+                    "true"
                 );
                 expect(referenceElement.getAttribute("d")).not.toBeNull();
             });
@@ -671,7 +671,7 @@ describe("Graph", () => {
                     referenceElement.classList.contains(styles.axisY2)
                 ).toBeTruthy();
                 expect(referenceElement.getAttribute("aria-hidden")).toBe(
-                    "false"
+                    "true"
                 );
                 expect(referenceElement.getAttribute("d")).not.toBeNull();
             });
@@ -706,7 +706,7 @@ describe("Graph", () => {
                     styles.axisReferenceLine
                 );
                 expect(referenceElement.getAttribute("aria-hidden")).toBe(
-                    "false"
+                    "true"
                 );
             });
             it("hides x and y axis when not enabled", () => {

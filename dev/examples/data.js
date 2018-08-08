@@ -1027,6 +1027,317 @@ const DATA = [
             showLabel: true,
             showLegend: true
         })
+    },
+    {
+        BAR_DEFAULT: (id) => ({
+            bindTo: id,
+            bindLegendTo: null,
+            axis: {
+                x: {
+                    show: true,
+                    label: "Data",
+                    lowerLimit: 0,
+                    upperLimit: 8
+                },
+                y: {
+                    show: true,
+                    label: "Bar Set A",
+                    lowerLimit: 0,
+                    upperLimit: 35
+                },
+                y2: {
+                    show: false,
+                    label: "Line Set B",
+                    lowerLimit: 0,
+                    upperLimit: 30
+                }
+            },
+            data: [
+                {
+                    key: "uid_bar_1",
+                    label: {
+                        display: "Data Label 1"
+                    },
+                    color: Carbon.helpers.COLORS.GREEN,
+                    onClick: loadPopup,
+                    values: [
+                        {
+                            x: 1,
+                            y: 30
+                        },
+                        {
+                            x: 2,
+                            y: 10
+                        },
+                        {
+                            x: 3,
+                            y: 13
+                        },
+                        {
+                            x: 4,
+                            y: 15
+                        },
+                        {
+                            x: 5,
+                            y: 18
+                        }
+                    ]
+                },
+                {
+                    key: "uid_bar_2",
+                    label: {
+                        display: "Data Label 2"
+                    },
+                    color: Carbon.helpers.COLORS.LIGHT_PURPLE,
+                    onClick: loadPopup,
+                    values: [
+                        {
+                            x: 1,
+                            y: 10
+                        },
+                        {
+                            x: 2,
+                            y: 15
+                        },
+                        {
+                            x: 3,
+                            y: 18
+                        },
+                        {
+                            x: 4,
+                            y: 6
+                        }
+                    ]
+                },
+                {
+                    key: "uid_bar_3",
+                    label: {
+                        display: "Data Label 3"
+                    },
+                    color: Carbon.helpers.COLORS.BLUE,
+                    onClick: loadPopup,
+                    values: [
+                        {
+                            x: 1,
+                            y: 15
+                        },
+                        {
+                            x: 2,
+                            y: 10
+                        },
+                        {
+                            x: 3,
+                            y: 13
+                        },
+                        {
+                            x: 4,
+                            y: 8
+                        }
+                    ]
+                },
+                {
+                    key: "uid_bar_4",
+                    label: {
+                        display: "Data Label 4"
+                    },
+                    group: "uid_bar_1",
+                    color: Carbon.helpers.COLORS.LIGHT_PURPLE,
+                    onClick: loadPopup,
+                    values: [
+                        {
+                            x: 1,
+                            y: 30
+                        },
+                        {
+                            x: 2,
+                            y: 5
+                        },
+                        {
+                            x: 3,
+                            y: 8
+                        },
+                        {
+                            x: 4,
+                            y: 10
+                        },
+                        {
+                            x: 5,
+                            y: 10
+                        },
+                        {
+                            x: 6,
+                            y: 10
+                        }
+                    ]
+                },
+                {
+                    key: "uid_bar_5",
+                    label: {
+                        display: "Data Label 5"
+                    },
+                    group: "uid_bar_1",
+                    color: Carbon.helpers.COLORS.BLUE,
+                    onClick: loadPopup,
+                    values: [
+                        {
+                            x: 1,
+                            y: 30
+                        },
+                        {
+                            x: 2,
+                            y: 8
+                        },
+                        {
+                            x: 3,
+                            y: 9
+                        },
+                        {
+                            x: 4,
+                            y: 10
+                        },
+                        {
+                            x: 5,
+                            y: 7
+                        }
+                    ]
+                },
+                {
+                    key: "uid_bar_6",
+                    label: {
+                        display: "Data Label 6"
+                    },
+                    group: "uid_bar_1",
+                    color: Carbon.helpers.COLORS.BLUE,
+                    onClick: loadPopup,
+                    values: [
+                        {
+                            x: 1,
+                            y: -15
+                        },
+                        {
+                            x: 2,
+                            y: -8
+                        },
+                        {
+                            x: 3,
+                            y: -9
+                        },
+                        {
+                            x: 4,
+                            y: -10
+                        },
+                        {
+                            x: 5,
+                            y: -7
+                        }
+                    ]
+                },
+                {
+                    key: "uid_barline_1",
+                    label: {
+                        display: "Data Bar Line 1"
+                    },
+                    yAxis: "y2",
+                    color: Carbon.helpers.COLORS.BLACK,
+                    onClick: loadPopup,
+                    values: new Array(7).fill("").map((_, i) => ({
+                        y: Math.sin(i) * Math.PI + 20,
+                        x: i + 0.5
+                    }))
+                }
+            ],
+            showLabel: true,
+            showLegend: true,
+            showShapes: true,
+            showVGrid: true,
+            showHGrid: true
+        })
+    },
+    {
+        BAR_TIMESERIES: (id) => ({
+            bindTo: id,
+            bindLegendTo: null,
+            axis: {
+                x: {
+                    show: true,
+                    type: Carbon.helpers.AXIS_TYPE.TIME_SERIES,
+                    label: "Data",
+                    lowerLimit: new Date(2017, 11, 31).toISOString(),
+                    upperLimit: new Date(2018, 0, 8).toISOString()
+                },
+                y: {
+                    show: true,
+                    label: "Bar Set A",
+                    lowerLimit: 0,
+                    upperLimit: 20
+                },
+                y2: {
+                    show: false,
+                    label: "Line Set B",
+                    lowerLimit: 0,
+                    upperLimit: 20
+                }
+            },
+            data: [
+                {
+                    key: "uid_bar_t1",
+                    label: {
+                        display: "Data Label t1"
+                    },
+                    color: Carbon.helpers.COLORS.BLUE,
+                    onClick: loadPopup,
+                    values: [
+                        {
+                            x: new Date(2018, 0, 1).toISOString(),
+                            y: 15
+                        },
+                        {
+                            x: new Date(2018, 0, 2).toISOString(),
+                            y: 19
+                        },
+                        {
+                            x: new Date(2018, 0, 3).toISOString(),
+                            y: 10
+                        },
+                        {
+                            x: new Date(2018, 0, 4).toISOString(),
+                            y: 13
+                        },
+                        {
+                            x: new Date(2018, 0, 5).toISOString(),
+                            y: 15
+                        }
+                    ]
+                },
+                {
+                    key: "uid_bar_t2",
+                    label: {
+                        display: "Data Label t2"
+                    },
+                    color: Carbon.helpers.COLORS.ORANGE,
+                    onClick: loadPopup,
+                    values: [
+                        {
+                            x: new Date(2018, 0, 2).toISOString(),
+                            y: 10
+                        },
+                        {
+                            x: new Date(2018, 0, 3).toISOString(),
+                            y: 10
+                        },
+                        {
+                            x: new Date(2018, 0, 4).toISOString(),
+                            y: 15
+                        }
+                    ]
+                }
+            ],
+            showLabel: true,
+            showLegend: true,
+            showShapes: true,
+            showVGrid: true,
+            showHGrid: true
+        })
     }
 ];
 export const getDemoData = (id, type) => {

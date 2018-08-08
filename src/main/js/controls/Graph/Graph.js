@@ -26,7 +26,8 @@ import {
     determineHeight,
     scaleGraph,
     translateGraph,
-    updateAxesDomain
+    updateAxesDomain,
+    setAxisPadding
 } from "./helpers/helpers";
 
 /**
@@ -260,13 +261,15 @@ class Graph extends Construct {
         validateContent(this.content, content);
         this.content.push(content);
         this.contentTargets.push(content.config);
+        setAxisPadding(this.config.axisPadding, content);
         getAxesDataRange(
-            content.valuesRange,
+            content,
             content.config.yAxis,
-            this.config
+            this.config,
+            this.content
         );
         if (isRangeModified(this.config, content.config.yAxis)) {
-            updateAxesDomain(this.config);
+            updateAxesDomain(this.config, content);
         }
         content.load(this);
         this.resize();

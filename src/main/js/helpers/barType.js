@@ -1,7 +1,32 @@
-"use strict";
+import constants, { COLORS } from "./constants";
+import utils from "./utils";
 import d3 from "d3";
-import constants, { COLORS } from "../../../helpers/constants";
-import styles from "../../../helpers/styles";
+import styles from "./styles";
+/**
+ * Returns the appropriate bar based on the bar style settings.
+ * For Bar, we apply the settings below in the
+ * `rect` element style attribute.
+ * @private
+ * @param {Object} style - data associated to the task
+ * @param {Object} dataTarget - input data object
+ * @returns {string} A style constant
+ */
+const getBarStyle = (style = {}, dataTarget) => {
+    const color = dataTarget.color || constants.DEFAULT_COLOR;
+    let currentStyle = `fill: ${color};stroke: ${color};`;
+
+    // If style property is not provided then we use treat it as filled.
+    if (utils.isEmpty(style)) {
+        return currentStyle;
+    }
+    if (style.isDotted === true) {
+        currentStyle = `${currentStyle} stroke-dasharray: 2, 2;`;
+    }
+    if (style.isHollow === true) {
+        currentStyle = `${currentStyle} fill: ${COLORS.WHITE};`;
+    }
+    return currentStyle;
+};
 
 /**
  * Creates a SVG rect and appends to the d3 element provided
@@ -91,10 +116,18 @@ const getPercentageBar = (path, x, y, width, height, percent, color) => {
  * @param {number} y - Scaled y co-ordinate
  * @param {number} width - width in scaled pixels
  * @param {number} height - fixed pixel height as a number
- * @param {string} color - hexa value denoting the color of the bar
+ * @param {string} style - style you want to apply for bar
  * @returns {Selection} d3 selection path
  */
-const getHashedBar = (defs, path, x, y, width, height, color) => {
+const getHashedBar = (
+    defs,
+    path,
+    x,
+    y,
+    width,
+    height,
+    style = `fill: ${constants.DEFAULT_BAR_HASH_COLOR};`
+) => {
     const patternId = "pattern-stripe";
     if (d3.select(`#${patternId}`).empty()) {
         defs.append("pattern")
@@ -110,11 +143,18 @@ const getHashedBar = (defs, path, x, y, width, height, color) => {
     }
     getRect(path, x, y, width, height)
         .classed(styles.taskBar, true)
-        .attr("style", `fill: ${color};`);
+        .attr("style", style);
     getRect(path, x, y, width, height)
         .classed(styles.taskBar, true)
         .attr("style", `fill: url(#${patternId}); opacity: 0.4;`);
     return path;
 };
 
-export { getRect, getBar, getChunk, getPercentageBar, getHashedBar };
+export {
+    getRect,
+    getBar,
+    getChunk,
+    getPercentageBar,
+    getHashedBar,
+    getBarStyle
+};

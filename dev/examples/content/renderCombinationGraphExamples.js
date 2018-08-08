@@ -1,4 +1,7 @@
-import { renderCombinationSimple } from "../controls/combination";
+import {
+    renderCombinationSimple,
+    renderCombinationBar
+} from "../controls/combination";
 import {
     btn,
     clearContent,
@@ -27,6 +30,13 @@ export const renderCombinationGraphExamples = (
                 contentSection,
                 "combinationSimple",
                 "Simple Combination Graph"
+            )
+        );
+        instance.load(
+            renderCombinationBar(
+                contentSection,
+                "combinationBar",
+                "Bar Graph  With Line"
             )
         );
         instance.render();

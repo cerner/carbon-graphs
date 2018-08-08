@@ -209,28 +209,32 @@ const translateLabel = (config, canvasSVG) => {
  * If the consumer needs to pad the X Axis then they can provide the range with sufficient padding.
  * @private
  * @param {Object} config - config object derived from input JSON
+ * @param {Array} [input] - array of target objects
  * @returns {Object} config - config object derived from input JSON
  */
-const updateAxesDomain = (config) => {
+const updateAxesDomain = (config, input = {}) => {
     config.outlierStretchFactor = determineOutlierStretchFactor(config);
-    const setDomain = (outlierStretchFactor, lowerLimit, upperLimit) => {
+    const setDomain = (outlierStretchFactor, lowerLimit, upperLimit, yAxis) => {
         const halfDomain = (upperLimit - lowerLimit) / 2;
         const midPoint = (upperLimit + lowerLimit) / 2;
-        return padDomain({
-            lowerLimit: midPoint - halfDomain * outlierStretchFactor.lowerLimit,
-            upperLimit: midPoint + halfDomain * outlierStretchFactor.upperLimit
-        });
+        return padDomain(
+            {
+                lowerLimit:
+                    midPoint - halfDomain * outlierStretchFactor.lowerLimit,
+                upperLimit:
+                    midPoint + halfDomain * outlierStretchFactor.upperLimit
+            },
+            config.axisPadding[yAxis]
+        );
     };
-    config.axis.y.domain = setDomain(
-        config.outlierStretchFactor,
-        config.axis.y.domain.lowerLimit,
-        config.axis.y.domain.upperLimit
-    );
-    if (hasY2Axis(config.axis)) {
-        config.axis.y2.domain = setDomain(
+
+    if (utils.notEmpty(input)) {
+        const yAxis = input.config.yAxis || constants.Y_AXIS;
+        config.axis[yAxis].domain = setDomain(
             config.outlierStretchFactor,
-            config.axis.y2.domain.lowerLimit,
-            config.axis.y2.domain.upperLimit
+            config.axis[yAxis].domain.lowerLimit,
+            config.axis[yAxis].domain.upperLimit,
+            yAxis
         );
     }
     return config;
@@ -355,6 +359,7 @@ const createContentContainer = (config, canvasSVG) =>
         .classed(styles.contentContainer, true)
         .attr(constants.X_AXIS, getXAxisXPosition(config))
         .attr(constants.Y_AXIS, PADDING.top);
+
 /**
  * Creates and sets the d3 scale for the Graph. Once the scale is created
  * we can create the axes. To create a d3 scale, we need domain and range.
@@ -430,19 +435,19 @@ const translateGraph = (control) => {
  * Pad percentage is 5%
  * @private
  * @param {Object} domain - Lower and upper bounds for the axes. Currently only being performed for Y and Y2 axes
+ * @param {boolean} isPaddingNeeded - represents if axis needs padding
  * @returns {object} - Bound adjusted (Padded) lower and upper bounds for the axes
  */
-const padDomain = (domain) => {
+const padDomain = (domain, isPaddingNeeded = true) => {
     const lowerBound = domain.lowerLimit;
     const upperBound = domain.upperLimit;
     const domainRange = Math.abs(upperBound - lowerBound);
     const domainStretch = domainRange * (50 / 1000);
     return {
-        lowerLimit: lowerBound - domainStretch,
-        upperLimit: upperBound + domainStretch
+        lowerLimit: lowerBound - (isPaddingNeeded ? domainStretch : 0),
+        upperLimit: upperBound + (isPaddingNeeded ? domainStretch : 0)
     };
 };
-
 /**
  * Calculates the height for Y and Y2 axes.
  * If dimensions are provided in the input, then they are given priority.
@@ -569,6 +574,20 @@ const d3RemoveElement = (el, selector, isBatchSelect = false) => {
         el.select(selector).remove();
     }
 };
+/**
+ * This toggles padding for y and y2 axis based on loaded content.
+ * Checks if axisPadding is set to true or false inside input config.
+ * If set to false, padding is turned off for that yAxis
+ * @param {Object} axisPadding - object representing padding values for y and y2
+ * @param {Object} config - input content's config object
+ * @returns {undefined} - returns nothing
+ */
+const setAxisPadding = (axisPadding, { config }) => {
+    const yAxis = config.yAxis ? config.yAxis : constants.Y_AXIS;
+    if (utils.notEmpty(config.axisPadding)) {
+        axisPadding[yAxis] = config.axisPadding;
+    }
+};
 
 export {
     translateAxes,
@@ -593,5 +612,6 @@ export {
     getTransformScale,
     attachEventHandlers,
     detachEventHandlers,
-    d3RemoveElement
+    d3RemoveElement,
+    setAxisPadding
 };

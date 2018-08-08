@@ -7,7 +7,7 @@ import {
     getChunk,
     getHashedBar,
     getPercentageBar
-} from "../../../main/js/controls/Gantt/helpers/barTypeHelpers";
+} from "../../../main/js/helpers/barType";
 import {
     calculatePercentage,
     getEndDuration,

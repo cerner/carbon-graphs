@@ -4,6 +4,7 @@ import Graph from "../../../main/js/controls/Graph";
 import Line from "../../../main/js/controls/Line";
 import PairedResult from "../../../main/js/controls/PairedResult";
 import Timeline from "../../../main/js/controls/Timeline";
+import Bar from "../../../main/js/controls/Bar";
 import Shape from "../../../main/js/core/Shape/Shape";
 import { SHAPES } from "../../../main/js/helpers/constants";
 import {
@@ -89,5 +90,22 @@ describe("Carbon", () => {
         const timeline = Carbon.api.timeline(timelineInput);
         expect(Carbon.api.timeline).toEqual(jasmine.any(Function));
         expect(timeline instanceof Timeline).toBeTruthy();
+    });
+    it("registers Bar", () => {
+        const data = {
+            key: "uid_1",
+            label: {
+                display: "Data Label 1"
+            },
+            values: [
+                {
+                    x: 35,
+                    y: 4
+                }
+            ]
+        };
+        const bar = Carbon.api.bar(data);
+        expect(Carbon.api.bar).toEqual(jasmine.any(Function));
+        expect(bar instanceof Bar).toBeTruthy();
     });
 });

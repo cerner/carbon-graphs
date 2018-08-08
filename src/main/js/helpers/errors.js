@@ -44,6 +44,7 @@ export default {
         "Invalid input format, unique key must be provided.",
     THROW_MSG_UNIQUE_LABEL_NOT_PROVIDED:
         "Invalid input format, unique label must be provided.",
+    THROW_MSG_NO_CONTENT_DATA_LOADED: "Content data needs to be loaded.",
     /**
      * @description Axes
      */
@@ -118,5 +119,14 @@ export default {
     THROW_MSG_DATELINE_NOT_PROVIDED:
         "Invalid property, a valid dateline value must be provided.",
     THROW_MSG_DATELINE_TYPE_NOT_VALID:
-        "Invalid property, dateline value type must be in ISO8601 datetime format."
+        "Invalid property, dateline value type must be in ISO8601 datetime format.",
+    /**
+     * @description Bar
+     */
+    THROW_MSG_INVALID_REGION_X_VALUE:
+        "Invalid property, Bar graph region requires an X Axis Value.",
+    THROW_MSG_INVALID_X_AXIS_TICK_VALUES:
+        "Invalid X Axis, tick values are required for Bar graph content.",
+    THROW_MSG_EMPTY_X_AXIS_TICK_VALUES:
+        "Invalid X Axis, tick values cannot be empty."
 };

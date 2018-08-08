@@ -72,6 +72,11 @@ export const processInput = (input, config, type) => {
     }
     config.shownTargets = [];
     config.hasCriticality = false;
+    // axisPadding is needed for case by case basis. Example: for bar graphs, we toggle padding using this variable
+    config.axisPadding = {
+        y: true,
+        y2: true
+    };
     return config;
 };
 

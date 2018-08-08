@@ -6,7 +6,12 @@ import constants, { COLORS } from "../../../helpers/constants";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 import { validateTask } from "../GanttConfig";
-import { getBar, getChunk, getPercentageBar, getRect } from "./barTypeHelpers";
+import {
+    getBar,
+    getChunk,
+    getPercentageBar,
+    getRect
+} from "../../../helpers/barType";
 import { getTrackLabel, getXAxisYPosition } from "./creationHelpers";
 import {
     calculatePercentage,

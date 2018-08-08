@@ -63,6 +63,7 @@ export default {
     region: "carbon-region",
     regionHighlight: "carbon-region-highlight",
     regionBlur: "carbon-region-blur",
+    goalGroup: "carbon-goal-region-group",
     /**
      * Criticality
      */
@@ -85,5 +86,12 @@ export default {
      * Timeline
      */
     timelineGraphContent: "carbon-timeline-graph-content",
-    timelineContentGroup: "carbon-timeline-content-group"
+    timelineContentGroup: "carbon-timeline-content-group",
+    /**
+     * Bar
+     */
+    bar: "carbon-bar-graph",
+    barGraphContent: "carbon-bar-graph-content",
+    currentBarsGroup: "carbon-data-bars-group",
+    barHashedRect: "carbon-data-bar--hashed"
 };

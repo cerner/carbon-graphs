@@ -7,6 +7,8 @@ import BaseConfig, {
     isDataValidFormat
 } from "./BaseConfig";
 
+import { validateBaseInput } from "./helper";
+
 export {
     BaseConfig as default,
     getDefaultValue,
@@ -14,5 +16,6 @@ export {
     getScale,
     getType,
     getInterpolationType,
-    isDataValidFormat
+    isDataValidFormat,
+    validateBaseInput
 };

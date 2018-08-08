@@ -135,6 +135,13 @@ export default {
         top: 5,
         bottom: 5
     },
+    DEFAULT_BAR_GRAPH_PADDING_ATTRIBUTES: {
+        WIDTH_RATIO: 0.66,
+        LEFT_SHIFT_OFFSET_RATIO: 0.5,
+        LEFT_SHIFT_OFFSET_PADDING_RATIO: 0.16,
+        OUTER_PADDING_RATIO: 2.5
+    },
+    DEFAULT_BAR_HASH_COLOR: "#d3d4d5",
     DEFAULT_Y_AXIS_SPACING: 30,
     HOVER_EVENT: {
         MOUSE_ENTER: "enter",

@@ -9,6 +9,7 @@ import constants, { AXIS_TYPE } from "../helpers/constants";
 import styles from "../helpers/styles";
 import utils from "../helpers/utils";
 import { DEFAULT_TICK_FORMAT } from "../locale";
+import Bar from "../controls/Bar/Bar";
 
 const PADDING = constants.PADDING;
 /**
@@ -724,21 +725,57 @@ const translateAxisReferenceLine = (axis, scale, config, canvasSVG) => {
     }
 };
 /**
+ * Calculates current min and max value ranges.
+ * if the input is bar content and is being cascaded on top of other bars,
+ * then we need to calculate top and bottom domain values by summing cascaded bars value ranges
+ * @private
+ * @param {Object} input - Object containing min and max data point values
+ * @param {Array} content - array of target objects
+ * @param {string} axis - y or y2
+ * @returns {Object} - Object with min and max value ranges
+ */
+const getCurMinMaxValueRange = (input, content, axis) => {
+    if (input instanceof Bar) {
+        let min = 0;
+        let max = 0;
+        const groupedBars = content.filter((value) => {
+            if (value instanceof Bar) {
+                return value.config.group === input.config.group;
+            }
+            return false;
+        });
+        groupedBars.forEach((bar) => {
+            max += bar.valuesRange[axis].max;
+            min += bar.valuesRange[axis].min;
+        });
+        return {
+            min,
+            max
+        };
+    }
+    return {
+        min: input.valuesRange[axis].min,
+        max: input.valuesRange[axis].max
+    };
+};
+/**
  * Calculates the axes - x, y and y2 data range.
  * For each data point provided, we need to set the min and max ranges.
  * Data point sets [n]
  *  Data points [n]
  *      x, y, y2 [1]
  * @private
- * @param {Object} valuesRange - Object containing min and max data point values
+ * @param {Object} input - input content object
  * @param {string} axis - y or y2
  * @param {Object} config - config object derived from input JSON
+ * @param {Array} content - array of target objects
  * @returns {undefined} - returns nothing
  */
 const getAxesDataRange = (
-    valuesRange = {},
+    input,
     axis = constants.Y_AXIS,
-    config
+    config,
+    content = []
 ) => {
     if (utils.isEmpty(config.axis.y.dataRange)) {
         config.axis.y.dataRange = {};
@@ -746,20 +783,21 @@ const getAxesDataRange = (
     if (hasY2Axis(config.axis) && utils.isEmpty(config.axis.y2.dataRange)) {
         config.axis.y2.dataRange = {};
     }
-    if (utils.isEmpty(valuesRange)) {
+    if (utils.isEmpty(input) || utils.isEmpty(input.valuesRange)) {
         return;
     }
+    const curRange = getCurMinMaxValueRange(input, content, axis);
     const prevMin = config.axis[axis].dataRange.oldMin;
     const prevMax = config.axis[axis].dataRange.oldMax;
     const isRangeModified =
         !(prevMin && prevMax) ||
-        !(prevMin <= valuesRange[axis].min || prevMax >= valuesRange[axis].max);
+        !(prevMin <= curRange.min || prevMax >= curRange.max);
     config.axis[axis].dataRange.isRangeModified = isRangeModified;
     if (isRangeModified) {
         config.axis[axis].dataRange.oldMin = config.axis[axis].dataRange.min;
         config.axis[axis].dataRange.oldMax = config.axis[axis].dataRange.max;
-        config.axis[axis].dataRange.min = valuesRange[axis].min;
-        config.axis[axis].dataRange.max = valuesRange[axis].max;
+        config.axis[axis].dataRange.min = curRange.min;
+        config.axis[axis].dataRange.max = curRange.max;
     }
 };
 

@@ -2,6 +2,10 @@ import "babel-polyfill";
 import "../src/main/less/carbon.less";
 import "./demo.less";
 import {
+    BarExample,
+    renderBarExamples
+} from "./examples/content/renderBarExamples";
+import {
     CombinationExample,
     renderCombinationGraphExamples
 } from "./examples/content/renderCombinationGraphExamples";
@@ -102,6 +106,13 @@ renderSplineExamples(
 );
 renderPairedResultExamples(
     new PairedResultExample(),
+    toggleSection,
+    contentSection,
+    setState,
+    getState
+);
+renderBarExamples(
+    new BarExample(),
     toggleSection,
     contentSection,
     setState,

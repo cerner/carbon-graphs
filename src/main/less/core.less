@@ -171,3 +171,13 @@ svg:not(:root) {
     fill: none;
     stroke: @grey10;
 }
+
+.carbon-data-completion-bar,
+.carbon-data-bar {
+    user-select: none;
+    shape-rendering: crispEdges;
+    cursor: pointer;
+    &[aria-hidden="true"] {
+        .opacity-hide();
+    }
+}

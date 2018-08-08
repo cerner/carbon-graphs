@@ -1,11 +1,6 @@
 import d3 from "d3";
 import Carbon from "../../../src/main/js/carbon";
-import {
-    getBar,
-    getChunk,
-    getHashedBar,
-    getPercentageBar
-} from "../../../src/main/js/controls/Gantt/helpers/barTypeHelpers";
+import { getBar, getHashedBar } from "../../../src/main/js/helpers/barType";
 import { isNativeShape } from "../../../src/main/js/core/Shape";
 import styles from "../../../src/main/js/helpers/styles";
 import { getShapes } from "../data";
