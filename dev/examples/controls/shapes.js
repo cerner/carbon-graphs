@@ -63,11 +63,10 @@ export const renderShapesAsSVG = (el, id, title) => {
         )
     );
 };
-export const renderGanttBarTypes = (el, id, title) => {
+export const renderFillTypes = (el, id, title) => {
     shell.render(el, id, title);
-    const getPercentage = (p, w) => (p * w) / 100;
     const shellElementId = document.querySelector(`#${id}`);
-    h3.render(shellElementId, "Normal Bar");
+    h3.render(shellElementId, "Default");
     const barSVG = d3.select(
         vector.render(
             shellElementId,
@@ -76,25 +75,7 @@ export const renderGanttBarTypes = (el, id, title) => {
             "width: 100%; height: 50px"
         )
     );
-    h3.render(shellElementId, "Chunk");
-    const chunkSVG = d3.select(
-        vector.render(
-            shellElementId,
-            `${id}Chunk`,
-            "",
-            "width: 100%; height: 50px"
-        )
-    );
-    h3.render(shellElementId, "Percentage Bar");
-    const percentageSVG = d3.select(
-        vector.render(
-            shellElementId,
-            `${id}Percentage`,
-            "",
-            "width: 100%; height: 50px"
-        )
-    );
-    h3.render(shellElementId, "Hashed Bar");
+    h3.render(shellElementId, "Hashed");
     const hashSVG = d3.select(
         vector.render(
             shellElementId,
@@ -107,19 +88,7 @@ export const renderGanttBarTypes = (el, id, title) => {
     const y = 10;
     const width = 400;
     const height = 30;
-    const percentage = 75;
     const defsPath = hashSVG.append("defs");
-
     getBar(barSVG.append("g"), x, y, width, height, "fill: #007cc3;");
-    getChunk(chunkSVG.append("g"), x, y, width, height, "fill: #007cc3;");
-    getPercentageBar(
-        percentageSVG.append("g"),
-        x,
-        y,
-        width,
-        height,
-        getPercentage(percentage, width),
-        "#ed5e00"
-    );
     getHashedBar(defsPath, hashSVG.append("g"), x, y, width, height, "#007cc3");
 };

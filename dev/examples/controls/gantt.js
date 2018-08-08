@@ -324,5 +324,24 @@ export const renderGanttStyle = (el, id, title) => () => {
             }
         ]
     });
+    ganttDefault.loadContent({
+        key: "track 3",
+        trackLabel: {
+            display: "Percentage",
+            onClick: loadTrackLabelPopup
+        },
+        tasks: [
+            {
+                key: "percentage",
+                onClick: loadTaskPopup,
+                label: {
+                    display: "Story Apex"
+                },
+                startDate: new Date(2018, 2, 1).toISOString(),
+                endDate: new Date(2018, 11, 1).toISOString(),
+                percentage: 30
+            }
+        ]
+    });
     return ganttDefault;
 };
