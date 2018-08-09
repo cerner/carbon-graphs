@@ -1,9 +1,9 @@
 import {
     renderBarDefault,
-    renderBarTimeSeries,
     renderBarGroup,
+    renderBarNegative,
     renderBarStacked,
-    renderBarNegative
+    renderBarTimeSeries
 } from "../controls/bar";
 
 import {

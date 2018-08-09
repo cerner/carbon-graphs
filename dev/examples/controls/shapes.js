@@ -1,7 +1,7 @@
 import d3 from "d3";
 import Carbon from "../../../src/main/js/carbon";
-import { getBar, getHashedBar } from "../../../src/main/js/helpers/barType";
 import { isNativeShape } from "../../../src/main/js/core/Shape";
+import { getBar, getHashedBar } from "../../../src/main/js/helpers/barType";
 import styles from "../../../src/main/js/helpers/styles";
 import { getShapes } from "../data";
 import { h3, shell, vector } from "../helpers";

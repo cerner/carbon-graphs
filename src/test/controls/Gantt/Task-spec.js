@@ -3,18 +3,18 @@ import d3 from "d3";
 import sinon from "sinon";
 import Gantt from "../../../main/js/controls/Gantt";
 import {
-    getBar,
-    getChunk,
-    getHashedBar,
-    getPercentageBar
-} from "../../../main/js/helpers/barType";
-import {
     calculatePercentage,
     getEndDuration,
     getStartDuration,
     getTaskStyle,
     isAChunk
 } from "../../../main/js/controls/Gantt/helpers/durationHelpers";
+import {
+    getBar,
+    getChunk,
+    getHashedBar,
+    getPercentageBar
+} from "../../../main/js/helpers/barType";
 import { COLORS } from "../../../main/js/helpers/constants";
 import errors from "../../../main/js/helpers/errors";
 import styles from "../../../main/js/helpers/styles";

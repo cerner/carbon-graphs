@@ -4,12 +4,12 @@
  */
 "use strict";
 import d3 from "d3";
+import Bar from "../controls/Bar/Bar";
 import { getScale } from "../core/BaseConfig";
 import constants, { AXIS_TYPE } from "../helpers/constants";
 import styles from "../helpers/styles";
 import utils from "../helpers/utils";
 import { DEFAULT_TICK_FORMAT } from "../locale";
-import Bar from "../controls/Bar/Bar";
 
 const PADDING = constants.PADDING;
 /**

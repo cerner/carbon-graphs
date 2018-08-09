@@ -25,9 +25,9 @@ import {
     detachEventHandlers,
     determineHeight,
     scaleGraph,
+    setAxisPadding,
     translateGraph,
-    updateAxesDomain,
-    setAxisPadding
+    updateAxesDomain
 } from "./helpers/helpers";
 
 /**

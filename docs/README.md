@@ -38,6 +38,7 @@ Consumers can generate one of the following graphs:
 #### Legend
 
 -   `Legend` only loads if the data-set label is provided
+    -   This is part of a functionality, any `content` using Graph API will have the ability to load data within graph and not show legend item
 -   `Graph` and `Legend` can be loaded in a separate containers when `bindTo` and `bindLegendTo` element id's are provided respectively
 
 #### Axis

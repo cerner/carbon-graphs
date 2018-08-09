@@ -2,16 +2,16 @@
 
 import d3 from "d3";
 import { getXAxisXPosition } from "../../../helpers/axis";
-import constants, { COLORS } from "../../../helpers/constants";
-import styles from "../../../helpers/styles";
-import utils from "../../../helpers/utils";
-import { validateTask } from "../GanttConfig";
 import {
     getBar,
     getChunk,
     getPercentageBar,
     getRect
 } from "../../../helpers/barType";
+import constants, { COLORS } from "../../../helpers/constants";
+import styles from "../../../helpers/styles";
+import utils from "../../../helpers/utils";
+import { validateTask } from "../GanttConfig";
 import { getTrackLabel, getXAxisYPosition } from "./creationHelpers";
 import {
     calculatePercentage,

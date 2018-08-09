@@ -1195,6 +1195,7 @@ describe("Gantt", () => {
                 "style",
                 "width: 800px; height: 200px"
             );
+            gantt.resize();
             triggerEvent(
                 window,
                 "resize",

@@ -64,7 +64,7 @@ export const axisTimeSeries = {
  * @param {boolean} isDefaultShape - if true, doesnt load the SHAPE
  * @param {boolean} isY2Axis - if true, then "y2"
  * @param {string} key - content key
- * @returns {Object} input JSON
+ * @returns {BarConfig} input JSON
  */
 export const getInput = (
     values = [],

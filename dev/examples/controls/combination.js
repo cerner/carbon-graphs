@@ -1,7 +1,7 @@
 import Carbon from "../../../src/main/js/carbon";
+import utils from "../../../src/main/js/helpers/utils";
 import { getDemoData } from "../data";
 import { shell } from "../helpers";
-import utils from "../../../src/main/js/helpers/utils";
 
 export const renderCombinationSimple = (el, id, title) => () => {
     shell.render(el, id, title);

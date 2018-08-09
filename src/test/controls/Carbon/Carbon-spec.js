@@ -1,10 +1,10 @@
 import Carbon from "../../../main/js/carbon";
+import Bar from "../../../main/js/controls/Bar";
 import Gantt from "../../../main/js/controls/Gantt";
 import Graph from "../../../main/js/controls/Graph";
 import Line from "../../../main/js/controls/Line";
 import PairedResult from "../../../main/js/controls/PairedResult";
 import Timeline from "../../../main/js/controls/Timeline";
-import Bar from "../../../main/js/controls/Bar";
 import Shape from "../../../main/js/core/Shape/Shape";
 import { SHAPES } from "../../../main/js/helpers/constants";
 import {

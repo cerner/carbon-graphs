@@ -1,7 +1,8 @@
-import constants, { COLORS } from "./constants";
-import utils from "./utils";
 import d3 from "d3";
+import constants, { COLORS } from "./constants";
 import styles from "./styles";
+import utils from "./utils";
+
 /**
  * Returns the appropriate bar based on the bar style settings.
  * For Bar, we apply the settings below in the

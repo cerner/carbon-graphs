@@ -1,6 +1,6 @@
 import {
-    renderCombinationSimple,
-    renderCombinationBar
+    renderCombinationBar,
+    renderCombinationSimple
 } from "../controls/combination";
 import {
     btn,

@@ -1,4 +1,3 @@
-import carbonIcon from "../../build/assets/icons/Carbon.svg";
 import utils from "../../src/main/js/helpers/utils";
 
 const init = (instance) => {

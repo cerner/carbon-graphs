@@ -1,20 +1,20 @@
 "use strict";
-import Graph from "../../../main/js/controls/Graph/Graph";
 import Bar from "../../../main/js/controls/Bar/Bar";
+import Graph from "../../../main/js/controls/Graph/Graph";
 import constants, { COLORS } from "../../../main/js/helpers/constants";
 import errors from "../../../main/js/helpers/errors";
 import styles from "../../../main/js/helpers/styles";
 import utils from "../../../main/js/helpers/utils";
 import {
     axisDefault,
+    axisTimeSeries,
+    barClickHandlerSpy,
+    fetchElementByClass,
     getAxes,
     getInput,
-    axisTimeSeries,
-    valuesTimeSeries,
+    triggerEvent,
     valuesDefault,
-    fetchElementByClass,
-    barClickHandlerSpy,
-    triggerEvent
+    valuesTimeSeries
 } from "./helpers";
 
 describe("Bar", () => {
@@ -55,13 +55,6 @@ describe("Bar", () => {
                     })
                 );
             }).toThrowError(errors.THROW_MSG_NO_DATA_POINTS);
-        });
-        it("throws error when invalid label is provided", () => {
-            const input = utils.deepClone(getInput(valuesDefault));
-            input.label = {};
-            expect(() => {
-                graphDefault.loadContent(new Bar(input));
-            }).toThrowError(errors.THROW_MSG_UNIQUE_LABEL_NOT_PROVIDED);
         });
         it("throws error when no values are provided", () => {
             const input = utils.deepClone(getInput(valuesDefault));
@@ -314,12 +307,18 @@ describe("Bar", () => {
                 expect(legendContainer).toBeNull();
                 noLegendGraph.destroy();
             });
-            it("throws error if label display value is not provided", () => {
+            it("does not load if label display value is not provided", () => {
                 const input = getInput(valuesDefault);
                 input.label.display = "";
-                expect(() => {
-                    graphDefault.loadContent(new Bar(input));
-                }).toThrowError(errors.THROW_MSG_UNIQUE_LABEL_NOT_PROVIDED);
+                graphDefault.loadContent(new Bar(input));
+                const legendContainer = fetchElementByClass(
+                    barGraphContainer,
+                    styles.legend
+                );
+                const legendItems = legendContainer.children;
+                expect(legendContainer).not.toBeNull();
+                expect(legendContainer.tagName).toBe("UL");
+                expect(legendItems.length).toBe(0);
             });
             it("sanitizes the legend display", () => {
                 const input = getInput(valuesDefault);

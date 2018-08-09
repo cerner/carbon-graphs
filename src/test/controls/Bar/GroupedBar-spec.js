@@ -1,15 +1,15 @@
 "use strict";
-import Graph from "../../../main/js/controls/Graph/Graph";
 import Bar from "../../../main/js/controls/Bar/Bar";
+import Graph from "../../../main/js/controls/Graph/Graph";
 import styles from "../../../main/js/helpers/styles";
 import utils from "../../../main/js/helpers/utils";
 import {
     axisDefault,
+    fetchAllElementsByClass,
     getAxes,
     getInput,
     valuesDefault,
-    valuesNegativeDefault,
-    fetchAllElementsByClass
+    valuesNegativeDefault
 } from "./helpers";
 
 describe("Grouped Bar", () => {
