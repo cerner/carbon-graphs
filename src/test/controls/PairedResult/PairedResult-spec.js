@@ -60,19 +60,19 @@ describe("PairedResult", () => {
         it("throws error when no input is provided", () => {
             expect(() => {
                 graphDefault.loadContent(new PairedResult());
-            }).toThrowError(errors.THROW_MSG_NO_DATA_POINTS);
+            }).toThrowError(errors.THROW_MSG_NO_CONTENT_DATA_LOADED);
         });
         it("throws error when invalid input is provided", () => {
             expect(() => {
                 graphDefault.loadContent(new PairedResult({ dummy: "dummy" }));
-            }).toThrowError(errors.THROW_MSG_INVALID_DATA_PROPERTY);
+            }).toThrowError(errors.THROW_MSG_UNIQUE_KEY_NOT_PROVIDED);
         });
         it("throws error when no values are provided", () => {
             expect(() => {
                 graphDefault.loadContent(
                     new PairedResult(getInput([], false, false))
                 );
-            }).toThrowError(errors.THROW_MSG_INVALID_DATA_PROPERTY);
+            }).toThrowError(errors.THROW_MSG_NO_DATA_POINTS);
         });
         it("does not throw error when datetime values have milliseconds", () => {
             expect(() => {

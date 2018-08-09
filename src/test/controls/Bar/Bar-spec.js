@@ -50,11 +50,10 @@ describe("Bar", () => {
                 graphDefault.loadContent(
                     new Bar({
                         label: { display: "data label" },
-                        dummy: "dummy",
-                        key: "bar_1"
+                        dummy: "dummy"
                     })
                 );
-            }).toThrowError(errors.THROW_MSG_NO_DATA_POINTS);
+            }).toThrowError(errors.THROW_MSG_UNIQUE_KEY_NOT_PROVIDED);
         });
         it("throws error when no values are provided", () => {
             const input = utils.deepClone(getInput(valuesDefault));

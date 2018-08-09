@@ -1,6 +1,5 @@
 "use strict";
-import BaseConfig, { isDataValidFormat } from "../../core/BaseConfig";
-import errors from "../../helpers/errors";
+import BaseConfig, { validateBaseInput } from "../../core/BaseConfig";
 import utils from "../../helpers/utils";
 
 /**
@@ -37,22 +36,10 @@ class PairedResultConfig extends BaseConfig {
 
     /**
      * Validates and verifies the input JSON object
-     * Checks if the following properties are present:
-     *      data
-     * Validates for:
-     *      values
-     *      unique keys
-     * @throws {module:errors.THROW_MSG_NO_DATA_POINTS}
-     * @throws {module:errors.THROW_MSG_INVALID_DATA_PROPERTY}
      * @returns {PairedResultConfig} instance object
      */
     validateInput() {
-        if (utils.isEmpty(this.input)) {
-            throw new Error(errors.THROW_MSG_NO_DATA_POINTS);
-        }
-        if (!isDataValidFormat(this.input)) {
-            throw new Error(errors.THROW_MSG_INVALID_DATA_PROPERTY);
-        }
+        validateBaseInput(this.input);
         return this;
     }
 

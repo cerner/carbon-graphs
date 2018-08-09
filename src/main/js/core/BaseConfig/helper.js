@@ -43,15 +43,6 @@ export const validateBaseInput = (input) => {
 export const getDefaultValue = (value, defaultVal) =>
     utils.isUndefined(value) ? defaultVal : value;
 /**
- * Validates if data is in correct format
- * Key and Values are mandatory.
- * @private
- * @param {Object} data - Input JSON
- * @returns {boolean} True if data valid
- */
-export const isDataValidFormat = (data) =>
-    utils.notEmpty(data.key) && utils.notEmpty(data.values);
-/**
  * Type can be default (Number based) or timeseries
  * @private
  * @param {string} type - consumer passed input type
