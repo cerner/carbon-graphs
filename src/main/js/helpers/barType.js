@@ -13,18 +13,20 @@ import utils from "./utils";
  * @returns {string} A style constant
  */
 const getBarStyle = (style = {}, dataTarget) => {
-    const color = dataTarget.color || constants.DEFAULT_COLOR;
-    let currentStyle = `fill: ${color};stroke: ${color};`;
+    const color = dataTarget.color || constants.DEFAULT_BAR_COLOR;
+    let currentStyle = `fill: ${color}; stroke: ${color};`;
 
     // If style property is not provided then we use treat it as filled.
     if (utils.isEmpty(style)) {
         return currentStyle;
     }
     if (style.isDotted === true) {
-        currentStyle = `${currentStyle} stroke-dasharray: 2, 2;`;
+        currentStyle = `${currentStyle} stroke-width: 1; stroke-dasharray: 2, 2;`;
     }
     if (style.isHollow === true) {
-        currentStyle = `${currentStyle} fill: ${COLORS.WHITE};`;
+        currentStyle = `${currentStyle} fill: ${
+            COLORS.WHITE
+        }; stroke-width: 1;`;
     }
     return currentStyle;
 };

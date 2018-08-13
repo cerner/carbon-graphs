@@ -142,6 +142,7 @@ export default {
         OUTER_PADDING_RATIO: 2.5
     },
     DEFAULT_BAR_HASH_COLOR: "#d3d4d5",
+    DEFAULT_BAR_COLOR: COLORS.BLUE,
     DEFAULT_Y_AXIS_SPACING: 30,
     HOVER_EVENT: {
         MOUSE_ENTER: "enter",

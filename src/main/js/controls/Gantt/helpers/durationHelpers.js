@@ -1,4 +1,4 @@
-import { COLORS } from "../../../helpers/constants";
+import { getBarStyle } from "../../../helpers/barType";
 import errors from "../../../helpers/errors";
 import utils from "../../../helpers/utils";
 
@@ -12,22 +12,8 @@ import utils from "../../../helpers/utils";
  * @param {Object} data - data associated to the task
  * @returns {string} A style constant
  */
-const getTaskStyle = (data = {}) => {
-    const color = data.color || COLORS.BLUE;
-    let currentStyle = `fill: ${color}; stroke: ${color};`;
-
-    // If style property is not provided then we use treat it as filled.
-    if (utils.isEmpty(data.style)) {
-        return currentStyle;
-    }
-    if (data.style.isDotted === true) {
-        currentStyle = `${currentStyle} stroke-dasharray: 2, 2;`;
-    }
-    if (data.style.isHollow === true) {
-        currentStyle = `${currentStyle} fill: ${COLORS.WHITE};`;
-    }
-    return currentStyle;
-};
+const getTaskStyle = (data = {}) =>
+    getBarStyle(data.style, { color: data.color });
 /**
  * Executes the function sent by consumer to get the duration.
  * This duration is used to compute start or end if one of them is not provided

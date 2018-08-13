@@ -29,12 +29,12 @@
         "useLongnameInNav": false,
         "showInheritedInNav": true,
         "default": {
-            "outputSourceFiles": false,
+            "outputSourceFiles": true,
             "includeDate": false
         }
     },
     "docdash": {
         "static": true,
-        "sort": false
+        "sort": true
     }
 }

@@ -260,7 +260,7 @@ describe("Bar", () => {
                 expect(barElement.firstChild.tagName).toBe("rect");
                 expect(
                     barElement.firstChild.attributes.getNamedItem("style").value
-                ).toBe("fill: #007cc3;stroke: #007cc3;");
+                ).toBe("fill: #007cc3; stroke: #007cc3;");
             });
             it("adds bar content with correct unique key", () => {
                 const barElement = fetchElementByClass(
