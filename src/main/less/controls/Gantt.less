@@ -1,3 +1,6 @@
+@import "../colors.less";
+@import "../variables.less";
+
 .carbon-y-axis-track-label {
     .tick > text {
         cursor: pointer;
@@ -29,7 +32,7 @@
     stroke: @yellow60;
     .carbon-gantt-dateline {
         stroke-width: 3px;
-        stroke-opacity: 0.5;
+        shape-rendering: crispEdges;
     }
     .carbon-gantt-dateline-point {
         cursor: pointer;
