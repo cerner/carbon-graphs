@@ -1,6 +1,7 @@
 "use strict";
 import d3 from "d3";
 import { getType } from "../../../core/BaseConfig";
+import { isValidAxisType } from "../../../helpers/axis";
 import { getBarStyle, getHashedBar, getRect } from "../../../helpers/barType";
 import constants, {
     AXIS_TYPE,
@@ -13,7 +14,6 @@ import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 import { d3RemoveElement } from "../../Graph/helpers/helpers";
 import { createRegion } from "./goalLineHelpers";
-import { isValidAxisType } from "../../../helpers/axis";
 
 const PADDING = constants.PADDING;
 

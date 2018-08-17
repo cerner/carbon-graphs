@@ -802,8 +802,8 @@ const getAxesDataRange = (
 };
 /**
  * Checks if provided input has valid axis type
- * @param {Object} x - input x value
- * @param {String} xAxisType - x axis type
+ * @param {string} x - input x value
+ * @param {string} xAxisType - x axis type
  * @returns {Boolean} - returns true if valid, false if invalid
  */
 const isValidAxisType = (x, xAxisType) =>

@@ -90,7 +90,7 @@ const setX0X1Scale = (bands, content, ordinalScale, config) => {
  * @private
  * @param {Array} content - Array of targets
  * @param {Array} contentTargets - Array of targets config objects
- * @param {Array} input - load input object
+ * @param {Object} input - load input object
  * @param {Object} ordinalScale - ordinal scale object
  * @param {Object} config - config object derived from input JSON
  * @returns {undefined} - returns nothing

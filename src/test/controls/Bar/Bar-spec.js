@@ -9,14 +9,14 @@ import {
     axisDefault,
     axisTimeSeries,
     barClickHandlerSpy,
-    fetchElementByClass,
     fetchAllElementsByClass,
+    fetchElementByClass,
     getAxes,
     getInput,
+    regionsDefault,
     triggerEvent,
     valuesDefault,
-    valuesTimeSeries,
-    regionsDefault
+    valuesTimeSeries
 } from "./helpers";
 
 describe("Bar", () => {

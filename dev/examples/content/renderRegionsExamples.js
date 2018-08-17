@@ -1,3 +1,8 @@
+import {
+    renderBarDefaultWithGoal,
+    renderBarGroupWithGoal,
+    renderBarStackedWithGoal
+} from "../controls/bar";
 import { renderCombinationRegion } from "../controls/combination";
 import {
     renderGoalLine,
@@ -8,11 +13,6 @@ import {
     renderLineRegionY2,
     renderMultiLineRegion
 } from "../controls/line";
-import {
-    renderBarStackedWithGoal,
-    renderBarGroupWithGoal,
-    renderBarDefaultWithGoal
-} from "../controls/bar";
 import {
     renderMultiPairedResultRegion,
     renderPairedResultRegionMultiple,

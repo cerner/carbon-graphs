@@ -5,6 +5,10 @@ Thanks for contributing to Carbon. :1st_place_medal: :1st_place_medal:
 This project uses NPM for dependency management, and provides NPM scripts to call on `Webpack` to run tasks on the project.
 To get started, you will need to checkout this project.
 
+## Code of Conduct
+
+Carbon adheres to the [JS Foundation Code of Conduct](https://js.foundation/community/code-of-conduct).
+
 ## Submitting Issues
 
 We use `Github` issues to track progress.

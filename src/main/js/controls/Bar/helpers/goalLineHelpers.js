@@ -1,19 +1,18 @@
 "use strict";
 import d3 from "d3";
-import styles from "../../../helpers/styles";
-import utils from "../../../helpers/utils";
+import { parseTypedValue } from "../../../core/BaseConfig";
+import { isValidAxisType } from "../../../helpers/axis";
 import constants from "../../../helpers/constants";
 import errors from "../../../helpers/errors";
-import { parseTypedValue } from "../../../core/BaseConfig";
 import { validateRegion } from "../../../helpers/region";
-import { isValidAxisType } from "../../../helpers/axis";
+import styles from "../../../helpers/styles";
+import utils from "../../../helpers/utils";
 
 /**
  * Calculates x-axis range for given region
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} ordinalScale - bar x-axis ordinal scale
  * @param {Object} region - region input
- * @param {Number} xAxisXPosition - x axis x position
  * @returns {Number} - xRange of region
  */
 const getXRange = (scale, ordinalScale, region) => {
@@ -33,7 +32,7 @@ const getXRange = (scale, ordinalScale, region) => {
  * @param {Object} region - Region to be shown within graph
  * @param {string} targetAxis - Axis for which region needs to be shown
  * @param {Array} ticks - x axis ticks array
- * @param {Object} xAxisType - Graph x axis type
+ * @param {string} xAxisType - Graph x axis type
  * @returns {undefined} - returns nothing
  */
 const validateBarRegion = (region, targetAxis, ticks, xAxisType) => {
@@ -97,7 +96,6 @@ const processGoalLines = (
  * @param {Object} regionGroupSVG - d3 object of region group svg
  * @param {Array} regionList - List of regions to be shown within graph
  * @param {String} uniqueKey - unique id of the content loaded in graph
- * @param {string} targetAxis - Axis for which region needs to be shown
  * @returns {Object} d3 svg path
  */
 const createRegion = (scale, config, regionGroupSVG, regionList, uniqueKey) => {
