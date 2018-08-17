@@ -1,9 +1,7 @@
-import constants from "../../../helpers/constants";
 import {
     legendClickHandler,
     legendHoverHandler
 } from "../../../helpers/legend";
-import styles from "../../../helpers/styles";
 
 /**
  * Handler for Request animation frame, executes on resize.
@@ -56,23 +54,7 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
  * @returns {function} - returns callback function that handles hover action on legend item
  */
 const hoverHandler = (graphTargets, canvasSVG) => (item, state) => {
-    const additionalHoverHandler = (
-        shownTargets,
-        canvasSVG,
-        currentKey,
-        hoverState,
-        k
-    ) => {
-        canvasSVG
-            .selectAll(`.${styles.region}[aria-describedby="region_${k}"]`)
-            .classed(
-                styles.regionBlur,
-                hoverState === constants.HOVER_EVENT.MOUSE_ENTER
-            );
-    };
-    legendHoverHandler(graphTargets, canvasSVG, item.key, state, [
-        additionalHoverHandler
-    ]);
+    legendHoverHandler(graphTargets, canvasSVG, item.key, state, []);
 };
 
 export { clickHandler, hoverHandler };

@@ -1493,7 +1493,7 @@ describe("Line", () => {
                     graphDefault.scale.y(15) + constants.PADDING.top
                 );
             });
-            it("Does not hide regions is graph has only 1 data-set", () => {
+            it("Does not hide regions if graph has only 1 data-set", () => {
                 data = utils.deepClone(getInput(valuesDefault));
                 data.regions = [
                     {

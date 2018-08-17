@@ -43,7 +43,7 @@ export const renderBarExamples = (
             renderBarGroup(contentSection, "barGroup", "Bar - Grouped bars")
         );
         instance.load(
-            renderBarStacked(contentSection, "barCascade", "Bar - Stacked bars")
+            renderBarStacked(contentSection, "barStacked", "Bar - Stacked bars")
         );
         instance.load(
             renderBarNegative(

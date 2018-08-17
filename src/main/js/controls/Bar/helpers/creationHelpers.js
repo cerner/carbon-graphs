@@ -12,6 +12,8 @@ import { loadLegendItem } from "../../../helpers/legend";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 import { d3RemoveElement } from "../../Graph/helpers/helpers";
+import { createRegion } from "./goalLineHelpers";
+import { isValidAxisType } from "../../../helpers/axis";
 
 const PADDING = constants.PADDING;
 
@@ -33,12 +35,7 @@ const hasInvalidTicks = (xTicks, inputValues) =>
  * @returns {Boolean} - true if input has invalid type, false if it doesn't have invalid type
  */
 const hasInvalidTypes = (type, inputValues) =>
-    inputValues.some(
-        (value) =>
-            (utils.isDate(value.x) &&
-                getType(type) !== AXIS_TYPE.TIME_SERIES) ||
-            (!utils.isDate(value.x) && getType(type) === AXIS_TYPE.TIME_SERIES)
-    );
+    inputValues.some((value) => !isValidAxisType(value.x, type));
 /**
  * Processes the input JSON and adds the colors, labels etc. to each data points so that we
  * can use them when rendering the data point.
@@ -150,7 +147,14 @@ const draw = (scale, ordinalScale, config, canvasSVG, dataTarget) => {
     const bars = barGroupSVG
         .selectAll(`.${styles.bar}`)
         .data(dataTarget.internalValuesSubset);
-    drawDataBars(scale, ordinalScale, config, canvasSVG, bars.enter());
+    drawDataBars(
+        scale,
+        ordinalScale,
+        config,
+        canvasSVG,
+        bars.enter(),
+        dataTarget.regions
+    );
 };
 
 /**
@@ -196,9 +200,17 @@ const barAttributesHelper = (scale, ordinalScale) => {
  * @param {Object} config - config object derived from input JSON
  * @param {Array} canvasSVG - d3 object of canvas svg
  * @param {Object} barGroupSVG - d3 object for bar group svg
+ * @param {Array} regionList - List of regions to be shown within graph
  * @returns {Object} d3 bar object
  */
-const drawDataBars = (scale, ordinalScale, config, canvasSVG, barGroupSVG) => {
+const drawDataBars = (
+    scale,
+    ordinalScale,
+    config,
+    canvasSVG,
+    barGroupSVG,
+    regionList
+) => {
     const attributeHelper = barAttributesHelper(scale, ordinalScale);
     return barGroupSVG
         .append("g")
@@ -229,6 +241,18 @@ const drawDataBars = (scale, ordinalScale, config, canvasSVG, barGroupSVG) => {
                     "aria-hidden",
                     config.shownTargets.indexOf(dataPoint.key) < 0
                 );
+            if (utils.notEmpty(regionList)) {
+                const regions = regionList.filter((r) => r.x === dataPoint.x);
+                if (utils.notEmpty(regions)) {
+                    createRegion(
+                        scale,
+                        config,
+                        dataPointSVG,
+                        regions,
+                        dataPoint.key
+                    );
+                }
+            }
         });
 };
 
@@ -288,5 +312,6 @@ export {
     clear,
     setGroupName,
     prepareLegendItems,
-    barAttributesHelper
+    barAttributesHelper,
+    getXAxisXPosition
 };

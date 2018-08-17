@@ -154,6 +154,12 @@ const legendHoverHandler = (
                 styles.blur,
                 hoverState === constants.HOVER_EVENT.MOUSE_ENTER
             );
+        canvasSVG
+            .selectAll(`.${styles.region}[aria-describedby="region_${k}"]`)
+            .attr(
+                "aria-hidden",
+                hoverState === constants.HOVER_EVENT.MOUSE_ENTER
+            );
         if (utils.notEmpty(additionalHandlers)) {
             additionalHandlers.forEach((fn) =>
                 fn(shownTargets, canvasSVG, key, hoverState, k)

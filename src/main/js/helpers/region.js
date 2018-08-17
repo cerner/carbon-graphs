@@ -271,5 +271,6 @@ export {
     removeRegion,
     regionLegendHoverHandler,
     shouldHideAllRegions,
-    translateRegion
+    translateRegion,
+    validateRegion
 };

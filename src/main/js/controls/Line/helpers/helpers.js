@@ -1,9 +1,12 @@
 "use strict";
 import d3 from "d3";
 import { Shape } from "../../../core";
-import { getInterpolationType, getType } from "../../../core/BaseConfig";
-import { getXAxisXPosition } from "../../../helpers/axis";
-import constants, { AXIS_TYPE, SHAPES } from "../../../helpers/constants";
+import {
+    getInterpolationType,
+    parseTypedValue
+} from "../../../core/BaseConfig";
+import { getXAxisXPosition, isValidAxisType } from "../../../helpers/axis";
+import constants, { SHAPES } from "../../../helpers/constants";
 import errors from "../../../helpers/errors";
 import {
     legendClickHandler,
@@ -236,16 +239,10 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
 const processDataPoints = (graphConfig, dataTarget) => {
     const type = graphConfig.axis.x.type;
     const getXDataValues = (x) => {
-        if (
-            (utils.isDate(x) && getType(type) !== AXIS_TYPE.TIME_SERIES) ||
-            (!utils.isDate(x) && getType(type) === AXIS_TYPE.TIME_SERIES)
-        ) {
+        if (!isValidAxisType(x, type)) {
             throw new Error(errors.THROW_MSG_INVALID_FORMAT_TYPE);
         }
-        if (getType(type) === AXIS_TYPE.TIME_SERIES) {
-            return utils.parseDateTime(x);
-        }
-        return utils.getNumber(x);
+        return parseTypedValue(x, type);
     };
     // Update the interpolation type
     dataTarget.interpolationType = getInterpolationType(dataTarget.type);

@@ -63,7 +63,6 @@ export default {
     region: "carbon-region",
     regionHighlight: "carbon-region-highlight",
     regionBlur: "carbon-region-blur",
-    goalGroup: "carbon-goal-region-group",
     /**
      * Criticality
      */

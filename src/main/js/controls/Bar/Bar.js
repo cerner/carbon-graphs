@@ -13,6 +13,8 @@ import {
 import { clickHandler, hoverHandler } from "./helpers/legendHelpers";
 import { scaleOrdinalAxis, setBarOffsets } from "./helpers/resizeHelpers";
 import { translateBarGraph } from "./helpers/translateHelpers";
+import { processGoalLines, translateRegion } from "./helpers/goalLineHelpers";
+import utils from "../../helpers/utils";
 
 /**
  * Calculates the min and max values for Y Axis or Y2 Axis
@@ -61,7 +63,6 @@ const initConfig = (control) => {
     control.valuesRange = {};
     return control;
 };
-
 /**
  * A bar graph is a graph used to represent numerical values of data by
  * height or length of lines or rectangles of equal width
@@ -149,6 +150,22 @@ class Bar extends GraphContent {
             graph.svg,
             this.dataTarget
         );
+        if (utils.notEmpty(this.dataTarget.regions)) {
+            processGoalLines(
+                graph.scale,
+                this.ordinalScale,
+                graph.config,
+                this.dataTarget,
+                this.config.yAxis
+            );
+            translateRegion(
+                graph.scale,
+                graph.config,
+                graph.svg.selectAll(
+                    `rect[aria-describedby=region_${this.dataTarget.key}]`
+                )
+            );
+        }
         return this;
     }
 

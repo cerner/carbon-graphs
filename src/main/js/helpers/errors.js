@@ -123,10 +123,14 @@ export default {
     /**
      * @description Bar
      */
-    THROW_MSG_INVALID_REGION_X_VALUE:
-        "Invalid property, Bar graph region requires an X Axis Value.",
     THROW_MSG_INVALID_X_AXIS_TICK_VALUES:
         "Invalid X Axis, tick values are required for Bar graph content.",
     THROW_MSG_EMPTY_X_AXIS_TICK_VALUES:
-        "Invalid X Axis, tick values cannot be empty."
+        "Invalid X Axis, tick values cannot be empty.",
+    THROW_MSG_BAR_REGION_EMPTY_X_VALUE:
+        "Region for Bar graph content cannot have 'x' value empty.",
+    THROW_MSG_INVALID_REGION_X_AXIS_TICK:
+        "Invalid X Axis, tick values are required for Bar region.",
+    THROW_MSG_REGION_INVALID_FORMAT:
+        "Region x type for bar graph cannot be default, if data-points are in date time format."
 };

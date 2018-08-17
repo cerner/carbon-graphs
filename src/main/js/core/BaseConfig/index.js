@@ -6,7 +6,8 @@ import {
     getInterpolationType,
     getScale,
     getType,
-    validateBaseInput
+    validateBaseInput,
+    parseTypedValue
 } from "./helper";
 
 export {
@@ -16,5 +17,6 @@ export {
     getScale,
     getType,
     getInterpolationType,
-    validateBaseInput
+    validateBaseInput,
+    parseTypedValue
 };

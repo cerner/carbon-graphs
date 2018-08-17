@@ -5,7 +5,7 @@
 "use strict";
 import d3 from "d3";
 import Bar from "../controls/Bar/Bar";
-import { getScale } from "../core/BaseConfig";
+import { getScale, getType } from "../core/BaseConfig";
 import constants, { AXIS_TYPE } from "../helpers/constants";
 import styles from "../helpers/styles";
 import utils from "../helpers/utils";
@@ -800,6 +800,15 @@ const getAxesDataRange = (
         config.axis[axis].dataRange.max = curRange.max;
     }
 };
+/**
+ * Checks if provided input has valid axis type
+ * @param {Object} x - input x value
+ * @param {String} xAxisType - x axis type
+ * @returns {Boolean} - returns true if valid, false if invalid
+ */
+const isValidAxisType = (x, xAxisType) =>
+    (utils.isDate(x) && getType(xAxisType) === AXIS_TYPE.TIME_SERIES) ||
+    (!utils.isDate(x) && getType(xAxisType) !== AXIS_TYPE.TIME_SERIES);
 
 /**
  * @enum {Function}
@@ -840,5 +849,6 @@ export {
     processTickValues,
     hasY2Axis,
     translateAxes,
-    translateAxisReferenceLine
+    translateAxisReferenceLine,
+    isValidAxisType
 };

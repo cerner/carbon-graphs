@@ -85,3 +85,13 @@ export const getDomain = (type, lowerLimit, upperLimit) =>
     getType(type) === AXIS_TYPE.TIME_SERIES
         ? [utils.parseDateTime(lowerLimit), utils.parseDateTime(upperLimit)]
         : [utils.getNumber(lowerLimit), utils.getNumber(upperLimit)];
+/**
+ * Parses input value to either date or number based on xAxisType
+ * @param {Object} x - input x value
+ * @param {Object} xAxisType - Graph x axis type
+ * @returns {any} - if xAxisType is time series then returns date, else returns number
+ */
+export const parseTypedValue = (x, xAxisType) =>
+    getType(xAxisType) === AXIS_TYPE.TIME_SERIES
+        ? utils.parseDateTime(x)
+        : utils.getNumber(x);

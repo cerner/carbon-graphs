@@ -125,6 +125,18 @@ export const valuesTimeSeries = [
         y: 15
     }
 ];
+export const regionsDefault = [
+    {
+        x: 1,
+        start: 7,
+        end: 7
+    },
+    {
+        x: 2,
+        start: 13,
+        end: 13
+    }
+];
 /**
  * Returns the DOM element queried by Class
  * @param {HTMLElement} id - Id attribute name

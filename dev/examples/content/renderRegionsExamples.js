@@ -9,6 +9,11 @@ import {
     renderMultiLineRegion
 } from "../controls/line";
 import {
+    renderBarStackedWithGoal,
+    renderBarGroupWithGoal,
+    renderBarDefaultWithGoal
+} from "../controls/bar";
+import {
     renderMultiPairedResultRegion,
     renderPairedResultRegionMultiple,
     renderPairedResultRegionSimple
@@ -103,6 +108,27 @@ export const renderRegionsExamples = (
                 contentSection,
                 "lineRegionNoUpper",
                 "Line - No Upper Bound"
+            )
+        );
+        instance.load(
+            renderBarDefaultWithGoal(
+                contentSection,
+                "SimpleBar",
+                "Bar - Goal Lines"
+            )
+        );
+        instance.load(
+            renderBarGroupWithGoal(
+                contentSection,
+                "GroupedBar",
+                "Bar - Grouped - Goal Lines"
+            )
+        );
+        instance.load(
+            renderBarStackedWithGoal(
+                contentSection,
+                "StackedBar",
+                "Bar - Stacked - Goal Lines"
             )
         );
         instance.render();

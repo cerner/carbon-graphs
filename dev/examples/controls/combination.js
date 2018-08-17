@@ -60,7 +60,6 @@ export const renderCombinationRegion = (el, id, title) => () => {
     combGraph.loadContent(Carbon.api.pairedResult(pairedData));
     return combGraph;
 };
-
 export const renderCombinationBar = (el, id, title) => () => {
     shell.render(el, id, title);
     const axisData = utils.deepClone(getDemoData(`#${id}`, "BAR_DEFAULT"));
