@@ -4,22 +4,26 @@
   </a>
 </div>
 
-<div align="center">
-<a style="font-size: 1.8666rem;" href="https://pages.github.cerner.com/Geneva/carbon-graphs/">Demo</a>
-</div>
-
 # Carbon (carbon-graphs)
 
 Carbon is a graphing library built using d3 visualization library. It provides an API for generating native graphs such as Line and Paired Result graphs based on design standards.
 Carbon provides an abstraction for c3 and d3.
 
+## Resources
+
+-   [Demo](https://pages.github.cerner.com/Geneva/carbon-graphs/)
+-   [API Reference](docs/README.md)
+-   [JSDocs](https://pages.github.cerner.com/Geneva/carbon-graphs/docs/)
+-   [Release Notes](https://github.cerner.com/Geneva/carbon-graphs/releases)
+
 ## Features
 
 -   Adheres to Cerner standard design template
 -   Responsive
--   Native-built Carbon graphs
+-   Native-built graphs
+-   Default theme for data points
 
-    | Graphs        |
+    | Graph types   |
     | ------------- |
     | Line          |
     | Multi-line    |
@@ -29,15 +33,18 @@ Carbon provides an abstraction for c3 and d3.
     | Bar           |
     | Gantt         |
 
--   Toggles:
-    -   Legend
-    -   Labels
-    -   Grid `Vertical & Horizontal`
-    -   Axes `x, y or y2`
-    -   Regions `Horizontal`
+    | Settings                     |
+    | ---------------------------- |
+    | Legend                       |
+    | Labels                       |
+    | Grid `Vertical & Horizontal` |
+    | Axes `x, y or y2`            |
+    | Regions `Horizontal`         |
+
+### Other highlights
+
 -   Criticality indicators for data point
 -   Non-contiguous data point Line graph
--   Default theme for data points
 -   Locale support for axes ticks
 
 ## Dependencies
@@ -50,7 +57,7 @@ Carbon provides an abstraction for c3 and d3.
 ## Potential features
 
 -   [ ] Sparkline graph
--   [ ] Scatterplot graph
+-   [ ] Scatter-plot graph
 -   [ ] Axes labelling along with shapes
 -   [ ] Area graphs
 -   [ ] Area spline graphs
@@ -75,8 +82,6 @@ Add `dist/js/carbon-graphs.js` and `dist/css/carbon-graphs.css` in your page and
 -   `npm install`
 -   `npm run dev`
 -   [http://localhost:9991/](http://localhost:9991/)
-
-### [Consumer documentation](docs/README.md)
 
 ## Browser support
 
