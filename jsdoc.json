@@ -35,6 +35,20 @@
     },
     "docdash": {
         "static": true,
-        "sort": true
+        "sort": true,
+        "meta": {
+            "title": "Carbon",
+            "description": "A graphing library built using d3 based on Cerner design standards",
+            "keyword": "carbon"
+        },
+        "search": [
+            true
+        ],
+        "collapse": [
+            true
+        ],
+        "typedefs": [
+            true
+        ]
     }
 }

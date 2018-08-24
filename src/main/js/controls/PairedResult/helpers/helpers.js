@@ -149,7 +149,7 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
     const pairedBoxGroupSVG = canvasSVG
         .append("g")
         .classed(styles.pairedBoxGroup, true)
-        .attr("clip-path", `url(#${constants.CLIP_PATH_ID})`)
+        .attr("clip-path", `url(#${config.clipPathId})`)
         .attr("aria-describedby", dataTarget.key);
     const pairedBoxPath = pairedBoxGroupSVG
         .selectAll(`.${styles.pairedBox}`)

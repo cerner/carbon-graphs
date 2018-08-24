@@ -321,7 +321,7 @@ const createDefs = (config, canvasSVG) =>
     canvasSVG
         .append("defs")
         .append("clipPath")
-        .attr("id", constants.CLIP_PATH_ID)
+        .attr("id", config.clipPathId)
         .append("rect")
         .attr(constants.X_AXIS, getXAxisXPosition(config))
         .attr(constants.Y_AXIS, getYAxisYPosition())
@@ -416,7 +416,7 @@ const createGanttContent = (config, canvasSVG) =>
     canvasSVG
         .append("g")
         .classed(styles.ganttChartContent, true)
-        .attr("clip-path", `url(#${constants.CLIP_PATH_ID})`);
+        .attr("clip-path", `url(#${config.clipPathId})`);
 /**
  * Toggles the selection of a dateline indicator, executes on click of a data point.
  * @private

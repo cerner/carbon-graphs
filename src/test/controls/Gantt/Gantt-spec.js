@@ -1315,7 +1315,7 @@ describe("Gantt", () => {
             gantt.unloadContent(primaryContent);
             setTimeout(() => {
                 const defsContainerElement = document.querySelector(
-                    `clipPath#${constants.CLIP_PATH_ID}`
+                    `clipPath#${gantt.config.clipPathId}`
                 );
                 expect(+defsContainerElement.getAttribute("height")).toBe(0);
                 done();

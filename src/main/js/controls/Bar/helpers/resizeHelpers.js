@@ -7,6 +7,7 @@ import Bar from "../Bar";
 
 /**
  * Filters and returns number of groups available for a unit bandwidth (for each x-axis tick)
+ * @private
  * @param {Array} content - Array of targets
  * @param {Array} shownTargets - Array of shown targets
  * @returns {Array} - array of group names
@@ -33,6 +34,7 @@ const getBands = (content, shownTargets) => {
  * Calculates and returns outer padding ratio for ordidnal scale unit bandwidth
  * Outer padding should be 2.5 times the inner padding
  * Inner padding should be 0.5 times the bar width
+ * @private
  * @param {Array} content - Array of targets
  * @param {Array} shownTargets - Array of shown targets
  * @returns {Number} - padding value
@@ -68,6 +70,7 @@ const scaleOrdinalAxis = (ordinalScale, config, content) => {
 };
 /**
  * Sets domain and range bands for ordinal scale
+ * @private
  * @param {Array} bands - bands array for bandwidth
  * @param {Array} content - Array of targets
  * @param {Object} ordinalScale - ordinal scale object
@@ -125,6 +128,7 @@ const setBarOffsets = (
  * By default, every bar is considered as a stacked bar. This method checks if there are any bars
  * getting stacked under it and calculates offset for both positive and negative bars.
  * If no other bar is stacked below this bar, offset is set to 0.
+ * @private
  * @param {Array} inputValues - Array of dataTarget's inputValueSubset
  * @param {Array} group - Array of filtered group names
  * @returns {undefined} - returns nothing

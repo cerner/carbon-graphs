@@ -154,7 +154,6 @@ export default {
     VIEW_BOX_SIZE: "0 0 48 48",
     DEFAULT_SHAPE: "circle",
     DEFAULT_COLOR: COLORS.BLACK,
-    CLIP_PATH_ID: `carbon-${+new Date()}-clip`,
     X_AXIS: "x",
     Y_AXIS: "y",
     Y2_AXIS: "y2",

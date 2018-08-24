@@ -1,6 +1,7 @@
 "use strict";
 import d3 from "d3";
 import BaseConfig, { getDefaultValue, getDomain } from "../../core/BaseConfig";
+import { generateClipPathId } from "../../core/BaseConfig/helper";
 import constants, { AXIS_TYPE } from "../../helpers/constants";
 import errors from "../../helpers/errors";
 import utils from "../../helpers/utils";
@@ -16,6 +17,7 @@ import { DEFAULT_LOCALE } from "../../locale/index";
  */
 export const processInput = (input, config) => {
     const _axis = utils.deepClone(input.axis);
+    config.clipPathId = generateClipPathId();
     config.bindTo = input.bindTo;
     config.bindLegendTo = input.bindLegendTo;
     config.axis = {

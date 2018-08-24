@@ -1,6 +1,7 @@
 "use strict";
 import d3 from "d3";
 import BaseConfig, { getDefaultValue, getDomain } from "../../core/BaseConfig";
+import { generateClipPathId } from "../../core/BaseConfig/helper";
 import { hasY2Axis } from "../../helpers/axis";
 import constants, { AXIS_TYPE } from "../../helpers/constants";
 import errors from "../../helpers/errors";
@@ -38,6 +39,7 @@ export const processInput = (input, config, type) => {
         };
         return config;
     };
+    config.clipPathId = generateClipPathId();
     config.bindTo = input.bindTo;
     config.bindLegendTo = input.bindLegendTo;
     config.axis = _axis;

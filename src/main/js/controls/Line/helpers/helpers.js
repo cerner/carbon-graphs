@@ -181,7 +181,7 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
     const lineSVG = canvasSVG
         .append("g")
         .classed(styles.lineGraphContent, true)
-        .attr("clip-path", `url(#${constants.CLIP_PATH_ID})`)
+        .attr("clip-path", `url(#${config.clipPathId})`)
         .attr("aria-hidden", config.shownTargets.indexOf(dataTarget.key) < 0)
         .attr("aria-describedby", dataTarget.key);
     const lineGroupSVG = lineSVG

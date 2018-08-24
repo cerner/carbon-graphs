@@ -52,7 +52,7 @@ const translateCanvas = (config, canvasSVG) =>
  */
 const translateDefs = (config, canvasSVG) =>
     canvasSVG
-        .select(`clipPath#${constants.CLIP_PATH_ID}`)
+        .select(`clipPath#${config.clipPathId}`)
         .selectAll("rect")
         .attr("height", config.height)
         .attr("width", getXAxisWidth(config));
@@ -250,7 +250,7 @@ const createDefs = (config, canvasSVG) =>
     canvasSVG
         .append("defs")
         .append("clipPath")
-        .attr("id", constants.CLIP_PATH_ID)
+        .attr("id", config.clipPathId)
         .append("rect")
         .attr(constants.X_AXIS, getXAxisXPosition(config))
         .attr(constants.Y_AXIS, PADDING.top)
@@ -578,6 +578,7 @@ const d3RemoveElement = (el, selector, isBatchSelect = false) => {
  * This toggles padding for y and y2 axis based on loaded content.
  * Checks if axisPadding is set to true or false inside input config.
  * If set to false, padding is turned off for that yAxis
+ * @private
  * @param {Object} axisPadding - object representing padding values for y and y2
  * @param {Object} config - input content's config object
  * @returns {undefined} - returns nothing

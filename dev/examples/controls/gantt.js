@@ -280,7 +280,6 @@ export const renderGanttStyle = (el, id, title) => () => {
             }
         ]
     });
-
     ganttDefault.loadContent({
         key: "track 1",
         trackLabel: {

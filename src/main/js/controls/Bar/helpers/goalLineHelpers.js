@@ -10,6 +10,7 @@ import utils from "../../../helpers/utils";
 
 /**
  * Calculates x-axis range for given region
+ * @private
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} ordinalScale - bar x-axis ordinal scale
  * @param {Object} region - region input
@@ -29,6 +30,7 @@ const getXRange = (scale, ordinalScale, region) => {
 };
 /**
  * Validates the input object provided for the region
+ * @private
  * @param {Object} region - Region to be shown within graph
  * @param {string} targetAxis - Axis for which region needs to be shown
  * @param {Array} ticks - x axis ticks array
@@ -50,6 +52,7 @@ const validateBarRegion = (region, targetAxis, ticks, xAxisType) => {
 /**
  * Process goal regions. Sets x-axis range and width of each region.
  * These values are used in createRegion method to create rect for each region
+ * @private
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} ordinalScale - bar x-axis ordinal scale
  * @param {Object} config - Graph config object derived from input JSON

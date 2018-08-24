@@ -133,7 +133,7 @@ const draw = (scale, ordinalScale, config, canvasSVG, dataTarget) => {
     const barSVG = canvasSVG
         .append("g")
         .classed(styles.barGraphContent, true)
-        .attr("clip-path", `url(#${constants.CLIP_PATH_ID})`)
+        .attr("clip-path", `url(#${config.clipPathId})`)
         .attr("aria-hidden", config.shownTargets.indexOf(dataTarget.key) < 0)
         .attr("aria-describedby", dataTarget.key);
     const barGroupSVG = barSVG

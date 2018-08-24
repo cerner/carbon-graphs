@@ -160,7 +160,7 @@ const createDefs = (config, canvasSVG) =>
     canvasSVG
         .append("defs")
         .append("clipPath")
-        .attr("id", constants.CLIP_PATH_ID)
+        .attr("id", config.clipPathId)
         .append("rect")
         .attr(constants.X_AXIS, getXAxisXPosition())
         .attr(constants.Y_AXIS, getXAxisYPosition() / 2)
@@ -226,7 +226,7 @@ const createTimelineContent = (config, canvasSVG) =>
     canvasSVG
         .append("g")
         .classed(styles.timelineGraphContent, true)
-        .attr("clip-path", `url(#${constants.CLIP_PATH_ID})`);
+        .attr("clip-path", `url(#${config.clipPathId})`);
 /**
  * Creates a group for each timeline content loaded
  * @private

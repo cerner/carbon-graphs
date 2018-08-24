@@ -50,6 +50,12 @@ export const getDefaultValue = (value, defaultVal) =>
  */
 export const getType = (type) => getDefaultValue(type, AXIS_TYPE.DEFAULT);
 /**
+ * Generates a clip path ID based on current date
+ * @private
+ * @returns {string} Clip path ID
+ */
+export const generateClipPathId = () => `carbon-${+new Date()}-clip`;
+/**
  * Interpolation type can be:
  * * Linear (default)
  * * Spline
@@ -87,6 +93,7 @@ export const getDomain = (type, lowerLimit, upperLimit) =>
         : [utils.getNumber(lowerLimit), utils.getNumber(upperLimit)];
 /**
  * Parses input value to either date or number based on xAxisType
+ * @private
  * @param {Object} x - input x value
  * @param {Object} xAxisType - Graph x axis type
  * @returns {any} - if xAxisType is time series then returns date, else returns number

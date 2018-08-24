@@ -26,7 +26,7 @@ import {
  */
 const translateDefs = (config, canvasSVG) =>
     canvasSVG
-        .select(`clipPath#${constants.CLIP_PATH_ID}`)
+        .select(`clipPath#${config.clipPathId}`)
         .selectAll("rect")
         .attr("height", getYAxisHeight(config))
         .attr("width", getXAxisWidth(config));
