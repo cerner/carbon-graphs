@@ -1,5 +1,6 @@
 import constants from "../../../helpers/constants";
 import { barAttributesHelper } from "./creationHelpers";
+import { translateSelectBars } from "./selectionHelpers";
 
 /**
  * Transforms bars for a data point set in the Bar graph on resize
@@ -8,10 +9,18 @@ import { barAttributesHelper } from "./creationHelpers";
  * @param {Object} ordinalScale - bar x-axis ordinal scale
  * @param {Array} canvasSVG - d3 object of canvas svg
  * @param {Object} dataTarget - Data points object
+ * @param {Object} config - graph config object
  * @returns {Object} d3 select object
  */
-const translateBarGraph = (scale, ordinalScale, canvasSVG, dataTarget) => {
+const translateBarGraph = (
+    scale,
+    ordinalScale,
+    canvasSVG,
+    dataTarget,
+    config
+) => {
     const attributeHelper = barAttributesHelper(scale, ordinalScale);
+    translateSelectBars(scale, ordinalScale, canvasSVG, config);
     return canvasSVG
         .selectAll(`rect[aria-describedby=${dataTarget.key}]`)
         .transition(constants.d3Transition)

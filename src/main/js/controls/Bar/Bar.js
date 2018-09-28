@@ -11,6 +11,10 @@ import {
     processDataPoints,
     setGroupName
 } from "./helpers/creationHelpers";
+import {
+    updateSelectionBars,
+    clearSelectionDatum
+} from "./helpers/selectionHelpers";
 import { processGoalLines, translateRegion } from "./helpers/goalLineHelpers";
 import { clickHandler, hoverHandler } from "./helpers/legendHelpers";
 import { scaleOrdinalAxis, setBarOffsets } from "./helpers/resizeHelpers";
@@ -63,7 +67,6 @@ const initConfig = (control) => {
     control.valuesRange = {};
     return control;
 };
-
 /**
  * A bar graph is a graph used to represent numerical values of data by
  * height or length of lines or rectangles of equal width
@@ -106,6 +109,11 @@ class Bar extends GraphContent {
             graph.svg,
             this.dataTarget
         );
+        updateSelectionBars(
+            this.dataTarget.internalValuesSubset,
+            graph.svg,
+            graph.config
+        );
         prepareLegendItems(
             graph.config,
             {
@@ -129,6 +137,7 @@ class Bar extends GraphContent {
     unload(graph) {
         clear(graph.svg, this.dataTarget.key);
         removeLegendItem(graph.legendSVG, this.dataTarget);
+        clearSelectionDatum(graph.svg, this.dataTarget.key);
         initConfig(this);
         return this;
     }
@@ -149,7 +158,8 @@ class Bar extends GraphContent {
             graph.scale,
             this.ordinalScale,
             graph.svg,
-            this.dataTarget
+            this.dataTarget,
+            graph.config
         );
         if (utils.notEmpty(this.dataTarget.regions)) {
             processGoalLines(

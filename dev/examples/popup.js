@@ -75,7 +75,6 @@ export const loadPopup = (onCloseCB, key, index, value) => {
                             : "N/A"
             }`
         );
-
         if (value.high) {
             createItem(pair, "High", getPairData(value.high.y));
         }
@@ -87,6 +86,15 @@ export const loadPopup = (onCloseCB, key, index, value) => {
         }
     }
 };
+export const loadBarPopup = (onCloseCB, key, index, values) => {
+    removeOldPopup();
+    const path = renderPopup(onCloseCB);
+    const pair = path.append("g");
+    values.forEach((value) =>
+        createItem(pair, `${value.label.display}`, `${value.x}, ${value.y}`)
+    );
+};
+
 export const loadTrackLabelPopup = (d) => {
     removeOldPopup();
     const path = renderPopup();

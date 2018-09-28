@@ -1,7 +1,12 @@
 "use strict";
 import d3 from "d3";
 import Carbon from "../../src/main/js/carbon";
-import { loadDatelinePopup, loadPopup, loadTimelinePopup } from "./popup";
+import {
+    loadDatelinePopup,
+    loadPopup,
+    loadTimelinePopup,
+    loadBarPopup
+} from "./popup";
 
 const daysToMilliseconds = (d) => 24 * 60 * 60 * 1000 * d;
 const bobRossIpsum =
@@ -1059,7 +1064,7 @@ const DATA = [
                         display: "Data Label 1"
                     },
                     color: Carbon.helpers.COLORS.GREEN,
-                    onClick: loadPopup,
+                    onClick: loadBarPopup,
                     values: [
                         {
                             x: 1,
@@ -1089,7 +1094,7 @@ const DATA = [
                         display: "Data Label 2"
                     },
                     color: Carbon.helpers.COLORS.LIGHT_PURPLE,
-                    onClick: loadPopup,
+                    onClick: loadBarPopup,
                     values: [
                         {
                             x: 1,
@@ -1106,6 +1111,10 @@ const DATA = [
                         {
                             x: 4,
                             y: 6
+                        },
+                        {
+                            x: 6,
+                            y: 10
                         }
                     ]
                 },
@@ -1115,7 +1124,7 @@ const DATA = [
                         display: "Data Label 3"
                     },
                     color: Carbon.helpers.COLORS.BLUE,
-                    onClick: loadPopup,
+                    onClick: loadBarPopup,
                     values: [
                         {
                             x: 1,
@@ -1142,7 +1151,7 @@ const DATA = [
                     },
                     group: "uid_bar_1",
                     color: Carbon.helpers.COLORS.LIGHT_PURPLE,
-                    onClick: loadPopup,
+                    onClick: loadBarPopup,
                     values: [
                         {
                             x: 1,
@@ -1177,7 +1186,7 @@ const DATA = [
                     },
                     group: "uid_bar_1",
                     color: Carbon.helpers.COLORS.BLUE,
-                    onClick: loadPopup,
+                    onClick: loadBarPopup,
                     values: [
                         {
                             x: 1,
@@ -1208,7 +1217,7 @@ const DATA = [
                     },
                     group: "uid_bar_1",
                     color: Carbon.helpers.COLORS.BLUE,
-                    onClick: loadPopup,
+                    onClick: loadBarPopup,
                     values: [
                         {
                             x: 1,
@@ -1285,7 +1294,7 @@ const DATA = [
                         display: "Data Label t1"
                     },
                     color: Carbon.helpers.COLORS.BLUE,
-                    onClick: loadPopup,
+                    onClick: loadBarPopup,
                     values: [
                         {
                             x: new Date(2018, 0, 1).toISOString(),
@@ -1315,7 +1324,7 @@ const DATA = [
                         display: "Data Label t2"
                     },
                     color: Carbon.helpers.COLORS.ORANGE,
-                    onClick: loadPopup,
+                    onClick: loadBarPopup,
                     values: [
                         {
                             x: new Date(2018, 0, 2).toISOString(),

@@ -2,6 +2,8 @@ import {
     legendClickHandler,
     legendHoverHandler
 } from "../../../helpers/legend";
+import styles from "../../../helpers/styles";
+import { setSelectionIndicatorAttributes } from "./creationHelpers";
 
 /**
  * Handler for Request animation frame, executes on resize.
@@ -10,7 +12,7 @@ import {
  *      * Shows/hides the regions
  * @private
  * @param {Object} graphContext - Graph instance
- * @param {Line} control - Line instance
+ * @param {Bar} control - Bar instance
  * @returns {function()} callback function handler for RAF
  */
 const onAnimationHandler = (graphContext, control) => () => {
@@ -18,10 +20,11 @@ const onAnimationHandler = (graphContext, control) => () => {
     graphContext.resize();
 };
 /**
- * Click handler for legend item. Removes the bar from graph when clicked and calls redraw
+ * Click handler for legend item. Removes the bar from graph when clicked and calls redraw.
+ * This will also redraws selection bars and update datum. So, we hide selection bar when legend is clicked.
  * @private
  * @param {Object} graphContext - Graph instance
- * @param {Line} control - Bar instance
+ * @param {Bar} control - Bar instance
  * @param {Object} config - Graph config object derived from input JSON
  * @param {Array} canvasSVG - d3 html element of canvas
  * @returns {function} - returns callback function that handles click action on legend item
@@ -43,6 +46,10 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
     canvasSVG
         .selectAll(`g[aria-describedby="${item.key}"]`)
         .attr("aria-hidden", true);
+    setSelectionIndicatorAttributes(
+        canvasSVG.selectAll(`.${styles.taskBarSelection}`),
+        false
+    );
     window.requestAnimationFrame(onAnimationHandler(graphContext, control));
 };
 /**

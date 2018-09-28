@@ -7,6 +7,7 @@ For documentation on code: [**JSDocs**](https://pages.github.cerner.com/Geneva/c
 Consumers can generate one of the following graphs:
 
 -   [Line](./controls/Line.md)
+-   [Bar](./controls/Bar.md)
 -   [Paired Result](./controls/PairedResult.md)
 -   [Gantt](./controls/Gantt.md)
 -   [Timeline](./controls/Timeline.md)

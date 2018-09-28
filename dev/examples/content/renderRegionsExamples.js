@@ -1,8 +1,3 @@
-import {
-    renderBarDefaultWithGoal,
-    renderBarGroupWithGoal,
-    renderBarStackedWithGoal
-} from "../controls/bar";
 import { renderCombinationRegion } from "../controls/combination";
 import {
     renderGoalLine,
@@ -18,6 +13,11 @@ import {
     renderPairedResultRegionMultiple,
     renderPairedResultRegionSimple
 } from "../controls/pairedResult";
+import {
+    renderBarDefaultWithGoal,
+    renderBarGroupWithGoal,
+    renderBarStackedWithGoal
+} from "../controls/bar";
 import {
     btn,
     clearContent,

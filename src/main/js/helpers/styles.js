@@ -92,5 +92,6 @@ export default {
     bar: "carbon-bar-graph",
     barGraphContent: "carbon-bar-graph-content",
     currentBarsGroup: "carbon-data-bars-group",
-    barHashedRect: "carbon-data-bar--hashed"
+    barHashedRect: "carbon-data-bar--hashed",
+    barSelectionGroup: "carbon-bar-selector-group"
 };

@@ -14,6 +14,7 @@ import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 import { d3RemoveElement } from "../../Graph/helpers/helpers";
 import { createRegion } from "./goalLineHelpers";
+import { drawSelectionBars, getSelectedData } from "./selectionHelpers";
 
 const PADDING = constants.PADDING;
 
@@ -130,6 +131,9 @@ const getXAxisXPosition = (config) =>
  * @returns {undefined} - returns nothing
  */
 const draw = (scale, ordinalScale, config, canvasSVG, dataTarget) => {
+    if (canvasSVG.select(`.${styles.barSelectionGroup}`).empty()) {
+        drawSelectionBars(scale, ordinalScale, config, canvasSVG);
+    }
     const barSVG = canvasSVG
         .append("g")
         .classed(styles.barGraphContent, true)
@@ -215,7 +219,7 @@ const drawDataBars = (
     return barGroupSVG
         .append("g")
         .classed(styles.bar, true)
-        .each(function(dataPoint) {
+        .each(function(dataPoint, index) {
             const dataPointSVG = d3.select(this);
             const rectPath = dataPoint.isHashed
                 ? getHashedBar(
@@ -240,7 +244,17 @@ const drawDataBars = (
                 .attr(
                     "aria-hidden",
                     config.shownTargets.indexOf(dataPoint.key) < 0
-                );
+                )
+                .on("click", (value) => {
+                    barActionHandler(
+                        value,
+                        index,
+                        canvasSVG,
+                        config.axis.x.type,
+                        config.axis.x.ticks.values,
+                        getSelectedData(canvasSVG, value, config)
+                    );
+                });
             if (utils.notEmpty(regionList)) {
                 const regions = regionList.filter((r) => r.x === dataPoint.x);
                 if (utils.notEmpty(regions)) {
@@ -305,6 +319,73 @@ const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
         );
     }
 };
+/**
+ * Toggles the selection of a bar, executes on click of a bar.
+ * @private
+ * @param {Object} value - data point object
+ * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {String} type - x-axis type
+ * @param {Array} tickValues - X axis ticks array
+ * @returns {Array} d3 html element of the selected bar
+ */
+const toggleDataPointSelection = (value, canvasSVG, type, tickValues) => {
+    const selectedPointNode = canvasSVG.select(
+        `rect[aria-describedby=bar-selector-${
+            type === AXIS_TYPE.TIME_SERIES
+                ? tickValues.indexOf(new Date(value.x).toISOString())
+                : tickValues.indexOf(value.x)
+        }]`
+    );
+    const isHidden = selectedPointNode.attr("aria-hidden") === "true";
+    setSelectionIndicatorAttributes(selectedPointNode, isHidden);
+    return selectedPointNode;
+};
+/**
+ * Handler for the bar on click. If the content property is present for the bar content
+ * then the callback is executed other wise it is NOP.
+ * If the callback is present, the selected bar is toggled and the element is passed as an argument to the
+ * consumer in the callback, to execute once the popup is closed.
+ *  Callback arguments:
+ *      Post close callback function
+ *      value [x and y data point values]
+ *      Selected bar target [d3 target]
+ *  On close of popup, call -> the provided callback
+ * @private
+ * @param {Object} value - data point object
+ * @param {number} index - data point index for the set
+ * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {String} type - x-axis type
+ * @param {Array} tickValues - X axis ticks array
+ * @param {Array} datum - selected bar data to be passed to onclick function
+ * @returns {undefined} - returns nothing
+ */
+const barActionHandler = (value, index, canvasSVG, type, tickValues, datum) => {
+    if (utils.isEmpty(value.onClick)) {
+        return;
+    }
+    toggleDataPointSelection(value, canvasSVG, type, tickValues).call(
+        (selectedTarget) =>
+            value.onClick(
+                () => {
+                    setSelectionIndicatorAttributes(selectedTarget, false);
+                },
+                value.key,
+                index,
+                datum,
+                selectedTarget
+            )
+    );
+};
+/**
+ * sets selection bar's aria-hidden and aria-selected attributes
+ * @param {Object} selectionPath - selection bar svg path
+ * @param {Boolean} isSelected - true if selected, false if not
+ * @returns {undefined} - returns nothing
+ */
+const setSelectionIndicatorAttributes = (selectionPath, isSelected) => {
+    selectionPath.attr("aria-hidden", !isSelected);
+    selectionPath.attr("aria-selected", isSelected);
+};
 
 export {
     processDataPoints,
@@ -313,5 +394,6 @@ export {
     setGroupName,
     prepareLegendItems,
     barAttributesHelper,
-    getXAxisXPosition
+    getXAxisXPosition,
+    setSelectionIndicatorAttributes
 };

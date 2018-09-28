@@ -273,6 +273,184 @@ describe("Bar", () => {
                     barElement.attributes.getNamedItem("aria-describedby").value
                 ).toBe(input.key);
             });
+            it("creates selection bars", () => {
+                const barElements = fetchAllElementsByClass(
+                    barGraphContainer,
+                    styles.taskBarSelection
+                );
+                expect(barElements.length).toBe(5);
+            });
+            it("hides selection bars by default", () => {
+                const barElements = fetchAllElementsByClass(
+                    barGraphContainer,
+                    styles.taskBarSelection
+                );
+                expect(
+                    barElements[0].attributes.getNamedItem("aria-hidden").value
+                ).toBe("true");
+            });
+            it("selected data point has rect as shape", () => {
+                const selectedPoints = fetchElementByClass(
+                    barGraphContainer,
+                    styles.taskBarSelection
+                );
+                expect(selectedPoints.tagName).toBe("rect");
+            });
+            it("creates selection bars for timeline graph", () => {
+                graphDefault.destroy();
+                graphDefault = new Graph(getAxes(axisTimeSeries));
+                input = getInput(valuesTimeSeries, false, false);
+                graphDefault.loadContent(new Bar(input));
+                const selectionPoints = fetchAllElementsByClass(
+                    barGraphContainer,
+                    styles.taskBarSelection
+                );
+                expect(selectionPoints.length).toEqual(5);
+            });
+            describe("selection bar has rect attributes correctly set", () => {
+                it("for simple bar", (done) => {
+                    graphDefault.destroy();
+                    graphDefault = new Graph(getAxes(axisDefault));
+                    input = getInput(valuesDefault, false, false);
+                    input.onClick = (clearSelectionCallback) => {
+                        clearSelectionCallback();
+                    };
+                    const bar = new Bar(input);
+                    graphDefault.loadContent(bar);
+                    bar.redraw(graphDefault);
+                    const selectionPoint = fetchElementByClass(
+                        barGraphContainer,
+                        styles.taskBarSelection
+                    );
+                    const point = fetchElementByClass(
+                        barGraphContainer,
+                        styles.taskBar
+                    );
+                    triggerEvent(point, "click", () => {
+                        expect(
+                            Number(selectionPoint.getAttribute("x"))
+                        ).toEqual(Number(point.getAttribute("x")) - 5);
+                        expect(
+                            Number(selectionPoint.getAttribute("y"))
+                        ).toEqual(Number(point.getAttribute("y")) - 5);
+                        expect(
+                            Number(selectionPoint.getAttribute("height"))
+                        ).toEqual(Number(point.getAttribute("height")) + 10);
+                        expect(
+                            Number(selectionPoint.getAttribute("width"))
+                        ).toEqual(Number(point.getAttribute("width")) + 10);
+                        done();
+                    });
+                });
+                it("for grouped bar", (done) => {
+                    graphDefault.destroy();
+                    graphDefault = new Graph(getAxes(axisDefault));
+                    input = getInput(valuesDefault, false, false);
+                    input.onClick = (clearSelectionCallback) => {
+                        clearSelectionCallback();
+                    };
+                    const bar = new Bar(input);
+                    graphDefault.loadContent(bar);
+                    const input2 = utils.deepClone(
+                        getInput(valuesDefault, false, false)
+                    );
+                    input2.key = "uid_2";
+                    input2.onClick = (clearSelectionCallback) => {
+                        clearSelectionCallback();
+                    };
+                    const bar2 = new Bar(input2);
+                    graphDefault.loadContent(bar2);
+                    bar.redraw(graphDefault);
+                    bar2.redraw(graphDefault);
+                    const selectionPoint = fetchElementByClass(
+                        barGraphContainer,
+                        styles.taskBarSelection
+                    );
+                    const point = fetchElementByClass(
+                        barGraphContainer,
+                        styles.taskBar
+                    );
+                    const points = fetchAllElementsByClass(
+                        barGraphContainer,
+                        styles.taskBar
+                    );
+                    triggerEvent(point, "click", () => {
+                        expect(
+                            Number(selectionPoint.getAttribute("x"))
+                        ).toEqual(Number(points[0].getAttribute("x")) - 5);
+                        expect(
+                            Number(selectionPoint.getAttribute("y"))
+                        ).toEqual(Number(points[0].getAttribute("y")) - 5);
+                        expect(
+                            Number(selectionPoint.getAttribute("height"))
+                        ).toEqual(
+                            Number(points[0].getAttribute("height")) + 10
+                        );
+                        expect(
+                            Number(selectionPoint.getAttribute("width"))
+                        ).toEqual(
+                            Number(points[3].getAttribute("x")) -
+                                Number(points[0].getAttribute("x")) +
+                                Number(points[1].getAttribute("width")) +
+                                10
+                        );
+                        done();
+                    });
+                });
+                it("for stacked bar", (done) => {
+                    graphDefault.destroy();
+                    graphDefault = new Graph(getAxes(axisDefault));
+                    input = getInput(valuesDefault, false, false);
+                    input.onClick = (clearSelectionCallback) => {
+                        clearSelectionCallback();
+                    };
+                    const bar = new Bar(input);
+                    graphDefault.loadContent(bar);
+                    const input2 = utils.deepClone(
+                        getInput(valuesDefault, false, false)
+                    );
+                    input2.key = "uid_2";
+                    input2.group = "uid_1";
+                    input2.onClick = (clearSelectionCallback) => {
+                        clearSelectionCallback();
+                    };
+                    const bar2 = new Bar(input2);
+                    graphDefault.loadContent(bar2);
+                    bar.redraw(graphDefault);
+                    bar2.redraw(graphDefault);
+                    const selectionPoint = fetchElementByClass(
+                        barGraphContainer,
+                        styles.taskBarSelection
+                    );
+                    const point = fetchElementByClass(
+                        barGraphContainer,
+                        styles.taskBar
+                    );
+                    const points = fetchAllElementsByClass(
+                        barGraphContainer,
+                        styles.taskBar
+                    );
+                    triggerEvent(point, "click", () => {
+                        expect(
+                            Number(selectionPoint.getAttribute("x"))
+                        ).toEqual(Number(points[0].getAttribute("x")) - 5);
+                        expect(
+                            Number(selectionPoint.getAttribute("y"))
+                        ).toEqual(Number(points[0].getAttribute("y")) - 5);
+                        expect(
+                            Number(selectionPoint.getAttribute("height"))
+                        ).toEqual(
+                            Number(points[0].getAttribute("height")) +
+                                Number(points[3].getAttribute("height")) +
+                                10
+                        );
+                        expect(
+                            Number(selectionPoint.getAttribute("width"))
+                        ).toEqual(Number(points[0].getAttribute("width")) + 10);
+                        done();
+                    });
+                });
+            });
             describe("when clicked on a data point", () => {
                 it("does not do anything if no onClick callback is provided", (done) => {
                     graphDefault.destroy();
@@ -282,10 +460,208 @@ describe("Bar", () => {
                     graphDefault.loadContent(new Bar(input));
                     const bar = fetchElementByClass(
                         barGraphContainer,
-                        styles.bar
+                        styles.taskBar
                     );
                     triggerEvent(bar, "click", () => {
                         expect(barClickHandlerSpy.calledOnce).toBeFalsy();
+                        done();
+                    });
+                });
+                it("hides data point selection when parameter callback is called", (done) => {
+                    graphDefault.destroy();
+                    graphDefault = new Graph(getAxes(axisDefault));
+                    input = getInput(valuesDefault, false, false);
+                    input.onClick = (clearSelectionCallback) => {
+                        clearSelectionCallback();
+                    };
+                    graphDefault.loadContent(new Bar(input));
+                    const point = fetchElementByClass(
+                        barGraphContainer,
+                        styles.taskBar
+                    );
+                    triggerEvent(point, "click", () => {
+                        const selectionPoint = fetchElementByClass(
+                            barGraphContainer,
+                            styles.taskBarSelection
+                        );
+                        expect(selectionPoint.getAttribute("aria-hidden")).toBe(
+                            "true"
+                        );
+                        done();
+                    });
+                });
+                it("highlights the data point", (done) => {
+                    const selectionPoint = fetchElementByClass(
+                        barGraphContainer,
+                        styles.taskBarSelection
+                    );
+                    const point = fetchElementByClass(
+                        barGraphContainer,
+                        styles.taskBar
+                    );
+                    triggerEvent(point, "click", () => {
+                        expect(selectionPoint.getAttribute("aria-hidden")).toBe(
+                            "false"
+                        );
+                        done();
+                    });
+                });
+                it("removes highlight when data point is clicked again", (done) => {
+                    const selectionPoint = fetchElementByClass(
+                        barGraphContainer,
+                        styles.taskBarSelection
+                    );
+                    const point = fetchElementByClass(
+                        barGraphContainer,
+                        styles.taskBar
+                    );
+                    triggerEvent(point, "click", () => {
+                        triggerEvent(point, "click", () => {
+                            expect(
+                                selectionPoint.getAttribute("aria-hidden")
+                            ).toBe("true");
+                            done();
+                        });
+                    });
+                });
+                it("calls onClick callback with parameters", (done) => {
+                    let args = {};
+                    graphDefault.destroy();
+                    graphDefault = new Graph(getAxes(axisDefault));
+                    input = getInput(valuesDefault, false, false);
+                    input.onClick = (cb, key, index, vals) => {
+                        args = {
+                            cb,
+                            key,
+                            index,
+                            vals
+                        };
+                    };
+                    graphDefault.loadContent(new Bar(input));
+                    const selectionPoint = barGraphContainer.querySelectorAll(
+                        `.${styles.taskBar}`
+                    )[1];
+                    triggerEvent(selectionPoint, "click", () => {
+                        expect(args).not.toBeNull();
+                        expect(args.cb).toEqual(jasmine.any(Function));
+                        expect(args.key).toBe("uid_1");
+                        expect(args.vals).not.toBeNull();
+                        expect(args.vals.length).toEqual(1);
+                        done();
+                    });
+                });
+                it("onClick callback will get an array of all content that belongs to that tick group", (done) => {
+                    let args = {};
+                    graphDefault.destroy();
+                    graphDefault = new Graph(getAxes(axisDefault));
+                    input = getInput(valuesDefault, false, false);
+                    input.onClick = (cb, key, index, vals) => {
+                        args = {
+                            cb,
+                            key,
+                            index,
+                            vals
+                        };
+                    };
+                    graphDefault.loadContent(new Bar(input));
+                    const input2 = utils.deepClone(
+                        getInput(valuesDefault, false, false)
+                    );
+                    input2.key = "uid_2";
+                    input2.onClick = (cb, key, index, vals) => {
+                        args = {
+                            cb,
+                            key,
+                            index,
+                            vals
+                        };
+                    };
+                    graphDefault.loadContent(new Bar(input2));
+                    const selectionPoint = barGraphContainer.querySelectorAll(
+                        `.${styles.taskBar}`
+                    )[1];
+                    triggerEvent(selectionPoint, "click", () => {
+                        expect(args.key).toBe("uid_1");
+                        expect(args.vals.length).toEqual(2);
+                        expect(args.vals[0].key).toBe("uid_1");
+                        expect(args.vals[1].key).toBe("uid_2");
+                        done();
+                    });
+                });
+                it("unload content will remove content data from selection bar datum", (done) => {
+                    let args = {};
+                    graphDefault.destroy();
+                    graphDefault = new Graph(getAxes(axisDefault));
+                    input = getInput(valuesDefault, false, false);
+                    input.onClick = (cb, key, index, vals) => {
+                        args = {
+                            cb,
+                            key,
+                            index,
+                            vals
+                        };
+                    };
+                    graphDefault.loadContent(new Bar(input));
+                    const input2 = utils.deepClone(
+                        getInput(valuesDefault, false, false)
+                    );
+                    input2.key = "uid_2";
+                    input2.onClick = (cb, key, index, vals) => {
+                        args = {
+                            cb,
+                            key,
+                            index,
+                            vals
+                        };
+                    };
+                    const barContent = new Bar(input2);
+                    graphDefault.loadContent(barContent);
+                    barContent.redraw(graphDefault);
+                    graphDefault.unloadContent(barContent);
+                    const selectionPoint2 = barGraphContainer.querySelectorAll(
+                        `.${styles.taskBar}`
+                    )[1];
+                    triggerEvent(selectionPoint2, "click", () => {
+                        expect(args.key).toBe("uid_1");
+                        expect(args.vals.length).toEqual(1);
+                        expect(args.vals[0].key).toBe("uid_1");
+                        done();
+                    });
+                });
+                it("onClick callback will get selection bar datum in order which input was loaded", (done) => {
+                    let args = {};
+                    graphDefault.destroy();
+                    graphDefault = new Graph(getAxes(axisDefault));
+                    input = getInput(valuesDefault, false, false);
+                    input.onClick = (cb, key, index, vals) => {
+                        args = {
+                            cb,
+                            key,
+                            index,
+                            vals
+                        };
+                    };
+                    const input2 = utils.deepClone(
+                        getInput(valuesDefault, false, false)
+                    );
+                    input2.key = "uid_2";
+                    input2.onClick = (cb, key, index, vals) => {
+                        args = {
+                            cb,
+                            key,
+                            index,
+                            vals
+                        };
+                    };
+                    graphDefault.loadContent(new Bar(input2));
+                    graphDefault.loadContent(new Bar(input));
+                    const selectionPoint2 = barGraphContainer.querySelectorAll(
+                        `.${styles.taskBar}`
+                    )[1];
+                    triggerEvent(selectionPoint2, "click", () => {
+                        expect(args.vals.length).toEqual(2);
+                        expect(args.vals[0].key).toBe("uid_2");
+                        expect(args.vals[1].key).toBe("uid_1");
                         done();
                     });
                 });
