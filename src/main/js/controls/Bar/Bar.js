@@ -11,13 +11,13 @@ import {
     processDataPoints,
     setGroupName
 } from "./helpers/creationHelpers";
-import {
-    updateSelectionBars,
-    clearSelectionDatum
-} from "./helpers/selectionHelpers";
 import { processGoalLines, translateRegion } from "./helpers/goalLineHelpers";
 import { clickHandler, hoverHandler } from "./helpers/legendHelpers";
 import { scaleOrdinalAxis, setBarOffsets } from "./helpers/resizeHelpers";
+import {
+    clearSelectionDatum,
+    updateSelectionBars
+} from "./helpers/selectionHelpers";
 import { translateBarGraph } from "./helpers/translateHelpers";
 
 /**
@@ -67,6 +67,7 @@ const initConfig = (control) => {
     control.valuesRange = {};
     return control;
 };
+
 /**
  * A bar graph is a graph used to represent numerical values of data by
  * height or length of lines or rectangles of equal width

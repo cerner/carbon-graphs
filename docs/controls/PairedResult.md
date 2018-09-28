@@ -22,7 +22,7 @@ pairedGraph.loadContent(
 | Property Name | Expected | Description                   |
 | ------------- | -------- | ----------------------------- |
 | bindTo        | string   | DOM id to bind the graph into |
-| axis          | object   | Refer [Axis](#axis)           |
+| axis          | object   | Refer [Axis](Axes.md)         |
 | data          | array    | Refer [Data](#data)           |
 
 #### Optional
@@ -37,41 +37,6 @@ pairedGraph.loadContent(
 | showLegend    | boolean  | true                    | Toggle to show graph legend                                                          |
 | showVGrid     | boolean  | true                    | Toggle to show vertical grid                                                         |
 | showHGrid     | boolean  | true                    | Toggle to show horizontal grid                                                       |
-
-### Axis
-
-#### Required
-
-| Property Name | Expected | Description                                                   |
-| ------------- | -------- | ------------------------------------------------------------- |
-| lowerLimit    | string   | Upper bound for the axis. This is inclusive                   |
-| upperLimit    | string   | Lower bound for the axis. This is inclusive                   |
-| label         | string   | Axis label value. Will not be rendered if nothing is provided |
-
-#### Optional
-
-Each axis - X, Y and Y2 should have the following properties:
-
-| Property Name | Expected | Default           | Description                       |
-| ------------- | -------- | ----------------- | --------------------------------- |
-| type          | string   | AXIS_TYPE.DEFAULT | Normal number value or time-based |
-| show          | boolean  | true              | Toggle for showing the axis       |
-| ticks         | object   | null              | Refer [Ticks](#ticks)             |
-
-`Note` _y2 axis is mandatory if the **y2.show** is enabled_
-
-### Ticks
-
-#### Required
-
-`N/A`
-
-#### Optional
-
-| Property Name | Expected | Default | Description                                                                                                                                       |
-| ------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| format        | string   | ""      | [Formatter](https://github.com/d3/d3-time-format/blob/master/README.md#locales) for tick values. `Note:` This is mandatory if values are provided |
-| values        | array    | []      | Ticks values in the axis. Each tick will have an associated grid line                                                                             |
 
 ### Data
 

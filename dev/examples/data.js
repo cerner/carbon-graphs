@@ -2,10 +2,10 @@
 import d3 from "d3";
 import Carbon from "../../src/main/js/carbon";
 import {
+    loadBarPopup,
     loadDatelinePopup,
     loadPopup,
-    loadTimelinePopup,
-    loadBarPopup
+    loadTimelinePopup
 } from "./popup";
 
 const daysToMilliseconds = (d) => 24 * 60 * 60 * 1000 * d;

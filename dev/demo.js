@@ -2,6 +2,10 @@ import "babel-polyfill";
 import "../src/main/less/carbon.less";
 import "./demo.less";
 import {
+    AxesExample,
+    renderAxesExamples
+} from "./examples/content/renderAxesExamples";
+import {
     BarExample,
     renderBarExamples
 } from "./examples/content/renderBarExamples";
@@ -17,6 +21,10 @@ import {
     GanttExample,
     renderGanttExamples
 } from "./examples/content/renderGanttExamples";
+import {
+    GridExample,
+    renderGridExamples
+} from "./examples/content/renderGridExamples";
 import {
     LineExample,
     renderLineExamples,
@@ -83,13 +91,6 @@ renderLineExamples(
     setState,
     getState
 );
-renderNonContiguousLineExamples(
-    new LineExample(),
-    toggleSection,
-    contentSection,
-    setState,
-    getState
-);
 renderMultiLineExamples(
     new LineExample(),
     toggleSection,
@@ -99,6 +100,13 @@ renderMultiLineExamples(
 );
 renderSplineExamples(
     new SplineExample(),
+    toggleSection,
+    contentSection,
+    setState,
+    getState
+);
+renderNonContiguousLineExamples(
+    new LineExample(),
     toggleSection,
     contentSection,
     setState,
@@ -134,6 +142,20 @@ renderGanttExamples(
 );
 renderTimelineExamples(
     new TimelineExample(),
+    toggleSection,
+    contentSection,
+    setState,
+    getState
+);
+renderGridExamples(
+    new GridExample(),
+    toggleSection,
+    contentSection,
+    setState,
+    getState
+);
+renderAxesExamples(
+    new AxesExample(),
     toggleSection,
     contentSection,
     setState,

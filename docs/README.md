@@ -6,11 +6,11 @@ For documentation on code: [**JSDocs**](https://pages.github.cerner.com/Geneva/c
 
 Consumers can generate one of the following graphs:
 
--   [Line](./controls/Line.md)
--   [Bar](./controls/Bar.md)
--   [Paired Result](./controls/PairedResult.md)
--   [Gantt](./controls/Gantt.md)
--   [Timeline](./controls/Timeline.md)
+-   [Line](controls/Line.md)
+-   [Paired Result](controls/PairedResult.md)
+-   [Bar](controls/Bar.md)
+-   [Gantt](controls/Gantt.md)
+-   [Timeline](controls/Timeline.md)
 
 ## Important information
 
@@ -166,4 +166,4 @@ Resources on locale based tick formatting:
 
 ## API Reference
 
-![Alt](./controls/api.png "API flowchart")
+![Alt](controls/api.png "API flowchart")

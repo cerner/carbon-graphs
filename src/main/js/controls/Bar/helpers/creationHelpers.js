@@ -378,6 +378,7 @@ const barActionHandler = (value, index, canvasSVG, type, tickValues, datum) => {
 };
 /**
  * sets selection bar's aria-hidden and aria-selected attributes
+ * @private
  * @param {Object} selectionPath - selection bar svg path
  * @param {Boolean} isSelected - true if selected, false if not
  * @returns {undefined} - returns nothing

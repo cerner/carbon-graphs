@@ -1,14 +1,15 @@
 "use strict";
 import constants, { AXIS_TYPE } from "../../../helpers/constants";
 import styles from "../../../helpers/styles";
-import { getXAxisXPosition, barAttributesHelper } from "./creationHelpers";
 import utils from "../../../helpers/utils";
+import { barAttributesHelper, getXAxisXPosition } from "./creationHelpers";
 
 const PADDING = constants.DEFAULT_BAR_SELECTION_PADDING;
 
 /**
  * Returns selected data on click of a bar.
  * This will return only content that is present in shownTargets. Array also maintains order in which content is loaded.
+ * @private
  * @param {Object} canvasSVG - d3 object of canvas svg
  * @param {Object} value - selected value
  * @param {Object} config - graph config object
@@ -31,6 +32,7 @@ const getSelectedData = (canvasSVG, value, config) =>
         );
 /**
  * This method is called when bar content is unloaded off graph. This will remove objects related to the unloaded content.
+ * @private
  * @param {Object} canvasSVG - d3 object of canvas svg
  * @param {String} key - unloaded content key
  * @returns {undefined} - returns nothing
@@ -47,6 +49,7 @@ const clearSelectionDatum = (canvasSVG, key) => {
 };
 /**
  * Updates selection datum with newly loaded content.
+ * @private
  * @param {Array} internalValueSubset - input internalValueSubset array
  * @param {Object} canvasSVG - d3 object of canvas svg
  * @param {Object} config - graph config object
@@ -108,6 +111,7 @@ const drawSelectionBars = (scale, ordinalScale, config, canvasSVG) => {
  * y is calculated using maximum y available in datum.
  * Last content - first content range is the width
  * max y range - min y range is the height
+ * @private
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} ordinalScale - bar x-axis ordinal scale
  * @param {Array} shownTargets - graph's shownTarget array

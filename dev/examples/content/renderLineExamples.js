@@ -1,19 +1,12 @@
 import {
     renderLine,
     renderLineBlankDataPoint,
-    renderLineGridHHidden,
-    renderLineGridVHidden,
     renderLineLabelHidden,
     renderLineLegendHidden,
     renderLineLegendItemDisabled,
     renderLineShapesHidden,
     renderLineTimeSeries,
-    renderLineXAlternateLocale,
-    renderLineXAxisFormatted,
-    renderLineXHidden,
-    renderLineXStaticTicks,
     renderLineY2Axis,
-    renderLineYHidden,
     renderMultiLine
 } from "../controls/line";
 import {
@@ -38,33 +31,6 @@ const lineExampleSet = (exampleInstance, contentSection, setState) => {
     );
     exampleInstance.load(renderLineY2Axis(contentSection, "lineY2", "Y2 Axis"));
     exampleInstance.load(
-        renderLineXHidden(contentSection, "lineXHidden", "X Axis Hidden")
-    );
-    exampleInstance.load(
-        renderLineYHidden(contentSection, "lineYHidden", "Y Axis Hidden")
-    );
-    exampleInstance.load(
-        renderLineXStaticTicks(
-            contentSection,
-            "lineXStaticTick",
-            "Static X Axis Ticks"
-        )
-    );
-    exampleInstance.load(
-        renderLineXAxisFormatted(
-            contentSection,
-            "lineXFormattedTick",
-            "X Axis Ticks Formatted"
-        )
-    );
-    exampleInstance.load(
-        renderLineXAlternateLocale(
-            contentSection,
-            "lineXAltLocale",
-            "X Axis Alternate Locale"
-        )
-    );
-    exampleInstance.load(
         renderLineLabelHidden(contentSection, "lineLabelHidden", "Label Hidden")
     );
     exampleInstance.load(
@@ -79,20 +45,6 @@ const lineExampleSet = (exampleInstance, contentSection, setState) => {
             contentSection,
             "lineLegendItemDisabled",
             "Legend Item Disabled"
-        )
-    );
-    exampleInstance.load(
-        renderLineGridHHidden(
-            contentSection,
-            "lineGridHHidden",
-            "Horizontal Grid Hidden"
-        )
-    );
-    exampleInstance.load(
-        renderLineGridVHidden(
-            contentSection,
-            "lineGridVHidden",
-            "Vertical Grid Hidden"
         )
     );
     exampleInstance.load(

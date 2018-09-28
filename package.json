@@ -109,6 +109,15 @@
     "bracketSpacing": true,
     "semi": true,
     "tabWidth": 4,
-    "trailingComma": "none"
+    "trailingComma": "none",
+    "overrides": [
+      {
+        "files": "package.json",
+        "options": {
+          "tabWidth": 2,
+          "printWidth": 250
+        }
+      }
+    ]
   }
 }

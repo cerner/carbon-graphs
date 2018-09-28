@@ -2,10 +2,10 @@
 
 @demo-font-color: #212121;
 @demo-banner-bg: #f1f1f2;
-@demo-banner-font-color: #303f9f;
-@demo-nav-btn: #3f51b5;
-@demo-nav-hover-bg: #c5cae9;
-@demo-nav-bg: #c5cae9;
+@demo-banner-font-color: #0d47a1;
+@demo-nav-btn: #1565c0;
+@demo-nav-hover-bg: #bbdefb;
+@demo-nav-bg: #e3f2fd;
 @demo-nav-border: #bdbdbd;
 
 body {
@@ -32,7 +32,7 @@ body {
     justify-content: center;
     padding: 0.5rem;
     margin: 0.5rem;
-    border-radius: 0.25rem;
+    border-radius: 0.3rem;
     background-color: @demo-banner-bg;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 4px 8px rgba(0, 0, 0, 0.28);
     @media screen and (max-width: 800px) {
@@ -50,12 +50,8 @@ body {
 }
 
 .graph-banner-content {
-    display: flex;
-    flex: 1;
-    justify-content: center;
     font-family: inherit;
     font-size: 3rem;
-    font-weight: 600;
     color: @demo-banner-font-color;
     @media screen and (max-width: 800px) {
         font-size: 1.5rem;
@@ -78,7 +74,7 @@ body {
     padding: 1rem;
     background-color: @white;
     z-index: 20;
-    border-radius: 0.25rem;
+    border-radius: 0.3rem;
     box-shadow: 0 2px 16px rgba(12, 12, 13, 0.1);
     -moz-box-shadow: 0 2px 16px rgba(12, 12, 13, 0.1);
     -webkit-box-shadow: 0 2px 16px rgba(12, 12, 13, 0.1);
@@ -114,7 +110,7 @@ body {
     flex-flow: row nowrap;
     flex: 1 1 auto;
     overflow-y: auto;
-    height: 89vh;
+    height: ~"calc(90vh - 1.25rem)";
 }
 
 .nav-section {
@@ -143,7 +139,7 @@ body {
     font-family: inherit;
     font-weight: 500;
     padding: 1rem 0.5rem;
-    border-radius: 0.25rem;
+    border-radius: 0.3rem;
     margin: 0.25rem 0;
     width: 100%;
     border-left: 0.25rem solid transparent;

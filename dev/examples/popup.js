@@ -91,10 +91,9 @@ export const loadBarPopup = (onCloseCB, key, index, values) => {
     const path = renderPopup(onCloseCB);
     const pair = path.append("g");
     values.forEach((value) =>
-        createItem(pair, `${value.label.display}`, `${value.x}, ${value.y}`)
+        createItem(pair, `${value.label.display}`, `${value.y}`)
     );
 };
-
 export const loadTrackLabelPopup = (d) => {
     removeOldPopup();
     const path = renderPopup();
