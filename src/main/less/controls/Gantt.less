@@ -29,14 +29,13 @@
 }
 
 .carbon-gantt-dateline-group {
-    stroke: @yellow60;
     .carbon-gantt-dateline {
         stroke-width: 3px;
         shape-rendering: crispEdges;
+        opacity: 0.3;
     }
     .carbon-gantt-dateline-point {
         cursor: pointer;
-        fill: @yellow60;
         &[aria-hidden="true"] {
             .opacity-hide();
         }

@@ -99,13 +99,28 @@ export const trackDimension = {
         trackHeight: 100
     }
 };
-export const datelineJSON = {
+export const datelineJSON = [
+    {
+        showDatelineIndicator: true,
+        label: {
+            display: "Release A"
+        },
+        color: Carbon.helpers.COLORS.GREEN,
+        shape: Carbon.helpers.SHAPES.SQUARE,
+        value: new Date(2018, 5, 1).toISOString()
+    }
+];
+
+export const datelineAlt = {
     showDatelineIndicator: true,
     label: {
         display: "Release A"
     },
+    color: Carbon.helpers.COLORS.GREEN,
+    shape: Carbon.helpers.SHAPES.SQUARE,
     value: new Date(2018, 5, 1).toISOString()
 };
+
 /**
  * Triggers an event on provided element
  * @param {HTMLElement|Node} element - DOM element

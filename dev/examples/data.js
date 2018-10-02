@@ -948,14 +948,38 @@ const DATA = [
                     color: Carbon.helpers.COLORS.GREEN
                 }
             ],
-            dateline: {
-                showDatelineIndicator: true,
-                label: {
-                    display: "Release A"
+            dateline: [
+                {
+                    showDatelineIndicator: true,
+                    label: {
+                        display: "DST Start"
+                    },
+                    color: "#D3D4D5",
+                    shape: Carbon.helpers.SHAPES.TRIANGLE,
+                    onClick: loadDatelinePopup,
+                    value: new Date(2018, 2, 10).toISOString()
                 },
-                onClick: loadDatelinePopup,
-                value: new Date(2018, 5, 1).toISOString()
-            },
+                {
+                    showDatelineIndicator: true,
+                    label: {
+                        display: "Current Date"
+                    },
+                    color: "#FFDF00",
+                    shape: Carbon.helpers.SHAPES.SQUARE,
+                    onClick: loadDatelinePopup,
+                    value: new Date(2018, 8, 5).toISOString()
+                },
+                {
+                    showDatelineIndicator: true,
+                    label: {
+                        display: "DST End"
+                    },
+                    color: "#D3D4D5",
+                    shape: Carbon.helpers.SHAPES.TRIANGLE,
+                    onClick: loadDatelinePopup,
+                    value: new Date(2018, 10, 3).toISOString()
+                }
+            ],
             showActionLegend: true
         })
     },

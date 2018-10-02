@@ -4,7 +4,11 @@ import sinon from "sinon";
 import Gantt from "../../../main/js/controls/Gantt";
 import { getXAxisWidth } from "../../../main/js/controls/Gantt/helpers/creationHelpers";
 import Track from "../../../main/js/controls/Gantt/Track";
-import constants, { AXIS_TYPE } from "../../../main/js/helpers/constants";
+import constants, {
+    COLORS,
+    SHAPES,
+    AXIS_TYPE
+} from "../../../main/js/helpers/constants";
 import errors from "../../../main/js/helpers/errors";
 import { loadLegendItem } from "../../../main/js/helpers/legend";
 import styles from "../../../main/js/helpers/styles";
@@ -14,6 +18,7 @@ import {
     axisJSON,
     BASE_CANVAS_HEIGHT_PADDING,
     datelineJSON,
+    datelineAlt,
     fetchElementByClass,
     getAxes,
     getData,
@@ -817,14 +822,43 @@ describe("Gantt", () => {
             });
             it("Throws error when dateline value is not provided", () => {
                 axisObj.dateline = utils.deepClone(datelineJSON);
-                axisObj.dateline.value = "";
+                axisObj.dateline[0].value = "";
                 expect(() => {
                     gantt = new Gantt(axisObj);
                 }).toThrowError(errors.THROW_MSG_DATELINE_NOT_PROVIDED);
             });
+
+            /**
+             * Verify that if a dateline is specified and a color is not supplied by the consumer, an Invalid property message is displayed, 'a valid color value must be provided'
+             */
+            it("Throws error when dateline color is not provided", () => {
+                axisObj.dateline = utils.deepClone(datelineJSON);
+                axisObj.dateline[0].color = "";
+                expect(() => {
+                    gantt = new Gantt(axisObj);
+                }).toThrowError(errors.THROW_MSG_DATELINE_COLOR_NOT_PROVIDED);
+            });
+
+            /**
+             * Verify that if an indicator is specified for the dateline and a shape is not supplied by the consumer, an Invalid property message is displayed, 'a valid shape valid must be provided'
+             */
+            it("Throws error when dateline shape is not provided when indicators are true", () => {
+                axisObj.dateline = utils.deepClone(datelineJSON);
+                axisObj.dateline[0].shape = "";
+                expect(() => {
+                    gantt = new Gantt(axisObj);
+                }).toThrowError(errors.THROW_MSG_DATELINE_SHAPE_NOT_PROVIDED);
+            });
+            it("Does not throws error when dateline shape is not provided when indicators are false", () => {
+                axisObj.dateline = utils.deepClone(datelineJSON);
+                axisObj.dateline[0].showDatelineIndicator = false;
+                axisObj.dateline[0].shape = "";
+                gantt = new Gantt(axisObj);
+            });
+
             it("Throws error when dateline value is not provided", () => {
                 axisObj.dateline = utils.deepClone(datelineJSON);
-                axisObj.dateline.value = "HELLO";
+                axisObj.dateline[0].value = "HELLO";
                 expect(() => {
                     gantt = new Gantt(axisObj);
                 }).toThrowError(errors.THROW_MSG_DATELINE_TYPE_NOT_VALID);
@@ -836,7 +870,7 @@ describe("Gantt", () => {
                     styles.ganttDatelineGroup
                 );
                 expect(d3.select(datelineGroupElement).datum().value).toBe(
-                    datelineJSON.value
+                    datelineAlt.value
                 );
                 expect(datelineGroupElement.getAttribute("aria-selected")).toBe(
                     "false"
@@ -852,6 +886,34 @@ describe("Gantt", () => {
                 const dateline = fetchElementByClass(styles.ganttDateline);
                 expect(dateline).not.toBeNull();
             });
+            it("creates multiple datelines correctly", () => {
+                axisObj.dateline = utils.deepClone(datelineJSON);
+                axisObj.dateline = [
+                    {
+                        showDatelineIndicator: true,
+                        label: {
+                            display: "Release A"
+                        },
+                        color: COLORS.GREY,
+                        shape: SHAPES.SQUARE,
+                        value: new Date(2018, 5, 1).toISOString()
+                    },
+                    {
+                        showDatelineIndicator: true,
+                        label: {
+                            display: "Release B"
+                        },
+                        color: COLORS.GREY,
+                        shape: SHAPES.SQUARE,
+                        value: new Date(2018, 8, 1).toISOString()
+                    }
+                ];
+                gantt = new Gantt(axisObj);
+                const datelines = document.querySelectorAll(
+                    `.${styles.ganttDateline}`
+                );
+                expect(datelines.length).toBe(2);
+            });
             it("Creates dateline point correctly", () => {
                 axisObj.dateline = utils.deepClone(datelineJSON);
                 gantt = new Gantt(axisObj);
@@ -864,7 +926,24 @@ describe("Gantt", () => {
             });
             it("Hides dateline point on consumer disable", () => {
                 axisObj.dateline = utils.deepClone(datelineJSON);
-                axisObj.dateline.showDatelineIndicator = false;
+                axisObj.dateline[0].showDatelineIndicator = false;
+                axisObj.dateline[0].shape = "";
+                gantt = new Gantt(axisObj);
+                const datelinePoint = fetchElementByClass(
+                    styles.ganttDatelinePoint
+                );
+                const datelineGroupElement = fetchElementByClass(
+                    styles.ganttDatelineGroup
+                );
+                expect(datelineGroupElement.childNodes.length).toBe(2);
+                expect(datelinePoint).not.toBeNull();
+                expect(datelinePoint.getAttribute("aria-hidden")).toBe("true");
+            });
+
+            it("Hides dateline point on consumer disable when shape available", () => {
+                axisObj.dateline = utils.deepClone(datelineJSON);
+                axisObj.dateline[0].showDatelineIndicator = false;
+                axisObj.dateline[0].shape = "CIRCLE";
                 gantt = new Gantt(axisObj);
                 const datelinePoint = fetchElementByClass(
                     styles.ganttDatelinePoint
@@ -893,7 +972,7 @@ describe("Gantt", () => {
                 it("Calls onClick callback", (done) => {
                     const onClickFunctionSpy = sinon.spy();
                     axisObj.dateline = utils.deepClone(datelineJSON);
-                    axisObj.dateline.onClick = onClickFunctionSpy;
+                    axisObj.dateline[0].onClick = onClickFunctionSpy;
                     gantt = new Gantt(axisObj);
                     triggerEvent(
                         fetchElementByClass(styles.ganttDatelinePoint),
@@ -912,7 +991,7 @@ describe("Gantt", () => {
                 it("Removes selection when task bar is clicked again", (done) => {
                     const onClickFunctionSpy = sinon.spy();
                     axisObj.dateline = utils.deepClone(datelineJSON);
-                    axisObj.dateline.onClick = onClickFunctionSpy;
+                    axisObj.dateline[0].onClick = onClickFunctionSpy;
                     gantt = new Gantt(axisObj);
                     const point = fetchElementByClass(
                         styles.ganttDatelinePoint
@@ -930,7 +1009,7 @@ describe("Gantt", () => {
                 });
                 it("Removes task bar selection when parameter callback is called", (done) => {
                     axisObj.dateline = utils.deepClone(datelineJSON);
-                    axisObj.dateline.onClick = (clearSelectionCallback) =>
+                    axisObj.dateline[0].onClick = (clearSelectionCallback) =>
                         clearSelectionCallback();
                     gantt = new Gantt(axisObj);
                     const point = fetchElementByClass(

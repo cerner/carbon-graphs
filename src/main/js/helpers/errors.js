@@ -136,10 +136,16 @@ export default {
     /**
      * @description Dateline
      */
+    THROW_MSG_DATELINE_OBJECT_NOT_PROVIDED:
+        "Invalid property, a valid dateline object must be provided.",
     THROW_MSG_DATELINE_NOT_PROVIDED:
         "Invalid property, a valid dateline value must be provided.",
     THROW_MSG_DATELINE_TYPE_NOT_VALID:
         "Invalid property, dateline value type must be in ISO8601 datetime format.",
+    THROW_MSG_DATELINE_COLOR_NOT_PROVIDED:
+        "Invalid property, a valid dateline color value must be provided.",
+    THROW_MSG_DATELINE_SHAPE_NOT_PROVIDED:
+        "Invalid property, a valid dateline shape value must be provided.",
     /**
      * @description Bar
      */

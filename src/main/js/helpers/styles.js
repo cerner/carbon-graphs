@@ -81,6 +81,7 @@ export default {
     activityGroup: "carbon-data-activity-group",
     activity: "carbon-data-activity",
     activityBar: "carbon-data-activity-bar",
+    ganttDatelineContent: "carbon-gantt-dateline-content",
     ganttDatelineGroup: "carbon-gantt-dateline-group",
     ganttDatelinePoint: "carbon-gantt-dateline-point",
     ganttDateline: "carbon-gantt-dateline",

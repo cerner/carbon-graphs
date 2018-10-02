@@ -182,8 +182,6 @@ class GanttConfig extends BaseConfig {
      * @throws {module:errors.THROW_MSG_NO_AXIS_INFO}
      * @throws {module:errors.THROW_MSG_NO_AXIS_LIMIT_INFO}
      * @throws {module:errors.THROW_MSG_INVALID_AXIS_TYPE_VALUES}
-     * @throws {module:errors.THROW_MSG_DATELINE_NOT_PROVIDED}
-     * @throws {module:errors.THROW_MSG_DATELINE_TYPE_NOT_VALID}
      * @returns {GanttConfig} instance object
      */
     validateInput() {
@@ -211,17 +209,11 @@ class GanttConfig extends BaseConfig {
         ) {
             throw new Error(errors.THROW_MSG_INVALID_AXIS_TYPE_VALUES);
         }
-        if (
-            utils.notEmpty(this.input.dateline) &&
-            utils.isEmpty(this.input.dateline.value)
-        ) {
-            throw new Error(errors.THROW_MSG_DATELINE_NOT_PROVIDED);
-        }
-        if (
-            utils.notEmpty(this.input.dateline) &&
-            !utils.isDate(this.input.dateline.value)
-        ) {
-            throw new Error(errors.THROW_MSG_DATELINE_TYPE_NOT_VALID);
+
+        if (utils.notEmpty(this.input.dateline)) {
+            this.input.dateline.forEach((dateline) => {
+                validateDateline(dateline);
+            });
         }
         return this;
     }
@@ -235,6 +227,37 @@ class GanttConfig extends BaseConfig {
         return this;
     }
 }
+
+/**
+ * Validates and verifies the dateline
+ * Checks if the following properties are present:
+ *      color
+ *      shape
+ *      dateline
+ * @param {object} dateline - JSON object with color, shape and date value.
+ * @throws {module:errors.THROW_MSG_DATELINE_OBJECT_NOT_PROVIDED}
+ * @throws {module:errors.THROW_MSG_DATELINE_COLOR_NOT_PROVIDED}
+ * @throws {module:errors.THROW_MSG_DATELINE_NOT_PROVIDED}
+ * @throws {module:errors.THROW_MSG_DATELINE_TYPE_NOT_VALID}
+ * @returns {GanttConfig} instance object
+ */
+const validateDateline = (dateline) => {
+    if (utils.isEmpty(dateline)) {
+        throw new Error(errors.THROW_MSG_DATELINE_OBJECT_NOT_PROVIDED);
+    }
+    if (utils.isEmpty(dateline.value)) {
+        throw new Error(errors.THROW_MSG_DATELINE_NOT_PROVIDED);
+    }
+    if (!utils.isDate(dateline.value)) {
+        throw new Error(errors.THROW_MSG_DATELINE_TYPE_NOT_VALID);
+    }
+    if (utils.isEmpty(dateline.color)) {
+        throw new Error(errors.THROW_MSG_DATELINE_COLOR_NOT_PROVIDED);
+    }
+    if (dateline.showDatelineIndicator && utils.isEmpty(dateline.shape)) {
+        throw new Error(errors.THROW_MSG_DATELINE_SHAPE_NOT_PROVIDED);
+    }
+};
 
 export default GanttConfig;
 export const validateTask = validateData;

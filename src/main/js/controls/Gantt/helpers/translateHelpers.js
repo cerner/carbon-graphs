@@ -229,6 +229,7 @@ const translateContentContainer = (config, canvasSVG) =>
         .transition(constants.d3Transition)
         .attr("width", getXAxisWidth(config))
         .attr("height", getYAxisHeight(config));
+
 /**
  * Translates the dateline, based on each content loaded.
  * When a new content is loaded, the height of the graph changes
@@ -241,25 +242,30 @@ const translateContentContainer = (config, canvasSVG) =>
  * @returns {undefined} - returns nothing
  */
 const translateDateline = (scale, config, canvasSVG) => {
-    if (!config.dateline.value) {
+    if (utils.isEmpty(config.dateline)) {
         return;
     }
-    const xVal = scale.x(utils.parseDateTime(config.dateline.value));
     const datelineGroup = canvasSVG
-        .select(`.${styles.ganttDatelineGroup}`)
+        .selectAll(`.${styles.ganttDatelineGroup}`)
         .transition(constants.d3Transition)
         .attr(
             "transform",
             `translate(${getXAxisXPosition(config)},${getXAxisYPosition()})`
-        );
+        )
+        .attr("style", (val) => `fill: ${val.color}; stroke: ${val.color}; `);
     datelineGroup
-        .select(`.${styles.ganttDatelinePoint}`)
-        .attr("transform", `translate(${xVal},0)`);
+        .selectAll(`.${styles.ganttDatelinePoint}`)
+        .attr(
+            "transform",
+            (val) => `translate(${scale.x(utils.parseDateTime(val.value))}, 0)`
+        )
+        .attr("style", (val) => `fill: ${val.color}; stroke: ${val.color}; `);
     datelineGroup
-        .select(`.${styles.ganttDateline}`)
-        .attr("x1", xVal)
+        .selectAll(`.${styles.ganttDateline}`)
+        .attr("style", (val) => `fill: ${val.color}; stroke: ${val.color}; `)
+        .attr("x1", (val) => scale.x(utils.parseDateTime(val.value)))
         .attr("y1", 0)
-        .attr("x2", xVal)
+        .attr("x2", (val) => scale.x(utils.parseDateTime(val.value)))
         .attr("y2", getYAxisHeight(config));
 };
 /**

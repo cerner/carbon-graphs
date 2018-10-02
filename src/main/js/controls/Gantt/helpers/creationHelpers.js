@@ -9,7 +9,7 @@ import {
     getYAxisXPosition,
     prepareXAxis
 } from "../../../helpers/axis";
-import constants, { SHAPES } from "../../../helpers/constants";
+import constants from "../../../helpers/constants";
 import { shouldTruncateLabel, truncateLabel } from "../../../helpers/label";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
@@ -453,6 +453,7 @@ const datelineClickHandler = (value, target) => {
         )
     );
 };
+
 /**
  * Creates a dateline for gantt chart. We are not adding
  * x1, x2, y1, y2 co-ordinates for the straight line since they will be adjusted when
@@ -465,20 +466,34 @@ const datelineClickHandler = (value, target) => {
  * @returns {Object} d3 svg path
  */
 const createDateline = (scale, config, canvasSVG) => {
-    const datelineGroup = canvasSVG
+    const datelineContent = canvasSVG
         .append("g")
-        .datum(config.dateline)
-        .classed(styles.ganttDatelineGroup, true)
-        .attr("aria-selected", false);
-    datelineGroup
-        .append("path")
-        .classed(styles.ganttDatelinePoint, true)
-        .attr("aria-hidden", !config.dateline.showDatelineIndicator)
-        .attr("d", new Shape(SHAPES.SQUARE).getPathDescription())
-        .on("click", function(value) {
-            datelineClickHandler(value, this);
-        });
-    datelineGroup.append("line").classed(styles.ganttDateline, true);
+        .classed(styles.ganttDatelineContent, true);
+    config.dateline.forEach((dateline) => {
+        const datelineGroup = datelineContent
+            .append("g")
+            .classed(styles.ganttDatelineGroup, true)
+            .datum(dateline)
+            .attr("style", (val) => `fill: ${val.color}; stroke: ${val.color}`)
+            .attr("aria-selected", false);
+        datelineGroup
+            .append("path")
+            .classed(styles.ganttDatelinePoint, true)
+            .attr("style", (val) => `fill: ${val.color}; stroke: ${val.color}`)
+            .attr("aria-hidden", !dateline.showDatelineIndicator)
+            .attr("d", (val) => {
+                if (val.showDatelineIndicator) {
+                    return new Shape(val.shape).getPathDescription();
+                }
+            })
+            .on("click", function(value) {
+                datelineClickHandler(value, this);
+            });
+        datelineGroup
+            .append("line")
+            .classed(styles.ganttDateline, true)
+            .attr("style", (val) => `fill: ${val.color}; stroke: ${val.color}`);
+    });
 };
 /**
  * Creates a new Track instance
