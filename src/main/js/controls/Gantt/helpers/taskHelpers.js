@@ -6,13 +6,14 @@ import {
     getBar,
     getChunk,
     getPercentageBar,
+    getHashedBar,
     getRect
 } from "../../../helpers/barType";
 import constants, { COLORS } from "../../../helpers/constants";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 import { validateTask } from "../GanttConfig";
-import { getTrackLabel, getXAxisYPosition } from "./creationHelpers";
+import { getTrackLabel, getXAxisYPosition, isHashed } from "./creationHelpers";
 import {
     calculatePercentage,
     getDuration,
@@ -78,6 +79,7 @@ const taskClickActionHandler = (value, index, target) => {
         )
     );
 };
+
 /**
  * Processes the input for a task and converts to an object needed to render a bar
  * Duration is a function that is needed to compute Start or end. If both start and end
@@ -110,7 +112,8 @@ const processTask = (graphConfig, trackLabel, dataTarget) => {
         color: dataTarget.color || COLORS.BLUE,
         label: dataTarget.label || null,
         key: dataTarget.key,
-        style: getTaskStyle(dataTarget)
+        style: getTaskStyle(dataTarget),
+        isHashed: isHashed(dataTarget.style)
     };
 };
 /**
@@ -191,7 +194,7 @@ const renderPercentageBarGroup = (scale, taskData, index, taskPath) => {
  * @param {Selection} taskPath - d3 task bar selection element
  * @returns {undefined} - returns nothing
  */
-const renderForegroundBarGroup = (scale, taskData, index, taskPath) => {
+const renderTaskGroup = (scale, taskData, index, taskPath) => {
     const _args = generatorArgs(scale, taskData, taskPath);
     renderSelectionIndicator(_args);
     (isAChunk(taskData.startDate, taskData.endDate) ? getChunk : getBar)(
@@ -203,10 +206,36 @@ const renderForegroundBarGroup = (scale, taskData, index, taskPath) => {
         taskData.style
     ).on("click", () => taskClickActionHandler(taskData, index, taskPath));
 };
+
+/**
+ * Based on startDate and endDate, we render a hashed bar.
+ * @private
+ * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {Object} scale - d3 scale for Graph
+ * @param {Object} data - Current activity data
+ * @param {number} index - Current task data index
+ * @param {Selection} path - d3 activity bar selection element
+ * @returns {undefined} - returns nothing
+ */
+const renderHashedTaskGroup = (canvasSVG, scale, data, index, path) => {
+    const _args = generatorArgs(scale, data, path);
+    renderSelectionIndicator(_args);
+    getHashedBar(
+        canvasSVG,
+        canvasSVG.select("defs"),
+        _args.path,
+        _args.x,
+        _args.y,
+        _args.width,
+        _args.height,
+        data.style
+    ).on("click", () => taskClickActionHandler(data, index, path));
+};
 /**
  * Renders the tasks for a track. Each task is created based on start and end datetime.
  * Values needs to be in ISO8601 datetime format, along with the unique key for each task.
  * @private
+ * @param {Array} canvasSVG - d3 object of canvas svg
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} config - Graph config object derived from input JSON
  * @param {Object} trackLabel - Track label
@@ -214,7 +243,14 @@ const renderForegroundBarGroup = (scale, taskData, index, taskPath) => {
  * @param {Array} tasks - Tasks list
  * @returns {undefined} - returns nothing
  */
-const drawTasks = (scale, config, trackLabel, taskGroupPath, tasks) => {
+const drawTasks = (
+    canvasSVG,
+    scale,
+    config,
+    trackLabel,
+    taskGroupPath,
+    tasks
+) => {
     const taskPath = taskGroupPath
         .selectAll("g")
         .data(
@@ -229,9 +265,13 @@ const drawTasks = (scale, config, trackLabel, taskGroupPath, tasks) => {
         .attr("aria-selected", false)
         .attr("aria-describedby", (d) => d.key)
         .each(function(d, i) {
-            d.percentage
-                ? renderPercentageBarGroup(scale, d, i, this)
-                : renderForegroundBarGroup(scale, d, i, this);
+            if (d.percentage) {
+                renderPercentageBarGroup(scale, d, i, this);
+            } else {
+                d.isHashed
+                    ? renderHashedTaskGroup(canvasSVG, scale, d, i, this)
+                    : renderTaskGroup(scale, d, i, this);
+            }
         });
     taskPath
         .exit()
@@ -262,6 +302,7 @@ const loadTasks = (graphContext, trackPathSVG, trackLabel, tasks) => {
         validateTask(a);
     });
     drawTasks(
+        graphContext.svg,
         graphContext.scale,
         graphContext.config,
         trackLabel,

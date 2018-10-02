@@ -1,4 +1,5 @@
 import { getBarStyle } from "../../../helpers/barType";
+import constants, { COLORS } from "../../../helpers/constants";
 import errors from "../../../helpers/errors";
 import utils from "../../../helpers/utils";
 
@@ -14,6 +15,32 @@ import utils from "../../../helpers/utils";
  */
 const getTaskStyle = (data = {}) =>
     getBarStyle(data.style, { color: data.color });
+
+/**
+ * Returns the appropriate bar based on the activity style settings.
+ * For Normal Bar we apply the settings below in the
+ * `rect` element style attribute.
+ * @private
+ * @param {Object} data - data associated to the task
+ * @returns {string} A style constant
+ */
+const getActivityStyle = (data = {}) => {
+    const color = data.color || COLORS.BLUE;
+    let currentStyle = `fill: ${color}; opacity: ${
+        constants.DEFAULT_GANTT_ACTIVITY_OPACITY
+    }`;
+
+    // If style property is not provided then we use treat it as filled.
+    if (utils.isEmpty(data.style)) {
+        return currentStyle;
+    }
+    if (data.style.isHashed === true) {
+        currentStyle = `fill: ${
+            constants.DEFAULT_ACTIVITY_BAR_HASH_COLOR
+        }; opacity: ${constants.DEFAULT_GANTT_ACTIVITY_OPACITY}`;
+    }
+    return currentStyle;
+};
 /**
  * Executes the function sent by consumer to get the duration.
  * This duration is used to compute start or end if one of them is not provided
@@ -30,6 +57,26 @@ const getDuration = (duration) => {
     const durationTime = duration();
     if (typeof durationTime !== "number") {
         throw new Error(errors.THROW_MSG_TASKS_DURATION_NOT_VALID);
+    }
+    return durationTime;
+};
+
+/**
+ * Executes the function sent by consumer to get the duration.
+ * This duration is used to compute start or end if one of them is not provided
+ * @private
+ * @throws {module:errors.THROW_MSG_TASKS_DURATION_NOT_FUNCTION}
+ * @throws {module:errors.THROW_MSG_TASKS_DURATION_NOT_VALID}
+ * @param {Function} duration - Duration function which returns a Date as a number
+ * @returns {number} a datetime number
+ */
+const getActivityDuration = (duration) => {
+    if (duration && !utils.isFunction(duration)) {
+        throw new Error(errors.THROW_MSG_ACTIVITIES_DURATION_NOT_FUNCTION);
+    }
+    const durationTime = duration();
+    if (typeof durationTime !== "number") {
+        throw new Error(errors.THROW_MSG_ACTIVITIES_DURATION_NOT_VALID);
     }
     return durationTime;
 };
@@ -85,5 +132,7 @@ export {
     getEndDuration,
     getStartDuration,
     getDuration,
-    getTaskStyle
+    getActivityDuration,
+    getTaskStyle,
+    getActivityStyle
 };

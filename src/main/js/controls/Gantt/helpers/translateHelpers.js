@@ -393,6 +393,29 @@ const translateTaskBar = (scale, path) =>
             }
         });
 /**
+ * Translates activity bars when resized.
+ * @description When translating the width of a bar:
+ * Bar will be subjected to normal translation.
+ * @private
+ * @param {Object} scale - d3 scale for Graph
+ * @param {Selection} path - d3 object of track
+ * @returns {undefined} - returns nothing
+ */
+const translateActivityBar = (scale, path) =>
+    path
+        .attr("x", (val) => scale.x(val.startDate))
+        .attr(
+            "y",
+            (val) =>
+                scale.y(val.y) + constants.DEFAULT_GANTT_ACTIVITY_PADDING.top
+        )
+        .attr(
+            "width",
+            (val) =>
+                scale.x(val.endDate) - scale.x(val.startDate) ||
+                constants.DEFAULT_GANTT_ACTIVITY_CHUNK_WIDTH
+        );
+/**
  * Translates task selection indicators when resized.
  * This is also called on initial creation, sets the positioning for
  * x, y, width and height attributes based on current task bar positioning.
@@ -447,6 +470,22 @@ const translateTasks = (scale, config, trackPath) =>
                 : translateTaskBar(scale, path);
         });
 
+/**
+ * Translates activities based on container width.
+ * @private
+ * @param {Object} scale - d3 scale for Graph
+ * @param {Object} config - config object derived from input JSON
+ * @param {Selection} trackPath - d3 object of track
+ * @returns {Selection} - d3 Track selection
+ */
+const translateActivities = (scale, config, trackPath) =>
+    trackPath
+        .selectAll(`g.${styles.activity}`)
+        .transition(constants.d3Transition)
+        .selectAll(`rect.${styles.activityBar}`)
+        .each(function() {
+            translateActivityBar(scale, d3.select(this));
+        });
 export {
     translateGraph,
     translateHGrid,
@@ -454,5 +493,6 @@ export {
     translateLabelText,
     transformPoint,
     translateActionPoints,
-    translateTasks
+    translateTasks,
+    translateActivities
 };

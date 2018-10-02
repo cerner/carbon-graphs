@@ -108,6 +108,26 @@ export default {
         "Invalid property: duration; Duration needs to be a function.",
     THROW_MSG_TASKS_DURATION_NOT_VALID:
         "Invalid property: duration; Duration needs to return a number.",
+
+    /**
+     * @description Activities
+     */
+    THROW_MSG_ACTIVITIES_NOT_PROVIDED:
+        "Invalid input format, task(s) must be provided for a track.",
+    THROW_MSG_ACTIVITIES_UNIQUE_KEY_NOT_PROVIDED:
+        "Invalid input format; unique key must be provided for each task.",
+    THROW_MSG_ACTIVITIES_START_AND_END_NOT_PROVIDED:
+        "Invalid input format; both start date and end date cannot be empty.",
+    THROW_MSG_ACTIVITIES_DURATION_NOT_PROVIDED:
+        "Invalid input format; start date or end date cannot be empty for a task. No duration function provided.",
+    THROW_MSG_ACTIVITIES_START_AND_END_TYPE_NOT_VALID:
+        "Input type invalid, start date and end date needs to be in ISO8601 datetime format.",
+    THROW_MSG_ACTIVITIES_START_MORE_END:
+        "Input input format; start date cannot be larger than end date.",
+    THROW_MSG_ACTIVITIES_DURATION_NOT_FUNCTION:
+        "Invalid property: duration; Duration needs to be a function.",
+    THROW_MSG_ACTIVITIES_DURATION_NOT_VALID:
+        "Invalid property: duration; Duration needs to return a number.",
     /**
      * @description Actions
      */

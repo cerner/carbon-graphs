@@ -224,6 +224,7 @@ const drawDataBars = (
             const rectPath = dataPoint.isHashed
                 ? getHashedBar(
                       canvasSVG,
+                      canvasSVG.append("defs"),
                       dataPointSVG,
                       attributeHelper.x(dataPoint),
                       attributeHelper.y(dataPoint),

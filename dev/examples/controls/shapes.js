@@ -86,6 +86,7 @@ export const renderFillTypes = (el, id, title) => {
     const defsPath = hashSVG.append("defs");
     getBar(barSVG.append("g"), x, y, width, height, "fill: #007cc3;");
     getHashedBar(
+        hashSVG,
         defsPath,
         hashSVG.append("g"),
         x,

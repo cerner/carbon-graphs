@@ -1,4 +1,3 @@
-import d3 from "d3";
 import constants, { COLORS } from "./constants";
 import styles from "./styles";
 import utils from "./utils";
@@ -27,6 +26,9 @@ const getBarStyle = (style = {}, dataTarget) => {
         currentStyle = `${currentStyle} fill: ${
             COLORS.WHITE
         }; stroke-width: 1;`;
+    }
+    if (style.isHashed === true) {
+        currentStyle = `${currentStyle} stroke-width: 1`;
     }
     return currentStyle;
 };
@@ -113,6 +115,7 @@ const getPercentageBar = (path, x, y, width, height, percent, color) => {
 /**
  * Creates a patterned bar with forward backslashes
  * @private
+ * @param {Array} canvasSVG - d3 object of canvas svg
  * @param {Selection} defs - d3 selection path for defs element in the graph
  * @param {Selection} path - d3 selection path for the SVG group element
  * @param {number} x - Scaled x co-ordinate
@@ -123,33 +126,37 @@ const getPercentageBar = (path, x, y, width, height, percent, color) => {
  * @returns {Selection} d3 selection path
  */
 const getHashedBar = (
+    canvasSVG,
     defs,
     path,
     x,
     y,
     width,
     height,
-    style = `fill: ${constants.DEFAULT_BAR_HASH_COLOR};`
+    style = `fill: ${constants.DEFAULT_TASK_BAR_HASH_COLOR};`
 ) => {
     const patternId = "pattern-stripe";
-    if (d3.select(`#${patternId}`).empty()) {
+    if (utils.isEmpty(defs) || defs.empty()) {
+        canvasSVG.append("defs");
+    }
+    if (canvasSVG.select(`#${patternId}`).empty()) {
         defs.append("pattern")
             .attr("id", patternId)
             .attr("patternUnits", "userSpaceOnUse")
-            .attr("patternTransform", "rotate(-45)")
-            .attr("width", "12")
-            .attr("height", "16")
+            .attr("patternTransform", "rotate(45)")
+            .attr("width", constants.DEFAULT_GANTT_TASK_STRIPE_WIDTH)
+            .attr("height", height)
             .append("rect")
-            .attr("width", "3")
-            .attr("height", "16")
-            .attr("style", "fill: #fff");
+            .attr("width", constants.DEFAULT_GANTT_TASK_STRIPE_DISTANCE)
+            .attr("height", height)
+            .style("fill", constants.DEFAULT_BAR_STRIPE_COLOR);
     }
     getRect(path, x, y, width, height)
         .classed(styles.taskBar, true)
         .attr("style", style);
     getRect(path, x, y, width, height)
         .classed(styles.taskBar, true)
-        .attr("style", `fill: url(#${patternId}); opacity: 0.4;`);
+        .attr("style", `fill: url(#${patternId});`);
     return path;
 };
 

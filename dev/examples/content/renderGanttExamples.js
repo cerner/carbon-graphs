@@ -1,5 +1,6 @@
 import {
     renderGantt,
+    renderGanttActivities,
     renderGanttAction,
     renderGanttPercentage,
     renderGanttStyle,
@@ -30,6 +31,13 @@ export const renderGanttExamples = (
         toggleSectionAsActive(event.target);
         instance.load(
             renderGantt(contentSection, "ganttSimple", "Simple Gantt")
+        );
+        instance.load(
+            renderGanttActivities(
+                contentSection,
+                "ganttActivities",
+                "Tasks and Activities"
+            )
         );
         instance.load(
             renderGanttPercentage(

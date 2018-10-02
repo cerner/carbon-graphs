@@ -90,11 +90,12 @@ Y Axis should have the following properties:
 
 #### Optional
 
-| Property Name | Expected | Default | Description                   |
-| ------------- | -------- | ------- | ----------------------------- |
-| dimension     | object   | {}      | Refer [Dimension](#dimension) |
-| tasks         | array    | []      | Refer [Tasks](#tasks)         |
-| actions       | array    | []      | Refer [Actions](#actions)     |
+| Property Name | Expected | Default | Description                     |
+| ------------- | -------- | ------- | ------------------------------- |
+| dimension     | object   | {}      | Refer [Dimension](#dimension)   |
+| tasks         | array    | []      | Refer [Tasks](#tasks)           |
+| activities    | array    | []      | Refer [Activities](#activities) |
+| actions       | array    | []      | Refer [Actions](#actions)       |
 
 ### Dimension
 
@@ -124,7 +125,7 @@ Y Axis should have the following properties:
 
 ### Tasks
 
-A Task is a `bar` along the track.
+A Task is a `foreground-bar` along the track. This represents a unit of work.
 
 -   A `task` needs a start and end date.
 -   If start date is not provided, a `duration` needs to be provided
@@ -136,6 +137,7 @@ A task can be styled as follows:
 
 -   A `bar` can be `Hollow`
 -   A `bar` can be `Dotted`
+-   A `bar` can be `Hashed`
 
 #### Required
 
@@ -147,14 +149,46 @@ A task can be styled as follows:
 
 #### Optional
 
-| Property Name | Expected | Default                            | Description                                                                                    |
-| ------------- | -------- | ---------------------------------- | ---------------------------------------------------------------------------------------------- |
-| onClick       | Function | null                               | Any action that can be performed when clicking on the task                                     |
-| duration      | Function | null                               | Function that returns a number that is relative to start or end date                           |
-| color         | string   | COLORS.BLUE                        | Color for the bar                                                                              |
-| label         | object   | {}                                 | `display` property needs to be provided for label                                              |
-| percentage    | number   | null                               | Transforms `bar` into Percentage bar and fill the bar with color opted for in `color` property |
-| style         | object   | `{isDotted: true, isHollow: true}` | Styling for `bar`                                                                              |
+| Property Name | Expected | Default                                            | Description                                                                                    |
+| ------------- | -------- | -------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| onClick       | Function | null                                               | Any action that can be performed when clicking on the task                                     |
+| duration      | Function | null                                               | Function that returns a number that is relative to start or end date                           |
+| color         | string   | COLORS.BLUE                                        | Color for the bar                                                                              |
+| label         | object   | {}                                                 | `display` property needs to be provided for label                                              |
+| percentage    | number   | null                                               | Transforms `bar` into Percentage bar and fill the bar with color opted for in `color` property |
+| style         | object   | `{isDotted: true, isHollow: true, isHashed: true}` | Styling for `bar`                                                                              |
+
+### Activities
+
+An Activity is a `background-bar` along the track. This represents the overall background process which may encapsulate one or more tasks.
+
+-   A `activity` needs a start and end date.
+-   A `activity` will not be selectable.
+-   If start date is not provided, a `duration` needs to be provided
+-   If end date is not provided, a `duration` needs to be provided
+-   If start and end date are same then a fixed width `chunk` is created
+-   Start and End date does not encapsulate the underlying tasks.
+
+An activity can be styled as follows:
+
+-   A `bar` can be `Hashed`
+
+#### Required
+
+| Property Name | Expected         | Description                         |
+| ------------- | ---------------- | ----------------------------------- |
+| key           | string           | Unique id which represents the task |
+| startDate     | string (ISO8601) | Task start date or `duration`       |
+| endDate       | string (ISO8601) | Task end date or `duration`         |
+
+#### Optional
+
+| Property Name | Expected | Default            | Description                                                          |
+| ------------- | -------- | ------------------ | -------------------------------------------------------------------- |
+| duration      | Function | null               | Function that returns a number that is relative to start or end date |
+| color         | string   | COLORS.BLUE        | Color for the bar                                                    |
+| label         | object   | {}                 | `display` property needs to be provided for label                    |
+| style         | object   | `{isHashed: true}` | Styling for `bar`                                                    |
 
 ### Actions
 

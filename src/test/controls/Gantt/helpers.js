@@ -62,6 +62,36 @@ export const taskValuesJSON = [
         percentage: 50,
         startDate: taskStartDate,
         endDate: taskEndDate
+    },
+    {
+        key: "taskHash",
+        onClick: sinon.spy(),
+        label: {
+            display: "Story Charming"
+        },
+        startDate: taskStartDate,
+        endDate: taskEndDate,
+        style: {
+            isHashed: true
+        }
+    }
+];
+export const activityValuesJSON = [
+    {
+        key: "activityNormal",
+        label: {
+            display: "Story Apex Activity Something"
+        },
+        startDate: taskStartDate,
+        endDate: taskEndDate
+    },
+    {
+        key: "activityChunk",
+        label: {
+            display: "Story Broccoli"
+        },
+        startDate: taskStartDate,
+        endDate: taskStartDate
     }
 ];
 export const trackDimension = {

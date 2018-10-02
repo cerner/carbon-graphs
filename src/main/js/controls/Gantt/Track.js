@@ -17,10 +17,12 @@ import {
     updateTrackProps
 } from "./helpers/creationHelpers";
 import { loadTasks, unloadTasks } from "./helpers/taskHelpers";
+import { loadActivities, unloadActivities } from "./helpers/activityHelpers";
 import {
     translateActionPoints,
     translateLabelText,
-    translateTasks
+    translateTasks,
+    translateActivities
 } from "./helpers/translateHelpers";
 
 /**
@@ -126,6 +128,14 @@ class Track extends GraphContent {
             graph.svg,
             this.config
         );
+        if (utils.notEmpty(this.config.activities)) {
+            loadActivities(
+                graph,
+                this.trackGroupPath,
+                this.config.trackLabel,
+                this.config.activities
+            );
+        }
         if (utils.notEmpty(this.config.tasks)) {
             loadTasks(
                 graph,
@@ -151,6 +161,9 @@ class Track extends GraphContent {
      */
     unload(graph) {
         updateTrackProps(graph.config, this.config);
+        if (utils.notEmpty(this.config.activities)) {
+            unloadActivities(graph, this.trackGroupPath);
+        }
         if (utils.notEmpty(this.config.tasks)) {
             unloadTasks(graph, this.trackGroupPath);
         }
@@ -166,6 +179,9 @@ class Track extends GraphContent {
      */
     resize(graph) {
         translateLabelText(graph.scale, graph.config, graph.svg);
+        if (utils.notEmpty(this.config.activities)) {
+            translateActivities(graph.scale, graph.config, this.trackGroupPath);
+        }
         if (utils.notEmpty(this.config.tasks)) {
             translateTasks(graph.scale, graph.config, this.trackGroupPath);
         }

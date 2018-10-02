@@ -15,7 +15,7 @@ import {
     getHashedBar,
     getPercentageBar
 } from "../../../main/js/helpers/barType";
-import { COLORS } from "../../../main/js/helpers/constants";
+import constants, { COLORS } from "../../../main/js/helpers/constants";
 import errors from "../../../main/js/helpers/errors";
 import styles from "../../../main/js/helpers/styles";
 import {
@@ -268,7 +268,7 @@ describe("Gantt -> Track -> Task", () => {
             loadData(gantt);
             const taskGroup = document.querySelectorAll(`.${styles.taskGroup}`);
             expect(taskGroup.length).toBe(1);
-            expect(taskGroup[0].childNodes.length).toBe(3);
+            expect(taskGroup[0].childNodes.length).toBe(4);
             expect(taskGroup[0].getAttribute("transform")).not.toBeNull();
         });
         it("Adds data to each task correctly", () => {
@@ -502,6 +502,32 @@ describe("Gantt -> Track -> Task", () => {
         it("Renders selection for percentage bar correctly", () => {
             loadData(gantt);
             const taskElement = document.querySelectorAll(`.${styles.task}`)[2];
+            const indicatorElement = taskElement.childNodes[0];
+            const taskBarElement = taskElement.childNodes[1];
+            expect(indicatorElement).not.toBeNull();
+            expect(indicatorElement.nodeName).toBe("rect");
+            expect(indicatorElement.getAttribute("aria-hidden")).toBe("true");
+            expect(indicatorElement.getAttribute("rx")).toBe("3");
+            expect(indicatorElement.getAttribute("ry")).toBe("3");
+            expect(indicatorElement.getAttribute("class")).toBe(
+                styles.taskBarSelection
+            );
+            expect(+indicatorElement.getAttribute("x")).toBeLessThan(
+                +taskBarElement.getAttribute("x")
+            );
+            expect(+indicatorElement.getAttribute("y")).toBeLessThan(
+                +taskBarElement.getAttribute("y")
+            );
+            expect(+indicatorElement.getAttribute("width")).toBeGreaterThan(
+                +taskBarElement.getAttribute("width")
+            );
+            expect(+indicatorElement.getAttribute("height")).toBeGreaterThan(
+                +taskBarElement.getAttribute("height")
+            );
+        });
+        it("Renders selection for hashed tasks correctly", () => {
+            loadData(gantt);
+            const taskElement = document.querySelectorAll(`.${styles.task}`)[3];
             const indicatorElement = taskElement.childNodes[0];
             const taskBarElement = taskElement.childNodes[1];
             expect(indicatorElement).not.toBeNull();
@@ -774,6 +800,47 @@ describe("Gantt -> Track -> Task", () => {
                     }
                 );
             });
+            it("Calls onClick callback for hashed bar", (done) => {
+                gantt.loadContent(
+                    Object.assign(getData(), {
+                        trackLabel: {
+                            display: "A"
+                        },
+                        tasks: [
+                            {
+                                key: "taskNormal",
+                                onClick: onClickFunctionSpy,
+                                label: {
+                                    display: "Story Apex"
+                                },
+                                startDate: taskStartDate,
+                                endDate: taskEndDate,
+                                style: {
+                                    isHashed: true
+                                }
+                            }
+                        ]
+                    })
+                );
+                triggerEvent(
+                    fetchElementByClass(styles.taskBar),
+                    "click",
+                    () => {
+                        expect(onClickFunctionSpy.calledOnce).toBeTruthy();
+                        expect(
+                            fetchElementByClass(styles.task).getAttribute(
+                                "aria-selected"
+                            )
+                        ).toBe("true");
+                        expect(
+                            fetchElementByClass(
+                                styles.taskBarSelection
+                            ).getAttribute("aria-hidden")
+                        ).toBe("false");
+                        done();
+                    }
+                );
+            });
             it("Emits correct parameters for a percentage bar", (done) => {
                 let args = {};
                 gantt.loadContent(
@@ -843,6 +910,108 @@ describe("Gantt -> Track -> Task", () => {
                                 percentage: 30,
                                 startDate: taskStartDate,
                                 endDate: taskEndDate
+                            }
+                        ]
+                    })
+                );
+                triggerEvent(
+                    fetchElementByClass(styles.taskBarCompletion),
+                    "click",
+                    () => {
+                        expect(onClickFunctionSpy.calledOnce).toBeTruthy();
+                        expect(
+                            fetchElementByClass(styles.task).getAttribute(
+                                "aria-selected"
+                            )
+                        ).toBe("true");
+                        expect(
+                            fetchElementByClass(
+                                styles.taskBarSelection
+                            ).getAttribute("aria-hidden")
+                        ).toBe("false");
+                        done();
+                    }
+                );
+            });
+            it("Emits correct parameters for a hashed task bar", (done) => {
+                let args = {};
+                gantt.loadContent(
+                    Object.assign(getData(), {
+                        trackLabel: {
+                            display: "A"
+                        },
+                        tasks: [
+                            {
+                                key: "taskHash_1",
+                                label: {
+                                    display: "Story Apex"
+                                },
+                                startDate: taskStartDate,
+                                endDate: taskStartDate,
+                                style: {
+                                    isHashed: true
+                                }
+                            },
+                            {
+                                key: "taskHash_2",
+                                label: {
+                                    display: "Story Beta"
+                                },
+                                onClick: (cb, key, index, val, target) => {
+                                    args = {
+                                        cb,
+                                        key,
+                                        index,
+                                        val,
+                                        target
+                                    };
+                                },
+                                startDate: new Date(2018, 3, 1).toISOString(),
+                                endDate: new Date(2018, 6, 1).toISOString(),
+                                style: {
+                                    isHashed: true
+                                }
+                            }
+                        ]
+                    })
+                );
+                triggerEvent(
+                    document.querySelectorAll(`.${styles.task}`)[1],
+                    "click",
+                    () => {
+                        expect(args).not.toBeNull();
+                        expect(args.cb).toEqual(jasmine.any(Function));
+                        expect(args.key).toBe("taskHash_2");
+                        expect(args.val).not.toBeNull();
+                        expect(args.val.label.display).toEqual("Story Beta");
+                        expect(args.target).not.toBeNull();
+                        done();
+                    }
+                );
+            });
+            /**
+             * CH05012018.31	Verify the hashed foreground bar is selectable
+             */
+            it("Calls onClick callback for a hashed task bar when clicked on completion bar", (done) => {
+                const onClickFunctionSpy = sinon.spy();
+                gantt.loadContent(
+                    Object.assign(getData(), {
+                        trackLabel: {
+                            display: "A"
+                        },
+                        tasks: [
+                            {
+                                key: "taskHash",
+                                onClick: onClickFunctionSpy,
+                                label: {
+                                    display: "Story Apex"
+                                },
+                                percentage: 30,
+                                startDate: taskStartDate,
+                                endDate: taskEndDate,
+                                style: {
+                                    isHashed: true
+                                }
                             }
                         ]
                     })
@@ -1113,6 +1282,17 @@ describe("Gantt -> Track -> Task", () => {
             expect(styleSettings).toContain(COLORS.BLUE);
             expect(styleSettings).toContain("stroke-dasharray");
         });
+        it("Returns correct style when dotted bar is needed", () => {
+            const styleSettings = getTaskStyle({
+                style: {
+                    isHashed: true
+                }
+            });
+            expect(styleSettings).toContain("fill");
+            expect(styleSettings).toContain(
+                constants.DEFAULT_TASK_BAR_HASH_COLOR
+            );
+        });
         it("Returns correct style when hollow bar is needed", () => {
             const styleSettings = getTaskStyle({
                 style: {
@@ -1206,6 +1386,7 @@ describe("Gantt -> Track -> Task", () => {
         it("Renders Hashed bar correctly", () => {
             gantt.destroy();
             getHashedBar(
+                d3.select(ganttChartContainer),
                 d3.select(ganttChartContainer).append("defs"),
                 d3.select(ganttChartContainer),
                 0,
@@ -1223,6 +1404,74 @@ describe("Gantt -> Track -> Task", () => {
             );
             expect(taskBarElements[1].nodeName).toBe("RECT");
             expect(taskBarElements[1].getAttribute("style")).toContain("url");
+        });
+        /**
+         * CH07252018.01	Verify duration can be displayed using a hashed, default (filled) task foreground bar
+         */
+        it("Renders hashed bar correctly with default color", () => {
+            const tasks = [
+                {
+                    key: "task",
+                    onClick: sinon.spy(),
+                    label: {
+                        display: "Story Dino"
+                    },
+                    startDate: taskStartDate,
+                    endDate: taskEndDate,
+                    style: {
+                        isHashed: true
+                    }
+                }
+            ];
+            gantt.loadContent(
+                Object.assign(getData(), {
+                    trackLabel: {
+                        display: "Project A Really long",
+                        onClick: onClickFunctionSpy
+                    },
+                    tasks
+                })
+            );
+            const taskElement = fetchElementByClass(styles.task);
+            expect(taskElement.getAttribute("aria-selected")).toEqual("false");
+            expect(taskElement.getAttribute("aria-describedby")).toEqual(
+                "task"
+            );
+            expect(taskElement.childNodes[2].getAttribute("style")).toEqual(
+                "fill: url(#pattern-stripe);"
+            );
+        });
+
+        /**
+         * CH07232018.03	Verify the foreground bar displays at the top of the row
+         */
+        it("Renders task bar at the top", () => {
+            const tasks = [
+                {
+                    key: "task",
+                    onClick: sinon.spy(),
+                    label: {
+                        display: "Story Dino"
+                    },
+                    startDate: taskStartDate,
+                    endDate: taskEndDate
+                }
+            ];
+            gantt.loadContent(
+                Object.assign(getData(), {
+                    trackLabel: {
+                        display: "Project A Really long",
+                        onClick: onClickFunctionSpy
+                    },
+                    tasks,
+                    dimension: {
+                        trackHeight: 160
+                    }
+                })
+            );
+            const taskElement = fetchElementByClass(styles.taskBar);
+            // 23 px height, even when track length is 160
+            expect(taskElement.getAttribute("height")).toEqual("23");
         });
     });
 });

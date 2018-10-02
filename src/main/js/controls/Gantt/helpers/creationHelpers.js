@@ -503,6 +503,14 @@ const createTrackContainer = (config, canvasSVG, trackConfig) =>
         .attr("aria-labelledby", trackConfig.trackLabel.display)
         .attr("aria-describedby", trackConfig.key);
 
+/**
+ * Checks if hashing style is available.
+ * @private
+ * @param {Object} style - all stlyings which can be applied.
+ * @returns {Boolean} - indicating if hashed styling can be applied.
+ */
+const isHashed = (style) => !(utils.isEmpty(style) || !style.isHashed);
+
 export {
     getXAxisWidth,
     getXAxisXPosition,
@@ -529,5 +537,6 @@ export {
     attachEventHandlers,
     detachEventHandlers,
     updateAxesDomain,
-    updateTrackProps
+    updateTrackProps,
+    isHashed
 };

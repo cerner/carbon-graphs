@@ -88,6 +88,82 @@ const tasks = [
             },
             endDate: new Date(2018, 7, 1).toISOString(),
             duration: () => daysToMilliseconds(10)
+        },
+        {
+            key: "Task 9",
+            onClick: loadTaskPopup,
+            label: {
+                display: "Story Broccoli Task hash"
+            },
+            startDate: new Date(2018, 8, 1).toISOString(),
+            endDate: new Date(2018, 9, 10).toISOString(),
+            style: {
+                isHashed: true
+            }
+        }
+    ]
+];
+
+const activities = [
+    [
+        {
+            key: "activity1",
+            label: {
+                display: "activity1"
+            },
+            onClick: () => {},
+            color: "#FFDF00",
+            startDate: new Date(2018, 1, 1).toISOString(),
+            endDate: new Date(2018, 4, 10).toISOString(),
+            style: {
+                isDotted: false,
+                isHollow: false
+            }
+        }
+    ],
+    [
+        {
+            key: "activity2-hashed",
+            label: {
+                display: "Story Apex Hashed Activity"
+            },
+            startDate: new Date(2018, 0, 1).toISOString(),
+            endDate: new Date(2018, 3, 1).toISOString(),
+            style: {
+                isDotted: false,
+                isHollow: false,
+                isHashed: true
+            }
+        },
+        {
+            key: "activity3",
+            color: "#ff0000",
+            label: {
+                display: "Story Apex Activity"
+            },
+            startDate: new Date(2018, 3, 1).toISOString(),
+            endDate: new Date(2018, 9, 10).toISOString(),
+            style: {
+                isDotted: false,
+                isHollow: false
+            }
+        }
+    ],
+    [
+        {
+            key: "activity4",
+            color: COLORS.LIGHT_BLUE,
+            onMouseEnter: loadTaskPopup,
+            onMouseMove: loadTaskPopup,
+            label: {
+                display: "Story Charming Activity"
+            },
+            startDate: new Date(2018, 5, 1).toISOString(),
+            endDate: new Date(2018, 5, 31).toISOString(),
+            style: {
+                isDotted: false,
+                isHollow: false
+            }
         }
     ]
 ];
@@ -134,6 +210,48 @@ export const renderGantt = (el, id, title) => () => {
             display: "Project C"
         }
     });*/
+    return ganttDefault;
+};
+export const renderGanttActivities = (el, id, title) => () => {
+    shell.render(el, id, title);
+    const data = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
+    data.showActionLegend = false;
+    const ganttDefault = Carbon.api.gantt(data);
+    ganttDefault.loadContent({
+        key: "track 1",
+        trackLabel: {
+            display: "Project A",
+            onClick: loadTrackLabelPopup
+        },
+        tasks: tasks[0],
+        activities: activities[0]
+    });
+    ganttDefault.loadContent({
+        key: "track 2",
+        trackLabel: {
+            display: "Project B",
+            onClick: loadTrackLabelPopup
+        },
+        tasks: tasks[1],
+        activities: activities[1]
+    });
+    ganttDefault.loadContent({
+        key: "track 3",
+        trackLabel: {
+            display: "Project C",
+            onClick: loadTrackLabelPopup
+        },
+        tasks: tasks[2],
+        activities: activities[2]
+    });
+    ganttDefault.loadContent({
+        key: "track 4",
+        trackLabel: {
+            display: "Project D",
+            onClick: loadTrackLabelPopup
+        },
+        tasks: tasks[4]
+    });
     return ganttDefault;
 };
 export const renderGanttPercentage = (el, id, title) => () => {
@@ -339,6 +457,94 @@ export const renderGanttStyle = (el, id, title) => () => {
                 startDate: new Date(2018, 2, 1).toISOString(),
                 endDate: new Date(2018, 11, 1).toISOString(),
                 percentage: 30
+            }
+        ]
+    });
+    ganttDefault.loadContent({
+        key: "track 4",
+        trackLabel: {
+            display: "Task Hashed",
+            onClick: loadTrackLabelPopup
+        },
+        tasks: [
+            {
+                key: "task_hash",
+                onClick: loadTaskPopup,
+                label: {
+                    display: "Story Apex"
+                },
+                startDate: new Date(2018, 2, 1).toISOString(),
+                endDate: new Date(2018, 11, 1).toISOString(),
+                style: {
+                    isHashed: true
+                }
+            }
+        ]
+    });
+    ganttDefault.loadContent({
+        key: "track 5",
+        trackLabel: {
+            display: "Activity",
+            onClick: loadTrackLabelPopup
+        },
+        activities: [
+            {
+                key: "Activity",
+                label: {
+                    display: "Story Apex Activity"
+                },
+                startDate: new Date(2018, 2, 1).toISOString(),
+                endDate: new Date(2018, 11, 1).toISOString()
+            }
+        ]
+    });
+
+    ganttDefault.loadContent({
+        key: "track 6",
+        trackLabel: {
+            display: "Activity Hashed",
+            onClick: loadTrackLabelPopup
+        },
+        activities: [
+            {
+                key: "Hash",
+                label: {
+                    display: "Story Apex Activity hash"
+                },
+                startDate: new Date(2018, 2, 1).toISOString(),
+                endDate: new Date(2018, 11, 1).toISOString(),
+                style: {
+                    isHashed: true
+                }
+            }
+        ]
+    });
+
+    ganttDefault.loadContent({
+        key: "track 7",
+        trackLabel: {
+            display: "Activity and Task",
+            onClick: loadTrackLabelPopup
+        },
+        tasks: [
+            {
+                key: "Task",
+                onClick: loadTaskPopup,
+                label: {
+                    display: "Story Apex Task"
+                },
+                startDate: new Date(2018, 2, 1).toISOString(),
+                endDate: new Date(2018, 11, 1).toISOString()
+            }
+        ],
+        activities: [
+            {
+                key: "Activity and Task",
+                label: {
+                    display: "Combination"
+                },
+                startDate: new Date(2018, 2, 1).toISOString(),
+                endDate: new Date(2018, 11, 1).toISOString()
             }
         ]
     });
