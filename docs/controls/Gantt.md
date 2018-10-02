@@ -211,11 +211,11 @@ If Dateline is provided then the `value` property is mandatory.
 
 #### Required
 
-| Property Name | Expected         | Description                                                                                                                            |
-| ------------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| value         | string (ISO8601) | Position where dateline needs to be placed                                                                                             |
-| color         | string (ISO8601) | color of the dateline                                                                                                                  |
-| shape         | string (ISO8601) | `Shape` of the indicator above dateline. Required field if showDatelineIndicator is set to true. Refer [a Shapes](../README.md#Shapes) |
+| Property Name | Expected         | Description                                                                                                                              |
+| ------------- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| value         | string (ISO8601) | Position where dateline needs to be placed                                                                                               |
+| color         | string (ISO8601) | color of the dateline                                                                                                                    |
+| shape         | string (ISO8601) | `Shape` of the indicator above dateline. Required field if `showDatelineIndicator` is set to true. Refer [a Shapes](../README.md#Shapes) |
 
 #### Optional
 

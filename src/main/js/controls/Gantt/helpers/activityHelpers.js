@@ -2,19 +2,19 @@
 
 import d3 from "d3";
 import { getXAxisXPosition } from "../../../helpers/axis";
+import { getRect } from "../../../helpers/barType";
 import constants, { COLORS } from "../../../helpers/constants";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
-import { getRect } from "../../../helpers/barType";
+import { validateActivity } from "../GanttConfig";
 import { getTrackLabel, getXAxisYPosition, isHashed } from "./creationHelpers";
 import {
     getActivityDuration,
+    getActivityStyle,
     getEndDuration,
     getStartDuration,
-    getActivityStyle,
     isAChunk
 } from "./durationHelpers";
-import { validateActivity } from "../GanttConfig";
 
 /**
  * Processes the input for a activity and converts to an object needed to render a bar
@@ -213,9 +213,7 @@ const getActivityHashedBar = (
     y,
     width,
     height,
-    style = `fill: ${constants.DEFAULT_ACTIVITY_BAR_HASH_COLOR}; opacity: ${
-        constants.DEFAULT_GANTT_ACTIVITY_OPACITY
-    }`
+    style
 ) => {
     const patternId = "pattern-stripe-gantt-activity";
     if (utils.isEmpty(defs) || defs.empty()) {
@@ -228,15 +226,21 @@ const getActivityHashedBar = (
             .attr("patternTransform", "rotate(135)")
             .attr("width", constants.DEFAULT_GANTT_ACTIVITY_STRIPE_WIDTH)
             .attr("height", height)
+            .attr("style", `fill: ${constants.DEFAULT_BAR_STRIPE_COLOR};`)
             .append("rect")
             .attr("width", constants.DEFAULT_GANTT_ACTIVITY_STRIPE_DISTANCE)
-            .attr("height", height)
-            .style("fill", constants.DEFAULT_BAR_STRIPE_COLOR);
+            .attr("height", height);
     }
     // Draw the background rect
     getRect(path, x, y, width, height)
         .classed(styles.activityBar, true)
-        .attr("style", style);
+        .attr(
+            "style",
+            style ||
+                `fill: ${constants.DEFAULT_ACTIVITY_BAR_HASH_COLOR}; opacity: ${
+                    constants.DEFAULT_GANTT_ACTIVITY_OPACITY
+                };`
+        );
     // Opacity for bar with hashes
     getRect(path, x, y, width, height)
         .classed(styles.activityBar, true)

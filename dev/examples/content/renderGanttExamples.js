@@ -1,7 +1,7 @@
 import {
     renderGantt,
-    renderGanttActivities,
     renderGanttAction,
+    renderGanttActivities,
     renderGanttPercentage,
     renderGanttStyle,
     renderGanttTruncate

@@ -5,9 +5,9 @@ import Gantt from "../../../main/js/controls/Gantt";
 import { getXAxisWidth } from "../../../main/js/controls/Gantt/helpers/creationHelpers";
 import Track from "../../../main/js/controls/Gantt/Track";
 import constants, {
+    AXIS_TYPE,
     COLORS,
-    SHAPES,
-    AXIS_TYPE
+    SHAPES
 } from "../../../main/js/helpers/constants";
 import errors from "../../../main/js/helpers/errors";
 import { loadLegendItem } from "../../../main/js/helpers/legend";
@@ -17,8 +17,8 @@ import LOCALE from "../../../main/js/locale/index";
 import {
     axisJSON,
     BASE_CANVAS_HEIGHT_PADDING,
-    datelineJSON,
     datelineAlt,
+    datelineJSON,
     fetchElementByClass,
     getAxes,
     getData,

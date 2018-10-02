@@ -2,11 +2,12 @@
 import d3 from "d3";
 import sinon from "sinon";
 import Gantt from "../../../main/js/controls/Gantt";
-import styles from "../../../main/js/helpers/styles";
 import { getActivityStyle } from "../../../main/js/controls/Gantt/helpers/durationHelpers";
 import constants, { COLORS } from "../../../main/js/helpers/constants";
 import errors from "../../../main/js/helpers/errors";
+import styles from "../../../main/js/helpers/styles";
 import {
+    activityValuesJSON,
     axisJSON,
     fetchElementByClass,
     getAxes,
@@ -14,7 +15,6 @@ import {
     onClickFunctionSpy,
     taskEndDate,
     taskStartDate,
-    activityValuesJSON,
     TRANSITION_DELAY,
     triggerEvent
 } from "./helpers";
@@ -303,10 +303,10 @@ describe("Gantt -> Track -> Activity", () => {
         });
 
         /**
-         * CH07232018.05	Verify duration can be displayed using a default (filled) background bar
-         * CH07252018.07	Verify the height of the background bar is taller than the foreground bar
-         * CH07252018.08	Verify opacity is applied to the background bar
-         * CH07252018.09	Verify the background bars layer above grid lines
+         * CH07232018.05    Verify duration can be displayed using a default (filled) background bar
+         * CH07252018.07    Verify the height of the background bar is taller than the foreground bar
+         * CH07252018.08    Verify opacity is applied to the background bar
+         * CH07252018.09    Verify the background bars layer above grid lines
          */
         it("Renders background bar correctly", () => {
             const tasks = [
@@ -357,7 +357,7 @@ describe("Gantt -> Track -> Activity", () => {
         });
 
         /**
-         * CH07252018.10	Verify the background bar displays at the top of the row
+         * CH07252018.10    Verify the background bar displays at the top of the row
          */
         it("Renders background bar at the top", () => {
             const activities = [
@@ -388,7 +388,7 @@ describe("Gantt -> Track -> Activity", () => {
         });
 
         /**
-         * CH07252018.06	Verify duration can be displayed using a hashed, default (filled) background bar
+         * CH07252018.06    Verify duration can be displayed using a hashed, default (filled) background bar
          */
         it("Renders background hashed bar correctly", () => {
             const activities = [
@@ -415,6 +415,19 @@ describe("Gantt -> Track -> Activity", () => {
             );
 
             const activityElement = fetchElementByClass(styles.activity);
+            const defsElement = document.getElementById(
+                "pattern-stripe-gantt-activity"
+            );
+
+            expect(defsElement.getAttribute("patternUnits")).toBe(
+                "userSpaceOnUse"
+            );
+            expect(defsElement.getAttribute("patternTransform")).toBe(
+                "rotate(135)"
+            );
+            expect(defsElement.getAttribute("style")).toBe("fill: #fff;");
+            expect(defsElement.childNodes.length).toBe(1);
+            expect(defsElement.childNodes[0].nodeName).toBe("rect");
             expect(activityElement.getAttribute("aria-selected")).toEqual(
                 "false"
             );
@@ -427,7 +440,7 @@ describe("Gantt -> Track -> Activity", () => {
         });
 
         /**
-         * CH07252018.02	Verify the foreground bars layer on top of the background bars and grid lines
+         * CH07252018.02    Verify the foreground bars layer on top of the background bars and grid lines
          */
         it("Renders both foreground and background", () => {
             const tasks = [
@@ -475,8 +488,8 @@ describe("Gantt -> Track -> Activity", () => {
         });
 
         /**
-         * CH05012018.31	Verify a foreground bar that is centered within a background bar is selectable
-         * CH07232018.04	Verify the foreground bar displays centered within the background bar
+         * CH05012018.31    Verify a foreground bar that is centered within a background bar is selectable
+         * CH07232018.04    Verify the foreground bar displays centered within the background bar
          */
         it("Calls onClick function for foreground bar when foreground and background overlap and foreground is selectable", (done) => {
             const onClickSpy = sinon.spy();

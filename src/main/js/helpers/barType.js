@@ -125,16 +125,7 @@ const getPercentageBar = (path, x, y, width, height, percent, color) => {
  * @param {string} style - style you want to apply for bar
  * @returns {Selection} d3 selection path
  */
-const getHashedBar = (
-    canvasSVG,
-    defs,
-    path,
-    x,
-    y,
-    width,
-    height,
-    style = `fill: ${constants.DEFAULT_TASK_BAR_HASH_COLOR};`
-) => {
+const getHashedBar = (canvasSVG, defs, path, x, y, width, height, style) => {
     const patternId = "pattern-stripe";
     if (utils.isEmpty(defs) || defs.empty()) {
         canvasSVG.append("defs");
@@ -146,14 +137,17 @@ const getHashedBar = (
             .attr("patternTransform", "rotate(45)")
             .attr("width", constants.DEFAULT_GANTT_TASK_STRIPE_WIDTH)
             .attr("height", height)
+            .attr("style", `fill: ${constants.DEFAULT_BAR_STRIPE_COLOR};`)
             .append("rect")
             .attr("width", constants.DEFAULT_GANTT_TASK_STRIPE_DISTANCE)
-            .attr("height", height)
-            .style("fill", constants.DEFAULT_BAR_STRIPE_COLOR);
+            .attr("height", height);
     }
     getRect(path, x, y, width, height)
         .classed(styles.taskBar, true)
-        .attr("style", style);
+        .attr(
+            "style",
+            style || `fill: ${constants.DEFAULT_TASK_BAR_HASH_COLOR};`
+        );
     getRect(path, x, y, width, height)
         .classed(styles.taskBar, true)
         .attr("style", `fill: url(#${patternId});`);

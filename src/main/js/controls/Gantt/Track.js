@@ -11,18 +11,18 @@ import styles from "../../helpers/styles";
 import utils from "../../helpers/utils";
 import { isUniqueKey } from "./GanttConfig";
 import { loadActions, unloadActions } from "./helpers/actionHelpers";
+import { loadActivities, unloadActivities } from "./helpers/activityHelpers";
 import {
     createTrackContainer,
     getTrackLabel,
     updateTrackProps
 } from "./helpers/creationHelpers";
 import { loadTasks, unloadTasks } from "./helpers/taskHelpers";
-import { loadActivities, unloadActivities } from "./helpers/activityHelpers";
 import {
     translateActionPoints,
+    translateActivities,
     translateLabelText,
-    translateTasks,
-    translateActivities
+    translateTasks
 } from "./helpers/translateHelpers";
 
 /**

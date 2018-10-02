@@ -990,7 +990,7 @@ describe("Gantt -> Track -> Task", () => {
                 );
             });
             /**
-             * CH05012018.31	Verify the hashed foreground bar is selectable
+             * CH05012018.31    Verify the hashed foreground bar is selectable
              */
             it("Calls onClick callback for a hashed task bar when clicked on completion bar", (done) => {
                 const onClickFunctionSpy = sinon.spy();
@@ -1406,7 +1406,7 @@ describe("Gantt -> Track -> Task", () => {
             expect(taskBarElements[1].getAttribute("style")).toContain("url");
         });
         /**
-         * CH07252018.01	Verify duration can be displayed using a hashed, default (filled) task foreground bar
+         * CH07252018.01    Verify duration can be displayed using a hashed, default (filled) task foreground bar
          */
         it("Renders hashed bar correctly with default color", () => {
             const tasks = [
@@ -1433,6 +1433,17 @@ describe("Gantt -> Track -> Task", () => {
                 })
             );
             const taskElement = fetchElementByClass(styles.task);
+            const defsElement = document.getElementById("pattern-stripe");
+
+            expect(defsElement.getAttribute("patternUnits")).toBe(
+                "userSpaceOnUse"
+            );
+            expect(defsElement.getAttribute("patternTransform")).toBe(
+                "rotate(45)"
+            );
+            expect(defsElement.getAttribute("style")).toBe("fill: #fff;");
+            expect(defsElement.childNodes.length).toBe(1);
+            expect(defsElement.childNodes[0].nodeName).toBe("rect");
             expect(taskElement.getAttribute("aria-selected")).toEqual("false");
             expect(taskElement.getAttribute("aria-describedby")).toEqual(
                 "task"
@@ -1443,7 +1454,7 @@ describe("Gantt -> Track -> Task", () => {
         });
 
         /**
-         * CH07232018.03	Verify the foreground bar displays at the top of the row
+         * CH07232018.03    Verify the foreground bar displays at the top of the row
          */
         it("Renders task bar at the top", () => {
             const tasks = [

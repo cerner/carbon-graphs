@@ -12,6 +12,10 @@ Consumers can generate one of the following graphs:
 -   [Gantt](controls/Gantt.md)
 -   [Timeline](controls/Timeline.md)
 
+For more information on Graph API's Axes:
+
+-   [Axes](controls/Axes.md)
+
 ## Important information
 
 ### Errors

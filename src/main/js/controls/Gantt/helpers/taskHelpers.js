@@ -5,8 +5,8 @@ import { getXAxisXPosition } from "../../../helpers/axis";
 import {
     getBar,
     getChunk,
-    getPercentageBar,
     getHashedBar,
+    getPercentageBar,
     getRect
 } from "../../../helpers/barType";
 import constants, { COLORS } from "../../../helpers/constants";
