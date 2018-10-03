@@ -1454,7 +1454,7 @@ describe("Gantt -> Track -> Task", () => {
         });
 
         /**
-         * CH07232018.03    Verify the foreground bar displays at the top of the row
+         * CH07252018.03    Verify the foreground bar displays at the top of the row
          */
         it("Renders task bar at the top", () => {
             const tasks = [

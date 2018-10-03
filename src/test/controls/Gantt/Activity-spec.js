@@ -303,7 +303,7 @@ describe("Gantt -> Track -> Activity", () => {
         });
 
         /**
-         * CH07232018.05    Verify duration can be displayed using a default (filled) background bar
+         * CH07252018.05    Verify duration can be displayed using a default (filled) background bar
          * CH07252018.07    Verify the height of the background bar is taller than the foreground bar
          * CH07252018.08    Verify opacity is applied to the background bar
          * CH07252018.09    Verify the background bars layer above grid lines
@@ -489,7 +489,7 @@ describe("Gantt -> Track -> Activity", () => {
 
         /**
          * CH05012018.31    Verify a foreground bar that is centered within a background bar is selectable
-         * CH07232018.04    Verify the foreground bar displays centered within the background bar
+         * CH07252018.04    Verify the foreground bar displays centered within the background bar
          */
         it("Calls onClick function for foreground bar when foreground and background overlap and foreground is selectable", (done) => {
             const onClickSpy = sinon.spy();
