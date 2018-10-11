@@ -93,6 +93,21 @@ export const LINE_TYPE = {
     LINEAR: "linear",
     SPLINE: "cardinal"
 };
+
+/**
+ * @enum {Object}
+ * Enum for different types of Axes orientations along X and Y Axes.
+ */
+export const AXES_ORIENTATION = {
+    X: {
+        TOP: "top",
+        BOTTOM: "bottom"
+    },
+    Y: {
+        LEFT: "left",
+        RIGHT: "right"
+    }
+};
 /**
  * @enum {Object}
  */

@@ -823,6 +823,124 @@ describe("Graph", () => {
                         .querySelector("text");
                     expect(tick.textContent).toBe("Jan 2016");
                 });
+                it("creates x axis with LowerTickValues", () => {
+                    graph.destroy();
+                    const localeAxisObj = utils.deepClone(axisTimeSeries);
+                    localeAxisObj.x = {
+                        type: "timeseries",
+                        label: "Some X Label",
+                        lowerLimit: new Date(2017, 0).toISOString(),
+                        upperLimit: new Date(2017, 6).toISOString()
+                    };
+                    localeAxisObj.x.ticks = {
+                        format: "%b %Y",
+                        lowerStepTickValues: [
+                            new Date(2017, 1).toISOString(),
+                            new Date(2017, 3).toISOString(),
+                            new Date(2017, 5).toISOString()
+                        ]
+                    };
+                    graph = new Graph(getAxes(localeAxisObj));
+                    const allXAxisElements = document.querySelectorAll(
+                        `.${styles.axisX}`
+                    );
+                    expect(
+                        allXAxisElements[0].childNodes[0].querySelector("text")
+                            .textContent
+                    ).toBe("Feb 2017");
+                    expect(
+                        allXAxisElements[0].childNodes[1].querySelector("text")
+                            .textContent
+                    ).toBe("Apr 2017");
+                    expect(
+                        allXAxisElements[0].childNodes[2].querySelector("text")
+                            .textContent
+                    ).toBe("Jun 2017");
+                    const gridLowerStepElement = fetchElementByClass(
+                        styles.gridLowerStep
+                    );
+                    expect(
+                        gridLowerStepElement.querySelectorAll(".tick").length
+                    ).toBe(3);
+                });
+
+                it("creates x axis with UpperTickValues", () => {
+                    graph.destroy();
+                    const localeAxisObj = utils.deepClone(axisTimeSeries);
+                    localeAxisObj.x = {
+                        type: "timeseries",
+                        label: "Some X Label",
+                        lowerLimit: new Date(2016, 11).toISOString(),
+                        upperLimit: new Date(2017, 6).toISOString()
+                    };
+                    localeAxisObj.x.ticks = {
+                        format: "%b %Y",
+                        show: true,
+                        upperStepTickValues: [
+                            new Date(2016, 11).toISOString(),
+                            new Date(2018, 1).toISOString()
+                        ]
+                    };
+                    graph = new Graph(getAxes(localeAxisObj));
+                    const allXAxisElements = document.querySelectorAll(
+                        `.${styles.axisX}`
+                    );
+                    const start = allXAxisElements[0].childNodes[0].querySelector(
+                        "text"
+                    );
+                    const end = allXAxisElements[0].childNodes[1].querySelector(
+                        "text"
+                    );
+                    expect(start.textContent).toBe("Dec 2016");
+                    expect(end.textContent).toBe("Feb 2018");
+                    const gridUpperStepElement = fetchElementByClass(
+                        styles.gridUpperStep
+                    );
+                    expect(
+                        gridUpperStepElement.querySelectorAll(".tick").length
+                    ).toBe(2);
+                });
+                it("creates x axis with LowerTickValues, UpperTickValues and values in default locale", () => {
+                    graph.destroy();
+                    const localeAxisObj = utils.deepClone(axisTimeSeries);
+                    localeAxisObj.x = {
+                        type: "timeseries",
+                        label: "Some X Label",
+                        lowerLimit: new Date(2016, 11).toISOString(),
+                        upperLimit: new Date(2018, 2).toISOString()
+                    };
+                    localeAxisObj.x.ticks = {
+                        format: "%b %Y",
+                        show: true,
+                        lowerStepTickValues: [
+                            new Date(2017, 1).toISOString(),
+                            new Date(2017, 5).toISOString(),
+                            new Date(2017, 9).toISOString()
+                        ],
+                        midpointTickValues: [
+                            new Date(2017, 3).toISOString(),
+                            new Date(2017, 7).toISOString(),
+                            new Date(2017, 11).toISOString()
+                        ],
+                        upperStepTickValues: [
+                            new Date(2016, 11).toISOString(),
+                            new Date(2018, 1).toISOString()
+                        ]
+                    };
+                    graph = new Graph(getAxes(localeAxisObj));
+
+                    const allXAxisElements = document.querySelectorAll(
+                        `.${styles.axisX}`
+                    );
+                    const lowerAxis = allXAxisElements[0].childNodes[0].querySelector(
+                        "text"
+                    );
+                    const upperAxis = allXAxisElements[0].childNodes[3].querySelector(
+                        "text"
+                    );
+                    expect(lowerAxis.textContent).toBe("Feb 2017");
+                    expect(upperAxis.textContent).toBe("Dec 2016");
+                });
             });
             describe("for default type", () => {
                 it("creates x axis with ticks in default locale", () => {
@@ -896,6 +1014,9 @@ describe("Graph", () => {
                 const gridElement = fetchElementByClass(styles.grid);
                 expect(gridElement.childElementCount).toBe(2);
             });
+            /**
+             * 	Verify if lower step grid lines do not display with midpoint grid lines or upper grid lines, the lower step grid lines displays as a solid 1px light gray color #E8E9EA
+             */
             it("creates the grid markup with tick values provided", () => {
                 graph.destroy();
                 const localeAxisObj = utils.deepClone(axisDefault);
@@ -912,6 +1033,136 @@ describe("Graph", () => {
                 expect(gridElement.childElementCount).toBe(2);
                 expect(gridHElement.querySelectorAll(".tick").length).toBe(3);
                 expect(gridVElement.querySelectorAll(".tick").length).toBe(3);
+            });
+            it("creates the grid markup with upperTickValues, midTickValues and values provided", () => {
+                graph.destroy();
+                const localeAxisObj = utils.deepClone(axisDefault);
+                localeAxisObj.x.ticks = {
+                    show: true,
+                    values: [15, 25, 35],
+                    upperStepTickValues: [10, 40],
+                    midpointTickValues: [15, 25]
+                };
+                graph = new Graph(getAxes(localeAxisObj));
+                const gridMidElement = fetchElementByClass(styles.gridMidpoint);
+                const gridLowerStepElement = fetchElementByClass(
+                    styles.gridLowerStep
+                );
+                const gridUpperStepElement = fetchElementByClass(
+                    styles.gridUpperStep
+                );
+
+                expect(
+                    gridLowerStepElement.querySelectorAll(".tick").length
+                ).toBe(3);
+                expect(gridMidElement.querySelectorAll(".tick").length).toBe(2);
+                expect(
+                    gridUpperStepElement.querySelectorAll(".tick").length
+                ).toBe(2);
+            });
+            /**
+             * Verify if lower step grid lines are displayed with midpoint grid lines or upper grid lines, the lower step grid lines displays as a solid 1px med gray color #9B9B9B
+             * Verify the upper step grid line displays as a solid 3px gray color #BCBFC0
+             * Verify the midpoint grid lines display as a solid 1px light gray color #E8E9EA
+             */
+            it("creates the grid markup with upperTickValues, lowerTickValues and midTickValues provided", () => {
+                graph.destroy();
+                const localeAxisObj = utils.deepClone(axisDefault);
+                localeAxisObj.x.ticks = {
+                    show: true,
+                    lowerStepTickValues: [15, 25, 35],
+                    upperStepTickValues: [10, 40],
+                    midpointTickValues: [15, 25]
+                };
+                graph = new Graph(getAxes(localeAxisObj));
+
+                const gridMidElement = fetchElementByClass(styles.gridMidpoint);
+                expect(gridMidElement).toBeDefined();
+                const gridLowerStepElement = fetchElementByClass(
+                    styles.gridLowerStep
+                );
+                expect(gridLowerStepElement).toBeDefined();
+                const gridUpperStepElement = fetchElementByClass(
+                    styles.gridUpperStep
+                );
+                expect(gridUpperStepElement).toBeDefined();
+
+                expect(
+                    gridLowerStepElement.querySelectorAll(".tick").length
+                ).toBe(3);
+                expect(gridMidElement.querySelectorAll(".tick").length).toBe(2);
+                expect(
+                    gridUpperStepElement.querySelectorAll(".tick").length
+                ).toBe(2);
+            });
+            it("creates the grid markup by giving lowerTickValues more precidence than values if both available", () => {
+                graph.destroy();
+                const localeAxisObj = utils.deepClone(axisDefault);
+                localeAxisObj.x.ticks = {
+                    show: true,
+                    values: [15, 30],
+                    lowerStepTickValues: [15, 25, 35],
+                    upperStepTickValues: [10, 40],
+                    midpointTickValues: [15, 25]
+                };
+                graph = new Graph(getAxes(localeAxisObj));
+                const gridMidElement = fetchElementByClass(styles.gridMidpoint);
+                const gridLowerStepElement = fetchElementByClass(
+                    styles.gridLowerStep
+                );
+                const gridUpperStepElement = fetchElementByClass(
+                    styles.gridUpperStep
+                );
+
+                expect(
+                    gridLowerStepElement.querySelectorAll(".tick").length
+                ).toBe(3);
+                expect(gridMidElement.querySelectorAll(".tick").length).toBe(2);
+                expect(
+                    gridUpperStepElement.querySelectorAll(".tick").length
+                ).toBe(2);
+            });
+            it("creates the grid markup with upper values provided", () => {
+                graph.destroy();
+                const localeAxisObj = utils.deepClone(axisDefault);
+                localeAxisObj.x.ticks = {
+                    show: true,
+                    upperStepTickValues: [10, 40]
+                };
+                graph = new Graph(getAxes(localeAxisObj));
+                const gridMidElement = fetchElementByClass(styles.gridMidpoint);
+                const gridLowerStepElement = fetchElementByClass(
+                    styles.gridLowerStep
+                );
+                const gridUpperStepElement = fetchElementByClass(
+                    styles.gridUpperStep
+                );
+
+                expect(gridMidElement).toBeNull;
+                expect(gridLowerStepElement).toBeNull;
+                expect(
+                    gridUpperStepElement.querySelectorAll(".tick").length
+                ).toBe(2);
+            });
+            it("creates the grid markup with mid values provided", () => {
+                graph.destroy();
+                const localeAxisObj = utils.deepClone(axisDefault);
+                localeAxisObj.x.ticks = {
+                    show: true,
+                    midpointTickValues: [10, 40]
+                };
+                graph = new Graph(getAxes(localeAxisObj));
+                const gridMidElement = fetchElementByClass(styles.gridMidpoint);
+                const gridLowerStepElement = fetchElementByClass(
+                    styles.gridLowerStep
+                );
+                const gridUpperStepElement = fetchElementByClass(
+                    styles.gridUpperStep
+                );
+
+                expect(gridLowerStepElement).toBeNull;
+                expect(gridUpperStepElement).toBeNull;
+                expect(gridMidElement.querySelectorAll(".tick").length).toBe(2);
             });
             it("creates the horizontal grid markup", () => {
                 const gridElement = fetchElementByClass(styles.grid);

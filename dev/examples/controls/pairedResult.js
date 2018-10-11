@@ -296,3 +296,40 @@ export const renderMultiPairedResultRegion = (el, id, title) => () => {
     pairedTime.loadContent(Carbon.api.pairedResult(dataAlt));
     return pairedTime;
 };
+export const renderPairedResultDateTimeBuckets = (el, id, title) => () => {
+    shell.render(
+        el,
+        id,
+        title,
+        "A Paired Result graph within Lower, Middle and Upper steps."
+    );
+    const axisData = utils.deepClone(
+        getDemoData(`#${id}`, "PAIRED_TIMESERIES")
+    );
+    axisData.axis.x.ticks = {
+        values: tickValues,
+        format: "%b %Y",
+        lowerStepTickValues: [
+            new Date(2016, 9).toISOString(),
+            new Date(2017, 3).toISOString(),
+            new Date(2017, 9).toISOString()
+        ],
+        midpointTickValues: [
+            new Date(2016, 6).toISOString(),
+            new Date(2017, 0).toISOString(),
+            new Date(2017, 6).toISOString(),
+            new Date(2018, 0).toISOString()
+        ],
+        upperStepTickValues: [
+            new Date(2016, 3).toISOString(),
+            new Date(2018, 3).toISOString()
+        ]
+    };
+    const pairedDefault = Carbon.api.graph(axisData);
+    pairedDefault.loadContent(
+        Carbon.api.pairedResult(
+            getDemoData(`#${id}`, "PAIRED_TIMESERIES").data[0]
+        )
+    );
+    return pairedDefault;
+};

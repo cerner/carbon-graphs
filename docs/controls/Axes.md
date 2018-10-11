@@ -25,17 +25,4 @@ Each axis - X, Y and Y2 should have the following properties:
 | ------------- | -------- | ----------------- | --------------------------------- |
 | type          | string   | AXIS_TYPE.DEFAULT | Normal number value or time-based |
 | show          | boolean  | true              | Toggle for showing the axis       |
-| ticks         | object   | null              | Refer [Ticks](#ticks)             |
-
-### Ticks
-
-#### Required
-
-| Property Name | Expected | Description                                                                                                                                       |
-| ------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| values        | array    | Ticks values in the axis. Each tick will have an associated grid line                                                                             |
-| format        | string   | [Formatter](https://github.com/d3/d3-time-format/blob/master/README.md#locales) for tick values. `Note:` This is mandatory if values are provided |
-
-#### Optional
-
-`N/A`
+| ticks         | object   | null              | Refer [Ticks](Ticks.md)           |

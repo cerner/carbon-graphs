@@ -7,9 +7,11 @@ import {
     getXAxisXPosition,
     getYAxisHeight,
     getYAxisXPosition,
+    prepareHorizontalAxis,
     prepareXAxis
 } from "../../../helpers/axis";
-import constants from "../../../helpers/constants";
+import constants, { AXES_ORIENTATION } from "../../../helpers/constants";
+import { createVGrid, prepareHAxis } from "../../../helpers/datetimeBuckets";
 import { shouldTruncateLabel, truncateLabel } from "../../../helpers/label";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
@@ -22,7 +24,10 @@ import {
     translateCanvas
 } from "../../Graph/helpers/helpers";
 import Track from "../Track";
-import { translateHGrid, translateVGrid } from "./translateHelpers";
+import {
+    translateHorizontalGrid,
+    translateVerticalGrid
+} from "./translateHelpers";
 
 const PADDING = constants.PADDING;
 /**
@@ -140,7 +145,7 @@ const prepareYAxis = (scale, height) =>
     d3.svg
         .axis()
         .scale(scale)
-        .orient("left")
+        .orient(AXES_ORIENTATION.Y.LEFT)
         .ticks(height / constants.DEFAULT_Y_AXIS_SPACING)
         .tickPadding(8);
 /**
@@ -184,7 +189,7 @@ const getYAxisWidth = (id, config) => {
     const axis = d3.svg
         .axis()
         .scale(scale)
-        .orient("left");
+        .orient(AXES_ORIENTATION.Y.LEFT);
     const dummy = d3.select("body").append("div");
     const svg = dummy.append("svg");
     const yAxisSVG = svg.append("g").call(axis);
@@ -233,7 +238,7 @@ const getAxesScale = (axis, scale, config) => {
             config.axis.x.ticks.format,
             config.axis.x.type
         ),
-        "top"
+        AXES_ORIENTATION.X.TOP
     );
     axis.y = prepareYAxis(scale.y, getYAxisHeight(config));
     return axis;
@@ -349,11 +354,23 @@ const createGrid = (axis, scale, config, canvasSVG) => {
     gridSVG
         .append("g")
         .classed(styles.gridH, true)
-        .call(translateHGrid(axis, config));
+        .call(translateHorizontalGrid(axis, config));
+    createVGrid(gridSVG, axis, config, createVGridHandler);
+};
+
+/**
+ * Function to create the vertical-grid with a specific style and config.
+ * @param {Object} gridSVG - d3 object of the grid
+ * @param {Object} axis - Axis scaled according to input parameters
+ * @param {String} style - Style with which, grid needs to be created.
+ * @param {Object} config - config required for translating vertical grid.
+ * @returns {undefined} - Doesn't return anything.
+ */
+const createVGridHandler = (gridSVG, axis, style, config) => {
     gridSVG
         .append("g")
-        .classed(styles.gridV, true)
-        .call(translateVGrid(axis, config));
+        .classed(style, true)
+        .call(translateVerticalGrid(axis, config));
 };
 /**
  * Create the d3 Axes - X, Y and Y2 and append into the canvas.
@@ -368,6 +385,13 @@ const createGrid = (axis, scale, config, canvasSVG) => {
  */
 const createAxes = (axis, scale, config, canvasSVG) => {
     getAxesScale(axis, scale, config);
+    prepareHAxis(
+        scale,
+        axis,
+        config,
+        prepareHorizontalAxis,
+        AXES_ORIENTATION.X.TOP
+    );
     canvasSVG
         .append("g")
         .classed(styles.axis, true)
@@ -390,6 +414,7 @@ const createAxes = (axis, scale, config, canvasSVG) => {
         )
         .call(axis.y);
 };
+
 /**
  * Creates a container for graph content (evident when there are no boundary ticks)
  * @private

@@ -58,26 +58,13 @@ X (Timeseries) axis should have the following properties:
 | Property Name | Expected | Default | Description                 |
 | ------------- | -------- | ------- | --------------------------- |
 | show          | boolean  | true    | Toggle for showing the axis |
-| ticks         | object   | null    | Refer [Ticks](#ticks)       |
+| ticks         | object   | null    | Refer [Ticks](Ticks.md)     |
 
 Y Axis should have the following properties:
 
 | Property Name | Expected | Default | Description                 |
 | ------------- | -------- | ------- | --------------------------- |
 | show          | boolean  | true    | Toggle for showing the axis |
-
-### Ticks
-
-#### Required
-
-`N/A`
-
-#### Optional
-
-| Property Name | Expected | Default | Description                                                                                                                                       |
-| ------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| format        | string   | ""      | [Formatter](https://github.com/d3/d3-time-format/blob/master/README.md#locales) for tick values. `Note:` This is mandatory if values are provided |
-| values        | array    | []      | Ticks values in the axis. Each tick will have an associated grid line                                                                             |
 
 ### Tracks
 

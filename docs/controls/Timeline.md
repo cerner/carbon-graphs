@@ -58,22 +58,9 @@ Timeline is marked only on `X Axis`, there is no other axis supplied. Axis is se
 
 `X Axis` should have the following properties:
 
-| Property Name | Expected | Default | Description           |
-| ------------- | -------- | ------- | --------------------- |
-| ticks         | object   | null    | Refer [Ticks](#ticks) |
-
-### Ticks
-
-#### Required
-
-`N/A`
-
-#### Optional
-
-| Property Name | Expected | Default | Description                                                                                                                                       |
-| ------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| format        | string   | ""      | [Formatter](https://github.com/d3/d3-time-format/blob/master/README.md#locales) for tick values. `Note:` This is mandatory if values are provided |
-| values        | array    | []      | Ticks values in the axis. Each tick will have an associated grid line                                                                             |
+| Property Name | Expected | Default | Description             |
+| ------------- | -------- | ------- | ----------------------- |
+| ticks         | object   | null    | Refer [Ticks](Ticks.md) |
 
 ### Data
 

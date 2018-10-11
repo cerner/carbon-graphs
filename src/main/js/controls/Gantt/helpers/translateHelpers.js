@@ -3,9 +3,11 @@ import d3 from "d3";
 import {
     getYAxisHeight,
     getYAxisXPosition,
+    prepareHorizontalAxis,
     processTickValues
 } from "../../../helpers/axis";
-import constants from "../../../helpers/constants";
+import { prepareHAxis, translateVGrid } from "../../../helpers/datetimeBuckets";
+import constants, { AXES_ORIENTATION } from "../../../helpers/constants";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 import {
@@ -134,6 +136,13 @@ const translateDefs = (config, canvasSVG) =>
  */
 const translateAxes = (axis, scale, config, canvasSVG) => {
     getAxesScale(axis, scale, config);
+    prepareHAxis(
+        scale,
+        axis,
+        config,
+        prepareHorizontalAxis,
+        AXES_ORIENTATION.X.TOP
+    );
     canvasSVG
         .select(`.${styles.axisX}`)
         .transition(constants.d3Transition)
@@ -151,6 +160,7 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
         )
         .call(axis.y);
 };
+
 /**
  * Translates the vertical grid on the canvas, grids are only applicable to standard
  * X and Y Axis.
@@ -161,18 +171,18 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
  * @param {Object} config - config object derived from input JSON
  * @returns {Object} d3 svg path
  */
-const translateVGrid = (axis, config) => {
+const translateVerticalGrid = (axis, config) => {
     let xAxisGrid;
     if (utils.notEmpty(config.axis.x.ticks.values)) {
         const ticks = config.axis.x.ticks.values;
         xAxisGrid = axis.x
-            .orient("bottom")
+            .orient(AXES_ORIENTATION.X.BOTTOM)
             .tickValues(processTickValues(ticks))
             .tickSize(getYAxisHeight(config), 0, 0)
             .tickFormat("");
     } else {
         xAxisGrid = axis.x
-            .orient("bottom")
+            .orient(AXES_ORIENTATION.X.BOTTOM)
             .tickSize(getYAxisHeight(config), 0, 0)
             .tickFormat("");
     }
@@ -188,7 +198,7 @@ const translateVGrid = (axis, config) => {
  * @param {Object} config - config object derived from input JSON
  * @returns {Object} d3 svg path
  */
-const translateHGrid = (axis, config) =>
+const translateHorizontalGrid = (axis, config) =>
     axis.y.tickSize(getXAxisWidth(config) * -1, 0, 0).tickFormat("");
 /**
  * Updates the horizontal and vertical grid sizes/positions on resize
@@ -210,11 +220,23 @@ const translateGrid = (axis, scale, config, canvasSVG) => {
     canvasSVG
         .select(`.${styles.gridH}`)
         .transition(constants.d3Transition)
-        .call(translateHGrid(axis, config));
+        .call(translateHorizontalGrid(axis, config));
+    translateVGrid(canvasSVG, axis, config, translateVGridHandler);
+};
+
+/**
+ * Function to create the vertical-grid with a specific style and config.
+ * @param {Object} canvasSVG - d3 object of the canvas
+ * @param {Object} axis - Axis scaled according to input parameters
+ * @param {String} style - Style with which, grid needs to be created.
+ * @param {Object} config - config required for translating vertical grid.
+ * @returns {undefined} - Doesn't return anything.
+ */
+const translateVGridHandler = (canvasSVG, axis, style, config) => {
     canvasSVG
-        .select(`.${styles.gridV}`)
+        .select(`.${style}`)
         .transition(constants.d3Transition)
-        .call(translateVGrid(axis, config));
+        .call(translateVerticalGrid(axis, config));
 };
 /**
  * Translates the rectangle which forms the container for graph content
@@ -494,8 +516,8 @@ const translateActivities = (scale, config, trackPath) =>
         });
 export {
     translateGraph,
-    translateHGrid,
-    translateVGrid,
+    translateHorizontalGrid,
+    translateVerticalGrid,
     translateLabelText,
     transformPoint,
     translateActionPoints,

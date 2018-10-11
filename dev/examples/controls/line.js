@@ -427,3 +427,38 @@ export const renderLineLegendTo = (el, id, title) => () => {
     );
     return lineTime;
 };
+export const renderLineDateTimeBuckets = (el, id, title) => () => {
+    shell.render(
+        el,
+        id,
+        title,
+        "A Line graph within Lower, Middle and Upper steps."
+    );
+    const axisData = utils.deepClone(getDemoData(`#${id}`, "LINE_TIMESERIES"));
+    axisData.axis.x.lowerLimit = new Date(2016, 0, 0, 23, 59).toISOString();
+    axisData.axis.x.upperLimit = new Date(2016, 0, 2, 1, 0).toISOString();
+    axisData.axis.x.ticks = {
+        values: tickValues,
+        format: "%H",
+        lowerStepTickValues: [
+            new Date(2016, 0, 1, 6).toISOString(),
+            new Date(2016, 0, 1, 12).toISOString(),
+            new Date(2016, 0, 1, 18).toISOString()
+        ],
+        midpointTickValues: [
+            new Date(2016, 0, 1, 3).toISOString(),
+            new Date(2016, 0, 1, 9).toISOString(),
+            new Date(2016, 0, 1, 15).toISOString(),
+            new Date(2016, 0, 1, 21).toISOString()
+        ],
+        upperStepTickValues: [
+            new Date(2016, 0, 1, 0).toISOString(),
+            new Date(2016, 0, 1, 24).toISOString()
+        ]
+    };
+    const lineDefault = Carbon.api.graph(axisData);
+    lineDefault.loadContent(
+        Carbon.api.line(getDemoData(`#${id}`, "LINE_TIMESERIES").data[0])
+    );
+    return lineDefault;
+};

@@ -7,4 +7,4 @@ lib
 .idea
 npm-debug.log
 *.stackdump
-.vscode/*
+.vscode

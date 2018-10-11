@@ -2,11 +2,13 @@
  * @module axis
  * @alias module:axis
  */
+
 "use strict";
 import d3 from "d3";
 import Bar from "../controls/Bar/Bar";
 import { getScale, getType } from "../core/BaseConfig";
-import constants, { AXIS_TYPE } from "../helpers/constants";
+import constants, { AXES_ORIENTATION, AXIS_TYPE } from "../helpers/constants";
+import { prepareHAxis } from "./datetimeBuckets";
 import styles from "../helpers/styles";
 import utils from "../helpers/utils";
 import { DEFAULT_TICK_FORMAT } from "../locale";
@@ -57,6 +59,7 @@ const createReferenceLine = (scale, yAxis) =>
  */
 const createAxes = (axis, scale, config, canvasSVG) => {
     getAxesScale(axis, scale, config);
+    prepareHAxis(scale, axis, config, prepareHorizontalAxis);
     canvasSVG
         .append("g")
         .classed(styles.axis, true)
@@ -93,6 +96,7 @@ const createAxes = (axis, scale, config, canvasSVG) => {
             .call(axis.y2);
     }
 };
+
 /**
  * Creates a horizontal reference line at 0, when Y Axis does not start at 0.
  * @private
@@ -213,7 +217,7 @@ const prepareXAxis = (
     tickValues,
     width,
     format,
-    orientation = "bottom"
+    orientation = AXES_ORIENTATION.X.BOTTOM
 ) =>
     d3.svg
         .axis()
@@ -224,6 +228,27 @@ const prepareXAxis = (
         )
         .tickValues(processTickValues(tickValues))
         .tickFormat(format);
+
+/**
+ * Helper function to Create the axis using the scale provided for X Axis using d3 svg axis.
+ * @param {Object} scale - d3 scale calculated using domain and range
+ * @param {Array} tickValues - Array of values that represent the tick values
+ * @param {Object} config - config object derived from input JSON
+ * @param {string} [orientation] - Axis orientation
+ * @return {Object} - d3 Object which forms the axis scale
+ */
+const prepareHorizontalAxis = (scale, tickValues, config, orientation) =>
+    prepareXAxis(
+        scale.x,
+        tickValues,
+        getXAxisWidth(config),
+        getAxisTickFormat(
+            config.locale,
+            config.axis.x.ticks.format,
+            config.axis.x.type
+        ),
+        orientation
+    );
 /**
  * Creates the axis using the scale provided for Y Axis using d3 svg axis
  * @private
@@ -393,7 +418,7 @@ const getXAxisHeight = (config) => {
     const axis = d3.svg
         .axis()
         .scale(scale)
-        .orient("bottom");
+        .orient(AXES_ORIENTATION.X.BOTTOM);
     const dummy = d3.select("body").append("div");
     const svg = dummy.append("svg");
     svg.append("g").call(axis);
@@ -650,12 +675,13 @@ const hasY2Axis = (axis) => utils.isDefined(axis.y2) && axis.y2.show;
  */
 const translateAxes = (axis, scale, config, canvasSVG) => {
     getAxesScale(axis, scale, config);
+    prepareHAxis(scale, axis, config, prepareHorizontalAxis);
     canvasSVG
         .select(`.${styles.axisX}`)
         .transition(constants.d3Transition)
         .attr(
             "transform",
-            `translate(${getXAxisXPosition(config)}, ${getXAxisYPosition(
+            `translate(${getXAxisXPosition(config)},${getXAxisYPosition(
                 config
             )})`
         )
@@ -815,6 +841,7 @@ const isValidAxisType = (x, xAxisType) =>
  */
 export {
     prepareXAxis,
+    prepareHorizontalAxis,
     prepareYAxis,
     prepareY2Axis,
     getAxisTickFormat,

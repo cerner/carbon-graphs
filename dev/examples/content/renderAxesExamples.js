@@ -3,14 +3,16 @@ import {
     renderLineXAxisFormatted,
     renderLineXHidden,
     renderLineXStaticTicks,
-    renderLineYHidden
+    renderLineYHidden,
+    renderLineDateTimeBuckets
 } from "../controls/line";
 import {
     renderPairedResultXAlternateLocale,
     renderPairedResultXAxisFormatted,
     renderPairedResultXHidden,
     renderPairedResultXStaticTicks,
-    renderPairedResultYHidden
+    renderPairedResultYHidden,
+    renderPairedResultDateTimeBuckets
 } from "../controls/pairedResult";
 import {
     btn,
@@ -18,6 +20,7 @@ import {
     ExampleControl,
     toggleSectionAsActive
 } from "../helpers";
+import { renderGanttDateTimeBuckets } from "../controls/gantt";
 
 export class AxesExample extends ExampleControl {
     constructor() {
@@ -70,6 +73,13 @@ export const renderAxesExamples = (
                 "Line - X Axis Alternate Locale"
             )
         );
+        instance.load(
+            renderLineDateTimeBuckets(
+                contentSection,
+                "lineDateTimeBuckets",
+                "Line - Datetime Buckets"
+            )
+        );
 
         instance.load(
             renderPairedResultXHidden(
@@ -104,6 +114,21 @@ export const renderAxesExamples = (
                 contentSection,
                 "pairedXAltLocale",
                 "Paired Result - X Axis Alternate Locale"
+            )
+        );
+        instance.load(
+            renderPairedResultDateTimeBuckets(
+                contentSection,
+                "pairedXDateTimeBuckets",
+                "Paired Result - Datetime Buckets"
+            )
+        );
+
+        instance.load(
+            renderGanttDateTimeBuckets(
+                contentSection,
+                "ganttDateTimeBuckets",
+                "Gantt Datetime Buckets"
             )
         );
         instance.render();

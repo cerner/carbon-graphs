@@ -167,6 +167,23 @@ const activities = [
         }
     ]
 ];
+
+const lowerStepTickValues = [
+    new Date(2018, 1, 2, 6).toISOString(),
+    new Date(2018, 1, 2, 12).toISOString(),
+    new Date(2018, 1, 2, 18).toISOString()
+];
+const midpointTickValues = [
+    new Date(2018, 1, 2, 3).toISOString(),
+    new Date(2018, 1, 2, 9).toISOString(),
+    new Date(2018, 1, 2, 15).toISOString(),
+    new Date(2018, 1, 2, 21).toISOString()
+];
+const upperStepTickValues = [
+    new Date(2018, 1, 2, 0).toISOString(),
+    new Date(2018, 1, 2, 24).toISOString()
+];
+
 export const renderGantt = (el, id, title) => () => {
     shell.render(el, id, title);
     const data = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
@@ -545,6 +562,46 @@ export const renderGanttStyle = (el, id, title) => () => {
                 },
                 startDate: new Date(2018, 2, 1).toISOString(),
                 endDate: new Date(2018, 11, 1).toISOString()
+            }
+        ]
+    });
+    return ganttDefault;
+};
+
+export const renderGanttDateTimeBuckets = (el, id, title) => () => {
+    shell.render(
+        el,
+        id,
+        title,
+        "A Gantt chart with a task within Lower, Middle and Upper steps."
+    );
+    const data = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
+    data.axis.x.lowerLimit = new Date(2018, 1, 1, 23).toISOString();
+    data.axis.x.upperLimit = new Date(2018, 1, 3, 1).toISOString();
+    data.axis.x.ticks = {
+        format: "%H",
+        lowerStepTickValues,
+        midpointTickValues,
+        upperStepTickValues
+    };
+    data.showActionLegend = false;
+    data.dateline = {};
+    const ganttDefault = Carbon.api.gantt(data);
+    ganttDefault.loadContent({
+        key: "track 1",
+        trackLabel: {
+            display: "Project A",
+            onClick: loadTrackLabelPopup
+        },
+        tasks: [
+            {
+                key: "task1",
+                onClick: loadTaskPopup,
+                label: {
+                    display: "Story Apex"
+                },
+                startDate: new Date(2018, 1, 2, 9).toISOString(),
+                endDate: new Date(2018, 1, 2, 19).toISOString()
             }
         ]
     });

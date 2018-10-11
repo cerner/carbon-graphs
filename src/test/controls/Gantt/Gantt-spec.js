@@ -505,6 +505,146 @@ describe("Gantt", () => {
                     gridElement.querySelector(`.${styles.gridV}`).nodeName
                 ).toBe("g");
             });
+            it("creates the grid markup with upperTickValues, values and midTickValues provided", () => {
+                gantt.destroy();
+                const axis = utils.deepClone(axisJSON);
+                axis.x.ticks = {
+                    show: true,
+                    values: [
+                        new Date(2018, 0, 2, 12).toISOString(),
+                        new Date(2019, 0, 6, 12).toISOString(),
+                        new Date(2019, 0, 11, 12).toISOString()
+                    ],
+                    upperStepTickValues: [
+                        new Date(2019, 0, 1, 12).toISOString(),
+                        new Date(2019, 0, 12, 12).toISOString()
+                    ],
+                    midpointTickValues: [
+                        new Date(2019, 0, 3, 12).toISOString(),
+                        new Date(2019, 0, 11, 12).toISOString()
+                    ]
+                };
+                gantt = new Gantt(getAxes(axis));
+
+                const gridMidElement = fetchElementByClass(styles.gridMidpoint);
+                expect(gridMidElement).toBeDefined();
+                const gridLowerStepElement = fetchElementByClass(
+                    styles.gridLowerStep
+                );
+                expect(gridLowerStepElement).toBeDefined();
+                const gridUpperStepElement = fetchElementByClass(
+                    styles.gridUpperStep
+                );
+                expect(gridUpperStepElement).toBeDefined();
+
+                expect(
+                    gridLowerStepElement.querySelectorAll(".tick").length
+                ).toBe(3);
+                expect(gridMidElement.querySelectorAll(".tick").length).toBe(2);
+                expect(
+                    gridUpperStepElement.querySelectorAll(".tick").length
+                ).toBe(2);
+            });
+            /**
+             * Verify if lower step grid lines are displayed with midpoint grid lines or upper grid lines, the lower step grid lines displays as a solid 1px med gray color #9B9B9B
+             * Verify the upper step grid line displays as a solid 3px gray color #BCBFC0
+             * Verify the midpoint grid lines display as a solid 1px light gray color #E8E9EA
+             */
+            it("creates the grid markup with upperTickValues, lowerTickValues and midTickValues provided", () => {
+                gantt.destroy();
+                const axis = utils.deepClone(axisJSON);
+                axis.x.ticks = {
+                    show: true,
+                    lowerStepTickValues: [
+                        new Date(2018, 0, 2, 12).toISOString(),
+                        new Date(2019, 0, 6, 12).toISOString(),
+                        new Date(2019, 0, 11, 12).toISOString()
+                    ],
+                    upperStepTickValues: [
+                        new Date(2019, 0, 1, 12).toISOString(),
+                        new Date(2019, 0, 12, 12).toISOString()
+                    ],
+                    midpointTickValues: [
+                        new Date(2019, 0, 3, 12).toISOString(),
+                        new Date(2019, 0, 11, 12).toISOString()
+                    ]
+                };
+                gantt = new Gantt(getAxes(axis));
+
+                const gridMidElement = fetchElementByClass(styles.gridMidpoint);
+                expect(gridMidElement).toBeDefined();
+                const gridLowerStepElement = fetchElementByClass(
+                    styles.gridLowerStep
+                );
+                expect(gridLowerStepElement).toBeDefined();
+                const gridUpperStepElement = fetchElementByClass(
+                    styles.gridUpperStep
+                );
+                expect(gridUpperStepElement).toBeDefined();
+
+                expect(
+                    gridLowerStepElement.querySelectorAll(".tick").length
+                ).toBe(3);
+                expect(gridMidElement.querySelectorAll(".tick").length).toBe(2);
+                expect(
+                    gridUpperStepElement.querySelectorAll(".tick").length
+                ).toBe(2);
+            });
+            it("creates the grid markup by giving lowerTickValues more precidence than values if both available", () => {
+                gantt.destroy();
+                const axis = utils.deepClone(axisJSON);
+                axis.x.ticks = {
+                    show: true,
+                    values: [
+                        new Date(2018, 0, 2, 12).toISOString(),
+                        new Date(2019, 0, 6, 12).toISOString()
+                    ],
+                    lowerStepTickValues: [
+                        new Date(2018, 0, 2, 12).toISOString(),
+                        new Date(2019, 0, 6, 12).toISOString(),
+                        new Date(2019, 0, 11, 12).toISOString()
+                    ]
+                };
+                gantt = new Gantt(getAxes(axis));
+                const gridLowerStepElement = fetchElementByClass(
+                    styles.gridLowerStep
+                );
+                expect(
+                    gridLowerStepElement.querySelectorAll(".tick").length
+                ).toBe(3);
+            });
+            it("creates the grid markup with upper values provided", () => {
+                gantt.destroy();
+                const axis = utils.deepClone(axisJSON);
+                axis.x.ticks = {
+                    show: true,
+                    upperStepTickValues: [
+                        new Date(2019, 0, 1, 12).toISOString(),
+                        new Date(2019, 0, 12, 12).toISOString()
+                    ]
+                };
+                gantt = new Gantt(getAxes(axis));
+                const gridUpperStepElement = fetchElementByClass(
+                    styles.gridUpperStep
+                );
+                expect(
+                    gridUpperStepElement.querySelectorAll(".tick").length
+                ).toBe(2);
+            });
+            it("creates the grid markup with mid values provided", () => {
+                gantt.destroy();
+                const axis = utils.deepClone(axisJSON);
+                axis.x.ticks = {
+                    show: true,
+                    midpointTickValues: [
+                        new Date(2019, 0, 1, 12).toISOString(),
+                        new Date(2019, 0, 12, 12).toISOString()
+                    ]
+                };
+                gantt = new Gantt(getAxes(axis));
+                const gridMidElement = fetchElementByClass(styles.gridMidpoint);
+                expect(gridMidElement.querySelectorAll(".tick").length).toBe(2);
+            });
         });
         describe("Content container", () => {
             it("Creates the container markup", () => {
@@ -614,6 +754,123 @@ describe("Gantt", () => {
                         .querySelector(".tick")
                         .querySelector("text");
                     expect(tick.textContent).toBe("Jan 2018");
+                });
+                it("creates x axis with LowerTickValues", () => {
+                    gantt.destroy();
+                    const localeAxisObj = utils.deepClone(axisJSON);
+                    localeAxisObj.x = {
+                        type: "timeseries",
+                        label: "Some X Label",
+                        lowerLimit: new Date(2016, 11).toISOString(),
+                        upperLimit: new Date(2017, 6).toISOString()
+                    };
+                    localeAxisObj.x.ticks = {
+                        format: "%b %Y",
+                        lowerStepTickValues: [
+                            new Date(2017, 1).toISOString(),
+                            new Date(2017, 3).toISOString(),
+                            new Date(2017, 5).toISOString()
+                        ]
+                    };
+                    gantt = new Gantt(getAxes(localeAxisObj));
+                    const allXAxisElements = document.querySelectorAll(
+                        `.${styles.axisX}`
+                    );
+                    expect(
+                        allXAxisElements[0].childNodes[0].querySelector("text")
+                            .textContent
+                    ).toBe("Feb 2017");
+                    expect(
+                        allXAxisElements[0].childNodes[1].querySelector("text")
+                            .textContent
+                    ).toBe("Apr 2017");
+                    expect(
+                        allXAxisElements[0].childNodes[2].querySelector("text")
+                            .textContent
+                    ).toBe("Jun 2017");
+                });
+                it("creates x axis with UpperTickValues", () => {
+                    gantt.destroy();
+                    const localeAxisObj = utils.deepClone(axisJSON);
+                    localeAxisObj.x = {
+                        type: "timeseries",
+                        label: "Some X Label",
+                        lowerLimit: new Date(2016, 11).toISOString(),
+                        upperLimit: new Date(2017, 6).toISOString()
+                    };
+                    localeAxisObj.x.ticks = {
+                        format: "%b %Y",
+                        show: true,
+                        upperStepTickValues: [
+                            new Date(2016, 11).toISOString(),
+                            new Date(2018, 1).toISOString()
+                        ]
+                    };
+                    gantt = new Gantt(getAxes(localeAxisObj));
+                    const allXAxisElements = document.querySelectorAll(
+                        `.${styles.axisX}`
+                    );
+                    const start = allXAxisElements[0].childNodes[0].querySelector(
+                        "text"
+                    );
+                    const end = allXAxisElements[0].childNodes[1].querySelector(
+                        "text"
+                    );
+                    expect(start.textContent).toBe("Dec 2016");
+                    expect(end.textContent).toBe("Feb 2018");
+                });
+                it("creates x axis with LowerTickValues, UpperTickValues and midTickValues in default locale", () => {
+                    gantt.destroy();
+                    const localeAxisObj = utils.deepClone(axisJSON);
+                    localeAxisObj.x = {
+                        type: "timeseries",
+                        label: "Some X Label",
+                        lowerLimit: new Date(2016, 10).toISOString(),
+                        upperLimit: new Date(2018, 2).toISOString()
+                    };
+                    localeAxisObj.x.ticks = {
+                        format: "%b %Y",
+                        show: true,
+                        lowerStepTickValues: [
+                            new Date(2017, 1).toISOString(),
+                            new Date(2017, 5).toISOString(),
+                            new Date(2017, 9).toISOString()
+                        ],
+                        midpointTickValues: [
+                            new Date(2017, 3).toISOString(),
+                            new Date(2017, 7).toISOString(),
+                            new Date(2017, 11).toISOString()
+                        ],
+                        upperStepTickValues: [
+                            new Date(2016, 11).toISOString(),
+                            new Date(2018, 1).toISOString()
+                        ]
+                    };
+                    gantt = new Gantt(getAxes(localeAxisObj));
+
+                    const allXAxisElements = document.querySelectorAll(
+                        `.${styles.axisX}`
+                    );
+                    const lowerAxis1 = allXAxisElements[0].childNodes[0].querySelector(
+                        "text"
+                    );
+                    const lowerAxis2 = allXAxisElements[0].childNodes[1].querySelector(
+                        "text"
+                    );
+                    const lowerAxis3 = allXAxisElements[0].childNodes[2].querySelector(
+                        "text"
+                    );
+                    const upperAxis1 = allXAxisElements[0].childNodes[3].querySelector(
+                        "text"
+                    );
+                    const upperAxis2 = allXAxisElements[0].childNodes[4].querySelector(
+                        "text"
+                    );
+                    expect(lowerAxis1.textContent).toBe("Feb 2017");
+                    expect(lowerAxis2.textContent).toBe("Jun 2017");
+                    expect(lowerAxis3.textContent).toBe("Oct 2017");
+                    expect(upperAxis1.textContent).toBe("Dec 2016");
+                    expect(upperAxis2.textContent).toBe("Feb 2018");
                 });
                 it("Creates x axis with ticks in provided locale - DE", () => {
                     gantt.destroy();
