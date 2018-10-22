@@ -125,6 +125,20 @@ export const valuesTimeSeries = [
         y: 15
     }
 ];
+export const valuesOutliers = [
+    {
+        x: 1,
+        y: 40
+    },
+    {
+        x: 2,
+        y: 35
+    },
+    {
+        x: 3,
+        y: 38
+    }
+];
 export const regionsDefault = [
     {
         x: 1,

@@ -331,8 +331,7 @@ const getYAxisLabelXPosition = (config) =>
  */
 const getYAxisLabelYPosition = (config) =>
     getYAxisYPosition() +
-    ((getYAxisHeight(config) - PADDING.top - PADDING.bottom) / 2) *
-        config.outlierStretchFactor.upperLimit;
+    (getYAxisHeight(config) - PADDING.top - PADDING.bottom) / 2;
 /**
  * Y2 Axis label's starting position vertically beside the graph
  * @private

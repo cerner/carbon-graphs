@@ -9,7 +9,9 @@ import {
     getAxes,
     getInput,
     valuesDefault,
-    valuesNegativeDefault
+    valuesOutliers,
+    valuesNegativeDefault,
+    fetchElementByClass
 } from "./helpers";
 
 describe("Stacked Bar", () => {
@@ -287,6 +289,36 @@ describe("Stacked Bar", () => {
                 styles.taskBar
             );
             expect(barsContainer.length).toEqual(0);
+        });
+    });
+    describe("when graph is loaded with outlier values", () => {
+        let bar1, bar2, graph;
+        beforeEach(() => {
+            bar1 = new Bar(getInput(valuesOutliers, false, false));
+            graph = graphDefault.loadContent(bar1);
+            bar1.redraw(graph);
+        });
+        afterEach(() => {
+            graphDefault.destroy();
+        });
+        it("y-axis label position stays the same", () => {
+            const yLabel1 = fetchElementByClass(
+                barGraphContainer,
+                styles.axisLabelY
+            ).getAttribute("transform");
+            const input = utils.deepClone(
+                getInput(valuesDefault, false, false, false, "uid_2")
+            );
+            input.group = "uid_1";
+            bar2 = new Bar(input);
+            graph = graphDefault.loadContent(bar2);
+            bar2.redraw(graph);
+            bar1.redraw(graph);
+            const yLabel2 = fetchElementByClass(
+                barGraphContainer,
+                styles.axisLabelY
+            );
+            expect(yLabel1).toEqual(yLabel2.getAttribute("transform"));
         });
     });
 });
