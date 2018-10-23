@@ -28,7 +28,7 @@ import {
     scaleGraph,
     updateAxesDomain
 } from "./helpers/creationHelpers";
-import { translateGraph } from "./helpers/translateHelpers";
+import { translateGraph, translateLabelText } from "./helpers/translateHelpers";
 
 /**
  * @typedef {Object} Gantt
@@ -235,6 +235,7 @@ class Gantt extends Construct {
         scaleGraph(this.scale, this.config);
         translateGraph(this);
         this.trackConfig.forEach((control) => control.resize(this));
+        translateLabelText(this.scale, this.config, this.svg);
         return this;
     }
 

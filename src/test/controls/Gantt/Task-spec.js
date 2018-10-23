@@ -447,109 +447,135 @@ describe("Gantt -> Track -> Task", () => {
                 taskElement.childNodes[1].getAttribute("width") / 2
             );
         });
-        it("Renders selection for bar correctly", () => {
+        it("Renders selection for bar correctly", (done) => {
             loadData(gantt);
-            const taskElement = fetchElementByClass(styles.task);
-            const indicatorElement = taskElement.childNodes[0];
-            const taskBarElement = taskElement.childNodes[1];
-            expect(indicatorElement).not.toBeNull();
-            expect(indicatorElement.nodeName).toBe("rect");
-            expect(indicatorElement.getAttribute("aria-hidden")).toBe("true");
-            expect(indicatorElement.getAttribute("rx")).toBe("3");
-            expect(indicatorElement.getAttribute("ry")).toBe("3");
-            expect(indicatorElement.getAttribute("class")).toBe(
-                styles.taskBarSelection
-            );
-            expect(+indicatorElement.getAttribute("x")).toBeLessThan(
-                +taskBarElement.getAttribute("x")
-            );
-            expect(+indicatorElement.getAttribute("y")).toBeLessThan(
-                +taskBarElement.getAttribute("y")
-            );
-            expect(+indicatorElement.getAttribute("width")).toBeGreaterThan(
-                +taskBarElement.getAttribute("width")
-            );
-            expect(+indicatorElement.getAttribute("height")).toBeGreaterThan(
-                +taskBarElement.getAttribute("height")
-            );
+            setTimeout(() => {
+                const taskElement = fetchElementByClass(styles.task);
+                const indicatorElement = taskElement.childNodes[0];
+                const taskBarElement = taskElement.childNodes[1];
+                expect(indicatorElement).not.toBeNull();
+                expect(indicatorElement.nodeName).toBe("rect");
+                expect(indicatorElement.getAttribute("aria-hidden")).toBe(
+                    "true"
+                );
+                expect(indicatorElement.getAttribute("rx")).toBe("3");
+                expect(indicatorElement.getAttribute("ry")).toBe("3");
+                expect(indicatorElement.getAttribute("class")).toBe(
+                    styles.taskBarSelection
+                );
+                expect(+indicatorElement.getAttribute("x")).toBeLessThan(
+                    +taskBarElement.getAttribute("x")
+                );
+                expect(+indicatorElement.getAttribute("y")).toBeLessThan(
+                    +taskBarElement.getAttribute("y")
+                );
+                expect(+indicatorElement.getAttribute("width")).toBeGreaterThan(
+                    +taskBarElement.getAttribute("width")
+                );
+                expect(
+                    +indicatorElement.getAttribute("height")
+                ).toBeGreaterThan(+taskBarElement.getAttribute("height"));
+                done();
+            }, TRANSITION_DELAY);
         });
-        it("Renders selection for chunk correctly", () => {
+        it("Renders selection for chunk correctly", (done) => {
             loadData(gantt);
-            const taskElement = document.querySelectorAll(`.${styles.task}`)[1];
-            const indicatorElement = taskElement.childNodes[0];
-            const taskBarElement = taskElement.childNodes[1];
-            expect(indicatorElement).not.toBeNull();
-            expect(indicatorElement.nodeName).toBe("rect");
-            expect(indicatorElement.getAttribute("aria-hidden")).toBe("true");
-            expect(indicatorElement.getAttribute("rx")).toBe("3");
-            expect(indicatorElement.getAttribute("ry")).toBe("3");
-            expect(indicatorElement.getAttribute("class")).toBe(
-                styles.taskBarSelection
-            );
-            expect(+indicatorElement.getAttribute("x")).toBeLessThan(
-                +taskBarElement.getAttribute("x")
-            );
-            expect(+indicatorElement.getAttribute("y")).toBeLessThan(
-                +taskBarElement.getAttribute("y")
-            );
-            expect(+indicatorElement.getAttribute("width")).toBeGreaterThan(
-                +taskBarElement.getAttribute("width")
-            );
-            expect(+indicatorElement.getAttribute("height")).toBeGreaterThan(
-                +taskBarElement.getAttribute("height")
-            );
+            setTimeout(() => {
+                const taskElement = document.querySelectorAll(
+                    `.${styles.task}`
+                )[1];
+                const indicatorElement = taskElement.childNodes[0];
+                const taskBarElement = taskElement.childNodes[1];
+                expect(indicatorElement).not.toBeNull();
+                expect(indicatorElement.nodeName).toBe("rect");
+                expect(indicatorElement.getAttribute("aria-hidden")).toBe(
+                    "true"
+                );
+                expect(indicatorElement.getAttribute("rx")).toBe("3");
+                expect(indicatorElement.getAttribute("ry")).toBe("3");
+                expect(indicatorElement.getAttribute("class")).toBe(
+                    styles.taskBarSelection
+                );
+                expect(+indicatorElement.getAttribute("x")).toBeLessThan(
+                    +taskBarElement.getAttribute("x")
+                );
+                expect(+indicatorElement.getAttribute("y")).toBeLessThan(
+                    +taskBarElement.getAttribute("y")
+                );
+                expect(+indicatorElement.getAttribute("width")).toBeGreaterThan(
+                    +taskBarElement.getAttribute("width")
+                );
+                expect(
+                    +indicatorElement.getAttribute("height")
+                ).toBeGreaterThan(+taskBarElement.getAttribute("height"));
+                done();
+            }, TRANSITION_DELAY);
         });
-        it("Renders selection for percentage bar correctly", () => {
+        it("Renders selection for percentage bar correctly", (done) => {
             loadData(gantt);
-            const taskElement = document.querySelectorAll(`.${styles.task}`)[2];
-            const indicatorElement = taskElement.childNodes[0];
-            const taskBarElement = taskElement.childNodes[1];
-            expect(indicatorElement).not.toBeNull();
-            expect(indicatorElement.nodeName).toBe("rect");
-            expect(indicatorElement.getAttribute("aria-hidden")).toBe("true");
-            expect(indicatorElement.getAttribute("rx")).toBe("3");
-            expect(indicatorElement.getAttribute("ry")).toBe("3");
-            expect(indicatorElement.getAttribute("class")).toBe(
-                styles.taskBarSelection
-            );
-            expect(+indicatorElement.getAttribute("x")).toBeLessThan(
-                +taskBarElement.getAttribute("x")
-            );
-            expect(+indicatorElement.getAttribute("y")).toBeLessThan(
-                +taskBarElement.getAttribute("y")
-            );
-            expect(+indicatorElement.getAttribute("width")).toBeGreaterThan(
-                +taskBarElement.getAttribute("width")
-            );
-            expect(+indicatorElement.getAttribute("height")).toBeGreaterThan(
-                +taskBarElement.getAttribute("height")
-            );
+            setTimeout(() => {
+                const taskElement = document.querySelectorAll(
+                    `.${styles.task}`
+                )[2];
+                const indicatorElement = taskElement.childNodes[0];
+                const taskBarElement = taskElement.childNodes[1];
+                expect(indicatorElement).not.toBeNull();
+                expect(indicatorElement.nodeName).toBe("rect");
+                expect(indicatorElement.getAttribute("aria-hidden")).toBe(
+                    "true"
+                );
+                expect(indicatorElement.getAttribute("rx")).toBe("3");
+                expect(indicatorElement.getAttribute("ry")).toBe("3");
+                expect(indicatorElement.getAttribute("class")).toBe(
+                    styles.taskBarSelection
+                );
+                expect(+indicatorElement.getAttribute("x")).toBeLessThan(
+                    +taskBarElement.getAttribute("x")
+                );
+                expect(+indicatorElement.getAttribute("y")).toBeLessThan(
+                    +taskBarElement.getAttribute("y")
+                );
+                expect(+indicatorElement.getAttribute("width")).toBeGreaterThan(
+                    +taskBarElement.getAttribute("width")
+                );
+                expect(
+                    +indicatorElement.getAttribute("height")
+                ).toBeGreaterThan(+taskBarElement.getAttribute("height"));
+                done();
+            }, TRANSITION_DELAY);
         });
-        it("Renders selection for hashed tasks correctly", () => {
+        it("Renders selection for hashed tasks correctly", (done) => {
             loadData(gantt);
-            const taskElement = document.querySelectorAll(`.${styles.task}`)[3];
-            const indicatorElement = taskElement.childNodes[0];
-            const taskBarElement = taskElement.childNodes[1];
-            expect(indicatorElement).not.toBeNull();
-            expect(indicatorElement.nodeName).toBe("rect");
-            expect(indicatorElement.getAttribute("aria-hidden")).toBe("true");
-            expect(indicatorElement.getAttribute("rx")).toBe("3");
-            expect(indicatorElement.getAttribute("ry")).toBe("3");
-            expect(indicatorElement.getAttribute("class")).toBe(
-                styles.taskBarSelection
-            );
-            expect(+indicatorElement.getAttribute("x")).toBeLessThan(
-                +taskBarElement.getAttribute("x")
-            );
-            expect(+indicatorElement.getAttribute("y")).toBeLessThan(
-                +taskBarElement.getAttribute("y")
-            );
-            expect(+indicatorElement.getAttribute("width")).toBeGreaterThan(
-                +taskBarElement.getAttribute("width")
-            );
-            expect(+indicatorElement.getAttribute("height")).toBeGreaterThan(
-                +taskBarElement.getAttribute("height")
-            );
+            setTimeout(() => {
+                const taskElement = document.querySelectorAll(
+                    `.${styles.task}`
+                )[3];
+                const indicatorElement = taskElement.childNodes[0];
+                const taskBarElement = taskElement.childNodes[1];
+                expect(indicatorElement).not.toBeNull();
+                expect(indicatorElement.nodeName).toBe("rect");
+                expect(indicatorElement.getAttribute("aria-hidden")).toBe(
+                    "true"
+                );
+                expect(indicatorElement.getAttribute("rx")).toBe("3");
+                expect(indicatorElement.getAttribute("ry")).toBe("3");
+                expect(indicatorElement.getAttribute("class")).toBe(
+                    styles.taskBarSelection
+                );
+                expect(+indicatorElement.getAttribute("x")).toBeLessThan(
+                    +taskBarElement.getAttribute("x")
+                );
+                expect(+indicatorElement.getAttribute("y")).toBeLessThan(
+                    +taskBarElement.getAttribute("y")
+                );
+                expect(+indicatorElement.getAttribute("width")).toBeGreaterThan(
+                    +taskBarElement.getAttribute("width")
+                );
+                expect(
+                    +indicatorElement.getAttribute("height")
+                ).toBeGreaterThan(+taskBarElement.getAttribute("height"));
+                done();
+            }, TRANSITION_DELAY);
         });
         describe("When clicked on a task", () => {
             it("Does not do anything if no onClick callback is provided", (done) => {

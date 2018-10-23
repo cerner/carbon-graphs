@@ -1,18 +1,19 @@
+import { renderGanttDateTimeBuckets } from "../controls/gantt";
 import {
+    renderLineDateTimeBuckets,
     renderLineXAlternateLocale,
     renderLineXAxisFormatted,
     renderLineXHidden,
     renderLineXStaticTicks,
-    renderLineYHidden,
-    renderLineDateTimeBuckets
+    renderLineYHidden
 } from "../controls/line";
 import {
+    renderPairedResultDateTimeBuckets,
     renderPairedResultXAlternateLocale,
     renderPairedResultXAxisFormatted,
     renderPairedResultXHidden,
     renderPairedResultXStaticTicks,
-    renderPairedResultYHidden,
-    renderPairedResultDateTimeBuckets
+    renderPairedResultYHidden
 } from "../controls/pairedResult";
 import {
     btn,
@@ -20,7 +21,6 @@ import {
     ExampleControl,
     toggleSectionAsActive
 } from "../helpers";
-import { renderGanttDateTimeBuckets } from "../controls/gantt";
 
 export class AxesExample extends ExampleControl {
     constructor() {

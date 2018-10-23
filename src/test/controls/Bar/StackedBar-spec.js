@@ -6,12 +6,12 @@ import utils from "../../../main/js/helpers/utils";
 import {
     axisDefault,
     fetchAllElementsByClass,
+    fetchElementByClass,
     getAxes,
     getInput,
     valuesDefault,
-    valuesOutliers,
     valuesNegativeDefault,
-    fetchElementByClass
+    valuesOutliers
 } from "./helpers";
 
 describe("Stacked Bar", () => {
