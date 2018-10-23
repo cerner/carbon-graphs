@@ -280,7 +280,7 @@ export const renderGanttPercentage = (el, id, title) => () => {
     );
     const data = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
     data.showActionLegend = false;
-    data.dateline = {};
+    data.dateline = [];
     const ganttDefault = Carbon.api.gantt(data);
 
     ganttDefault.loadContent({
@@ -324,7 +324,7 @@ export const renderGanttAction = (el, id, title) => () => {
         "* A Gantt chart showing actions/milestones that can occur within a project."
     );
     const data = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
-    data.dateline = {};
+    data.dateline = [];
     const ganttDefault = Carbon.api.gantt(data);
     ganttDefault.loadContent({
         key: "track 1",
@@ -378,7 +378,7 @@ export const renderGanttTruncate = (el, id, title) => () => {
     );
     const data = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
     data.showActionLegend = false;
-    data.dateline = {};
+    data.dateline = [];
     const ganttDefault = Carbon.api.gantt(data);
 
     ganttDefault.loadContent({
@@ -395,7 +395,7 @@ export const renderGanttStyle = (el, id, title) => () => {
     shell.render(el, id, title);
     const data = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
     data.showActionLegend = false;
-    data.dateline = {};
+    data.dateline = [];
     const ganttDefault = Carbon.api.gantt(data);
     ganttDefault.loadContent({
         key: "track 0",
@@ -585,7 +585,7 @@ export const renderGanttDateTimeBuckets = (el, id, title) => () => {
         upperStepTickValues
     };
     data.showActionLegend = false;
-    data.dateline = {};
+    data.dateline = [];
     const ganttDefault = Carbon.api.gantt(data);
     ganttDefault.loadContent({
         key: "track 1",

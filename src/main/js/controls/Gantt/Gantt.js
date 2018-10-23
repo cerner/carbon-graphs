@@ -100,7 +100,7 @@ const initConfig = (control) => {
         },
         shownTargets: {},
         actionLegend: [],
-        dateline: {}
+        dateline: []
     };
     control.axis = {};
     control.scale = {};

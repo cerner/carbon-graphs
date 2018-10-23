@@ -228,7 +228,7 @@ describe("Gantt", () => {
             expect(gantt.config.axis).not.toBeNull();
             expect(gantt.config.locale).not.toBeNull();
             expect(gantt.config.throttle).toEqual(constants.RESIZE_THROTTLE);
-            expect(gantt.config.dateline).toEqual(input.dateline || {});
+            expect(gantt.config.dateline).toEqual(input.dateline || []);
             expect(gantt.config.actionLegend).toEqual(input.actionLegend || []);
             expect(gantt.config.axis.x.type).toEqual(AXIS_TYPE.TIME_SERIES);
             expect(gantt.config.axis.x.ticks).toEqual({});
@@ -1729,7 +1729,7 @@ describe("Gantt", () => {
                 }),
                 shownTargets: Object({}),
                 actionLegend: [],
-                dateline: {}
+                dateline: []
             });
             expect(gantt.axis).toEqual({});
             expect(gantt.scale).toEqual({});

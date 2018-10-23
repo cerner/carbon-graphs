@@ -108,7 +108,7 @@ export const processInput = (input, config) => {
         input.throttle,
         constants.RESIZE_THROTTLE
     );
-    config.dateline = getDefaultValue(utils.deepClone(input.dateline), {});
+    config.dateline = getDefaultValue(utils.deepClone(input.dateline), []);
     config.actionLegend = getDefaultValue(
         utils.deepClone(input.actionLegend),
         []
