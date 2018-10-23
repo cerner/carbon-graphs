@@ -14,10 +14,7 @@ const compiler = webpack({
         publicPath: "/dist/"
     },
     resolve: {
-        modules: [
-            process.cwd(),
-            "node_modules"
-        ]
+        modules: [process.cwd(), "node_modules"]
     },
     module: {
         rules: [
@@ -39,7 +36,7 @@ const compiler = webpack({
             }
         ]
     },
-    plugins: [ new webpack.optimize.ModuleConcatenationPlugin() ]
+    plugins: [new webpack.optimize.ModuleConcatenationPlugin()]
 });
 const port = Number(process.env.PORT || 9991);
 
@@ -52,6 +49,6 @@ const server = new WebpackDevServer(compiler, {
     contentBase: "./build"
 });
 
-server.listen(port, () => {
+server.listen(port, "localhost", () => {
     console.log(`Server started. Please go to http://localhost:${port}`);
 });

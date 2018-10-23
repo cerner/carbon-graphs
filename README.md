@@ -56,16 +56,14 @@ Carbon provides an abstraction for c3 and d3.
 
 ## Potential features
 
+-   [ ] Axes labelling along with shapes
 -   [ ] Sparkline graph
 -   [ ] Scatter-plot graph
--   [ ] Axes labelling along with shapes
 -   [ ] Area graphs
 -   [ ] Area spline graphs
--   [ ] Datetime formatting
 -   [ ] DST
 -   [ ] Tick counts
 -   [ ] Show/hide ticks
--   [ ] Zoom
 -   [ ] Pan
 
 ## Usage
