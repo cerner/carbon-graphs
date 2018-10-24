@@ -50,7 +50,7 @@ svg:not(:root) {
 
 .carbon-axis {
     &.carbon-axis-reference-line {
-        stroke-width: 0.0625rem;
+        stroke-width: 2px;
         stroke: @grey30;
     }
 }
@@ -61,17 +61,17 @@ svg:not(:root) {
 
 .carbon-lower-step-grid line {
     stroke: #9b9b9b;
-    stroke-width: 0.0625rem;
+    stroke-width: 1px;
 }
 
 .carbon-midpoint-grid line {
     stroke: @grey10;
-    stroke-width: 0.0625rem;
+    stroke-width: 1px;
 }
 
 .carbon-upper-step-grid line {
     stroke: @grey30;
-    stroke-width: 0.1875rem;
+    stroke-width: 3px;
 }
 
 .carbon-no-data-text {
@@ -151,6 +151,9 @@ svg:not(:root) {
             @default-transition-duration,
             @default-transition-timing
         );
+    }
+    path {
+        stroke-width: 1px;
     }
 }
 

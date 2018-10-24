@@ -6,8 +6,8 @@ import {
     prepareHorizontalAxis,
     processTickValues
 } from "../../../helpers/axis";
-import { prepareHAxis, translateVGrid } from "../../../helpers/datetimeBuckets";
 import constants, { AXES_ORIENTATION } from "../../../helpers/constants";
+import { prepareHAxis, translateVGrid } from "../../../helpers/datetimeBuckets";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 import {
@@ -46,7 +46,7 @@ const getLabelIndexFromDomain = (scale, yVal) => scale.y.domain().indexOf(yVal);
  * @param {number} index - label index in domain
  * @returns {boolean} true if y co-ordinate transform translate is not needed, false otherwise
  */
-const validateLabelBeforeTranslation = (scale, config, yVal, index) =>
+const isTrackLabelOutsideDomain = (scale, config, yVal, index) =>
     index < 0 ||
     utils.isEmpty(config.axis.y.trackList) ||
     scale.y.domain().length > Object.keys(config.axis.y.trackList).length;
@@ -62,12 +62,9 @@ const validateLabelBeforeTranslation = (scale, config, yVal, index) =>
  * @returns {number} y co-ordinate transform translate
  */
 const getTransformYCoordinate = (scale, config, yVal) => {
-    if (!scale) {
-        return 0;
-    }
     const index = getLabelIndexFromDomain(scale, yVal);
-    if (validateLabelBeforeTranslation(scale, config, yVal, index)) {
-        return scale.y(yVal) / 2;
+    if (!scale || isTrackLabelOutsideDomain(scale, config, yVal, index)) {
+        return 0;
     }
     const getCurrentTrackHeightList = (trackList) =>
         Object.keys(trackList).map((o) => trackList[o].trackHeight);
@@ -398,6 +395,7 @@ const translateActionPoints = (scale, config, trackPath) => {
  */
 const translateTaskBar = (scale, path) =>
     path
+        .transition(constants.d3Transition)
         .attr("x", (val) => scale.x(val.startDate))
         .attr(
             "y",
@@ -431,6 +429,7 @@ const translateTaskBar = (scale, path) =>
  */
 const translateActivityBar = (scale, path) =>
     path
+        .transition(constants.d3Transition)
         .attr("x", (val) => scale.x(val.startDate))
         .attr(
             "y",
@@ -462,7 +461,8 @@ const translateTaskIndicator = (scale, path) => {
     const positionAdjustment = Math.floor(
         constants.DEFAULT_GANTT_TASK_SELECTION_PADDING / 4
     );
-    path.attr("x", (val) => scale.x(val.startDate) - positionAdjustment)
+    path.transition(constants.d3Transition)
+        .attr("x", (val) => scale.x(val.startDate) - positionAdjustment)
         .attr(
             "y",
             (val) =>
@@ -489,7 +489,6 @@ const translateTaskIndicator = (scale, path) => {
 const translateTasks = (scale, config, trackPath) =>
     trackPath
         .selectAll(`g.${styles.task}`)
-        .transition(constants.d3Transition)
         .selectAll("rect")
         .each(function() {
             const path = d3.select(this);
@@ -509,7 +508,6 @@ const translateTasks = (scale, config, trackPath) =>
 const translateActivities = (scale, config, trackPath) =>
     trackPath
         .selectAll(`g.${styles.activity}`)
-        .transition(constants.d3Transition)
         .selectAll(`rect.${styles.activityBar}`)
         .each(function() {
             translateActivityBar(scale, d3.select(this));

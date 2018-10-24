@@ -4,7 +4,7 @@
 
 .carbon-line path {
     fill: none;
-    stroke-width: 0.075rem;
+    stroke-width: 1px;
     // To counteract the opacity change when blur is used on a line
     .basic-transition(
         opacity,
@@ -12,7 +12,7 @@
         @default-transition-timing
     );
     &.carbon-highlight {
-        stroke-width: 0.15rem;
+        stroke-width: 2px;
         .transform-transition(
             stroke,
             @default-transition-duration,

@@ -1015,7 +1015,7 @@ describe("Graph", () => {
                 expect(gridElement.childElementCount).toBe(2);
             });
             /**
-             * 	Verify if lower step grid lines do not display with midpoint grid lines or upper grid lines, the lower step grid lines displays as a solid 1px light gray color #E8E9EA
+             *    Verify if lower step grid lines do not display with midpoint grid lines or upper grid lines, the lower step grid lines displays as a solid 1px light gray color #E8E9EA
              */
             it("creates the grid markup with tick values provided", () => {
                 graph.destroy();

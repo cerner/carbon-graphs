@@ -474,7 +474,7 @@ const datelineClickHandler = (value, target) => {
                 selectedTarget.attr("aria-selected", false);
             },
             value,
-            selectedTarget
+            d3.select(target)
         )
     );
 };
@@ -502,6 +502,10 @@ const createDateline = (scale, config, canvasSVG) => {
             .attr("style", (val) => `fill: ${val.color}; stroke: ${val.color}`)
             .attr("aria-selected", false);
         datelineGroup
+            .append("line")
+            .classed(styles.ganttDateline, true)
+            .attr("style", (val) => `fill: ${val.color}; stroke: ${val.color}`);
+        datelineGroup
             .append("path")
             .classed(styles.ganttDatelinePoint, true)
             .attr("style", (val) => `fill: ${val.color}; stroke: ${val.color}`)
@@ -514,10 +518,6 @@ const createDateline = (scale, config, canvasSVG) => {
             .on("click", function(value) {
                 datelineClickHandler(value, this);
             });
-        datelineGroup
-            .append("line")
-            .classed(styles.ganttDateline, true)
-            .attr("style", (val) => `fill: ${val.color}; stroke: ${val.color}`);
     });
 };
 /**

@@ -8,10 +8,10 @@ import d3 from "d3";
 import Bar from "../controls/Bar/Bar";
 import { getScale, getType } from "../core/BaseConfig";
 import constants, { AXES_ORIENTATION, AXIS_TYPE } from "../helpers/constants";
-import { prepareHAxis } from "./datetimeBuckets";
 import styles from "../helpers/styles";
 import utils from "../helpers/utils";
 import { DEFAULT_TICK_FORMAT } from "../locale";
+import { prepareHAxis } from "./datetimeBuckets";
 
 const PADDING = constants.PADDING;
 /**

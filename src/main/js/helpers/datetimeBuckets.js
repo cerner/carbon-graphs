@@ -1,5 +1,5 @@
-import utils from "./utils";
 import styles from "./styles";
+import utils from "./utils";
 
 /** Different types of Buckets. */
 const BUCKET_TYPES = {

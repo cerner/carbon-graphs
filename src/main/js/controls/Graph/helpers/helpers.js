@@ -22,8 +22,8 @@ import {
     translateAxes,
     translateAxisReferenceLine
 } from "../../../helpers/axis";
-import { createVGrid, translateVGrid } from "../../../helpers/datetimeBuckets";
 import constants, { SHAPES } from "../../../helpers/constants";
+import { createVGrid, translateVGrid } from "../../../helpers/datetimeBuckets";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 

@@ -21,7 +21,6 @@ import { loadTasks, unloadTasks } from "./helpers/taskHelpers";
 import {
     translateActionPoints,
     translateActivities,
-    translateLabelText,
     translateTasks
 } from "./helpers/translateHelpers";
 
@@ -178,7 +177,6 @@ class Track extends GraphContent {
      * @inheritDoc
      */
     resize(graph) {
-        translateLabelText(graph.scale, graph.config, graph.svg);
         if (utils.notEmpty(this.config.activities)) {
             translateActivities(graph.scale, graph.config, this.trackGroupPath);
         }
