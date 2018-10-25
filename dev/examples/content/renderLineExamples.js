@@ -58,43 +58,7 @@ const lineExampleSet = (exampleInstance, contentSection, setState) => {
     setState(exampleInstance);
     return exampleInstance;
 };
-export const renderNonContiguousLineExamples = (
-    instance,
-    toggleSection,
-    contentSection,
-    setState,
-    getState
-) =>
-    btn.render(toggleSection, "Non-Contiguous Line", (event) => {
-        clearContent(contentSection, getState());
-        toggleSectionAsActive(event.target);
-        instance.load(
-            renderLineBlankDataPoint(
-                contentSection,
-                "nonContiguousLine",
-                "Non-Contiguous Data Points"
-            )
-        );
-        instance.render();
-        setState(instance);
-    });
-export const renderMultiLineExamples = (
-    instance,
-    toggleSection,
-    contentSection,
-    setState,
-    getState
-) =>
-    btn.render(toggleSection, "Multi-Line", (event) => {
-        clearContent(contentSection, getState());
-        toggleSectionAsActive(event.target);
-        instance.load(
-            renderMultiLine(contentSection, "multiLine", "Multi-Line Graph")
-        );
-        instance.render();
-        setState(instance);
-    });
-export const toggleLineAsActive = (
+export const triggerLineExample = (
     instance,
     contentSection,
     setState,
@@ -104,7 +68,70 @@ export const toggleLineAsActive = (
     toggleSectionAsActive(event.target);
     lineExampleSet(instance, contentSection, setState);
 };
-export const renderLineExamples = (
+export const triggerNonContiguousExample = (
+    instance,
+    contentSection,
+    setState,
+    getState
+) => (event) => {
+    clearContent(contentSection, getState());
+    toggleSectionAsActive(event.target);
+    instance.load(
+        renderLineBlankDataPoint(
+            contentSection,
+            "nonContiguousLine",
+            "Non-Contiguous Data Points"
+        )
+    );
+    instance.render();
+    setState(instance);
+};
+export const triggerMultilineExample = (
+    instance,
+    contentSection,
+    setState,
+    getState
+) => (event) => {
+    clearContent(contentSection, getState());
+    toggleSectionAsActive(event.target);
+    instance.load(
+        renderMultiLine(contentSection, "multiLine", "Multi-Line Graph")
+    );
+    instance.render();
+    setState(instance);
+};
+export const registerNonContiguousLineExamples = (
+    instance,
+    toggleSection,
+    contentSection,
+    setState,
+    getState
+) =>
+    btn.render(
+        toggleSection,
+        "Non-Contiguous Line",
+        "non-contiguous-line",
+        triggerNonContiguousExample(
+            instance,
+            contentSection,
+            setState,
+            getState
+        )
+    );
+export const registerMultiLineExamples = (
+    instance,
+    toggleSection,
+    contentSection,
+    setState,
+    getState
+) =>
+    btn.render(
+        toggleSection,
+        "Multi-Line",
+        "multiline",
+        triggerMultilineExample(instance, contentSection, setState, getState)
+    );
+export const registerLineExamples = (
     instance,
     toggleSection,
     contentSection,
@@ -114,5 +141,6 @@ export const renderLineExamples = (
     btn.render(
         toggleSection,
         "Line",
-        toggleLineAsActive(instance, contentSection, setState, getState)
+        "line",
+        triggerLineExample(instance, contentSection, setState, getState)
     );

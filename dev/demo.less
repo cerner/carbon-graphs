@@ -31,7 +31,7 @@ body {
     align-content: center;
     justify-content: center;
     background-color: @demo-banner-bg;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 4px 8px rgba(0, 0, 0, 0.28);
+    box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
     @media screen and (max-width: 800px) {
         padding: 1rem;
     }
@@ -72,9 +72,9 @@ body {
     background-color: @white;
     z-index: 20;
     border-radius: 0.3rem;
-    box-shadow: 0 2px 16px rgba(12, 12, 13, 0.1);
-    -moz-box-shadow: 0 2px 16px rgba(12, 12, 13, 0.1);
-    -webkit-box-shadow: 0 2px 16px rgba(12, 12, 13, 0.1);
+    box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
     & .popup-item {
         display: block;
     }
@@ -131,14 +131,18 @@ body {
 
 .carbon-btn {
     border: 0;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
     background-color: transparent;
     color: @demo-nav-btn;
     cursor: pointer;
     font-family: inherit;
     font-weight: 500;
     padding: 0.866rem 0.5rem;
-    margin: 0.125rem 0;
-    width: 100%;
+    margin: 0.25rem 0;
     border-left: 0.25rem solid transparent;
     &[disabled="disabled"] {
         &:hover {

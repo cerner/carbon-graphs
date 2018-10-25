@@ -19,39 +19,42 @@ export class BarExample extends ExampleControl {
     }
 }
 
-export const renderBarExamples = (
+export const triggerBarExample = (
+    instance,
+    contentSection,
+    setState,
+    getState
+) => (event) => {
+    clearContent(contentSection, getState());
+    toggleSectionAsActive(event.target);
+    instance.load(
+        renderBarDefault(contentSection, "barDefault", "Bar - Simple bar")
+    );
+    instance.load(
+        renderBarTimeSeries(contentSection, "barTimeSeries", "Bar - TimeSeries")
+    );
+    instance.load(
+        renderBarGroup(contentSection, "barGroup", "Bar - Grouped bars")
+    );
+    instance.load(
+        renderBarStacked(contentSection, "barStacked", "Bar - Stacked bars")
+    );
+    instance.load(
+        renderBarNegative(contentSection, "barNegative", "Bar - Negative bars")
+    );
+    instance.render();
+    setState(instance);
+};
+export const registerBarExamples = (
     instance,
     toggleSection,
     contentSection,
     setState,
     getState
 ) =>
-    btn.render(toggleSection, "Bar", (event) => {
-        clearContent(contentSection, getState());
-        toggleSectionAsActive(event.target);
-        instance.load(
-            renderBarDefault(contentSection, "barDefault", "Bar - Simple bar")
-        );
-        instance.load(
-            renderBarTimeSeries(
-                contentSection,
-                "barTimeSeries",
-                "Bar - TimeSeries"
-            )
-        );
-        instance.load(
-            renderBarGroup(contentSection, "barGroup", "Bar - Grouped bars")
-        );
-        instance.load(
-            renderBarStacked(contentSection, "barStacked", "Bar - Stacked bars")
-        );
-        instance.load(
-            renderBarNegative(
-                contentSection,
-                "barNegative",
-                "Bar - Negative bars"
-            )
-        );
-        instance.render();
-        setState(instance);
-    });
+    btn.render(
+        toggleSection,
+        "Bar",
+        "bar",
+        triggerBarExample(instance, contentSection, setState, getState)
+    );

@@ -23,7 +23,7 @@ export const renderPieExamples = (
     setState,
     getState
 ) =>
-    btn.render(toggleSection, "Pie", (event) => {
+    btn.render(toggleSection, "Pie", "pie", (event) => {
         clearContent(contentSection, getState());
         toggleSectionAsActive(event.target);
         instance.load(

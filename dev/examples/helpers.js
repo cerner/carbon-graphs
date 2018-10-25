@@ -4,6 +4,8 @@ const init = (instance) => {
     instance.instanceList = [];
     instance.exampleSet = [];
 };
+export const navSectionClass = "nav-section";
+export const contentSectionClass = "content-section";
 
 export class ExampleControl {
     constructor() {
@@ -109,11 +111,19 @@ export const paragraph = {
     }
 };
 export const btn = {
-    render: (el, display, contentCallback) => {
-        const elem = document.createElement("button");
+    render: (el, display, key, contentCallback) => {
+        const elem = document.createElement("a");
+        elem.setAttribute("href", `#${key}`);
+        elem.setAttribute("id", `demo-${key}`);
         elem.setAttribute("class", "carbon-btn");
         el.appendChild(elem).innerHTML = display;
-        elem.addEventListener("click", contentCallback);
+        elem.addEventListener(
+            "click",
+            (event) =>
+                event.target && !event.target.getAttribute("disabled")
+                    ? contentCallback(event)
+                    : ""
+        );
     }
 };
 export const shell = {
@@ -143,3 +153,8 @@ export const renderRootSection = (el) => {
     section.render(rootSection, "nav-section");
     section.render(rootSection, "content-section");
 };
+export const getWindowHref = () =>
+    window.location.href ? window.location.href.split("#")[1] : "";
+export const getEventTarget = (id) => ({
+    target: document.querySelector(`#demo-${id}`)
+});

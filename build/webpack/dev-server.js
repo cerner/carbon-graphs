@@ -6,7 +6,7 @@ const compiler = webpack({
     devtool: "inline-source-map",
     entry: [
         "webpack-dev-server/client?http://localhost:9991/",
-        "./dev/demo.js"
+        "./dev/app.js"
     ],
     output: {
         path: path.join(process.cwd(), "dist"),

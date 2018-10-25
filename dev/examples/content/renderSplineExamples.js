@@ -12,23 +12,34 @@ export class SplineExample extends ExampleControl {
     }
 }
 
-export const renderSplineExamples = (
+export const triggerSplineExample = (
+    instance,
+    contentSection,
+    setState,
+    getState
+) => (event) => {
+    clearContent(contentSection, getState());
+    toggleSectionAsActive(event.target);
+    instance.load(
+        renderSplineLine(
+            contentSection,
+            "splineLineSimple",
+            "Simple Spline Line Graph"
+        )
+    );
+    instance.render();
+    setState(instance);
+};
+export const registerSplineExamples = (
     instance,
     toggleSection,
     contentSection,
     setState,
     getState
 ) =>
-    btn.render(toggleSection, "Spline", (event) => {
-        clearContent(contentSection, getState());
-        toggleSectionAsActive(event.target);
-        instance.load(
-            renderSplineLine(
-                contentSection,
-                "splineLineSimple",
-                "Simple Spline Line Graph"
-            )
-        );
-        instance.render();
-        setState(instance);
-    });
+    btn.render(
+        toggleSection,
+        "Spline",
+        "spline",
+        triggerSplineExample(instance, contentSection, setState, getState)
+    );

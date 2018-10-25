@@ -16,44 +16,55 @@ export class GridExample extends ExampleControl {
     }
 }
 
-export const renderGridExamples = (
+export const triggerGridExample = (
+    instance,
+    contentSection,
+    setState,
+    getState
+) => (event) => {
+    clearContent(contentSection, getState());
+    toggleSectionAsActive(event.target);
+    instance.load(
+        renderLineGridHHidden(
+            contentSection,
+            "lineGridHHidden",
+            "Line - Horizontal Grid Hidden"
+        )
+    );
+    instance.load(
+        renderLineGridVHidden(
+            contentSection,
+            "lineGridVHidden",
+            "Line - Vertical Grid Hidden"
+        )
+    );
+    instance.load(
+        renderPairedResultGridHHidden(
+            contentSection,
+            "pairedGridHHidden",
+            "Paired Result - Horizontal Grid Hidden"
+        )
+    );
+    instance.load(
+        renderPairedResultGridVHidden(
+            contentSection,
+            "pairedGridVHidden",
+            "Paired Result - Vertical Grid Hidden"
+        )
+    );
+    instance.render();
+    setState(instance);
+};
+export const registerGridExamples = (
     instance,
     toggleSection,
     contentSection,
     setState,
     getState
 ) =>
-    btn.render(toggleSection, "Grid", (event) => {
-        clearContent(contentSection, getState());
-        toggleSectionAsActive(event.target);
-        instance.load(
-            renderLineGridHHidden(
-                contentSection,
-                "lineGridHHidden",
-                "Line - Horizontal Grid Hidden"
-            )
-        );
-        instance.load(
-            renderLineGridVHidden(
-                contentSection,
-                "lineGridVHidden",
-                "Line - Vertical Grid Hidden"
-            )
-        );
-        instance.load(
-            renderPairedResultGridHHidden(
-                contentSection,
-                "pairedGridHHidden",
-                "Paired Result - Horizontal Grid Hidden"
-            )
-        );
-        instance.load(
-            renderPairedResultGridVHidden(
-                contentSection,
-                "pairedGridVHidden",
-                "Paired Result - Vertical Grid Hidden"
-            )
-        );
-        instance.render();
-        setState(instance);
-    });
+    btn.render(
+        toggleSection,
+        "Grid",
+        "grid",
+        triggerGridExample(instance, contentSection, setState, getState)
+    );

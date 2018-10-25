@@ -5,7 +5,7 @@ const webpack = require("webpack");
 const { jsOptions, cssOptions } = require("./helpers/rules");
 const webpackConfig = (env) => ({
     entry: [
-        "./dev/demo.js"
+        "./dev/app.js"
     ],
     output: {
         path: path.resolve(__dirname, "../..", ".site"),

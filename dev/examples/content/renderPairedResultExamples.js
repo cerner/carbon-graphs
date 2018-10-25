@@ -19,54 +19,65 @@ export class PairedResultExample extends ExampleControl {
     }
 }
 
-export const renderPairedResultExamples = (
+export const triggerPairedLineExample = (
+    instance,
+    contentSection,
+    setState,
+    getState
+) => (event) => {
+    clearContent(contentSection, getState());
+    toggleSectionAsActive(event.target);
+    instance.load(
+        renderPairedResult(
+            contentSection,
+            "pairedSimple",
+            "Simple Paired Result Graph"
+        )
+    );
+    instance.load(
+        renderPairedResultTimeseries(
+            contentSection,
+            "pairedTimeSeries",
+            "Time-Series"
+        )
+    );
+    instance.load(
+        renderPairedResultY2Axis(contentSection, "pairedY2", "Y2 Axis")
+    );
+    instance.load(
+        renderPairedResultLabelHidden(
+            contentSection,
+            "pairedLabelHidden",
+            "Label Hidden"
+        )
+    );
+    instance.load(
+        renderPairedResultLegendHidden(
+            contentSection,
+            "pairedLegendHidden",
+            "Legend Hidden"
+        )
+    );
+    instance.load(
+        renderPairedResultLegendItemDisabled(
+            contentSection,
+            "pairedLegendItemDisabled",
+            "Legend Item Disabled"
+        )
+    );
+    instance.render();
+    setState(instance);
+};
+export const registerPairedResultExamples = (
     instance,
     toggleSection,
     contentSection,
     setState,
     getState
 ) =>
-    btn.render(toggleSection, "Paired Result", (event) => {
-        clearContent(contentSection, getState());
-        toggleSectionAsActive(event.target);
-        instance.load(
-            renderPairedResult(
-                contentSection,
-                "pairedSimple",
-                "Simple Paired Result Graph"
-            )
-        );
-        instance.load(
-            renderPairedResultTimeseries(
-                contentSection,
-                "pairedTimeSeries",
-                "Time-Series"
-            )
-        );
-        instance.load(
-            renderPairedResultY2Axis(contentSection, "pairedY2", "Y2 Axis")
-        );
-        instance.load(
-            renderPairedResultLabelHidden(
-                contentSection,
-                "pairedLabelHidden",
-                "Label Hidden"
-            )
-        );
-        instance.load(
-            renderPairedResultLegendHidden(
-                contentSection,
-                "pairedLegendHidden",
-                "Legend Hidden"
-            )
-        );
-        instance.load(
-            renderPairedResultLegendItemDisabled(
-                contentSection,
-                "pairedLegendItemDisabled",
-                "Legend Item Disabled"
-            )
-        );
-        instance.render();
-        setState(instance);
-    });
+    btn.render(
+        toggleSection,
+        "Paired Result",
+        "paired-result",
+        triggerPairedLineExample(instance, contentSection, setState, getState)
+    );

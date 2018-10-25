@@ -12,23 +12,34 @@ export class TimelineExample extends ExampleControl {
     }
 }
 
-export const renderTimelineExamples = (
+export const triggerTimelineExample = (
+    instance,
+    contentSection,
+    setState,
+    getState
+) => (event) => {
+    clearContent(contentSection, getState());
+    toggleSectionAsActive(event.target);
+    instance.load(
+        renderTimeline(
+            contentSection,
+            "TimelineSimple",
+            "Simple Timeline Graph"
+        )
+    );
+    instance.render();
+    setState(instance);
+};
+export const registerTimelineExamples = (
     instance,
     toggleSection,
     contentSection,
     setState,
     getState
 ) =>
-    btn.render(toggleSection, "Timeline", (event) => {
-        clearContent(contentSection, getState());
-        toggleSectionAsActive(event.target);
-        instance.load(
-            renderTimeline(
-                contentSection,
-                "TimelineSimple",
-                "Simple Timeline Graph"
-            )
-        );
-        instance.render();
-        setState(instance);
-    });
+    btn.render(
+        toggleSection,
+        "Timeline",
+        "timeline",
+        triggerTimelineExample(instance, contentSection, setState, getState)
+    );

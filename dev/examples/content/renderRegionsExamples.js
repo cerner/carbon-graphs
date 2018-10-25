@@ -31,106 +31,113 @@ export class RegionsExample extends ExampleControl {
     }
 }
 
-export const renderRegionsExamples = (
+export const triggerRegionsExample = (
+    instance,
+    contentSection,
+    setState,
+    getState
+) => (event) => {
+    clearContent(contentSection, getState());
+    toggleSectionAsActive(event.target);
+    instance.load(
+        renderLineRegionSimple(
+            contentSection,
+            "lineRegionSimple",
+            "Line - Simple"
+        )
+    );
+    instance.load(
+        renderPairedResultRegionSimple(
+            contentSection,
+            "pairedRegionSimple",
+            "Paired Result - Simple"
+        )
+    );
+    instance.load(
+        renderCombinationRegion(
+            contentSection,
+            "combinationRegion",
+            "Combination - Simple"
+        )
+    );
+    instance.load(
+        renderMultiLineRegion(contentSection, "multiLineRegion", "Multi-Line")
+    );
+    instance.load(
+        renderMultiPairedResultRegion(
+            contentSection,
+            "multiPairedRegion",
+            "Multi-Paired Result"
+        )
+    );
+    instance.load(
+        renderLineRegionMultiple(
+            contentSection,
+            "lineRegionMultiple",
+            "Line - Multiple Regions"
+        )
+    );
+    instance.load(
+        renderPairedResultRegionMultiple(
+            contentSection,
+            "pairedRegionMultiple",
+            "Paired Result - Multiple Regions"
+        )
+    );
+    instance.load(
+        renderLineRegionY2(contentSection, "lineRegionY2", "Line - Y2")
+    );
+    instance.load(
+        renderGoalLine(contentSection, "goalLine", "Line - Goal-line")
+    );
+    instance.load(
+        renderLineRegionNoLower(
+            contentSection,
+            "lineRegionNoLower",
+            "Line - No Lower Bound"
+        )
+    );
+    instance.load(
+        renderLineRegionNoUpper(
+            contentSection,
+            "lineRegionNoUpper",
+            "Line - No Upper Bound"
+        )
+    );
+    instance.load(
+        renderBarDefaultWithGoal(
+            contentSection,
+            "SimpleBar",
+            "Bar - Goal Lines"
+        )
+    );
+    instance.load(
+        renderBarGroupWithGoal(
+            contentSection,
+            "GroupedBar",
+            "Bar - Grouped - Goal Lines"
+        )
+    );
+    instance.load(
+        renderBarStackedWithGoal(
+            contentSection,
+            "StackedBar",
+            "Bar - Stacked - Goal Lines"
+        )
+    );
+    instance.render();
+    setState(instance);
+};
+export const registerRegionsExamples = (
     instance,
     toggleSection,
     contentSection,
     setState,
     getState
 ) =>
-    btn.render(toggleSection, "Regions", (event) => {
-        clearContent(contentSection, getState());
-        toggleSectionAsActive(event.target);
-        instance.load(
-            renderLineRegionSimple(
-                contentSection,
-                "lineRegionSimple",
-                "Line - Simple"
-            )
-        );
-        instance.load(
-            renderPairedResultRegionSimple(
-                contentSection,
-                "pairedRegionSimple",
-                "Paired Result - Simple"
-            )
-        );
-        instance.load(
-            renderCombinationRegion(
-                contentSection,
-                "combinationRegion",
-                "Combination - Simple"
-            )
-        );
-        instance.load(
-            renderMultiLineRegion(
-                contentSection,
-                "multiLineRegion",
-                "Multi-Line"
-            )
-        );
-        instance.load(
-            renderMultiPairedResultRegion(
-                contentSection,
-                "multiPairedRegion",
-                "Multi-Paired Result"
-            )
-        );
-        instance.load(
-            renderLineRegionMultiple(
-                contentSection,
-                "lineRegionMultiple",
-                "Line - Multiple Regions"
-            )
-        );
-        instance.load(
-            renderPairedResultRegionMultiple(
-                contentSection,
-                "pairedRegionMultiple",
-                "Paired Result - Multiple Regions"
-            )
-        );
-        instance.load(
-            renderLineRegionY2(contentSection, "lineRegionY2", "Line - Y2")
-        );
-        instance.load(
-            renderGoalLine(contentSection, "goalLine", "Line - Goal-line")
-        );
-        instance.load(
-            renderLineRegionNoLower(
-                contentSection,
-                "lineRegionNoLower",
-                "Line - No Lower Bound"
-            )
-        );
-        instance.load(
-            renderLineRegionNoUpper(
-                contentSection,
-                "lineRegionNoUpper",
-                "Line - No Upper Bound"
-            )
-        );
-        instance.load(
-            renderBarDefaultWithGoal(
-                contentSection,
-                "SimpleBar",
-                "Bar - Goal Lines"
-            )
-        );
-        instance.load(
-            renderBarGroupWithGoal(
-                contentSection,
-                "GroupedBar",
-                "Bar - Grouped - Goal Lines"
-            )
-        );
-        instance.load(
-            renderBarStackedWithGoal(
-                contentSection,
-                "StackedBar",
-                "Bar - Stacked - Goal Lines"
-            )
-        );
-        instance.render();
-        setState(instance);
-    });
+    btn.render(
+        toggleSection,
+        "Regions",
+        "regions",
+        triggerRegionsExample(instance, contentSection, setState, getState)
+    );

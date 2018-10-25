@@ -2,195 +2,60 @@ import "babel-polyfill";
 import "../src/main/less/carbon.less";
 import "./demo.less";
 import {
-    AxesExample,
-    renderAxesExamples
-} from "./examples/content/renderAxesExamples";
+    DEFAULT_HOME_CONTENT,
+    DEFAULT_HOME_CONTENT_ID,
+    DICTIONARY,
+    registerExamples
+} from "./examples/contentDictionary";
 import {
-    BarExample,
-    renderBarExamples
-} from "./examples/content/renderBarExamples";
-import {
-    CombinationExample,
-    renderCombinationGraphExamples
-} from "./examples/content/renderCombinationGraphExamples";
-import {
-    CriticalityExample,
-    renderCriticalityExamples
-} from "./examples/content/renderCriticalityExamples";
-import {
-    GanttExample,
-    renderGanttExamples
-} from "./examples/content/renderGanttExamples";
-import {
-    GridExample,
-    renderGridExamples
-} from "./examples/content/renderGridExamples";
-import {
-    LineExample,
-    renderLineExamples,
-    renderMultiLineExamples,
-    renderNonContiguousLineExamples,
-    toggleLineAsActive
-} from "./examples/content/renderLineExamples";
-import {
-    PairedResultExample,
-    renderPairedResultExamples
-} from "./examples/content/renderPairedResultExamples";
-import {
-    RegionsExample,
-    renderRegionsExamples
-} from "./examples/content/renderRegionsExamples";
-import {
-    renderShapesExamples,
-    ShapesExample
-} from "./examples/content/renderShapesExamples";
-import {
-    renderSplineExamples,
-    SplineExample
-} from "./examples/content/renderSplineExamples";
-import {
-    renderTimelineExamples,
-    TimelineExample
-} from "./examples/content/renderTimelineExamples";
-import { renderColorsExample } from "./examples/controls/colors";
-import {
-    btn,
-    clearContent,
+    contentSectionClass,
+    getEventTarget,
+    getWindowHref,
+    navSectionClass,
     renderRoot,
     renderRootSection,
-    renderTooltip,
-    toggleSectionAsActive
+    renderTooltip
 } from "./examples/helpers";
 
-const root = document.querySelector("#root");
+export default class Root {
+    constructor() {
+        this.root = document.querySelector("#root");
+        this.state = {
+            currentSection: null
+        };
+    }
 
-/* Render the root here.*/
-renderRoot(root);
-renderTooltip(root);
-renderRootSection(root);
-const toggleSection = root.querySelector(".nav-section");
-const contentSection = root.querySelector(".content-section");
-const _state = {
-    currentSection: null
-};
-const setState = (val) => {
-    _state.currentSection = val;
-};
-const getState = () => _state.currentSection;
+    setCurrentSection(val) {
+        this.state.currentSection = val;
+    }
 
-/* Add examples (graph types) that needs to go inside the Nav bar
-* Steps:
-*   * Create a "control"
-*   * Create a "content" to tie in control to the DOM
-*   * Add the content function below
-*/
-renderLineExamples(
-    new LineExample(),
-    toggleSection,
-    contentSection,
-    setState,
-    getState
-);
-renderMultiLineExamples(
-    new LineExample(),
-    toggleSection,
-    contentSection,
-    setState,
-    getState
-);
-renderSplineExamples(
-    new SplineExample(),
-    toggleSection,
-    contentSection,
-    setState,
-    getState
-);
-renderNonContiguousLineExamples(
-    new LineExample(),
-    toggleSection,
-    contentSection,
-    setState,
-    getState
-);
-renderPairedResultExamples(
-    new PairedResultExample(),
-    toggleSection,
-    contentSection,
-    setState,
-    getState
-);
-renderBarExamples(
-    new BarExample(),
-    toggleSection,
-    contentSection,
-    setState,
-    getState
-);
-renderCombinationGraphExamples(
-    new CombinationExample(),
-    toggleSection,
-    contentSection,
-    setState,
-    getState
-);
-renderGanttExamples(
-    new GanttExample(),
-    toggleSection,
-    contentSection,
-    setState,
-    getState
-);
-renderTimelineExamples(
-    new TimelineExample(),
-    toggleSection,
-    contentSection,
-    setState,
-    getState
-);
-renderGridExamples(
-    new GridExample(),
-    toggleSection,
-    contentSection,
-    setState,
-    getState
-);
-renderAxesExamples(
-    new AxesExample(),
-    toggleSection,
-    contentSection,
-    setState,
-    getState
-);
-renderRegionsExamples(
-    new RegionsExample(),
-    toggleSection,
-    contentSection,
-    setState,
-    getState
-);
-renderCriticalityExamples(
-    new CriticalityExample(),
-    toggleSection,
-    contentSection,
-    setState,
-    getState
-);
-renderShapesExamples(
-    new ShapesExample(),
-    toggleSection,
-    contentSection,
-    setState,
-    getState
-);
+    getCurrentSection() {
+        return this.state.currentSection;
+    }
 
-btn.render(toggleSection, "Colors", (event) => {
-    clearContent(contentSection, getState());
-    toggleSectionAsActive(event.target);
-    setState(null);
-    renderColorsExample(contentSection, "graph-colors", "Colors");
-});
+    renderContainer() {
+        renderRoot(this.root);
+        renderTooltip(this.root);
+        renderRootSection(this.root);
 
-/* Toggle Line in nav bar to show by default */
-toggleLineAsActive(new LineExample(), contentSection, setState, getState)({
-    target: toggleSection.querySelector(".carbon-btn")
-});
+        registerExamples(
+            this.root.querySelector(`.${navSectionClass}`),
+            this.root.querySelector(`.${contentSectionClass}`),
+            this.setCurrentSection.bind(this),
+            this.getCurrentSection.bind(this)
+        );
+        return this;
+    }
+
+    renderContent() {
+        const contentId = getWindowHref() || DEFAULT_HOME_CONTENT_ID;
+        const contentExample = DICTIONARY[contentId] || DEFAULT_HOME_CONTENT;
+        contentExample.triggerFunction(
+            new contentExample.Instance(),
+            this.root.querySelector(`.${contentSectionClass}`),
+            this.setCurrentSection.bind(this),
+            this.getCurrentSection.bind(this)
+        )(getEventTarget(contentId));
+        return this;
+    }
+}

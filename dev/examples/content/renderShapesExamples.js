@@ -16,22 +16,29 @@ export class ShapesExample extends ExampleControl {
     }
 }
 
-export const renderShapesExamples = (
+export const triggerShapesExample = (
+    instance,
+    contentSection,
+    setState,
+    getState
+) => (event) => {
+    clearContent(contentSection, getState());
+    toggleSectionAsActive(event.target);
+    renderShapesSimple(contentSection, "ShapesSimple", "Simple");
+    renderCriticalityShapes(contentSection, "criticalityShapes", "Criticality");
+    renderFillTypes(contentSection, "FillTypes", "Fill types");
+    setState(instance);
+};
+export const registerShapesExamples = (
     instance,
     toggleSection,
     contentSection,
     setState,
     getState
 ) =>
-    btn.render(toggleSection, "Shapes", (event) => {
-        clearContent(contentSection, getState());
-        toggleSectionAsActive(event.target);
-        renderShapesSimple(contentSection, "ShapesSimple", "Simple");
-        renderCriticalityShapes(
-            contentSection,
-            "criticalityShapes",
-            "Criticality"
-        );
-        renderFillTypes(contentSection, "FillTypes", "Fill types");
-        setState(instance);
-    });
+    btn.render(
+        toggleSection,
+        "Shapes",
+        "shapes",
+        triggerShapesExample(instance, contentSection, setState, getState)
+    );
