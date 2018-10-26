@@ -100,5 +100,6 @@ export default {
     barGraphContent: "carbon-bar-graph-content",
     currentBarsGroup: "carbon-data-bars-group",
     barHashedRect: "carbon-data-bar--hashed",
-    barSelectionGroup: "carbon-bar-selector-group"
+    barSelectionGroup: "carbon-bar-selector-group",
+    barGoalLine: "carbon-bar-goal-line"
 };

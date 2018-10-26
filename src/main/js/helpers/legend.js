@@ -155,7 +155,7 @@ const legendHoverHandler = (
                 hoverState === constants.HOVER_EVENT.MOUSE_ENTER
             );
         canvasSVG
-            .selectAll(`.${styles.region}[aria-describedby="region_${k}"]`)
+            .selectAll(`.${styles.barGoalLine}[aria-describedby="region_${k}"]`)
             .attr(
                 "aria-hidden",
                 hoverState === constants.HOVER_EVENT.MOUSE_ENTER

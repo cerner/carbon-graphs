@@ -107,6 +107,7 @@ const createRegion = (scale, config, regionGroupSVG, regionList, uniqueKey) => {
         .enter()
         .append("rect")
         .classed(styles.region, true)
+        .classed(styles.barGoalLine, true)
         .attr("aria-hidden", config.shownTargets.indexOf(uniqueKey) < 0)
         .attr("aria-describedby", `region_${uniqueKey}`)
         .attr(

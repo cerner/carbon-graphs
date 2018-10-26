@@ -1020,7 +1020,7 @@ describe("Bar", () => {
                         styles.region
                     );
                     expect(regionElement.getAttribute("class")).toBe(
-                        styles.region
+                        `${styles.region} ${styles.barGoalLine}`
                     );
                     expect(regionElement.getAttribute("aria-hidden")).toBe(
                         "false"

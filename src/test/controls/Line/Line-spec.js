@@ -1800,6 +1800,15 @@ describe("Line", () => {
                                     )
                                     .classList.contains(styles.regionHighlight)
                             ).toBeFalsy();
+                            expect(
+                                document
+                                    .querySelector(
+                                        `rect[aria-describedby="region_${
+                                            inputPrimary.key
+                                        }"]`
+                                    )
+                                    .getAttribute("aria-hidden")
+                            ).toBeTruthy();
                             done();
                         });
                     });
