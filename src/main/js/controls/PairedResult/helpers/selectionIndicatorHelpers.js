@@ -1,7 +1,10 @@
 import d3 from "d3";
-import constants from "../../../helpers/constants";
+import Shape, { getDefaultSVGProps } from "../../../core/Shape";
+import constants, { SHAPES } from "../../../helpers/constants";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
+import { getTransformScale } from "../../Graph/helpers/helpers";
+import { getSVGObject } from "./helpers";
 
 /**
  * Returns the pair value that's present, to be used when
@@ -61,7 +64,12 @@ const showHideSiblingDataPoint = (config, value, target) => {
     // Toggle items to force show if hidden or hide, add/remove a class to force display:block
     const targetNode = d3.select(target);
     targetNode
-        .selectAll("path")
+        .select("path")
+        .classed(styles.dataPointDisplayEnable, function() {
+            return !d3.select(this).classed(styles.dataPointDisplayEnable);
+        });
+    targetNode
+        .selectAll("svg")
         .classed(styles.dataPointDisplayEnable, function() {
             return !d3.select(this).classed(styles.dataPointDisplayEnable);
         });
@@ -190,6 +198,17 @@ const updateSelectionIndicatorAttributes = (d3PairElement, scale, value) =>
                 constants.SELECTION_INDICATOR_Y_POSITION * 2
         );
 /**
+ * Transforms the partial point in the Paired Result graph on resize
+ * @private
+ * @param {Object} scale - d3 scale for Graph
+ * @returns {Function} - translate function for d3 transform
+ */
+const transformPartialPoint = (scale) => (value) => (scaleFactor) => {
+    const getX = (val) => scale.x(getIncompletePairObject(val).x);
+    const getY = (val) => scale[value.yAxis](getIncompletePairObject(val).y);
+    return `translate(${getX(value)},${getY(value)}) scale(${scaleFactor})`;
+};
+/**
  * Transforms selection indicator RECTANGLE for a data point set in the Paired Result graph on resize, with
  * both high and low data points.
  * Needs to have both high and low data points for translation of a "box" to occur.
@@ -222,18 +241,17 @@ export const translateSelectionBox = (scale, canvasSVG) =>
  */
 export const translateSelectionItem = (scale, canvasSVG) =>
     canvasSVG
-        .selectAll(
-            `.${styles.pairedBoxGroup} circle.${styles.dataPointSelection}`
-        )
-        .transition(constants.d3Transition)
+        .selectAll(`.${styles.pairedBoxGroup} .${styles.dataPointSelection}`)
         .each(function(value) {
             return d3
                 .select(this)
+                .selectAll("path")
                 .transition(constants.d3Transition)
-                .attr("cx", (d) => scale.x(getIncompletePairObject(d).x))
-                .attr("cy", (d) =>
-                    scale[value.yAxis](getIncompletePairObject(d).y)
-                );
+                .attr("transform", function() {
+                    return transformPartialPoint(
+                        scale
+                    )(value)(getTransformScale(this));
+                });
         });
 /**
  * Adds a RECT svg element for each data point pair high AND low.
@@ -263,6 +281,7 @@ const addRect = (d3PairElement, scale, config, value) =>
         scale,
         value
     );
+
 /**
  * Adds a CIRCLE svg element for each data point pair high OR low OR mid.
  * @private
@@ -273,19 +292,25 @@ const addRect = (d3PairElement, scale, config, value) =>
  * @returns {undefined} - returns nothing
  */
 const addCircle = (d3PairElement, scale, config, value) =>
-    d3PairElement
-        .append("circle")
-        .classed(styles.dataPointSelection, true)
-        .attr("cx", (d) => scale.x(getIncompletePairObject(d).x))
-        .attr("cy", (d) => scale[value.yAxis](getIncompletePairObject(d).y))
-        .attr("r", constants.DEFAULT_SELECTED_RADIUS)
-        .attr(
-            "style",
-            (d) =>
-                `${isIncompletePairHidden(config, d) ? "display: none;" : ""}`
+    d3PairElement.append(() =>
+        new Shape(
+            getSVGObject(SHAPES.CIRCLE, constants.DEFAULT_PLOT_SELECTION_SCALE)
+        ).getShapeElement(
+            getDefaultSVGProps({
+                svgClassNames: styles.dataPointSelection,
+                svgStyles: `${
+                    isIncompletePairHidden(config, value)
+                        ? "display: none;"
+                        : ""
+                }`,
+                transformFn: transformPartialPoint(scale)(value),
+                a11yAttributes: {
+                    "aria-hidden": true,
+                    "aria-describedby": value.key
+                }
+            })
         )
-        .attr("aria-hidden", true)
-        .attr("aria-describedby", value.key);
+    );
 /**
  * Draws a rectangle around the 2 data points high and low. If either one of them is missing
  * then the rectangle is not drawn. A circle is allocated for any incomplete pair.

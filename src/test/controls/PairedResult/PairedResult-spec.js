@@ -1,19 +1,22 @@
 "use strict";
+import d3 from "d3";
 import sinon from "sinon";
 import Graph from "../../../main/js/controls/Graph/Graph";
 import {
-    getShape,
-    getTransformScale
+    getCurrentTransform,
+    getShapeForTarget,
+    getTransformScale,
+    round2Decimals
 } from "../../../main/js/controls/Graph/helpers/helpers";
 import PairedResult from "../../../main/js/controls/PairedResult";
-import { Shape } from "../../../main/js/core";
 import {
     getXAxisWidth,
     getXAxisXPosition
 } from "../../../main/js/helpers/axis";
 import constants, {
     AXIS_TYPE,
-    COLORS
+    COLORS,
+    SHAPES
 } from "../../../main/js/helpers/constants";
 import errors from "../../../main/js/helpers/errors";
 import styles from "../../../main/js/helpers/styles";
@@ -27,7 +30,6 @@ import {
     getInput,
     inputSecondary,
     multiRegion,
-    SHAPES,
     simpleRegion,
     triggerEvent,
     valuesDefault,
@@ -276,7 +278,7 @@ describe("PairedResult", () => {
             input.values = [];
             expect(pairedResult.config.key).not.toBe(input.key);
             expect(pairedResult.config.color).not.toBe(input.color);
-            expect(pairedResult.config.shape).not.toBe(input.shape);
+            expect(pairedResult.config.shape).not.toEqual(input.shape);
             expect(pairedResult.config.label).not.toEqual(input.label);
             expect(pairedResult.config.values).not.toBe(input.values);
             expect(pairedResult.config.onClick).toEqual(jasmine.any(Function));
@@ -761,9 +763,9 @@ describe("PairedResult", () => {
                     const points = pointsGroup.querySelector(
                         `.${styles.pairedPoint}.${styles.high}`
                     );
-                    expect(points.attributes.getNamedItem("d").value).toBe(
-                        constants.CUSTOM_SHAPE_PATH.TEAR_DROP
-                    );
+                    expect(
+                        points.firstChild.attributes.getNamedItem("d").value
+                    ).toBe(SHAPES.TEAR_ALT.path.d);
                 });
                 it("mid", () => {
                     const pointsGroup = fetchElementByClass(
@@ -773,9 +775,9 @@ describe("PairedResult", () => {
                     const points = pointsGroup.querySelector(
                         `.${styles.pairedPoint}.${styles.mid}`
                     );
-                    expect(points.attributes.getNamedItem("d").value).toBe(
-                        constants.CUSTOM_SHAPE_PATH.RHOMBUS
-                    );
+                    expect(
+                        points.firstChild.attributes.getNamedItem("d").value
+                    ).toBe(SHAPES.RHOMBUS.path.d);
                 });
                 it("low", () => {
                     const pointsGroup = fetchElementByClass(
@@ -785,9 +787,9 @@ describe("PairedResult", () => {
                     const points = pointsGroup.querySelector(
                         `.${styles.pairedPoint}.${styles.low}`
                     );
-                    expect(points.attributes.getNamedItem("d").value).toBe(
-                        constants.CUSTOM_SHAPE_PATH.TEAR_DROP
-                    );
+                    expect(
+                        points.firstChild.attributes.getNamedItem("d").value
+                    ).toBe(SHAPES.TEAR_DROP.path.d);
                 });
             });
             describe("creates data point selection elements as needed", () => {
@@ -829,7 +831,11 @@ describe("PairedResult", () => {
                         pairedResultGraphContainer,
                         styles.dataPointSelection
                     );
-                    expect(selectionElement.tagName).toBe("circle");
+                    expect(selectionElement.tagName).toBe("svg");
+                    expect(selectionElement.firstChild.nodeName).toBe("path");
+                    expect(selectionElement.firstChild.getAttribute("id")).toBe(
+                        "circle"
+                    );
                     expect(selectionElement.classList).toContain(
                         styles.dataPointSelection
                     );
@@ -861,7 +867,11 @@ describe("PairedResult", () => {
                         pairedResultGraphContainer,
                         styles.dataPointSelection
                     );
-                    expect(selectionElement.tagName).toBe("circle");
+                    expect(selectionElement.tagName).toBe("svg");
+                    expect(selectionElement.firstChild.nodeName).toBe("path");
+                    expect(selectionElement.firstChild.getAttribute("id")).toBe(
+                        "circle"
+                    );
                     expect(selectionElement.classList).toContain(
                         styles.dataPointSelection
                     );
@@ -893,7 +903,11 @@ describe("PairedResult", () => {
                         pairedResultGraphContainer,
                         styles.dataPointSelection
                     );
-                    expect(selectionElement.tagName).toBe("circle");
+                    expect(selectionElement.tagName).toBe("svg");
+                    expect(selectionElement.firstChild.nodeName).toBe("path");
+                    expect(selectionElement.firstChild.getAttribute("id")).toBe(
+                        "circle"
+                    );
                     expect(selectionElement.classList).toContain(
                         styles.dataPointSelection
                     );
@@ -1307,13 +1321,13 @@ describe("PairedResult", () => {
                     pairedResultGraphContainer,
                     styles.legendItem
                 );
+                const iconSVG = legendItem.querySelector("svg");
                 const iconPath = legendItem.querySelector("path");
+                expect(iconSVG).not.toBeNull();
+                expect(iconSVG.classList).toContain(styles.legendItemIcon);
                 expect(iconPath).not.toBeNull();
                 expect(iconPath.getAttribute("d")).not.toBeNull();
-                expect(iconPath.getAttribute("d")).toBe(
-                    constants.CUSTOM_SHAPE_PATH.TEAR_DROP
-                );
-                expect(iconPath.getAttribute("transform")).not.toBeNull();
+                expect(iconPath.getAttribute("d")).toBe(SHAPES.TEAR_ALT.path.d);
             });
             it("loads the correct color", () => {
                 const input = getInput(valuesDefault, false, false);
@@ -1322,10 +1336,14 @@ describe("PairedResult", () => {
                     pairedResultGraphContainer,
                     styles.legendItem
                 );
+                const iconSVG = legendItem.querySelector("svg");
                 const iconPath = legendItem.querySelector("path");
                 expect(iconPath).not.toBeNull();
                 expect(iconPath.getAttribute("d")).not.toBeNull();
-                expect(iconPath.getAttribute("style")).toBe(
+                expect(iconPath.getAttribute("d")).toEqual(
+                    getShapeForTarget(input).high.path.d
+                );
+                expect(iconSVG.getAttribute("style")).toBe(
                     `fill: ${COLORS.BLUE}`
                 );
             });
@@ -1686,7 +1704,7 @@ describe("PairedResult", () => {
                                         pairedResultGraphContainer,
                                         styles.pairedPoint
                                     );
-                                    expect(pointElement.tagName).toBe("path");
+                                    expect(pointElement.tagName).toBe("svg");
                                     expect(pointElement.classList).toContain(
                                         styles.pairedPoint
                                     );
@@ -1852,7 +1870,10 @@ describe("PairedResult", () => {
                                         pairedResultGraphContainer,
                                         styles.pairedPoint
                                     );
-                                    expect(pointElement.tagName).toBe("path");
+                                    expect(pointElement.tagName).toBe("svg");
+                                    expect(pointElement.classList).toContain(
+                                        styles.svgIcon
+                                    );
                                     expect(pointElement.classList).toContain(
                                         styles.pairedPoint
                                     );
@@ -1860,7 +1881,7 @@ describe("PairedResult", () => {
                                         styles.high
                                     );
                                     expect(
-                                        pointElement.classList[2]
+                                        pointElement.classList[3]
                                     ).toBeUndefined();
                                     expect(
                                         fetchElementByClass(
@@ -2964,7 +2985,7 @@ describe("PairedResult", () => {
             it("Does not add indicator if data point is not critical", () => {
                 const valuesMutated = utils.deepClone(valuesDefault);
                 pairedResultPrimaryContent = new PairedResult(
-                    getInput(valuesMutated)
+                    getInput(valuesMutated, false, false)
                 );
                 graphDefault.loadContent(pairedResultPrimaryContent);
                 const criticalOuterElement = fetchElementByClass(
@@ -2984,7 +3005,7 @@ describe("PairedResult", () => {
                 valuesMutated[0].mid.isCritical = false;
                 valuesMutated[0].low.isCritical = false;
                 pairedResultPrimaryContent = new PairedResult(
-                    getInput(valuesMutated)
+                    getInput(valuesMutated, false, false)
                 );
                 graphDefault.loadContent(pairedResultPrimaryContent);
                 const criticalOuterElement = fetchElementByClass(
@@ -3003,7 +3024,7 @@ describe("PairedResult", () => {
                 valuesMutated[0].high.isCritical = true;
                 valuesMutated[0].mid.isCritical = true;
                 valuesMutated[0].low.isCritical = true;
-                inputPrimary = getInput(valuesMutated);
+                inputPrimary = getInput(valuesMutated, false, false);
                 pairedResultPrimaryContent = new PairedResult(inputPrimary);
                 graphDefault.loadContent(pairedResultPrimaryContent);
                 const criticalOuterElement = fetchElementByClass(
@@ -3011,7 +3032,7 @@ describe("PairedResult", () => {
                     styles.criticalityOuterPoint
                 );
                 expect(criticalOuterElement).not.toBeNull();
-                expect(criticalOuterElement.nodeName).toBe("path");
+                expect(criticalOuterElement.nodeName).toBe("svg");
                 expect(criticalOuterElement.classList).toContain(
                     styles.pairedPoint
                 );
@@ -3028,7 +3049,7 @@ describe("PairedResult", () => {
                 valuesMutated[0].high.isCritical = true;
                 valuesMutated[0].mid.isCritical = true;
                 valuesMutated[0].low.isCritical = true;
-                inputPrimary = getInput(valuesMutated);
+                inputPrimary = getInput(valuesMutated, false, false);
                 pairedResultPrimaryContent = new PairedResult(inputPrimary);
                 graphDefault.loadContent(pairedResultPrimaryContent);
                 const criticalInnerElement = fetchElementByClass(
@@ -3036,7 +3057,7 @@ describe("PairedResult", () => {
                     styles.criticalityInnerPoint
                 );
                 expect(criticalInnerElement).not.toBeNull();
-                expect(criticalInnerElement.nodeName).toBe("path");
+                expect(criticalInnerElement.nodeName).toBe("svg");
                 expect(criticalInnerElement.classList).toContain(
                     styles.pairedPoint
                 );
@@ -3053,7 +3074,7 @@ describe("PairedResult", () => {
                 valuesMutated[0].high.isCritical = true;
                 valuesMutated[0].mid.isCritical = true;
                 valuesMutated[0].low.isCritical = true;
-                inputPrimary = getInput(valuesMutated);
+                inputPrimary = getInput(valuesMutated, false, false);
                 pairedResultPrimaryContent = new PairedResult(inputPrimary);
                 graphDefault.loadContent(pairedResultPrimaryContent);
                 const criticalOuterElements = pairedResultGraphContainer.querySelectorAll(
@@ -3095,22 +3116,19 @@ describe("PairedResult", () => {
                 inputPrimary = getInput(valuesMutated, false, false);
                 pairedResultPrimaryContent = new PairedResult(inputPrimary);
                 graphDefault.loadContent(pairedResultPrimaryContent);
-                const criticalOuterElement = fetchElementByClass(
+                const criticalOuterElementPath = fetchElementByClass(
                     pairedResultGraphContainer,
                     styles.criticalityOuterPoint
-                );
-                const criticalInnerElement = fetchElementByClass(
+                ).firstChild;
+                const criticalInnerElementPath = fetchElementByClass(
                     pairedResultGraphContainer,
                     styles.criticalityInnerPoint
+                ).firstChild;
+                expect(criticalOuterElementPath.getAttribute("d")).toBe(
+                    SHAPES.TEAR_ALT.path.d
                 );
-                const currentShape = new Shape(
-                    getShape({ shape: SHAPES.TEAR_DROP })
-                );
-                expect(criticalOuterElement.getAttribute("d")).toBe(
-                    currentShape.getPathDescription()
-                );
-                expect(criticalInnerElement.getAttribute("d")).toBe(
-                    currentShape.getPathDescription()
+                expect(criticalInnerElementPath.getAttribute("d")).toBe(
+                    SHAPES.TEAR_ALT.path.d
                 );
             });
             it("Adds indicators inner and outer with same shape for all pair types", () => {
@@ -3121,36 +3139,29 @@ describe("PairedResult", () => {
                 inputPrimary = getInput(valuesMutated, false, false);
                 pairedResultPrimaryContent = new PairedResult(inputPrimary);
                 graphDefault.loadContent(pairedResultPrimaryContent);
-                const criticalOuterElements = pairedResultGraphContainer.querySelectorAll(
-                    `.${styles.criticalityOuterPoint}`
+                const criticalOuterElementPath = pairedResultGraphContainer.querySelectorAll(
+                    `.${styles.criticalityOuterPoint} path`
                 );
-                const criticalInnerElements = pairedResultGraphContainer.querySelectorAll(
-                    `.${styles.criticalityInnerPoint}`
+                const criticalInnerElementPath = pairedResultGraphContainer.querySelectorAll(
+                    `.${styles.criticalityInnerPoint} path`
                 );
-                const shapeHigh = new Shape(
-                    getShape({ shape: SHAPES.TEAR_DROP })
+                expect(criticalOuterElementPath[0].getAttribute("d")).toBe(
+                    SHAPES.TEAR_ALT.path.d
                 );
-                const shapeMid = new Shape(getShape({ shape: SHAPES.RHOMBUS }));
-                const shapeLow = new Shape(
-                    getShape({ shape: SHAPES.TEAR_DROP })
+                expect(criticalOuterElementPath[1].getAttribute("d")).toBe(
+                    SHAPES.RHOMBUS.path.d
                 );
-                expect(criticalOuterElements[0].getAttribute("d")).toBe(
-                    shapeHigh.getPathDescription()
+                expect(criticalOuterElementPath[2].getAttribute("d")).toBe(
+                    SHAPES.TEAR_DROP.path.d
                 );
-                expect(criticalOuterElements[1].getAttribute("d")).toBe(
-                    shapeMid.getPathDescription()
+                expect(criticalInnerElementPath[0].getAttribute("d")).toBe(
+                    SHAPES.TEAR_ALT.path.d
                 );
-                expect(criticalOuterElements[2].getAttribute("d")).toBe(
-                    shapeLow.getPathDescription()
+                expect(criticalInnerElementPath[1].getAttribute("d")).toBe(
+                    SHAPES.RHOMBUS.path.d
                 );
-                expect(criticalInnerElements[0].getAttribute("d")).toBe(
-                    shapeHigh.getPathDescription()
-                );
-                expect(criticalInnerElements[1].getAttribute("d")).toBe(
-                    shapeMid.getPathDescription()
-                );
-                expect(criticalInnerElements[2].getAttribute("d")).toBe(
-                    shapeLow.getPathDescription()
+                expect(criticalInnerElementPath[2].getAttribute("d")).toBe(
+                    SHAPES.TEAR_DROP.path.d
                 );
             });
             it("Translates properly", () => {
@@ -3161,25 +3172,63 @@ describe("PairedResult", () => {
                 inputPrimary = getInput(valuesMutated, false, false);
                 pairedResultPrimaryContent = new PairedResult(inputPrimary);
                 graphDefault.loadContent(pairedResultPrimaryContent);
-                const criticalOuterElement = fetchElementByClass(
+                const criticalOuterElementPath = fetchElementByClass(
                     pairedResultGraphContainer,
                     styles.criticalityOuterPoint
-                );
-                const criticalInnerElement = fetchElementByClass(
+                ).firstChild;
+                const criticalInnerElementPath = fetchElementByClass(
                     pairedResultGraphContainer,
                     styles.criticalityInnerPoint
-                );
+                ).firstChild;
+
                 expect(
-                    criticalOuterElement.getAttribute("transform")
+                    criticalOuterElementPath.getAttribute("transform")
                 ).not.toBeNull();
                 expect(
-                    criticalInnerElement.getAttribute("transform")
+                    criticalInnerElementPath.getAttribute("transform")
                 ).not.toBeNull();
-                expect(getTransformScale(criticalOuterElement)[0]).toBe(
-                    constants.DEFAULT_CRITICAL_OUTER_PLOT_SCALE[0]
+                expect(
+                    d3.transform(getCurrentTransform(criticalOuterElementPath))
+                        .translate[0]
+                ).not.toBeNull();
+                expect(
+                    d3.transform(getCurrentTransform(criticalOuterElementPath))
+                        .translate[1]
+                ).not.toBeNull();
+                expect(
+                    d3.transform(getCurrentTransform(criticalInnerElementPath))
+                        .translate[0]
+                ).not.toBeNull();
+                expect(
+                    d3.transform(getCurrentTransform(criticalInnerElementPath))
+                        .translate[1]
+                ).not.toBeNull();
+            });
+            it("Scales properly", () => {
+                const valuesMutated = utils.deepClone(valuesDefault);
+                valuesMutated[0].high.isCritical = true;
+                valuesMutated[0].mid.isCritical = true;
+                valuesMutated[0].low.isCritical = true;
+                inputPrimary = getInput(valuesMutated, false, false);
+                pairedResultPrimaryContent = new PairedResult(inputPrimary);
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                const criticalOuterElementPath = fetchElementByClass(
+                    pairedResultGraphContainer,
+                    styles.criticalityOuterPoint
+                ).firstChild;
+                const criticalInnerElementPath = fetchElementByClass(
+                    pairedResultGraphContainer,
+                    styles.criticalityInnerPoint
+                ).firstChild;
+                expect(getTransformScale(criticalOuterElementPath)[0]).toBe(
+                    round2Decimals(
+                        getShapeForTarget(inputPrimary).high.options.scale
+                    )
                 );
-                expect(getTransformScale(criticalInnerElement)[0]).toBe(
-                    constants.DEFAULT_CRITICAL_INNER_PLOT_SCALE[0]
+                expect(getTransformScale(criticalInnerElementPath)[0]).toBe(
+                    round2Decimals(
+                        getShapeForTarget(inputPrimary).high.options.scale
+                    )
                 );
             });
             it("Shows even on multiple data-set", () => {
@@ -3201,7 +3250,7 @@ describe("PairedResult", () => {
                     styles.criticalityInnerPoint
                 );
                 expect(criticalOuterElement).not.toBeNull();
-                expect(criticalOuterElement.nodeName).toBe("path");
+                expect(criticalOuterElement.nodeName).toBe("svg");
                 expect(criticalOuterElement.classList).toContain(
                     styles.pairedPoint
                 );
@@ -3209,7 +3258,7 @@ describe("PairedResult", () => {
                     styles.criticalityOuterPoint
                 );
                 expect(criticalInnerElement).not.toBeNull();
-                expect(criticalInnerElement.nodeName).toBe("path");
+                expect(criticalInnerElement.nodeName).toBe("svg");
                 expect(criticalInnerElement.classList).toContain(
                     styles.pairedPoint
                 );
@@ -3402,12 +3451,12 @@ describe("PairedResult", () => {
                     );
                     triggerEvent(legendItem, "mouseenter", () => {
                         const criticalOuterElement = pairedResultGraphContainer.querySelector(
-                            `path.${
+                            `.${
                                 styles.criticalityOuterPoint
                             }[aria-describedby="${inputPrimary.key}_high"]`
                         );
                         const criticalInnerElement = pairedResultGraphContainer.querySelector(
-                            `path.${
+                            `.${
                                 styles.criticalityInnerPoint
                             }[aria-describedby="${inputPrimary.key}_high"]`
                         );
@@ -3428,12 +3477,12 @@ describe("PairedResult", () => {
                     triggerEvent(legendItem, "mouseenter", () => {
                         triggerEvent(legendItem, "mouseleave", () => {
                             const criticalOuterElement = pairedResultGraphContainer.querySelector(
-                                `path.${
+                                `.${
                                     styles.criticalityOuterPoint
                                 }[aria-describedby="${inputPrimary.key}_high"]`
                             );
                             const criticalInnerElement = pairedResultGraphContainer.querySelector(
-                                `path.${
+                                `.${
                                     styles.criticalityInnerPoint
                                 }[aria-describedby="${inputPrimary.key}_high"]`
                             );
@@ -3453,12 +3502,12 @@ describe("PairedResult", () => {
                     )[1];
                     triggerEvent(legendItem, "mouseenter", () => {
                         const criticalOuterElement = pairedResultGraphContainer.querySelector(
-                            `path.${
+                            `.${
                                 styles.criticalityOuterPoint
                             }[aria-describedby="${inputPrimary.key}_mid"]`
                         );
                         const criticalInnerElement = pairedResultGraphContainer.querySelector(
-                            `path.${
+                            `.${
                                 styles.criticalityInnerPoint
                             }[aria-describedby="${inputPrimary.key}_mid"]`
                         );
@@ -3478,12 +3527,12 @@ describe("PairedResult", () => {
                     triggerEvent(legendItem, "mouseenter", () => {
                         triggerEvent(legendItem, "mouseleave", () => {
                             const criticalOuterElement = pairedResultGraphContainer.querySelector(
-                                `path.${
+                                `.${
                                     styles.criticalityOuterPoint
                                 }[aria-describedby="${inputPrimary.key}_mid"]`
                             );
                             const criticalInnerElement = pairedResultGraphContainer.querySelector(
-                                `path.${
+                                `.${
                                     styles.criticalityInnerPoint
                                 }[aria-describedby="${inputPrimary.key}_mid"]`
                             );
@@ -3503,12 +3552,12 @@ describe("PairedResult", () => {
                     )[2];
                     triggerEvent(legendItem, "mouseenter", () => {
                         const criticalOuterElement = pairedResultGraphContainer.querySelector(
-                            `path.${
+                            `.${
                                 styles.criticalityOuterPoint
                             }[aria-describedby="${inputPrimary.key}_low"]`
                         );
                         const criticalInnerElement = pairedResultGraphContainer.querySelector(
-                            `path.${
+                            `.${
                                 styles.criticalityInnerPoint
                             }[aria-describedby="${inputPrimary.key}_low"]`
                         );
@@ -3528,12 +3577,12 @@ describe("PairedResult", () => {
                     triggerEvent(legendItem, "mouseenter", () => {
                         triggerEvent(legendItem, "mouseleave", () => {
                             const criticalOuterElement = pairedResultGraphContainer.querySelector(
-                                `path.${
+                                `.${
                                     styles.criticalityOuterPoint
                                 }[aria-describedby="${inputPrimary.key}_low"]`
                             );
                             const criticalInnerElement = pairedResultGraphContainer.querySelector(
-                                `path.${
+                                `.${
                                     styles.criticalityInnerPoint
                                 }[aria-describedby="${inputPrimary.key}_low"]`
                             );
@@ -3572,12 +3621,12 @@ describe("PairedResult", () => {
                     );
                     triggerEvent(legendItem, "mouseenter", () => {
                         const criticalOuterElement = pairedResultGraphContainer.querySelector(
-                            `path.${
+                            `.${
                                 styles.criticalityOuterPoint
                             }[aria-describedby="${inputPrimary.key}_high"]`
                         );
                         const criticalInnerElement = pairedResultGraphContainer.querySelector(
-                            `path.${
+                            `.${
                                 styles.criticalityInnerPoint
                             }[aria-describedby="${inputPrimary.key}_high"]`
                         );
@@ -3598,22 +3647,22 @@ describe("PairedResult", () => {
                     );
                     triggerEvent(legendItem, "mouseenter", () => {
                         const criticalOuterElement = document.querySelector(
-                            `path.${
+                            `.${
                                 styles.criticalityOuterPoint
                             }[aria-describedby="${inputPrimary.key}_high"]`
                         );
                         const criticalInnerElement = document.querySelector(
-                            `path.${
+                            `.${
                                 styles.criticalityInnerPoint
                             }[aria-describedby="${inputPrimary.key}_high"]`
                         );
                         const criticalOuterElementAlt = document.querySelector(
-                            `path.${
+                            `.${
                                 styles.criticalityOuterPoint
                             }[aria-describedby="${inputSecondary.key}_high"]`
                         );
                         const criticalInnerElementAlt = document.querySelector(
-                            `path.${
+                            `.${
                                 styles.criticalityInnerPoint
                             }[aria-describedby="${inputSecondary.key}_high"]`
                         );
@@ -3641,12 +3690,12 @@ describe("PairedResult", () => {
                     triggerEvent(legendItem, "mouseenter", () => {
                         triggerEvent(legendItem, "mouseleave", () => {
                             const criticalOuterElement = document.querySelector(
-                                `path.${
+                                `.${
                                     styles.criticalityOuterPoint
                                 }[aria-describedby="${inputPrimary.key}_high"]`
                             );
                             const criticalInnerElement = document.querySelector(
-                                `path.${
+                                `.${
                                     styles.criticalityInnerPoint
                                 }[aria-describedby="${inputPrimary.key}_high"]`
                             );
@@ -3669,24 +3718,24 @@ describe("PairedResult", () => {
                     triggerEvent(legendItem, "mouseenter", () => {
                         triggerEvent(legendItem, "mouseleave", () => {
                             const criticalOuterElement = document.querySelector(
-                                `path.${
+                                `.${
                                     styles.criticalityOuterPoint
                                 }[aria-describedby="${inputPrimary.key}_high"]`
                             );
                             const criticalInnerElement = document.querySelector(
-                                `path.${
+                                `.${
                                     styles.criticalityInnerPoint
                                 }[aria-describedby="${inputPrimary.key}_high"]`
                             );
                             const criticalOuterElementAlt = document.querySelector(
-                                `path.${
+                                `.${
                                     styles.criticalityOuterPoint
                                 }[aria-describedby="${
                                     inputSecondary.key
                                 }_high"]`
                             );
                             const criticalInnerElementAlt = document.querySelector(
-                                `path.${
+                                `.${
                                     styles.criticalityInnerPoint
                                 }[aria-describedby="${
                                     inputSecondary.key
@@ -3730,12 +3779,12 @@ describe("PairedResult", () => {
                     );
                     triggerEvent(legendItem, "click", () => {
                         const criticalOuterElement = document.querySelector(
-                            `path.${
+                            `.${
                                 styles.criticalityOuterPoint
                             }[aria-describedby="${inputPrimary.key}_high"]`
                         );
                         const criticalInnerElement = document.querySelector(
-                            `path.${
+                            `.${
                                 styles.criticalityInnerPoint
                             }[aria-describedby="${inputPrimary.key}_high"]`
                         );
@@ -3760,14 +3809,14 @@ describe("PairedResult", () => {
                             "click",
                             () => {
                                 const criticalOuterElement = document.querySelector(
-                                    `path.${
+                                    `.${
                                         styles.criticalityOuterPoint
                                     }[aria-describedby="${
                                         inputPrimary.key
                                     }_high"]`
                                 );
                                 const criticalInnerElement = document.querySelector(
-                                    `path.${
+                                    `.${
                                         styles.criticalityInnerPoint
                                     }[aria-describedby="${
                                         inputPrimary.key
@@ -3797,14 +3846,14 @@ describe("PairedResult", () => {
                             "click",
                             () => {
                                 let criticalOuterElement = document.querySelector(
-                                    `path.${
+                                    `.${
                                         styles.criticalityOuterPoint
                                     }[aria-describedby="${
                                         inputPrimary.key
                                     }_low"]`
                                 );
                                 let criticalInnerElement = document.querySelector(
-                                    `path.${
+                                    `.${
                                         styles.criticalityInnerPoint
                                     }[aria-describedby="${
                                         inputPrimary.key
@@ -3817,14 +3866,14 @@ describe("PairedResult", () => {
                                     criticalInnerElement.getAttribute("style")
                                 ).toBe("");
                                 criticalOuterElement = document.querySelector(
-                                    `path.${
+                                    `.${
                                         styles.criticalityOuterPoint
                                     }[aria-describedby="${
                                         inputPrimary.key
                                     }_high"]`
                                 );
                                 criticalInnerElement = document.querySelector(
-                                    `path.${
+                                    `.${
                                         styles.criticalityInnerPoint
                                     }[aria-describedby="${
                                         inputPrimary.key

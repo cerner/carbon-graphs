@@ -1,5 +1,6 @@
 import d3 from "d3";
 import { Shape } from "../../../core";
+import { getDefaultSVGProps } from "../../../core/Shape";
 import { getXAxisXPosition } from "../../../helpers/axis";
 import constants, { SHAPES } from "../../../helpers/constants";
 import errors from "../../../helpers/errors";
@@ -8,9 +9,13 @@ import {
     legendHoverHandler,
     loadLegendItem
 } from "../../../helpers/legend";
+import { getSVGObject } from "../../../helpers/shapeSVG";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
-import { getColorForTarget, getShape } from "../../Graph/helpers/helpers";
+import {
+    getColorForTarget,
+    getShapeForTarget
+} from "../../Graph/helpers/helpers";
 import { getXAxisYPosition } from "./creationHelpers";
 import { transformPoint } from "./translateHelpers";
 
@@ -256,23 +261,26 @@ const shouldHideDataPoints = (shownTargets, value) =>
  * @returns {Object} - d3 selection object
  */
 const renderDataPointPath = (scale, config, path, dataPoint, index) =>
-    path
-        .classed(styles.point, true)
-        .attr("d", new Shape(getShape(dataPoint)).getPathDescription())
-        .attr("transform", transformPoint(scale, config))
-        .attr(
-            "style",
-            `fill: ${getColorForTarget(dataPoint)}${
-                shouldHideDataPoints(config.shownTargets, dataPoint)
-                    ? "; display: none;"
-                    : ";"
-            }`
+    path.append(() =>
+        new Shape(getShapeForTarget(dataPoint)).getShapeElement(
+            getDefaultSVGProps({
+                svgClassNames: styles.point,
+                svgStyles: `fill: ${getColorForTarget(dataPoint)}${
+                    shouldHideDataPoints(config.shownTargets, dataPoint)
+                        ? "; display: none;"
+                        : ";"
+                }`,
+                transformFn: transformPoint(scale, config)(dataPoint),
+                onClickFn() {
+                    dataPointActionHandler(dataPoint, index, this);
+                },
+                a11yAttributes: {
+                    "aria-hidden": false,
+                    "aria-describedby": dataPoint.key
+                }
+            })
         )
-        .attr("aria-hidden", false)
-        .attr("aria-describedby", dataPoint.key)
-        .on("click", function() {
-            dataPointActionHandler(dataPoint, index, this);
-        });
+    );
 /**
  * Renders the circle svg element which shows up when clicked on the data point.
  * It is hidden by default and toggled visible onClick.
@@ -285,24 +293,28 @@ const renderDataPointPath = (scale, config, path, dataPoint, index) =>
  * @returns {Object} - d3 selection object
  */
 const renderSelectionPath = (scale, config, path, dataPoint, index) =>
-    path
-        .classed(styles.dataPointSelection, true)
-        .attr("d", new Shape(getShape(dataPoint)).getPathDescription())
-        .attr("transform", transformPoint(scale, config))
-        .attr("r", constants.DEFAULT_SELECTED_RADIUS)
-        .attr(
-            "style",
-            `${
-                shouldHideDataPoints(config.shownTargets, dataPoint)
-                    ? "display: none;"
-                    : ""
-            }`
+    path.append(() =>
+        new Shape(
+            getSVGObject(SHAPES.CIRCLE, constants.DEFAULT_PLOT_SELECTION_SCALE)
+        ).getShapeElement(
+            getDefaultSVGProps({
+                svgClassNames: styles.dataPointSelection,
+                svgStyles: `${
+                    shouldHideDataPoints(config.shownTargets, dataPoint)
+                        ? "display: none;"
+                        : ""
+                }`,
+                transformFn: transformPoint(scale, config)(dataPoint),
+                onClickFn() {
+                    dataPointActionHandler(dataPoint, index, this);
+                },
+                a11yAttributes: {
+                    "aria-hidden": true,
+                    "aria-describedby": dataPoint.key
+                }
+            })
         )
-        .attr("aria-hidden", true)
-        .attr("aria-describedby", dataPoint.key)
-        .on("click", function() {
-            dataPointActionHandler(dataPoint, index, this);
-        });
+    );
 /**
  * Draws the points with options opted in the input JSON by the consumer for each data set.
  *  Render the point with appropriate color, shape, x and y co-ordinates, label etc.
@@ -319,20 +331,8 @@ const drawDataPoints = (scale, config, canvasSVG) =>
         .classed(styles.pointGroup, true)
         .each(function(dataPoint, index) {
             const dataPointSVG = d3.select(this);
-            renderSelectionPath(
-                scale,
-                config,
-                dataPointSVG.append(constants.DEFAULT_SHAPE),
-                dataPoint,
-                index
-            );
-            renderDataPointPath(
-                scale,
-                config,
-                dataPointSVG.append("path"),
-                dataPoint,
-                index
-            );
+            renderSelectionPath(scale, config, dataPointSVG, dataPoint, index);
+            renderDataPointPath(scale, config, dataPointSVG, dataPoint, index);
         });
 /**
  * Renders the action items for a track. The data points provided are of ISO8601 datetime format

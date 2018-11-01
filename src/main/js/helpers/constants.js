@@ -5,6 +5,7 @@
  * @alias module:constants
  */
 import d3 from "d3";
+import * as DEFAULT_SHAPES from "../core/Shape/shapeDefinitions";
 
 /**
  * Consumers can pick a color from this default list
@@ -56,17 +57,17 @@ export const COLORS = {
  * @enum {{Object: String}}
  */
 export const SHAPES = {
-    CIRCLE: "CIRCLE",
-    TRIANGLE: "TRIANGLE",
-    SQUARE: "SQUARE",
-    X: "X",
-    DIAMOND: "DIAMOND",
-    CROSS: "CROSS",
-    VERTICAL_BAR: "VERTICAL_BAR",
-    RHOMBUS: "RHOMBUS",
-    TEAR_DROP: "TEAR_DROP",
-    TEAR_ALT: "TEAR_ALT",
-    TRIANGLE_DOWN: "TRIANGLE_DOWN"
+    CIRCLE: DEFAULT_SHAPES.CIRCLE,
+    CROSS: DEFAULT_SHAPES.CROSS,
+    DIAMOND: DEFAULT_SHAPES.DIAMOND,
+    RHOMBUS: DEFAULT_SHAPES.RHOMBUS,
+    SQUARE: DEFAULT_SHAPES.SQUARE,
+    TEAR_ALT: DEFAULT_SHAPES.TEAR_ALT,
+    TEAR_DROP: DEFAULT_SHAPES.TEAR_DROP,
+    TRIANGLE: DEFAULT_SHAPES.TRIANGLE,
+    TRIANGLE_DOWN: DEFAULT_SHAPES.TRIANGLE_DOWN,
+    VERTICAL_BAR: DEFAULT_SHAPES.VERTICAL_BAR,
+    X: DEFAULT_SHAPES.X
 };
 /**
  * Consumers can pick axes tick type from default list
@@ -125,17 +126,11 @@ export default {
     BASE_CANVAS_WIDTH_PADDING: 10,
     TIMELINE_HEIGHT: 40,
     DEFAULT_HEIGHT: 250,
-    DEFAULT_PLOT_SIZE: 60,
-    DEFAULT_PLOT_SCALE: [1, 1],
-    DEFAULT_CRITICAL_OUTER_PLOT_SCALE: [1.9, 1.9],
-    DEFAULT_CRITICAL_INNER_PLOT_SCALE: [1.4, 1.4],
-    DEFAULT_TIMELINE_SCALE: [1.25, 1.25],
+    DEFAULT_PLOT_SCALE: 0.275,
+    DEFAULT_PLOT_SELECTION_SCALE: { posX: 1.95, posY: 1.95, scale: 2 },
+    DEFAULT_TIMELINE_PLOT_SELECTION_SCALE: { posX: 2.05, posY: 2, scale: 2.2 },
+    DEFAULT_TIMELINE_SCALE: { posX: 1.15, posY: 1.15, scale: 1.25 },
     DEFAULT_TIMELINE_TICK_LENGTH: 12,
-    DEFAULT_LEGEND_ICON_SIZE: 30,
-    DEFAULT_LEGEND_ICON_SCALE: 4,
-    DEFAULT_LEGEND_ICON_X_POS: 25,
-    DEFAULT_LEGEND_ICON_Y_POS: 22.5,
-    DEFAULT_SELECTED_RADIUS: 9,
     DEFAULT_LABEL_CHARACTER_LIMIT: 12,
     DEFAULT_GANTT_TRACK_HEIGHT: 41,
     DEFAULT_GANTT_TASK_HEIGHT: 23,
@@ -177,77 +172,12 @@ export default {
         MOUSE_EXIT: "exit"
     },
     VIEW_BOX_SIZE: "0 0 48 48",
-    DEFAULT_SHAPE: "circle",
     DEFAULT_COLOR: COLORS.BLACK,
     X_AXIS: "x",
     Y_AXIS: "y",
     Y2_AXIS: "y2",
     MIN_TICKS: 3,
     MAX_TICK_VARIANCE: 100,
-    SHAPE_PROPS: {
-        CIRCLE: {
-            translate: [24, 24],
-            scale: 5
-        },
-        TRIANGLE: {
-            translate: [24, 24],
-            scale: 4
-        },
-        SQUARE: {
-            translate: [24, 24],
-            scale: 5.5
-        },
-        X: {
-            translate: [24, 24],
-            scale: 4.5
-        },
-        DIAMOND: {
-            translate: [24, 24],
-            scale: 3.25
-        },
-        CROSS: {
-            translate: [24, 24],
-            scale: 4.5
-        },
-        VERTICAL_BAR: {
-            translate: [24, 24],
-            scale: 4.5
-        },
-        RHOMBUS: {
-            translate: [24, 24],
-            scale: 4.75
-        },
-        TEAR_DROP: {
-            translate: [24, 27],
-            scale: 4.75
-        },
-        TEAR_ALT: {
-            translate: [24, 25],
-            scale: 4.75
-        },
-        TRIANGLE_DOWN: {
-            translate: [24, 24],
-            scale: 4
-        }
-    },
-    D3_INBUILT_SHAPE: {
-        CIRCLE: "circle",
-        CROSS: "cross",
-        DIAMOND: "diamond",
-        SQUARE: "square",
-        TRIANGLE_DOWN: "triangle-down",
-        TRIANGLE: "triangle-up"
-    },
-    CUSTOM_SHAPE_PATH: {
-        TEAR_DROP:
-            "m0.05-5.59q0 0 3.05 3.66a3.9 3.9 0 1 1-6.1 0q3.05-3.66 3.05-3.66z",
-        TEAR_ALT:
-            "m0.01 4.72q0 0-3.05-3.66a3.9 3.9 0 1 1 6.1 0q-3.05 3.66-3.05 3.66z",
-        X:
-            "m-5.01-2.47 2.5-2.5 2.5 2.5 2.5-2.5 2.5 2.5-2.5 2.5 2.5 2.5-2.5 2.5-2.5-2.5-2.5 2.5-2.5-2.5 2.5-2.5z",
-        RHOMBUS: "M-0.01-5.01 4.99-0.01-0.01 4.99-5.01-0.01Z",
-        VERTICAL_BAR: "m-2.46-6.05h4.8v12h-4.8v-12"
-    },
     DEFAULT_INTERPOLATION: "linear",
     SELECTION_INDICATOR_X_POSITION: 10,
     SELECTION_INDICATOR_Y_POSITION: 12.5,

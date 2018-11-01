@@ -1,6 +1,7 @@
 "use strict";
 import d3 from "d3";
 import { Shape } from "../../../core";
+import { getDefaultSVGProps } from "../../../core/Shape";
 import {
     buildAxisLabel,
     getAxisLabelHeight,
@@ -10,12 +11,13 @@ import {
     getYAxisHeight,
     prepareXAxis
 } from "../../../helpers/axis";
-import constants from "../../../helpers/constants";
+import constants, { SHAPES } from "../../../helpers/constants";
 import {
     legendClickHandler,
     legendHoverHandler,
     loadLegendItem
 } from "../../../helpers/legend";
+import { getSVGObject } from "../../../helpers/shapeSVG";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 import {
@@ -23,7 +25,6 @@ import {
     d3RemoveElement,
     detachEventHandlers,
     getColorForTarget,
-    getShape,
     getShapeForTarget
 } from "../../Graph/helpers/helpers";
 import { transformPoint } from "./translateHelpers";
@@ -302,38 +303,56 @@ const dataPointActionHandler = (value, index, target) => {
  */
 const createPoints = (scale, config, canvasSVG) => {
     const renderDataPointPath = (path, value, index) =>
-        path
-            .classed(styles.point, true)
-            .attr("d", new Shape(getShape(value)).getPathDescription())
-            .attr("transform", transformPoint(scale))
-            .attr("style", `fill: ${getColorForTarget(value)};`)
-            .attr("aria-describedby", value.key)
-            .attr("aria-hidden", config.shownTargets.indexOf(value.key) < 0)
-            .on("click", function() {
-                dataPointActionHandler(value, index, this);
-            });
+        path.append(() =>
+            new Shape(
+                getSVGObject(
+                    getShapeForTarget(value),
+                    constants.DEFAULT_TIMELINE_SCALE
+                )
+            ).getShapeElement(
+                getDefaultSVGProps({
+                    svgClassNames: styles.point,
+                    svgStyles: `fill: ${getColorForTarget(value)};`,
+                    transformFn: transformPoint(scale)(value),
+                    onClickFn() {
+                        dataPointActionHandler(value, index, this);
+                    },
+                    a11yAttributes: {
+                        "aria-describedby": value.key,
+                        "aria-hidden":
+                            config.shownTargets.indexOf(value.key) < 0
+                    }
+                })
+            )
+        );
     const renderSelectionPath = (path, value, index) =>
-        path
-            .classed(styles.dataPointSelection, true)
-            .attr("d", new Shape(getShape(value)).getPathDescription())
-            .attr("transform", transformPoint(scale))
-            .attr("r", constants.DEFAULT_SELECTED_RADIUS)
-            .attr("aria-hidden", true)
-            .attr("aria-describedby", value.key)
-            .on("click", function() {
-                dataPointActionHandler(value, index, this);
-            });
+        path.append(() =>
+            new Shape(
+                getSVGObject(
+                    SHAPES.CIRCLE,
+                    constants.DEFAULT_TIMELINE_PLOT_SELECTION_SCALE
+                )
+            ).getShapeElement(
+                getDefaultSVGProps({
+                    svgClassNames: styles.dataPointSelection,
+                    transformFn: transformPoint(scale)(value),
+                    onClickFn() {
+                        dataPointActionHandler(value, index, this);
+                    },
+                    a11yAttributes: {
+                        "aria-hidden": true,
+                        "aria-describedby": value.key
+                    }
+                })
+            )
+        );
     canvasSVG
         .append("g")
         .classed(styles.pointGroup, true)
         .each(function(d, i) {
             const dataPointSVG = d3.select(this);
-            renderSelectionPath(
-                dataPointSVG.append(constants.DEFAULT_SHAPE),
-                d,
-                i
-            );
-            renderDataPointPath(dataPointSVG.append("path"), d, i);
+            renderSelectionPath(dataPointSVG, d, i);
+            renderDataPointPath(dataPointSVG, d, i);
         });
 };
 /**
@@ -453,7 +472,6 @@ export {
     prepareLegendItems,
     scaleGraph,
     determineHeight,
-    getShape,
     getShapeForTarget,
     getColorForTarget,
     attachEventHandlers,

@@ -1,12 +1,3 @@
-import Shape, {
-    isD3InbuiltShape,
-    isNativeShape,
-    isValidCarbonShape
-} from "./Shape";
+import Shape, { getDefaultSVGProps } from "./Shape";
 
-export {
-    Shape as default,
-    isD3InbuiltShape,
-    isNativeShape,
-    isValidCarbonShape
-};
+export { Shape as default, getDefaultSVGProps };

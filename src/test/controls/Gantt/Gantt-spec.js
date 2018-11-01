@@ -1077,6 +1077,12 @@ describe("Gantt", () => {
                 gantt.destroy();
                 axisObj = utils.deepClone(getAxes(axisJSON));
             });
+            it("Throws error when dateline is not provided", () => {
+                axisObj.dateline = [{}];
+                expect(() => {
+                    gantt = new Gantt(axisObj);
+                }).toThrowError(errors.THROW_MSG_DATELINE_OBJECT_NOT_PROVIDED);
+            });
             it("Throws error when dateline value is not provided", () => {
                 axisObj.dateline = utils.deepClone(datelineJSON);
                 axisObj.dateline[0].value = "";
@@ -1177,9 +1183,13 @@ describe("Gantt", () => {
                 const datelinePoint = fetchElementByClass(
                     styles.ganttDatelinePoint
                 );
+                const datelinePointPath = datelinePoint.firstChild;
                 expect(datelinePoint).not.toBeNull();
                 expect(datelinePoint.getAttribute("aria-hidden")).toBe("false");
-                expect(datelinePoint.getAttribute("d")).not.toBeNull();
+                expect(datelinePointPath.getAttribute("d")).not.toBeNull();
+                expect(datelinePointPath.getAttribute("d")).toBe(
+                    datelineJSON[0].shape.path.d
+                );
             });
             it("Hides dateline point on consumer disable", () => {
                 axisObj.dateline = utils.deepClone(datelineJSON);
@@ -1196,11 +1206,10 @@ describe("Gantt", () => {
                 expect(datelinePoint).not.toBeNull();
                 expect(datelinePoint.getAttribute("aria-hidden")).toBe("true");
             });
-
             it("Hides dateline point on consumer disable when shape available", () => {
                 axisObj.dateline = utils.deepClone(datelineJSON);
                 axisObj.dateline[0].showDatelineIndicator = false;
-                axisObj.dateline[0].shape = "CIRCLE";
+                axisObj.dateline[0].shape = SHAPES.CIRCLE;
                 gantt = new Gantt(axisObj);
                 const datelinePoint = fetchElementByClass(
                     styles.ganttDatelinePoint

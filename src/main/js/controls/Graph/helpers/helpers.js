@@ -1,7 +1,6 @@
 "use strict";
 import d3 from "d3";
 import { getScale } from "../../../core/BaseConfig/index";
-import { isValidCarbonShape } from "../../../core/Shape/index";
 import {
     buildAxisLabel,
     determineOutlierStretchFactor,
@@ -496,16 +495,6 @@ const determineHeight = (config, dimension) => {
     );
 };
 /**
- * Checks if the shape is part of inbuilt d3 shapes list or otherwise.
- * @private
- * @param {Object} dataPoint - Data point containing the shape
- * @returns {Object} Shape Object if present or null
- */
-const getShape = (dataPoint) => {
-    const shape = getShapeForTarget(dataPoint);
-    return isValidCarbonShape(shape) ? shape : null;
-};
-/**
  * Returns the shape property from the data point.
  * If the shape is not provided then the default shape is Circle.
  * @private
@@ -632,9 +621,9 @@ export {
     translateGraph,
     padDomain,
     determineHeight,
-    getShape,
     getShapeForTarget,
     getColorForTarget,
+    round2Decimals,
     getCurrentTransform,
     getTransformScale,
     attachEventHandlers,

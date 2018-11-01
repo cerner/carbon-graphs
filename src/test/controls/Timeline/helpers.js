@@ -1,11 +1,7 @@
 import sinon from "sinon";
-import constants, { COLORS } from "../../../main/js/helpers/constants";
+import constants, { COLORS, SHAPES } from "../../../main/js/helpers/constants";
 import utils from "../../../main/js/helpers/utils";
 
-export const SHAPES = {
-    RHOMBUS: "RHOMBUS",
-    CIRCLE: "CIRCLE"
-};
 export const onClickFunctionSpy = sinon.spy();
 export const TRANSITION_DELAY = 500;
 export const BASE_CANVAS_HEIGHT_PADDING =

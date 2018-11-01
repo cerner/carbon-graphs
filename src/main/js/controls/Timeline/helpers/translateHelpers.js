@@ -1,4 +1,5 @@
 "use strict";
+import d3 from "d3";
 import { getRotationForAxis, getYAxisHeight } from "../../../helpers/axis";
 import constants from "../../../helpers/constants";
 import styles from "../../../helpers/styles";
@@ -76,13 +77,9 @@ const translateLabel = (config, canvasSVG) => {
  * Transforms the point in the timeline graph on resize
  * @private
  * @param {Object} scale - d3 scale for Graph
- * @param {Array<number>|number} [scaleFactor] - amount of transform needs to be done for scaling an svg
  * @returns {Function} - function that returns translate string for d3 transform
  */
-const transformPoint = (
-    scale,
-    scaleFactor = constants.DEFAULT_TIMELINE_SCALE
-) => (value) => {
+const transformPoint = (scale) => (value) => (scaleFactor) => {
     const getX = (val) => scale.x(val.x);
     return `translate(${getX(
         value
@@ -100,10 +97,15 @@ const transformPoint = (
 const translatePoints = (scale, canvasSVG, key, style) =>
     canvasSVG
         .select(`.${styles.timelineContentGroup}[aria-describedby="${key}"]`)
-        .transition(constants.d3Transition)
         .selectAll(style)
-        .attr("transform", function(value) {
-            return transformPoint(scale, getTransformScale(this))(value);
+        .each(function(d) {
+            const pointGroupSVG = d3.select(this);
+            pointGroupSVG
+                .selectAll("path")
+                .transition(constants.d3Transition)
+                .attr("transform", function() {
+                    return transformPoint(scale)(d)(getTransformScale(this));
+                });
         });
 /**
  * Translates graph based on the current positioning on resize. We

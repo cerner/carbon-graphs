@@ -1,11 +1,7 @@
 import sinon from "sinon";
-import { AXIS_TYPE, COLORS } from "../../../main/js/helpers/constants";
+import { AXIS_TYPE, COLORS, SHAPES } from "../../../main/js/helpers/constants";
 import utils from "../../../main/js/helpers/utils";
 
-export const SHAPES = {
-    RHOMBUS: "RHOMBUS",
-    CIRCLE: "CIRCLE"
-};
 export const dataPointClickHandlerSpy = sinon.spy();
 /**
  * Creates and returns an example input with data point values

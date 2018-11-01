@@ -1,11 +1,7 @@
 import sinon from "sinon";
-import { AXIS_TYPE, COLORS } from "../../../main/js/helpers/constants";
+import { AXIS_TYPE, COLORS, SHAPES } from "../../../main/js/helpers/constants";
 import utils from "../../../main/js/helpers/utils";
 
-export const SHAPES = {
-    RHOMBUS: "RHOMBUS",
-    TEAR_DROP: "TEAR_DROP"
-};
 export const dataPointClickHandlerSpy = sinon.spy();
 /**
  * Creates and returns an example input with data point values
@@ -23,7 +19,7 @@ export const getInput = (
 ) => ({
     key: `uid_1`,
     shape: {
-        high: isDefaultShape ? "" : SHAPES.TEAR_DROP,
+        high: isDefaultShape ? "" : SHAPES.TEAR_ALT,
         mid: isDefaultShape ? "" : SHAPES.RHOMBUS,
         low: isDefaultShape ? "" : SHAPES.TEAR_DROP
     },

@@ -1,6 +1,7 @@
 "use strict";
 import d3 from "d3";
 import { Shape } from "../../../core";
+import { getDefaultSVGProps } from "../../../core/Shape";
 import {
     getAxisTickFormat,
     getXAxisHeight,
@@ -19,7 +20,6 @@ import {
     attachEventHandlers,
     detachEventHandlers,
     getColorForTarget,
-    getShape,
     getShapeForTarget,
     translateCanvas
 } from "../../Graph/helpers/helpers";
@@ -478,7 +478,6 @@ const datelineClickHandler = (value, target) => {
         )
     );
 };
-
 /**
  * Creates a dateline for gantt chart. We are not adding
  * x1, x2, y1, y2 co-ordinates for the straight line since they will be adjusted when
@@ -499,25 +498,26 @@ const createDateline = (scale, config, canvasSVG) => {
             .append("g")
             .classed(styles.ganttDatelineGroup, true)
             .datum(dateline)
-            .attr("style", (val) => `fill: ${val.color}; stroke: ${val.color}`)
+            .attr("style", (val) => `fill: ${val.color}; stroke: ${val.color};`)
             .attr("aria-selected", false);
         datelineGroup
             .append("line")
             .classed(styles.ganttDateline, true)
-            .attr("style", (val) => `fill: ${val.color}; stroke: ${val.color}`);
-        datelineGroup
-            .append("path")
-            .classed(styles.ganttDatelinePoint, true)
-            .attr("style", (val) => `fill: ${val.color}; stroke: ${val.color}`)
-            .attr("aria-hidden", !dateline.showDatelineIndicator)
-            .attr("d", (val) => {
-                if (val.showDatelineIndicator) {
-                    return new Shape(val.shape).getPathDescription();
-                }
-            })
-            .on("click", function(value) {
-                datelineClickHandler(value, this);
-            });
+            .attr("style", (d) => `fill: ${d.color}; stroke: ${d.color}`);
+        datelineGroup.append((d) =>
+            new Shape(getShapeForTarget(d)).getShapeElement(
+                getDefaultSVGProps({
+                    svgClassNames: styles.ganttDatelinePoint,
+                    svgStyles: `fill: ${d.color}; stroke: ${d.color}`,
+                    onClickFn() {
+                        datelineClickHandler(d, this);
+                    },
+                    a11yAttributes: {
+                        "aria-hidden": !dateline.showDatelineIndicator
+                    }
+                })
+            )
+        );
     });
 };
 /**
@@ -570,7 +570,6 @@ export {
     createDateline,
     scaleGraph,
     determineHeight,
-    getShape,
     getShapeForTarget,
     getColorForTarget,
     getTrackLabel,

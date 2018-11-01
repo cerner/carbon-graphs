@@ -1,9 +1,13 @@
 "use strict";
 import Timeline from "../../../main/js/controls/Timeline";
-import { getXAxisWidth } from "../../../main/js/controls/Timeline/helpers/creationHelpers";
+import {
+    getShapeForTarget,
+    getXAxisWidth
+} from "../../../main/js/controls/Timeline/helpers/creationHelpers";
 import constants, {
     AXIS_TYPE,
-    COLORS
+    COLORS,
+    SHAPES
 } from "../../../main/js/helpers/constants";
 import errors from "../../../main/js/helpers/errors";
 import { loadLegendItem } from "../../../main/js/helpers/legend";
@@ -854,7 +858,9 @@ describe("Timeline", () => {
         it("Defaults shapes to circle when not provided", () => {
             const data = timeline.contentConfig[0].dataTarget;
             expect(
-                data.internalValuesSubset.every((j) => j.shape === "CIRCLE")
+                data.internalValuesSubset.every(
+                    (j) => j.shape === SHAPES.CIRCLE
+                )
             ).toBeTruthy();
         });
         describe("Draws the graph", () => {
@@ -908,9 +914,9 @@ describe("Timeline", () => {
             });
             it("Points have correct shape", () => {
                 const points = fetchElementByClass(styles.point);
-                expect(points.attributes.getNamedItem("d").value).toBe(
-                    constants.CUSTOM_SHAPE_PATH.RHOMBUS
-                );
+                expect(
+                    points.firstChild.attributes.getNamedItem("d").value
+                ).toBe(SHAPES.RHOMBUS.path.d);
             });
             it("Points have correct unique key assigned", () => {
                 const points = fetchElementByClass(styles.point);
@@ -935,7 +941,11 @@ describe("Timeline", () => {
                 const selectedPoints = fetchElementByClass(
                     styles.dataPointSelection
                 );
-                expect(selectedPoints.tagName).toBe("circle");
+                expect(selectedPoints.tagName).toBe("svg");
+                expect(selectedPoints.firstChild.nodeName).toBe("path");
+                expect(selectedPoints.firstChild.getAttribute("id")).toBe(
+                    "circle"
+                );
             });
             it("Selected data point has correct unique key assigned", () => {
                 const selectedPoints = fetchElementByClass(
@@ -1140,22 +1150,26 @@ describe("Timeline", () => {
                 const input = getData(valuesJSON, false, false);
                 timeline.loadContent(input);
                 const legendItem = fetchElementByClass(styles.legendItem);
+                const iconSVG = legendItem.querySelector("svg");
                 const iconPath = legendItem.querySelector("path");
+                expect(iconSVG).not.toBeNull();
+                expect(iconSVG.classList).toContain(styles.legendItemIcon);
                 expect(iconPath).not.toBeNull();
                 expect(iconPath.getAttribute("d")).not.toBeNull();
-                expect(iconPath.getAttribute("d")).toBe(
-                    constants.CUSTOM_SHAPE_PATH.RHOMBUS
-                );
-                expect(iconPath.getAttribute("transform")).not.toBeNull();
+                expect(iconPath.getAttribute("d")).toBe(SHAPES.RHOMBUS.path.d);
             });
             it("Loads the correct color", () => {
                 const input = getData(valuesJSON, false, false);
                 timeline.loadContent(input);
                 const legendItem = fetchElementByClass(styles.legendItem);
+                const iconSVG = legendItem.querySelector("svg");
                 const iconPath = legendItem.querySelector("path");
                 expect(iconPath).not.toBeNull();
                 expect(iconPath.getAttribute("d")).not.toBeNull();
-                expect(iconPath.getAttribute("style")).toBe(
+                expect(iconPath.getAttribute("d")).toEqual(
+                    getShapeForTarget(input).path.d
+                );
+                expect(iconSVG.getAttribute("style")).toBe(
                     `fill: ${COLORS.BLUE}`
                 );
             });

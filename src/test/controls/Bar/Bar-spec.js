@@ -1,7 +1,7 @@
 "use strict";
 import Bar from "../../../main/js/controls/Bar/Bar";
 import Graph from "../../../main/js/controls/Graph/Graph";
-import constants, { COLORS } from "../../../main/js/helpers/constants";
+import constants, { COLORS, SHAPES } from "../../../main/js/helpers/constants";
 import errors from "../../../main/js/helpers/errors";
 import styles from "../../../main/js/helpers/styles";
 import utils from "../../../main/js/helpers/utils";
@@ -736,6 +736,9 @@ describe("Bar", () => {
                 );
                 expect(legendItemBtn.children[0].tagName).toBe("svg");
                 expect(
+                    legendItemBtn.children[0].firstChild.getAttribute("d")
+                ).toBe(SHAPES.SQUARE.path.d);
+                expect(
                     legendItemBtn.children[0].classList.contains(
                         styles.legendItemIcon
                     )
@@ -748,12 +751,13 @@ describe("Bar", () => {
                     barGraphContainer,
                     styles.legendItem
                 );
+                const iconSVG = legendItem.querySelector("svg");
                 const iconPath = legendItem.querySelector("path");
+                expect(iconSVG).not.toBeNull();
+                expect(iconSVG.classList).toContain(styles.legendItemIcon);
+                expect(iconSVG.getAttribute("style")).toContain(COLORS.BLUE);
                 expect(iconPath).not.toBeNull();
                 expect(iconPath.getAttribute("d")).not.toBeNull();
-                expect(iconPath.getAttribute("style")).toBe(
-                    `fill: ${COLORS.BLUE}`
-                );
             });
             it("attaches click event handlers correctly", (done) => {
                 const input = getInput(valuesDefault, false, false);

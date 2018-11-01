@@ -2,6 +2,7 @@
 import d3 from "d3";
 import { Shape } from "../../../core";
 import { parseTypedValue } from "../../../core/BaseConfig";
+import { getDefaultSVGProps } from "../../../core/Shape";
 import { getXAxisXPosition, isValidAxisType } from "../../../helpers/axis";
 import constants, { SHAPES } from "../../../helpers/constants";
 import errors from "../../../helpers/errors";
@@ -17,12 +18,13 @@ import {
     regionLegendHoverHandler,
     showHideRegion
 } from "../../../helpers/region";
+import { getSVGObject } from "../../../helpers/shapeSVG";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 import {
     d3RemoveElement,
     getColorForTarget,
-    getShape,
+    getShapeForTarget,
     getTransformScale
 } from "../../Graph/helpers/helpers";
 import {
@@ -33,6 +35,7 @@ import {
 } from "./selectionIndicatorHelpers";
 
 const PADDING = constants.PADDING;
+
 /**
  * Returns the value based on the type of data point - High, mid or low
  * @private
@@ -79,14 +82,9 @@ const createLine = (scale, d) => {
  * @private
  * @param {Object} scale - d3 scale for Graph
  * @param {string} type - high, mid or low
- * @param {Array<number>|number} [scaleFactor] - amount of transform needs to be done for scaling an svg
- * @returns {string} - translate string for d3 transform
+ * @returns {Function} - translate function for d3 transform
  */
-const transformPoint = (
-    scale,
-    type,
-    scaleFactor = constants.DEFAULT_PLOT_SCALE
-) => (value) => {
+const transformPoint = (scale, type) => (value) => (scaleFactor) => {
     const getX = (val) => scale.x(getValue(val, type).x);
     const getY = (val) => scale[val.yAxis](getValue(val, type).y);
     return `translate(${getX(value)},${getY(value)}) scale(${scaleFactor})`;
@@ -120,13 +118,17 @@ const translatePoints = (scale, canvasSVG) =>
                     type
                 )}`
             )
-            .transition(constants.d3Transition)
-            .attr("transform", function(value) {
-                return transformPoint(
-                    scale,
-                    type,
-                    getTransformScale(this)
-                )(value);
+            .each(function(d) {
+                const pairedPointSVG = d3.select(this);
+                pairedPointSVG
+                    .selectAll("path")
+                    .transition(constants.d3Transition)
+                    .attr("transform", function() {
+                        return transformPoint(
+                            scale,
+                            type
+                        )(d)(getTransformScale(this));
+                    });
             });
     });
 /**
@@ -270,33 +272,36 @@ const drawLine = (scale, config, boxPath) =>
  */
 const drawPoints = (scale, config, canvasSVG) => {
     const getDataPointPath = (path, type, value, index) =>
-        path
-            .classed(styles.pairedPoint, true)
-            .classed(getValue(styles, type), true)
-            .attr("d", (value) => {
-                const shape = getShape(getValue(value, type));
-                return new Shape(shape).getPathDescription();
-            })
-            .attr("transform", transformPoint(scale, type))
-            .attr(
-                "style",
-                (value) =>
-                    `fill: ${getColorForTarget(getValue(value, type))}${
+        path.append(() =>
+            new Shape(getShapeForTarget(getValue(value, type))).getShapeElement(
+                getDefaultSVGProps({
+                    svgClassNames: `${styles.pairedPoint} ${getValue(
+                        styles,
+                        type
+                    )}`,
+                    svgStyles: `fill: ${getColorForTarget(
+                        getValue(value, type)
+                    )}${
                         config.shownTargets.indexOf(getValue(value, type).key) <
                         0
                             ? "; display: none;"
                             : ";"
-                    }`
+                    }`,
+                    transformFn: transformPoint(scale, type)(value),
+                    onClickFn() {
+                        dataPointActionHandler(
+                            config,
+                            value,
+                            index,
+                            this.parentNode.parentNode
+                        );
+                    },
+                    a11yAttributes: {
+                        "aria-describedby": getValue(value, type).key
+                    }
+                })
             )
-            .attr("aria-describedby", (value) => getValue(value, type).key)
-            .on("click", function() {
-                dataPointActionHandler(
-                    config,
-                    value,
-                    index,
-                    this.parentNode.parentNode
-                );
-            });
+        );
     canvasSVG.each(function(value, index) {
         const boxPath = d3.select(this);
         iterateOnPairType((type) => {
@@ -316,7 +321,7 @@ const drawPoints = (scale, config, canvasSVG) => {
                         index
                     );
                 }
-                getDataPointPath(pointGroup.append("path"), type, value, index);
+                getDataPointPath(pointGroup, type, value, index);
             }
         });
     });
@@ -341,50 +346,49 @@ const drawCriticalityPoints = (
     value,
     index
 ) => {
-    const renderPoint = (path, type, value, index, cls, scaleFactor) =>
-        path
-            .append("path")
-            .classed(styles.pairedPoint, true)
-            .classed(getValue(styles, type), true)
-            .classed(cls, true)
-            .attr(
-                "d",
-                new Shape(getShape(getValue(value, type))).getPathDescription()
+    const renderPoint = (path, type, value, index, cls) =>
+        path.append(() =>
+            new Shape(getShapeForTarget(getValue(value, type))).getShapeElement(
+                getDefaultSVGProps({
+                    svgClassNames: `${cls}`,
+                    svgStyles: `${
+                        config.shownTargets.indexOf(getValue(value, type).key) <
+                        0
+                            ? "display: none;"
+                            : ""
+                    }`,
+                    transformFn: transformPoint(scale, type)(value),
+                    onClickFn() {
+                        dataPointActionHandler(
+                            config,
+                            value,
+                            index,
+                            this.parentNode.parentNode
+                        );
+                    },
+                    a11yAttributes: {
+                        "aria-describedby": getValue(value, type).key
+                    }
+                })
             )
-            .attr("transform", transformPoint(scale, type, scaleFactor))
-            .attr(
-                "style",
-                `${
-                    config.shownTargets.indexOf(getValue(value, type).key) < 0
-                        ? "display: none;"
-                        : ""
-                }`
-            )
-            .attr("aria-hidden", false)
-            .attr("aria-describedby", getValue(value, type).key)
-            .on("click", function() {
-                dataPointActionHandler(
-                    config,
-                    value,
-                    index,
-                    this.parentNode.parentNode
-                );
-            });
+        );
     renderPoint(
         pointGroup,
         type,
         value,
         index,
-        styles.criticalityOuterPoint,
-        constants.DEFAULT_CRITICAL_OUTER_PLOT_SCALE
+        `${styles.pairedPoint} ${getValue(styles, type)} ${
+            styles.criticalityOuterPoint
+        }`
     );
     renderPoint(
         pointGroup,
         type,
         value,
         index,
-        styles.criticalityInnerPoint,
-        constants.DEFAULT_CRITICAL_INNER_PLOT_SCALE
+        `${styles.pairedPoint} ${getValue(styles, type)} ${
+            styles.criticalityInnerPoint
+        }`
     );
 };
 /**
@@ -475,6 +479,9 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
     canvasSVG
         .selectAll(`path[aria-describedby="${item.key}"]`)
         .attr("aria-hidden", true);
+    canvasSVG
+        .selectAll(`.${styles.pairedPoint}[aria-describedby="${item.key}"]`)
+        .attr("aria-hidden", true);
     window.requestAnimationFrame(
         onAnimationHandler(graphContext, control, config, canvasSVG, item)
     );
@@ -509,6 +516,10 @@ const hoverHandler = (config, canvasSVG) => (item, state) => {
     canvasSVG
         .selectAll(`path[aria-describedby="${item.key}"]`)
         .classed(styles.highlight, state === constants.HOVER_EVENT.MOUSE_ENTER);
+    canvasSVG
+        .selectAll(`.${styles.pairedPoint}[aria-describedby="${item.key}"]`)
+        .classed(styles.highlight, state === constants.HOVER_EVENT.MOUSE_ENTER);
+
     // Highlight region(s) of the item hovered on, only if the graph is currently displayed
     regionLegendHoverHandler(config.shownTargets, canvasSVG, item.key, state);
 };
@@ -609,6 +620,7 @@ const clear = (canvasSVG, dataTarget) =>
     d3RemoveElement(canvasSVG, `g[aria-describedby="${dataTarget.key}"]`);
 
 export {
+    getSVGObject,
     translatePoints,
     translateLines,
     createLine,

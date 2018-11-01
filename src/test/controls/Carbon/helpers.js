@@ -8,7 +8,7 @@ export const LIBRARY_LIST = [
     "timeline",
     "bar"
 ];
-export const TOOLS_LIST = ["shape"];
+export const TOOLS_LIST = ["shape", "defaultSVGProps"];
 export const nativeInput = {
     bindTo: "#testGraph_carbon",
     axis: {

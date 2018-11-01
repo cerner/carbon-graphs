@@ -146,7 +146,7 @@ describe("Gantt -> Track -> Action", () => {
             const actionData = d3DataPointElement.datum();
             expect(actionData.key).toBe(legendJSON[0].key);
             expect(actionData.onClick).toEqual(jasmine.any(Function));
-            expect(actionData.shape).toBe(SHAPES.CIRCLE);
+            expect(actionData.shape).toEqual(SHAPES.CIRCLE);
             expect(actionData.color).toBe(COLORS.BLUE);
             expect(actionData.label.display).toBe(legendJSON[0].label.display);
             expect(actionData.y).toBe("Project A");
@@ -167,14 +167,18 @@ describe("Gantt -> Track -> Action", () => {
         it("Renders data points correctly", () => {
             loadData(gantt);
             const pointElement = fetchElementByClass(styles.point);
-            expect(pointElement.nodeName).toBe("path");
-            expect(pointElement.getAttribute("class")).toBe(styles.point);
-            expect(pointElement.getAttribute("d")).not.toBeNull();
+            expect(pointElement.nodeName).toBe("svg");
+            expect(pointElement.classList).toContain(styles.svgIcon);
+            expect(pointElement.classList).toContain(styles.point);
             expect(pointElement.getAttribute("style")).toContain(COLORS.BLUE);
             expect(pointElement.getAttribute("aria-describedby")).toBe(
                 "uid_action_1"
             );
             expect(pointElement.getAttribute("aria-hidden")).toBe("false");
+            expect(pointElement.firstChild.getAttribute("d")).not.toBeNull();
+            expect(pointElement.firstChild.getAttribute("d")).toBe(
+                SHAPES.CIRCLE.path.d
+            );
         });
         it("Renders multiple data sets correctly", () => {
             gantt.loadContent(
@@ -201,9 +205,17 @@ describe("Gantt -> Track -> Action", () => {
             expect(pointElements[1].getAttribute("aria-describedby")).toBe(
                 "uid_action_2"
             );
-            expect(pointElements[0].getAttribute("transform")).not.toBe(
-                pointElements[1].getAttribute("transform")
-            );
+            expect(pointElements[0].getAttribute("aria-hidden")).toBe("false");
+            expect(pointElements[1].getAttribute("aria-hidden")).toBe("false");
+            expect(
+                pointElements[0].firstChild.getAttribute("transform")
+            ).not.toBeNull();
+            expect(
+                pointElements[1].firstChild.getAttribute("transform")
+            ).not.toBeNull();
+            expect(
+                pointElements[0].firstChild.getAttribute("transform")
+            ).not.toBe(pointElements[1].firstChild.getAttribute("transform"));
         });
         it("Renders data points in different tracks correctly", () => {
             gantt.loadContent(
@@ -237,20 +249,32 @@ describe("Gantt -> Track -> Action", () => {
             expect(pointElements[1].getAttribute("aria-describedby")).toBe(
                 "uid_action_2"
             );
-            expect(pointElements[0].getAttribute("transform")).not.toBe(
-                pointElements[1].getAttribute("transform")
-            );
+            expect(
+                pointElements[0].firstChild.getAttribute("transform")
+            ).not.toBe(pointElements[1].firstChild.getAttribute("transform"));
+            expect(
+                pointElements[0].firstChild.getAttribute("transform")
+            ).not.toBeNull();
+            expect(
+                pointElements[1].firstChild.getAttribute("transform")
+            ).not.toBeNull();
         });
         it("Renders selection data points correctly", () => {
             loadData(gantt);
             const selectionPointElement = fetchElementByClass(
                 styles.dataPointSelection
             );
-            expect(selectionPointElement.nodeName).toBe("circle");
-            expect(selectionPointElement.getAttribute("class")).toBe(
+            expect(selectionPointElement.tagName).toBe("svg");
+            expect(selectionPointElement.firstChild.nodeName).toBe("path");
+            expect(selectionPointElement.firstChild.getAttribute("id")).toBe(
+                "circle"
+            );
+            expect(selectionPointElement.firstChild.getAttribute("d")).toBe(
+                SHAPES.CIRCLE.path.d
+            );
+            expect(selectionPointElement.classList).toContain(
                 styles.dataPointSelection
             );
-            expect(selectionPointElement.getAttribute("d")).not.toBeNull();
             expect(selectionPointElement.getAttribute("aria-describedby")).toBe(
                 "uid_action_1"
             );
@@ -278,10 +302,27 @@ describe("Gantt -> Track -> Action", () => {
             });
             gantt = new Gantt(axisData);
             loadData(gantt);
-            const pointElement = fetchElementByClass(styles.point);
-            expect(pointElement.nodeName).toBe("path");
-            expect(pointElement.getAttribute("class")).toBe(styles.point);
-            expect(pointElement.getAttribute("style")).toContain(COLORS.BLACK);
+            const pointElements = document.querySelectorAll(`.${styles.point}`);
+            const firstPointElement = pointElements[0];
+            const secondPointElement = pointElements[1];
+            expect(firstPointElement.nodeName).toBe("svg");
+            expect(firstPointElement.classList).toContain(styles.svgIcon);
+            expect(firstPointElement.classList).toContain(styles.point);
+            expect(firstPointElement.getAttribute("style")).toContain(
+                COLORS.BLACK
+            );
+            expect(firstPointElement.firstChild.getAttribute("d")).toBe(
+                SHAPES.CIRCLE.path.d
+            );
+            expect(secondPointElement.nodeName).toBe("svg");
+            expect(firstPointElement.classList).toContain(styles.svgIcon);
+            expect(firstPointElement.classList).toContain(styles.point);
+            expect(secondPointElement.getAttribute("style")).toContain(
+                COLORS.BLACK
+            );
+            expect(secondPointElement.firstChild.getAttribute("d")).toBe(
+                SHAPES.CIRCLE.path.d
+            );
         });
         describe("When clicked on a data point", () => {
             it("Does not do anything if no onClick callback is provided", (done) => {
@@ -589,8 +630,9 @@ describe("Gantt -> Track -> Action", () => {
             loadData(gantt);
         });
         it("Translates points correctly", (done) => {
-            const pointElement = fetchElementByClass(styles.point);
-            const currentPointPos = getTranslate(pointElement);
+            const currentPointPos = getTranslate(
+                fetchElementByClass(styles.point).firstChild
+            );
             ganttChartContainer.setAttribute(
                 "style",
                 "width: 800px; height: 400px;"
@@ -600,16 +642,24 @@ describe("Gantt -> Track -> Action", () => {
                 "resize",
                 () => {
                     expect(
-                        getTranslate(fetchElementByClass(styles.point))[0]
+                        getTranslate(
+                            fetchElementByClass(styles.point).firstChild
+                        )[0]
                     ).not.toEqual(currentPointPos[0]);
+                    expect(
+                        getTranslate(
+                            fetchElementByClass(styles.point).firstChild
+                        )[1]
+                    ).not.toEqual(currentPointPos[1]);
                     done();
                 },
                 TRANSITION_DELAY
             );
         });
         it("Translates selection points correctly", (done) => {
-            const pointElement = fetchElementByClass(styles.dataPointSelection);
-            const currentPointPos = getTranslate(pointElement);
+            const currentPointPos = getTranslate(
+                fetchElementByClass(styles.dataPointSelection).firstChild
+            );
             ganttChartContainer.setAttribute(
                 "style",
                 "width: 800px; height: 400px;"
@@ -621,8 +671,15 @@ describe("Gantt -> Track -> Action", () => {
                     expect(
                         getTranslate(
                             fetchElementByClass(styles.dataPointSelection)
+                                .firstChild
                         )[0]
                     ).not.toEqual(currentPointPos[0]);
+                    expect(
+                        getTranslate(
+                            fetchElementByClass(styles.dataPointSelection)
+                                .firstChild
+                        )[1]
+                    ).not.toEqual(currentPointPos[1]);
                     done();
                 },
                 TRANSITION_DELAY
@@ -719,22 +776,25 @@ describe("Gantt -> Track -> Action", () => {
                 fetchElementByClass(styles.legendItem),
                 "mouseenter",
                 () => {
-                    const pointElement = fetchElementByClass(styles.point);
-                    const secondaryPointElement = document.querySelectorAll(
+                    const pointElements = document.querySelectorAll(
                         `.${styles.point}`
-                    )[1];
-                    expect(pointElement.getAttribute("class")).toBe(
-                        styles.point
                     );
+                    const pointElement = pointElements[0];
+                    const secondaryPointElement = pointElements[1];
                     expect(pointElement.getAttribute("aria-describedby")).toBe(
                         "uid_action_1"
                     );
-                    expect(secondaryPointElement.classList.toString()).toBe(
-                        `${styles.point} ${styles.blur}`
-                    );
+                    expect(pointElement.classList).toContain(styles.point);
+                    expect(pointElement.classList).not.toContain(styles.blur);
                     expect(
                         secondaryPointElement.getAttribute("aria-describedby")
                     ).toBe("uid_action_2");
+                    expect(secondaryPointElement.classList).toContain(
+                        styles.point
+                    );
+                    expect(secondaryPointElement.classList).toContain(
+                        styles.blur
+                    );
                     done();
                 },
                 TRANSITION_DELAY

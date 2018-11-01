@@ -10,7 +10,8 @@ import LOCALE from "./locale";
  * @enum {{Object: Function}}
  */
 const tools = {
-    shape: (...args) => new Shape(...args)
+    shape: (...args) => new Shape(...args),
+    defaultSVGProps: (args) => Shape.getDefaultSVGProps(args)
 };
 /**
  * Carbon helper constants

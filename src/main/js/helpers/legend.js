@@ -8,9 +8,10 @@ import d3 from "d3";
 import {
     d3RemoveElement,
     getColorForTarget,
-    getShape
+    getShapeForTarget
 } from "../controls/Graph/helpers/helpers";
 import { Shape } from "../core";
+import { getDefaultSVGProps } from "../core/Shape";
 import constants from "../helpers/constants";
 import styles from "../helpers/styles";
 import utils from "../helpers/utils";
@@ -63,16 +64,19 @@ const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
                 eventHandlers.hoverHandler(t, constants.HOVER_EVENT.MOUSE_EXIT)
             );
     }
-    const buttonPath = itemPath
+    itemPath
         .append("button")
         .classed(styles.legendItemBtn, true)
-        .attr("tabindex", 0);
-    buttonPath.node().appendChild(
-        new Shape(getShape(t)).getShapeElement({
-            svgClassNames: styles.legendItemIcon,
-            pathStyles: `fill: ${getColorForTarget(t)}`
-        })
-    );
+        .attr("tabindex", 0)
+        .append(() =>
+            new Shape(getShapeForTarget(t)).getShapeElement(
+                getDefaultSVGProps({
+                    svgClassNames: styles.legendItemIcon,
+                    svgStyles: `fill: ${getColorForTarget(t)}`
+                }),
+                true
+            )
+        );
     itemPath
         .append("label")
         .classed(styles.legendItemText, true)
@@ -136,6 +140,14 @@ const legendHoverHandler = (
 ) => {
     // Blur everything except the item hovered
     shownTargets.filter((target) => target !== key).forEach((k) => {
+        // All Points
+        canvasSVG
+            .selectAll(`svg[aria-describedby="${k}"]`)
+            .classed(
+                styles.blur,
+                hoverState === constants.HOVER_EVENT.MOUSE_ENTER
+            );
+        // All Lines
         canvasSVG
             .selectAll(`path[aria-describedby="${k}"]`)
             .classed(

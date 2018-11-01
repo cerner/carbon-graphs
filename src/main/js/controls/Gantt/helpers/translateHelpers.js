@@ -248,7 +248,6 @@ const translateContentContainer = (config, canvasSVG) =>
         .transition(constants.d3Transition)
         .attr("width", getXAxisWidth(config))
         .attr("height", getYAxisHeight(config));
-
 /**
  * Translates the dateline, based on each content loaded.
  * When a new content is loaded, the height of the graph changes
@@ -270,18 +269,19 @@ const translateDateline = (scale, config, canvasSVG) => {
         .attr(
             "transform",
             `translate(${getXAxisXPosition(config)},${getXAxisYPosition()})`
-        )
-        .attr("style", (val) => `fill: ${val.color}; stroke: ${val.color}; `);
+        );
     datelineGroup
         .selectAll(`.${styles.ganttDatelinePoint}`)
+        .select("path")
         .attr(
             "transform",
-            (val) => `translate(${scale.x(utils.parseDateTime(val.value))}, 0)`
-        )
-        .attr("style", (val) => `fill: ${val.color}; stroke: ${val.color}; `);
+            (val) =>
+                `translate(${scale.x(
+                    utils.parseDateTime(val.value)
+                )}, 0) scale(${constants.DEFAULT_PLOT_SCALE})`
+        );
     datelineGroup
         .selectAll(`.${styles.ganttDateline}`)
-        .attr("style", (val) => `fill: ${val.color}; stroke: ${val.color}; `)
         .attr("x1", (val) => scale.x(utils.parseDateTime(val.value)))
         .attr("y1", 0)
         .attr("x2", (val) => scale.x(utils.parseDateTime(val.value)))
@@ -309,14 +309,9 @@ const translateLabelText = (scale, config, canvasSVG) =>
  * @private
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} config - config object derived from input JSON
- * @param {Array<number>|number} [scaleFactor] - amount of transform needs to be done for scaling an svg
  * @returns {Function} - translate string for d3 transform function
  */
-const transformPoint = (
-    scale,
-    config,
-    scaleFactor = constants.DEFAULT_PLOT_SCALE
-) => (value) =>
+const transformPoint = (scale, config) => (value) => (scaleFactor) =>
     `translate(${getTransformXCoordinate(
         scale,
         value.x
@@ -335,16 +330,18 @@ const transformPoint = (
  * @returns {Object} d3 select object
  */
 const translatePoints = (scale, config, trackPath, style) =>
-    trackPath
-        .selectAll(style)
-        .transition(constants.d3Transition)
-        .attr("transform", function(value) {
-            return transformPoint(
-                scale,
-                config,
-                getTransformScale(this)
-            )(value);
-        });
+    trackPath.selectAll(style).each(function(d) {
+        const pointSVG = d3.select(this);
+        pointSVG
+            .selectAll("path")
+            .transition(constants.d3Transition)
+            .attr("transform", function() {
+                return transformPoint(
+                    scale,
+                    config
+                )(d)(getTransformScale(this));
+            });
+    });
 /**
  * Translates graph based on the current positioning on resize. We
  * don't need to resize the entire graph, in our case we just need to transform:

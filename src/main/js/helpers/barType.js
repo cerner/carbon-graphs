@@ -105,7 +105,7 @@ const getPercentageBar = (path, x, y, width, height, percent, color) => {
         .classed(styles.taskBar, true)
         .attr(
             "style",
-            `fill: ${COLORS.WHITE}; stroke: ${color}; stroke-width: 1px;`
+            `fill: ${COLORS.WHITE}; stroke: ${color}; stroke-width: 1;`
         );
     getRect(path, x, y, percent, height)
         .classed(styles.taskBarCompletion, true)

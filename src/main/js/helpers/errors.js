@@ -25,7 +25,10 @@ export default {
     /**
      * @description Shapes
      */
-    THROW_MSG_UNKNOWN_SHAPE: "Unknown shape type provided for data point.",
+    THROW_MSG_SHAPE_PATH_EMPTY: "Shape Path property cannot be empty.",
+    THROW_MSG_SHAPE_OPTIONS_EMPTY: "Shape Options property cannot be empty.",
+    THROW_MSG_SHAPE_OPTIONS_PROPERTY_INVALID:
+        "Invalid Shape Options property attributes (x, y, scale).",
     /**
      * @description Graph
      */

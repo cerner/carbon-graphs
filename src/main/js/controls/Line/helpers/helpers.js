@@ -5,6 +5,7 @@ import {
     getInterpolationType,
     parseTypedValue
 } from "../../../core/BaseConfig";
+import { getDefaultSVGProps } from "../../../core/Shape";
 import { getXAxisXPosition, isValidAxisType } from "../../../helpers/axis";
 import constants, { SHAPES } from "../../../helpers/constants";
 import errors from "../../../helpers/errors";
@@ -17,12 +18,13 @@ import {
     processRegions,
     regionLegendHoverHandler
 } from "../../../helpers/region";
+import { getSVGObject } from "../../../helpers/shapeSVG";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 import {
     d3RemoveElement,
     getColorForTarget,
-    getShape,
+    getShapeForTarget,
     getTransformScale
 } from "../../Graph/helpers/helpers";
 
@@ -48,12 +50,9 @@ const createLine = (scale, d) => {
  * Transforms the point in the Line graph on resize
  * @private
  * @param {Object} scale - d3 scale for Graph
- * @param {Array<number>|number} [scaleFactor] - amount of transform needs to be done for scaling an svg
- * @returns {string} - translate string for d3 transform
+ * @returns {Function} - translate function for d3 transform
  */
-const transformPoint = (scale, scaleFactor = constants.DEFAULT_PLOT_SCALE) => (
-    value
-) => {
+const transformPoint = (scale) => (value) => (scaleFactor) => {
     const getX = (val) => scale.x(val.x);
     const getY = (val) => scale[val.yAxis](val.y);
     return `translate(${getX(value)},${getY(value)}) scale(${scaleFactor})`;
@@ -76,28 +75,20 @@ const translateLines = (scale, canvasSVG) =>
  * @private
  * @param {Object} scale - d3 scale for Graph
  * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {string} cls - selector for the data point translation
  * @returns {Object} d3 select object
  */
-const translatePoints = (scale, canvasSVG) =>
+const translatePoints = (scale, canvasSVG, cls) =>
     canvasSVG
-        .selectAll(`.${styles.lineGraphContent} .${styles.point}`)
-        .transition(constants.d3Transition)
-        .attr("transform", function(value) {
-            return transformPoint(scale, getTransformScale(this))(value);
-        });
-/**
- * Transforms selected data point element for a data point in the Line graph on resize
- * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Array} canvasSVG - d3 object of canvas svg
- * @returns {Object} d3 select object
- */
-const translateSelectedPoint = (scale, canvasSVG) =>
-    canvasSVG
-        .selectAll(`.${styles.lineGraphContent} .${styles.dataPointSelection}`)
-        .transition(constants.d3Transition)
-        .attr("transform", function(value) {
-            return transformPoint(scale, getTransformScale(this))(value);
+        .selectAll(`.${styles.lineGraphContent} .${cls}`)
+        .each(function(d) {
+            const pointSVG = d3.select(this);
+            pointSVG
+                .selectAll("path")
+                .transition(constants.d3Transition)
+                .attr("transform", function() {
+                    return transformPoint(scale)(d)(getTransformScale(this));
+                });
         });
 /**
  * Toggles the selection of a data point, executes on click of a data point.
@@ -160,8 +151,8 @@ const dataPointActionHandler = (value, index, target) => {
  */
 const translateLineGraph = (scale, canvasSVG) => {
     translateLines(scale, canvasSVG);
-    translatePoints(scale, canvasSVG);
-    translateSelectedPoint(scale, canvasSVG);
+    translatePoints(scale, canvasSVG, styles.point);
+    translatePoints(scale, canvasSVG, styles.dataPointSelection);
 };
 /**
  * Draws the Line graph on the canvas element. This calls the Graph API to render the following first
@@ -216,7 +207,6 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
             .exit()
             .transition(constants.d3Transition)
             .remove();
-
         const pointPath = lineSVG
             .select(`.${styles.currentPointsGroup}`)
             .selectAll(`.${styles.point}`)
@@ -317,87 +307,93 @@ const drawDataLines = (scale, config, lineGroupSVG) =>
  */
 const drawDataPoints = (scale, config, pointGroupPath) => {
     const renderDataPointPath = (path, value, index) =>
-        path
-            .classed(styles.point, true)
-            .attr("d", new Shape(getShape(value)).getPathDescription())
-            .attr("transform", transformPoint(scale))
-            .attr(
-                "style",
-                `fill: ${getColorForTarget(value)}${
-                    shouldHideDataPoints(config.shownTargets, value)
-                        ? "; display: none;"
-                        : ";"
-                }`
+        path.append(() =>
+            new Shape(getShapeForTarget(value)).getShapeElement(
+                getDefaultSVGProps({
+                    svgClassNames: styles.point,
+                    svgStyles: `fill: ${getColorForTarget(value)}${
+                        shouldHideDataPoints(config.shownTargets, value)
+                            ? "; display: none;"
+                            : ";"
+                    }`,
+                    transformFn: transformPoint(scale)(value),
+                    onClickFn() {
+                        dataPointActionHandler(value, index, this);
+                    },
+                    a11yAttributes: {
+                        "aria-describedby": value.key
+                    }
+                })
             )
-            .attr("aria-describedby", value.key)
-            .on("click", function() {
-                dataPointActionHandler(value, index, this);
-            });
+        );
     const renderSelectionPath = (path, value, index) =>
-        path
-            .classed(styles.dataPointSelection, true)
-            .attr("d", new Shape(getShape(value)).getPathDescription())
-            .attr("transform", transformPoint(scale))
-            .attr("r", constants.DEFAULT_SELECTED_RADIUS)
-            .attr(
-                "style",
-                `${
-                    shouldHideDataPoints(config.shownTargets, value)
-                        ? "display: none;"
-                        : ""
-                }`
+        path.append(() =>
+            new Shape(
+                getSVGObject(
+                    SHAPES.CIRCLE,
+                    constants.DEFAULT_PLOT_SELECTION_SCALE
+                )
+            ).getShapeElement(
+                getDefaultSVGProps({
+                    svgClassNames: styles.dataPointSelection,
+                    svgStyles: `${
+                        shouldHideDataPoints(config.shownTargets, value)
+                            ? "display: none;"
+                            : ""
+                    }`,
+                    transformFn: transformPoint(scale)(value),
+                    onClickFn() {
+                        dataPointActionHandler(value, index, this);
+                    },
+                    a11yAttributes: {
+                        "aria-hidden": true,
+                        "aria-describedby": value.key
+                    }
+                })
             )
-            .attr("aria-hidden", true)
-            .attr("aria-describedby", value.key)
-            .on("click", function() {
-                dataPointActionHandler(value, index, this);
-            });
-    const renderCriticalityPath = (path, value, index, cls, scaleFactor) =>
-        path
-            .classed(styles.point, true)
-            .classed(cls, true)
-            .attr("d", new Shape(getShape(value)).getPathDescription())
-            .attr("transform", transformPoint(scale, scaleFactor))
-            .attr(
-                "style",
-                `${
-                    shouldHideDataPoints(config.shownTargets, value)
-                        ? "display: none;"
-                        : ""
-                }`
+        );
+    const renderCriticalityPath = (path, value, index, cls) =>
+        path.append(() =>
+            new Shape(getShapeForTarget(value)).getShapeElement(
+                getDefaultSVGProps({
+                    svgClassNames: `${styles.point} ${cls}`,
+                    svgStyles: `${
+                        shouldHideDataPoints(config.shownTargets, value)
+                            ? "display: none;"
+                            : ""
+                    }`,
+                    transformFn: transformPoint(scale)(value),
+                    onClickFn() {
+                        dataPointActionHandler(value, index, this);
+                    },
+                    a11yAttributes: {
+                        "aria-describedby": value.key
+                    }
+                })
             )
-            .attr("aria-describedby", value.key)
-            .on("click", function() {
-                dataPointActionHandler(value, index, this);
-            });
+        );
     pointGroupPath
         .append("g")
         .classed(styles.pointGroup, true)
         .each(function(d, i) {
             const dataPointSVG = d3.select(this);
-            renderSelectionPath(
-                dataPointSVG.append(constants.DEFAULT_SHAPE),
-                d,
-                i
-            );
+            renderSelectionPath(dataPointSVG, d, i);
             if (d.isCritical) {
                 config.hasCriticality = true;
                 renderCriticalityPath(
-                    dataPointSVG.append("path"),
+                    dataPointSVG,
                     d,
                     i,
-                    styles.criticalityOuterPoint,
-                    constants.DEFAULT_CRITICAL_OUTER_PLOT_SCALE
+                    styles.criticalityOuterPoint
                 );
                 renderCriticalityPath(
-                    dataPointSVG.append("path"),
+                    dataPointSVG,
                     d,
                     i,
-                    styles.criticalityInnerPoint,
-                    constants.DEFAULT_CRITICAL_INNER_PLOT_SCALE
+                    styles.criticalityInnerPoint
                 );
             }
-            renderDataPointPath(dataPointSVG.append("path"), d, i);
+            renderDataPointPath(dataPointSVG, d, i);
         });
 };
 /**
@@ -476,6 +472,10 @@ const hoverHandler = (graphTargets, canvasSVG) => (item, state) => {
     canvasSVG
         .selectAll(`path[aria-describedby="${item.key}"]`)
         .classed(styles.highlight, state === constants.HOVER_EVENT.MOUSE_ENTER);
+    canvasSVG
+        .selectAll(`svg[aria-describedby="${item.key}"]`)
+        .classed(styles.highlight, state === constants.HOVER_EVENT.MOUSE_ENTER);
+
     // Highlight region(s) of the item hovered on, only if the content is currently displayed
     regionLegendHoverHandler(graphTargets, canvasSVG, item.key, state);
 };
@@ -513,7 +513,6 @@ const clear = (canvasSVG, dataTarget) =>
 
 export {
     toggleDataPointSelection,
-    translateSelectedPoint,
     translatePoints,
     translateLines,
     translateLineGraph,

@@ -1,54 +1,151 @@
 "use strict";
 import d3 from "d3";
-import constants, { SHAPES } from "../../helpers/constants";
+import constants from "../../helpers/constants";
 import errors from "../../helpers/errors";
 import styles from "../../helpers/styles";
+import utils from "../../helpers/utils";
 
 /**
- * Checks if the shape is an inbuilt shape
- * @private
- * @param {string} shape - shape to display in the point
- * @returns {boolean} true if inbuilt shape
+ * Creates a skeleton for SVG props used to generate nested SVG
+ * @public
+ * @param {Object} [SVGProps] - SVG default props
+ * @property {string} svgClassNames - SVG class name
+ * @property {string} svgStyles - SVG styles
+ * @property {Function} transformFn - Function callback for translating SVG
+ * @property {Function} onClickFn - Function callback for onclick event
+ * @property {Object} a11yAttributes - a11y attributes for SVG
+ * @returns {Object} Object containing custom named SVG properties
  */
-export const isD3InbuiltShape = (shape) => shape in constants.D3_INBUILT_SHAPE;
+export const getDefaultSVGProps = ({
+    svgClassNames = "",
+    svgStyles = "",
+    transformFn = () => {},
+    onClickFn = () => {},
+    a11yAttributes = {}
+} = {}) => ({
+    svgClassNames,
+    svgStyles,
+    transformFn,
+    onClickFn,
+    a11yAttributes
+});
 /**
- * Checks if the shape is an custom shape
+ * Creates an element with SVG specs. SVG or path
  * @private
- * @param {string} shape - shape to display in the point
- * @returns {boolean} true if custom shape
+ * @param {string} tag - svg or path
+ * @returns {HTMLElement} an SVG or path element
  */
-export const isNativeShape = (shape) => shape in constants.CUSTOM_SHAPE_PATH;
-
+const createElementNS = (tag) =>
+    document.createElementNS(d3.ns.prefix.svg, tag);
 /**
- * Checks if the shape is a d3 inbuilt shape or one of the Carbon custom shapes.
+ * Validates a shape for basic structure
  * @private
- * @param {string} shape - shape to display in the point
- * @returns {boolean} true if inbuilt or custom shape, false otherwise
+ * @throws {module:errors.THROW_MSG_SHAPE_PATH_EMPTY}
+ * @throws {module:errors.THROW_MSG_SHAPE_OPTIONS_EMPTY}
+ * @throws {module:errors.THROW_MSG_SHAPE_OPTIONS_PROPERTY_INVALID}
+ * @param {string} shape -  Path object of the shape
+ * @returns {undefined} - returns nothing
  */
-export const isValidCarbonShape = (shape) =>
-    isD3InbuiltShape(shape) || isNativeShape(shape);
-
+const validateShape = (shape) => {
+    if (utils.isEmpty(shape.path)) {
+        throw new Error(errors.THROW_MSG_SHAPE_PATH_EMPTY);
+    }
+    if (utils.isEmpty(shape.options)) {
+        throw new Error(errors.THROW_MSG_SHAPE_OPTIONS_EMPTY);
+    }
+    if (
+        utils.isEmpty(shape.options.x) ||
+        utils.isEmpty(shape.options.y) ||
+        utils.isEmpty(shape.options.scale)
+    ) {
+        throw new Error(errors.THROW_MSG_SHAPE_OPTIONS_PROPERTY_INVALID);
+    }
+};
+/**
+ * Returns svg path element with path description ('d' attr)
+ * @private
+ * @param {Selection} d3Elem - d3 SVG element
+ * @param {string|array} shapePath - Path object of the shape
+ * @param {Function} transformFn - Function to transform individual paths within SVG
+ * @param {number} scale - transform scale for the path
+ * @returns {Selection} A svg path element
+ */
+const setPathProperty = (
+    d3Elem,
+    shapePath,
+    transformFn,
+    scale = constants.DEFAULT_PLOT_SCALE
+) => {
+    const getD3PathElement = (path) =>
+        d3
+            .select(createElementNS("path"))
+            .attr("transform", transformFn(scale))
+            .attr("id", path.id || "")
+            .attr("fill", path.fill || "")
+            .attr("class", path.class || "")
+            .attr("d", path.d || "");
+    (utils.isArray(shapePath) ? shapePath : [shapePath]).forEach((p) =>
+        d3Elem.append(() => getD3PathElement(p).node())
+    );
+    return d3Elem;
+};
+/**
+ * Sets aria properties to the d3 element
+ * @private
+ * @param {string} props - ARIA properties for SVG
+ * @returns {Function} d3Elem - d3 SVG element
+ */
+const setA11yProperties = (...props) => (d3Elem, a11yAttributes) =>
+    props.forEach(
+        (prop) =>
+            Object.prototype.hasOwnProperty.call(a11yAttributes, prop)
+                ? d3Elem.attr(prop, a11yAttributes[prop])
+                : undefined
+    );
+/**
+ * Sets viewBox to the element
+ * @private
+ * @param {Selection} d3Elem - d3 SVG element
+ * @returns {Selection} d3Elem - d3 SVG element
+ */
+const setViewBoxProperty = (d3Elem) =>
+    d3Elem.attr("viewBox", constants.VIEW_BOX_SIZE);
 /**
  * Returns the SVG element container within which a path element is stored.
  * viewBox sizing is "0 0 48 48"
  * Default icon width and height is 1rem
  * @private
- * @param {HTMLElement} pathElement -  Path element containing the "icon" as a description
- * @param {string} classNames - SVG element class attribute loaded by the consumer
- * @param {string} style - Style that can be applied to the svg element
+ * @param {string} shape -  Path object of the shape
+ * @param {string} svgElementProps -  SVG element props
+ * @param {boolean} [includeViewBox] -  Include viewBox in the SVG element or otherwise. False by default
  * @returns {HTMLElement} Returns the SVG element with the "icon" path
  */
-const getSVGElement = (pathElement, { classNames, style }) => {
-    const svgElement = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "svg"
+const createSVG = (
+    shape,
+    { svgClassNames, svgStyles, transformFn, onClickFn, a11yAttributes },
+    includeViewBox = false
+) => {
+    const d3SVGElement = d3
+        .select(createElementNS("svg"))
+        .attr("x", shape.options.x)
+        .attr("y", shape.options.y)
+        .attr("style", svgStyles)
+        .attr("class", `${styles.svgIcon} ${svgClassNames}`)
+        .attr("role", "img")
+        .on("click", onClickFn);
+    if (includeViewBox) {
+        setViewBoxProperty(d3SVGElement);
+    }
+    // Set a11y attributes to svg element
+    setA11yProperties("aria-describedby", "aria-hidden", "aria-selected")(
+        d3SVGElement,
+        a11yAttributes
     );
-    svgElement.setAttribute("viewBox", constants.VIEW_BOX_SIZE);
-    svgElement.setAttribute("style", style);
-    svgElement.setAttribute("class", `${styles.svgIcon} ${classNames}`);
-    svgElement.setAttribute("role", "img");
-    svgElement.appendChild(pathElement);
-    return svgElement;
+
+    // Process the shape and generate paths, if the shape has more than one path
+    setPathProperty(d3SVGElement, shape.path, transformFn, shape.options.scale);
+
+    return d3SVGElement.node();
 };
 
 /**
@@ -57,85 +154,28 @@ const getSVGElement = (pathElement, { classNames, style }) => {
  * @class Shape
  */
 class Shape {
-    constructor(shape = SHAPES.CIRCLE) {
+    constructor(shape) {
+        validateShape(shape);
         this.shape = shape;
-    }
-
-    /**
-     * Returns the path description (svg -> d attribute) for the shape.
-     * @throws {module:errors.THROW_MSG_UNKNOWN_SHAPE}
-     * @param {number} [size] - size of the shape. Used for d3 inbuilt shapes only.
-     * Custom shapes would need separate scaling
-     * @returns {string} Path description "d" value for the shape set in the Shape class
-     */
-    getPathDescription(size) {
-        const getCustomPath = (shape) => {
-            if (isNativeShape(shape)) {
-                return constants.CUSTOM_SHAPE_PATH[shape];
-            }
-            throw new Error(errors.THROW_MSG_UNKNOWN_SHAPE);
-        };
-        const getD3Shape = (shape) =>
-            d3.svg
-                .symbol()
-                .type(constants.D3_INBUILT_SHAPE[shape])
-                .size(size || constants.DEFAULT_PLOT_SIZE)();
-        return isD3InbuiltShape(this.shape)
-            ? getD3Shape(this.shape)
-            : getCustomPath(this.shape);
-    }
-
-    /**
-     * Returns svg path element with path description ('d' attr)
-     * @param {string} classNames - Path element class attribute loaded by the consumer
-     * @param {string} style - Style that can be applied to the path element
-     * @returns {HTMLElement} A svg path element
-     */
-    getPathElement({ classNames, style }) {
-        const shapeProp = constants.SHAPE_PROPS[this.shape];
-        const pathElement = document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "path"
-        );
-        pathElement.setAttribute("style", style);
-        pathElement.setAttribute("class", classNames);
-        pathElement.setAttribute("d", this.getPathDescription());
-        pathElement.setAttribute(
-            "transform",
-            `translate(${shapeProp.translate.join(",")}) scale(${
-                shapeProp.scale
-            })`
-        );
-        return pathElement;
     }
 
     /**
      * Returns the shape element. Shape element is an svg element containing a path element.
      * The consumer can customize the classNames and styles for the svg and path elements accordingly
      * using the function parameters.
-     * @param {string} svgClassNames - SVG element class attribute loaded by the consumer
-     * @param {string} svgStyles - Style that can be applied to the svg element
-     * @param {string} pathClassNames - Path element class attribute loaded by the consumer
-     * @param {string} pathStyles - Style that can be applied to the path element
+     * @public
+     * @param {Object} svgProps - SVG element attributes loaded by the consumer. This is required parameter for creating a non-generic svg
+     * @param {boolean} [includeViewBox] -  Include viewBox in the SVG element or otherwise. False by default
      * @returns {HTMLElement} an svg element
      */
-    getShapeElement({
-        svgClassNames = "",
-        svgStyles = "",
-        pathClassNames = "",
-        pathStyles = ""
-    }) {
-        return getSVGElement(
-            this.getPathElement({
-                classNames: pathClassNames,
-                style: pathStyles
-            }),
-            {
-                classNames: svgClassNames,
-                style: svgStyles
-            }
+    getShapeElement(svgProps, includeViewBox = false) {
+        return createSVG(
+            this.shape,
+            svgProps || getDefaultSVGProps(),
+            includeViewBox
         );
     }
 }
 
+Shape.getDefaultSVGProps = getDefaultSVGProps;
 export default Shape;

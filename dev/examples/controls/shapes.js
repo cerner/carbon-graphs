@@ -1,16 +1,21 @@
 import d3 from "d3";
 import Carbon from "../../../src/main/js/carbon";
-import { isNativeShape } from "../../../src/main/js/core/Shape";
 import { getBar, getHashedBar } from "../../../src/main/js/helpers/barType";
 import styles from "../../../src/main/js/helpers/styles";
+import utils from "../../../src/main/js/helpers/utils";
 import { getShapes } from "../data";
 import { h3, shell, vector } from "../helpers";
 
 const viewBoxSize = "0 0 1050 100";
-const transformPoint = (scaleFactor = 3) => (d, i) =>
-    `translate(${i * 100 + 20},${25}) scale(${
-        isNativeShape(d) ? scaleFactor : 1
-    })`;
+const transformPoint = (i) => (scaleFactor = 1) =>
+    `translate(${i * 100 + 20},${40}) scale(${scaleFactor})`;
+const constructSVGObject = (shape, { posX = 1, posY = 1, scale = 1 }) => {
+    const d3Shape = utils.deepClone(shape);
+    d3Shape.options.x = shape.options.x * posX;
+    d3Shape.options.y = shape.options.y * posY;
+    d3Shape.options.scale = d3Shape.options.scale * scale;
+    return d3Shape;
+};
 export const renderShapesSimple = (el, id, title) => {
     shell.render(el, id, title);
     vector.render(document.querySelector(`#${id}`), `${id}Items`, viewBoxSize);
@@ -19,9 +24,16 @@ export const renderShapesSimple = (el, id, title) => {
         .selectAll("path")
         .data(getShapes())
         .enter()
-        .append("path")
-        .attr("d", (d) => Carbon.tools.shape(d).getPathDescription(500))
-        .attr("transform", transformPoint());
+        .append((d, i) =>
+            Carbon.tools
+                .shape(constructSVGObject(Carbon.helpers.SHAPES[d], {}))
+                .getShapeElement(
+                    Carbon.tools.defaultSVGProps({
+                        svgClassNames: styles.point,
+                        transformFn: transformPoint(i)
+                    })
+                )
+        );
 };
 export const renderCriticalityShapes = (el, id, title) => {
     shell.render(el, id, title);
@@ -33,29 +45,35 @@ export const renderCriticalityShapes = (el, id, title) => {
         .data(getShapes())
         .enter()
         .append("g");
-    groupSVG
-        .append("path")
-        .classed(styles.criticalityOuterPoint, true)
-        .attr("d", (d) => Carbon.tools.shape(d).getPathDescription(24 * 25))
-        .attr("transform", transformPoint(3));
-    groupSVG
-        .append("path")
-        .classed(styles.criticalityInnerPoint, true)
-        .attr("d", (d) => Carbon.tools.shape(d).getPathDescription(15 * 25))
-        .attr("transform", transformPoint(2));
-    groupSVG
-        .append("path")
-        .attr("d", (d) => Carbon.tools.shape(d).getPathDescription(9 * 25))
-        .attr("transform", transformPoint(1.5));
-};
-export const renderShapesAsSVG = (el, id, title) => {
-    const section = shell.render(el, id, title);
-    getShapes().forEach((i) =>
-        section.appendChild(
-            Carbon.tools
-                .shape(i)
-                .getShapeElement({ svgClassNames: "svg-shape" })
-        )
+    groupSVG.append((d, i) =>
+        Carbon.tools
+            .shape(constructSVGObject(Carbon.helpers.SHAPES[d], {}))
+            .getShapeElement(
+                Carbon.tools.defaultSVGProps({
+                    svgClassNames: styles.criticalityOuterPoint,
+                    transformFn: transformPoint(i)
+                })
+            )
+    );
+    groupSVG.append((d, i) =>
+        Carbon.tools
+            .shape(constructSVGObject(Carbon.helpers.SHAPES[d], {}))
+            .getShapeElement(
+                Carbon.tools.defaultSVGProps({
+                    svgClassNames: styles.criticalityInnerPoint,
+                    transformFn: transformPoint(i)
+                })
+            )
+    );
+    groupSVG.append((d, i) =>
+        Carbon.tools
+            .shape(constructSVGObject(Carbon.helpers.SHAPES[d], {}))
+            .getShapeElement(
+                Carbon.tools.defaultSVGProps({
+                    svgClassNames: styles.point,
+                    transformFn: transformPoint(i)
+                })
+            )
     );
 };
 export const renderFillTypes = (el, id, title) => {

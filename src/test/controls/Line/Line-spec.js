@@ -1,9 +1,12 @@
 "use strict";
+import d3 from "d3";
 import sinon from "sinon";
 import Graph from "../../../main/js/controls/Graph/Graph";
 import {
-    getShape,
-    getTransformScale
+    getCurrentTransform,
+    getShapeForTarget,
+    getTransformScale,
+    round2Decimals
 } from "../../../main/js/controls/Graph/helpers/helpers";
 import Line from "../../../main/js/controls/Line";
 import { Shape } from "../../../main/js/core";
@@ -14,7 +17,8 @@ import {
 import constants, {
     AXIS_TYPE,
     COLORS,
-    LINE_TYPE
+    LINE_TYPE,
+    SHAPES
 } from "../../../main/js/helpers/constants";
 import errors from "../../../main/js/helpers/errors";
 import styles from "../../../main/js/helpers/styles";
@@ -225,7 +229,7 @@ describe("Line", () => {
             const line = new Line(input);
             expect(line.config.key).toBe(input.key);
             expect(line.config.color).toBe(input.color);
-            expect(line.config.shape).toBe(input.shape);
+            expect(line.config.shape).toEqual(input.shape);
             expect(line.config.label).toEqual(input.label);
             expect(line.config.onClick).toEqual(jasmine.any(Function));
             expect(line.config.values.length).toBe(3);
@@ -355,7 +359,9 @@ describe("Line", () => {
             );
             const data = graph.content[0].dataTarget;
             expect(
-                data.internalValuesSubset.every((j) => j.shape === "CIRCLE")
+                data.internalValuesSubset.every(
+                    (j) => j.shape === SHAPES.CIRCLE
+                )
             ).toBeTruthy();
         });
         it("defaults axis to Y axis when not provided", () => {
@@ -524,9 +530,9 @@ describe("Line", () => {
                     styles.currentPointsGroup
                 );
                 const points = fetchElementByClass(pointsGroup, styles.point);
-                expect(points.attributes.getNamedItem("d").value).toBe(
-                    constants.CUSTOM_SHAPE_PATH.RHOMBUS
-                );
+                expect(
+                    points.firstChild.attributes.getNamedItem("d").value
+                ).toBe(SHAPES.RHOMBUS.path.d);
             });
             it("points have correct unique key assigned", () => {
                 const pointsGroup = fetchElementByClass(
@@ -558,7 +564,10 @@ describe("Line", () => {
                     lineGraphContainer,
                     styles.dataPointSelection
                 );
-                expect(selectedPoints.tagName).toBe("circle");
+                expect(selectedPoints.tagName).toBe("svg");
+                expect(selectedPoints.children[0].getAttribute("id")).toBe(
+                    "circle"
+                );
             });
             it("selected data point has correct unique key assigned", () => {
                 const selectedPoints = fetchElementByClass(
@@ -859,13 +868,13 @@ describe("Line", () => {
                     lineGraphContainer,
                     styles.legendItem
                 );
+                const iconSVG = legendItem.querySelector("svg");
                 const iconPath = legendItem.querySelector("path");
+                expect(iconSVG).not.toBeNull();
+                expect(iconSVG.classList).toContain(styles.legendItemIcon);
                 expect(iconPath).not.toBeNull();
                 expect(iconPath.getAttribute("d")).not.toBeNull();
-                expect(iconPath.getAttribute("d")).toBe(
-                    constants.CUSTOM_SHAPE_PATH.RHOMBUS
-                );
-                expect(iconPath.getAttribute("transform")).not.toBeNull();
+                expect(iconPath.getAttribute("d")).toBe(SHAPES.RHOMBUS.path.d);
             });
             it("loads the correct color", () => {
                 const input = getInput(valuesDefault, false, false);
@@ -874,12 +883,15 @@ describe("Line", () => {
                     lineGraphContainer,
                     styles.legendItem
                 );
+                const iconSVG = legendItem.querySelector("svg");
                 const iconPath = legendItem.querySelector("path");
-                expect(iconPath).not.toBeNull();
-                expect(iconPath.getAttribute("d")).not.toBeNull();
-                expect(iconPath.getAttribute("style")).toBe(
+                expect(iconSVG).not.toBeNull();
+                expect(iconSVG.classList).toContain(styles.legendItemIcon);
+                expect(iconSVG.getAttribute("style")).toBe(
                     `fill: ${COLORS.BLUE}`
                 );
+                expect(iconPath).not.toBeNull();
+                expect(iconPath.getAttribute("d")).not.toBeNull();
             });
             it("attaches click event handlers correctly", (done) => {
                 const input = getInput(valuesDefault, false, false);
@@ -2048,7 +2060,7 @@ describe("Line", () => {
                     styles.criticalityOuterPoint
                 );
                 expect(criticalOuterElement).not.toBeNull();
-                expect(criticalOuterElement.nodeName).toBe("path");
+                expect(criticalOuterElement.nodeName).toBe("svg");
                 expect(criticalOuterElement.classList).toContain(styles.point);
                 expect(criticalOuterElement.classList).toContain(
                     styles.criticalityOuterPoint
@@ -2069,7 +2081,7 @@ describe("Line", () => {
                     styles.criticalityInnerPoint
                 );
                 expect(criticalInnerElement).not.toBeNull();
-                expect(criticalInnerElement.nodeName).toBe("path");
+                expect(criticalInnerElement.nodeName).toBe("svg");
                 expect(criticalInnerElement.classList).toContain(styles.point);
                 expect(criticalInnerElement.classList).toContain(
                     styles.criticalityInnerPoint
@@ -2085,6 +2097,7 @@ describe("Line", () => {
                 inputPrimary = getInput(valuesMutated, false, false);
                 linePrimary = new Line(inputPrimary);
                 graphDefault.loadContent(linePrimary);
+
                 const criticalOuterElement = fetchElementByClass(
                     lineGraphContainer,
                     styles.criticalityOuterPoint
@@ -2093,12 +2106,20 @@ describe("Line", () => {
                     lineGraphContainer,
                     styles.criticalityInnerPoint
                 );
-                const currentShape = new Shape(getShape(inputPrimary));
-                expect(criticalOuterElement.getAttribute("d")).toBe(
-                    currentShape.getPathDescription()
+                const currentShape = new Shape(
+                    getShapeForTarget(inputPrimary)
+                ).getShapeElement();
+                expect(criticalOuterElement.nodeName).toBe(
+                    currentShape.nodeName
                 );
-                expect(criticalInnerElement.getAttribute("d")).toBe(
-                    currentShape.getPathDescription()
+                expect(criticalInnerElement.nodeName).toBe(
+                    currentShape.nodeName
+                );
+                expect(criticalOuterElement.firstChild.getAttribute("d")).toBe(
+                    currentShape.firstChild.getAttribute("d")
+                );
+                expect(criticalInnerElement.firstChild.getAttribute("d")).toBe(
+                    currentShape.firstChild.getAttribute("d")
                 );
             });
             it("Translates properly", () => {
@@ -2107,26 +2128,61 @@ describe("Line", () => {
                 inputPrimary = getInput(valuesMutated, false, false);
                 linePrimary = new Line(inputPrimary);
                 graphDefault.loadContent(linePrimary);
-                const criticalOuterElement = fetchElementByClass(
+                const criticalOuterElementPath = fetchElementByClass(
                     lineGraphContainer,
                     styles.criticalityOuterPoint
-                );
-                const criticalInnerElement = fetchElementByClass(
+                ).firstChild;
+                const criticalInnerElementPath = fetchElementByClass(
                     lineGraphContainer,
                     styles.criticalityInnerPoint
-                );
+                ).firstChild;
 
                 expect(
-                    criticalOuterElement.getAttribute("transform")
+                    criticalOuterElementPath.getAttribute("transform")
                 ).not.toBeNull();
                 expect(
-                    criticalInnerElement.getAttribute("transform")
+                    criticalInnerElementPath.getAttribute("transform")
                 ).not.toBeNull();
-                expect(getTransformScale(criticalOuterElement)[0]).toBe(
-                    constants.DEFAULT_CRITICAL_OUTER_PLOT_SCALE[0]
+                expect(
+                    d3.transform(getCurrentTransform(criticalOuterElementPath))
+                        .translate[0]
+                ).not.toBeNull();
+                expect(
+                    d3.transform(getCurrentTransform(criticalOuterElementPath))
+                        .translate[1]
+                ).not.toBeNull();
+                expect(
+                    d3.transform(getCurrentTransform(criticalInnerElementPath))
+                        .translate[0]
+                ).not.toBeNull();
+                expect(
+                    d3.transform(getCurrentTransform(criticalInnerElementPath))
+                        .translate[1]
+                ).not.toBeNull();
+            });
+            it("Scales properly", () => {
+                const valuesMutated = utils.deepClone(valuesDefault);
+                valuesMutated[0].isCritical = true;
+                inputPrimary = getInput(valuesMutated, false, false);
+                linePrimary = new Line(inputPrimary);
+                graphDefault.loadContent(linePrimary);
+                const criticalOuterElementPath = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.criticalityOuterPoint
+                ).firstChild;
+                const criticalInnerElementPath = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.criticalityInnerPoint
+                ).firstChild;
+                expect(getTransformScale(criticalOuterElementPath)[0]).toBe(
+                    round2Decimals(
+                        getShapeForTarget(inputPrimary).options.scale
+                    )
                 );
-                expect(getTransformScale(criticalInnerElement)[0]).toBe(
-                    constants.DEFAULT_CRITICAL_INNER_PLOT_SCALE[0]
+                expect(getTransformScale(criticalInnerElementPath)[0]).toBe(
+                    round2Decimals(
+                        getShapeForTarget(inputPrimary).options.scale
+                    )
                 );
             });
             it("Shows even on multiple data-set", () => {
@@ -2146,14 +2202,14 @@ describe("Line", () => {
                     styles.criticalityInnerPoint
                 );
                 expect(criticalOuterElement).not.toBeNull();
-                expect(criticalOuterElement.nodeName).toBe("path");
+                expect(criticalOuterElement.nodeName).toBe("svg");
                 expect(criticalOuterElement.classList).toContain(styles.point);
                 expect(criticalOuterElement.classList).toContain(
                     styles.criticalityOuterPoint
                 );
                 expect(criticalOuterElement.getAttribute("style")).toBe("");
                 expect(criticalInnerElement).not.toBeNull();
-                expect(criticalInnerElement.nodeName).toBe("path");
+                expect(criticalInnerElement.nodeName).toBe("svg");
                 expect(criticalInnerElement.classList).toContain(styles.point);
                 expect(criticalInnerElement.classList).toContain(
                     styles.criticalityInnerPoint
@@ -2295,12 +2351,12 @@ describe("Line", () => {
                     );
                     triggerEvent(legendItem, "mouseenter", () => {
                         const criticalOuterElement = document.querySelector(
-                            `path.${
+                            `.${
                                 styles.criticalityOuterPoint
                             }[aria-describedby="${inputPrimary.key}"]`
                         );
                         const criticalInnerElement = document.querySelector(
-                            `path.${
+                            `.${
                                 styles.criticalityInnerPoint
                             }[aria-describedby="${inputPrimary.key}"]`
                         );
@@ -2327,12 +2383,12 @@ describe("Line", () => {
                     triggerEvent(legendItem, "mouseenter", () => {
                         triggerEvent(legendItem, "mouseleave", () => {
                             const criticalOuterElement = document.querySelector(
-                                `path.${
+                                `.${
                                     styles.criticalityOuterPoint
                                 }[aria-describedby="${inputPrimary.key}"]`
                             );
                             const criticalInnerElement = document.querySelector(
-                                `path.${
+                                `.${
                                     styles.criticalityInnerPoint
                                 }[aria-describedby="${inputPrimary.key}"]`
                             );
@@ -2379,12 +2435,12 @@ describe("Line", () => {
                     );
                     triggerEvent(legendItem, "mouseenter", () => {
                         const criticalOuterElement = document.querySelector(
-                            `path.${
+                            `.${
                                 styles.criticalityOuterPoint
                             }[aria-describedby="${inputPrimary.key}"]`
                         );
                         const criticalInnerElement = document.querySelector(
-                            `path.${
+                            `.${
                                 styles.criticalityInnerPoint
                             }[aria-describedby="${inputPrimary.key}"]`
                         );
@@ -2411,22 +2467,22 @@ describe("Line", () => {
                     );
                     triggerEvent(legendItem, "mouseenter", () => {
                         const criticalOuterElement = document.querySelector(
-                            `path.${
+                            `.${
                                 styles.criticalityOuterPoint
                             }[aria-describedby="${inputPrimary.key}"]`
                         );
                         const criticalInnerElement = document.querySelector(
-                            `path.${
+                            `.${
                                 styles.criticalityInnerPoint
                             }[aria-describedby="${inputPrimary.key}"]`
                         );
                         const criticalOuterElementAlt = document.querySelector(
-                            `path.${
+                            `.${
                                 styles.criticalityOuterPoint
                             }[aria-describedby="${inputSecondary.key}"]`
                         );
                         const criticalInnerElementAlt = document.querySelector(
-                            `path.${
+                            `.${
                                 styles.criticalityInnerPoint
                             }[aria-describedby="${inputSecondary.key}"]`
                         );
@@ -2454,12 +2510,12 @@ describe("Line", () => {
                     triggerEvent(legendItem, "mouseenter", () => {
                         triggerEvent(legendItem, "mouseleave", () => {
                             const criticalOuterElement = document.querySelector(
-                                `path.${
+                                `.${
                                     styles.criticalityOuterPoint
                                 }[aria-describedby="${inputPrimary.key}"]`
                             );
                             const criticalInnerElement = document.querySelector(
-                                `path.${
+                                `.${
                                     styles.criticalityInnerPoint
                                 }[aria-describedby="${inputPrimary.key}"]`
                             );
@@ -2482,22 +2538,22 @@ describe("Line", () => {
                     triggerEvent(legendItem, "mouseenter", () => {
                         triggerEvent(legendItem, "mouseleave", () => {
                             const criticalOuterElement = document.querySelector(
-                                `path.${
+                                `.${
                                     styles.criticalityOuterPoint
                                 }[aria-describedby="${inputPrimary.key}"]`
                             );
                             const criticalInnerElement = document.querySelector(
-                                `path.${
+                                `.${
                                     styles.criticalityInnerPoint
                                 }[aria-describedby="${inputPrimary.key}"]`
                             );
                             const criticalOuterElementAlt = document.querySelector(
-                                `path.${
+                                `.${
                                     styles.criticalityOuterPoint
                                 }[aria-describedby="${inputSecondary.key}"]`
                             );
                             const criticalInnerElementAlt = document.querySelector(
-                                `path.${
+                                `.${
                                     styles.criticalityInnerPoint
                                 }[aria-describedby="${inputSecondary.key}"]`
                             );
@@ -2543,12 +2599,12 @@ describe("Line", () => {
                     );
                     triggerEvent(legendItem, "click", () => {
                         const criticalOuterElement = document.querySelector(
-                            `path.${
+                            `.${
                                 styles.criticalityOuterPoint
                             }[aria-describedby="${inputPrimary.key}"]`
                         );
                         const criticalInnerElement = document.querySelector(
-                            `path.${
+                            `.${
                                 styles.criticalityInnerPoint
                             }[aria-describedby="${inputPrimary.key}"]`
                         );
@@ -2573,12 +2629,12 @@ describe("Line", () => {
                             "click",
                             () => {
                                 const criticalOuterElement = document.querySelector(
-                                    `path.${
+                                    `.${
                                         styles.criticalityOuterPoint
                                     }[aria-describedby="${inputPrimary.key}"]`
                                 );
                                 const criticalInnerElement = document.querySelector(
-                                    `path.${
+                                    `.${
                                         styles.criticalityInnerPoint
                                     }[aria-describedby="${inputPrimary.key}"]`
                                 );
@@ -2609,22 +2665,22 @@ describe("Line", () => {
                     );
                     triggerEvent(legendItem, "click", () => {
                         const criticalOuterElement = document.querySelector(
-                            `path.${
+                            `.${
                                 styles.criticalityOuterPoint
                             }[aria-describedby="${inputPrimary.key}"]`
                         );
                         const criticalInnerElement = document.querySelector(
-                            `path.${
+                            `.${
                                 styles.criticalityInnerPoint
                             }[aria-describedby="${inputPrimary.key}"]`
                         );
                         const criticalOuterElementAlt = document.querySelector(
-                            `path.${
+                            `.${
                                 styles.criticalityOuterPoint
                             }[aria-describedby="${inputSecondary.key}"]`
                         );
                         const criticalInnerElementAlt = document.querySelector(
-                            `path.${
+                            `.${
                                 styles.criticalityInnerPoint
                             }[aria-describedby="${inputSecondary.key}"]`
                         );
