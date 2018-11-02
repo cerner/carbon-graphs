@@ -509,6 +509,7 @@ const createDateline = (scale, config, canvasSVG) => {
                 getDefaultSVGProps({
                     svgClassNames: styles.ganttDatelinePoint,
                     svgStyles: `fill: ${d.color}; stroke: ${d.color}`,
+                    transformFn: (scale) => `scale(${scale})`,
                     onClickFn() {
                         datelineClickHandler(d, this);
                     },

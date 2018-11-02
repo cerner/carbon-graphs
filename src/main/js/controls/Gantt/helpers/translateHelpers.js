@@ -273,13 +273,11 @@ const translateDateline = (scale, config, canvasSVG) => {
     datelineGroup
         .selectAll(`.${styles.ganttDatelinePoint}`)
         .select("path")
-        .attr(
-            "transform",
-            (val) =>
-                `translate(${scale.x(
-                    utils.parseDateTime(val.value)
-                )}, 0) scale(${constants.DEFAULT_PLOT_SCALE})`
-        );
+        .attr("transform", function(d) {
+            return `translate(${scale.x(
+                utils.parseDateTime(d.value)
+            )}, 0) scale(${getTransformScale(this)})`;
+        });
     datelineGroup
         .selectAll(`.${styles.ganttDateline}`)
         .attr("x1", (val) => scale.x(utils.parseDateTime(val.value)))
