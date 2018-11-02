@@ -3,7 +3,7 @@ import d3 from "d3";
 import { Shape } from "../../../core";
 import { parseTypedValue } from "../../../core/BaseConfig";
 import { getDefaultSVGProps } from "../../../core/Shape";
-import { getXAxisXPosition, isValidAxisType } from "../../../helpers/axis";
+import { getXAxisXPosition, isValidAxisType, calculateVerticalPadding } from "../../../helpers/axis";
 import constants, { SHAPES } from "../../../helpers/constants";
 import errors from "../../../helpers/errors";
 import {
@@ -33,8 +33,6 @@ import {
     translateSelectionBox,
     translateSelectionItem
 } from "./selectionIndicatorHelpers";
-
-const PADDING = constants.PADDING;
 
 /**
  * Returns the value based on the type of data point - High, mid or low
@@ -163,7 +161,9 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
         .attr("aria-selected", false)
         .attr(
             "transform",
-            `translate(${getXAxisXPosition(config)},${PADDING.top})`
+            `translate(${getXAxisXPosition(config)},${calculateVerticalPadding(
+                config
+            )})`
         )
         .call(drawBox);
     pairedBoxPath

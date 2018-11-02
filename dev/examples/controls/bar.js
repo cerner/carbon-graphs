@@ -226,3 +226,19 @@ export const renderBarStackedWithGoal = (el, id, title) => () => {
     barStacked.loadContent(Carbon.api.bar(data3));
     return barStacked;
 };
+export const renderBarTimeSeriesXOrientationTop = (el, id, title) => () => {
+    shell.render(el, id, title);
+    const axisData = utils.deepClone(getDemoData(`#${id}`, "BAR_TIMESERIES"));
+    axisData.axis.x.ticks = {
+        values: tickValues,
+        format: "%a %b %e"
+    };
+    axisData.showVGrid = false;
+    axisData.axis.x.orientation = Carbon.helpers.AXES_ORIENTATION.X.TOP;
+
+    const barTime = Carbon.api.graph(axisData);
+    barTime.loadContent(
+        Carbon.api.bar(getDemoData(`#${id}`, "BAR_TIMESERIES").data[0])
+    );
+    return barTime;
+};

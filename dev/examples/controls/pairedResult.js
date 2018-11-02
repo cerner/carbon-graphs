@@ -333,3 +333,13 @@ export const renderPairedResultDateTimeBuckets = (el, id, title) => () => {
     );
     return pairedDefault;
 };
+export const renderPairedResultXOrientationTop = (el, id, title) => () => {
+    shell.render(el, id, title);
+    const axisData = utils.deepClone(getDemoData(`#${id}`, "PAIRED_DEFAULT"));
+    axisData.axis.x.orientation = Carbon.helpers.AXES_ORIENTATION.X.TOP;
+    const pairedDefault = Carbon.api.graph(axisData);
+    pairedDefault.loadContent(
+        Carbon.api.pairedResult(getDemoData(`#${id}`, "PAIRED_DEFAULT").data[0])
+    );
+    return pairedDefault;
+};

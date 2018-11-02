@@ -184,5 +184,9 @@ export default {
     d3Transition: d3
         .transition()
         .duration(250)
-        .ease()
+        .ease(),
+    TICK_ORIENTATION: {
+        TOP: -1,
+        BOTTOM: 1
+    }
 };

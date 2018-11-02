@@ -1,7 +1,7 @@
 "use strict";
 import d3 from "d3";
 import { getType } from "../../../core/BaseConfig";
-import { isValidAxisType } from "../../../helpers/axis";
+import { isValidAxisType, calculateVerticalPadding } from "../../../helpers/axis";
 import { getBarStyle, getHashedBar, getRect } from "../../../helpers/barType";
 import constants, {
     AXIS_TYPE,
@@ -15,8 +15,6 @@ import utils from "../../../helpers/utils";
 import { d3RemoveElement } from "../../Graph/helpers/helpers";
 import { createRegion } from "./goalLineHelpers";
 import { drawSelectionBars, getSelectedData } from "./selectionHelpers";
-
-const PADDING = constants.PADDING;
 
 /**
  * Checks if ticks are provided for every input
@@ -145,7 +143,9 @@ const draw = (scale, ordinalScale, config, canvasSVG, dataTarget) => {
         .classed(styles.currentBarsGroup, true)
         .attr(
             "transform",
-            `translate(${getXAxisXPosition(config)},${PADDING.top})`
+            `translate(${getXAxisXPosition(config)},${calculateVerticalPadding(
+                config
+                )})`
         )
         .data([dataTarget]);
     const bars = barGroupSVG

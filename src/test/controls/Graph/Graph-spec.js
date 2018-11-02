@@ -2,7 +2,7 @@
 import Graph from "../../../main/js/controls/Graph/index";
 import Line from "../../../main/js/controls/Line/Line";
 import { getXAxisWidth } from "../../../main/js/helpers/axis";
-import constants, { AXIS_TYPE } from "../../../main/js/helpers/constants";
+import constants, { AXIS_TYPE, AXES_ORIENTATION } from "../../../main/js/helpers/constants";
 import errors from "../../../main/js/helpers/errors";
 import { loadLegendItem } from "../../../main/js/helpers/legend";
 import styles from "../../../main/js/helpers/styles";
@@ -283,6 +283,7 @@ describe("Graph", () => {
             expect(graph.config.axis.y.ticks).toEqual({});
             expect(graph.config.axis.x.show).toEqual(true);
             expect(graph.config.axis.y.show).toEqual(true);
+            expect(graph.config.axis.x.orientation).toEqual(AXES_ORIENTATION.X.BOTTOM);
         });
         it("processes the timeseries input correctly", () => {
             const input = getAxes(axisTimeSeries);
@@ -302,6 +303,7 @@ describe("Graph", () => {
             expect(graph.config.axis.y.ticks).toEqual({});
             expect(graph.config.axis.x.show).toEqual(true);
             expect(graph.config.axis.y.show).toEqual(true);
+            expect(graph.config.axis.x.orientation).toEqual(AXES_ORIENTATION.X.BOTTOM);
         });
         it("process bindLegendTo correctly", () => {
             const input = utils.deepClone(getAxes(axisDefault));
@@ -433,6 +435,12 @@ describe("Graph", () => {
             });
             it("sets the height correctly", () => {
                 expect(graph.config.height).toBe(235);
+            });
+            it("sets X axis position correctly", () => {
+                const axisXElement = fetchElementByClass(styles.axisX);
+                expect(axisXElement.getAttribute("transform")).toContain(
+                    "translate(72, 240)"
+                );
             });
             it("returns the consumer set height if dimension is provided", () => {
                 graph = new Graph(
@@ -674,6 +682,13 @@ describe("Graph", () => {
                     "true"
                 );
                 expect(referenceElement.getAttribute("d")).not.toBeNull();
+            });
+            it("sets x axis orientation to bottom", () => {
+                const xAxisBottomOrientation = utils.deepClone(axisDefault);
+                xAxisBottomOrientation.x.orientation = AXES_ORIENTATION.X.BOTTOM;
+                const input = getAxes(xAxisBottomOrientation);
+                graph = new Graph(input);
+                expect(graph.config.axis.x.orientation).toEqual(AXES_ORIENTATION.X.BOTTOM);
             });
             it("hides x axis when not enabled", () => {
                 graph.destroy();
@@ -1619,6 +1634,93 @@ describe("Graph", () => {
             expect(graph.resizeHandler).toBeNull();
             expect(graph.content).toEqual([]);
             expect(graph.contentTargets).toEqual([]);
+        });
+    });
+    describe("when x axis orientation is set to top", () => {
+        it("processes the default input correctly", () => {
+            const xAxisTopOrientation = utils.deepClone(axisDefault);
+            xAxisTopOrientation.x.orientation = AXES_ORIENTATION.X.TOP;
+            const input = getAxes(xAxisTopOrientation);
+            graph = new Graph(input);
+            expect(graph.config.bindTo).toEqual(input.bindTo);
+            expect(graph.config.axis).not.toBeNull();
+            expect(graph.config.locale).not.toBeNull();
+            expect(graph.config.throttle).toEqual(constants.RESIZE_THROTTLE);
+            expect(graph.config.showLabel).toEqual(true);
+            expect(graph.config.showLegend).toEqual(true);
+            expect(graph.config.showShapes).toEqual(true);
+            expect(graph.config.showHGrid).toEqual(true);
+            expect(graph.config.showVGrid).toEqual(true);
+            expect(graph.config.dimension).toEqual({});
+            expect(graph.config.axis.x.type).toEqual(AXIS_TYPE.DEFAULT);
+            expect(graph.config.axis.x.ticks).toEqual({});
+            expect(graph.config.axis.y.ticks).toEqual({});
+            expect(graph.config.axis.x.show).toEqual(true);
+            expect(graph.config.axis.y.show).toEqual(true);
+            expect(graph.config.axis.x.orientation).toEqual(AXES_ORIENTATION.X.TOP);
+        });
+        it("creates label x axis when text is present", () => {
+            graph.destroy();
+            const xAxisTopOrientation = utils.deepClone(axisDefault);
+            xAxisTopOrientation.x.orientation = AXES_ORIENTATION.X.TOP;
+            const input = getAxes(xAxisTopOrientation);
+            graph = new Graph(input);
+            const xLabelElement = fetchElementByClass(styles.axisLabelX);
+            expect(xLabelElement.nodeName).toBe("g");
+            expect(xLabelElement.querySelector("tspan").textContent).toBe(
+                axisDefault.x.label
+            );
+        });
+        it("sets x axis position correctly", () => {
+            graph.destroy();
+            const xAxisTopOrientation = utils.deepClone(axisDefault);
+            xAxisTopOrientation.x.orientation = AXES_ORIENTATION.X.TOP;
+            const input = getAxes(xAxisTopOrientation);
+            graph = new Graph(input);
+            const axisXElement = fetchElementByClass(styles.axisX);
+            expect(axisXElement.getAttribute("transform")).toContain(
+                "translate(72, 44)"
+            );
+        });
+        it("sets x axis position correctly when x axis is hidden", () => {
+            graph.destroy();
+            const hiddenAxisObj = utils.deepClone(axisDefault);
+            hiddenAxisObj.x.show = false;
+            hiddenAxisObj.x.orientation = AXES_ORIENTATION.X.TOP;
+            graph = new Graph(getAxes(hiddenAxisObj));
+            const axisXElement = fetchElementByClass(styles.axisX);
+            expect(axisXElement.getAttribute("transform")).toContain(
+                "translate(72, 44)"
+            );
+        });
+        it("sets x axis position correctly when labels are hidden", () => {
+            graph.destroy();
+            const hiddenLabelObj = utils.deepClone(axisDefault);
+            hiddenLabelObj.x.orientation = AXES_ORIENTATION.X.TOP;
+            graph = new Graph(
+                Object.assign(
+                    {
+                        showLabel: false
+                    },
+                    getAxes(hiddenLabelObj)
+                )
+            );
+            const axisXElement = fetchElementByClass(styles.axisX);
+            expect(axisXElement.getAttribute("transform")).toContain(
+                "translate(55, 20)"
+            );
+        });
+        it("sets x axis position correctly when x axis label is hidden", () => {
+            graph.destroy();
+            const hiddenXLabelObj = utils.deepClone(axisDefault);
+            hiddenXLabelObj.x.orientation = AXES_ORIENTATION.X.TOP;
+            hiddenXLabelObj.x.label = "";
+            const input = getAxes(hiddenXLabelObj);
+            graph = new Graph(input);
+            const axisXElement = fetchElementByClass(styles.axisX);
+            expect(axisXElement.getAttribute("transform")).toContain(
+                "translate(72, 20)"
+            );
         });
     });
 });

@@ -462,3 +462,13 @@ export const renderLineDateTimeBuckets = (el, id, title) => () => {
     );
     return lineDefault;
 };
+export const renderLineXOrientationTop = (el, id, title) => () => {
+    shell.render(el, id, title);
+    const axisData = utils.deepClone(getDemoData(`#${id}`, "LINE_DEFAULT"));
+    axisData.axis.x.orientation = Carbon.helpers.AXES_ORIENTATION.X.TOP;
+    const lineDefault = Carbon.api.graph(axisData);
+    lineDefault.loadContent(
+        Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[0])
+    );
+    return lineDefault;
+};

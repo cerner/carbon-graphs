@@ -11,6 +11,7 @@ import {
     getXAxisRange,
     getXAxisWidth,
     getXAxisXPosition,
+    calculateVerticalPadding,
     getY2AxisLabelXPosition,
     getYAxisHeight,
     getYAxisLabelXPosition,
@@ -19,10 +20,11 @@ import {
     hasY2Axis,
     processTickValues,
     translateAxes,
-    translateAxisReferenceLine
+    translateAxisReferenceLine,
+    isXAxisOrientationTop
 } from "../../../helpers/axis";
-import constants, { SHAPES } from "../../../helpers/constants";
 import { createVGrid, translateVGrid } from "../../../helpers/datetimeBuckets";
+import constants, { SHAPES } from "../../../helpers/constants";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 
@@ -93,15 +95,18 @@ const translateHorizontalGrid = (axis, config) => {
  */
 const translateVerticalGrid = (axis, config) => {
     let xAxisGrid;
+    const tickSizeMultiplicand = isXAxisOrientationTop(config.axis.x.orientation)
+    ? constants.TICK_ORIENTATION.TOP
+    : constants.TICK_ORIENTATION.BOTTOM;
     if (utils.notEmpty(config.axis.x.ticks.values)) {
         const ticks = config.axis.x.ticks.values;
         xAxisGrid = axis.x
             .tickValues(processTickValues(ticks))
-            .tickSize(getYAxisHeight(config), 0, 0)
+            .tickSize(getYAxisHeight(config) * tickSizeMultiplicand, 0, 0)
             .tickFormat("");
     } else {
         xAxisGrid = axis.x
-            .tickSize(getYAxisHeight(config), 0, 0)
+            .tickSize(getYAxisHeight(config) * tickSizeMultiplicand, 0, 0)
             .tickFormat("");
     }
     return xAxisGrid;
@@ -121,7 +126,9 @@ const translateGrid = (axis, scale, config, canvasSVG) => {
         .select(`.${styles.grid}`)
         .attr(
             "transform",
-            `translate(${getXAxisXPosition(config)},${PADDING.top})`
+            `translate(${getXAxisXPosition(config)},${calculateVerticalPadding(
+                config
+            )})`
         );
     if (config.showHGrid) {
         canvasSVG
@@ -265,7 +272,7 @@ const createDefs = (config, canvasSVG) =>
         .attr("id", config.clipPathId)
         .append("rect")
         .attr(constants.X_AXIS, getXAxisXPosition(config))
-        .attr(constants.Y_AXIS, PADDING.top)
+        .attr(constants.Y_AXIS, calculateVerticalPadding(config))
         .attr("width", getXAxisWidth(config))
         .attr("height", config.height);
 /**
@@ -285,7 +292,9 @@ const createGrid = (axis, scale, config, canvasSVG) => {
         .classed(styles.grid, true)
         .attr(
             "transform",
-            `translate(${getXAxisXPosition(config)},${PADDING.top})`
+            `translate(${getXAxisXPosition(config)},${calculateVerticalPadding(
+                config
+            )})`
         );
     if (config.showHGrid) {
         gridSVG
@@ -382,7 +391,7 @@ const createContentContainer = (config, canvasSVG) =>
         .append("rect")
         .classed(styles.contentContainer, true)
         .attr(constants.X_AXIS, getXAxisXPosition(config))
-        .attr(constants.Y_AXIS, PADDING.top);
+        .attr(constants.Y_AXIS, calculateVerticalPadding(config));
 
 /**
  * Creates and sets the d3 scale for the Graph. Once the scale is created

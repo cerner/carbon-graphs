@@ -6,7 +6,11 @@ import {
     parseTypedValue
 } from "../../../core/BaseConfig";
 import { getDefaultSVGProps } from "../../../core/Shape";
-import { getXAxisXPosition, isValidAxisType } from "../../../helpers/axis";
+import {
+    getXAxisXPosition,
+    isValidAxisType,
+    calculateVerticalPadding
+} from "../../../helpers/axis";
 import constants, { SHAPES } from "../../../helpers/constants";
 import errors from "../../../helpers/errors";
 import {
@@ -27,8 +31,6 @@ import {
     getShapeForTarget,
     getTransformScale
 } from "../../Graph/helpers/helpers";
-
-const PADDING = constants.PADDING;
 
 /**
  * Creates a d3 svg line
@@ -180,7 +182,9 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
         .classed(styles.currentLinesGroup, true)
         .attr(
             "transform",
-            `translate(${getXAxisXPosition(config)},${PADDING.top})`
+            `translate(${getXAxisXPosition(config)},${calculateVerticalPadding(
+                config
+            )})`
         );
     const linePath = lineGroupSVG
         .selectAll(`.${styles.line}`)
@@ -201,7 +205,9 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
             .classed(styles.currentPointsGroup, true)
             .attr(
                 "transform",
-                `translate(${getXAxisXPosition(config)},${PADDING.top})`
+                `translate(${getXAxisXPosition(config)},${calculateVerticalPadding(
+                    config
+                )})`
             );
         currentPointsPath
             .exit()

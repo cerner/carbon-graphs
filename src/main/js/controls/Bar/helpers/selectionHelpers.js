@@ -3,6 +3,7 @@ import constants, { AXIS_TYPE } from "../../../helpers/constants";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 import { barAttributesHelper, getXAxisXPosition } from "./creationHelpers";
+import { calculateVerticalPadding } from "../../../helpers/axis";
 
 const PADDING = constants.DEFAULT_BAR_SELECTION_PADDING;
 
@@ -86,7 +87,7 @@ const drawSelectionBars = (scale, ordinalScale, config, canvasSVG) => {
     const selectionPath = canvasSVG
         .append("g")
         .classed(styles.barSelectionGroup, true)
-        .attr("transform", `translate(${getXAxisXPosition(config)},${PADDING})`)
+        .attr("transform", `translate(${getXAxisXPosition(config)},${calculateVerticalPadding(config)})`)
         .selectAll(`${styles.taskBarSelection}`)
         .data(tickValues);
     selectionPath

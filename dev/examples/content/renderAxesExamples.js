@@ -5,7 +5,8 @@ import {
     renderLineXAxisFormatted,
     renderLineXHidden,
     renderLineXStaticTicks,
-    renderLineYHidden
+    renderLineYHidden,
+    renderLineXOrientationTop
 } from "../controls/line";
 import {
     renderPairedResultDateTimeBuckets,
@@ -13,8 +14,12 @@ import {
     renderPairedResultXAxisFormatted,
     renderPairedResultXHidden,
     renderPairedResultXStaticTicks,
-    renderPairedResultYHidden
+    renderPairedResultYHidden,
+    renderPairedResultXOrientationTop
 } from "../controls/pairedResult";
+import {
+    renderBarTimeSeriesXOrientationTop
+}from "../controls/bar";
 import {
     btn,
     clearContent,
@@ -70,6 +75,13 @@ export const triggerAxesExample = (
             "Line - Datetime Buckets"
         )
     );
+    instance.load(
+        renderLineXOrientationTop(
+            contentSection,
+            "lineXtop",
+            "Line - X Axis Orientation Top"
+        )
+    );
 
     instance.load(
         renderPairedResultXHidden(
@@ -113,12 +125,27 @@ export const triggerAxesExample = (
             "Paired Result - Datetime Buckets"
         )
     );
+    instance.load(
+        renderPairedResultXOrientationTop(
+            contentSection,
+            "pairedXTop",
+            "Paired Result - X Axis Orientation Top"
+        )
+    );
 
     instance.load(
         renderGanttDateTimeBuckets(
             contentSection,
             "ganttDateTimeBuckets",
             "Gantt Datetime Buckets"
+        )
+    );
+
+    instance.load(
+        renderBarTimeSeriesXOrientationTop(
+            contentSection,
+            "barXTop",
+            "Bar - X Axis Orientation Top"
         )
     );
     instance.render();

@@ -1,7 +1,7 @@
 "use strict";
 import d3 from "d3";
 import { d3RemoveElement } from "../controls/Graph/helpers/helpers";
-import { getXAxisWidth, getXAxisXPosition } from "./axis";
+import { getXAxisWidth, getXAxisXPosition, calculateVerticalPadding } from "./axis";
 import constants from "./constants";
 import errors from "./errors";
 import styles from "./styles";
@@ -111,10 +111,10 @@ const createRegion = (
         .attr("aria-describedby", uniqueKey)
         .attr("style", (d) => (d.color ? `fill: ${d.color};` : ""))
         .attr(constants.X_AXIS, getXAxisXPosition(config))
-        .attr(constants.Y_AXIS, getYAxisRangePosition(scale))
+        .attr(constants.Y_AXIS, getYAxisRangePosition(scale, config))
         .attr("width", getXAxisWidth(config))
         .attr("height", function(d) {
-            return getRegionHeight(d3.select(this), d, scale, config.height);
+            return getRegionHeight(d3.select(this), d, scale, config);
         });
     regionPath
         .exit()
@@ -133,12 +133,13 @@ const getRegionAxis = (region) => region.axis || constants.Y_AXIS;
  * Returns the function which returns Y Axis Vertical position for Range
  * @private
  * @param {Object} scale - d3 scale taking into account the input parameters
+ * @param {Object} config - config object derived from input JSON
  * @returns {function(*=): number} Function which returns Y Axis Vertical position for Range
  */
-const getYAxisRangePosition = (scale) => (bounds) =>
+const getYAxisRangePosition = (scale, config) => (bounds) =>
     bounds.end
-        ? scale[getRegionAxis(bounds)](bounds.end) + constants.PADDING.top
-        : constants.PADDING.top;
+        ? scale[getRegionAxis(bounds)](bounds.end) + calculateVerticalPadding(config)
+        : calculateVerticalPadding(config);
 /**
  * Returns the height for range based on Y Axes, start and end bounds
  * If start and end bounds arent provided then a "goal line" number is returned with
@@ -147,14 +148,15 @@ const getYAxisRangePosition = (scale) => (bounds) =>
  * @param {Object} regionPath - d3 object of region svg
  * @param {Object} bounds - Start and end values for region
  * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {number} graphHeight - graph height in pixels
+ * @param {Object} config - config object derived from input JSON
  * @returns {number} Height of the region for Y axes
  */
-const getRegionHeight = (regionPath, bounds, scale, graphHeight) => {
+const getRegionHeight = (regionPath, bounds, scale, config) => {
+    const graphHeight = config.height; 
     const upperBound = regionPath.attr(constants.Y_AXIS);
     const lowerBound = bounds.start
-        ? scale[getRegionAxis(bounds)](bounds.start) + constants.PADDING.top
-        : graphHeight + constants.PADDING.top;
+        ? scale[getRegionAxis(bounds)](bounds.start) + calculateVerticalPadding(config)
+        : graphHeight + calculateVerticalPadding(config);
     // If start and end are the same then `padding.top` worth of height is
     // applied to make it seem like a goal line
     return lowerBound - upperBound || constants.PADDING.top;
@@ -172,11 +174,11 @@ const translateRegion = (scale, config, regionGroupSVG) =>
     regionGroupSVG
         .selectAll(`.${styles.region}`)
         .attr(constants.X_AXIS, getXAxisXPosition(config))
-        .attr(constants.Y_AXIS, getYAxisRangePosition(scale))
+        .attr(constants.Y_AXIS, getYAxisRangePosition(scale, config))
         .transition(constants.d3Transition)
         .attr("width", getXAxisWidth(config))
         .attr("height", function(d) {
-            return getRegionHeight(d3.select(this), d, scale, config.height);
+            return getRegionHeight(d3.select(this), d, scale, config);
         });
 /**
  * Decides if regions needs to be hidden based on count of displayed targets in graph

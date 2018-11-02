@@ -79,7 +79,9 @@ const createAxes = (axis, scale, config, canvasSVG) => {
         .attr("aria-hidden", !config.axis.y.show)
         .attr(
             "transform",
-            `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition()})`
+            `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition(
+                config
+            )})`
         )
         .call(axis.y);
     if (hasY2Axis(config.axis)) {
@@ -89,9 +91,9 @@ const createAxes = (axis, scale, config, canvasSVG) => {
             .classed(styles.axisY2, true)
             .attr(
                 "transform",
-                `translate(${getY2AxisXPosition(
+                `translate(${getY2AxisXPosition(config)}, ${getY2AxisYPosition(
                     config
-                )}, ${getY2AxisYPosition()})`
+                )})`
             )
             .call(axis.y2);
     }
@@ -109,7 +111,7 @@ const createAxes = (axis, scale, config, canvasSVG) => {
 const createAxisReferenceLine = (axis, scale, config, canvasSVG) => {
     const transformAttribute = `translate(${getYAxisXPosition(
         config
-    )}, ${getYAxisYPosition()})`;
+    )}, ${getYAxisYPosition(config)})`;
     const setReferenceLineAttributes = (path, style) =>
         path
             .classed(styles.axisReferenceLine, true)
@@ -145,7 +147,8 @@ const getAxesScale = (axis, scale, config) => {
             config.locale,
             config.axis.x.ticks.format,
             config.axis.x.type
-        )
+        ),
+        config.axis.x.orientation
     );
     axis.y = prepareYAxis(
         scale.y,
@@ -314,7 +317,11 @@ const getXAxisLabelXPosition = (config) =>
  * @returns {number} Position for the label
  */
 const getXAxisLabelYPosition = (config) =>
-    getXAxisYPosition(config) + config.axisLabelHeights.x * 2 + PADDING.bottom;
+    isXAxisOrientationTop(config.axis.x.orientation)
+        ? calculateVerticalPadding(config) - config.axisLabelHeights.x * 2
+        : getXAxisYPosition(config) +
+          config.axisLabelHeights.x * 2 +
+          PADDING.bottom;
 /**
  * Y Axis label's starting position vertically beside the graph
  * @private
@@ -330,8 +337,8 @@ const getYAxisLabelXPosition = (config) =>
  * @returns {number} Position for the label
  */
 const getYAxisLabelYPosition = (config) =>
-    getYAxisYPosition() +
-    (getYAxisHeight(config) - PADDING.top - PADDING.bottom) / 2;
+    getYAxisYPosition(config) +
+    ((getYAxisHeight(config) - PADDING.top - PADDING.bottom) / 2);
 /**
  * Y2 Axis label's starting position vertically beside the graph
  * @private
@@ -343,6 +350,20 @@ const getY2AxisLabelXPosition = (config) =>
     config.axisSizes.y2 -
     PADDING.right +
     config.axisLabelWidths.y2;
+/**
+ * Calculates Vertical Padding according to X Axis orientation
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @returns {number} Vertical Padding for X Axis
+ */
+const calculateVerticalPadding = (config) => {
+    if (!isXAxisOrientationTop(config.axis.x.orientation)) {
+        return  PADDING.top;
+    } else if(!config.axisLabelHeights.x) {
+        return PADDING.bottom * 2;
+    }
+    return config.axisLabelHeights.x * 2 + PADDING.bottom;
+};
 /**
  * X Axis's starting position within the canvas
  * @private
@@ -357,7 +378,10 @@ const getXAxisXPosition = (config) =>
  * @param {Object} config - config object derived from input JSON
  * @returns {number} Position for the axis
  */
-const getXAxisYPosition = (config) => getYAxisHeight(config) + PADDING.top;
+const getXAxisYPosition = (config) =>
+    isXAxisOrientationTop(config.axis.x.orientation)
+        ? calculateVerticalPadding(config)
+        : getYAxisHeight(config) + calculateVerticalPadding(config);
 /**
  * Y Axis's starting position relative to the canvas
  * @private
@@ -368,9 +392,10 @@ const getYAxisXPosition = (config) => getXAxisXPosition(config);
 /**
  * Y Axis's position vertically relative to the canvas
  * @private
+ * @param {Object} config - config object derived from input JSON
  * @returns {number} Position for the axis
  */
-const getYAxisYPosition = () => PADDING.top;
+const getYAxisYPosition = (config) => calculateVerticalPadding(config);
 /**
  * Y2 Axis's starting position relative to the canvas
  * @private
@@ -382,9 +407,10 @@ const getY2AxisXPosition = (config) =>
 /**
  * Y2 Axis's position vertically relative to the canvas
  * @private
+ * @param {Object} config - config object derived from input JSON
  * @returns {number} Position for the axis
  */
-const getY2AxisYPosition = () => PADDING.top;
+const getY2AxisYPosition = (config) => calculateVerticalPadding(config);
 /**
  * X Axis's width that will hold equally spaced ticks
  * @private
@@ -498,6 +524,13 @@ const getYAxisWidth = (id, config) => {
     dummy.remove();
     return width;
 };
+/**
+ * Checks if X Axis orientation is set to top
+ * @private
+ * @param {String} xAxisOrientation - X Axis orientation
+ * @returns {Boolean} - true if X Axis orientation is set to top, false if it is bottom(default)
+ */
+const isXAxisOrientationTop = (xAxisOrientation) => xAxisOrientation === AXES_ORIENTATION.X.TOP;
 /**
  * Calculates axes sizes, specifically:
  *  X Axis: Height
@@ -690,7 +723,9 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
         .transition(constants.d3Transition)
         .attr(
             "transform",
-            `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition()})`
+            `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition(
+                config
+            )})`
         )
         .call(axis.y);
     if (hasY2Axis(config.axis)) {
@@ -699,9 +734,9 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
             .transition(constants.d3Transition)
             .attr(
                 "transform",
-                `translate(${getY2AxisXPosition(
+                `translate(${getY2AxisXPosition(config)}, ${getY2AxisYPosition(
                     config
-                )}, ${getY2AxisYPosition()})`
+                )})`
             )
             .call(axis.y2);
     }
@@ -876,5 +911,7 @@ export {
     hasY2Axis,
     translateAxes,
     translateAxisReferenceLine,
-    isValidAxisType
+    isValidAxisType,
+    calculateVerticalPadding,
+    isXAxisOrientationTop
 };

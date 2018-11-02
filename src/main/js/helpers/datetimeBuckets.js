@@ -25,6 +25,7 @@ const createDatetimeBuckets = (gridSVG, axis, config, createVGridHandler) => {
             gridSVG,
             axis,
             config.axis.x.ticks.values,
+            config.axis.x.orientation,
             config.height,
             BUCKET_TYPES.LOWER_STEP_TICK_VALUES,
             createVGridHandler
@@ -34,6 +35,7 @@ const createDatetimeBuckets = (gridSVG, axis, config, createVGridHandler) => {
             gridSVG,
             axis,
             config.axis.x.ticks.lowerStepTickValues,
+            config.axis.x.orientation,
             config.height,
             BUCKET_TYPES.LOWER_STEP_TICK_VALUES,
             createVGridHandler
@@ -45,6 +47,7 @@ const createDatetimeBuckets = (gridSVG, axis, config, createVGridHandler) => {
             gridSVG,
             axis,
             config.axis.x.ticks.midpointTickValues,
+            config.axis.x.orientation,
             config.height,
             BUCKET_TYPES.MIDPOINT_TICK_VALUES,
             createVGridHandler
@@ -56,6 +59,7 @@ const createDatetimeBuckets = (gridSVG, axis, config, createVGridHandler) => {
             gridSVG,
             axis,
             config.axis.x.ticks.upperStepTickValues,
+            config.axis.x.orientation,
             config.height,
             BUCKET_TYPES.UPPER_STEP_TICK_VALUES,
             createVGridHandler
@@ -86,6 +90,7 @@ const translateDatetimeBuckets = (
             canvasSVG,
             axis,
             config.axis.x.ticks.values,
+            config.axis.x.orientation,
             config.height,
             BUCKET_TYPES.LOWER_STEP_TICK_VALUES,
             translateVGridHandler
@@ -95,6 +100,7 @@ const translateDatetimeBuckets = (
             canvasSVG,
             axis,
             config.axis.x.ticks.lowerStepTickValues,
+            config.axis.x.orientation,
             config.height,
             BUCKET_TYPES.LOWER_STEP_TICK_VALUES,
             translateVGridHandler
@@ -106,6 +112,7 @@ const translateDatetimeBuckets = (
             canvasSVG,
             axis,
             config.axis.x.ticks.midpointTickValues,
+            config.axis.x.orientation,
             config.height,
             BUCKET_TYPES.MIDPOINT_TICK_VALUES,
             translateVGridHandler
@@ -117,6 +124,7 @@ const translateDatetimeBuckets = (
             canvasSVG,
             axis,
             config.axis.x.ticks.upperStepTickValues,
+            config.axis.x.orientation,
             config.height,
             BUCKET_TYPES.UPPER_STEP_TICK_VALUES,
             translateVGridHandler
@@ -130,6 +138,7 @@ const translateDatetimeBuckets = (
  * @param {Object} gridSVG - d3 object of the grid
  * @param {Object} axis - Axis scaled according to input parameters
  * @param {array} values - List of all tick values.
+ * @param {string} orientation - X axis orientation.
  * @param {string} height - height of the grid, based on input config.
  * @param {string} type - type of tick. Either lowerStepTick or midpointTick or upperStepTick.
  * @param {Function} createVGridHandler - Call back function to create grid.
@@ -139,11 +148,12 @@ const createVGridForDatetimeBuckets = (
     gridSVG,
     axis,
     values,
+    orientation,
     height,
     type,
     createVGridHandler
 ) => {
-    const config = createDatetimeBucketConfig(values, height);
+    const config = createDatetimeBucketConfig(values, height, orientation);
     const style = determineBucketStyle(type);
     createVGridHandler(gridSVG, axis, style, config);
 };
@@ -154,6 +164,7 @@ const createVGridForDatetimeBuckets = (
  * @param {Object} canvasSVG - d3 object of the grid
  * @param {Object} axis - Axis scaled according to input parameters
  * @param {array} values - List of all tick values.
+ * @param {string} orientation - X axis orientation.
  * @param {string} height - height of the grid, based on input config.
  * @param {string} type - type of tick. Either lowerStepTick or midpointTick or upperStepTick.
  * @param {Function} translateVGridHandler - Call back function to translate grid.
@@ -163,11 +174,12 @@ const translateVGridDatetimeBuckets = (
     canvasSVG,
     axis,
     values,
+    orientation,
     height,
     type,
     translateVGridHandler
 ) => {
-    const config = createDatetimeBucketConfig(values, height);
+    const config = createDatetimeBucketConfig(values, height, orientation);
     const style = determineBucketStyle(type);
     translateVGridHandler(canvasSVG, axis, style, config);
 };
@@ -177,14 +189,16 @@ const translateVGridDatetimeBuckets = (
  * @private
  * @param {array} values - list of all tick values.
  * @param {string} height - Y axis height.
+ * @param {string} orientation - X axis orientation.
  * @returns {Object} - config with tick values and height.
  */
-const createDatetimeBucketConfig = (values, height) => ({
+const createDatetimeBucketConfig = (values, height, orientation) => ({
     axis: {
         x: {
             ticks: {
                 values
-            }
+            },
+            orientation : `${orientation}`
         }
     },
     height: `${height}`
@@ -280,7 +294,7 @@ const prepareHAxis = (
     axis,
     config,
     prepareXAxisHandler,
-    orientation
+    orientation = config.axis.x.orientation
 ) => {
     if (hasDatetimeBuckets(config.axis.x.ticks)) {
         const values = config.axis.x.ticks.lowerStepTickValues
