@@ -1,7 +1,11 @@
 "use strict";
 import d3 from "d3";
 import { d3RemoveElement } from "../controls/Graph/helpers/helpers";
-import { getXAxisWidth, getXAxisXPosition, calculateVerticalPadding } from "./axis";
+import {
+    getXAxisWidth,
+    getXAxisXPosition,
+    calculateVerticalPadding
+} from "./axis";
 import constants from "./constants";
 import errors from "./errors";
 import styles from "./styles";
@@ -138,7 +142,8 @@ const getRegionAxis = (region) => region.axis || constants.Y_AXIS;
  */
 const getYAxisRangePosition = (scale, config) => (bounds) =>
     bounds.end
-        ? scale[getRegionAxis(bounds)](bounds.end) + calculateVerticalPadding(config)
+        ? scale[getRegionAxis(bounds)](bounds.end) +
+          calculateVerticalPadding(config)
         : calculateVerticalPadding(config);
 /**
  * Returns the height for range based on Y Axes, start and end bounds
@@ -152,10 +157,11 @@ const getYAxisRangePosition = (scale, config) => (bounds) =>
  * @returns {number} Height of the region for Y axes
  */
 const getRegionHeight = (regionPath, bounds, scale, config) => {
-    const graphHeight = config.height; 
+    const graphHeight = config.height;
     const upperBound = regionPath.attr(constants.Y_AXIS);
     const lowerBound = bounds.start
-        ? scale[getRegionAxis(bounds)](bounds.start) + calculateVerticalPadding(config)
+        ? scale[getRegionAxis(bounds)](bounds.start) +
+          calculateVerticalPadding(config)
         : graphHeight + calculateVerticalPadding(config);
     // If start and end are the same then `padding.top` worth of height is
     // applied to make it seem like a goal line

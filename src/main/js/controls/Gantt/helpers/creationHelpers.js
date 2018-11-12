@@ -13,7 +13,6 @@ import {
 } from "../../../helpers/axis";
 import constants, { AXES_ORIENTATION } from "../../../helpers/constants";
 import { createVGrid, prepareHAxis } from "../../../helpers/datetimeBuckets";
-import { shouldTruncateLabel, truncateLabel } from "../../../helpers/label";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 import {
@@ -244,15 +243,6 @@ const getAxesScale = (axis, scale, config) => {
     return axis;
 };
 /**
- * Checks if the track label needs to be truncated and returns the truncated value
- * @private
- * @param {string} label - Track label display property
- * @returns {string} if more than constants.DEFAULT_LABEL_CHARACTER_LIMIT then truncates,
- * normal label otherwise
- */
-const getTrackLabel = (label) =>
-    shouldTruncateLabel(label) ? truncateLabel(label) : label;
-/**
  * Returns an array containing the current domain for Y Axis.
  * If there are no labels or the graph has no content then the domain is empty array,
  * but if the data is provided then the domain will be 'null' as the first item
@@ -265,9 +255,7 @@ const getTrackLabel = (label) =>
 const getYAxisDomain = (trackList) =>
     utils.isEmpty(trackList)
         ? []
-        : Object.keys(trackList).map((k) =>
-              getTrackLabel(trackList[k].trackLabel)
-          );
+        : Object.keys(trackList).map((k) => trackList[k].trackLabel);
 /**
  * Computes the Y Axis range by adding the track heights provided by consumer for each track
  * If the track height for 3 tracks are [80, null, 50]
@@ -573,7 +561,6 @@ export {
     determineHeight,
     getShapeForTarget,
     getColorForTarget,
-    getTrackLabel,
     attachEventHandlers,
     detachEventHandlers,
     updateAxesDomain,

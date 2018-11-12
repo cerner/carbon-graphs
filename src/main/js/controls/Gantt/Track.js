@@ -14,14 +14,14 @@ import { loadActions, unloadActions } from "./helpers/actionHelpers";
 import { loadActivities, unloadActivities } from "./helpers/activityHelpers";
 import {
     createTrackContainer,
-    getTrackLabel,
     updateTrackProps
 } from "./helpers/creationHelpers";
 import { loadTasks, unloadTasks } from "./helpers/taskHelpers";
 import {
     translateActionPoints,
     translateActivities,
-    translateTasks
+    translateTasks,
+    truncateTrackLabelText
 } from "./helpers/translateHelpers";
 
 /**
@@ -60,7 +60,7 @@ export const validateContent = (content) => {
  * @returns {boolean} true if label value is the same as the tick text, false otherwise
  */
 const hasMatchingTrackLabel = (control, display) =>
-    d3.select(control).datum() === getTrackLabel(display);
+    d3.select(control).datum() === display;
 /**
  * Adds onClick event for each tick.
  * Criteria:
@@ -177,6 +177,7 @@ class Track extends GraphContent {
      * @inheritDoc
      */
     resize(graph) {
+        truncateTrackLabelText();
         if (utils.notEmpty(this.config.activities)) {
             translateActivities(graph.scale, graph.config, this.trackGroupPath);
         }

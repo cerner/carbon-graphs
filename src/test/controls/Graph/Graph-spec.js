@@ -2,7 +2,10 @@
 import Graph from "../../../main/js/controls/Graph/index";
 import Line from "../../../main/js/controls/Line/Line";
 import { getXAxisWidth } from "../../../main/js/helpers/axis";
-import constants, { AXIS_TYPE, AXES_ORIENTATION } from "../../../main/js/helpers/constants";
+import constants, {
+    AXIS_TYPE,
+    AXES_ORIENTATION
+} from "../../../main/js/helpers/constants";
 import errors from "../../../main/js/helpers/errors";
 import { loadLegendItem } from "../../../main/js/helpers/legend";
 import styles from "../../../main/js/helpers/styles";
@@ -283,7 +286,9 @@ describe("Graph", () => {
             expect(graph.config.axis.y.ticks).toEqual({});
             expect(graph.config.axis.x.show).toEqual(true);
             expect(graph.config.axis.y.show).toEqual(true);
-            expect(graph.config.axis.x.orientation).toEqual(AXES_ORIENTATION.X.BOTTOM);
+            expect(graph.config.axis.x.orientation).toEqual(
+                AXES_ORIENTATION.X.BOTTOM
+            );
         });
         it("processes the timeseries input correctly", () => {
             const input = getAxes(axisTimeSeries);
@@ -303,7 +308,9 @@ describe("Graph", () => {
             expect(graph.config.axis.y.ticks).toEqual({});
             expect(graph.config.axis.x.show).toEqual(true);
             expect(graph.config.axis.y.show).toEqual(true);
-            expect(graph.config.axis.x.orientation).toEqual(AXES_ORIENTATION.X.BOTTOM);
+            expect(graph.config.axis.x.orientation).toEqual(
+                AXES_ORIENTATION.X.BOTTOM
+            );
         });
         it("process bindLegendTo correctly", () => {
             const input = utils.deepClone(getAxes(axisDefault));
@@ -685,10 +692,13 @@ describe("Graph", () => {
             });
             it("sets x axis orientation to bottom", () => {
                 const xAxisBottomOrientation = utils.deepClone(axisDefault);
-                xAxisBottomOrientation.x.orientation = AXES_ORIENTATION.X.BOTTOM;
+                xAxisBottomOrientation.x.orientation =
+                    AXES_ORIENTATION.X.BOTTOM;
                 const input = getAxes(xAxisBottomOrientation);
                 graph = new Graph(input);
-                expect(graph.config.axis.x.orientation).toEqual(AXES_ORIENTATION.X.BOTTOM);
+                expect(graph.config.axis.x.orientation).toEqual(
+                    AXES_ORIENTATION.X.BOTTOM
+                );
             });
             it("hides x axis when not enabled", () => {
                 graph.destroy();
@@ -1657,7 +1667,9 @@ describe("Graph", () => {
             expect(graph.config.axis.y.ticks).toEqual({});
             expect(graph.config.axis.x.show).toEqual(true);
             expect(graph.config.axis.y.show).toEqual(true);
-            expect(graph.config.axis.x.orientation).toEqual(AXES_ORIENTATION.X.TOP);
+            expect(graph.config.axis.x.orientation).toEqual(
+                AXES_ORIENTATION.X.TOP
+            );
         });
         it("creates label x axis when text is present", () => {
             graph.destroy();

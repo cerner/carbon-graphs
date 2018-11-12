@@ -81,6 +81,16 @@ describe("Carbon", () => {
         expect(Carbon.tools.shape).toEqual(jasmine.any(Function));
         expect(shape instanceof Shape).toBeTruthy();
     });
+    it("registers defaultSVGProps", () => {
+        const _svgProps = Carbon.tools.defaultSVGProps();
+        expect(Carbon.tools.defaultSVGProps).toEqual(jasmine.any(Function));
+        expect(_svgProps instanceof Object).toBeTruthy();
+        expect(_svgProps.svgClassNames).toEqual("");
+        expect(_svgProps.svgStyles).toEqual("");
+        expect(_svgProps.transformFn).toEqual(jasmine.any(Function));
+        expect(_svgProps.onClickFn).toEqual(jasmine.any(Function));
+        expect(_svgProps.a11yAttributes).toEqual({});
+    });
     it("registers Gantt", () => {
         const gantt = Carbon.api.gantt(ganttInput);
         expect(Carbon.api.gantt).toEqual(jasmine.any(Function));

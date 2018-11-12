@@ -2,7 +2,13 @@
 /* globals VERSION */
 import api from "./controls";
 import { Shape } from "./core";
-import { AXIS_TYPE, COLORS, LINE_TYPE, SHAPES, AXES_ORIENTATION } from "./helpers/constants";
+import {
+    AXES_ORIENTATION,
+    AXIS_TYPE,
+    COLORS,
+    LINE_TYPE,
+    SHAPES
+} from "./helpers/constants";
 import LOCALE from "./locale";
 
 /**

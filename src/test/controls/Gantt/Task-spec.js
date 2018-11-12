@@ -285,7 +285,7 @@ describe("Gantt -> Track -> Task", () => {
             const d3TaskElement = d3.select(`.${styles.task}`);
             const taskData = d3TaskElement.datum();
             expect(taskData.key).toBe(taskValuesJSON[0].key);
-            expect(taskData.y).toBe("Project A Re...");
+            expect(taskData.y).toBe("Project A Really long");
             expect(taskData.onClick).toEqual(jasmine.any(Function));
             expect(taskData.color).toBe(COLORS.BLUE);
             expect(taskData.startDate).toEqual(

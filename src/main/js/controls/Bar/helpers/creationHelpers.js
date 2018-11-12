@@ -1,7 +1,10 @@
 "use strict";
 import d3 from "d3";
 import { getType } from "../../../core/BaseConfig";
-import { isValidAxisType, calculateVerticalPadding } from "../../../helpers/axis";
+import {
+    isValidAxisType,
+    calculateVerticalPadding
+} from "../../../helpers/axis";
 import { getBarStyle, getHashedBar, getRect } from "../../../helpers/barType";
 import constants, {
     AXIS_TYPE,
@@ -145,7 +148,7 @@ const draw = (scale, ordinalScale, config, canvasSVG, dataTarget) => {
             "transform",
             `translate(${getXAxisXPosition(config)},${calculateVerticalPadding(
                 config
-                )})`
+            )})`
         )
         .data([dataTarget]);
     const bars = barGroupSVG

@@ -17,9 +17,7 @@ import {
     renderPairedResultYHidden,
     renderPairedResultXOrientationTop
 } from "../controls/pairedResult";
-import {
-    renderBarTimeSeriesXOrientationTop
-}from "../controls/bar";
+import { renderBarTimeSeriesXOrientationTop } from "../controls/bar";
 import {
     btn,
     clearContent,

@@ -83,6 +83,39 @@ describe("Gantt -> Track", () => {
             }).toThrowError(errors.THROW_MSG_UNIQUE_LABEL_NOT_PROVIDED);
         });
     });
+    describe("Track label", () => {
+        const smallLabel = "Project A";
+        const largeLabel =
+            "Project long display value which is only for testing";
+        beforeEach(() => {
+            gantt.loadContent({
+                key: "track 1",
+                trackLabel: {
+                    display: largeLabel
+                }
+            });
+            gantt.loadContent({
+                key: "track 2",
+                trackLabel: {
+                    display: smallLabel
+                }
+            });
+        });
+        it("Truncates if too long", () => {
+            expect(
+                document.querySelectorAll(
+                    `.${styles.axisYTrackLabel} .tick text`
+                )[0].textContent
+            ).toBe("Project long...");
+        });
+        it("Does not truncate if not long", () => {
+            expect(
+                document.querySelectorAll(
+                    `.${styles.axisYTrackLabel} .tick text`
+                )[1].textContent
+            ).toBe("Project A");
+        });
+    });
     describe("Adds clickHandler for Label", () => {
         const smallLabel = "Project A";
         const largeLabel =

@@ -95,9 +95,11 @@ const translateHorizontalGrid = (axis, config) => {
  */
 const translateVerticalGrid = (axis, config) => {
     let xAxisGrid;
-    const tickSizeMultiplicand = isXAxisOrientationTop(config.axis.x.orientation)
-    ? constants.TICK_ORIENTATION.TOP
-    : constants.TICK_ORIENTATION.BOTTOM;
+    const tickSizeMultiplicand = isXAxisOrientationTop(
+        config.axis.x.orientation
+    )
+        ? constants.TICK_ORIENTATION.TOP
+        : constants.TICK_ORIENTATION.BOTTOM;
     if (utils.notEmpty(config.axis.x.ticks.values)) {
         const ticks = config.axis.x.ticks.values;
         xAxisGrid = axis.x

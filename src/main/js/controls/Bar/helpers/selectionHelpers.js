@@ -87,7 +87,12 @@ const drawSelectionBars = (scale, ordinalScale, config, canvasSVG) => {
     const selectionPath = canvasSVG
         .append("g")
         .classed(styles.barSelectionGroup, true)
-        .attr("transform", `translate(${getXAxisXPosition(config)},${calculateVerticalPadding(config)})`)
+        .attr(
+            "transform",
+            `translate(${getXAxisXPosition(config)},${calculateVerticalPadding(
+                config
+            )})`
+        )
         .selectAll(`${styles.taskBarSelection}`)
         .data(tickValues);
     selectionPath

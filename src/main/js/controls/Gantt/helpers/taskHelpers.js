@@ -13,7 +13,7 @@ import constants, { COLORS } from "../../../helpers/constants";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 import { validateTask } from "../GanttConfig";
-import { getTrackLabel, getXAxisYPosition, isHashed } from "./creationHelpers";
+import { getXAxisYPosition, isHashed } from "./creationHelpers";
 import {
     calculatePercentage,
     getDuration,
@@ -96,7 +96,7 @@ const processTask = (graphConfig, trackLabel, dataTarget) => {
         : 0;
     return {
         onClick: dataTarget.onClick,
-        y: getTrackLabel(trackLabel.display),
+        y: trackLabel.display,
         startDate: getStartDuration(
             _duration,
             dataTarget.startDate,

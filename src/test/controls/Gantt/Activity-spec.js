@@ -285,7 +285,7 @@ describe("Gantt -> Track -> Activity", () => {
             const d3ActivityElement = d3.select(`.${styles.activity}`);
             const activityData = d3ActivityElement.datum();
             expect(activityData.key).toBe(activityValuesJSON[0].key);
-            expect(activityData.y).toBe("Project A Re...");
+            expect(activityData.y).toBe("Project A Really long");
             expect(activityData.color).toBe(COLORS.BLUE);
             expect(activityData.startDate).toEqual(
                 new Date(activityValuesJSON[0].startDate)

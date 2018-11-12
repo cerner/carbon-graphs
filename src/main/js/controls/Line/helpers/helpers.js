@@ -205,9 +205,9 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
             .classed(styles.currentPointsGroup, true)
             .attr(
                 "transform",
-                `translate(${getXAxisXPosition(config)},${calculateVerticalPadding(
+                `translate(${getXAxisXPosition(
                     config
-                )})`
+                )},${calculateVerticalPadding(config)})`
             );
         currentPointsPath
             .exit()

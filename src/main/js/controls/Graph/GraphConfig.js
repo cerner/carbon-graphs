@@ -3,7 +3,10 @@ import d3 from "d3";
 import BaseConfig, { getDefaultValue, getDomain } from "../../core/BaseConfig";
 import { generateClipPathId } from "../../core/BaseConfig/helper";
 import { hasY2Axis } from "../../helpers/axis";
-import constants, { AXIS_TYPE, AXES_ORIENTATION } from "../../helpers/constants";
+import constants, {
+    AXIS_TYPE,
+    AXES_ORIENTATION
+} from "../../helpers/constants";
 import errors from "../../helpers/errors";
 import utils from "../../helpers/utils";
 import { DEFAULT_LOCALE } from "../../locale/index";

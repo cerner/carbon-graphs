@@ -8,6 +8,7 @@ import {
 } from "../../../helpers/axis";
 import constants, { AXES_ORIENTATION } from "../../../helpers/constants";
 import { prepareHAxis, translateVGrid } from "../../../helpers/datetimeBuckets";
+import { shouldTruncateLabel, truncateLabel } from "../../../helpers/label";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 import {
@@ -16,7 +17,6 @@ import {
 } from "../../Graph/helpers/helpers";
 import {
     getAxesScale,
-    getTrackLabel,
     getXAxisWidth,
     getXAxisXPosition,
     getXAxisYPosition,
@@ -24,6 +24,7 @@ import {
 } from "./creationHelpers";
 import { calculatePercentage } from "./durationHelpers";
 
+const TRACK_LABEL_TEXT_CLASS = `.${styles.axisYTrackLabel} .tick text`;
 /**
  * Returns the track label position in D3 scale's domain
  * @private
@@ -88,9 +89,8 @@ const getTransformXCoordinate = (scale, xVal) => (!scale ? 0 : scale.x(xVal));
  * @returns {number} y co-ordinate transform translate
  */
 const getTransformYCoordinateWithScale = (scale, config, yVal) => {
-    const label = getTrackLabel(yVal);
-    const offset = !scale ? 0 : scale.y(label);
-    const yPosBasedOnHeight = getTransformYCoordinate(scale, config, label);
+    const offset = !scale ? 0 : scale.y(yVal);
+    const yPosBasedOnHeight = getTransformYCoordinate(scale, config, yVal);
     return offset + yPosBasedOnHeight;
 };
 /**
@@ -300,8 +300,25 @@ const translateDateline = (scale, config, canvasSVG) => {
  */
 const translateLabelText = (scale, config, canvasSVG) =>
     canvasSVG
-        .selectAll(".carbon-axis.carbon-axis-y .tick text")
+        .selectAll(TRACK_LABEL_TEXT_CLASS)
         .attr("transform", getTrackLabelTransformProperty(scale, config));
+/**
+ * Checks if the track label needs to be truncated and returns the truncated value
+ * @private
+ * @param {string} label - Track label display property
+ * @returns {string} if more than constants.DEFAULT_LABEL_CHARACTER_LIMIT then truncates,
+ * normal label otherwise
+ */
+const getTrackLabel = (label) =>
+    shouldTruncateLabel(label) ? truncateLabel(label) : label;
+/**
+ * Truncates Track label text using d3
+ * @private
+ * @returns {undefined} - returns nothing
+ */
+const truncateTrackLabelText = () =>
+    d3.selectAll(TRACK_LABEL_TEXT_CLASS).text((d) => getTrackLabel(d));
+
 /**
  * Transforms the point in the gantt graph on resize
  * @private
@@ -512,6 +529,7 @@ export {
     translateHorizontalGrid,
     translateVerticalGrid,
     translateLabelText,
+    truncateTrackLabelText,
     transformPoint,
     translateActionPoints,
     translateTasks,

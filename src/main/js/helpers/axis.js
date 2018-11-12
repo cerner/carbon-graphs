@@ -338,7 +338,7 @@ const getYAxisLabelXPosition = (config) =>
  */
 const getYAxisLabelYPosition = (config) =>
     getYAxisYPosition(config) +
-    ((getYAxisHeight(config) - PADDING.top - PADDING.bottom) / 2);
+    (getYAxisHeight(config) - PADDING.top - PADDING.bottom) / 2;
 /**
  * Y2 Axis label's starting position vertically beside the graph
  * @private
@@ -358,8 +358,8 @@ const getY2AxisLabelXPosition = (config) =>
  */
 const calculateVerticalPadding = (config) => {
     if (!isXAxisOrientationTop(config.axis.x.orientation)) {
-        return  PADDING.top;
-    } else if(!config.axisLabelHeights.x) {
+        return PADDING.top;
+    } else if (!config.axisLabelHeights.x) {
         return PADDING.bottom * 2;
     }
     return config.axisLabelHeights.x * 2 + PADDING.bottom;
@@ -530,7 +530,8 @@ const getYAxisWidth = (id, config) => {
  * @param {String} xAxisOrientation - X Axis orientation
  * @returns {Boolean} - true if X Axis orientation is set to top, false if it is bottom(default)
  */
-const isXAxisOrientationTop = (xAxisOrientation) => xAxisOrientation === AXES_ORIENTATION.X.TOP;
+const isXAxisOrientationTop = (xAxisOrientation) =>
+    xAxisOrientation === AXES_ORIENTATION.X.TOP;
 /**
  * Calculates axes sizes, specifically:
  *  X Axis: Height

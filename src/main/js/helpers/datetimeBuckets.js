@@ -198,7 +198,7 @@ const createDatetimeBucketConfig = (values, height, orientation) => ({
             ticks: {
                 values
             },
-            orientation : `${orientation}`
+            orientation: `${orientation}`
         }
     },
     height: `${height}`

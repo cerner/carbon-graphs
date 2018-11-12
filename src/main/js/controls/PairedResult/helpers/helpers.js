@@ -3,7 +3,11 @@ import d3 from "d3";
 import { Shape } from "../../../core";
 import { parseTypedValue } from "../../../core/BaseConfig";
 import { getDefaultSVGProps } from "../../../core/Shape";
-import { getXAxisXPosition, isValidAxisType, calculateVerticalPadding } from "../../../helpers/axis";
+import {
+    getXAxisXPosition,
+    isValidAxisType,
+    calculateVerticalPadding
+} from "../../../helpers/axis";
 import constants, { SHAPES } from "../../../helpers/constants";
 import errors from "../../../helpers/errors";
 import {
