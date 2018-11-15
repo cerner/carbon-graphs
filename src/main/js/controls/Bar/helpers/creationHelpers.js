@@ -17,6 +17,7 @@ import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 import { d3RemoveElement } from "../../Graph/helpers/helpers";
 import { createRegion } from "./goalLineHelpers";
+import { isEqual } from "./resizeHelpers";
 import { drawSelectionBars, getSelectedData } from "./selectionHelpers";
 
 /**
@@ -260,7 +261,7 @@ const drawDataBars = (
                     );
                 });
             if (utils.notEmpty(regionList)) {
-                const regions = regionList.filter((r) => r.x === dataPoint.x);
+                const regions = regionList.filter((r) => isEqual(r.x, dataPoint.x));
                 if (utils.notEmpty(regions)) {
                     createRegion(
                         scale,

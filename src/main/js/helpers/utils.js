@@ -116,6 +116,13 @@ const deepClone = (o) => {
  */
 const isDate = (str) => constants.ISO8601_DATE_TIME_MILLI.test(str);
 /**
+ * Checks to see if the object provided is an instance of date
+ * @private
+ * @param {Object} obj - Object instance of date
+ * @returns {boolean} true if instance of date
+ */
+const isDateInstance = (obj) => obj instanceof Date;
+/**
  * Converts ISO8601 datetime string to Date
  * @private
  * @param {number|string} value - ISO8601 datetime string
@@ -162,5 +169,6 @@ export default {
     isDate,
     isNumber,
     parseDateTime,
-    getTime
+    getTime,
+    isDateInstance
 };

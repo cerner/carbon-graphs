@@ -868,8 +868,8 @@ const getAxesDataRange = (
  * @returns {boolean} - returns true if valid, false if invalid
  */
 const isValidAxisType = (x, xAxisType) =>
-    (utils.isDate(x) && getType(xAxisType) === AXIS_TYPE.TIME_SERIES) ||
-    (!utils.isDate(x) && getType(xAxisType) !== AXIS_TYPE.TIME_SERIES);
+    ((utils.isDate(x) || utils.isDateInstance(x)) && getType(xAxisType) === AXIS_TYPE.TIME_SERIES) ||
+    (!utils.isDate(x) && !utils.isDateInstance(x) && getType(xAxisType) !== AXIS_TYPE.TIME_SERIES);
 
 /**
  * @enum {Function}
