@@ -138,8 +138,10 @@ const isDateEqual = (a, b) => a.getTime() === b.getTime();
  * @param {Object} b - value to compare
  * @returns {Boolean} - returns true or false
  */
-const isEqual = (a, b) => utils.isDate(a) || utils.isDateInstance(a) ?
-    isDateEqual(utils.parseDateTime(a), utils.parseDateTime(b)) : a === b;
+const isEqual = (a, b) =>
+    utils.isDate(a) || utils.isDateInstance(a)
+        ? isDateEqual(utils.parseDateTime(a), utils.parseDateTime(b))
+        : a === b;
 /**
  * In case of stacked bars, this method sets y-axis offset for each data point.
  * By default, every bar is considered as a stacked bar. This method checks if there are any bars

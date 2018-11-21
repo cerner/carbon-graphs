@@ -201,7 +201,7 @@ const translateSelectBars = (scale, ordinalScale, canvasSVG, config) =>
             dataPoint.valueSubsetArray
         );
         canvasSVG
-            .select(`rect[aria-describedby=bar-selector-${i}`)
+            .select(`rect[aria-describedby=bar-selector-${i}]`)
             .transition(constants.d3Transition)
             .attr("x", selectionAttrHelper.x())
             .attr("y", selectionAttrHelper.y())
