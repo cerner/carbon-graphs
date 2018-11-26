@@ -19,7 +19,7 @@ import utils from "../../helpers/utils";
  * @throws module:errors.THROW_MSG_NO_DATA_POINTS
  * @throws module:errors.THROW_MSG_UNIQUE_KEY_NOT_PROVIDED
  * @throws module:errors.THROW_MSG_NO_CONTENT_DATA_LOADED
- * @param {object} input - input JSON object
+ * @param {Object} input - input JSON object
  * @returns {undefined} returns nothing
  */
 export const validateBaseInput = (input) => {

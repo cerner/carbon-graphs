@@ -93,7 +93,7 @@ const createRegionContainer = (config, canvasSVG) =>
  * @param {Object} config - config object derived from input JSON
  * @param {Object} regionGroupSVG - d3 object of region group svg
  * @param {Array} regionList - List of regions to be shown within graph
- * @param {String} uniqueKey - unique id of the content loaded in graph
+ * @param {string} uniqueKey - unique id of the content loaded in graph
  * @param {string} targetAxis - Axis for which region needs to be shown
  * @returns {Object} d3 svg path
  */

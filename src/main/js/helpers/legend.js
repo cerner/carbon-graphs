@@ -139,45 +139,49 @@ const legendHoverHandler = (
     additionalHandlers = []
 ) => {
     // Blur everything except the item hovered
-    shownTargets.filter((target) => target !== key).forEach((k) => {
-        // All Points
-        canvasSVG
-            .selectAll(`svg[aria-describedby="${k}"]`)
-            .classed(
-                styles.blur,
-                hoverState === constants.HOVER_EVENT.MOUSE_ENTER
-            );
-        // All Lines
-        canvasSVG
-            .selectAll(`path[aria-describedby="${k}"]`)
-            .classed(
-                styles.blur,
-                hoverState === constants.HOVER_EVENT.MOUSE_ENTER
-            );
-        canvasSVG
-            .selectAll(`.${styles.pairedLine}`)
-            .classed(
-                styles.blur,
-                hoverState === constants.HOVER_EVENT.MOUSE_ENTER
-            );
-        canvasSVG
-            .selectAll(`rect[aria-describedby="${k}"]`)
-            .classed(
-                styles.blur,
-                hoverState === constants.HOVER_EVENT.MOUSE_ENTER
-            );
-        canvasSVG
-            .selectAll(`.${styles.barGoalLine}[aria-describedby="region_${k}"]`)
-            .attr(
-                "aria-hidden",
-                hoverState === constants.HOVER_EVENT.MOUSE_ENTER
-            );
-        if (utils.notEmpty(additionalHandlers)) {
-            additionalHandlers.forEach((fn) =>
-                fn(shownTargets, canvasSVG, key, hoverState, k)
-            );
-        }
-    });
+    shownTargets
+        .filter((target) => target !== key)
+        .forEach((k) => {
+            // All Points
+            canvasSVG
+                .selectAll(`svg[aria-describedby="${k}"]`)
+                .classed(
+                    styles.blur,
+                    hoverState === constants.HOVER_EVENT.MOUSE_ENTER
+                );
+            // All Lines
+            canvasSVG
+                .selectAll(`path[aria-describedby="${k}"]`)
+                .classed(
+                    styles.blur,
+                    hoverState === constants.HOVER_EVENT.MOUSE_ENTER
+                );
+            canvasSVG
+                .selectAll(`.${styles.pairedLine}`)
+                .classed(
+                    styles.blur,
+                    hoverState === constants.HOVER_EVENT.MOUSE_ENTER
+                );
+            canvasSVG
+                .selectAll(`rect[aria-describedby="${k}"]`)
+                .classed(
+                    styles.blur,
+                    hoverState === constants.HOVER_EVENT.MOUSE_ENTER
+                );
+            canvasSVG
+                .selectAll(
+                    `.${styles.barGoalLine}[aria-describedby="region_${k}"]`
+                )
+                .attr(
+                    "aria-hidden",
+                    hoverState === constants.HOVER_EVENT.MOUSE_ENTER
+                );
+            if (utils.notEmpty(additionalHandlers)) {
+                additionalHandlers.forEach((fn) =>
+                    fn(shownTargets, canvasSVG, key, hoverState, k)
+                );
+            }
+        });
 };
 
 /**

@@ -434,7 +434,7 @@ const getYAxisHeight = (config) => config.height;
  * X Axis height for the axis and labels to display within
  * @private
  * @param {Object} config - config object derived from input JSON
- * @returns {Number} Height of the X Axis ticks, labels and numbers/datetimes
+ * @returns {number} Height of the X Axis ticks, labels and numbers/datetimes
  */
 const getXAxisHeight = (config) => {
     const scale = getScale(config.axis.x.type)
@@ -470,7 +470,7 @@ const getYAxisRange = (config) => [getYAxisHeight(config), 0];
  * @private
  * @param {string} label - Label text
  * @param {string} axis - x, y or y2
- * @returns {Number} label width
+ * @returns {number} label width
  */
 const getAxisLabelWidth = (label, axis) => {
     const dummy = d3.select("body").append("div");
@@ -487,7 +487,7 @@ const getAxisLabelWidth = (label, axis) => {
  * Dynamically generate the label height for axes
  * @private
  * @param {string} label - Label text
- * @returns {Number} label height
+ * @returns {number} label height
  */
 const getAxisLabelHeight = (label) => {
     const dummy = d3.select("body").append("div");
@@ -503,7 +503,7 @@ const getAxisLabelHeight = (label) => {
  * @private
  * @param {string} id - y or y2
  * @param {Object} config - config object derived from input JSON
- * @returns {Number} label width
+ * @returns {number} label width
  */
 const getYAxisWidth = (id, config) => {
     const scale = d3.scale
@@ -527,8 +527,8 @@ const getYAxisWidth = (id, config) => {
 /**
  * Checks if X Axis orientation is set to top
  * @private
- * @param {String} xAxisOrientation - X Axis orientation
- * @returns {Boolean} - true if X Axis orientation is set to top, false if it is bottom(default)
+ * @param {string} xAxisOrientation - X Axis orientation
+ * @returns {boolean} - true if X Axis orientation is set to top, false if it is bottom(default)
  */
 const isXAxisOrientationTop = (xAxisOrientation) =>
     xAxisOrientation === AXES_ORIENTATION.X.TOP;
@@ -865,7 +865,7 @@ const getAxesDataRange = (
  * Checks if provided input has valid axis type
  * @param {string} x - input x value
  * @param {string} xAxisType - x axis type
- * @returns {Boolean} - returns true if valid, false if invalid
+ * @returns {boolean} - returns true if valid, false if invalid
  */
 const isValidAxisType = (x, xAxisType) =>
     (utils.isDate(x) && getType(xAxisType) === AXIS_TYPE.TIME_SERIES) ||

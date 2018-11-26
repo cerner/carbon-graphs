@@ -148,7 +148,7 @@ const translateGrid = (axis, scale, config, canvasSVG) => {
  * Function to translate the vertical-grid with a specific style and config.
  * @param {Array} canvasSVG - d3 object of canvas svg
  * @param {Object} axis - Axis scaled according to input parameters
- * @param {String} style - Style with which, grid needs to be created.
+ * @param {string} style - Style with which, grid needs to be created.
  * @param {Object} config - config object derived from input JSON
  * @returns {undefined} - returns nothing.
  */
@@ -313,7 +313,7 @@ const createGrid = (axis, scale, config, canvasSVG) => {
  * Function to create the vertical-grid with a specific style and config.
  * @param {Object} gridSVG - d3 object of the grid
  * @param {Object} axis - Axis scaled according to input parameters
- * @param {String} style - Style with which, grid needs to be created.
+ * @param {string} style - Style with which, grid needs to be created.
  * @param {Object} config - config required for translating vertical grid.
  * @returns {undefined} - Doesn't return anything.
  */
@@ -471,7 +471,7 @@ const translateGraph = (control) => {
  * @private
  * @param {Object} domain - Lower and upper bounds for the axes. Currently only being performed for Y and Y2 axes
  * @param {boolean} isPaddingNeeded - represents if axis needs padding
- * @returns {object} - Bound adjusted (Padded) lower and upper bounds for the axes
+ * @returns {Object} - Bound adjusted (Padded) lower and upper bounds for the axes
  */
 const padDomain = (domain, isPaddingNeeded = true) => {
     const lowerBound = domain.lowerLimit;

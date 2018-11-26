@@ -37,7 +37,7 @@ const getBands = (content, shownTargets) => {
  * @private
  * @param {Array} content - Array of targets
  * @param {Array} shownTargets - Array of shown targets
- * @returns {Number} - padding value
+ * @returns {number} - padding value
  */
 const getBandwidthPaddingRatio = (content, shownTargets) =>
     constants.DEFAULT_BAR_GRAPH_PADDING_ATTRIBUTES.OUTER_PADDING_RATIO /

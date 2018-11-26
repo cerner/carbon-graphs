@@ -14,7 +14,7 @@ import utils from "../../../helpers/utils";
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} ordinalScale - bar x-axis ordinal scale
  * @param {Object} region - region input
- * @returns {Number} - xRange of region
+ * @returns {number} - xRange of region
  */
 const getXRange = (scale, ordinalScale, region) => {
     const leftShiftOffset =
@@ -98,7 +98,7 @@ const processGoalLines = (
  * @param {Object} config - config object derived from input JSON
  * @param {Object} regionGroupSVG - d3 object of region group svg
  * @param {Array} regionList - List of regions to be shown within graph
- * @param {String} uniqueKey - unique id of the content loaded in graph
+ * @param {string} uniqueKey - unique id of the content loaded in graph
  * @returns {Object} d3 svg path
  */
 const createRegion = (scale, config, regionGroupSVG, regionList, uniqueKey) => {

@@ -6,7 +6,7 @@
  */
 
 /**
- * @enum {String}
+ * @enum {string}
  */
 export default {
     /**

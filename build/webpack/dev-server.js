@@ -45,7 +45,10 @@ const server = new WebpackDevServer(compiler, {
     historyApiFallback: true,
     noInfo: true,
     disableHostCheck: true,
+    open: true,
+    openPage: `http://localhost:${port}`,
     overlay: true,
+    headers: { "Access-Control-Allow-Origin": "*" },
     contentBase: "./build"
 });
 

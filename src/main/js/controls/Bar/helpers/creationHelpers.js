@@ -24,7 +24,7 @@ import { drawSelectionBars, getSelectedData } from "./selectionHelpers";
  * @private
  * @param {Array} xTicks - graph x axis tick values
  * @param {Array} inputValues - input values
- * @returns {Boolean} - true if invalid. false if valid
+ * @returns {boolean} - true if invalid. false if valid
  */
 const hasInvalidTicks = (xTicks, inputValues) =>
     inputValues.some((value) => xTicks.indexOf(value.x) < 0);
@@ -32,9 +32,9 @@ const hasInvalidTicks = (xTicks, inputValues) =>
 /**
  * Checks if x-axis type matches for every input
  * @private
- * @param {String} type - x-axis type
+ * @param {string} type - x-axis type
  * @param {Array} inputValues - input values
- * @returns {Boolean} - true if input has invalid type, false if it doesn't have invalid type
+ * @returns {boolean} - true if input has invalid type, false if it doesn't have invalid type
  */
 const hasInvalidTypes = (type, inputValues) =>
     inputValues.some((value) => !isValidAxisType(value.x, type));
@@ -295,7 +295,7 @@ const setGroupName = (config, content) => {
  * CLear the graph data points and bars currently rendered
  * @private
  * @param {Object} canvasSVG - d3 html element of canvas
- * @param {String} key - identifier
+ * @param {string} key - identifier
  * @returns {Object} - d3 select object
  */
 const clear = (canvasSVG, key) =>
@@ -328,7 +328,7 @@ const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
  * @private
  * @param {Object} value - data point object
  * @param {Array} canvasSVG - d3 object of canvas svg
- * @param {String} type - x-axis type
+ * @param {string} type - x-axis type
  * @param {Array} tickValues - X axis ticks array
  * @returns {Array} d3 html element of the selected bar
  */
@@ -358,7 +358,7 @@ const toggleDataPointSelection = (value, canvasSVG, type, tickValues) => {
  * @param {Object} value - data point object
  * @param {number} index - data point index for the set
  * @param {Array} canvasSVG - d3 object of canvas svg
- * @param {String} type - x-axis type
+ * @param {string} type - x-axis type
  * @param {Array} tickValues - X axis ticks array
  * @param {Array} datum - selected bar data to be passed to onclick function
  * @returns {undefined} - returns nothing
@@ -384,7 +384,7 @@ const barActionHandler = (value, index, canvasSVG, type, tickValues, datum) => {
  * sets selection bar's aria-hidden and aria-selected attributes
  * @private
  * @param {Object} selectionPath - selection bar svg path
- * @param {Boolean} isSelected - true if selected, false if not
+ * @param {boolean} isSelected - true if selected, false if not
  * @returns {undefined} - returns nothing
  */
 const setSelectionIndicatorAttributes = (selectionPath, isSelected) => {

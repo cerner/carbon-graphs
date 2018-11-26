@@ -117,12 +117,10 @@ export const btn = {
         elem.setAttribute("id", `demo-${key}`);
         elem.setAttribute("class", "carbon-btn");
         el.appendChild(elem).innerHTML = display;
-        elem.addEventListener(
-            "click",
-            (event) =>
-                event.target && !event.target.getAttribute("disabled")
-                    ? contentCallback(event)
-                    : ""
+        elem.addEventListener("click", (event) =>
+            event.target && !event.target.getAttribute("disabled")
+                ? contentCallback(event)
+                : ""
         );
     }
 };

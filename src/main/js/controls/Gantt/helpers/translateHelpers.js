@@ -225,7 +225,7 @@ const translateGrid = (axis, scale, config, canvasSVG) => {
  * Function to create the vertical-grid with a specific style and config.
  * @param {Object} canvasSVG - d3 object of the canvas
  * @param {Object} axis - Axis scaled according to input parameters
- * @param {String} style - Style with which, grid needs to be created.
+ * @param {string} style - Style with which, grid needs to be created.
  * @param {Object} config - config required for translating vertical grid.
  * @returns {undefined} - Doesn't return anything.
  */

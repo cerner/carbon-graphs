@@ -228,7 +228,7 @@ const determineBucketStyle = (type) => {
  * We only display lowerStepTickValues/values and upperStepTickValues in the axis, since,
  * midpointTickValues can be inferred.
  * @private
- * @param {object} dateTimeBuckets - all tick values.
+ * @param {Object} dateTimeBuckets - all tick values.
  * @returns {Array} newStepvalues - tick values based on bucket input.
  */
 const constructDatetimeBucketValues = (dateTimeBuckets) => {

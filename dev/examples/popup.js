@@ -69,10 +69,10 @@ export const loadPopup = (onCloseCB, key, index, value) => {
                 value.high
                     ? getPairData(value.high.x)
                     : value.mid
-                        ? getPairData(value.mid.x)
-                        : value.low
-                            ? getPairData(value.low.x)
-                            : "N/A"
+                    ? getPairData(value.mid.x)
+                    : value.low
+                    ? getPairData(value.low.x)
+                    : "N/A"
             }`
         );
         if (value.high) {

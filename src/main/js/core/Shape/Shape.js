@@ -96,11 +96,10 @@ const setPathProperty = (
  * @returns {Function} d3Elem - d3 SVG element
  */
 const setA11yProperties = (...props) => (d3Elem, a11yAttributes) =>
-    props.forEach(
-        (prop) =>
-            Object.prototype.hasOwnProperty.call(a11yAttributes, prop)
-                ? d3Elem.attr(prop, a11yAttributes[prop])
-                : undefined
+    props.forEach((prop) =>
+        Object.prototype.hasOwnProperty.call(a11yAttributes, prop)
+            ? d3Elem.attr(prop, a11yAttributes[prop])
+            : undefined
     );
 /**
  * Sets viewBox to the element

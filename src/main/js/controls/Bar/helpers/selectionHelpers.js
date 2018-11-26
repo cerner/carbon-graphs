@@ -35,7 +35,7 @@ const getSelectedData = (canvasSVG, value, config) =>
  * This method is called when bar content is unloaded off graph. This will remove objects related to the unloaded content.
  * @private
  * @param {Object} canvasSVG - d3 object of canvas svg
- * @param {String} key - unloaded content key
+ * @param {string} key - unloaded content key
  * @returns {undefined} - returns nothing
  */
 const clearSelectionDatum = (canvasSVG, key) => {
@@ -59,11 +59,10 @@ const clearSelectionDatum = (canvasSVG, key) => {
 const updateSelectionBars = (internalValueSubset, canvasSVG, config) => {
     const selectionPath = canvasSVG.selectAll(`.${styles.taskBarSelection}`);
     selectionPath.each((dataPoint) => {
-        const value = internalValueSubset.filter(
-            (v) =>
-                config.axis.x.type === AXIS_TYPE.TIME_SERIES
-                    ? v.x.toISOString() === dataPoint.x
-                    : v.x === dataPoint.x
+        const value = internalValueSubset.filter((v) =>
+            config.axis.x.type === AXIS_TYPE.TIME_SERIES
+                ? v.x.toISOString() === dataPoint.x
+                : v.x === dataPoint.x
         );
         if (utils.notEmpty(value)) {
             dataPoint.valueSubsetArray.push(value[0]);

@@ -271,7 +271,7 @@ const getDataPointValues = (target) => target.internalValuesSubset;
  * If they are then true, false otherwise
  * @private
  * @param {Object} shownTargets - graph targets config object
- * @param {object} value - data point value object
+ * @param {Object} value - data point value object
  * @returns {boolean} true if data point needs to be hidden, false otherwise
  */
 const shouldHideDataPoints = (shownTargets, value) =>

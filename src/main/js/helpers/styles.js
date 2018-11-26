@@ -5,7 +5,7 @@
  * @alias module:styles
  */
 /**
- * @enum {String}
+ * @enum {string}
  */
 export default {
     container: "carbon-graph-container",

@@ -178,7 +178,7 @@ const calculateAxesLabelSize = (config) => {
  * @private
  * @param {string} id - y or y2
  * @param {Object} config - config object derived from input JSON
- * @returns {Number} label width
+ * @returns {number} label width
  */
 const getYAxisWidth = (id, config) => {
     const scale = d3.scale
@@ -267,11 +267,8 @@ const getYAxisDomain = (trackList) =>
 const getYAxisRange = (trackList) =>
     Object.keys(trackList)
         .map((o) => trackList[o].trackHeight)
-        .map(
-            (h, index, arr) =>
-                index > 0
-                    ? h + arr.slice(0, index).reduce((a, b) => a + b, 0)
-                    : h
+        .map((h, index, arr) =>
+            index > 0 ? h + arr.slice(0, index).reduce((a, b) => a + b, 0) : h
         );
 /**
  * Creates and sets the d3 scale for the Graph. Once the scale is created
@@ -350,7 +347,7 @@ const createGrid = (axis, scale, config, canvasSVG) => {
  * Function to create the vertical-grid with a specific style and config.
  * @param {Object} gridSVG - d3 object of the grid
  * @param {Object} axis - Axis scaled according to input parameters
- * @param {String} style - Style with which, grid needs to be created.
+ * @param {string} style - Style with which, grid needs to be created.
  * @param {Object} config - config required for translating vertical grid.
  * @returns {undefined} - Doesn't return anything.
  */
@@ -536,7 +533,7 @@ const createTrackContainer = (config, canvasSVG, trackConfig) =>
  * Checks if hashing style is available.
  * @private
  * @param {Object} style - all stlyings which can be applied.
- * @returns {Boolean} - indicating if hashed styling can be applied.
+ * @returns {boolean} - indicating if hashed styling can be applied.
  */
 const isHashed = (style) => !(utils.isEmpty(style) || !style.isHashed);
 
