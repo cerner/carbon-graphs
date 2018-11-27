@@ -2,6 +2,9 @@
 
 Ticks and Grid lines representing Axes values.
 
+-   [Ticks](#ticks)
+    -   [JSON Properties](#json-properties) - [Required](#required) - [Optional](#optional) - [Constraints](#constraints) - [Example](#example) - [Values example](#values-example) - [Datetime Buckets example](#datetime-buckets-example) - [Use Case](#use-case)
+
 ## JSON Properties
 
 #### Required

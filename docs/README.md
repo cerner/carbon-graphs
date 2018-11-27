@@ -2,6 +2,24 @@
 
 For documentation on code: [**JSDocs**](https://pages.github.cerner.com/Geneva/carbon-graphs/docs/)
 
+-   [Consumer documentation](#consumer-documentation)
+    -   [Chart types](#chart-types)
+    -   [Important information](#important-information)
+        -   [Errors](#errors)
+            -   [Input](#input)
+            -   [Axis Type: Timeseries](#axis-type-timeseries)
+        -   [Constraints](#constraints)
+            -   [Legend](#legend)
+            -   [Axis](#axis)
+            -   [Data-point OnClick](#data-point-onclick)
+            -   [Locale](#locale)
+            -   [Data-point values](#data-point-values)
+    -   [Colors](#colors)
+    -   [Shapes](#shapes)
+    -   [Locale](#locale-1)
+        -   [Format](#format)
+    -   [API Reference](#api-reference)
+
 ## Chart types
 
 Consumers can generate one of the following graphs:
@@ -12,9 +30,10 @@ Consumers can generate one of the following graphs:
 -   [Gantt](controls/Gantt.md)
 -   [Timeline](controls/Timeline.md)
 
-For more information on Graph API's Axes:
+Guides:
 
--   [Axes](controls/Axes.md)
+-   [Axes](helpers/Axes.md)
+-   [Shape](core/Shape.md)
 
 ## Important information
 
@@ -95,6 +114,8 @@ For more information on Graph API's Axes:
 | TRIANGLE_DOWN |
 | VERTICAL_BAR  |
 | X             |
+
+For more information on custom icon support, follow [Carbon Shape](core/Shape.md)
 
 ## Locale
 

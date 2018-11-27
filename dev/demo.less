@@ -1,12 +1,11 @@
 @import "../src/main/less/colors.less";
 
 @demo-font-color: #212121;
-@demo-banner-bg: #e3f2fd;
-@demo-banner-font-color: #0d47a1;
-@demo-nav-btn: #1565c0;
-@demo-nav-hover-bg: #bbdefb;
-@demo-nav-bg: #e3f2fd;
-@demo-nav-border: #bdbdbd;
+@demo-banner-bg: #0d47a1;
+@demo-banner-font-color: #ffffff;
+@demo-nav-btn: #002171;
+@demo-nav-bg: #5472d3;
+@demo-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
 
 body {
     margin: 0;
@@ -31,7 +30,7 @@ body {
     align-content: center;
     justify-content: center;
     background-color: @demo-banner-bg;
-    box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: @demo-shadow;
     @media screen and (max-width: 800px) {
         padding: 1rem;
     }
@@ -148,12 +147,14 @@ body {
         &:hover {
             color: @demo-nav-btn;
         }
-        cursor: not-allowed;
+        color: @demo-banner-font-color;
+        box-shadow: @demo-shadow;
         background-color: @demo-nav-bg;
         border-left: 0.25rem solid @demo-nav-btn;
     }
     &:hover {
-        color: @dark;
+        color: @demo-banner-font-color;
+        box-shadow: @demo-shadow;
         background-color: @demo-nav-bg;
         border-left: 0.25rem solid @demo-nav-btn;
     }

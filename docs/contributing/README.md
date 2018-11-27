@@ -1,8 +1,24 @@
 # Contributing to Carbon
 
-Thanks for contributing to Carbon. :1st_place_medal: :1st_place_medal:
+Thanks for contributing to Carbon! :1st_place_medal: :1st_place_medal:
 
-This project uses NPM for dependency management, and provides NPM scripts to call on `Webpack` to run tasks on the project.
+-   [Contributing to Carbon](#contributing-to-carbon)
+    -   [Code of Conduct](#code-of-conduct)
+    -   [Submitting Issues](#submitting-issues)
+        -   [Creating Issues](#creating-issues)
+        -   [Closing Issues](#closing-issues)
+    -   [Development](#development)
+        -   [Pulling in dependencies](#pulling-in-dependencies)
+        -   [Building the project](#building-the-project)
+        -   [Guidelines](#guidelines)
+        -   [Commit message format](#commit-message-format)
+    -   [Code Review](#code-review)
+        -   [Pull Request](#pull-request)
+    -   [Release](#release)
+    -   [Deploying the site to GitHub](#deploying-the-site-to-github)
+-   [Breaking changes](#breaking-changes)
+
+This project uses NPM for dependency management and provides NPM scripts to call on `Webpack` to run tasks on the project.
 To get started, you will need to checkout this project.
 
 ## Code of Conduct
@@ -56,14 +72,19 @@ npm run build && npm run build:dist
 
 This will generate `dist` and `lib` folders with `core + packaged dependencies` and `core` source codes respectively.
 
-### Development
+### Process checklist
 
 -   Follow the [UX Design Standards](https://wiki.ucern.com/display/UserExperience/Standard+Graphs).
--   Ensure no unit tests are broken.
--   Ensure there are no linting errors.
+-   Setup a design meeting to discuss overall design of the project.
+-   Add the code changes.
+-   Add unit tests.
 -   Ensure your code is thoroughly unit tested.
+-   Ensure no unit tests are broken.
+-   Ensure no linting errors are present.
+-   Add examples in appropriate tab within `site`
 -   Write documentation in `Markdown`, following the existing documentation pattern.
--   Include screenshots and animated GIFs in your pull request whenever possible.
+-   Include screenshots and animated GIFs in your **pull request** whenever possible.
+-   Follow proper PR title and Commit message format.
 -   End files with a newline.
 
 ### Commit message format

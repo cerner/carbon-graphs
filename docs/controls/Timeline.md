@@ -3,6 +3,23 @@
 A native timeline graph using d3 based on standard design patterns. Timeline graph is a graph with no Y Axis.
 This is primarily used to denote an action at a given point of time. It also accepts/supplies a content property which can be used to display non-numeric values which typically cannot be represented using traditional graphs like Line or Paired Result.
 
+-   [Timeline](#timeline)
+    -   [Usage](#usage)
+    -   [JSON Properties](#json-properties)
+        -   [Root](#root)
+            -   [Required](#required)
+            -   [Optional](#optional)
+        -   [Axis](#axis)
+            -   [Required](#required-1)
+            -   [Optional](#optional-1)
+        -   [Data](#data)
+            -   [Required](#required-2)
+            -   [Optional](#optional-2)
+        -   [Values](#values)
+            -   [Required](#required-3)
+            -   [Optional](#optional-3)
+        -   [Structure](#structure)
+
 ## Usage
 
 ```javascript
@@ -58,9 +75,9 @@ Timeline is marked only on `X Axis`, there is no other axis supplied. Axis is se
 
 `X Axis` should have the following properties:
 
-| Property Name | Expected | Default | Description             |
-| ------------- | -------- | ------- | ----------------------- |
-| ticks         | object   | null    | Refer [Ticks](Ticks.md) |
+| Property Name | Expected | Default | Description                        |
+| ------------- | -------- | ------- | ---------------------------------- |
+| ticks         | object   | null    | Refer [Ticks](../helpers/Ticks.md) |
 
 ### Data
 

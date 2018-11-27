@@ -2,6 +2,41 @@
 
 A native gantt chart using d3 based on standard design patterns.
 
+-   [Gantt](#gantt)
+    -   [Usage](#usage)
+    -   [JSON Properties](#json-properties)
+        -   [Root](#root)
+            -   [Required](#required)
+            -   [Optional](#optional)
+        -   [Axis](#axis)
+            -   [Required](#required-1)
+            -   [Optional](#optional-1)
+        -   [Tracks](#tracks)
+            -   [Required](#required-2)
+            -   [Optional](#optional-2)
+        -   [Dimension](#dimension)
+            -   [Required](#required-3)
+            -   [Optional](#optional-3)
+        -   [Track Label](#track-label)
+            -   [Required](#required-4)
+            -   [Optional](#optional-4)
+        -   [Tasks](#tasks)
+            -   [Required](#required-5)
+            -   [Optional](#optional-5)
+        -   [Activities](#activities)
+            -   [Required](#required-6)
+            -   [Optional](#optional-6)
+        -   [Actions](#actions)
+            -   [Required](#required-7)
+            -   [Optional](#optional-7)
+        -   [Dateline](#dateline)
+            -   [Required](#required-8)
+            -   [Optional](#optional-8)
+        -   [Action Legend](#action-legend)
+            -   [Required](#required-9)
+            -   [Optional](#optional-9)
+        -   [Structure](#structure)
+
 ## Usage
 
 ```javascript
@@ -55,10 +90,10 @@ ganttInstance.loadContent(/* Data Object D */);
 
 X (Timeseries) axis should have the following properties:
 
-| Property Name | Expected | Default | Description                 |
-| ------------- | -------- | ------- | --------------------------- |
-| show          | boolean  | true    | Toggle for showing the axis |
-| ticks         | object   | null    | Refer [Ticks](Ticks.md)     |
+| Property Name | Expected | Default | Description                        |
+| ------------- | -------- | ------- | ---------------------------------- |
+| show          | boolean  | true    | Toggle for showing the axis        |
+| ticks         | object   | null    | Refer [Ticks](../helpers/Ticks.md) |
 
 Y Axis should have the following properties:
 

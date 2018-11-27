@@ -2,6 +2,27 @@
 
 A native line graph using d3 based on standard design patterns.
 
+-   [Line](#line)
+    -   [Usage](#usage)
+    -   [JSON Properties](#json-properties)
+        -   [Root](#root)
+            -   [Required](#required)
+            -   [Optional](#optional)
+        -   [Data](#data)
+            -   [Required](#required-1)
+            -   [Optional](#optional-1)
+        -   [Dimension](#dimension)
+            -   [Required](#required-2)
+            -   [Optional](#optional-2)
+        -   [Values](#values)
+            -   [Required](#required-3)
+            -   [Optional](#optional-3)
+        -   [Regions](#regions)
+            -   [Required](#required-4)
+            -   [Optional](#optional-4)
+        -   [Constraints](#constraints)
+        -   [Structure](#structure)
+
 ## Usage
 
 ```javascript
@@ -27,11 +48,11 @@ lineDefault.loadContent(Carbon.api.line(/* Data array D */));
 
 #### Required
 
-| Property Name | Expected | Description                   |
-| ------------- | -------- | ----------------------------- |
-| bindTo        | string   | DOM id to bind the graph into |
-| axis          | object   | Refer [Axis](Axes.md)         |
-| data          | array    | Refer [Data](#data)           |
+| Property Name | Expected | Description                      |
+| ------------- | -------- | -------------------------------- |
+| bindTo        | string   | DOM id to bind the graph into    |
+| axis          | object   | Refer [Axis](../helpers/Axes.md) |
+| data          | array    | Refer [Data](#data)              |
 
 #### Optional
 
