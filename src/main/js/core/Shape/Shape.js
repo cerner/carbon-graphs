@@ -136,10 +136,12 @@ const createSVG = (
         setViewBoxProperty(d3SVGElement);
     }
     // Set a11y attributes to svg element
-    setA11yProperties("aria-describedby", "aria-hidden", "aria-selected")(
-        d3SVGElement,
-        a11yAttributes
-    );
+    setA11yProperties(
+        "aria-describedby",
+        "aria-hidden",
+        "aria-selected",
+        "aria-disabled"
+    )(d3SVGElement, a11yAttributes);
 
     // Process the shape and generate paths, if the shape has more than one path
     setPathProperty(d3SVGElement, shape.path, transformFn, shape.options.scale);

@@ -268,6 +268,34 @@ Loads the legend for `actions`.
 | color         | string   | COLORS.BLACK  | Color for the data point `action`                                                  |
 | shape         | string   | SHAPES.CIRCLE | Shape for representing the data points                                             |
 
+### Events
+
+#### Required
+
+| Property Name | Expected | Description                                                           |
+| ------------- | -------- | --------------------------------------------------------------------- |
+| key           | string   | Unique id which represents the actions within the tracks              |
+| values        | array    | List of string(ISO8601) where a data point `event` needs to be placed |
+| shape         | object   | svg represented as json, which got transpiled from `svg-to-carbon`    |
+
+#### Optional
+
+| Property Name | Expected | Default     | Description                                                                                               |
+| ------------- | -------- | ----------- | --------------------------------------------------------------------------------------------------------- |
+| isSelectable  | boolean  | `true`      | to specify if an event is selectable. `true` states its selectable and `false` states its non selectable. |
+| onClick       | Function | null        | Any event that can be performed when clicking on the data point                                           |
+| label         | object   | {}          | To address a group of events                                                                              |
+| color         | string   | COLORS.BLUE | color of the data point                                                                                   |
+
+### Layering
+
+Here is a list of how layering will be followed inside `Gantt`. Layering here follows the order from `bottom` to `top`.
+
+-   `Activities`
+-   `Tasks`
+-   `Events`
+-   `Actions`
+
 ### Structure
 
 ```javascript
@@ -314,6 +342,18 @@ var input = {
     showActionLegend: true
 };
 
+var caretUp = {
+    path: {
+        id: "caretUp",
+        d: "M0,36l24-24l24,24H0z"
+    },
+    options: {
+        x: -7,
+        y: -7,
+        scale: 0.3
+    }
+};
+
 var data = {
     key: "track 1",
     trackLabel: {
@@ -340,6 +380,19 @@ var data = {
                 new Date(2018, 3, 1, 6, 15).toISOString(),
                 new Date(2018, 4, 1, 6, 15).toISOString()
             ]
+        }
+    ],
+    events: [
+        {
+            key: "uid_event_1",
+            label: {
+                display: "Defect A"
+            },
+            isSelectable: false,
+            onClick: loadPopup,
+            shape: caretUp,
+            color: Carbon.helpers.COLORS.GREEN,
+            values: [new Date(2018, 4, 30).toISOString()]
         }
     ]
 };

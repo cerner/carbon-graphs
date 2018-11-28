@@ -12,13 +12,14 @@ import utils from "../../helpers/utils";
 import { isUniqueKey } from "./GanttConfig";
 import { loadActions, unloadActions } from "./helpers/actionHelpers";
 import { loadActivities, unloadActivities } from "./helpers/activityHelpers";
+import { loadEvents, unloadEvents } from "./helpers/eventHelpers";
 import {
     createTrackContainer,
     updateTrackProps
 } from "./helpers/creationHelpers";
 import { loadTasks, unloadTasks } from "./helpers/taskHelpers";
 import {
-    translateActionPoints,
+    translateDataPoints,
     translateActivities,
     translateTasks,
     truncateTrackLabelText
@@ -143,6 +144,14 @@ class Track extends GraphContent {
                 this.config.tasks
             );
         }
+        if (utils.notEmpty(this.config.events)) {
+            loadEvents(
+                graph,
+                this.trackGroupPath,
+                this.config.trackLabel,
+                this.config.events
+            );
+        }
         if (utils.notEmpty(this.config.actions)) {
             loadActions(
                 graph,
@@ -166,6 +175,9 @@ class Track extends GraphContent {
         if (utils.notEmpty(this.config.tasks)) {
             unloadTasks(graph, this.trackGroupPath);
         }
+        if (utils.notEmpty(this.config.events)) {
+            unloadEvents(graph, this.trackGroupPath);
+        }
         if (utils.notEmpty(this.config.actions)) {
             unloadActions(graph, this.trackGroupPath);
         }
@@ -184,12 +196,11 @@ class Track extends GraphContent {
         if (utils.notEmpty(this.config.tasks)) {
             translateTasks(graph.scale, graph.config, this.trackGroupPath);
         }
-        if (utils.notEmpty(this.config.actions)) {
-            translateActionPoints(
-                graph.scale,
-                graph.config,
-                this.trackGroupPath
-            );
+        if (
+            utils.notEmpty(this.config.actions) ||
+            utils.notEmpty(this.config.events)
+        ) {
+            translateDataPoints(graph.scale, graph.config, this.trackGroupPath);
         }
         return this;
     }

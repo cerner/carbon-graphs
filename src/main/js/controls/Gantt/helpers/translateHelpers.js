@@ -387,7 +387,7 @@ const translateGraph = (control) => {
  * @param {Array} trackPath - d3 object of track
  * @returns {undefined} - returns nothing
  */
-const translateActionPoints = (scale, config, trackPath) => {
+const translateDataPoints = (scale, config, trackPath) => {
     translatePoints(scale, config, trackPath, `.${styles.point}`);
     translatePoints(scale, config, trackPath, `.${styles.dataPointSelection}`);
 };
@@ -531,7 +531,7 @@ export {
     translateLabelText,
     truncateTrackLabelText,
     transformPoint,
-    translateActionPoints,
+    translateDataPoints,
     translateTasks,
     translateActivities
 };

@@ -1,6 +1,7 @@
 import {
     renderGantt,
     renderGanttAction,
+    renderGanttEvents,
     renderGanttActivities,
     renderGanttPercentage,
     renderGanttStyle,
@@ -39,6 +40,7 @@ export const triggerGanttExample = (
         renderGanttPercentage(contentSection, "ganttPercentage", "Percentage")
     );
     instance.load(renderGanttAction(contentSection, "ganttAction", "Actions"));
+    instance.load(renderGanttEvents(contentSection, "ganttEvent", "Events"));
     instance.load(renderGanttStyle(contentSection, "ganttStyles", "Bar types"));
     instance.load(
         renderGanttTruncate(contentSection, "ganttTruncate", "Label Truncation")

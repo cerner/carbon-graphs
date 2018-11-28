@@ -71,8 +71,6 @@ export const renderBarDefault = (el, id, title) => () => {
     axisData.axis.x.ticks = {
         values: [1, 2, 3, 4, 5, 6, 7]
     };
-    axisData.showVGrid = false;
-
     const barSimple = Carbon.api.graph(axisData);
     barSimple.loadContent(
         Carbon.api.bar(getDemoData(`#${id}`, "BAR_DEFAULT").data[0])

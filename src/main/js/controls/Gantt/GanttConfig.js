@@ -86,6 +86,27 @@ const validateActivityData = (input) => {
         throw new Error(errors.THROW_MSG_ACTIVITIES_START_MORE_END);
     }
 };
+
+/**
+ * Validates the newly added Event into the graph before rendering
+ * @private
+ * @throws {module:errors.THROW_MSG_NO_DATA_LOADED}
+ * @throws {module:errors.THROW_MSG_UNIQUE_KEY_NOT_PROVIDED}
+ * @throws {module:errors.THROW_MSG_NO_DATA_POINTS}
+ * @param {Object} content - Newly added graph content
+ * @returns {undefined} - returns nothing
+ */
+const validateEventData = (content) => {
+    if (utils.isEmpty(content)) {
+        throw new Error(errors.THROW_MSG_NO_DATA_LOADED);
+    }
+    if (utils.isEmpty(content.key)) {
+        throw new Error(errors.THROW_MSG_UNIQUE_KEY_NOT_PROVIDED);
+    }
+    if (utils.isEmpty(content.values)) {
+        throw new Error(errors.THROW_MSG_NO_DATA_POINTS);
+    }
+};
 /**
  * Processes the input from the JSON and updates the config object.
  * d3 domain and ranges are stored based on the upper and lower x limits.
@@ -262,3 +283,4 @@ const validateDateline = (dateline) => {
 export default GanttConfig;
 export const validateTask = validateData;
 export const validateActivity = validateActivityData;
+export const validateEvent = validateEventData;

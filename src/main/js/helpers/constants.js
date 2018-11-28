@@ -109,6 +109,7 @@ export const AXES_ORIENTATION = {
         RIGHT: "right"
     }
 };
+
 /**
  * @enum {Object}
  */

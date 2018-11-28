@@ -7,6 +7,28 @@ import { shell } from "../helpers";
 import { loadPopup, loadTaskPopup, loadTrackLabelPopup } from "../popup";
 
 const daysToMilliseconds = (d) => 24 * 60 * 60 * 1000 * d;
+const caretUp = {
+    path: {
+        id: "caretUp",
+        d: "M0,36l24-24l24,24H0z"
+    },
+    options: {
+        x: -7,
+        y: -7,
+        scale: 0.3
+    }
+};
+const caretDown = {
+    path: {
+        id: "caretDown",
+        d: "M48,12L24,36L0,12H48z"
+    },
+    options: {
+        x: -7.5,
+        y: -7,
+        scale: 0.3
+    }
+};
 const tasks = [
     [
         {
@@ -164,6 +186,43 @@ const activities = [
                 isDotted: false,
                 isHollow: false
             }
+        }
+    ]
+];
+
+const events = [
+    [
+        {
+            key: "uid_event_1",
+            label: {
+                display: "Defect A"
+            },
+            isSelectable: false,
+            onClick: loadPopup,
+            shape: caretUp,
+            values: [new Date(2018, 4, 30).toISOString()]
+        },
+        {
+            key: "uid_event_2",
+            label: {
+                display: "Defect B"
+            },
+            isSelectable: false,
+            onClick: loadPopup,
+            shape: caretDown,
+            color: Carbon.helpers.COLORS.GREEN,
+            values: [new Date(2018, 5, 4).toISOString()]
+        },
+        {
+            key: "uid_event_3",
+            label: {
+                display: "Defect C"
+            },
+            isSelectable: true,
+            onClick: loadPopup,
+            shape: caretDown,
+            color: Carbon.helpers.COLORS.GREEN,
+            values: [new Date(2018, 9, 5).toISOString()]
         }
     ]
 ];
@@ -366,6 +425,29 @@ export const renderGanttAction = (el, id, title) => () => {
                 values: [new Date(2018, 7, 1, 6, 15).toISOString()]
             }
         ]
+    });
+    return ganttDefault;
+};
+
+export const renderGanttEvents = (el, id, title) => () => {
+    shell.render(
+        el,
+        id,
+        title,
+        "* A Gantt chart showing events/ornaments that can occur within a project."
+    );
+    const data = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
+    data.dateline = [];
+    data.showActionLegend = false;
+    const ganttDefault = Carbon.api.gantt(data);
+    ganttDefault.loadContent({
+        key: "track 1",
+        trackLabel: {
+            display: "Day 1",
+            onClick: loadTrackLabelPopup
+        },
+        tasks: tasks[1],
+        events: events[0]
     });
     return ganttDefault;
 };

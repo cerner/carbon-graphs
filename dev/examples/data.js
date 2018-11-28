@@ -909,9 +909,20 @@ const DATA = [
                                 display: "Defect A"
                             },
                             onClick: () => {},
-                            shape: Carbon.helpers.SHAPES.CIRCLE,
+                            isSelectable: true,
+                            shape: {
+                                path: {
+                                    id: "caretUp",
+                                    d: "M0,36l24-24l24,24H0z"
+                                },
+                                options: {
+                                    x: -12,
+                                    y: -12,
+                                    scale: 0.5
+                                }
+                            },
                             color: Carbon.helpers.COLORS.BLUE,
-                            value: new Date(2018, 3, 1, 7, 0).toISOString()
+                            values: [new Date(2018, 3, 1, 7, 0).toISOString()]
                         }
                     ],
                     actions: [
