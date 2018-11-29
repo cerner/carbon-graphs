@@ -6,7 +6,6 @@ import constants from "../../../helpers/constants";
 import errors from "../../../helpers/errors";
 import { validateRegion } from "../../../helpers/region";
 import styles from "../../../helpers/styles";
-import { isEqual } from "./resizeHelpers";
 import utils from "../../../helpers/utils";
 
 /**
@@ -46,7 +45,7 @@ const validateBarRegion = (region, targetAxis, ticks, xAxisType) => {
     if (!isValidAxisType(region.x, xAxisType)) {
         throw new Error(errors.THROW_MSG_REGION_INVALID_FORMAT);
     }
-    if (!ticks.filter((t) => isEqual(t, region.x)).length) {
+    if (!ticks.filter((t) => utils.isEqual(t, region.x)).length) {
         throw new Error(errors.THROW_MSG_INVALID_REGION_X_AXIS_TICK);
     }
 };

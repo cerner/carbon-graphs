@@ -153,6 +153,25 @@ const getNumber = (n) => (n ? Number(n) : 0);
  */
 const isNumber = (n) => typeof n === "number" && !isNaN(n);
 /**
+ * Checks if provided dates are equal
+ * @private
+ * @param {Date} a - date to compare
+ * @param {Date} b - date to compare
+ * @returns {boolean} true if dates are equal
+ */
+const isDateEqual = (a, b) => a.getTime() === b.getTime();
+/**
+ * Compares 2 values and return true if equals. False if not.
+ * @private
+ * @param {Object} a - value to compare
+ * @param {Object} b - value to compare
+ * @returns {Boolean} - returns true or false
+ */
+const isEqual = (a, b) =>
+    isDate(a) || isDateInstance(a)
+        ? isDateEqual(parseDateTime(a), parseDateTime(b))
+        : a === b;
+/**
  * @enum {Function}
  */
 export default {
@@ -170,5 +189,6 @@ export default {
     isNumber,
     parseDateTime,
     getTime,
-    isDateInstance
+    isDateInstance,
+    isEqual
 };

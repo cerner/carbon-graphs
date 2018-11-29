@@ -124,25 +124,6 @@ const setBarOffsets = (
     );
 };
 /**
- * Checks if dates are equal
- * @private
- * @param {Date} a - date to compare
- * @param {Date} b - date to compare
- * @returns {boolean} true if dates are equal
- */
-const isDateEqual = (a, b) => a.getTime() === b.getTime();
-/**
- * Compares 2 values and return true if equals. False if not.
- * @private
- * @param {Object} a - value to compare
- * @param {Object} b - value to compare
- * @returns {Boolean} - returns true or false
- */
-const isEqual = (a, b) =>
-    utils.isDate(a) || utils.isDateInstance(a)
-        ? isDateEqual(utils.parseDateTime(a), utils.parseDateTime(b))
-        : a === b;
-/**
  * In case of stacked bars, this method sets y-axis offset for each data point.
  * By default, every bar is considered as a stacked bar. This method checks if there are any bars
  * getting stacked under it and calculates offset for both positive and negative bars.
@@ -157,7 +138,7 @@ const setStackOffset = (inputValues, group) => {
         let upY = 0;
         let downY = 0;
         group.forEach((prev) => {
-            const f = prev.values.filter((p) => isEqual(p.x, value.x));
+            const f = prev.values.filter((p) => utils.isEqual(p.x, value.x));
             if (f.length > 0) {
                 if (f[0].y > 0) {
                     upY += f[0].y;
@@ -170,4 +151,4 @@ const setStackOffset = (inputValues, group) => {
     });
 };
 
-export { scaleOrdinalAxis, setBarOffsets, isEqual };
+export { scaleOrdinalAxis, setBarOffsets };
