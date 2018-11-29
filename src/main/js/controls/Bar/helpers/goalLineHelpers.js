@@ -39,13 +39,13 @@ const getXRange = (scale, ordinalScale, region) => {
  */
 const validateBarRegion = (region, targetAxis, ticks, xAxisType) => {
     validateRegion(region, targetAxis);
-    if (utils.isEmpty(region.x)) {
+    if (utils.isEmpty(region.x) && !utils.isDateInstance(region.x)) {
         throw new Error(errors.THROW_MSG_BAR_REGION_EMPTY_X_VALUE);
     }
     if (!isValidAxisType(region.x, xAxisType)) {
         throw new Error(errors.THROW_MSG_REGION_INVALID_FORMAT);
     }
-    if (!ticks.filter((t) => t === region.x).length) {
+    if (!ticks.filter((t) => utils.isEqual(t, region.x)).length) {
         throw new Error(errors.THROW_MSG_INVALID_REGION_X_AXIS_TICK);
     }
 };

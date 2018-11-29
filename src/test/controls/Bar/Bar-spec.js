@@ -139,6 +139,9 @@ describe("Bar", () => {
         });
     });
     describe("when graph is loaded with input", () => {
+        afterEach(() => {
+            graphDefault.destroy();
+        });
         it("returns the graph instance", () => {
             const loadedBar = new Bar(getInput(valuesDefault, false, false));
             loadedBar.load(graphDefault);
@@ -206,6 +209,9 @@ describe("Bar", () => {
             beforeEach(() => {
                 input = getInput(valuesDefault, false, false);
                 graphDefault.loadContent(new Bar(input));
+            });
+            afterEach(() => {
+                graphDefault.destroy();
             });
             it("adds content container for bars", () => {
                 const barContentContainer = fetchElementByClass(
@@ -308,6 +314,9 @@ describe("Bar", () => {
                 expect(selectionPoints.length).toEqual(5);
             });
             describe("selection bar has rect attributes correctly set", () => {
+                afterEach(() => {
+                    graphDefault.destroy();
+                });
                 it("for simple bar", (done) => {
                     graphDefault.destroy();
                     graphDefault = new Graph(getAxes(axisDefault));
@@ -450,8 +459,79 @@ describe("Bar", () => {
                         done();
                     });
                 });
+                it("for mixed type bar", (done) => {
+                    graphDefault.destroy();
+                    graphDefault = new Graph(getAxes(axisDefault));
+                    input = getInput(valuesDefault, false, false);
+                    input.onClick = (clearSelectionCallback) => {
+                        clearSelectionCallback();
+                    };
+                    const bar = new Bar(input);
+                    graphDefault.loadContent(bar);
+                    const input2 = utils.deepClone(
+                        getInput(valuesDefault, false, false)
+                    );
+                    input2.key = "uid_2";
+                    input2.onClick = (clearSelectionCallback) => {
+                        clearSelectionCallback();
+                    };
+                    const input3 = utils.deepClone(
+                        getInput(valuesDefault, false, false)
+                    );
+                    input3.key = "uid_3";
+                    input3.group = "uid_1";
+                    input3.onClick = (clearSelectionCallback) => {
+                        clearSelectionCallback();
+                    };
+                    const bar2 = new Bar(input2);
+                    const bar3 = new Bar(input3);
+                    graphDefault.loadContent(bar2);
+                    graphDefault.loadContent(bar3);
+                    bar.redraw(graphDefault);
+                    bar2.redraw(graphDefault);
+                    bar3.redraw(graphDefault);
+                    const selectionPoint = fetchElementByClass(
+                        barGraphContainer,
+                        styles.taskBarSelection
+                    );
+                    const point = fetchElementByClass(
+                        barGraphContainer,
+                        styles.taskBar
+                    );
+                    const points = fetchAllElementsByClass(
+                        barGraphContainer,
+                        styles.taskBar
+                    );
+                    triggerEvent(point, "click", () => {
+                        expect(
+                            Number(selectionPoint.getAttribute("x"))
+                        ).toEqual(Number(points[0].getAttribute("x")) - 5);
+                        expect(
+                            Number(selectionPoint.getAttribute("y"))
+                        ).toEqual(Number(points[0].getAttribute("y")) - 5);
+                        expect(
+                            Number(selectionPoint.getAttribute("height"))
+                        ).toEqual(
+                            Number(points[0].getAttribute("height")) +
+                                Number(points[6].getAttribute("height")) +
+                                10
+                        );
+                        expect(
+                            Number(selectionPoint.getAttribute("width"))
+                        ).toEqual(
+                            Number(points[3].getAttribute("x")) -
+                                Number(points[0].getAttribute("x")) +
+                                Number(points[1].getAttribute("width")) +
+                                10
+                        );
+                        done();
+                    });
+                });
             });
             describe("when clicked on a data point", () => {
+                afterEach(() => {
+                    graphDefault.destroy();
+                });
                 it("does not do anything if no onClick callback is provided", (done) => {
                     graphDefault.destroy();
                     graphDefault = new Graph(getAxes(axisDefault));
@@ -1001,6 +1081,9 @@ describe("Bar", () => {
         let bar;
         let data;
         describe("on load", () => {
+            afterEach(() => {
+                graphDefault.destroy();
+            });
             describe("Ideally", () => {
                 beforeEach(() => {
                     data = utils.deepClone(
@@ -1009,6 +1092,9 @@ describe("Bar", () => {
                     data.regions = regionsDefault;
                     bar = new Bar(data);
                     graphDefault.loadContent(bar);
+                });
+                afterEach(() => {
+                    graphDefault.destroy();
                 });
                 it("Creates region when present", () => {
                     const regionElement = fetchAllElementsByClass(
@@ -1053,6 +1139,9 @@ describe("Bar", () => {
                     data.regions = regionsDefault;
                     bar = new Bar(data);
                     graphDefault.loadContent(bar);
+                });
+                afterEach(() => {
+                    graphDefault.destroy();
                 });
                 it("Renders all regions", () => {
                     const regionElement = fetchAllElementsByClass(
@@ -1452,6 +1541,9 @@ describe("Bar", () => {
             });
         });
         describe("On unload", () => {
+            afterEach(() => {
+                graphDefault.destroy();
+            });
             it("Removes all regions", () => {
                 data = utils.deepClone(getInput(valuesDefault));
                 data.regions = [
@@ -1506,6 +1598,9 @@ describe("Bar", () => {
                     barSecondary = new Bar(inputSecondary);
                     graphDefault.loadContent(barPrimary);
                     graphDefault.loadContent(barSecondary);
+                });
+                afterEach(() => {
+                    graphDefault.destroy();
                 });
                 it("Hides all the regions except current on mouse hover", (done) => {
                     const legendItem = fetchElementByClass(

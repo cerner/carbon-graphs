@@ -138,7 +138,7 @@ const setStackOffset = (inputValues, group) => {
         let upY = 0;
         let downY = 0;
         group.forEach((prev) => {
-            const f = prev.values.filter((p) => p.x === value.x);
+            const f = prev.values.filter((p) => utils.isEqual(p.x, value.x));
             if (f.length > 0) {
                 if (f[0].y > 0) {
                     upY += f[0].y;

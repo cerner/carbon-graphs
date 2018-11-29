@@ -11,7 +11,9 @@ import {
     getInput,
     valuesDefault,
     valuesNegativeDefault,
-    valuesOutliers
+    valuesOutliers,
+    axisTimeSeries,
+    valuesTimeSeries
 } from "./helpers";
 
 describe("Stacked Bar", () => {
@@ -87,6 +89,87 @@ describe("Stacked Bar", () => {
             );
             expect(Number(barsContainer[0].getAttribute("height"))).toBe(
                 heightInput1
+            );
+        });
+
+        it("when graph is unloaded off input1, unloads first content from graph", () => {
+            graphDefault.unloadContent(bar1);
+            const barsContainer = fetchAllElementsByClass(
+                barGraphContainer,
+                styles.taskBar
+            );
+            expect(barsContainer.length).toEqual(3);
+        });
+
+        it("when graph is unloaded off input2, unloads second content from graph", () => {
+            graphDefault.unloadContent(bar2);
+            const barsContainer = fetchAllElementsByClass(
+                barGraphContainer,
+                styles.taskBar
+            );
+            expect(barsContainer.length).toEqual(3);
+        });
+
+        it("when graph is unloaded off both inputs, unloads both content from graph", () => {
+            graphDefault.unloadContent(bar1);
+            graphDefault.unloadContent(bar2);
+            const barsContainer = fetchAllElementsByClass(
+                barGraphContainer,
+                styles.taskBar
+            );
+            expect(barsContainer.length).toEqual(0);
+        });
+    });
+    describe("when timeseries content is loaded", () => {
+        let bar1, bar2;
+        beforeEach(() => {
+            graphDefault = new Graph(getAxes(axisTimeSeries));
+            spyOn(window, "requestAnimationFrame").and.callThrough();
+            bar1 = new Bar(getInput(valuesTimeSeries, false, false));
+            let graph = graphDefault.loadContent(bar1);
+            bar1.redraw(graph);
+            const input = utils.deepClone(
+                getInput(valuesTimeSeries, false, false, false, "uid_2")
+            );
+            input.group = "uid_1";
+            bar2 = new Bar(input);
+            graph = graphDefault.loadContent(bar2);
+            bar1.redraw(graph);
+            bar2.redraw(graph);
+        });
+        afterEach(() => {
+            graphDefault.destroy();
+        });
+        it("Both inputs are loaded", () => {
+            const barContentContainer = fetchAllElementsByClass(
+                barGraphContainer,
+                styles.barGraphContent
+            );
+            expect(barContentContainer).not.toBeNull();
+            expect(
+                barContentContainer[0].getAttribute("aria-describedby")
+            ).toBe("uid_1");
+            expect(
+                barContentContainer[1].getAttribute("aria-describedby")
+            ).toBe("uid_2");
+        });
+
+        it("first input gets stacked on top of second input", () => {
+            const barsContainer = fetchAllElementsByClass(
+                barGraphContainer,
+                styles.taskBar
+            );
+            const yInput2 = Number(barsContainer[0].getAttribute("y"));
+            const heightInput1 = Number(
+                barsContainer[0].getAttribute("height")
+            );
+            // y Range of second input should be yRange of first input + height of first input
+            expect(Math.round(Number(barsContainer[3].getAttribute("y")))).toBe(
+                Math.round(yInput2 + heightInput1)
+            );
+            //x range of both inputs should be equal
+            expect(Number(barsContainer[0].getAttribute("x"))).toEqual(
+                Number(barsContainer[3].getAttribute("x"))
             );
         });
 

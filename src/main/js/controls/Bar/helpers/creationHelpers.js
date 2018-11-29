@@ -260,7 +260,9 @@ const drawDataBars = (
                     );
                 });
             if (utils.notEmpty(regionList)) {
-                const regions = regionList.filter((r) => r.x === dataPoint.x);
+                const regions = regionList.filter((r) =>
+                    utils.isEqual(r.x, dataPoint.x)
+                );
                 if (utils.notEmpty(regions)) {
                     createRegion(
                         scale,

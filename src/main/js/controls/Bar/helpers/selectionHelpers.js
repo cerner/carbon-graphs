@@ -154,6 +154,20 @@ const selectionAttributeHelper = (scale, ordinalScale, shownTargets, datum) => {
         }
         return maxIndex;
     })(shownDatum);
+    const maxXIndex = ((targets) => {
+        let maxIndex = -1;
+        if (utils.notEmpty(targets)) {
+            let maxX = 0;
+            targets.forEach((v, i) => {
+                const temp = Math.max(maxX, barAttributeHelper.x(v));
+                if (temp > maxX) {
+                    maxIndex = i;
+                    maxX = temp;
+                }
+            });
+        }
+        return maxIndex;
+    })(shownDatum);
 
     const leftRange = utils.notEmpty(shownDatum)
         ? barAttributeHelper.x(shownDatum[0])
@@ -162,8 +176,7 @@ const selectionAttributeHelper = (scale, ordinalScale, shownTargets, datum) => {
         ? barAttributeHelper.y(shownDatum[maxYIndex])
         : 0;
     const rightRange = utils.notEmpty(shownDatum)
-        ? barAttributeHelper.x(shownDatum[shownDatum.length - 1]) +
-          barAttributeHelper.width
+        ? barAttributeHelper.x(shownDatum[maxXIndex]) + barAttributeHelper.width
         : 0;
     const bottomRange = utils.notEmpty(shownDatum)
         ? barAttributeHelper.y(shownDatum[minYIndex]) +
@@ -201,7 +214,7 @@ const translateSelectBars = (scale, ordinalScale, canvasSVG, config) =>
             dataPoint.valueSubsetArray
         );
         canvasSVG
-            .select(`rect[aria-describedby=bar-selector-${i}`)
+            .select(`rect[aria-describedby=bar-selector-${i}]`)
             .transition(constants.d3Transition)
             .attr("x", selectionAttrHelper.x())
             .attr("y", selectionAttrHelper.y())

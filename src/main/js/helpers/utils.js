@@ -116,6 +116,13 @@ const deepClone = (o) => {
  */
 const isDate = (str) => constants.ISO8601_DATE_TIME_MILLI.test(str);
 /**
+ * Checks to see if the object provided is an instance of date
+ * @private
+ * @param {Object} obj - Object instance of date
+ * @returns {boolean} true if instance of date
+ */
+const isDateInstance = (obj) => obj instanceof Date;
+/**
  * Converts ISO8601 datetime string to Date
  * @private
  * @param {number|string} value - ISO8601 datetime string
@@ -146,6 +153,25 @@ const getNumber = (n) => (n ? Number(n) : 0);
  */
 const isNumber = (n) => typeof n === "number" && !isNaN(n);
 /**
+ * Checks if provided dates are equal
+ * @private
+ * @param {Date} a - date to compare
+ * @param {Date} b - date to compare
+ * @returns {boolean} true if dates are equal
+ */
+const isDateEqual = (a, b) => a.getTime() === b.getTime();
+/**
+ * Compares 2 values and return true if equals. False if not.
+ * @private
+ * @param {Object} a - value to compare
+ * @param {Object} b - value to compare
+ * @returns {Boolean} - returns true or false
+ */
+const isEqual = (a, b) =>
+    isDate(a) || isDateInstance(a)
+        ? isDateEqual(parseDateTime(a), parseDateTime(b))
+        : a === b;
+/**
  * @enum {Function}
  */
 export default {
@@ -162,5 +188,7 @@ export default {
     isDate,
     isNumber,
     parseDateTime,
-    getTime
+    getTime,
+    isDateInstance,
+    isEqual
 };
