@@ -15,7 +15,7 @@ import Gantt from "../../../main/js/controls/Gantt";
 import styles from "../../../main/js/helpers/styles";
 
 /**
- * Verify the system will allow consumers to utilize events within the Gantt Chart.
+ * BF11272018.02 - Verify the system will allow consumers to utilize events within the Gantt Chart.
  */
 describe("Gantt -> Track -> Event", () => {
     let gantt = null;
@@ -137,8 +137,8 @@ describe("Gantt -> Track -> Event", () => {
             });
         });
         /**
-         * Verify the system allows the consumer to specify the color of the event
-         * Verify the system will allow the consumer to determine the positioning and size of the event
+         * BF11272018.05 - Verify the system allows the consumer to specify the color of the event
+         * BF11272018.04 - Verify the system will allow the consumer to determine the positioning and size of the event
          */
         it("Prepares events", () => {
             loadData(gantt);
@@ -151,7 +151,7 @@ describe("Gantt -> Track -> Event", () => {
             expect(eventData.x).toEqual(new Date(xVal));
         });
         /**
-         * Verify the (Events) are displayed as a shape.
+         * BF11272018.03 - Verify the (Events) are displayed as a shape.
          */
         it("Renders event groups correctly", () => {
             loadData(gantt);
@@ -348,7 +348,7 @@ describe("Gantt -> Track -> Event", () => {
                 );
             });
             /**
-             * Verify upon selection, the system will execute the operation established by the consumer
+             * BF11272018.15 - Verify upon selection, the system will execute the operation established by the consumer
              */
             it("Calls onClick callback", (done) => {
                 gantt.loadContent(
@@ -361,7 +361,7 @@ describe("Gantt -> Track -> Event", () => {
                     done();
                 });
             });
-            /** Verify the system will allow the consumer to provide a lists of events. */
+            /** BF11272018.06 - Verify the system will allow the consumer to provide a lists of events. */
             it("Emits correct parameters", (done) => {
                 let args = {};
                 gantt.loadContent(
@@ -541,7 +541,8 @@ describe("Gantt -> Track -> Event", () => {
                 );
             });
             /**
-             * Verify the system allows an event to be select-able by default
+             * BF11272018.1 - Verify the system allows an event to be select-able.
+             * BF11272018.13 - Verify an event is select-able by default.
              */
             it("Even when isSelectable is undefined", (done) => {
                 gantt.loadContent(
