@@ -313,6 +313,22 @@ describe("Bar", () => {
                 );
                 expect(selectionPoints.length).toEqual(5);
             });
+            describe("selection bar translates to 0 x-axis range", () => {
+                it("when graph has no bar contents", () => {
+                    graphDefault.destroy();
+                    graphDefault = new Graph(getAxes(axisDefault));
+                    input = getInput(valuesDefault, false, false);
+                    const bar = new Bar(input);
+                    graphDefault.loadContent(bar);
+                    bar.redraw(graphDefault);
+                    graphDefault.unloadContent(bar);
+                    const selectionPoint = fetchElementByClass(
+                        barGraphContainer,
+                        styles.taskBarSelection
+                    );
+                    expect(Number(selectionPoint.getAttribute("x"))).toEqual(0);
+                });
+            });
             describe("selection bar has rect attributes correctly set", () => {
                 afterEach(() => {
                     graphDefault.destroy();

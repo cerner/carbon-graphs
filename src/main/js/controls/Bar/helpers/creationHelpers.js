@@ -189,7 +189,7 @@ const barAttributesHelper = (scale, ordinalScale) => {
         x: (d) => {
             // x offset for grouped bars. By default every content is treated as a grouped bar.
             const groupOffset = ordinalScale.x1(d.group);
-            return getXRange(d.x, groupOffset || 0);
+            return getXRange(d.x, groupOffset || 0) || 0;
         },
         y: (d) => (d.y < 0 ? scale[d.yAxis](d.y0) : scale[d.yAxis](d.y + d.y0)),
         height: (d) => Math.abs(scale[d.yAxis](0) - scale[d.yAxis](+d.y)),

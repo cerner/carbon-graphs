@@ -127,7 +127,7 @@ const selectionAttributeHelper = (scale, ordinalScale, shownTargets, datum) => {
     const barAttributeHelper = barAttributesHelper(scale, ordinalScale);
     const shownDatum = datum.filter((v) => shownTargets.indexOf(v.key) > -1);
     const maxYIndex = ((targets) => {
-        let maxIndex = -1;
+        let maxIndex = 0;
         if (utils.notEmpty(targets)) {
             let maxY = Math.max(0, targets[0].y + targets[0].y0);
             targets.forEach((v, i) => {
@@ -141,7 +141,7 @@ const selectionAttributeHelper = (scale, ordinalScale, shownTargets, datum) => {
         return maxIndex;
     })(shownDatum);
     const minYIndex = ((targets) => {
-        let maxIndex = -1;
+        let maxIndex = 0;
         if (utils.notEmpty(targets)) {
             let maxY = Math.min(0, targets[0].y + targets[0].y0);
             targets.forEach((v, i) => {
@@ -155,7 +155,7 @@ const selectionAttributeHelper = (scale, ordinalScale, shownTargets, datum) => {
         return maxIndex;
     })(shownDatum);
     const maxXIndex = ((targets) => {
-        let maxIndex = -1;
+        let maxIndex = 0;
         if (utils.notEmpty(targets)) {
             let maxX = 0;
             targets.forEach((v, i) => {
