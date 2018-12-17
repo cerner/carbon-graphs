@@ -158,9 +158,7 @@ const getRegionAxis = (region) => region.axis || constants.Y_AXIS;
  * @returns {function(*=): number} Function which returns Y Axis Vertical position for Range
  */
 const getYAxisRangePosition = (scale) => (bounds) =>
-    bounds.end
-        ? scale[getRegionAxis(bounds)](bounds.end) + constants.PADDING.top
-        : constants.PADDING.top;
+    bounds.end ? scale[getRegionAxis(bounds)](bounds.end) : 0;
 /**
  * Returns the height for range based on Y Axes, start and end bounds
  * If start and end bounds arent provided then a "goal line" number is returned with

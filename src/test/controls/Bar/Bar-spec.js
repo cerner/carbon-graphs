@@ -1389,7 +1389,7 @@ describe("Bar", () => {
                 );
                 expect(regionElement.nodeName).toBe("rect");
                 expect(+regionElement.getAttribute("y")).toBe(
-                    graphDefault.scale.y(15) + constants.PADDING.top
+                    graphDefault.scale.y(15)
                 );
             });
             it("Does not hide regions if graph has more than 1 data-set", () => {
@@ -1508,9 +1508,7 @@ describe("Bar", () => {
                     barGraphContainer,
                     styles.region
                 );
-                expect(+regionElement.getAttribute("y")).toBe(
-                    constants.PADDING.top
-                );
+                expect(+regionElement.getAttribute("y")).toBe(0);
             });
             it("Creates region with correct, color if provided", () => {
                 data = utils.deepClone(getInput(valuesDefault));

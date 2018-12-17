@@ -13,7 +13,8 @@ import {
     valuesNegativeDefault,
     valuesOutliers,
     axisTimeSeries,
-    valuesTimeSeries
+    valuesTimeSeries,
+    regionsDefault
 } from "./helpers";
 
 describe("Stacked Bar", () => {
@@ -402,6 +403,50 @@ describe("Stacked Bar", () => {
                 styles.axisLabelY
             );
             expect(yLabel1).toEqual(yLabel2.getAttribute("transform"));
+        });
+    });
+    describe("Region", () => {
+        let bar1;
+        let bar2;
+        describe("on load", () => {
+            beforeEach(() => {
+                const input1 = getInput(valuesNegativeDefault, false, false);
+                input1.regions = regionsDefault;
+                bar1 = new Bar(input1);
+                let graph = graphDefault.loadContent(bar1);
+                bar1.redraw(graph);
+                const input2 = utils.deepClone(
+                    getInput(
+                        valuesNegativeDefault,
+                        false,
+                        false,
+                        false,
+                        "uid_2"
+                    )
+                );
+                input2.group = "uid_1";
+                input2.regions = regionsDefault;
+                bar2 = new Bar(input2);
+                graph = graphDefault.loadContent(bar2);
+                bar2.redraw(graph);
+                bar1.redraw(graph);
+            });
+            afterEach(() => {
+                graphDefault.destroy();
+            });
+
+            it("Translates region correctly", () => {
+                const regionElement = fetchAllElementsByClass(
+                    barGraphContainer,
+                    styles.region
+                );
+                expect(regionElement[0].getAttribute("y")).toBe(
+                    regionElement[2].getAttribute("y")
+                );
+                expect(regionElement[0].getAttribute("x")).toBe(
+                    regionElement[2].getAttribute("x")
+                );
+            });
         });
     });
 });
