@@ -13,7 +13,6 @@ import utils from "../helpers/utils";
 import { DEFAULT_TICK_FORMAT } from "../locale";
 import { prepareHAxis } from "./datetimeBuckets";
 
-const PADDING = constants.PADDING;
 /**
  * Checks if Y or Y2 axis starts from Origin
  * @private
@@ -321,7 +320,7 @@ const getXAxisLabelYPosition = (config) =>
         ? calculateVerticalPadding(config) - config.axisLabelHeights.x * 2
         : getXAxisYPosition(config) +
           config.axisLabelHeights.x * 2 +
-          PADDING.bottom;
+          config.padding.bottom;
 /**
  * Y Axis label's starting position vertically beside the graph
  * @private
@@ -338,7 +337,7 @@ const getYAxisLabelXPosition = (config) =>
  */
 const getYAxisLabelYPosition = (config) =>
     getYAxisYPosition(config) +
-    (getYAxisHeight(config) - PADDING.top - PADDING.bottom) / 2;
+    (getYAxisHeight(config) - config.padding.top - config.padding.bottom) / 2;
 /**
  * Y2 Axis label's starting position vertically beside the graph
  * @private
@@ -348,7 +347,7 @@ const getYAxisLabelYPosition = (config) =>
 const getY2AxisLabelXPosition = (config) =>
     getY2AxisXPosition(config) +
     config.axisSizes.y2 -
-    PADDING.right +
+    config.padding.right +
     config.axisLabelWidths.y2;
 /**
  * Calculates Vertical Padding according to X Axis orientation
@@ -358,11 +357,11 @@ const getY2AxisLabelXPosition = (config) =>
  */
 const calculateVerticalPadding = (config) => {
     if (!isXAxisOrientationTop(config.axis.x.orientation)) {
-        return PADDING.top;
+        return config.padding.top;
     } else if (!config.axisLabelHeights.x) {
-        return PADDING.bottom * 2;
+        return config.padding.bottom * 2;
     }
-    return config.axisLabelHeights.x * 2 + PADDING.bottom;
+    return config.axisLabelHeights.x * 2 + config.padding.bottom;
 };
 /**
  * X Axis's starting position within the canvas
@@ -437,6 +436,9 @@ const getYAxisHeight = (config) => config.height;
  * @returns {number} Height of the X Axis ticks, labels and numbers/datetimes
  */
 const getXAxisHeight = (config) => {
+    if (config.padding.hasCustomPadding) {
+        return config.padding.bottom;
+    }
     const scale = getScale(config.axis.x.type)
         .domain(config.axis.x.domain)
         .range([0, config.canvasWidth]);
@@ -506,6 +508,9 @@ const getAxisLabelHeight = (label) => {
  * @returns {number} label width
  */
 const getYAxisWidth = (id, config) => {
+    if (config.padding.hasCustomPadding) {
+        return config.padding.left;
+    }
     const scale = d3.scale
         .linear()
         .domain([
@@ -523,6 +528,23 @@ const getYAxisWidth = (id, config) => {
     const width = yAxisSVG.node().getBoundingClientRect().width;
     dummy.remove();
     return width;
+};
+
+/**
+ * Generate the label width for y2 axes.
+ * @private
+ * @param {object} config - config object derived from input JSON.
+ * @returns {number} label width
+ */
+const getY2AxisWidth = (config) => {
+    if (config.padding.hasCustomPadding) {
+        return config.padding.right;
+    }
+    return (
+        (hasY2Axis(config.axis)
+            ? getYAxisWidth(constants.Y2_AXIS, config)
+            : 20) + config.padding.right
+    );
 };
 /**
  * Checks if X Axis orientation is set to top
@@ -543,11 +565,10 @@ const isXAxisOrientationTop = (xAxisOrientation) =>
  */
 const calculateAxesSize = (config) => {
     config.axisSizes = {};
-    config.axisSizes.y = getYAxisWidth(constants.Y_AXIS, config) + PADDING.left;
-    config.axisSizes.y2 =
-        (hasY2Axis(config.axis)
-            ? getYAxisWidth(constants.Y2_AXIS, config)
-            : 20) + PADDING.right;
+    config.axisSizes.y = config.padding.hasCustomPadding
+        ? getYAxisWidth(constants.Y_AXIS, config)
+        : getYAxisWidth(constants.Y_AXIS, config) + config.padding.left;
+    config.axisSizes.y2 = getY2AxisWidth(config);
     config.axisSizes.x = getXAxisHeight(config);
 };
 /**

@@ -249,6 +249,149 @@ describe("Gantt", () => {
             expect(gantt.config.bindLegendTo).toEqual(input.bindLegendTo);
         });
     });
+    describe("When custom padding is used in input", () => {
+        it("default padding is applied when no custom padding is used", () => {
+            const primaryContent = getData();
+            const ganttConfig = getAxes(axisJSON);
+            gantt = new Gantt(ganttConfig);
+            const expectedOutput = {
+                top: 5,
+                bottom: 10,
+                left: 100, // defaults to constants trackLabel
+                right: 30,
+                hasCustomPadding: false
+            };
+            expect(gantt.config.padding).toEqual(expectedOutput);
+            gantt.loadContent(primaryContent);
+            const contentContainer = d3.select(`.${styles.contentContainer}`);
+            expect(Number.parseInt(contentContainer.attr("x"), 10)).toEqual(
+                gantt.config.axisSizes.y + gantt.config.axisLabelWidths.y
+            );
+            expect(Number.parseInt(contentContainer.attr("y"), 10)).toEqual(
+                (5 + 10) * 2
+            );
+        });
+        it("default padding applied when custom padding half used", () => {
+            const primaryContent = getData();
+            const ganttConfig = getAxes(axisJSON);
+            ganttConfig.padding = {
+                top: 50
+            };
+            gantt = new Gantt(ganttConfig);
+            const expectedOutput = {
+                top: 50,
+                bottom: 10,
+                left: 100,
+                right: 30,
+                hasCustomPadding: true
+            };
+            expect(gantt.config.padding).toEqual(expectedOutput);
+            gantt.loadContent(primaryContent);
+            const contentContainer = d3.select(`.${styles.contentContainer}`);
+            expect(Number.parseInt(contentContainer.attr("x"), 10)).toEqual(
+                gantt.config.axisSizes.y + gantt.config.axisLabelWidths.y
+            );
+            expect(Number.parseInt(contentContainer.attr("y"), 10)).toEqual(
+                (50 + 10) * 2
+            );
+        });
+        it("position of content container starts where canvas starts", () => {
+            const primaryContent = getData();
+            const ganttConfig = getAxes(axisJSON);
+            ganttConfig.padding = {
+                left: 0,
+                right: 0,
+                bottom: 0,
+                top: 0
+            };
+            gantt = new Gantt(ganttConfig);
+            gantt.loadContent(primaryContent);
+            const contentContainer = d3.select(`.${styles.contentContainer}`);
+            expect(Number.parseInt(contentContainer.attr("x"), 10)).toEqual(
+                gantt.config.axisSizes.y + gantt.config.axisLabelWidths.y
+            );
+            expect(Number.parseInt(contentContainer.attr("y"), 10)).toEqual(
+                (ganttConfig.padding.top + ganttConfig.padding.bottom) * 2
+            );
+        });
+        it("position of content container shifts right, when left padding is applied", () => {
+            // Ideally, Gantt wouldn't be using left and right padding, but it uses trackLabel.
+            // When custom padding is applied, trackLabel's value is defaulted to left padding value.
+            const primaryContent = getData();
+            const ganttConfig = getAxes(axisJSON);
+            ganttConfig.padding = {
+                left: 20,
+                right: 0,
+                bottom: 0,
+                top: 0
+            };
+            gantt = new Gantt(ganttConfig);
+            gantt.loadContent(primaryContent);
+            const contentContainer = d3.select(`.${styles.contentContainer}`);
+            expect(Number.parseInt(contentContainer.attr("x"), 10)).toEqual(
+                gantt.config.axisSizes.y + gantt.config.axisLabelWidths.y
+            );
+            expect(Number.parseInt(contentContainer.attr("y"), 10)).toEqual(
+                (ganttConfig.padding.top + ganttConfig.padding.bottom) * 2
+            );
+        });
+        it("position of content container shifts bottom, when top padding is applied", () => {
+            const primaryContent = getData();
+            const ganttConfig = getAxes(axisJSON);
+            ganttConfig.padding = {
+                left: 0,
+                right: 0,
+                bottom: 0,
+                top: 20
+            };
+            gantt = new Gantt(ganttConfig);
+            gantt.loadContent(primaryContent);
+            const contentContainer = d3.select(`.${styles.contentContainer}`);
+            expect(Number.parseInt(contentContainer.attr("x"), 10)).toEqual(
+                gantt.config.axisSizes.y + gantt.config.axisLabelWidths.y
+            );
+            expect(Number.parseInt(contentContainer.attr("y"), 10)).toEqual(
+                (ganttConfig.padding.top + ganttConfig.padding.bottom) * 2
+            );
+        });
+        it("position of content container shifts top, when bottom padding is applied", () => {
+            const primaryContent = getData();
+            const ganttConfig = getAxes(axisJSON);
+            ganttConfig.padding = {
+                left: 0,
+                right: 0,
+                bottom: 20,
+                top: 0
+            };
+            gantt = new Gantt(ganttConfig);
+            gantt.loadContent(primaryContent);
+            const contentContainer = d3.select(`.${styles.contentContainer}`);
+            expect(Number.parseInt(contentContainer.attr("x"), 10)).toEqual(
+                gantt.config.axisSizes.y + gantt.config.axisLabelWidths.y
+            );
+            expect(Number.parseInt(contentContainer.attr("y"), 10)).toEqual(
+                (ganttConfig.padding.top + ganttConfig.padding.bottom) * 2
+            );
+        });
+        it("width and height of the content container is equal to width and height of the canvas when no padding", () => {
+            const primaryContent = getData();
+            const ganttConfig = getAxes(axisJSON);
+            ganttConfig.padding = {
+                left: 0,
+                right: 0,
+                bottom: 0,
+                top: 0
+            };
+            gantt = new Gantt(ganttConfig);
+            gantt.loadContent(primaryContent);
+            const contentContainer = d3.select(`.${styles.contentContainer}`);
+            const canvas = d3.select(`.${styles.canvas}`);
+            expect(contentContainer.attr("width")).toEqual(
+                canvas.attr("width")
+            );
+            expect(gantt.config.canvasHeight).toEqual(gantt.config.height);
+        });
+    });
     describe("When beforeInit is called", () => {
         describe("With normal type values", () => {
             beforeEach(() => {
@@ -1342,6 +1485,29 @@ describe("Gantt", () => {
                     trackLabelElement[0].getAttribute("transform")
                 ).not.toBeNull();
             });
+            it("Custom Padding input with Custom Track Height", () => {
+                gantt.destroy();
+                const ganttConfig = getAxes(axisJSON);
+                ganttConfig.padding = {
+                    top: 0,
+                    bottom: 0,
+                    left: 0,
+                    right: 0
+                };
+                gantt = new Gantt(ganttConfig);
+                const primaryContent = getData();
+                primaryContent.dimension = trackDimension.dimension;
+                gantt.loadContent(primaryContent);
+                const contentContainer = d3.select(
+                    `.${styles.contentContainer}`
+                );
+                expect(Number.parseInt(contentContainer.attr("x"), 10)).toEqual(
+                    gantt.config.axisSizes.y + gantt.config.axisLabelWidths.y
+                );
+                expect(Number.parseInt(contentContainer.attr("y"), 10)).toEqual(
+                    (ganttConfig.padding.top + ganttConfig.padding.bottom) * 2
+                );
+            });
         });
         describe("Multiple Track inputs", () => {
             it("Loads content correctly", () => {
@@ -1403,6 +1569,53 @@ describe("Gantt", () => {
                 expect(gantt.config.height).toBe(241);
                 expect(gantt.config.canvasHeight).toBe(
                     241 + BASE_CANVAS_HEIGHT_PADDING
+                );
+            });
+            it("Custom Padding input with Custom Track Heights", () => {
+                gantt.destroy();
+                const ganttConfig = getAxes(axisJSON);
+                ganttConfig.padding = {
+                    top: 0,
+                    bottom: 0,
+                    left: 0,
+                    right: 0
+                };
+                gantt = new Gantt(ganttConfig);
+                const primaryContent = getData();
+                const secondaryContent = utils.deepClone(getData());
+                secondaryContent.key = "uid_2";
+                const tertiaryContent = utils.deepClone(getData());
+                tertiaryContent.key = "uid_3";
+                primaryContent.dimension = trackDimension.dimension;
+                secondaryContent.dimension = trackDimension.dimension;
+                gantt.loadContent(primaryContent);
+                gantt.loadContent(secondaryContent);
+                gantt.loadContent(tertiaryContent);
+                const contentContainer = d3.select(
+                    `.${styles.contentContainer}`
+                );
+                expect(Number.parseInt(contentContainer.attr("x"), 10)).toEqual(
+                    gantt.config.axisSizes.y + gantt.config.axisLabelWidths.y
+                );
+                expect(Number.parseInt(contentContainer.attr("y"), 10)).toEqual(
+                    (ganttConfig.padding.top + ganttConfig.padding.bottom) * 2
+                );
+                expect(gantt.config.axisSizes.y).toEqual(0);
+                expect(
+                    (ganttConfig.padding.top + ganttConfig.padding.bottom) * 2
+                ).toEqual(0);
+                const canvas = d3.select(`.${styles.canvas}`);
+                expect(gantt.config.height).toEqual(
+                    Number.parseInt(canvas.attr("height"), 10)
+                );
+                expect(getXAxisWidth(gantt.config)).toEqual(
+                    Number.parseInt(canvas.attr("width"), 10)
+                );
+                expect(Number.parseInt(contentContainer.attr("x"), 10)).toEqual(
+                    gantt.config.axisSizes.y + gantt.config.axisLabelWidths.y
+                );
+                expect(Number.parseInt(contentContainer.attr("y"), 10)).toEqual(
+                    (ganttConfig.padding.top + ganttConfig.padding.bottom) * 2
                 );
             });
         });
@@ -1616,6 +1829,58 @@ describe("Gantt", () => {
                 throttledInput.throttle
             );
         });
+        it("When custom padding is used", (done) => {
+            gantt.destroy();
+            const ganttConfig = getAxes(axisJSON);
+            ganttConfig.padding = {
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0
+            };
+            gantt = new Gantt(ganttConfig);
+            const primaryContent = getData();
+            gantt.loadContent(primaryContent);
+            ganttChartContainer.setAttribute(
+                "style",
+                "width: 800px; height: 200px"
+            );
+            triggerEvent(
+                window,
+                "resize",
+                () => {
+                    expect(gantt.config.axisSizes.y).toEqual(0);
+                    expect(
+                        (ganttConfig.padding.top + ganttConfig.padding.bottom) *
+                            2
+                    ).toEqual(0);
+                    const canvas = d3.select(`.${styles.canvas}`);
+                    const contentContainer = d3.select(
+                        `.${styles.contentContainer}`
+                    );
+                    expect(gantt.config.height).toEqual(
+                        Number.parseInt(canvas.attr("height"), 10)
+                    );
+                    expect(getXAxisWidth(gantt.config)).toEqual(
+                        Number.parseInt(canvas.attr("width"), 10)
+                    );
+                    expect(
+                        Number.parseInt(contentContainer.attr("x"), 10)
+                    ).toEqual(
+                        gantt.config.axisSizes.y +
+                            gantt.config.axisLabelWidths.y
+                    );
+                    expect(
+                        Number.parseInt(contentContainer.attr("y"), 10)
+                    ).toEqual(
+                        (ganttConfig.padding.top + ganttConfig.padding.bottom) *
+                            2
+                    );
+                    done();
+                },
+                TRANSITION_DELAY
+            );
+        });
     });
     describe("When unload is called", () => {
         const primaryContent = getData();
@@ -1712,6 +1977,54 @@ describe("Gantt", () => {
             expect(gantt.config.height).toBe(141);
             expect(gantt.config.canvasHeight).toBe(
                 141 + BASE_CANVAS_HEIGHT_PADDING
+            );
+        });
+        it("When custom padding is used", () => {
+            gantt.destroy();
+            const ganttConfig = getAxes(axisJSON);
+            ganttConfig.padding = {
+                top: 0,
+                left: 0,
+                bottom: 0,
+                right: 0
+            };
+            gantt = new Gantt(ganttConfig);
+            gantt.loadContent(primaryContent);
+            gantt.loadContent(secondaryContent);
+            const contentContainer = d3.select(`.${styles.contentContainer}`);
+            expect(gantt.config.axisSizes.y).toEqual(0);
+            expect(
+                (ganttConfig.padding.top + ganttConfig.padding.bottom) * 2
+            ).toEqual(0);
+            const canvas = d3.select(`.${styles.canvas}`);
+            expect(gantt.config.height).toEqual(
+                Number.parseInt(canvas.attr("height"), 10)
+            );
+            expect(getXAxisWidth(gantt.config)).toEqual(
+                Number.parseInt(canvas.attr("width"), 10)
+            );
+            expect(Number.parseInt(contentContainer.attr("x"), 10)).toEqual(
+                gantt.config.axisSizes.y + gantt.config.axisLabelWidths.y
+            );
+            expect(Number.parseInt(contentContainer.attr("y"), 10)).toEqual(
+                (ganttConfig.padding.top + ganttConfig.padding.bottom) * 2
+            );
+            gantt.unloadContent(secondaryContent);
+            expect(gantt.config.axisSizes.y).toEqual(0);
+            expect(
+                (ganttConfig.padding.top + ganttConfig.padding.bottom) * 2
+            ).toEqual(0);
+            expect(gantt.config.height).toEqual(
+                Number.parseInt(canvas.attr("height"), 10)
+            );
+            expect(getXAxisWidth(gantt.config)).toEqual(
+                Number.parseInt(canvas.attr("width"), 10)
+            );
+            expect(Number.parseInt(contentContainer.attr("x"), 10)).toEqual(
+                gantt.config.axisSizes.y + gantt.config.axisLabelWidths.y
+            );
+            expect(Number.parseInt(contentContainer.attr("y"), 10)).toEqual(
+                (ganttConfig.padding.top + ganttConfig.padding.bottom) * 2
             );
         });
     });

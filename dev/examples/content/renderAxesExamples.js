@@ -1,4 +1,7 @@
-import { renderGanttDateTimeBuckets } from "../controls/gantt";
+import {
+    renderGanttDateTimeBuckets,
+    renderGanttCustomPadding
+} from "../controls/gantt";
 import {
     renderLineDateTimeBuckets,
     renderLineXAlternateLocale,
@@ -135,10 +138,16 @@ export const triggerAxesExample = (
         renderGanttDateTimeBuckets(
             contentSection,
             "ganttDateTimeBuckets",
-            "Gantt Datetime Buckets"
+            "Gantt - Datetime Buckets"
         )
     );
-
+    instance.load(
+        renderGanttCustomPadding(
+            contentSection,
+            "ganttCustomPadding",
+            "Gantt - Custom Padding"
+        )
+    );
     instance.load(
         renderBarTimeSeriesXOrientationTop(
             contentSection,

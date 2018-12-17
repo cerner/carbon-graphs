@@ -68,14 +68,15 @@ ganttInstance.loadContent(/* Data Object D */);
 
 #### Optional
 
-| Property Name    | Expected | Default                 | Description                                                                          |
-| ---------------- | -------- | ----------------------- | ------------------------------------------------------------------------------------ |
-| bindLegendTo     | string   | null                    | If DOM id provided, binds legend into that container (Example: `"#legendContainer"`) |
-| locale           | object   | LOCALE.en_US            | Locale object for X-Axis tick values                                                 |
-| throttle         | number   | (1000/60) => time in ms | Delay between resize of a browser window                                             |
-| dateline         | object   | {}                      | Refer [Dateline](#dateline)                                                          |
-| actionLegend     | array    | []                      | Refer [Action Legend](#action-legend)                                                |
-| showActionLegend | boolean  | true                    | Toggle to show graph legend                                                          |
+| Property Name    | Expected | Default                                        | Description                                                                          |
+| ---------------- | -------- | ---------------------------------------------- | ------------------------------------------------------------------------------------ |
+| bindLegendTo     | string   | null                                           | If DOM id provided, binds legend into that container (Example: `"#legendContainer"`) |
+| locale           | object   | LOCALE.en_US                                   | Locale object for X-Axis tick values                                                 |
+| throttle         | number   | (1000/60) => time in ms                        | Delay between resize of a browser window                                             |
+| dateline         | object   | {}                                             | Refer [Dateline](#dateline)                                                          |
+| actionLegend     | array    | []                                             | Refer [Action Legend](#action-legend)                                                |
+| showActionLegend | boolean  | true                                           | Toggle to show graph legend                                                          |
+| padding          | object   | `{ top: 5, bottom: 10, left: 100, right: 30 }` | Refer [Padding](Padding.md)                                                          |
 
 ### Axis
 

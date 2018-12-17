@@ -35,7 +35,6 @@ import {
  * @typedef {Object} GraphConfig
  */
 
-const PADDING = constants.PADDING;
 const BASE_CANVAS_WIDTH_PADDING = constants.BASE_CANVAS_WIDTH_PADDING;
 /**
  * Sets the canvas width
@@ -58,7 +57,10 @@ const setCanvasWidth = (container, config) => {
 const setCanvasHeight = (config) => {
     config.canvasHeight =
         getYAxisHeight(config) +
-        (PADDING.bottom + PADDING.top + config.axisLabelHeights.x) * 2;
+        (config.padding.bottom +
+            config.padding.top +
+            config.axisLabelHeights.x) *
+            2;
 };
 
 /**
@@ -209,7 +211,12 @@ class Graph extends Construct {
             .classed(styles.canvas, true)
             .attr("role", "img")
             .attr("height", this.config.canvasHeight)
-            .attr("width", this.config.canvasWidth - BASE_CANVAS_WIDTH_PADDING);
+            .attr(
+                "width",
+                this.config.padding.hasCustomPadding
+                    ? this.config.canvasWidth
+                    : this.config.canvasWidth - BASE_CANVAS_WIDTH_PADDING
+            );
         createDefs(this.config, this.svg);
         createRegionContainer(this.config, this.svg);
         createGrid(this.axis, this.scale, this.config, this.svg);

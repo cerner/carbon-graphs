@@ -179,12 +179,14 @@ class TimelineContent extends GraphContent {
     resize(graph) {
         translatePoints(
             graph.scale,
+            graph.config,
             graph.svg,
             this.config.key,
             `.${styles.point}`
         );
         translatePoints(
             graph.scale,
+            graph.config,
             graph.svg,
             this.config.key,
             `.${styles.dataPointSelection}`

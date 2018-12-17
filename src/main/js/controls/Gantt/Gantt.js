@@ -35,8 +35,6 @@ import { translateGraph, translateLabelText } from "./helpers/translateHelpers";
  * @typedef {Object} GanttConfig
  */
 
-const PADDING = constants.PADDING;
-const BASE_CANVAS_HEIGHT_PADDING = (PADDING.bottom * 2 + PADDING.top) * 2;
 const BASE_CANVAS_WIDTH_PADDING = constants.BASE_CANVAS_WIDTH_PADDING;
 /**
  * Sets the canvas width
@@ -55,9 +53,10 @@ const setCanvasWidth = (container, config) => {
  * @param {Object} config - config object derived from input JSON
  * @returns {undefined} - returns nothing
  */
-const setCanvasHeight = (config) => {
-    config.canvasHeight = getYAxisHeight(config) + BASE_CANVAS_HEIGHT_PADDING;
-};
+const setCanvasHeight = (config) =>
+    (config.canvasHeight =
+        getYAxisHeight(config) +
+        (config.padding.bottom * 2 + config.padding.top) * 2);
 /**
  * Data point sets can be loaded using this function.
  * Load function validates, clones and stores the input onto a config object.
@@ -186,7 +185,12 @@ class Gantt extends Construct {
             .classed(styles.canvas, true)
             .attr("role", "img")
             .attr("height", this.config.canvasHeight)
-            .attr("width", this.config.canvasWidth - BASE_CANVAS_WIDTH_PADDING);
+            .attr(
+                "width",
+                this.config.padding.hasCustomPadding
+                    ? this.config.canvasWidth
+                    : this.config.canvasWidth - BASE_CANVAS_WIDTH_PADDING
+            );
         createDefs(this.config, this.svg);
         createGrid(this.axis, this.scale, this.config, this.svg);
         createContentContainer(this.config, this.svg);
@@ -231,12 +235,14 @@ class Gantt extends Construct {
      *  @returns {Gantt} - Gantt instance
      */
     resize() {
-        setCanvasWidth(this.graphContainer, this.config);
-        scaleGraph(this.scale, this.config);
-        translateGraph(this);
-        this.trackConfig.forEach((control) => control.resize(this));
-        translateLabelText(this.scale, this.config, this.svg);
-        return this;
+        if (this.graphContainer) {
+            setCanvasWidth(this.graphContainer, this.config);
+            scaleGraph(this.scale, this.config);
+            translateGraph(this);
+            this.trackConfig.forEach((control) => control.resize(this));
+            translateLabelText(this.scale, this.config, this.svg);
+            return this;
+        }
     }
 
     /**

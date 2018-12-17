@@ -165,7 +165,7 @@ const getRegionHeight = (regionPath, bounds, scale, config) => {
         : graphHeight + calculateVerticalPadding(config);
     // If start and end are the same then `padding.top` worth of height is
     // applied to make it seem like a goal line
-    return lowerBound - upperBound || constants.PADDING.top;
+    return lowerBound - upperBound || config.padding.top;
 };
 /**
  * Translates region. Moves the "rect" according the new scale generated on-resize.

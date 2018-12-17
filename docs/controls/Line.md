@@ -56,17 +56,18 @@ lineDefault.loadContent(Carbon.api.line(/* Data array D */));
 
 #### Optional
 
-| Property Name | Expected | Default                 | Description                                                                          |
-| ------------- | -------- | ----------------------- | ------------------------------------------------------------------------------------ |
-| bindLegendTo  | string   | null                    | If DOM id provided, binds legend into that container (Example: `"#legendContainer"`) |
-| locale        | object   | LOCALE.en_US            | Locale object for X-Axis tick values                                                 |
-| dimension     | object   | {}                      | Refer [Dimension](#dimension)                                                        |
-| throttle      | number   | (1000/60) => time in ms | Delay between resize of a browser window                                             |
-| showLabel     | boolean  | true                    | Toggle to show axes labels                                                           |
-| showLegend    | boolean  | true                    | Toggle to show graph legend                                                          |
-| showShapes    | boolean  | true                    | Toggle to show shapes in the line graph                                              |
-| showVGrid     | boolean  | true                    | Toggle to show vertical grid                                                         |
-| showHGrid     | boolean  | true                    | Toggle to show horizontal grid                                                       |
+| Property Name | Expected | Default                                       | Description                                                                          |
+| ------------- | -------- | --------------------------------------------- | ------------------------------------------------------------------------------------ |
+| bindLegendTo  | string   | null                                          | If DOM id provided, binds legend into that container (Example: `"#legendContainer"`) |
+| locale        | object   | LOCALE.en_US                                  | Locale object for X-Axis tick values                                                 |
+| dimension     | object   | {}                                            | Refer [Dimension](#dimension)                                                        |
+| throttle      | number   | (1000/60) => time in ms                       | Delay between resize of a browser window                                             |
+| showLabel     | boolean  | true                                          | Toggle to show axes labels                                                           |
+| showLegend    | boolean  | true                                          | Toggle to show graph legend                                                          |
+| showShapes    | boolean  | true                                          | Toggle to show shapes in the line graph                                              |
+| showVGrid     | boolean  | true                                          | Toggle to show vertical grid                                                         |
+| showHGrid     | boolean  | true                                          | Toggle to show horizontal grid                                                       |
+| padding       | object   | `{ top: 5, bottom: 10, left: 30, right: 30 }` | Refer [Padding](Padding.md)                                                          |
 
 ### Data
 

@@ -296,7 +296,7 @@ const loadTasks = (graphContext, trackPathSVG, trackLabel, tasks) => {
             "transform",
             `translate(${getXAxisXPosition(
                 graphContext.config
-            )},${getXAxisYPosition()})`
+            )},${getXAxisYPosition(graphContext.config)})`
         );
     tasks.forEach((a) => {
         validateTask(a);

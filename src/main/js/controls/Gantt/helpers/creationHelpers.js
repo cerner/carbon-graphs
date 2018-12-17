@@ -28,7 +28,6 @@ import {
     translateVerticalGrid
 } from "./translateHelpers";
 
-const PADDING = constants.PADDING;
 /**
  * Calculates the height for Y and Y2 axes.
  * If dimensions are provided in the input, then they are given priority.
@@ -171,7 +170,7 @@ const calculateAxesSize = (config) => {
  */
 const calculateAxesLabelSize = (config) => {
     config.axisLabelWidths = {};
-    config.axisLabelWidths.y = PADDING.trackLabel;
+    config.axisLabelWidths.y = config.padding.left;
 };
 /**
  * Dynamically generate the label width for y axes
@@ -181,6 +180,9 @@ const calculateAxesLabelSize = (config) => {
  * @returns {number} label width
  */
 const getYAxisWidth = (id, config) => {
+    if (config.padding.hasCustomPadding) {
+        return config.padding.left;
+    }
     const scale = d3.scale
         .ordinal()
         .domain(getYAxisDomain(config.axis.y.trackList))
@@ -206,19 +208,22 @@ const getXAxisWidth = (config) =>
     config.canvasWidth -
     config.axisSizes.y -
     config.axisLabelWidths.y -
-    getXAxisYPosition();
+    getXAxisYPosition(config);
 /**
  * X Axis's position vertically relative to the canvas
  * @private
+ * @param {object} config - config object derived from input JSON
  * @returns {number} Position for the axis
  */
-const getXAxisYPosition = () => (PADDING.top + PADDING.bottom) * 2;
+const getXAxisYPosition = (config) =>
+    (config.padding.top + config.padding.bottom) * 2;
 /**
  * Y Axis's position vertically relative to the canvas
  * @private
+ * @param {object} config - derived config from input json.
  * @returns {number} Position for the axis
  */
-const getYAxisYPosition = () => getXAxisYPosition();
+const getYAxisYPosition = (config) => getXAxisYPosition(config);
 /**
  * Prepares X,Y and Y2 Axes according to their scale and available container width and height
  * @private
@@ -314,7 +319,7 @@ const createDefs = (config, canvasSVG) =>
         .attr("id", config.clipPathId)
         .append("rect")
         .attr(constants.X_AXIS, getXAxisXPosition(config))
-        .attr(constants.Y_AXIS, getYAxisYPosition())
+        .attr(constants.Y_AXIS, getYAxisYPosition(config))
         .attr("width", getXAxisWidth(config))
         .attr("height", getYAxisHeight(config));
 /**
@@ -334,7 +339,9 @@ const createGrid = (axis, scale, config, canvasSVG) => {
         .classed(styles.grid, true)
         .attr(
             "transform",
-            `translate(${getXAxisXPosition(config)},${getXAxisYPosition()})`
+            `translate(${getXAxisXPosition(config)},${getXAxisYPosition(
+                config
+            )})`
         );
     gridSVG
         .append("g")
@@ -384,7 +391,9 @@ const createAxes = (axis, scale, config, canvasSVG) => {
         .attr("aria-hidden", !config.axis.x.show)
         .attr(
             "transform",
-            `translate(${getXAxisXPosition(config)}, ${getXAxisYPosition()})`
+            `translate(${getXAxisXPosition(config)}, ${getXAxisYPosition(
+                config
+            )})`
         )
         .call(axis.x);
     canvasSVG
@@ -395,7 +404,9 @@ const createAxes = (axis, scale, config, canvasSVG) => {
         .attr("aria-hidden", !config.axis.y.show)
         .attr(
             "transform",
-            `translate(${getYAxisXPosition(config)},${getXAxisYPosition()})`
+            `translate(${getYAxisXPosition(config)},${getXAxisYPosition(
+                config
+            )})`
         )
         .call(axis.y);
 };
@@ -412,7 +423,7 @@ const createContentContainer = (config, canvasSVG) =>
         .append("rect")
         .classed(styles.contentContainer, true)
         .attr(constants.X_AXIS, getXAxisXPosition(config))
-        .attr(constants.Y_AXIS, getXAxisYPosition())
+        .attr(constants.Y_AXIS, getXAxisYPosition(config))
         .attr("width", getXAxisWidth(config))
         .attr("height", getYAxisHeight(config));
 /**

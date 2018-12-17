@@ -33,7 +33,9 @@ export const drawDataPoints = (
         .classed(styles.currentPointsGroup, true)
         .attr(
             "transform",
-            `translate(${getXAxisXPosition(config)}, ${getXAxisYPosition()})`
+            `translate(${getXAxisXPosition(config)}, ${getXAxisYPosition(
+                config
+            )})`
         );
     const pointPath = allPointsPath
         .selectAll(`.${styles.point}`)

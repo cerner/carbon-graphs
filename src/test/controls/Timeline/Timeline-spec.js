@@ -1,8 +1,10 @@
 "use strict";
+import d3 from "d3";
 import Timeline from "../../../main/js/controls/Timeline";
 import {
     getShapeForTarget,
-    getXAxisWidth
+    getXAxisWidth,
+    getXAxisYPosition
 } from "../../../main/js/controls/Timeline/helpers/creationHelpers";
 import constants, {
     AXIS_TYPE,
@@ -27,6 +29,7 @@ import {
     triggerEvent,
     valuesJSON
 } from "./helpers";
+import { getYAxisHeight } from "../../../main/js/helpers/axis";
 
 describe("Timeline", () => {
     let timeline = null;
@@ -863,6 +866,29 @@ describe("Timeline", () => {
                 )
             ).toBeTruthy();
         });
+        it("when custom padding is used", () => {
+            timeline.destroy();
+            input = getData(valuesJSON);
+            const config = getAxes(axisJSON);
+            config.padding = {
+                top: 0,
+                left: 0,
+                bottom: 0,
+                right: 0
+            };
+            timeline = new Timeline(config);
+            timeline.loadContent(input);
+            const canvas = d3.select(`.${styles.canvas}`);
+            const canvasHeight =
+                getYAxisHeight(timeline.config) +
+                (config.padding.bottom * 2 + config.padding.top) * 2;
+            expect(Number.parseInt(canvas.attr("height"), 10)).toEqual(
+                canvasHeight
+            );
+            expect(getXAxisYPosition(timeline.config)).toEqual(
+                (config.padding.top + config.padding.bottom) * 2
+            );
+        });
         describe("Draws the graph", () => {
             let input = null;
             let secondaryInput = null;
@@ -1471,6 +1497,42 @@ describe("Timeline", () => {
                 throttledInput.throttle
             );
         });
+        it("when custom padding is used", (done) => {
+            timeline.destroy();
+            const input = getData(valuesJSON);
+            const config = getAxes(axisJSON);
+            config.padding = {
+                top: 0,
+                left: 0,
+                bottom: 0,
+                right: 0
+            };
+            config.throttle = 500;
+            timeline = new Timeline(config);
+            timeline.loadContent(input);
+            TimelineGraphContainer.setAttribute(
+                "style",
+                "width: 400px; height: 200px"
+            );
+            const canvasHeight =
+                getYAxisHeight(timeline.config) +
+                (config.padding.bottom * 2 + config.padding.top) * 2;
+            const canvas = fetchElementByClass(styles.canvas);
+            expect(Number.parseInt(canvas.getAttribute("height"), 10)).toEqual(
+                canvasHeight
+            );
+            triggerEvent(
+                window,
+                "resize",
+                () => {
+                    done();
+                    expect(getXAxisYPosition(timeline.config)).toEqual(
+                        (config.padding.top + config.padding.bottom) * 2
+                    );
+                },
+                config.throttle
+            );
+        });
     });
     describe("When unload is called", () => {
         let input = null;
@@ -1528,6 +1590,33 @@ describe("Timeline", () => {
             );
             expect(timeline.content.length).toBe(1);
             expect(timeline.content[0]).toBe(secondaryInput.key);
+        });
+        it("when custom padding is used", () => {
+            timeline.destroy();
+            input = getData(valuesJSON);
+            const config = getAxes(axisJSON);
+            config.padding = {
+                top: 0,
+                left: 0,
+                bottom: 0,
+                right: 0
+            };
+            timeline = new Timeline(config);
+            timeline.loadContent(input);
+            const secondaryInput = getData(secondaryValuesJSON, false, false);
+            secondaryInput.key = "uid_2";
+            timeline.loadContent(secondaryInput);
+            timeline.unloadContent(secondaryInput);
+            const canvas = d3.select(`.${styles.canvas}`);
+            const canvasHeight =
+                getYAxisHeight(timeline.config) +
+                (config.padding.bottom * 2 + config.padding.top) * 2;
+            expect(Number.parseInt(canvas.attr("height"), 10)).toEqual(
+                canvasHeight
+            );
+            expect(getXAxisYPosition(timeline.config)).toEqual(
+                (config.padding.top + config.padding.bottom) * 2
+            );
         });
     });
     describe("When destruct is called", () => {

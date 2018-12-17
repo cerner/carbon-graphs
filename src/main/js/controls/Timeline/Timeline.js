@@ -27,9 +27,6 @@ import TimelineContent from "./TimelineContent";
  * @typedef {Object} Timeline
  * @typedef {Object} TimelineConfig
  */
-
-const PADDING = constants.PADDING;
-const BASE_CANVAS_HEIGHT_PADDING = (PADDING.bottom * 2 + PADDING.top) * 2;
 const BASE_CANVAS_WIDTH_PADDING = constants.BASE_CANVAS_WIDTH_PADDING;
 /**
  * Sets the canvas width
@@ -48,7 +45,9 @@ const setCanvasWidth = (container, config) => {
  * @returns {undefined} - returns nothing
  */
 const setCanvasHeight = (config) => {
-    config.canvasHeight = getYAxisHeight(config) + BASE_CANVAS_HEIGHT_PADDING;
+    config.canvasHeight =
+        getYAxisHeight(config) +
+        (config.padding.bottom * 2 + config.padding.top) * 2;
 };
 /**
  * Data point sets can be loaded using this function.
@@ -73,7 +72,7 @@ const loadInput = (inputJSON) =>
  */
 const beforeInit = (control) => {
     control.graphContainer = d3.select(control.config.bindTo);
-    control.config.height = determineHeight();
+    control.config.height = determineHeight(control.config);
     return control;
 };
 /**
@@ -178,7 +177,12 @@ class Timeline extends Construct {
             .classed(styles.canvas, true)
             .attr("role", "img")
             .attr("height", this.config.canvasHeight)
-            .attr("width", this.config.canvasWidth - BASE_CANVAS_WIDTH_PADDING);
+            .attr(
+                "width",
+                this.config.padding.hasCustomPadding
+                    ? this.config.canvasWidth
+                    : this.config.canvasWidth - BASE_CANVAS_WIDTH_PADDING
+            );
         createDefs(this.config, this.svg);
         createAxes(this.axis, this.scale, this.config, this.svg);
         createTimelineContent(this.config, this.svg);

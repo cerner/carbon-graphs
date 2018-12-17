@@ -1,7 +1,8 @@
 "use strict";
+import d3 from "d3";
 import Graph from "../../../main/js/controls/Graph/index";
 import Line from "../../../main/js/controls/Line/Line";
-import { getXAxisWidth } from "../../../main/js/helpers/axis";
+import { getXAxisWidth, getYAxisHeight } from "../../../main/js/helpers/axis";
 import constants, {
     AXIS_TYPE,
     AXES_ORIENTATION
@@ -22,6 +23,7 @@ import {
     valuesDefault,
     valuesTimeSeries
 } from "./helpers";
+import { TRANSITION_DELAY } from "../Gantt/helpers";
 
 describe("Graph", () => {
     let graph = null;
@@ -622,6 +624,45 @@ describe("Graph", () => {
             expect(regionElement.nodeName).toBe("g");
             expect(regionElement.getAttribute("class")).toBe(
                 styles.regionGroup
+            );
+        });
+        it("when custom padding is used", (done) => {
+            graph.destroy();
+            const ganttConfig = getAxes(axisDefault);
+            ganttConfig.padding = {
+                top: -17,
+                left: -17,
+                right: 0,
+                bottom: 0
+            };
+            graph = new Graph(ganttConfig);
+            const contentContainer = d3.select(`.${styles.contentContainer}`);
+            expect(Number.parseInt(contentContainer.attr("x"), 10)).toEqual(0);
+            expect(Number.parseInt(contentContainer.attr("y"), 10)).toEqual(
+                ganttConfig.padding.left
+            );
+            expect(
+                graph.config.axisSizes.y + graph.config.axisLabelWidths.y
+            ).toEqual(0);
+            expect(getYAxisHeight(graph.config)).toEqual(267);
+            graphContainer.setAttribute("style", "width: 800px; height: 200px");
+            triggerEvent(
+                window,
+                "resize",
+                () => {
+                    const canvas = d3.select(`.${styles.canvas}`);
+                    const contentContainer = d3.select(
+                        `.${styles.contentContainer}`
+                    );
+                    expect(
+                        Number.parseInt(contentContainer.attr("width"), 10)
+                    ).toEqual(Number.parseInt(canvas.attr("width"), 10));
+                    expect(
+                        Number.parseInt(contentContainer.attr("height"), 10)
+                    ).toEqual(Number.parseInt(canvas.attr("height"), 10));
+                    done();
+                },
+                TRANSITION_DELAY + 500
             );
         });
         describe("axes", () => {
@@ -1581,25 +1622,230 @@ describe("Graph", () => {
                 throttledInput.throttle
             );
         });
+        describe("when custom padding is used", () => {
+            it("default padding is applied when no custom padding is used", () => {
+                const axisData = getAxes(axisDefault);
+                graph.destroy();
+                graph = new Graph(axisData);
+                const expectedOutput = {
+                    top: 5,
+                    bottom: 10,
+                    left: 30,
+                    right: 30,
+                    hasCustomPadding: false
+                };
+                expect(graph.config.padding).toEqual(expectedOutput);
+            });
+            it("default padding is applied when custom padding half filled", () => {
+                const axisData = getAxes(axisDefault);
+                axisData.padding = {
+                    top: 40
+                };
+                graph.destroy();
+                graph = new Graph(axisData);
+                const expectedOutput = {
+                    top: 40,
+                    bottom: 10,
+                    left: 30,
+                    right: 30,
+                    hasCustomPadding: true
+                };
+                expect(graph.config.padding).toEqual(expectedOutput);
+            });
+            it("position of content container starts where canvas starts", () => {
+                const axisData = getAxes(axisDefault);
+                axisData.padding = {
+                    top: 0,
+                    left: -17,
+                    right: 0,
+                    bottom: 0
+                };
+                graph.destroy();
+                graph = new Graph(axisData);
+                graphContainer.setAttribute(
+                    "style",
+                    "width: 800px; height: 200px"
+                );
+                graph.resize();
+                const contentContainer = d3.select(
+                    `.${styles.contentContainer}`
+                );
+                expect(contentContainer.attr("x")).toBe("0");
+                expect(contentContainer.attr("y")).toBe("0");
+            });
+            it("position of content container shifts right, when left padding is applied", () => {
+                const axisData = getAxes(axisDefault);
+                axisData.padding = {
+                    top: 0,
+                    left: 20,
+                    right: 0,
+                    bottom: 0
+                };
+                graph.destroy();
+                graph = new Graph(axisData);
+                graphContainer.setAttribute(
+                    "style",
+                    "width: 800px; height: 200px"
+                );
+                graph.resize();
+                const contentContainer = fetchElementByClass(
+                    styles.contentContainer
+                );
+                expect(contentContainer.getAttribute("x")).toBeGreaterThan("0");
+                expect(contentContainer.getAttribute("y")).toBe("0");
+            });
+            it("position of content container shifts right, when left padding is applied", () => {
+                const axisData = getAxes(axisDefault);
+                axisData.padding = {
+                    top: 0,
+                    left: 20,
+                    right: 0,
+                    bottom: 0
+                };
+                graph.destroy();
+                graph = new Graph(axisData);
+                graphContainer.setAttribute(
+                    "style",
+                    "width: 800px; height: 200px"
+                );
+                graph.resize();
+                const contentContainer = fetchElementByClass(
+                    styles.contentContainer
+                );
+                expect(contentContainer.getAttribute("x")).toBeGreaterThan("0");
+                expect(contentContainer.getAttribute("y")).toBe("0");
+            });
+            it("position of content container shifts left, when right padding is applied", (done) => {
+                const axisData = getAxes(axisDefault);
+                axisData.padding = {
+                    top: 0,
+                    left: 0,
+                    right: 20,
+                    bottom: 0
+                };
+                graph.destroy();
+                graph = new Graph(axisData);
+                graphContainer.setAttribute(
+                    "style",
+                    "width: 800px; height: 200px"
+                );
+                graph.resize();
+                triggerEvent(window, "resize", () => {
+                    // height and width of the content container gets set when the resize event occurs, via translateContentContainer
+                    const contentContainer = fetchElementByClass(
+                        styles.contentContainer
+                    );
+                    expect(contentContainer.getAttribute("height")).toBe("250");
+                    expect(contentContainer.getAttribute("width")).toBe("763");
+                    done();
+                });
+            });
+            it("position of content container shifts top, when bottom padding is applied", () => {
+                const axisData = getAxes(axisDefault);
+                axisData.padding = {
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 20
+                };
+                graph.destroy();
+                graph = new Graph(axisData);
+                graphContainer.setAttribute(
+                    "style",
+                    "width: 800px; height: 200px"
+                );
+                graph.resize();
+                const contentContainer = fetchElementByClass(
+                    styles.contentContainer
+                );
+                expect(contentContainer.getAttribute("height")).toBeLessThan(
+                    fetchElementByClass(styles.canvas).getAttribute("height")
+                );
+            });
+            it("position of content container shifts bottom, when top padding is applied", () => {
+                const axisData = getAxes(axisDefault);
+                axisData.padding = {
+                    top: 20,
+                    left: 0,
+                    right: 0,
+                    bottom: 0
+                };
+                graph.destroy();
+                graph = new Graph(axisData);
+                graphContainer.setAttribute(
+                    "style",
+                    "width: 800px; height: 200px"
+                );
+                graph.resize();
+                const contentContainer = fetchElementByClass(
+                    styles.contentContainer
+                );
+                expect(contentContainer.getAttribute("height")).toBeLessThan(
+                    fetchElementByClass(styles.canvas).getAttribute("height")
+                );
+            });
+        });
     });
     describe("when unload is called", () => {
         const primaryContent = new Line(getData(valuesDefault));
         const secondaryContent = new Line(getData(valuesDefault));
-        beforeEach(() => {
+        it("throws error when unloading a content which isnt loaded", () => {
             graph = new Graph(getAxes(axisDefault));
             graph.loadContent(primaryContent);
-        });
-        it("throws error when unloading a content which isnt loaded", () => {
             expect(() => {
                 graph.unloadContent(secondaryContent);
             }).toThrowError(errors.THROW_MSG_INVALID_OBJECT_PROVIDED);
         });
         it("Removes the content successfully", () => {
+            graph = new Graph(getAxes(axisDefault));
+            graph.loadContent(primaryContent);
             graph.unloadContent(primaryContent);
             expect(graph.content).toEqual([]);
             expect(graph.contentTargets).toEqual([]);
             expect(graph.content.length).toBe(0);
             expect(graph.contentTargets.length).toBe(0);
+        });
+        it("when custom padding is used", (done) => {
+            const graphConfig = utils.deepClone(getAxes(axisDefault));
+            graphConfig.padding = {
+                top: -17,
+                left: -17,
+                right: 0,
+                bottom: 0
+            };
+            graph = new Graph(graphConfig);
+            const data = utils.deepClone(getData(valuesDefault));
+            const primaryContent = new Line(data);
+            graph.loadContent(primaryContent);
+            graph.unloadContent(primaryContent);
+            const contentContainer = d3.select(`.${styles.contentContainer}`);
+            expect(Number.parseInt(contentContainer.attr("x"), 10)).toEqual(0);
+            expect(Number.parseInt(contentContainer.attr("y"), 10)).toEqual(
+                graphConfig.padding.left
+            );
+            expect(
+                graph.config.axisSizes.y + graph.config.axisLabelWidths.y
+            ).toEqual(0);
+            expect(getYAxisHeight(graph.config)).toEqual(267);
+            graphContainer.setAttribute("style", "width: 800px; height: 200px");
+            triggerEvent(
+                window,
+                "resize",
+                () => {
+                    const canvas = d3.select(`.${styles.canvas}`);
+                    const contentContainer = d3.select(
+                        `.${styles.contentContainer}`
+                    );
+                    expect(
+                        Number.parseInt(contentContainer.attr("width"), 10)
+                    ).toEqual(Number.parseInt(canvas.attr("width"), 10));
+                    expect(
+                        Number.parseInt(contentContainer.attr("height"), 10)
+                    ).toEqual(Number.parseInt(canvas.attr("height"), 10));
+                    done();
+                },
+                TRANSITION_DELAY + 500
+            );
         });
     });
     describe("when destruct is called", () => {

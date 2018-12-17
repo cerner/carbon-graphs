@@ -29,7 +29,6 @@ import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 
 const BASE_CANVAS_WIDTH_PADDING = constants.BASE_CANVAS_WIDTH_PADDING;
-const PADDING = constants.PADDING;
 const DEFAULT_HEIGHT = constants.DEFAULT_HEIGHT;
 
 /**
@@ -42,7 +41,12 @@ const DEFAULT_HEIGHT = constants.DEFAULT_HEIGHT;
 const translateCanvas = (config, canvasSVG) =>
     canvasSVG
         .attr("height", config.canvasHeight)
-        .attr("width", config.canvasWidth - BASE_CANVAS_WIDTH_PADDING);
+        .attr(
+            "width",
+            config.padding.hasCustomPadding
+                ? config.canvasWidth
+                : config.canvasWidth - BASE_CANVAS_WIDTH_PADDING
+        );
 /**
  * Updates clipPath rectangle width and height on resize.
  * `clipPath` updates are necessary since the clip-path URL needs to get
@@ -499,7 +503,8 @@ const determineHeight = (config, dimension) => {
     if (dimension.height) {
         return dimension.height;
     }
-    const halfHeight = (DEFAULT_HEIGHT - PADDING.top - PADDING.bottom) / 2;
+    const verticalPadding = config.padding.top + config.padding.bottom;
+    const halfHeight = (DEFAULT_HEIGHT - verticalPadding) / 2;
     return (
         halfHeight * config.outlierStretchFactor.upperLimit +
         halfHeight * config.outlierStretchFactor.lowerLimit

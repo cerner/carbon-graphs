@@ -29,15 +29,16 @@ import {
 } from "../../Graph/helpers/helpers";
 import { transformPoint } from "./translateHelpers";
 
-const PADDING = constants.PADDING;
 const DEFAULT_HEIGHT = constants.TIMELINE_HEIGHT;
 
 /**
  * Calculates the height for graph
  * @private
+ * @param {object} config - config object derived from input JSON
  * @returns {number} Height for the axes
  */
-const determineHeight = () => DEFAULT_HEIGHT + PADDING.top - PADDING.bottom;
+const determineHeight = (config) =>
+    DEFAULT_HEIGHT + config.padding.top - config.padding.bottom;
 /**
  * Calculates axes label sizes, specifically:
  *  X Axis Label: Height
@@ -70,15 +71,19 @@ const calculateAxesSize = (config) => {
 /**
  * X Axis's starting position within the canvas
  * @private
+ * @param {object} config - config object derived from input JSON
  * @returns {number} Position for the axis
  */
-const getXAxisXPosition = () => PADDING.left;
+const getXAxisXPosition = (config) => config.padding.left;
 /**
  * X Axis's position vertically relative to the canvas
  * @private
+ * @param {object} config - config object derived from input JSON
  * @returns {number} Position for the axis
  */
-const getXAxisYPosition = () => (PADDING.top + PADDING.bottom) * 2;
+const getXAxisYPosition = (config) =>
+    (config.padding.top + config.padding.bottom) * 2;
+
 /**
  * X Axis's width that will hold equally spaced ticks
  * @private
@@ -86,7 +91,7 @@ const getXAxisYPosition = () => (PADDING.top + PADDING.bottom) * 2;
  * @returns {number} X Axis width
  */
 const getXAxisWidth = (config) =>
-    config.canvasWidth - PADDING.left - getXAxisYPosition();
+    config.canvasWidth - config.padding.left - getXAxisYPosition(config);
 /**
  * X Axis label's starting position below the graph
  * @private
@@ -94,7 +99,7 @@ const getXAxisWidth = (config) =>
  * @returns {number} Position for the label
  */
 const getXAxisLabelXPosition = (config) =>
-    getXAxisXPosition() + getXAxisWidth(config) / 2;
+    getXAxisXPosition(config) + getXAxisWidth(config) / 2;
 /**
  * X Axis label's position vertically below the graph
  * @private
@@ -102,7 +107,9 @@ const getXAxisLabelXPosition = (config) =>
  * @returns {number} Position for the label
  */
 const getXAxisLabelYPosition = (config) =>
-    getXAxisYPosition() + config.axisLabelHeights.x * 2 + PADDING.bottom;
+    getXAxisYPosition(config) +
+    config.axisLabelHeights.x * 2 +
+    config.padding.bottom;
 /**
  * Prepares X,Y and Y2 Axes according to their scale and available container width and height
  * @private
@@ -163,8 +170,8 @@ const createDefs = (config, canvasSVG) =>
         .append("clipPath")
         .attr("id", config.clipPathId)
         .append("rect")
-        .attr(constants.X_AXIS, getXAxisXPosition())
-        .attr(constants.Y_AXIS, getXAxisYPosition() / 2)
+        .attr(constants.X_AXIS, getXAxisXPosition(config))
+        .attr(constants.Y_AXIS, getXAxisYPosition(config) / 2)
         .attr("width", getXAxisWidth(config))
         .attr("height", getYAxisHeight(config));
 /**
@@ -185,7 +192,9 @@ const createAxes = (axis, scale, config, canvasSVG) => {
         .attr("aria-hidden", false)
         .attr(
             "transform",
-            `translate(${getXAxisXPosition()}, ${getXAxisYPosition()})`
+            `translate(${getXAxisXPosition(config)}, ${getXAxisYPosition(
+                config
+            )})`
         )
         .call(axis.x);
 };
@@ -240,7 +249,7 @@ const createTimelineContentGroup = (config, canvasSVG, contentConfig) =>
     canvasSVG
         .append("g")
         .classed(styles.timelineContentGroup, true)
-        .attr("transform", `translate(${getXAxisXPosition()},0)`)
+        .attr("transform", `translate(${getXAxisXPosition(config)},0)`)
         .attr("aria-labelledby", contentConfig.label.display)
         .attr("aria-describedby", contentConfig.key);
 /**
@@ -313,7 +322,7 @@ const createPoints = (scale, config, canvasSVG) => {
                 getDefaultSVGProps({
                     svgClassNames: styles.point,
                     svgStyles: `fill: ${getColorForTarget(value)};`,
-                    transformFn: transformPoint(scale)(value),
+                    transformFn: transformPoint(scale, config)(value),
                     onClickFn() {
                         dataPointActionHandler(value, index, this);
                     },
@@ -335,7 +344,7 @@ const createPoints = (scale, config, canvasSVG) => {
             ).getShapeElement(
                 getDefaultSVGProps({
                     svgClassNames: styles.dataPointSelection,
-                    transformFn: transformPoint(scale)(value),
+                    transformFn: transformPoint(scale, config)(value),
                     onClickFn() {
                         dataPointActionHandler(value, index, this);
                     },

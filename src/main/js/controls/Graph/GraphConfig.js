@@ -19,6 +19,36 @@ const initialAxisInfo = {
         upperLimit: 0
     }
 };
+
+/**
+ * Helper function to set the right padding values based on input JSON.
+ * @private
+ * @param {Object} config - config which needs to be updated
+ * @param {Object} inputPadding - input padding provided via input JSON.
+ * @returns {Object} - padding for Graph
+ */
+const getPadding = (config, inputPadding) => {
+    if (utils.isDefined(config.padding)) {
+        return {
+            top: getDefaultValue(inputPadding.top, constants.PADDING.top),
+            bottom: getDefaultValue(
+                inputPadding.bottom,
+                constants.PADDING.bottom
+            ),
+            right: getDefaultValue(inputPadding.right, constants.PADDING.right),
+            left: getDefaultValue(inputPadding.left, constants.PADDING.left),
+            hasCustomPadding: true
+        };
+    } else {
+        return {
+            top: constants.PADDING.top,
+            bottom: constants.PADDING.bottom,
+            right: constants.PADDING.right,
+            left: constants.PADDING.left,
+            hasCustomPadding: false
+        };
+    }
+};
 /**
  * Processes the input from the JSON and updates the config object.
  * d3 domain and ranges are stored based on the upper and lower x, y and y2 limits.
@@ -46,6 +76,7 @@ export const processInput = (input, config, type) => {
     config.bindTo = input.bindTo;
     config.bindLegendTo = input.bindLegendTo;
     config.axis = _axis;
+    config.padding = getPadding(config, input.padding);
     config.locale = d3.locale(getDefaultValue(input.locale, DEFAULT_LOCALE));
     config.throttle = getDefaultValue(
         input.throttle,

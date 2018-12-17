@@ -32,6 +32,7 @@ export const renderLine = (el, id, title) => () => {
     );
     return lineDefault;
 };
+
 export const renderLineY2Axis = (el, id, title) => () => {
     shell.render(el, id, title);
     const axisData = utils.deepClone(getDemoData(`#${id}`, "LINE_TIMESERIES"));

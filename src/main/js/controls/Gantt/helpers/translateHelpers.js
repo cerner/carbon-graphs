@@ -145,7 +145,9 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
         .transition(constants.d3Transition)
         .attr(
             "transform",
-            `translate(${getXAxisXPosition(config)},${getXAxisYPosition()})`
+            `translate(${getXAxisXPosition(config)},${getXAxisYPosition(
+                config
+            )})`
         )
         .call(axis.x);
     canvasSVG
@@ -153,7 +155,9 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
         .transition(constants.d3Transition)
         .attr(
             "transform",
-            `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition()})`
+            `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition(
+                config
+            )})`
         )
         .call(axis.y);
 };
@@ -212,7 +216,9 @@ const translateGrid = (axis, scale, config, canvasSVG) => {
         .select(`.${styles.grid}`)
         .attr(
             "transform",
-            `translate(${getXAxisXPosition(config)},${getXAxisYPosition()})`
+            `translate(${getXAxisXPosition(config)},${getXAxisYPosition(
+                config
+            )})`
         );
     canvasSVG
         .select(`.${styles.gridH}`)
@@ -268,7 +274,9 @@ const translateDateline = (scale, config, canvasSVG) => {
         .transition(constants.d3Transition)
         .attr(
             "transform",
-            `translate(${getXAxisXPosition(config)},${getXAxisYPosition()})`
+            `translate(${getXAxisXPosition(config)},${getXAxisYPosition(
+                config
+            )})`
         );
     datelineGroup
         .selectAll(`.${styles.ganttDatelinePoint}`)

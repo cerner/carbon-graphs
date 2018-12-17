@@ -20,6 +20,8 @@ export const processInput = (input, config) => {
     config.clipPathId = generateClipPathId();
     config.bindTo = input.bindTo;
     config.bindLegendTo = input.bindLegendTo;
+    config.padding = getDefaultValue(input.padding, constants.PADDING);
+    config.padding.hasCustomPadding = utils.isDefined(input.padding);
     config.axis = {
         x: {}
     };

@@ -115,10 +115,10 @@ const createRegion = (scale, config, regionGroupSVG, regionList, uniqueKey) => {
             (d) => `fill: ${d.color || constants.DEFAULT_BAR_REGION_COLOR};`
         )
         .attr(constants.X_AXIS, (d) => d.xRange | 0)
-        .attr(constants.Y_AXIS, getYAxisRangePosition(scale))
+        .attr(constants.Y_AXIS, getYAxisRangePosition(scale, config))
         .attr("width", (d) => d.width | 0)
         .attr("height", function(d) {
-            return getRegionHeight(d3.select(this), d, scale, config.height);
+            return getRegionHeight(d3.select(this), d, scale, config);
         });
     regionPath
         .exit()
@@ -137,11 +137,11 @@ const createRegion = (scale, config, regionGroupSVG, regionList, uniqueKey) => {
 const translateRegion = (scale, config, regionGroupSVG) => {
     regionGroupSVG
         .attr(constants.X_AXIS, (d) => d.xRange | 0)
-        .attr(constants.Y_AXIS, getYAxisRangePosition(scale))
+        .attr(constants.Y_AXIS, getYAxisRangePosition(scale, config))
         .transition(constants.d3Transition)
         .attr("width", (d) => d.width | 0)
         .attr("height", function(d) {
-            return getRegionHeight(d3.select(this), d, scale, config.height);
+            return getRegionHeight(d3.select(this), d, scale, config);
         });
 };
 /**
@@ -155,6 +155,7 @@ const getRegionAxis = (region) => region.axis || constants.Y_AXIS;
  * Returns the function which returns Y Axis Vertical position for Range
  * @private
  * @param {Object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config derived from input JSON.
  * @returns {function(*=): number} Function which returns Y Axis Vertical position for Range
  */
 const getYAxisRangePosition = (scale) => (bounds) =>
@@ -167,17 +168,17 @@ const getYAxisRangePosition = (scale) => (bounds) =>
  * @param {Object} regionPath - d3 object of region svg
  * @param {Object} bounds - Start and end values for region
  * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {number} graphHeight - graph height in pixels
+ * @param {object} config - config object derived from input JSON.
  * @returns {number} Height of the region for Y axes
  */
-const getRegionHeight = (regionPath, bounds, scale, graphHeight) => {
+const getRegionHeight = (regionPath, bounds, scale, config) => {
     const upperBound = regionPath.attr(constants.Y_AXIS);
     const lowerBound = bounds.start
-        ? scale[getRegionAxis(bounds)](bounds.start) + constants.PADDING.top
-        : graphHeight + constants.PADDING.top;
+        ? scale[getRegionAxis(bounds)](bounds.start) + config.padding.top
+        : config.height + config.padding.top;
     // If start and end are the same then `padding.top` worth of height is
     // applied to make it seem like a goal line
-    return lowerBound - upperBound || constants.PADDING.top;
+    return lowerBound - upperBound || config.padding.top;
 };
 
 export { processGoalLines, translateRegion, createRegion };

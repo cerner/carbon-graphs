@@ -51,13 +51,14 @@ timelineDefault.loadContent(/* Data array D */);
 
 #### Optional
 
-| Property Name | Expected | Default                 | Description                                                                          |
-| ------------- | -------- | ----------------------- | ------------------------------------------------------------------------------------ |
-| bindLegendTo  | string   | null                    | If DOM id provided, binds legend into that container (Example: `"#legendContainer"`) |
-| locale        | object   | LOCALE.en_US            | Locale object for X-Axis tick values                                                 |
-| throttle      | number   | (1000/60) => time in ms | Delay between resize of a browser window                                             |
-| showLabel     | boolean  | true                    | Toggle to show X axis label                                                          |
-| showLegend    | boolean  | true                    | Toggle to show graph legend                                                          |
+| Property Name | Expected | Default                                     | Description                                                                          |
+| ------------- | -------- | ------------------------------------------- | ------------------------------------------------------------------------------------ |
+| bindLegendTo  | string   | null                                        | If DOM id provided, binds legend into that container (Example: `"#legendContainer"`) |
+| locale        | object   | LOCALE.en_US                                | Locale object for X-Axis tick values                                                 |
+| throttle      | number   | (1000/60) => time in ms                     | Delay between resize of a browser window                                             |
+| showLabel     | boolean  | true                                        | Toggle to show X axis label                                                          |
+| showLegend    | boolean  | true                                        | Toggle to show graph legend                                                          |
+| padding       | object   | { top: 5, bottom: 10, left: 30, right: 30 } | Refer [Padding](Padding.md)                                                          |
 
 ### Axis
 

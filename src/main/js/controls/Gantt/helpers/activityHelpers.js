@@ -177,7 +177,7 @@ const loadActivities = (graphContext, trackPathSVG, trackLabel, activities) => {
             "transform",
             `translate(${getXAxisXPosition(
                 graphContext.config
-            )},${getXAxisYPosition()})`
+            )},${getXAxisYPosition(graphContext.config)})`
         );
     activities.forEach((a) => {
         validateActivity(a);

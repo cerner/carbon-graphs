@@ -47,7 +47,9 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
         .transition(constants.d3Transition)
         .attr(
             "transform",
-            `translate(${getXAxisXPosition()},${getXAxisYPosition()})`
+            `translate(${getXAxisXPosition(config)},${getXAxisYPosition(
+                config
+            )})`
         )
         .call(axis.x);
 };
@@ -77,24 +79,26 @@ const translateLabel = (config, canvasSVG) => {
  * Transforms the point in the timeline graph on resize
  * @private
  * @param {Object} scale - d3 scale for Graph
+ * @param {object} config - config object derived from input JSON.
  * @returns {Function} - function that returns translate string for d3 transform
  */
-const transformPoint = (scale) => (value) => (scaleFactor) => {
+const transformPoint = (scale, config) => (value) => (scaleFactor) => {
     const getX = (val) => scale.x(val.x);
-    return `translate(${getX(
-        value
-    )},${getXAxisYPosition()}) scale(${scaleFactor})`;
+    return `translate(${getX(value)},${getXAxisYPosition(
+        config
+    )}) scale(${scaleFactor})`;
 };
 /**
  * Transforms points for a data point set in the timeline graph on resize
  * @private
  * @param {Object} scale - d3 scale for Graph
+ * @param {object} config - config object derived from input JSON
  * @param {Array} canvasSVG - d3 html element of canvas
  * @param {string} key - d3 object of points group key
  * @param {string} style - CSS style representing the data points
  * @returns {Object} d3 select object
  */
-const translatePoints = (scale, canvasSVG, key, style) =>
+const translatePoints = (scale, config, canvasSVG, key, style) =>
     canvasSVG
         .select(`.${styles.timelineContentGroup}[aria-describedby="${key}"]`)
         .selectAll(style)
@@ -104,7 +108,10 @@ const translatePoints = (scale, canvasSVG, key, style) =>
                 .selectAll("path")
                 .transition(constants.d3Transition)
                 .attr("transform", function() {
-                    return transformPoint(scale)(d)(getTransformScale(this));
+                    return transformPoint(
+                        scale,
+                        config
+                    )(d)(getTransformScale(this));
                 });
         });
 /**

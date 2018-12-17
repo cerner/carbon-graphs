@@ -248,44 +248,7 @@ export const renderGantt = (el, id, title) => () => {
     const data = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
     data.showActionLegend = false;
     const ganttDefault = Carbon.api.gantt(data);
-    ganttDefault.loadContent({
-        key: "track 1",
-        trackLabel: {
-            display: "Project A",
-            onClick: loadTrackLabelPopup
-        },
-        tasks: tasks[0]
-    });
-    ganttDefault.loadContent({
-        key: "track 2",
-        trackLabel: {
-            display: "Project B",
-            onClick: loadTrackLabelPopup
-        },
-        tasks: tasks[1]
-    });
-    ganttDefault.loadContent({
-        key: "track 3",
-        trackLabel: {
-            display: "Project C",
-            onClick: loadTrackLabelPopup
-        },
-        tasks: tasks[2]
-    });
-    ganttDefault.loadContent({
-        key: "track 4",
-        trackLabel: {
-            display: "Project D",
-            onClick: loadTrackLabelPopup
-        },
-        tasks: tasks[3]
-    });
-    /*ganttDefault.unloadContent({
-        key: "track 3",
-        trackLabel: {
-            display: "Project C"
-        }
-    });*/
+    loadTracks(ganttDefault, tasks, [], [], [], 4);
     return ganttDefault;
 };
 export const renderGanttActivities = (el, id, title) => () => {
@@ -293,41 +256,7 @@ export const renderGanttActivities = (el, id, title) => () => {
     const data = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
     data.showActionLegend = false;
     const ganttDefault = Carbon.api.gantt(data);
-    ganttDefault.loadContent({
-        key: "track 1",
-        trackLabel: {
-            display: "Project A",
-            onClick: loadTrackLabelPopup
-        },
-        tasks: tasks[0],
-        activities: activities[0]
-    });
-    ganttDefault.loadContent({
-        key: "track 2",
-        trackLabel: {
-            display: "Project B",
-            onClick: loadTrackLabelPopup
-        },
-        tasks: tasks[1],
-        activities: activities[1]
-    });
-    ganttDefault.loadContent({
-        key: "track 3",
-        trackLabel: {
-            display: "Project C",
-            onClick: loadTrackLabelPopup
-        },
-        tasks: tasks[2],
-        activities: activities[2]
-    });
-    ganttDefault.loadContent({
-        key: "track 4",
-        trackLabel: {
-            display: "Project D",
-            onClick: loadTrackLabelPopup
-        },
-        tasks: tasks[4]
-    });
+    loadTracks(ganttDefault, tasks, activities, [], [], 4);
     return ganttDefault;
 };
 export const renderGanttPercentage = (el, id, title) => () => {
@@ -385,13 +314,8 @@ export const renderGanttAction = (el, id, title) => () => {
     const data = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
     data.dateline = [];
     const ganttDefault = Carbon.api.gantt(data);
-    ganttDefault.loadContent({
-        key: "track 1",
-        trackLabel: {
-            display: "Day 1",
-            onClick: loadTrackLabelPopup
-        },
-        actions: [
+    const actions = [
+        [
             {
                 key: "uid_action_1",
                 onClick: loadPopup,
@@ -402,15 +326,8 @@ export const renderGanttAction = (el, id, title) => () => {
                 onClick: loadPopup,
                 values: [new Date(2018, 7, 1, 6, 15).toISOString()]
             }
-        ]
-    });
-    ganttDefault.loadContent({
-        key: "track 2",
-        trackLabel: {
-            display: "Day 2",
-            onClick: loadTrackLabelPopup
-        },
-        actions: [
+        ],
+        [
             {
                 key: "uid_action_1",
                 onClick: loadPopup,
@@ -425,10 +342,10 @@ export const renderGanttAction = (el, id, title) => () => {
                 values: [new Date(2018, 7, 1, 6, 15).toISOString()]
             }
         ]
-    });
+    ];
+    loadTracks(ganttDefault, [], [], [], actions, 2);
     return ganttDefault;
 };
-
 export const renderGanttEvents = (el, id, title) => () => {
     shell.render(
         el,
@@ -440,15 +357,7 @@ export const renderGanttEvents = (el, id, title) => () => {
     data.dateline = [];
     data.showActionLegend = false;
     const ganttDefault = Carbon.api.gantt(data);
-    ganttDefault.loadContent({
-        key: "track 1",
-        trackLabel: {
-            display: "Day 1",
-            onClick: loadTrackLabelPopup
-        },
-        tasks: tasks[1],
-        events: events[0]
-    });
+    loadTracks(ganttDefault, [tasks[1]], [], [events[0]], [], 1);
     return ganttDefault;
 };
 export const renderGanttTruncate = (el, id, title) => () => {
@@ -462,7 +371,6 @@ export const renderGanttTruncate = (el, id, title) => () => {
     data.showActionLegend = false;
     data.dateline = [];
     const ganttDefault = Carbon.api.gantt(data);
-
     ganttDefault.loadContent({
         key: "track 1",
         trackLabel: {
@@ -649,7 +557,6 @@ export const renderGanttStyle = (el, id, title) => () => {
     });
     return ganttDefault;
 };
-
 export const renderGanttDateTimeBuckets = (el, id, title) => () => {
     shell.render(
         el,
@@ -688,4 +595,58 @@ export const renderGanttDateTimeBuckets = (el, id, title) => () => {
         ]
     });
     return ganttDefault;
+};
+export const renderGanttCustomPadding = (el, id, title) => () => {
+    shell.render(el, id, title);
+    const data = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
+    data.showActionLegend = false;
+    data.padding = {
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0
+    };
+    const ganttDefault = Carbon.api.gantt(data);
+    loadTracks(ganttDefault, tasks, [], [], [], 4);
+    return ganttDefault;
+};
+
+/**
+ * Helper function to load tracks.
+ * @private
+ * @param {object} gantt - gantt object where its components needs to be loaded.
+ * @param {Array} tasks - gantt tasks that needs to be loaded
+ * @param {Array} activities - gantt activities that needs to be loaded
+ * @param {Array} events - gantt events that needs to be loaded
+ * @param {Array} actions - gannt actions that needs to be loaded
+ * @param {number} totalTracks - total required number of tracks
+ * @returns {undefined} - returns nothing
+ */
+const loadTracks = (
+    gantt,
+    tasks = [],
+    activities = [],
+    events = [],
+    actions = [],
+    totalTracks = 1
+) => {
+    for (const each of Array(totalTracks).keys()) {
+        gantt.loadContent({
+            key: `track ${each}`,
+            trackLabel: {
+                display: `Project ${String.fromCharCode(65 + each)}`,
+                onClick: loadTrackLabelPopup
+            },
+            tasks: tasks[each] ? tasks[each] : {},
+            activities: activities[each] ? activities[each] : {},
+            events: events[each] ? events[each] : {},
+            actions: actions[each] ? actions[each] : {}
+        });
+    }
+    /*gantt.unloadContent({
+        key: "track 3",
+        trackLabel: {
+            display: "Project C"
+        }
+    });*/
 };
