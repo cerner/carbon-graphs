@@ -249,6 +249,9 @@ describe("Gantt", () => {
             expect(gantt.config.bindLegendTo).toEqual(input.bindLegendTo);
         });
     });
+    /**
+     * BF12182018.01 - Verify the consumer has the option to provide custom padding for the graph-container.
+     */
     describe("When custom padding is used in input", () => {
         it("default padding is applied when no custom padding is used", () => {
             const primaryContent = getData();

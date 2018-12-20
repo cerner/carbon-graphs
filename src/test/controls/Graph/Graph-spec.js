@@ -1622,6 +1622,9 @@ describe("Graph", () => {
                 throttledInput.throttle
             );
         });
+        /**
+         * BF12182018.01 - Verify the consumer has the option to provide custom padding for the graph-container.
+         */
         describe("when custom padding is used", () => {
             it("default padding is applied when no custom padding is used", () => {
                 const axisData = getAxes(axisDefault);

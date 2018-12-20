@@ -1497,6 +1497,9 @@ describe("Timeline", () => {
                 throttledInput.throttle
             );
         });
+        /**
+         * BF12182018.01 - Verify the consumer has the option to provide custom padding for the graph-container.
+         */
         it("when custom padding is used", (done) => {
             timeline.destroy();
             const input = getData(valuesJSON);
