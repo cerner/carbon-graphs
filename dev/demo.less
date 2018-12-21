@@ -1,11 +1,10 @@
 @import "../src/main/less/colors.less";
 
 @demo-font-color: #212121;
-@demo-banner-bg: #0d47a1;
-@demo-banner-font-color: #ffffff;
-@demo-nav-btn: #002171;
-@demo-nav-bg: #5472d3;
-@demo-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
+@demo-banner-bg: #007cc3;
+@demo-banner-font-color: #fff;
+@demo-nav-btn: #212121;
+@demo-nav-bg: #007cc3;
 
 body {
     margin: 0;
@@ -18,8 +17,9 @@ body {
 
 .graph-section {
     font-family: inherit;
-    padding: 0.5rem 0.5rem 0;
+    padding: 0.5rem;
     background-color: transparent;
+
     &.hidden {
         display: none;
     }
@@ -30,10 +30,6 @@ body {
     align-content: center;
     justify-content: center;
     background-color: @demo-banner-bg;
-    box-shadow: @demo-shadow;
-    @media screen and (max-width: 800px) {
-        padding: 1rem;
-    }
 }
 
 .graph-banner-icon {
@@ -46,23 +42,20 @@ body {
 }
 
 .graph-banner-content {
-    font-family: inherit;
-    font-size: 3rem;
+    font-weight: 500;
     color: @demo-banner-font-color;
-    @media screen and (max-width: 800px) {
-        font-size: 1.5rem;
-    }
 }
 
 .graph-header {
-    font-family: inherit;
+    padding: 0 2rem;
+    font-weight: 500;
     color: @demo-nav-btn;
 }
 
 .graph-subHeader {
     color: @grey45;
     font-size: 0.75rem;
-    margin-left: 0.5rem;
+    margin-left: 4rem;
 }
 
 .tooltip {
@@ -74,17 +67,22 @@ body {
     box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
     -moz-box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
     -webkit-box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
+
     & .popup-item {
         display: block;
     }
+
     & g {
         display: inline-block;
+
         & .popup-label {
             color: @grey45;
+
             &:after {
                 content: ": ";
             }
         }
+
         &:not(:last-child) {
             padding-bottom: 0.25rem;
         }
@@ -114,7 +112,7 @@ body {
     display: block;
     min-width: 12.5%;
     max-width: 12.5%;
-    padding: 0.5rem;
+    padding: 0 0.5rem;
     width: 100%;
     overflow-y: auto;
     @media screen and (max-width: 800px) {
@@ -125,38 +123,35 @@ body {
 .content-section {
     flex: 1 1 auto;
     background-color: transparent;
+    padding: 1rem;
     overflow-y: auto;
 }
 
 .carbon-btn {
-    border: 0;
     display: flex;
     flex: 1;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     text-decoration: none;
     background-color: transparent;
     color: @demo-nav-btn;
     cursor: pointer;
-    font-family: inherit;
     font-weight: 500;
-    padding: 0.866rem 0.5rem;
+    padding: 0.75rem 1rem;
     margin: 0.25rem 0;
-    border-left: 0.25rem solid transparent;
+    border-radius: 0.25rem;
+
     &[disabled="disabled"] {
         &:hover {
-            color: @demo-nav-btn;
+            outline: 1px dotted @grey30;
         }
+
         color: @demo-banner-font-color;
-        box-shadow: @demo-shadow;
         background-color: @demo-nav-bg;
-        border-left: 0.25rem solid @demo-nav-btn;
     }
+
     &:hover {
-        color: @demo-banner-font-color;
-        box-shadow: @demo-shadow;
-        background-color: @demo-nav-bg;
-        border-left: 0.25rem solid @demo-nav-btn;
+        outline: 1px dotted @grey30;
     }
 }
 
