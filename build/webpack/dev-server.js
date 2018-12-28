@@ -2,12 +2,10 @@ const WebpackDevServer = require("webpack-dev-server");
 const path = require("path");
 const webpack = require("webpack");
 const { jsOptions, cssOptions } = require("./helpers/rules");
+const port = Number(process.env.PORT || 9991);
 const compiler = webpack({
-    devtool: "inline-source-map",
-    entry: [
-        "webpack-dev-server/client?http://localhost:9991/",
-        "./dev/app.js"
-    ],
+    mode: "development",
+    entry: ["webpack-dev-server/client?http://localhost:9991/", "./dev/app.js"],
     output: {
         path: path.join(process.cwd(), "dist"),
         filename: "bundle.js",
@@ -35,10 +33,8 @@ const compiler = webpack({
                 use: cssOptions("DEV")
             }
         ]
-    },
-    plugins: [new webpack.optimize.ModuleConcatenationPlugin()]
+    }
 });
-const port = Number(process.env.PORT || 9991);
 
 const server = new WebpackDevServer(compiler, {
     publicPath: "/dist/",

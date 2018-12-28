@@ -4,14 +4,15 @@ import Graph from "../../../main/js/controls/Graph/index";
 import Line from "../../../main/js/controls/Line/Line";
 import { getXAxisWidth, getYAxisHeight } from "../../../main/js/helpers/axis";
 import constants, {
-    AXIS_TYPE,
-    AXES_ORIENTATION
+    AXES_ORIENTATION,
+    AXIS_TYPE
 } from "../../../main/js/helpers/constants";
 import errors from "../../../main/js/helpers/errors";
 import { loadLegendItem } from "../../../main/js/helpers/legend";
 import styles from "../../../main/js/helpers/styles";
 import utils from "../../../main/js/helpers/utils";
 import LOCALE from "../../../main/js/locale/index";
+import { TRANSITION_DELAY, triggerEvent } from "../helpers/commonHelpers";
 import {
     axisDefault,
     axisTimeSeries,
@@ -19,11 +20,9 @@ import {
     fetchElementByClass,
     getAxes,
     getData,
-    triggerEvent,
     valuesDefault,
     valuesTimeSeries
 } from "./helpers";
-import { TRANSITION_DELAY } from "../Gantt/helpers";
 
 describe("Graph", () => {
     let graph = null;
@@ -646,6 +645,7 @@ describe("Graph", () => {
             ).toEqual(0);
             expect(getYAxisHeight(graph.config)).toEqual(267);
             graphContainer.setAttribute("style", "width: 800px; height: 200px");
+            graph.resize();
             triggerEvent(
                 window,
                 "resize",
@@ -662,7 +662,7 @@ describe("Graph", () => {
                     ).toEqual(Number.parseInt(canvas.attr("height"), 10));
                     done();
                 },
-                TRANSITION_DELAY + 500
+                TRANSITION_DELAY
             );
         });
         describe("axes", () => {
@@ -1204,8 +1204,8 @@ describe("Graph", () => {
                     styles.gridUpperStep
                 );
 
-                expect(gridMidElement).toBeNull;
-                expect(gridLowerStepElement).toBeNull;
+                expect(gridMidElement).toBeNull();
+                expect(gridLowerStepElement).toBeNull();
                 expect(
                     gridUpperStepElement.querySelectorAll(".tick").length
                 ).toBe(2);
@@ -1226,8 +1226,8 @@ describe("Graph", () => {
                     styles.gridUpperStep
                 );
 
-                expect(gridLowerStepElement).toBeNull;
-                expect(gridUpperStepElement).toBeNull;
+                expect(gridLowerStepElement).toBeNull();
+                expect(gridUpperStepElement).toBeNull();
                 expect(gridMidElement.querySelectorAll(".tick").length).toBe(2);
             });
             it("creates the horizontal grid markup", () => {
@@ -1831,6 +1831,7 @@ describe("Graph", () => {
             ).toEqual(0);
             expect(getYAxisHeight(graph.config)).toEqual(267);
             graphContainer.setAttribute("style", "width: 800px; height: 200px");
+            graph.resize();
             triggerEvent(
                 window,
                 "resize",
@@ -1847,7 +1848,7 @@ describe("Graph", () => {
                     ).toEqual(Number.parseInt(canvas.attr("height"), 10));
                     done();
                 },
-                TRANSITION_DELAY + 500
+                TRANSITION_DELAY
             );
         });
     });

@@ -25,10 +25,8 @@ module.exports = function(config) {
             ]
         },
         singleRun: true,
-        browserNoActivityTimeout: 120000, // default: 10000; doing this for jenkins
-        captureTimeout: 120000, // default: 60000; doing this for jenkins
         files: [
-            "../../node_modules/babel-polyfill/dist/polyfill.js",
+            "../../node_modules/@babel/polyfill/dist/polyfill.js",
             "../webpack/tests.webpack.js"
         ],
         frameworks: [
@@ -39,11 +37,10 @@ module.exports = function(config) {
         },
         reporters: [ "progress", "coverage" ],
         webpackMiddleware: {
-            noInfo: true
+            stats: 'errors-only'
         },
         webpack: {
-            cache: true,
-            devtool: "inline-source-map",
+            mode: "development",
             resolve: {
                 modules: [
                     "node_modules"
@@ -59,10 +56,10 @@ module.exports = function(config) {
                             {
                                 loader: "babel-loader",
                                 options: {
-                                    presets: [ [ "es2015" ] ],
+                                    presets: [ [ "@babel/preset-env" ] ],
                                     plugins: [
-                                        [ "transform-es2015-classes", { loose: true } ],
-                                        [ "babel-plugin-minify-replace", {
+                                        [ "@babel/plugin-transform-classes", { loose: true } ],
+                                        [ "minify-replace", {
                                             "replacements": [
                                                 {
                                                     "identifierName": "VERSION",
@@ -84,7 +81,8 @@ module.exports = function(config) {
                         ]
                     }
                 ]
-            }
+            },
+            stats: 'errors-only'
         }
     });
 };

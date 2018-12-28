@@ -19,6 +19,11 @@ import constants, { COLORS } from "../../../main/js/helpers/constants";
 import errors from "../../../main/js/helpers/errors";
 import styles from "../../../main/js/helpers/styles";
 import {
+    delay,
+    TRANSITION_DELAY,
+    triggerEvent
+} from "../helpers/commonHelpers";
+import {
     axisJSON,
     fetchElementByClass,
     getAxes,
@@ -26,9 +31,7 @@ import {
     onClickFunctionSpy,
     taskEndDate,
     taskStartDate,
-    taskValuesJSON,
-    TRANSITION_DELAY,
-    triggerEvent
+    taskValuesJSON
 } from "./helpers";
 
 describe("Gantt -> Track -> Task", () => {
@@ -449,7 +452,7 @@ describe("Gantt -> Track -> Task", () => {
         });
         it("Renders selection for bar correctly", (done) => {
             loadData(gantt);
-            setTimeout(() => {
+            delay(() => {
                 const taskElement = fetchElementByClass(styles.task);
                 const indicatorElement = taskElement.childNodes[0];
                 const taskBarElement = taskElement.childNodes[1];
@@ -480,7 +483,7 @@ describe("Gantt -> Track -> Task", () => {
         });
         it("Renders selection for chunk correctly", (done) => {
             loadData(gantt);
-            setTimeout(() => {
+            delay(() => {
                 const taskElement = document.querySelectorAll(
                     `.${styles.task}`
                 )[1];
@@ -513,7 +516,7 @@ describe("Gantt -> Track -> Task", () => {
         });
         it("Renders selection for percentage bar correctly", (done) => {
             loadData(gantt);
-            setTimeout(() => {
+            delay(() => {
                 const taskElement = document.querySelectorAll(
                     `.${styles.task}`
                 )[2];
@@ -546,7 +549,7 @@ describe("Gantt -> Track -> Task", () => {
         });
         it("Renders selection for hashed tasks correctly", (done) => {
             loadData(gantt);
-            setTimeout(() => {
+            delay(() => {
                 const taskElement = document.querySelectorAll(
                     `.${styles.task}`
                 )[3];

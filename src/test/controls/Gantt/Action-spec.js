@@ -5,14 +5,13 @@ import Gantt from "../../../main/js/controls/Gantt";
 import { COLORS, SHAPES } from "../../../main/js/helpers/constants";
 import errors from "../../../main/js/helpers/errors";
 import styles from "../../../main/js/helpers/styles";
+import { TRANSITION_DELAY, triggerEvent } from "../helpers/commonHelpers";
 import {
     axisJSON,
     fetchElementByClass,
     getAxes,
     getData,
-    legendJSON,
-    TRANSITION_DELAY,
-    triggerEvent
+    legendJSON
 } from "./helpers";
 
 describe("Gantt -> Track -> Action", () => {

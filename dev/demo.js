@@ -1,4 +1,4 @@
-import "babel-polyfill";
+import "@babel/polyfill";
 import "../src/main/less/carbon.less";
 import "./demo.less";
 import {

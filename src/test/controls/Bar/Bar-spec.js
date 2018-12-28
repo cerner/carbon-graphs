@@ -5,6 +5,7 @@ import constants, { COLORS, SHAPES } from "../../../main/js/helpers/constants";
 import errors from "../../../main/js/helpers/errors";
 import styles from "../../../main/js/helpers/styles";
 import utils from "../../../main/js/helpers/utils";
+import { triggerEvent } from "../helpers/commonHelpers";
 import {
     axisDefault,
     axisTimeSeries,
@@ -14,7 +15,6 @@ import {
     getAxes,
     getInput,
     regionsDefault,
-    triggerEvent,
     valuesDefault,
     valuesTimeSeries
 } from "./helpers";

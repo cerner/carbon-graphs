@@ -3,13 +3,8 @@ import sinon from "sinon";
 import Gantt from "../../../main/js/controls/Gantt";
 import errors from "../../../main/js/helpers/errors";
 import styles from "../../../main/js/helpers/styles";
-import {
-    axisJSON,
-    fetchElementByClass,
-    getAxes,
-    getData,
-    triggerEvent
-} from "./helpers";
+import { triggerEvent } from "../helpers/commonHelpers";
+import { axisJSON, fetchElementByClass, getAxes, getData } from "./helpers";
 
 describe("Gantt -> Track", () => {
     let gantt = null;

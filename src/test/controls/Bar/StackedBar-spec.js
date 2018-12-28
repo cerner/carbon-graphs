@@ -5,16 +5,16 @@ import styles from "../../../main/js/helpers/styles";
 import utils from "../../../main/js/helpers/utils";
 import {
     axisDefault,
+    axisTimeSeries,
     fetchAllElementsByClass,
     fetchElementByClass,
     getAxes,
     getInput,
+    regionsDefault,
     valuesDefault,
     valuesNegativeDefault,
     valuesOutliers,
-    axisTimeSeries,
-    valuesTimeSeries,
-    regionsDefault
+    valuesTimeSeries
 } from "./helpers";
 
 describe("Stacked Bar", () => {

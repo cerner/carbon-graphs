@@ -108,6 +108,7 @@ const processEvents = (trackLabel, dataTarget) => {
 
 /**
  * Load function validates, clones and stores the input onto a config object.
+ * @private
  * @param {object} inputJSON - input json for event.
  * @returns {object} config object containing consumer data.
  */

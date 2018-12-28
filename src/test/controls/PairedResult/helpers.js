@@ -219,19 +219,3 @@ export const inputSecondary = {
  * @returns {HTMLElement} - DOM element
  */
 export const fetchElementByClass = (id, cls) => id.querySelector(`.${cls}`);
-/**
- * Triggers an event on provided element
- * @param {HTMLElement} element - DOM element
- * @param {string} eventName - event name
- * @param {Function} [cb] - callback function that needs to be executed post event trigger
- * @param {number} [delayDuration=100] - delay duration before calling the callback function
- * @returns {undefined} returns nothing
- */
-export const triggerEvent = (element, eventName, cb, delayDuration = 100) => {
-    const event = document.createEvent("Event");
-    event.initEvent(eventName, true, true);
-    element.dispatchEvent(event);
-    if (cb) {
-        setTimeout(cb, delayDuration);
-    }
-};

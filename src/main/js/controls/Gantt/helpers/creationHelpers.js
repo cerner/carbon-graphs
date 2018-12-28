@@ -352,6 +352,7 @@ const createGrid = (axis, scale, config, canvasSVG) => {
 
 /**
  * Function to create the vertical-grid with a specific style and config.
+ * @private
  * @param {Object} gridSVG - d3 object of the grid
  * @param {Object} axis - Axis scaled according to input parameters
  * @param {string} style - Style with which, grid needs to be created.

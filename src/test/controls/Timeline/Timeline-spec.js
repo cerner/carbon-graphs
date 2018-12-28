@@ -6,6 +6,7 @@ import {
     getXAxisWidth,
     getXAxisYPosition
 } from "../../../main/js/controls/Timeline/helpers/creationHelpers";
+import { getYAxisHeight } from "../../../main/js/helpers/axis";
 import constants, {
     AXIS_TYPE,
     COLORS,
@@ -17,6 +18,11 @@ import styles from "../../../main/js/helpers/styles";
 import utils from "../../../main/js/helpers/utils";
 import LOCALE from "../../../main/js/locale/index";
 import {
+    delay,
+    TRANSITION_DELAY,
+    triggerEvent
+} from "../helpers/commonHelpers";
+import {
     axisJSON,
     BASE_CANVAS_HEIGHT_PADDING,
     DEFAULT_HEIGHT,
@@ -25,11 +31,8 @@ import {
     getData,
     onClickFunctionSpy,
     secondaryValuesJSON,
-    TRANSITION_DELAY,
-    triggerEvent,
     valuesJSON
 } from "./helpers";
-import { getYAxisHeight } from "../../../main/js/helpers/axis";
 
 describe("Timeline", () => {
     let timeline = null;
@@ -897,7 +900,6 @@ describe("Timeline", () => {
                 input = getData(valuesJSON, false, false);
                 secondaryInput = getData(secondaryValuesJSON, false, false);
                 secondaryInput.key = "uid_2";
-
                 timeline = new Timeline(getAxes(axisJSON));
                 timeline.loadContent(input);
             });
@@ -1218,7 +1220,7 @@ describe("Timeline", () => {
                     "click",
                     () => {
                         timeline.resize();
-                        setTimeout(() => {
+                        delay(() => {
                             expect(
                                 window.requestAnimationFrame
                             ).toHaveBeenCalledTimes(1);
@@ -1253,7 +1255,7 @@ describe("Timeline", () => {
                     "click",
                     () => {
                         timeline.resize();
-                        setTimeout(() => {
+                        delay(() => {
                             const primaryElement = document.querySelector(
                                 `.${
                                     styles.timelineContentGroup
@@ -1302,7 +1304,7 @@ describe("Timeline", () => {
                     timeline.resize();
                     triggerEvent(legendItem, "click", () => {
                         timeline.resize();
-                        setTimeout(() => {
+                        delay(() => {
                             expect(
                                 window.requestAnimationFrame
                             ).toHaveBeenCalledTimes(2);
@@ -1409,7 +1411,7 @@ describe("Timeline", () => {
             );
             triggerEvent(window, "resize", () => {
                 timeline.resize();
-                setTimeout(() => {
+                delay(() => {
                     expect(timeline.config.canvasWidth).toBe(800);
                     done();
                 }, TRANSITION_DELAY);
