@@ -3,7 +3,6 @@ import constants, { COLORS, SHAPES } from "../../../main/js/helpers/constants";
 import utils from "../../../main/js/helpers/utils";
 
 export const onClickFunctionSpy = sinon.spy();
-export const TRANSITION_DELAY = 500;
 export const BASE_CANVAS_HEIGHT_PADDING =
     (constants.PADDING.bottom * 2 + constants.PADDING.top) * 2;
 export const DEFAULT_HEIGHT =
@@ -37,22 +36,6 @@ export const secondaryValuesJSON = [
         content: "Secondary Values content"
     }
 ];
-/**
- * Triggers an event on provided element
- * @param {HTMLElement|Node} element - DOM element
- * @param {string} eventName - event name
- * @param {Function} [cb] - callback function that needs to be executed post event trigger
- * @param {number} [delayDuration=100] - delay duration before calling the callback function
- * @returns {undefined} returns nothing
- */
-export const triggerEvent = (element, eventName, cb, delayDuration = 100) => {
-    const event = document.createEvent("Event");
-    event.initEvent(eventName, true, true);
-    element.dispatchEvent(event);
-    if (cb) {
-        setTimeout(cb, delayDuration);
-    }
-};
 /**
  * Creates and returns an example input with custom axis values
  * @param {Object} axis - X axis data

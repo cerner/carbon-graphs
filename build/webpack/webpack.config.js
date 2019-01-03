@@ -1,13 +1,14 @@
 const path = require("path");
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const webpack = require("webpack");
 const merge = require("webpack-merge");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { jsOptions, cssOptions } = require("./helpers/rules");
 
 const webpackConfig = (env, folder = "") => ({
+    mode: "production",
+    bail: true,
     entry: {
         "carbon-graphs": "./src/main/js/carbon.js",
-        "style": "./src/main/less/carbon.less"
+        style: "./src/main/less/carbon.less"
     },
     output: {
         path: path.resolve(__dirname, "../.."),
@@ -17,44 +18,36 @@ const webpackConfig = (env, folder = "") => ({
         libraryTarget: "umd"
     },
     resolve: {
-        modules: [
-            process.cwd(),
-            "node_modules"
-        ]
+        modules: [process.cwd(), "node_modules"]
     },
     module: {
         rules: [
             {
                 test: /\.(less|css)$/,
-                loader: ExtractTextPlugin.extract(cssOptions(env.TYPE))
+                use: [MiniCssExtractPlugin.loader, ...cssOptions(env.TYPE)]
             },
             {
                 test: /\.(js|jsx)$/,
-                include: [
-                    path.join(__dirname, "../../src/main/js")
-                ],
+                include: [path.join(__dirname, "../../src/main/js")],
                 use: jsOptions(env.TYPE)
             }
         ]
     },
     plugins: [
-        new ExtractTextPlugin(`./${folder}css/carbon-graphs.css`),
-        new webpack.optimize.ModuleConcatenationPlugin(),
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false
-            },
-            mangle: true,
-            minimize: true
+        new MiniCssExtractPlugin({
+            filename: `./${folder}css/carbon-graphs.css`,
+            chunkFilename: `./${folder}css/carbon-graphs.css`
         })
     ],
     stats: {
         colors: true,
         errorDetails: true,
         chunks: false,
+        entrypoints: false,
         chunkModules: false,
         chunkOrigins: false,
-        modules: false
+        modules: false,
+        warnings: false
     }
 });
 

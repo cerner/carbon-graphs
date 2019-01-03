@@ -6,6 +6,7 @@ import { getActivityStyle } from "../../../main/js/controls/Gantt/helpers/durati
 import constants, { COLORS } from "../../../main/js/helpers/constants";
 import errors from "../../../main/js/helpers/errors";
 import styles from "../../../main/js/helpers/styles";
+import { TRANSITION_DELAY, triggerEvent } from "../helpers/commonHelpers";
 import {
     activityValuesJSON,
     axisJSON,
@@ -14,9 +15,7 @@ import {
     getData,
     onClickFunctionSpy,
     taskEndDate,
-    taskStartDate,
-    TRANSITION_DELAY,
-    triggerEvent
+    taskStartDate
 } from "./helpers";
 
 describe("Gantt -> Track -> Activity", () => {

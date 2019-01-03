@@ -52,7 +52,7 @@ export const toggleSectionAsActive = (target) => {
 export const header = {
     render: (el, content) => {
         const elem = el.appendChild(document.createElement("div"));
-        const headerContent = document.createElement("span");
+        const headerContent = document.createElement("h1");
         headerContent.innerText = content;
         headerContent.setAttribute("class", "graph-banner-content");
         elem.appendChild(headerContent);
@@ -61,8 +61,8 @@ export const header = {
 };
 export const section = {
     render: (el, cls = "") => {
-        const elem = el.appendChild(document.createElement("div"));
-        elem.setAttribute("class", `graph-section ${cls}`);
+        const elem = el.appendChild(document.createElement("section"));
+        elem.setAttribute("class", `${cls}`);
         return elem;
     }
 };
@@ -126,7 +126,7 @@ export const btn = {
 };
 export const shell = {
     render: (el, id, title, supportingTitle = "") => {
-        const sect = section.render(el);
+        const sect = section.render(el, "graph-section");
         h2.render(sect, title);
         supportingTitle ? paragraph.render(sect, supportingTitle) : "";
         div.render(sect, id, "carbon-graph");

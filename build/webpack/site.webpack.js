@@ -1,12 +1,10 @@
 const path = require("path");
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const webpack = require("webpack");
 const { jsOptions, cssOptions } = require("./helpers/rules");
 const webpackConfig = (env) => ({
-    entry: [
-        "./dev/app.js"
-    ],
+    mode: "development",
+    entry: ["./dev/app.js"],
     output: {
         path: path.resolve(__dirname, "../..", ".site"),
         filename: "carbon-graphs.js",
@@ -15,12 +13,8 @@ const webpackConfig = (env) => ({
         libraryTarget: "umd"
     },
     resolve: {
-        modules: [
-            process.cwd(),
-            "node_modules"
-        ]
+        modules: [process.cwd(), "node_modules"]
     },
-    devtool: "eval-source-map",
     module: {
         rules: [
             {
@@ -29,7 +23,7 @@ const webpackConfig = (env) => ({
             },
             {
                 test: /\.(less|css)$/,
-                loader: ExtractTextPlugin.extract(cssOptions(env.TYPE))
+                use: [MiniCssExtractPlugin.loader, ...cssOptions(env.TYPE)]
             },
             {
                 test: /\.(js|jsx)$/,
@@ -42,8 +36,10 @@ const webpackConfig = (env) => ({
         ]
     },
     plugins: [
-        new ExtractTextPlugin("carbon-graphs.css"),
-        new webpack.optimize.ModuleConcatenationPlugin(),
+        new MiniCssExtractPlugin({
+            filename: "carbon-graphs.css",
+            chunkFilename: "carbon-graphs.css"
+        }),
         new HtmlWebpackPlugin({
             template: "build/assets/index.ejs",
             title: "Carbon",
@@ -56,9 +52,11 @@ const webpackConfig = (env) => ({
         colors: true,
         errorDetails: true,
         chunks: false,
+        entrypoints: false,
         chunkModules: false,
         chunkOrigins: false,
-        modules: false
+        modules: false,
+        warnings: false
     }
 });
 

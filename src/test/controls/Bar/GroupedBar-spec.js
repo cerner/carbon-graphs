@@ -8,9 +8,9 @@ import {
     fetchAllElementsByClass,
     getAxes,
     getInput,
+    regionsDefault,
     valuesDefault,
-    valuesNegativeDefault,
-    regionsDefault
+    valuesNegativeDefault
 } from "./helpers";
 
 describe("Grouped Bar", () => {

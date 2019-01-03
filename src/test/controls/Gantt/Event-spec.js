@@ -1,18 +1,12 @@
 "use strict";
 import d3 from "d3";
 import sinon from "sinon";
+import Gantt from "../../../main/js/controls/Gantt";
 import { COLORS, SHAPES } from "../../../main/js/helpers/constants";
 import errors from "../../../main/js/helpers/errors";
-import {
-    axisJSON,
-    getAxes,
-    fetchElementByClass,
-    getData,
-    TRANSITION_DELAY,
-    triggerEvent
-} from "./helpers";
-import Gantt from "../../../main/js/controls/Gantt";
 import styles from "../../../main/js/helpers/styles";
+import { TRANSITION_DELAY, triggerEvent } from "../helpers/commonHelpers";
+import { axisJSON, fetchElementByClass, getAxes, getData } from "./helpers";
 
 /**
  * BF11272018.02 - Verify the system will allow consumers to utilize events within the Gantt Chart.

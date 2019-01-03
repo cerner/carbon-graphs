@@ -15,6 +15,11 @@ import styles from "../../../main/js/helpers/styles";
 import utils from "../../../main/js/helpers/utils";
 import LOCALE from "../../../main/js/locale/index";
 import {
+    delay,
+    TRANSITION_DELAY,
+    triggerEvent
+} from "../helpers/commonHelpers";
+import {
     axisJSON,
     BASE_CANVAS_HEIGHT_PADDING,
     datelineAlt,
@@ -23,9 +28,7 @@ import {
     getAxes,
     getData,
     legendJSON,
-    trackDimension,
-    TRANSITION_DELAY,
-    triggerEvent
+    trackDimension
 } from "./helpers";
 
 describe("Gantt", () => {
@@ -1643,7 +1646,7 @@ describe("Gantt", () => {
         describe("Content container", () => {
             it("Increases the height when content is loaded dynamically", (done) => {
                 const canvasElement = fetchElementByClass(styles.canvas);
-                setTimeout(() => {
+                delay(() => {
                     const containerElement = canvasElement.querySelector(
                         `.${styles.contentContainer}`
                     );
@@ -1658,7 +1661,7 @@ describe("Gantt", () => {
                 data.dimension = trackDimension.dimension;
                 gantt.loadContent(data);
                 const canvasElement = fetchElementByClass(styles.canvas);
-                setTimeout(() => {
+                delay(() => {
                     const containerElement = canvasElement.querySelector(
                         `.${styles.contentContainer}`
                     );
@@ -1902,7 +1905,7 @@ describe("Gantt", () => {
         });
         it("Removes the content successfully", (done) => {
             gantt.unloadContent(primaryContent);
-            setTimeout(() => {
+            delay(() => {
                 expect(gantt.tracks).toEqual([]);
                 expect(gantt.trackConfig).toEqual([]);
                 expect(gantt.tracks.length).toBe(0);
@@ -1918,7 +1921,7 @@ describe("Gantt", () => {
         });
         it("Removes the grid and track", (done) => {
             gantt.unloadContent(primaryContent);
-            setTimeout(() => {
+            delay(() => {
                 expect(gantt.scale.y.domain()).toEqual([]);
                 expect(gantt.scale.y.range()).toEqual([0]);
                 done();
@@ -1926,7 +1929,7 @@ describe("Gantt", () => {
         });
         it("Adjusts the defs height", (done) => {
             gantt.unloadContent(primaryContent);
-            setTimeout(() => {
+            delay(() => {
                 const defsContainerElement = document.querySelector(
                     `clipPath#${gantt.config.clipPathId}`
                 );
@@ -1936,7 +1939,7 @@ describe("Gantt", () => {
         });
         it("Adjusts the content container height", (done) => {
             gantt.unloadContent(primaryContent);
-            setTimeout(() => {
+            delay(() => {
                 const contentContainerElement = fetchElementByClass(
                     styles.contentContainer
                 );
@@ -1946,7 +1949,7 @@ describe("Gantt", () => {
         });
         it("Updates track props", (done) => {
             gantt.unloadContent(primaryContent);
-            setTimeout(() => {
+            delay(() => {
                 expect(gantt.config.axis.y.trackCount).toBe(0);
                 expect(
                     gantt.config.axis.y.trackList[primaryContent.key]

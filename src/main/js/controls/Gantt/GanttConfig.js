@@ -288,6 +288,7 @@ class GanttConfig extends BaseConfig {
  *      color
  *      shape
  *      dateline
+ * @private
  * @param {Object} dateline - JSON object with color, shape and date value.
  * @throws {module:errors.THROW_MSG_DATELINE_OBJECT_NOT_PROVIDED}
  * @throws {module:errors.THROW_MSG_DATELINE_COLOR_NOT_PROVIDED}

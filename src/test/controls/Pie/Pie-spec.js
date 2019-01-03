@@ -2,12 +2,8 @@
 import Carbon from "../../../main/js/carbon";
 import Pie from "../../../main/js/controls/Pie";
 import errors from "../../../main/js/helpers/errors";
-import {
-    dataSecondary,
-    dataTertiary,
-    inputDefault,
-    triggerEvent
-} from "./helpers";
+import { triggerEvent } from "../helpers/commonHelpers";
+import { dataSecondary, dataTertiary, inputDefault } from "./helpers";
 
 describe("Pie", () => {
     let graphContainer;
