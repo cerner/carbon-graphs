@@ -20,7 +20,8 @@
   "scripts": {
     "build": "webpack --config ./build/webpack/webpack.config.js --env.TYPE=LIB",
     "build:dist": "webpack --config ./build/webpack/webpack.config.js --env.TYPE=DIST",
-    "deploy:site": "npm run docs && webpack --config ./build/webpack/site.webpack.js --env.TYPE=SITE && gh-pages -d .site -m \"Upgrade: Deploy site\"",
+    "build:site": "npm run docs && webpack --config ./build/webpack/site.webpack.js --env.TYPE=SITE",
+    "deploy:site": "npm run build:site && gh-pages -d .site -m \"Upgrade: Deploy site\"",
     "dev": "node ./build/webpack/dev-server.js --env.TYPE=DEV",
     "docs": "node_modules/.bin/jsdoc -c jsdoc.json",
     "lint:styles": "stylelint src/main/less/**/*.less",

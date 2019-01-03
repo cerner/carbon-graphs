@@ -12,6 +12,10 @@ const tickValues = [
     new Date(2018, 0, 6).toISOString(),
     new Date(2018, 0, 7).toISOString()
 ];
+const numberedTicks = {
+    values: [1, 2, 3, 4, 5, 6, 7],
+    format: ".0f"
+};
 const regions = [
     {
         axis: "y",
@@ -68,9 +72,7 @@ const regions2 = [
 export const renderBarDefault = (el, id, title) => () => {
     shell.render(el, id, title);
     const axisData = utils.deepClone(getDemoData(`#${id}`, "BAR_DEFAULT"));
-    axisData.axis.x.ticks = {
-        values: [1, 2, 3, 4, 5, 6, 7]
-    };
+    axisData.axis.x.ticks = numberedTicks;
     const barSimple = Carbon.api.graph(axisData);
     barSimple.loadContent(
         Carbon.api.bar(getDemoData(`#${id}`, "BAR_DEFAULT").data[0])
@@ -97,9 +99,7 @@ export const renderBarTimeSeries = (el, id, title) => () => {
 export const renderBarGroup = (el, id, title) => () => {
     shell.render(el, id, title);
     const axisData = utils.deepClone(getDemoData(`#${id}`, "BAR_DEFAULT"));
-    axisData.axis.x.ticks = {
-        values: [1, 2, 3, 4, 5, 6, 7]
-    };
+    axisData.axis.x.ticks = numberedTicks;
     axisData.showVGrid = false;
 
     const barGroup = Carbon.api.graph(axisData);
@@ -119,9 +119,7 @@ export const renderBarGroup = (el, id, title) => () => {
 export const renderBarStacked = (el, id, title) => () => {
     shell.render(el, id, title);
     const axisData = utils.deepClone(getDemoData(`#${id}`, "BAR_DEFAULT"));
-    axisData.axis.x.ticks = {
-        values: [1, 2, 3, 4, 5, 6, 7]
-    };
+    axisData.axis.x.ticks = numberedTicks;
     axisData.showVGrid = false;
 
     const barStacked = Carbon.api.graph(axisData);
@@ -140,9 +138,7 @@ export const renderBarStacked = (el, id, title) => () => {
 export const renderBarNegative = (el, id, title) => () => {
     shell.render(el, id, title, "* A Bar graph with negative data point");
     const axisData = utils.deepClone(getDemoData(`#${id}`, "BAR_DEFAULT"));
-    axisData.axis.x.ticks = {
-        values: [1, 2, 3, 4, 5, 6, 7]
-    };
+    axisData.axis.x.ticks = numberedTicks;
     axisData.showVGrid = false;
     axisData.axis.y.lowerLimit = -15;
     axisData.axis.y.upperLimit = 0;
@@ -161,9 +157,7 @@ export const renderBarDefaultWithGoal = (el, id, title) => () => {
         "* A Simple bar graph with goal line. Goal lines are shown face up."
     );
     const axisData = utils.deepClone(getDemoData(`#${id}`, "BAR_DEFAULT"));
-    axisData.axis.x.ticks = {
-        values: [1, 2, 3, 4, 5, 6, 7]
-    };
+    axisData.axis.x.ticks = numberedTicks;
     axisData.showVGrid = false;
 
     const barSimple = Carbon.api.graph(axisData);
@@ -181,9 +175,7 @@ export const renderBarGroupWithGoal = (el, id, title) => () => {
         "* Grouped bars with goal lines for each input target. Goal lines are shown face up."
     );
     const axisData = utils.deepClone(getDemoData(`#${id}`, "BAR_DEFAULT"));
-    axisData.axis.x.ticks = {
-        values: [1, 2, 3, 4, 5, 6, 7]
-    };
+    axisData.axis.x.ticks = numberedTicks;
     axisData.showVGrid = false;
 
     const barGroup = Carbon.api.graph(axisData);
@@ -207,9 +199,7 @@ export const renderBarStackedWithGoal = (el, id, title) => () => {
         "* Stacked Bar graph with goal lines. Goal lines are shown face up."
     );
     const axisData = utils.deepClone(getDemoData(`#${id}`, "BAR_DEFAULT"));
-    axisData.axis.x.ticks = {
-        values: [1, 2, 3, 4, 5, 6, 7]
-    };
+    axisData.axis.x.ticks = numberedTicks;
     axisData.showVGrid = false;
     const barStacked = Carbon.api.graph(axisData);
 

@@ -64,7 +64,8 @@ export const renderCombinationBar = (el, id, title) => () => {
     shell.render(el, id, title);
     const axisData = utils.deepClone(getDemoData(`#${id}`, "BAR_DEFAULT"));
     axisData.axis.x.ticks = {
-        values: [1, 2, 3, 4, 5, 6, 7]
+        values: [1, 2, 3, 4, 5, 6, 7],
+        format: ".0f"
     };
     axisData.showVGrid = false;
     axisData.axis.y2.show = true;
