@@ -1203,6 +1203,9 @@ describe("Gantt", () => {
                 expect(
                     legendElement.children[0].getAttribute("aria-selected")
                 ).toBeTruthy();
+                expect(
+                    legendElement.children[0].getAttribute("aria-disabled")
+                ).toBe("false");
                 expect(legendElement.children[0].getAttribute("role")).toBe(
                     "listitem"
                 );

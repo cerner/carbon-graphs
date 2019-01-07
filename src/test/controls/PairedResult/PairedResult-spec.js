@@ -470,6 +470,18 @@ describe("PairedResult", () => {
                 );
                 expect(legendItems.length).toBe(6);
             });
+            it("disables legend when disabled flag is set", () => {
+                graphDefault.destroy();
+                const graph = new Graph(getAxes(axisDefault));
+                const data = utils.deepClone(valuesDefault);
+                input = getInput(data);
+                input.label.high.isDisabled = true;
+                graph.loadContent(new PairedResult(input));
+                const legendItem = document.body.querySelector(
+                    `.${styles.legendItem}`
+                );
+                expect(legendItem.getAttribute("aria-disabled")).toBe("true");
+            });
             it("adds data pair group for paired result", () => {
                 const pairedGroupContentContainer = fetchElementByClass(
                     pairedResultGraphContainer,
@@ -1356,6 +1368,9 @@ describe("PairedResult", () => {
                 );
                 triggerEvent(legendItem, "click", () => {
                     expect(legendItem.getAttribute("aria-selected")).toBe(
+                        "false"
+                    );
+                    expect(legendItem.getAttribute("aria-disabled")).toBe(
                         "false"
                     );
                     done();

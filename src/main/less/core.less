@@ -86,36 +86,47 @@ svg:not(:root) {
     flex-flow: row wrap;
     flex: 1 1 100%;
     margin: 0;
+
     & .carbon-legend-item {
         display: flex;
         align-items: center;
         margin: 0.5rem;
         padding: 0.25rem 0.5rem;
-        cursor: pointer;
         outline: 0;
         user-select: none;
-        &:hover {
-            background-color: @blue10;
+
+        &[aria-disabled="false"] {
+            cursor: pointer;
+
+            &:hover {
+                background-color: @blue10;
+            }
+
+            & .carbon-legend-item-btn,
+            & .carbon-legend-item-text {
+                cursor: pointer;
+            }
         }
+
         & .carbon-legend-item-btn {
             font-size: inherit;
             align-self: flex-start;
             align-content: center;
             margin-right: 0.5rem;
             padding: 0.5rem;
-            cursor: pointer;
             border-radius: 0.25rem;
             border: 0.1rem solid @grey15;
             background-color: @grey15;
         }
+
         & .carbon-legend-item-icon {
             display: block;
             vertical-align: middle;
             width: 0.75rem;
             height: 0.75rem;
         }
+
         & .carbon-legend-item-text {
-            cursor: pointer;
             word-wrap: break-word;
         }
     }
@@ -124,6 +135,7 @@ svg:not(:root) {
         & .carbon-legend-item-btn {
             background-color: @white;
         }
+
         & .carbon-legend-item-text {
             color: @grey65;
         }
@@ -144,6 +156,7 @@ svg:not(:root) {
     stroke: @blue30;
     fill: @blue10;
     fill-opacity: 0.25;
+
     &[aria-hidden="true"] {
         opacity: 0;
         .basic-transition(
@@ -152,6 +165,7 @@ svg:not(:root) {
             @default-transition-timing
         );
     }
+
     path {
         stroke-width: 1px;
     }
@@ -174,6 +188,7 @@ svg:not(:root) {
     &[aria-hidden="true"] {
         .opacity-hide();
     }
+
     &.carbon-highlight {
         .opacity-show();
     }
@@ -181,10 +196,12 @@ svg:not(:root) {
 
 .carbon-region {
     fill: @grey5;
+
     &[aria-hidden="true"],
     &.carbon-region-blur {
         .opacity-hide();
     }
+
     &.carbon-region-highlight {
         .opacity-show();
     }
@@ -201,6 +218,7 @@ svg:not(:root) {
     shape-rendering: crispEdges;
     cursor: pointer;
     stroke-width: 0;
+
     &[aria-hidden="true"] {
         .opacity-hide();
     }
