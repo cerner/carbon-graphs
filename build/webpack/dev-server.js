@@ -48,6 +48,6 @@ const server = new WebpackDevServer(compiler, {
     contentBase: "./build"
 });
 
-server.listen(port, "localhost", () => {
+server.listen(port, "0.0.0.0", () => {
     console.log(`Server started. Please go to http://localhost:${port}`);
 });
