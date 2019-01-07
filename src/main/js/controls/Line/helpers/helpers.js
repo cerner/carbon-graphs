@@ -7,9 +7,9 @@ import {
 } from "../../../core/BaseConfig";
 import { getDefaultSVGProps } from "../../../core/Shape";
 import {
+    calculateVerticalPadding,
     getXAxisXPosition,
-    isValidAxisType,
-    calculateVerticalPadding
+    isValidAxisType
 } from "../../../helpers/axis";
 import constants, { SHAPES } from "../../../helpers/constants";
 import errors from "../../../helpers/errors";
@@ -327,7 +327,8 @@ const drawDataPoints = (scale, config, pointGroupPath) => {
                         dataPointActionHandler(value, index, this);
                     },
                     a11yAttributes: {
-                        "aria-describedby": value.key
+                        "aria-describedby": value.key,
+                        "aria-disabled": !utils.isFunction(value.onClick)
                     }
                 })
             )
@@ -353,7 +354,8 @@ const drawDataPoints = (scale, config, pointGroupPath) => {
                     },
                     a11yAttributes: {
                         "aria-hidden": true,
-                        "aria-describedby": value.key
+                        "aria-describedby": value.key,
+                        "aria-disabled": !utils.isFunction(value.onClick)
                     }
                 })
             )
@@ -373,7 +375,8 @@ const drawDataPoints = (scale, config, pointGroupPath) => {
                         dataPointActionHandler(value, index, this);
                     },
                     a11yAttributes: {
-                        "aria-describedby": value.key
+                        "aria-describedby": value.key,
+                        "aria-disabled": !utils.isFunction(value.onClick)
                     }
                 })
             )

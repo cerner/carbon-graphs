@@ -336,8 +336,12 @@ describe("Gantt -> Track -> Action", () => {
                         ]
                     })
                 );
-                triggerEvent(fetchElementByClass(styles.point), "click", () => {
+                const pointElement = fetchElementByClass(styles.point);
+                triggerEvent(pointElement, "click", () => {
                     expect(onClickFunctionSpy.calledOnce).toBeFalsy();
+                    expect(pointElement.getAttribute("aria-disabled")).toBe(
+                        "true"
+                    );
                     done();
                 });
             });
@@ -362,6 +366,11 @@ describe("Gantt -> Track -> Action", () => {
                                 styles.dataPointSelection
                             ).getAttribute("aria-hidden")
                         ).toBe("true");
+                        expect(
+                            fetchElementByClass(
+                                styles.dataPointSelection
+                            ).getAttribute("aria-disabled")
+                        ).toBe("false");
                         done();
                     });
                 });
@@ -389,6 +398,9 @@ describe("Gantt -> Track -> Action", () => {
                         expect(pointElement.getAttribute("aria-hidden")).toBe(
                             "true"
                         );
+                        expect(pointElement.getAttribute("aria-disabled")).toBe(
+                            "false"
+                        );
                         expect(
                             pointElement.getAttribute("aria-describedby")
                         ).toBe("uid_action_1");
@@ -412,6 +424,11 @@ describe("Gantt -> Track -> Action", () => {
                 );
                 triggerEvent(fetchElementByClass(styles.point), "click", () => {
                     expect(onClickFunctionSpy.calledOnce).toBeTruthy();
+                    expect(
+                        fetchElementByClass(styles.point).getAttribute(
+                            "aria-disabled"
+                        )
+                    ).toBe("false");
                     done();
                 });
             });
@@ -498,12 +515,41 @@ describe("Gantt -> Track -> Action", () => {
                         expect(pointElement.getAttribute("aria-hidden")).toBe(
                             "true"
                         );
+                        expect(pointElement.getAttribute("aria-disabled")).toBe(
+                            "false"
+                        );
                         expect(
                             pointElement.getAttribute("aria-describedby")
                         ).toBe("uid_action_1");
                         done();
                     },
                     TRANSITION_DELAY
+                );
+            });
+            it("Doesnt calls onClick callback on selection indicator if onClick is not provided", (done) => {
+                const onClickFunctionSpy = sinon.spy();
+                gantt.loadContent(
+                    Object.assign(getData(), {
+                        actions: [
+                            {
+                                key: "uid_action_1",
+                                values: [xVal]
+                            }
+                        ]
+                    })
+                );
+                triggerEvent(
+                    fetchElementByClass(styles.dataPointSelection),
+                    "click",
+                    () => {
+                        expect(onClickFunctionSpy.calledOnce).toBeFalsy();
+                        expect(
+                            fetchElementByClass(
+                                styles.dataPointSelection
+                            ).getAttribute("aria-disabled")
+                        ).toBe("true");
+                        done();
+                    }
                 );
             });
             it("Calls onClick callback", (done) => {
@@ -524,6 +570,11 @@ describe("Gantt -> Track -> Action", () => {
                     "click",
                     () => {
                         expect(onClickFunctionSpy.calledOnce).toBeTruthy();
+                        expect(
+                            fetchElementByClass(
+                                styles.dataPointSelection
+                            ).getAttribute("aria-disabled")
+                        ).toBe("false");
                         done();
                     }
                 );

@@ -281,12 +281,11 @@ Loads the legend for `actions`.
 
 #### Optional
 
-| Property Name | Expected | Default     | Description                                                                                               |
-| ------------- | -------- | ----------- | --------------------------------------------------------------------------------------------------------- |
-| isSelectable  | boolean  | `true`      | to specify if an event is selectable. `true` states its selectable and `false` states its non selectable. |
-| onClick       | Function | null        | Any event that can be performed when clicking on the data point                                           |
-| label         | object   | {}          | To address a group of events                                                                              |
-| color         | string   | COLORS.BLUE | color of the data point                                                                                   |
+| Property Name | Expected | Default     | Description                                                     |
+| ------------- | -------- | ----------- | --------------------------------------------------------------- |
+| onClick       | Function | null        | Any event that can be performed when clicking on the data point |
+| label         | object   | {}          | To address a group of events                                    |
+| color         | string   | COLORS.BLUE | color of the data point                                         |
 
 ### Layering
 
@@ -389,7 +388,6 @@ var data = {
             label: {
                 display: "Defect A"
             },
-            isSelectable: false,
             onClick: loadPopup,
             shape: caretUp,
             color: Carbon.helpers.COLORS.GREEN,

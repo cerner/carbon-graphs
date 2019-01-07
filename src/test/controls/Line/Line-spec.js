@@ -603,6 +603,9 @@ describe("Line", () => {
                     );
                     triggerEvent(point, "click", () => {
                         expect(dataPointClickHandlerSpy.calledOnce).toBeFalsy();
+                        expect(point.getAttribute("aria-disabled")).toBe(
+                            "true"
+                        );
                         done();
                     });
                 });

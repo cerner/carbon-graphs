@@ -14,12 +14,12 @@ import {
     getColorForTarget,
     getShapeForTarget
 } from "../../Graph/helpers/helpers";
-import { transformPoint } from "./translateHelpers";
 import {
-    renderSelectionPath,
     dataPointActionHandler,
-    drawDataPoints
+    drawDataPoints,
+    renderSelectionPath
 } from "./datapointHelpers";
+import { transformPoint } from "./translateHelpers";
 
 /**
  * Processes the input JSON and adds the shapes, colors, labels etc. to each data points so that we
@@ -232,7 +232,8 @@ const renderDataPointPath = (scale, config, path, dataPoint, index) =>
                 },
                 a11yAttributes: {
                     "aria-hidden": false,
-                    "aria-describedby": dataPoint.key
+                    "aria-describedby": dataPoint.key,
+                    "aria-disabled": !utils.isFunction(dataPoint.onClick)
                 }
             })
         )

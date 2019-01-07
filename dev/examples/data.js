@@ -909,7 +909,6 @@ const DATA = [
                                 display: "Defect A"
                             },
                             onClick: () => {},
-                            isSelectable: true,
                             shape: {
                                 path: {
                                     id: "caretUp",

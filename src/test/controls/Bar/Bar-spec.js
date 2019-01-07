@@ -571,6 +571,7 @@ describe("Bar", () => {
                     );
                     triggerEvent(bar, "click", () => {
                         expect(barClickHandlerSpy.calledOnce).toBeFalsy();
+                        expect(bar.getAttribute("aria-disabled")).toBe("true");
                         done();
                     });
                 });

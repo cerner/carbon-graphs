@@ -3,6 +3,7 @@ import d3 from "d3";
 import { getScale } from "../../../core/BaseConfig/index";
 import {
     buildAxisLabel,
+    calculateVerticalPadding,
     determineOutlierStretchFactor,
     getAxesScale,
     getRotationForAxis,
@@ -11,20 +12,19 @@ import {
     getXAxisRange,
     getXAxisWidth,
     getXAxisXPosition,
-    calculateVerticalPadding,
     getY2AxisLabelXPosition,
     getYAxisHeight,
     getYAxisLabelXPosition,
     getYAxisLabelYPosition,
     getYAxisRange,
     hasY2Axis,
+    isXAxisOrientationTop,
     processTickValues,
     translateAxes,
-    translateAxisReferenceLine,
-    isXAxisOrientationTop
+    translateAxisReferenceLine
 } from "../../../helpers/axis";
-import { createVGrid, translateVGrid } from "../../../helpers/datetimeBuckets";
 import constants, { SHAPES } from "../../../helpers/constants";
+import { createVGrid, translateVGrid } from "../../../helpers/datetimeBuckets";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 

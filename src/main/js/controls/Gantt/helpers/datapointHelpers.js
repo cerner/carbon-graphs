@@ -1,12 +1,12 @@
 import d3 from "d3";
-import { getSVGObject } from "../../../helpers/shapeSVG";
-import { getDefaultSVGProps } from "../../../core/Shape";
-import utils from "../../../helpers/utils";
 import { Shape } from "../../../core";
-import constants, { SHAPES } from "../../../helpers/constants";
+import { getDefaultSVGProps } from "../../../core/Shape";
 import { getXAxisXPosition } from "../../../helpers/axis";
-import { getXAxisYPosition } from "./creationHelpers";
+import constants, { SHAPES } from "../../../helpers/constants";
+import { getSVGObject } from "../../../helpers/shapeSVG";
 import styles from "../../../helpers/styles";
+import utils from "../../../helpers/utils";
+import { getXAxisYPosition } from "./creationHelpers";
 import { transformPoint } from "./translateHelpers";
 
 /**
@@ -72,7 +72,8 @@ export const renderSelectionPath = (scale, config, path, dataPoint, index) =>
                 },
                 a11yAttributes: {
                     "aria-hidden": true,
-                    "aria-describedby": dataPoint.key
+                    "aria-describedby": dataPoint.key,
+                    "aria-disabled": !utils.isFunction(dataPoint.onClick)
                 }
             })
         )

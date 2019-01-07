@@ -1004,6 +1004,9 @@ describe("Timeline", () => {
                     const point = fetchElementByClass(styles.point);
                     triggerEvent(point, "click", () => {
                         expect(onClickFunctionSpy.calledOnce).toBeFalsy();
+                        expect(point.getAttribute("aria-disabled")).toBe(
+                            "true"
+                        );
                         done();
                     });
                 });

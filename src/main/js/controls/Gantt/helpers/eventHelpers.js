@@ -1,23 +1,23 @@
 "use strict";
 import d3 from "d3";
-import styles from "../../../helpers/styles";
 import { Shape } from "../../../core";
 import { getDefaultSVGProps } from "../../../core/Shape";
 import { SHAPES } from "../../../helpers/constants";
 import errors from "../../../helpers/errors";
+import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 import {
     getColorForTarget,
     getShapeForTarget
 } from "../../Graph/helpers/helpers";
-import { transformPoint } from "./translateHelpers";
-import {
-    renderSelectionPath,
-    dataPointActionHandler,
-    drawDataPoints
-} from "./datapointHelpers";
 import { validateEvent } from "../GanttConfig";
-import { getDefaultValue } from "../../../core/BaseConfig";
+import {
+    dataPointActionHandler,
+    drawDataPoints,
+    renderSelectionPath
+} from "./datapointHelpers";
+import { transformPoint } from "./translateHelpers";
+
 /**
  * Renders the data point in the provided path element.
  * It uses the consumer opted Shape, color of the data point.
@@ -43,7 +43,7 @@ const renderDataPointPath = (scale, config, path, dataPoint, index) =>
                 a11yAttributes: {
                     "aria-hidden": false,
                     "aria-describedby": dataPoint.key,
-                    "aria-disabled": !dataPoint.isSelectable
+                    "aria-disabled": !utils.isFunction(dataPoint.onClick)
                 }
             })
         )
@@ -66,7 +66,7 @@ const drawEventDataPoints = (scale, config, canvasSVG) => {
         .classed(styles.pointGroup, true)
         .each(function(dataPoint, index) {
             const dataPointSVG = d3.select(this);
-            if (dataPoint.isSelectable) {
+            if (utils.isFunction(dataPoint.onClick)) {
                 renderSelectionPath(
                     scale,
                     config,
@@ -96,7 +96,6 @@ const processEvents = (trackLabel, dataTarget) => {
     };
     return dataTarget.values.map((value) => ({
         key: dataTarget.key,
-        isSelectable: getDefaultValue(dataTarget.isSelectable, true),
         onClick: dataTarget.onClick,
         x: checkX(value),
         y: trackLabel.display,

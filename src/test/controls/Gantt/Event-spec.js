@@ -26,7 +26,6 @@ describe("Gantt -> Track -> Event", () => {
                     {
                         key: "uid_event_1",
                         onClick: sinon.spy(),
-                        isSelectable: true,
                         shape: SHAPES.CIRCLE,
                         color: COLORS.BLUE,
                         values: [xVal]
@@ -34,7 +33,6 @@ describe("Gantt -> Track -> Event", () => {
                     {
                         key: "uid_event_2",
                         onClick: sinon.spy(),
-                        isSelectable: true,
                         shape: SHAPES.DIAMOND,
                         color: COLORS.BLUE,
                         values: [xVal]
@@ -59,7 +57,6 @@ describe("Gantt -> Track -> Event", () => {
             {
                 key: "uid_event_1",
                 onClick: onClickFunctionSpy,
-                isSelectable: true,
                 shape: SHAPES.CIRCLE,
                 color: COLORS.BLUE,
                 values: [xVal]
@@ -204,7 +201,6 @@ describe("Gantt -> Track -> Event", () => {
                         {
                             key: "uid_event_1",
                             onClick: sinon.spy(),
-                            isSelectable: true,
                             shape: SHAPES.CIRCLE,
                             color: COLORS.BLUE,
                             values: [new Date(2018, 4, 1).toISOString()]
@@ -219,7 +215,6 @@ describe("Gantt -> Track -> Event", () => {
                         {
                             key: "uid_event_2",
                             onClick: sinon.spy(),
-                            isSelectable: true,
                             shape: SHAPES.CIRCLE,
                             color: COLORS.BLUE,
                             values: [new Date(2018, 4, 1).toISOString()]
@@ -276,7 +271,6 @@ describe("Gantt -> Track -> Event", () => {
                         events: [
                             {
                                 key: "uid_event_1",
-                                isSelectable: true,
                                 shape: SHAPES.DIAMOND,
                                 color: COLORS.BLUE,
                                 values: [xVal]
@@ -316,7 +310,6 @@ describe("Gantt -> Track -> Event", () => {
                                 onClick: (clearSelectionCallback) =>
                                     clearSelectionCallback(),
                                 values: [xVal],
-                                isSelectable: true,
                                 shape: SHAPES.DIAMOND,
                                 color: COLORS.BLUE
                             }
@@ -372,7 +365,6 @@ describe("Gantt -> Track -> Event", () => {
                                         target
                                     };
                                 },
-                                isSelectable: true,
                                 shape: SHAPES.DIAMOND,
                                 color: COLORS.BLUE,
                                 values: [xVal, xValAlt]
@@ -405,7 +397,6 @@ describe("Gantt -> Track -> Event", () => {
                             {
                                 key: "uid_event_1",
                                 onClick: onClickFunctionSpy,
-                                isSelectable: true,
                                 shape: SHAPES.DIAMOND,
                                 color: COLORS.BLUE,
                                 values: [xVal]
@@ -432,7 +423,6 @@ describe("Gantt -> Track -> Event", () => {
                                 key: "uid_event_1",
                                 onClick: (clearSelectionCallback) =>
                                     clearSelectionCallback(),
-                                isSelectable: true,
                                 shape: SHAPES.CIRCLE,
                                 color: COLORS.BLUE,
                                 values: [xVal]
@@ -509,7 +499,6 @@ describe("Gantt -> Track -> Event", () => {
                                         target
                                     };
                                 },
-                                isSelectable: true,
                                 shape: SHAPES.CIRCLE,
                                 color: COLORS.BLUE,
                                 values: [xVal, xValAlt]
@@ -538,7 +527,7 @@ describe("Gantt -> Track -> Event", () => {
              * BF11272018.1 - Verify the system allows an event to be select-able.
              * BF11272018.13 - Verify an event is select-able by default.
              */
-            it("Even when isSelectable is undefined", (done) => {
+            it("Calls onClick when selected, if provided", (done) => {
                 gantt.loadContent(
                     Object.assign(getData(), {
                         events: [
@@ -552,13 +541,39 @@ describe("Gantt -> Track -> Event", () => {
                         ]
                     })
                 );
-                triggerEvent(
-                    fetchElementByClass(styles.dataPointSelection),
-                    "click",
-                    () => {
-                        expect(onClickFunctionSpy.calledOnce).toBe(true);
-                        done();
-                    }
+                const selectedPointElement = fetchElementByClass(
+                    styles.dataPointSelection
+                );
+                triggerEvent(selectedPointElement, "click", () => {
+                    expect(onClickFunctionSpy.calledOnce).toBe(true);
+                    expect(
+                        selectedPointElement.getAttribute("aria-disabled")
+                    ).toBe("false");
+                    done();
+                });
+            });
+            it("Sets svg as disabled when onClick is not provided", () => {
+                gantt.loadContent(
+                    Object.assign(getData(), {
+                        events: [
+                            {
+                                key: "uid_event_1",
+                                shape: SHAPES.CIRCLE,
+                                color: COLORS.BLUE,
+                                values: [xVal]
+                            }
+                        ]
+                    })
+                );
+                const pointElement = fetchElementByClass(styles.point);
+
+                expect(fetchElementByClass(styles.dataPointSelection)).toBe(
+                    null
+                );
+                expect(pointElement.getAttribute("aria-disabled")).toBe("true");
+                expect(pointElement.getAttribute("aria-hidden")).toBe("false");
+                expect(pointElement.getAttribute("style")).toContain(
+                    COLORS.BLUE
                 );
             });
         });
@@ -571,7 +586,6 @@ describe("Gantt -> Track -> Event", () => {
                             {
                                 key: "uid_event_1",
                                 onClick: onClickSpy,
-                                isSelectable: false,
                                 shape: SHAPES.CIRCLE,
                                 color: COLORS.BLUE,
                                 values: [xVal]
@@ -605,7 +619,6 @@ describe("Gantt -> Track -> Event", () => {
                             {
                                 key: "uid_event_1",
                                 onClick: () => {},
-                                isSelectable: false,
                                 shape: caretUp,
                                 values: [xVal]
                             }
@@ -623,7 +636,6 @@ describe("Gantt -> Track -> Event", () => {
                             {
                                 key: "uid_event_1",
                                 onClick: () => {},
-                                isSelectable: false,
                                 values: [xVal]
                             }
                         ]

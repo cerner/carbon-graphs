@@ -3,16 +3,13 @@
 
 .carbon-y-axis-track-label {
     .tick > text {
-        cursor: pointer;
+        &[aria-disabled="false"] {
+            cursor: pointer;
+        }
     }
 }
 
 .carbon-data-track-group {
-    .carbon-point {
-        &[aria-disabled="true"] {
-            cursor: default;
-        }
-    }
     .carbon-selected-data-point {
         &[aria-hidden="true"] {
             .opacity-hide();
@@ -27,6 +24,7 @@
     fill: @blue10;
     fill-opacity: 0.25;
     shape-rendering: geometricPrecision;
+
     &[aria-hidden="true"] {
         .opacity-hide();
     }
@@ -38,8 +36,12 @@
         shape-rendering: crispEdges;
         opacity: 0.3;
     }
+
     .carbon-gantt-dateline-point {
-        cursor: pointer;
+        &[aria-disabled="false"] {
+            cursor: pointer;
+        }
+
         &[aria-hidden="true"] {
             .opacity-hide();
         }

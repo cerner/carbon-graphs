@@ -581,7 +581,7 @@ describe("Gantt -> Track -> Task", () => {
             }, TRANSITION_DELAY);
         });
         describe("When clicked on a task", () => {
-            it("Does not do anything if no onClick callback is provided", (done) => {
+            it("Does not do anything if no onClick callback is provided - Normal", (done) => {
                 const onClickFunctionSpy = sinon.spy();
                 gantt.loadContent(
                     Object.assign(getData(), {
@@ -605,6 +605,111 @@ describe("Gantt -> Track -> Task", () => {
                     "click",
                     () => {
                         expect(onClickFunctionSpy.calledOnce).toBeFalsy();
+                        expect(
+                            fetchElementByClass(styles.task).getAttribute(
+                                "aria-disabled"
+                            )
+                        ).toBe("true");
+                        done();
+                    }
+                );
+            });
+            it("Does not do anything if invalid onClick callback is provided", (done) => {
+                const onClickFunctionSpy = sinon.spy();
+                gantt.loadContent(
+                    Object.assign(getData(), {
+                        trackLabel: {
+                            display: "A"
+                        },
+                        tasks: [
+                            {
+                                key: "taskNormal",
+                                label: {
+                                    display: "Story Apex"
+                                },
+                                onClick: null,
+                                startDate: taskStartDate,
+                                endDate: taskEndDate
+                            }
+                        ]
+                    })
+                );
+                triggerEvent(
+                    fetchElementByClass(styles.taskBar),
+                    "click",
+                    () => {
+                        expect(onClickFunctionSpy.calledOnce).toBeFalsy();
+                        expect(
+                            fetchElementByClass(styles.task).getAttribute(
+                                "aria-disabled"
+                            )
+                        ).toBe("true");
+                        done();
+                    }
+                );
+            });
+            it("Does not do anything if no onClick callback is provided - Chunk", (done) => {
+                const onClickFunctionSpy = sinon.spy();
+                gantt.loadContent(
+                    Object.assign(getData(), {
+                        trackLabel: {
+                            display: "A"
+                        },
+                        tasks: [
+                            {
+                                key: "taskChunk",
+                                label: {
+                                    display: "Story Apex"
+                                },
+                                startDate: taskStartDate,
+                                endDate: taskStartDate
+                            }
+                        ]
+                    })
+                );
+                triggerEvent(
+                    fetchElementByClass(styles.taskBar),
+                    "click",
+                    () => {
+                        expect(onClickFunctionSpy.calledOnce).toBeFalsy();
+                        expect(
+                            fetchElementByClass(styles.task).getAttribute(
+                                "aria-disabled"
+                            )
+                        ).toBe("true");
+                        done();
+                    }
+                );
+            });
+            it("Does not do anything if no onClick callback is provided - Percentage", (done) => {
+                gantt.loadContent(
+                    Object.assign(getData(), {
+                        trackLabel: {
+                            display: "A"
+                        },
+                        tasks: [
+                            {
+                                key: "taskNormal",
+                                label: {
+                                    display: "Story Apex"
+                                },
+                                percentage: 30,
+                                startDate: taskStartDate,
+                                endDate: taskEndDate
+                            }
+                        ]
+                    })
+                );
+                triggerEvent(
+                    fetchElementByClass(styles.taskBar),
+                    "click",
+                    () => {
+                        expect(onClickFunctionSpy.calledOnce).toBeFalsy();
+                        expect(
+                            fetchElementByClass(styles.task).getAttribute(
+                                "aria-disabled"
+                            )
+                        ).toBe("true");
                         done();
                     }
                 );
@@ -639,6 +744,11 @@ describe("Gantt -> Track -> Task", () => {
                                 "aria-selected"
                             )
                         ).toBe("true");
+                        expect(
+                            fetchElementByClass(styles.task).getAttribute(
+                                "aria-disabled"
+                            )
+                        ).toBe("false");
                         expect(
                             fetchElementByClass(
                                 styles.taskBarSelection
@@ -729,6 +839,11 @@ describe("Gantt -> Track -> Task", () => {
                                 "aria-selected"
                             )
                         ).toBe("true");
+                        expect(
+                            fetchElementByClass(styles.task).getAttribute(
+                                "aria-disabled"
+                            )
+                        ).toBe("false");
                         expect(
                             fetchElementByClass(
                                 styles.taskBarSelection
@@ -821,6 +936,11 @@ describe("Gantt -> Track -> Task", () => {
                             )
                         ).toBe("true");
                         expect(
+                            fetchElementByClass(styles.task).getAttribute(
+                                "aria-disabled"
+                            )
+                        ).toBe("false");
+                        expect(
                             fetchElementByClass(
                                 styles.taskBarSelection
                             ).getAttribute("aria-hidden")
@@ -861,6 +981,11 @@ describe("Gantt -> Track -> Task", () => {
                                 "aria-selected"
                             )
                         ).toBe("true");
+                        expect(
+                            fetchElementByClass(styles.task).getAttribute(
+                                "aria-disabled"
+                            )
+                        ).toBe("false");
                         expect(
                             fetchElementByClass(
                                 styles.taskBarSelection
@@ -953,6 +1078,11 @@ describe("Gantt -> Track -> Task", () => {
                                 "aria-selected"
                             )
                         ).toBe("true");
+                        expect(
+                            fetchElementByClass(styles.task).getAttribute(
+                                "aria-disabled"
+                            )
+                        ).toBe("false");
                         expect(
                             fetchElementByClass(
                                 styles.taskBarSelection
@@ -1055,6 +1185,11 @@ describe("Gantt -> Track -> Task", () => {
                                 "aria-selected"
                             )
                         ).toBe("true");
+                        expect(
+                            fetchElementByClass(styles.task).getAttribute(
+                                "aria-disabled"
+                            )
+                        ).toBe("false");
                         expect(
                             fetchElementByClass(
                                 styles.taskBarSelection

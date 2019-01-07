@@ -2,8 +2,8 @@
 import d3 from "d3";
 import { getType } from "../../../core/BaseConfig";
 import {
-    isValidAxisType,
-    calculateVerticalPadding
+    calculateVerticalPadding,
+    isValidAxisType
 } from "../../../helpers/axis";
 import { getBarStyle, getHashedBar, getRect } from "../../../helpers/barType";
 import constants, {
@@ -249,6 +249,7 @@ const drawDataBars = (
                     "aria-hidden",
                     config.shownTargets.indexOf(dataPoint.key) < 0
                 )
+                .attr("aria-disabled", !utils.isFunction(dataPoint.onClick))
                 .on("click", (value) => {
                     barActionHandler(
                         value,

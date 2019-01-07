@@ -329,7 +329,8 @@ const createPoints = (scale, config, canvasSVG) => {
                     a11yAttributes: {
                         "aria-describedby": value.key,
                         "aria-hidden":
-                            config.shownTargets.indexOf(value.key) < 0
+                            config.shownTargets.indexOf(value.key) < 0,
+                        "aria-disabled": !utils.isFunction(value.onClick)
                     }
                 })
             )
@@ -350,7 +351,8 @@ const createPoints = (scale, config, canvasSVG) => {
                     },
                     a11yAttributes: {
                         "aria-hidden": true,
-                        "aria-describedby": value.key
+                        "aria-describedby": value.key,
+                        "aria-disabled": !utils.isFunction(value.onClick)
                     }
                 })
             )

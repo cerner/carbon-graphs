@@ -1,9 +1,9 @@
 "use strict";
+import { calculateVerticalPadding } from "../../../helpers/axis";
 import constants, { AXIS_TYPE } from "../../../helpers/constants";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 import { barAttributesHelper, getXAxisXPosition } from "./creationHelpers";
-import { calculateVerticalPadding } from "../../../helpers/axis";
 
 const PADDING = constants.DEFAULT_BAR_SELECTION_PADDING;
 
