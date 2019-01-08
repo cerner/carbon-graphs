@@ -151,6 +151,16 @@ svg:not(:root) {
     );
 }
 
+.carbon-point {
+    &[aria-disabled="false"] {
+        cursor: pointer;
+    }
+
+    &[aria-hidden="true"] {
+        .opacity-hide();
+    }
+}
+
 .carbon-selected-data-point {
     display: block;
     stroke: @blue30;
@@ -158,12 +168,7 @@ svg:not(:root) {
     fill-opacity: 0.25;
 
     &[aria-hidden="true"] {
-        opacity: 0;
-        .basic-transition(
-            opacity,
-            @default-transition-duration,
-            @default-transition-timing
-        );
+        .opacity-hide();
     }
 
     path {
