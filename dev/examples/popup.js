@@ -14,6 +14,31 @@ const createItem = (pair, label, value) => {
         .classed("popup-text", true)
         .text(value);
 };
+const createTrackItem = (pair, label, items) => {
+    const item = pair.append("g").classed("popup-item", true);
+    item.append("label")
+        .classed("popup-label", true)
+        .text(label);
+    const section = item.append("g").classed("section", true);
+    for (const value of Object.values(items)) {
+        const content = section.append("g").classed("content", true);
+        Object.entries(value).forEach(([subLabel, subItem]) => {
+            const subContent = content.append("g").classed("popup-item", true);
+            subContent
+                .append("label")
+                .classed("popup-label", true)
+                .text(
+                    subLabel
+                        .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+                        .replace(/(\b[a-z](?!\s))/g, (x) => x.toUpperCase())
+                );
+            subContent
+                .append("g")
+                .classed("popup-text", true)
+                .text(subItem);
+        });
+    }
+};
 const renderPopup = (fn) => {
     const tip = document.querySelector("#tooltip");
     const clickHandler = () => {
@@ -103,6 +128,53 @@ export const loadTrackLabelPopup = (d) => {
         .append("g")
         .classed("popup-text", true)
         .text(d);
+};
+export const loadTrackPopup = (onCloseCB, key, value) => {
+    removeOldPopup();
+    const path = renderPopup(onCloseCB);
+    const pair = path.append("g");
+    if (value.tasks && value.tasks.length > 0) {
+        const tasks = [];
+        value.tasks.forEach((task) => {
+            tasks.push({
+                name: task.key,
+                startDate: task.startDate,
+                endDate: task.endDate
+            });
+        });
+        createTrackItem(pair, "Tasks", tasks);
+    }
+    if (value.activities && value.activities.length > 0) {
+        const activities = [];
+        value.activities.forEach((activity) => {
+            activities.push({
+                name: activity.key,
+                startDate: activity.startDate,
+                endDate: activity.endDate
+            });
+        });
+        createTrackItem(pair, "Activities", activities);
+    }
+    if (value.events && value.events.length > 0) {
+        const events = [];
+        value.events.forEach((event) => {
+            events.push({
+                name: event.key,
+                values: event.values.join(", ")
+            });
+        });
+        createTrackItem(pair, "Events", events);
+    }
+    if (value.actions && value.actions.length > 0) {
+        const actions = [];
+        value.actions.forEach((action) => {
+            actions.push({
+                name: action.key,
+                values: action.values.join(", ")
+            });
+        });
+        createTrackItem(pair, "Actions", actions);
+    }
 };
 export const loadTaskPopup = (onCloseCB, key, index, value) => {
     removeOldPopup();

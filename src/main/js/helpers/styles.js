@@ -76,6 +76,8 @@ export default {
      */
     ganttChartContent: "carbon-gantt-chart-content",
     trackGroup: "carbon-data-track-group",
+    ganttTrackSelectorGroup: "carbon-gantt-track-selector-group",
+    ganttTrackBarSelection: "carbon-track-selected-bar",
     taskGroup: "carbon-data-task-group",
     task: "carbon-data-task",
     taskBar: "carbon-data-bar",

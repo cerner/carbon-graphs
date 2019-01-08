@@ -16,13 +16,15 @@ import {
     createTrackContainer,
     updateTrackProps
 } from "./helpers/creationHelpers";
+import { loadGanttTrackSelector } from "./helpers/trackHelpers";
 import { loadEvents, unloadEvents } from "./helpers/eventHelpers";
 import { loadTasks, unloadTasks } from "./helpers/taskHelpers";
 import {
     translateActivities,
     translateDataPoints,
     translateTasks,
-    truncateTrackLabelText
+    truncateTrackLabelText,
+    translateTrackSelector
 } from "./helpers/translateHelpers";
 
 /**
@@ -162,6 +164,7 @@ class Track extends GraphContent {
             );
         }
         updateTrackProps(graph.config, this.config, true);
+        loadGanttTrackSelector(graph.config, graph.svg, this.config);
         return this;
     }
 
@@ -191,6 +194,7 @@ class Track extends GraphContent {
      */
     resize(graph) {
         truncateTrackLabelText();
+        translateTrackSelector(graph.config, graph.svg, this.config);
         if (utils.notEmpty(this.config.activities)) {
             translateActivities(graph.scale, graph.config, this.trackGroupPath);
         }

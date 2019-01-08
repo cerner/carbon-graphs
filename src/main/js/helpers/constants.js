@@ -134,6 +134,12 @@ export default {
     DEFAULT_TIMELINE_TICK_LENGTH: 12,
     DEFAULT_LABEL_CHARACTER_LIMIT: 12,
     DEFAULT_GANTT_TRACK_HEIGHT: 41,
+    DEFAULT_GANTT_TRACK_SELECTION: {
+        x: 1,
+        y: 1,
+        width: 2,
+        height: 1.5
+    },
     DEFAULT_GANTT_TASK_HEIGHT: 23,
     DEFAULT_GANTT_TASK_PADDING: {
         top: 9,

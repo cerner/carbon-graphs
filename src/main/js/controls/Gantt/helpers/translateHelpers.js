@@ -517,7 +517,33 @@ const translateTasks = (scale, config, trackPath) =>
                 ? translateTaskIndicator(scale, path)
                 : translateTaskBar(scale, path);
         });
-
+/**
+ * Translates track selector based on container width.
+ * @private
+ * @param {Object} config - base config derived from input JSON.
+ * @param {*} canvasSVG - d3 object of canvas svg
+ * @param {*} trackConfig - config derived from input track JSON.
+ * @returns {undefined} - returns nothing.
+ */
+const translateTrackSelector = (config, canvasSVG, trackConfig) => {
+    const ganttTrackSelectorGroupPath = canvasSVG.select(
+        `.${styles.ganttTrackSelectorGroup}`
+    );
+    ganttTrackSelectorGroupPath.selectAll("rect").each(function() {
+        const path = d3.select(this);
+        path.transition(constants.d3Transition)
+            .attr(
+                "width",
+                getXAxisWidth(config) -
+                    constants.DEFAULT_GANTT_TRACK_SELECTION.width
+            )
+            .attr(
+                "height",
+                config.axis.y.trackList[trackConfig.key].trackHeight -
+                    constants.DEFAULT_GANTT_TRACK_SELECTION.height
+            );
+    });
+};
 /**
  * Translates activities based on container width.
  * @private
@@ -542,5 +568,6 @@ export {
     transformPoint,
     translateDataPoints,
     translateTasks,
-    translateActivities
+    translateActivities,
+    translateTrackSelector
 };

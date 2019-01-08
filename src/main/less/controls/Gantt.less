@@ -11,6 +11,7 @@
 
 .carbon-data-track-group {
     .carbon-selected-data-point {
+        .selected-indicator-styles();
         &[aria-hidden="true"] {
             .opacity-hide();
         }
@@ -19,14 +20,23 @@
 
 .carbon-data-selected-bar {
     display: block;
-    stroke-width: 1px;
-    stroke: @blue30;
-    fill: @blue10;
-    fill-opacity: 0.25;
+    .selected-indicator-styles();
     shape-rendering: geometricPrecision;
 
     &[aria-hidden="true"] {
         .opacity-hide();
+    }
+}
+
+.carbon-track-selected-bar {
+    display: block;
+    fill-opacity: 0;
+    &[aria-disabled="false"] {
+        cursor: pointer;
+    }
+    &[aria-selected="true"] {
+        .selected-indicator-styles();
+        shape-rendering: geometricPrecision;
     }
 }
 

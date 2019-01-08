@@ -18,6 +18,7 @@ import {
     calculateAxesSize,
     createAxes,
     createContentContainer,
+    createTrackSelectionContainer,
     createDateline,
     createDefs,
     createGanttContent,
@@ -195,6 +196,7 @@ class Gantt extends Construct {
         createGrid(this.axis, this.scale, this.config, this.svg);
         createContentContainer(this.config, this.svg);
         createAxes(this.axis, this.scale, this.config, this.svg);
+        createTrackSelectionContainer(this.config, this.svg);
         createGanttContent(this.config, this.svg);
         if (utils.notEmpty(this.config.dateline)) {
             createDateline(this.scale, this.config, this.svg);

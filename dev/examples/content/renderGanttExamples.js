@@ -5,7 +5,8 @@ import {
     renderGanttActivities,
     renderGanttPercentage,
     renderGanttStyle,
-    renderGanttTruncate
+    renderGanttTruncate,
+    renderGanttTrackSelection
 } from "../controls/gantt";
 import {
     btn,
@@ -41,6 +42,13 @@ export const triggerGanttExample = (
     );
     instance.load(renderGanttAction(contentSection, "ganttAction", "Actions"));
     instance.load(renderGanttEvents(contentSection, "ganttEvent", "Events"));
+    instance.load(
+        renderGanttTrackSelection(
+            contentSection,
+            "ganttTrackSelection",
+            "Gantt Track Selection"
+        )
+    );
     instance.load(renderGanttStyle(contentSection, "ganttStyles", "Bar types"));
     instance.load(
         renderGanttTruncate(contentSection, "ganttTruncate", "Label Truncation")

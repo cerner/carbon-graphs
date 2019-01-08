@@ -427,6 +427,16 @@ const createContentContainer = (config, canvasSVG) =>
         .attr(constants.Y_AXIS, getXAxisYPosition(config))
         .attr("width", getXAxisWidth(config))
         .attr("height", getYAxisHeight(config));
+
+/**
+ * Creates a container for gantt chart track content
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @param {Array} canvasSVG - d3 object of canvas svg
+ * @returns {Object} d3 svg path
+ */
+const createTrackSelectionContainer = (config, canvasSVG) =>
+    canvasSVG.append("g").classed(styles.ganttTrackSelectorGroup, true);
 /**
  * Creates a container for gantt chart content
  * @private
@@ -564,6 +574,7 @@ export {
     createDefs,
     createGrid,
     createContentContainer,
+    createTrackSelectionContainer,
     createGanttContent,
     createTrackContainer,
     createDateline,

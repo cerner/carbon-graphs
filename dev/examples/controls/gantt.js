@@ -4,7 +4,12 @@ import { COLORS } from "../../../src/main/js/helpers/constants";
 import utils from "../../../src/main/js/helpers/utils";
 import { getDemoData } from "../data";
 import { shell } from "../helpers";
-import { loadPopup, loadTaskPopup, loadTrackLabelPopup } from "../popup";
+import {
+    loadPopup,
+    loadTaskPopup,
+    loadTrackLabelPopup,
+    loadTrackPopup
+} from "../popup";
 
 const daysToMilliseconds = (d) => 24 * 60 * 60 * 1000 * d;
 const caretUp = {
@@ -222,6 +227,36 @@ const events = [
     ]
 ];
 
+const actions = [
+    [
+        {
+            key: "uid_action_1",
+            onClick: loadPopup,
+            values: [new Date(2018, 2, 1, 6, 15).toISOString()]
+        },
+        {
+            key: "uid_action_2",
+            onClick: loadPopup,
+            values: [new Date(2018, 7, 1, 6, 15).toISOString()]
+        }
+    ],
+    [
+        {
+            key: "uid_action_1",
+            onClick: loadPopup,
+            values: [
+                new Date(2018, 2, 1, 6, 15).toISOString(),
+                new Date(2018, 4, 1, 6, 15).toISOString()
+            ]
+        },
+        {
+            key: "uid_action_2",
+            onClick: loadPopup,
+            values: [new Date(2018, 7, 1, 6, 15).toISOString()]
+        }
+    ]
+];
+
 const lowerStepTickValues = [
     new Date(2018, 1, 2, 6).toISOString(),
     new Date(2018, 1, 2, 12).toISOString(),
@@ -309,35 +344,6 @@ export const renderGanttAction = (el, id, title) => () => {
     const data = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
     data.dateline = [];
     const ganttDefault = Carbon.api.gantt(data);
-    const actions = [
-        [
-            {
-                key: "uid_action_1",
-                onClick: loadPopup,
-                values: [new Date(2018, 2, 1, 6, 15).toISOString()]
-            },
-            {
-                key: "uid_action_2",
-                onClick: loadPopup,
-                values: [new Date(2018, 7, 1, 6, 15).toISOString()]
-            }
-        ],
-        [
-            {
-                key: "uid_action_1",
-                onClick: loadPopup,
-                values: [
-                    new Date(2018, 2, 1, 6, 15).toISOString(),
-                    new Date(2018, 4, 1, 6, 15).toISOString()
-                ]
-            },
-            {
-                key: "uid_action_2",
-                onClick: loadPopup,
-                values: [new Date(2018, 7, 1, 6, 15).toISOString()]
-            }
-        ]
-    ];
     loadTracks(ganttDefault, [], [], [], actions, 2);
     return ganttDefault;
 };
@@ -605,7 +611,14 @@ export const renderGanttCustomPadding = (el, id, title) => () => {
     loadTracks(ganttDefault, tasks, [], [], [], 4);
     return ganttDefault;
 };
-
+export const renderGanttTrackSelection = (el, id, title) => () => {
+    shell.render(el, id, title);
+    const data = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
+    data.showActionLegend = true;
+    const ganttDefault = Carbon.api.gantt(data);
+    loadTracks(ganttDefault, tasks, activities, events, actions, 1, true);
+    return ganttDefault;
+};
 /**
  * Helper function to load tracks.
  * @private
@@ -615,6 +628,7 @@ export const renderGanttCustomPadding = (el, id, title) => () => {
  * @param {Array} events - gantt events that needs to be loaded
  * @param {Array} actions - gannt actions that needs to be loaded
  * @param {number} totalTracks - total required number of tracks
+ * @param {boolean} isTrackSelectable - indicator to specify if track is selectable or not.
  * @returns {undefined} - returns nothing
  */
 const loadTracks = (
@@ -623,11 +637,13 @@ const loadTracks = (
     activities = [],
     events = [],
     actions = [],
-    totalTracks = 1
+    totalTracks = 1,
+    isTrackSelectable = false
 ) => {
     for (const each of Array(totalTracks).keys()) {
         gantt.loadContent({
             key: `track ${each}`,
+            onClick: isTrackSelectable ? loadTrackPopup : undefined,
             trackLabel: {
                 display: `Project ${String.fromCharCode(65 + each)}`,
                 onClick: loadTrackLabelPopup

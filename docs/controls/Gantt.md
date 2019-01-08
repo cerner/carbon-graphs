@@ -113,12 +113,13 @@ Y Axis should have the following properties:
 
 #### Optional
 
-| Property Name | Expected | Default | Description                     |
-| ------------- | -------- | ------- | ------------------------------- |
-| dimension     | object   | {}      | Refer [Dimension](#dimension)   |
-| tasks         | array    | []      | Refer [Tasks](#tasks)           |
-| activities    | array    | []      | Refer [Activities](#activities) |
-| actions       | array    | []      | Refer [Actions](#actions)       |
+| Property Name | Expected | Default | Description                                             |
+| ------------- | -------- | ------- | ------------------------------------------------------- |
+| onClick       | Function | null    | Any action that can be performed when clicking on track |
+| dimension     | object   | {}      | Refer [Dimension](#dimension)                           |
+| tasks         | array    | []      | Refer [Tasks](#tasks)                                   |
+| activities    | array    | []      | Refer [Activities](#activities)                         |
+| actions       | array    | []      | Refer [Actions](#actions)                               |
 
 ### Dimension
 

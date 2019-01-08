@@ -1,10 +1,23 @@
 "use strict";
+import d3 from "d3";
 import sinon from "sinon";
 import Gantt from "../../../main/js/controls/Gantt";
 import errors from "../../../main/js/helpers/errors";
 import styles from "../../../main/js/helpers/styles";
+import constants from "../../../main/js/helpers/constants";
 import { triggerEvent } from "../helpers/commonHelpers";
-import { axisJSON, fetchElementByClass, getAxes, getData } from "./helpers";
+import {
+    axisJSON,
+    fetchElementByClass,
+    getAxes,
+    getData,
+    TRANSITION_DELAY,
+    onClickFunctionSpy
+} from "./helpers";
+import {
+    getXAxisXPosition,
+    getXAxisWidth
+} from "../../../main/js/controls/Gantt/helpers/creationHelpers";
 
 describe("Gantt -> Track", () => {
     let gantt = null;
@@ -166,6 +179,349 @@ describe("Gantt -> Track", () => {
                 `.${styles.axisYTrackLabel} .tick text`
             )[1];
             expect(truncatedLabelElement.textContent).toBe("Project long...");
+        });
+    });
+    describe("Track selection", () => {
+        it("Selecter bar has aria-disabled property set to true", () => {
+            gantt.loadContent({
+                key: "track 1",
+                trackLabel: {
+                    display: "label"
+                },
+                tasks: [],
+                activities: []
+            });
+            const selectionBar = d3.select(`.${styles.ganttTrackBarSelection}`);
+            expect(selectionBar.attr("aria-selected")).toEqual("false");
+            expect(selectionBar.attr("aria-describedby")).toEqual("track 1");
+            expect(selectionBar.attr("aria-disabled")).toEqual("true");
+        });
+        it("Doesn't show pointer when onClick is undefined", () => {
+            gantt.loadContent({
+                key: "track 1",
+                onClick: undefined,
+                trackLabel: {
+                    display: "label"
+                },
+                tasks: [],
+                activities: []
+            });
+            const selectionBar = d3.select(`.${styles.ganttTrackBarSelection}`);
+            expect(selectionBar.attr("aria-selected")).toEqual("false");
+            expect(selectionBar.attr("aria-describedby")).toEqual("track 1");
+            expect(selectionBar.attr("aria-disabled")).toEqual("true");
+        });
+        it("Shows pointer when onClick is defined", () => {
+            gantt.loadContent({
+                key: "track 1",
+                onClick: () => {},
+                trackLabel: {
+                    display: "label"
+                },
+                tasks: [],
+                activities: []
+            });
+            const selectionBar = d3.select(`.${styles.ganttTrackBarSelection}`);
+            expect(selectionBar.attr("aria-selected")).toEqual("false");
+            expect(selectionBar.attr("aria-describedby")).toEqual("track 1");
+            expect(selectionBar.attr("aria-disabled")).toEqual("false");
+        });
+        describe("When default track height", () => {
+            beforeEach(() => {
+                gantt.loadContent({
+                    key: "track 1",
+                    trackLabel: {
+                        display: "label"
+                    },
+                    onClick: onClickFunctionSpy,
+                    tasks: [],
+                    activities: []
+                });
+            });
+            afterEach(() => {
+                document.body.innerHTML = "";
+            });
+            it("Selection Bar is not selected", () => {
+                const selectionBar = d3.select(
+                    `.${styles.ganttTrackBarSelection}`
+                );
+                expect(selectionBar.attr("aria-selected")).toEqual("false");
+                expect(selectionBar.attr("aria-describedby")).toEqual(
+                    "track 1"
+                );
+                expect(selectionBar.attr("aria-disabled")).toEqual("false");
+            });
+            it("Selection Bar is selected", (done) => {
+                expect(
+                    fetchElementByClass(
+                        `${styles.ganttTrackBarSelection}`
+                    ).getAttribute("aria-selected")
+                ).toBe("false");
+                triggerEvent(
+                    fetchElementByClass(`${styles.ganttTrackBarSelection}`),
+                    "click",
+                    () => {
+                        setTimeout(() => {
+                            const ganttTrackSelectionBar = fetchElementByClass(
+                                `${styles.ganttTrackBarSelection}`
+                            );
+                            expect(
+                                ganttTrackSelectionBar.getAttribute(
+                                    "aria-selected"
+                                )
+                            ).toBe("true");
+                            done();
+                        }, TRANSITION_DELAY);
+                    }
+                );
+            });
+            it("Selection Bar is inside the track", (done) => {
+                triggerEvent(
+                    fetchElementByClass(`${styles.ganttTrackBarSelection}`),
+                    "click",
+                    () => {
+                        const selectionBar = d3.select(
+                            `.${styles.ganttTrackBarSelection}`
+                        );
+                        const container = d3.select(
+                            `.${styles.contentContainer}`
+                        );
+                        expect(
+                            Number.parseInt(selectionBar.attr("x"))
+                        ).toBeGreaterThan(Number.parseInt(container.attr("x")));
+                        expect(Number.parseInt(selectionBar.attr("x"))).toEqual(
+                            getXAxisXPosition(gantt.config) +
+                                constants.DEFAULT_GANTT_TRACK_SELECTION.x
+                        );
+                        expect(
+                            Number.parseInt(selectionBar.attr("y"))
+                        ).toBeGreaterThan(Number.parseInt(container.attr("y")));
+                        expect(Number.parseInt(selectionBar.attr("y"))).toEqual(
+                            31
+                        );
+                        expect(
+                            Number.parseInt(selectionBar.attr("width"))
+                        ).toBeLessThan(
+                            Number.parseInt(container.attr("width"))
+                        );
+                        expect(
+                            Number.parseInt(selectionBar.attr("width"))
+                        ).toEqual(
+                            getXAxisWidth(gantt.config) -
+                                constants.DEFAULT_GANTT_TRACK_SELECTION.width
+                        );
+                        const canvasElement = fetchElementByClass(
+                            styles.canvas
+                        );
+                        const containerElement = canvasElement.querySelector(
+                            `.${styles.contentContainer}`
+                        );
+                        expect(
+                            Number.parseInt(selectionBar.attr("height"))
+                        ).toBeLessThan(
+                            +containerElement.getAttribute("height")
+                        );
+                        expect(
+                            Number.parseFloat(selectionBar.attr("height"))
+                        ).toEqual(
+                            gantt.config.axis.y.trackList["track 1"]
+                                .trackHeight -
+                                constants.DEFAULT_GANTT_TRACK_SELECTION.height
+                        );
+                        done();
+                    }
+                );
+            });
+            it("Callback function is called", (done) => {
+                triggerEvent(
+                    fetchElementByClass(`${styles.ganttTrackBarSelection}`),
+                    "click",
+                    () => {
+                        expect(
+                            fetchElementByClass(
+                                `${styles.ganttTrackBarSelection}`
+                            ).getAttribute("aria-selected")
+                        ).toBe("true");
+                        expect(onClickFunctionSpy.called).toBe(true);
+                        done();
+                    }
+                );
+            });
+            it("Right values are passed for callback function", (done) => {
+                gantt.destroy();
+                let args = {};
+                gantt = new Gantt(getAxes(axisJSON));
+                gantt.loadContent({
+                    key: "track 1",
+                    trackLabel: {
+                        display: "label"
+                    },
+                    onClick: (cb, key, val, target) => {
+                        args = {
+                            cb,
+                            key,
+                            val,
+                            target
+                        };
+                    },
+                    tasks: [],
+                    activities: []
+                });
+                triggerEvent(
+                    fetchElementByClass(`${styles.ganttTrackBarSelection}`),
+                    "click",
+                    () => {
+                        expect(args).not.toBeNull();
+                        expect(args.cb).toEqual(jasmine.any(Function));
+                        expect(args.key).toBe("track 1");
+                        expect(args.val).not.toBeNull();
+                        expect(args.val.tasks).toEqual([]);
+                        expect(args.val.activities).toEqual([]);
+                        expect(args.target).not.toBeNull();
+                        done();
+                    }
+                );
+            });
+            it("Translates selection bars", (done) => {
+                ganttChartContainer.setAttribute(
+                    "style",
+                    "width: 800px; height: 400px;"
+                );
+                gantt.resize();
+                triggerEvent(
+                    window,
+                    "resize",
+                    () => {
+                        const selectionBar = d3.select(
+                            `.${styles.ganttTrackBarSelection}`
+                        );
+                        expect(
+                            Number.parseInt(selectionBar.attr("width"))
+                        ).toEqual(
+                            getXAxisWidth(gantt.config) -
+                                constants.DEFAULT_GANTT_TRACK_SELECTION.width
+                        );
+                        expect(
+                            Number.parseFloat(selectionBar.attr("height"))
+                        ).toEqual(
+                            gantt.config.axis.y.trackList["track 1"]
+                                .trackHeight -
+                                constants.DEFAULT_GANTT_TRACK_SELECTION.height
+                        );
+                        done();
+                    },
+                    TRANSITION_DELAY
+                );
+            });
+        });
+        describe("When custom track height is used", () => {
+            beforeEach(() => {
+                gantt.loadContent({
+                    key: "track 1",
+                    trackLabel: {
+                        display: "label"
+                    },
+                    dimension: {
+                        trackHeight: 160
+                    },
+                    onClick: onClickFunctionSpy,
+                    tasks: [],
+                    activities: []
+                });
+            });
+            afterEach(() => {
+                document.body.innerHTML = "";
+            });
+            it("Selection Bar is inside the track", (done) => {
+                triggerEvent(
+                    fetchElementByClass(`${styles.ganttTrackBarSelection}`),
+                    "click",
+                    () => {
+                        const selectionBar = d3.select(
+                            `.${styles.ganttTrackBarSelection}`
+                        );
+                        const container = d3.select(
+                            `.${styles.contentContainer}`
+                        );
+                        expect(
+                            Number.parseInt(selectionBar.attr("x"))
+                        ).toBeGreaterThan(Number.parseInt(container.attr("x")));
+                        expect(Number.parseInt(selectionBar.attr("x"))).toEqual(
+                            getXAxisXPosition(gantt.config) +
+                                constants.DEFAULT_GANTT_TRACK_SELECTION.x
+                        );
+                        // intially config height would be 0, so (top + bottom) * 2 padding + 1
+                        expect(Number.parseInt(selectionBar.attr("y"))).toEqual(
+                            31
+                        );
+                        expect(
+                            Number.parseInt(selectionBar.attr("y"))
+                        ).toBeGreaterThan(Number.parseInt(container.attr("y")));
+                        expect(
+                            Number.parseInt(selectionBar.attr("width"))
+                        ).toBeLessThan(
+                            Number.parseInt(container.attr("width"))
+                        );
+                        expect(
+                            Number.parseInt(selectionBar.attr("width"))
+                        ).toEqual(
+                            getXAxisWidth(gantt.config) -
+                                constants.DEFAULT_GANTT_TRACK_SELECTION.width
+                        );
+                        const canvasElement = fetchElementByClass(
+                            styles.canvas
+                        );
+                        const containerElement = canvasElement.querySelector(
+                            `.${styles.contentContainer}`
+                        );
+                        expect(
+                            Number.parseInt(selectionBar.attr("height"))
+                        ).toBeLessThan(
+                            +containerElement.getAttribute("height")
+                        );
+                        expect(
+                            Number.parseFloat(selectionBar.attr("height"))
+                        ).toEqual(
+                            gantt.config.axis.y.trackList["track 1"]
+                                .trackHeight -
+                                constants.DEFAULT_GANTT_TRACK_SELECTION.height
+                        );
+                        done();
+                    },
+                    TRANSITION_DELAY
+                );
+            });
+            it("Translates selection bars", (done) => {
+                ganttChartContainer.setAttribute(
+                    "style",
+                    "width: 800px; height: 400px;"
+                );
+                gantt.resize();
+                triggerEvent(
+                    window,
+                    "resize",
+                    () => {
+                        const selectionBar = d3.select(
+                            `.${styles.ganttTrackBarSelection}`
+                        );
+                        expect(
+                            Number.parseInt(selectionBar.attr("width"))
+                        ).toEqual(
+                            getXAxisWidth(gantt.config) -
+                                constants.DEFAULT_GANTT_TRACK_SELECTION.width
+                        );
+                        expect(
+                            Number.parseFloat(selectionBar.attr("height"))
+                        ).toEqual(
+                            gantt.config.axis.y.trackList["track 1"]
+                                .trackHeight -
+                                constants.DEFAULT_GANTT_TRACK_SELECTION.height
+                        );
+                        done();
+                    },
+                    TRANSITION_DELAY
+                );
+            });
         });
     });
 });
