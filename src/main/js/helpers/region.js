@@ -2,9 +2,9 @@
 import d3 from "d3";
 import { d3RemoveElement } from "../controls/Graph/helpers/helpers";
 import {
+    calculateVerticalPadding,
     getXAxisWidth,
-    getXAxisXPosition,
-    calculateVerticalPadding
+    getXAxisXPosition
 } from "./axis";
 import constants from "./constants";
 import errors from "./errors";

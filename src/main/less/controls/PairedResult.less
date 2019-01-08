@@ -10,12 +10,17 @@ and one of the data point is selected.
 }
 
 .carbon-paired-point {
-    cursor: pointer;
+    &[aria-disabled="false"] {
+        cursor: pointer;
+    }
 }
 
 .carbon-paired-line {
     fill: none;
-    cursor: pointer;
     stroke-width: 1px;
     stroke: @dark;
+
+    &[aria-disabled="false"] {
+        cursor: pointer;
+    }
 }

@@ -5,6 +5,7 @@ const { jsOptions, cssOptions } = require("./helpers/rules");
 const port = Number(process.env.PORT || 9991);
 const compiler = webpack({
     mode: "development",
+    devtool: "inline-source-map",
     entry: ["webpack-dev-server/client?http://localhost:9991/", "./dev/app.js"],
     output: {
         path: path.join(process.cwd(), "dist"),

@@ -927,6 +927,17 @@ describe("Timeline", () => {
                 );
                 expect(legendItems.length).toBe(2);
             });
+            it("Disables legend when disabled flag is set", () => {
+                timeline.destroy();
+                timeline = new Timeline(getAxes(axisJSON));
+                input = getData(valuesJSON, false, false);
+                input.label.isDisabled = true;
+                timeline.loadContent(input);
+                const legendItem = document.body.querySelector(
+                    `.${styles.legendItem}`
+                );
+                expect(legendItem.getAttribute("aria-disabled")).toBe("true");
+            });
             it("Adds points for each data point", () => {
                 const pointsGroup = fetchElementByClass(
                     styles.timelineContentGroup
@@ -993,6 +1004,9 @@ describe("Timeline", () => {
                     const point = fetchElementByClass(styles.point);
                     triggerEvent(point, "click", () => {
                         expect(onClickFunctionSpy.calledOnce).toBeFalsy();
+                        expect(point.getAttribute("aria-disabled")).toBe(
+                            "true"
+                        );
                         done();
                     });
                 });
@@ -1156,6 +1170,7 @@ describe("Timeline", () => {
                 const legendItemBtn = fetchElementByClass(styles.legendItemBtn);
                 expect(legendItem).not.toBeNull();
                 expect(legendItem.getAttribute("aria-selected")).toBe("true");
+                expect(legendItem.getAttribute("aria-disabled")).toBe("false");
                 expect(legendItem.children[1].className).toBe(
                     styles.legendItemText
                 );

@@ -197,8 +197,6 @@ const events = [
             label: {
                 display: "Defect A"
             },
-            isSelectable: false,
-            onClick: loadPopup,
             shape: caretUp,
             values: [new Date(2018, 4, 30).toISOString()]
         },
@@ -207,8 +205,6 @@ const events = [
             label: {
                 display: "Defect B"
             },
-            isSelectable: false,
-            onClick: loadPopup,
             shape: caretDown,
             color: Carbon.helpers.COLORS.GREEN,
             values: [new Date(2018, 5, 4).toISOString()]
@@ -218,7 +214,6 @@ const events = [
             label: {
                 display: "Defect C"
             },
-            isSelectable: true,
             onClick: loadPopup,
             shape: caretDown,
             color: Carbon.helpers.COLORS.GREEN,

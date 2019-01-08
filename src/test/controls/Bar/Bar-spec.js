@@ -233,6 +233,17 @@ describe("Bar", () => {
                 );
                 expect(legendItems.length).toBe(2);
             });
+            it("disables legend when disabled flag is set", () => {
+                graphDefault.destroy();
+                graphDefault = new Graph(getAxes(axisTimeSeries));
+                input = getInput(valuesTimeSeries, false, false);
+                input.label.isDisabled = true;
+                graphDefault.loadContent(new Bar(input));
+                const legendItem = document.body.querySelector(
+                    `.${styles.legendItem}`
+                );
+                expect(legendItem.getAttribute("aria-disabled")).toBe("true");
+            });
             it("add bar group for bar content", () => {
                 const barContentContainer = fetchElementByClass(
                     barGraphContainer,
@@ -560,6 +571,7 @@ describe("Bar", () => {
                     );
                     triggerEvent(bar, "click", () => {
                         expect(barClickHandlerSpy.calledOnce).toBeFalsy();
+                        expect(bar.getAttribute("aria-disabled")).toBe("true");
                         done();
                     });
                 });
@@ -819,6 +831,7 @@ describe("Bar", () => {
                 );
                 expect(legendItem).not.toBeNull();
                 expect(legendItem.getAttribute("aria-selected")).toBe("true");
+                expect(legendItem.getAttribute("aria-disabled")).toBe("false");
                 expect(legendItem.children[1].className).toBe(
                     styles.legendItemText
                 );

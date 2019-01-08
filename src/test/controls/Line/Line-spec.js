@@ -410,6 +410,18 @@ describe("Line", () => {
                 );
                 expect(legendItems.length).toBe(2);
             });
+            it("disables legend when disabled flag is set", () => {
+                graphDefault.destroy();
+                const graph = new Graph(getAxes(axisDefault));
+                const data = utils.deepClone(valuesDefault);
+                input = getInput(data);
+                input.label.isDisabled = true;
+                graph.loadContent(new Line(input));
+                const legendItem = document.body.querySelector(
+                    `.${styles.legendItem}`
+                );
+                expect(legendItem.getAttribute("aria-disabled")).toBe("true");
+            });
             it("add line group for line", () => {
                 const lineContentContainer = fetchElementByClass(
                     lineGraphContainer,
@@ -591,6 +603,9 @@ describe("Line", () => {
                     );
                     triggerEvent(point, "click", () => {
                         expect(dataPointClickHandlerSpy.calledOnce).toBeFalsy();
+                        expect(point.getAttribute("aria-disabled")).toBe(
+                            "true"
+                        );
                         done();
                     });
                 });
@@ -843,6 +858,7 @@ describe("Line", () => {
                 );
                 expect(legendItem).not.toBeNull();
                 expect(legendItem.getAttribute("aria-selected")).toBe("true");
+                expect(legendItem.getAttribute("aria-disabled")).toBe("false");
                 expect(legendItem.children[1].className).toBe(
                     styles.legendItemText
                 );

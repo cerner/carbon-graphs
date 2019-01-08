@@ -181,7 +181,9 @@ const renderPercentageBarGroup = (scale, taskData, index, taskPath) => {
             taskData.percentage
         ),
         taskData.color
-    ).on("click", () => taskClickActionHandler(taskData, index, taskPath));
+    )
+        .attr("aria-disabled", !utils.isFunction(taskData.onClick))
+        .on("click", () => taskClickActionHandler(taskData, index, taskPath));
 };
 /**
  * Based on startDate and endDate, we either render a chunk or a normal bar.
@@ -204,7 +206,9 @@ const renderTaskGroup = (scale, taskData, index, taskPath) => {
         _args.width,
         _args.height,
         taskData.style
-    ).on("click", () => taskClickActionHandler(taskData, index, taskPath));
+    )
+        .attr("aria-disabled", !utils.isFunction(taskData.onClick))
+        .on("click", () => taskClickActionHandler(taskData, index, taskPath));
 };
 
 /**
@@ -229,7 +233,9 @@ const renderHashedTaskGroup = (canvasSVG, scale, data, index, path) => {
         _args.width,
         _args.height,
         data.style
-    ).on("click", () => taskClickActionHandler(data, index, path));
+    )
+        .attr("aria-disabled", !utils.isFunction(data.onClick))
+        .on("click", () => taskClickActionHandler(data, index, path));
 };
 /**
  * Renders the tasks for a track. Each task is created based on start and end datetime.

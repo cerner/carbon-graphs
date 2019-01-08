@@ -1203,6 +1203,9 @@ describe("Gantt", () => {
                 expect(
                     legendElement.children[0].getAttribute("aria-selected")
                 ).toBeTruthy();
+                expect(
+                    legendElement.children[0].getAttribute("aria-disabled")
+                ).toBe("false");
                 expect(legendElement.children[0].getAttribute("role")).toBe(
                     "listitem"
                 );
@@ -1375,35 +1378,39 @@ describe("Gantt", () => {
                     axisObj.dateline = utils.deepClone(datelineJSON);
                     gantt = new Gantt(axisObj);
                     const onClickFunctionSpy = sinon.spy();
-                    triggerEvent(
-                        fetchElementByClass(styles.ganttDatelinePoint),
-                        "click",
-                        () => {
-                            expect(onClickFunctionSpy.calledOnce).toBeFalsy();
-                            done();
-                        }
+                    const datelinePointElement = fetchElementByClass(
+                        styles.ganttDatelinePoint
                     );
+                    triggerEvent(datelinePointElement, "click", () => {
+                        expect(onClickFunctionSpy.calledOnce).toBeFalsy();
+                        expect(
+                            datelinePointElement.getAttribute("aria-disabled")
+                        ).toBe("true");
+                        done();
+                    });
                 });
                 it("Calls onClick callback", (done) => {
                     const onClickFunctionSpy = sinon.spy();
                     axisObj.dateline = utils.deepClone(datelineJSON);
                     axisObj.dateline[0].onClick = onClickFunctionSpy;
                     gantt = new Gantt(axisObj);
-                    triggerEvent(
-                        fetchElementByClass(styles.ganttDatelinePoint),
-                        "click",
-                        () => {
-                            expect(onClickFunctionSpy.calledOnce).toBeTruthy();
-                            expect(
-                                fetchElementByClass(
-                                    styles.ganttDatelineGroup
-                                ).getAttribute("aria-selected")
-                            ).toBe("true");
-                            done();
-                        }
+                    const datelinePointElement = fetchElementByClass(
+                        styles.ganttDatelinePoint
                     );
+                    triggerEvent(datelinePointElement, "click", () => {
+                        expect(onClickFunctionSpy.calledOnce).toBeTruthy();
+                        expect(
+                            fetchElementByClass(
+                                styles.ganttDatelineGroup
+                            ).getAttribute("aria-selected")
+                        ).toBe("true");
+                        expect(
+                            datelinePointElement.getAttribute("aria-disabled")
+                        ).toBe("false");
+                        done();
+                    });
                 });
-                it("Removes selection when task bar is clicked again", (done) => {
+                it("Removes selection when dateline is clicked again", (done) => {
                     const onClickFunctionSpy = sinon.spy();
                     axisObj.dateline = utils.deepClone(datelineJSON);
                     axisObj.dateline[0].onClick = onClickFunctionSpy;
@@ -1422,7 +1429,7 @@ describe("Gantt", () => {
                         });
                     });
                 });
-                it("Removes task bar selection when parameter callback is called", (done) => {
+                it("Removes dateline selection when parameter callback is called", (done) => {
                     axisObj.dateline = utils.deepClone(datelineJSON);
                     axisObj.dateline[0].onClick = (clearSelectionCallback) =>
                         clearSelectionCallback();

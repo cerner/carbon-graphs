@@ -12,15 +12,15 @@ import utils from "../../helpers/utils";
 import { isUniqueKey } from "./GanttConfig";
 import { loadActions, unloadActions } from "./helpers/actionHelpers";
 import { loadActivities, unloadActivities } from "./helpers/activityHelpers";
-import { loadEvents, unloadEvents } from "./helpers/eventHelpers";
 import {
     createTrackContainer,
     updateTrackProps
 } from "./helpers/creationHelpers";
+import { loadEvents, unloadEvents } from "./helpers/eventHelpers";
 import { loadTasks, unloadTasks } from "./helpers/taskHelpers";
 import {
-    translateDataPoints,
     translateActivities,
+    translateDataPoints,
     translateTasks,
     truncateTrackLabelText
 } from "./helpers/translateHelpers";
@@ -81,6 +81,7 @@ const addTrackLabelEventHandler = (canvasSVG, labelObj) =>
                 !utils.isFunction(labelObj.onClick) ||
                 !hasMatchingTrackLabel(this, labelObj.display)
             ) {
+                d3.select(this).attr("aria-disabled", true);
                 return;
             }
             d3.select(this).on("click", () => {

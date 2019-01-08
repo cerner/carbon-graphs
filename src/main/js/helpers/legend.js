@@ -49,6 +49,7 @@ const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
         .append("li")
         .classed(styles.legendItem, true)
         .attr("aria-selected", !t.label.isDisabled && index > -1)
+        .attr("aria-disabled", !!t.label.isDisabled)
         .attr("role", "listitem")
         .attr("aria-labelledby", text)
         .attr("aria-describedby", t.key);

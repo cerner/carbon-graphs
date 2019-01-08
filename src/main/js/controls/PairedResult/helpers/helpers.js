@@ -4,9 +4,9 @@ import { Shape } from "../../../core";
 import { parseTypedValue } from "../../../core/BaseConfig";
 import { getDefaultSVGProps } from "../../../core/Shape";
 import {
+    calculateVerticalPadding,
     getXAxisXPosition,
-    isValidAxisType,
-    calculateVerticalPadding
+    isValidAxisType
 } from "../../../helpers/axis";
 import constants, { SHAPES } from "../../../helpers/constants";
 import errors from "../../../helpers/errors";
@@ -255,6 +255,7 @@ const drawLine = (scale, config, boxPath) =>
             .append("path")
             .classed(styles.pairedLine, true)
             .attr("aria-describedby", value.key)
+            .attr("aria-disabled", !utils.isFunction(value.onClick))
             .attr("d", value.high && value.low ? createLine(scale, value) : "")
             .attr(
                 "style",
@@ -301,7 +302,10 @@ const drawPoints = (scale, config, canvasSVG) => {
                         );
                     },
                     a11yAttributes: {
-                        "aria-describedby": getValue(value, type).key
+                        "aria-describedby": getValue(value, type).key,
+                        "aria-disabled": !utils.isFunction(
+                            getValue(value, type).onClick
+                        )
                     }
                 })
             )
@@ -371,7 +375,10 @@ const drawCriticalityPoints = (
                         );
                     },
                     a11yAttributes: {
-                        "aria-describedby": getValue(value, type).key
+                        "aria-describedby": getValue(value, type).key,
+                        "aria-disabled": !utils.isFunction(
+                            getValue(value, type).onClick
+                        )
                     }
                 })
             )

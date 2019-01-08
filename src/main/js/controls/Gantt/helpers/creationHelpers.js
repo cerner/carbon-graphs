@@ -511,7 +511,8 @@ const createDateline = (scale, config, canvasSVG) => {
                         datelineClickHandler(d, this);
                     },
                     a11yAttributes: {
-                        "aria-hidden": !dateline.showDatelineIndicator
+                        "aria-hidden": !dateline.showDatelineIndicator,
+                        "aria-disabled": !utils.isFunction(dateline.onClick)
                     }
                 })
             )

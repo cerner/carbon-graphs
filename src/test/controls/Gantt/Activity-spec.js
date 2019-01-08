@@ -534,6 +534,11 @@ describe("Gantt -> Track -> Activity", () => {
 
             triggerEvent(fetchElementByClass(styles.taskBar), "click", () => {
                 expect(onClickSpy.calledOnce).toBeTruthy();
+                expect(
+                    fetchElementByClass(styles.task).getAttribute(
+                        "aria-disabled"
+                    )
+                ).toBe("false");
                 done();
             });
         });
