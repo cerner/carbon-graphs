@@ -41,6 +41,7 @@ module.exports = function(config) {
         },
         webpack: {
             mode: "development",
+            devtool: "inline-source-map",
             resolve: {
                 modules: [
                     "node_modules"
