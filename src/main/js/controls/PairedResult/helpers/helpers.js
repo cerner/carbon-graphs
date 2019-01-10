@@ -303,9 +303,7 @@ const drawPoints = (scale, config, canvasSVG) => {
                     },
                     a11yAttributes: {
                         "aria-describedby": getValue(value, type).key,
-                        "aria-disabled": !utils.isFunction(
-                            getValue(value, type).onClick
-                        )
+                        "aria-disabled": !utils.isFunction(value.onClick)
                     }
                 })
             )
@@ -376,9 +374,7 @@ const drawCriticalityPoints = (
                     },
                     a11yAttributes: {
                         "aria-describedby": getValue(value, type).key,
-                        "aria-disabled": !utils.isFunction(
-                            getValue(value, type).onClick
-                        )
+                        "aria-disabled": !utils.isFunction(value.onClick)
                     }
                 })
             )
