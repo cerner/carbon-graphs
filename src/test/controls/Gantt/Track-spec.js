@@ -211,6 +211,10 @@ describe("Gantt -> Track", () => {
             expect(selectionBar.attr("aria-describedby")).toEqual("track 1");
             expect(selectionBar.attr("aria-disabled")).toEqual("true");
         });
+        /**
+         * BF01142019.07 - Verify the system allows the consumer to determine if tracks are select-able.
+         * BF01142019.09 - Verify the system will only select the track when an empty part of the track can be selected.
+         */
         it("Shows pointer when onClick is defined", () => {
             gantt.loadContent({
                 key: "track 1",
@@ -275,6 +279,9 @@ describe("Gantt -> Track", () => {
                     }
                 );
             });
+            /**
+             * BF01142019.09 - Verify upon the selection, the system displays an outline (border) inset within the track.
+             */
             it("Selection Bar is inside the track", (done) => {
                 triggerEvent(
                     fetchElementByClass(`${styles.ganttTrackBarSelection}`),
@@ -332,6 +339,9 @@ describe("Gantt -> Track", () => {
                     }
                 );
             });
+            /**
+             * BF01142019.09 - Verify upon selection, the system will execute the operation established by the consumer.
+             */
             it("Callback function is called", (done) => {
                 triggerEvent(
                     fetchElementByClass(`${styles.ganttTrackBarSelection}`),
@@ -347,6 +357,9 @@ describe("Gantt -> Track", () => {
                     }
                 );
             });
+            /**
+             * BF01142019.09 - Verify upon selection, the data store within the track will be provided by the consumer.
+             */
             it("Right values are passed for callback function", (done) => {
                 gantt.destroy();
                 let args = {};
