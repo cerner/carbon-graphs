@@ -1,1 +1,1 @@
-Documentation is provided [here](../docs/contributing/README.md) to help developers get started with working on Carbon.
+Before submitting a PR please refer contribution guidelines provided [here](https://github.cerner.com/Geneva/carbon-graphs/blob/master/docs/contributing/README.md). Thanks!!
