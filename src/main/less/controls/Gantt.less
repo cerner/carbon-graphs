@@ -9,6 +9,13 @@
     }
 }
 
+.carbon-data-task {
+    cursor: pointer;
+    &[aria-disabled="true"] {
+        cursor: default;
+    }
+}
+
 .carbon-data-track-group {
     .carbon-selected-data-point {
         .selected-indicator-styles();

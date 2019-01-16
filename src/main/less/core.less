@@ -221,9 +221,10 @@ svg:not(:root) {
 .carbon-data-bar {
     user-select: none;
     shape-rendering: crispEdges;
-    cursor: pointer;
     stroke-width: 0;
-
+    &[aria-disabled="false"] {
+        cursor: pointer;
+    }
     &[aria-hidden="true"] {
         .opacity-hide();
     }
