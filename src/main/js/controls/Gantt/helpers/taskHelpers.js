@@ -113,7 +113,10 @@ const processTask = (graphConfig, trackLabel, dataTarget) => {
         label: dataTarget.label || null,
         key: dataTarget.key,
         style: getTaskStyle(dataTarget),
-        isHashed: isHashed(dataTarget.style)
+        isHashed: isHashed(dataTarget.style),
+        clickPassThrough: utils.isDefined(graphConfig.clickPassThrough)
+            ? graphConfig.clickPassThrough.tasks
+            : false
     };
 };
 /**
@@ -183,6 +186,11 @@ const renderPercentageBarGroup = (scale, taskData, index, taskPath) => {
         taskData.color
     )
         .attr("aria-disabled", !utils.isFunction(taskData.onClick))
+        .attr("pointer-events", () =>
+            taskData.clickPassThrough && !utils.isFunction(taskData.onClick)
+                ? "none"
+                : "auto"
+        )
         .on("click", () => taskClickActionHandler(taskData, index, taskPath));
 };
 /**
@@ -208,6 +216,11 @@ const renderTaskGroup = (scale, taskData, index, taskPath) => {
         taskData.style
     )
         .attr("aria-disabled", !utils.isFunction(taskData.onClick))
+        .attr("pointer-events", () =>
+            taskData.clickPassThrough && !utils.isFunction(taskData.onClick)
+                ? "none"
+                : "auto"
+        )
         .on("click", () => taskClickActionHandler(taskData, index, taskPath));
 };
 
@@ -235,6 +248,11 @@ const renderHashedTaskGroup = (canvasSVG, scale, data, index, path) => {
         data.style
     )
         .attr("aria-disabled", !utils.isFunction(data.onClick))
+        .attr("pointer-events", () =>
+            data.clickPassThrough && !utils.isFunction(data.onClick)
+                ? "none"
+                : "auto"
+        )
         .on("click", () => taskClickActionHandler(data, index, path));
 };
 /**

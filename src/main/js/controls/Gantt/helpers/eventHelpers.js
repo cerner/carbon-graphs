@@ -44,6 +44,11 @@ const renderDataPointPath = (scale, config, path, dataPoint, index) =>
                     "aria-hidden": false,
                     "aria-describedby": dataPoint.key,
                     "aria-disabled": !utils.isFunction(dataPoint.onClick)
+                },
+                additionalAttributes: {
+                    "pointer-events":
+                        dataPoint.clickPassThrough &&
+                        !utils.isFunction(dataPoint.onClick)
                 }
             })
         )
@@ -83,11 +88,12 @@ const drawEventDataPoints = (scale, config, canvasSVG) => {
  * Processes the input JSON and adds the shapes, colors, labels etc. to each data points so that we can
  * use them when rendering the data points of events.
  * @private
+ * @param {Object} config - Gantt config derived from input JSON.
  * @param {Object} trackLabel - Track label
  * @param {Object} dataTarget  - Data points object
  * @returns {Object} dataTarget - Updated data target object
  */
-const processEvents = (trackLabel, dataTarget) => {
+const processEvents = (config, trackLabel, dataTarget) => {
     const checkX = (x) => {
         if (!utils.isDate(x)) {
             throw new Error(errors.THROW_MSG_INVALID_FORMAT_TYPE);
@@ -101,7 +107,10 @@ const processEvents = (trackLabel, dataTarget) => {
         y: trackLabel.display,
         label: dataTarget.label,
         color: dataTarget.color || "",
-        shape: dataTarget.shape || SHAPES.CIRCLE
+        shape: dataTarget.shape || SHAPES.CIRCLE,
+        clickPassThrough: utils.isDefined(config.clickPassThrough)
+            ? config.clickPassThrough.events
+            : false
     }));
 };
 
@@ -131,7 +140,11 @@ const loadEvents = (graphContext, trackPathSVG, trackLabel, events) => {
             graphContext.scale,
             graphContext.config,
             trackPathSVG,
-            processEvents(trackLabel, loadEventInput(event)),
+            processEvents(
+                graphContext.config,
+                trackLabel,
+                loadEventInput(event)
+            ),
             drawEventDataPoints
         );
     });

@@ -1229,55 +1229,64 @@ describe("Gantt", () => {
                 gantt.destroy();
                 axisObj = utils.deepClone(getAxes(axisJSON));
             });
-            it("Throws error when dateline is not provided", () => {
-                axisObj.dateline = [{}];
-                expect(() => {
+            describe("Validates", () => {
+                it("Throws error when dateline is not provided", () => {
+                    axisObj.dateline = [{}];
+                    expect(() => {
+                        gantt = new Gantt(axisObj);
+                    }).toThrowError(
+                        errors.THROW_MSG_DATELINE_OBJECT_NOT_PROVIDED
+                    );
+                });
+                it("Throws error when dateline value is not provided", () => {
+                    axisObj.dateline = utils.deepClone(datelineJSON);
+                    axisObj.dateline[0].value = "";
+                    expect(() => {
+                        gantt = new Gantt(axisObj);
+                    }).toThrowError(errors.THROW_MSG_DATELINE_NOT_PROVIDED);
+                });
+
+                /**
+                 * Verify that if a dateline is specified and a color is not supplied by the consumer, an Invalid property message is displayed, 'a valid color value must be provided'
+                 */
+                it("Throws error when dateline color is not provided", () => {
+                    axisObj.dateline = utils.deepClone(datelineJSON);
+                    axisObj.dateline[0].color = "";
+                    expect(() => {
+                        gantt = new Gantt(axisObj);
+                    }).toThrowError(
+                        errors.THROW_MSG_DATELINE_COLOR_NOT_PROVIDED
+                    );
+                });
+
+                /**
+                 * Verify that if an indicator is specified for the dateline and a shape is not supplied by the consumer, an Invalid property message is displayed, 'a valid shape valid must be provided'
+                 */
+                it("Throws error when dateline shape is not provided when indicators are true", () => {
+                    axisObj.dateline = utils.deepClone(datelineJSON);
+                    axisObj.dateline[0].shape = "";
+                    expect(() => {
+                        gantt = new Gantt(axisObj);
+                    }).toThrowError(
+                        errors.THROW_MSG_DATELINE_SHAPE_NOT_PROVIDED
+                    );
+                });
+                it("Does not throws error when dateline shape is not provided when indicators are false", () => {
+                    axisObj.dateline = utils.deepClone(datelineJSON);
+                    axisObj.dateline[0].showDatelineIndicator = false;
+                    axisObj.dateline[0].shape = "";
                     gantt = new Gantt(axisObj);
-                }).toThrowError(errors.THROW_MSG_DATELINE_OBJECT_NOT_PROVIDED);
-            });
-            it("Throws error when dateline value is not provided", () => {
-                axisObj.dateline = utils.deepClone(datelineJSON);
-                axisObj.dateline[0].value = "";
-                expect(() => {
-                    gantt = new Gantt(axisObj);
-                }).toThrowError(errors.THROW_MSG_DATELINE_NOT_PROVIDED);
+                });
+
+                it("Throws error when dateline value is not provided", () => {
+                    axisObj.dateline = utils.deepClone(datelineJSON);
+                    axisObj.dateline[0].value = "HELLO";
+                    expect(() => {
+                        gantt = new Gantt(axisObj);
+                    }).toThrowError(errors.THROW_MSG_DATELINE_TYPE_NOT_VALID);
+                });
             });
 
-            /**
-             * Verify that if a dateline is specified and a color is not supplied by the consumer, an Invalid property message is displayed, 'a valid color value must be provided'
-             */
-            it("Throws error when dateline color is not provided", () => {
-                axisObj.dateline = utils.deepClone(datelineJSON);
-                axisObj.dateline[0].color = "";
-                expect(() => {
-                    gantt = new Gantt(axisObj);
-                }).toThrowError(errors.THROW_MSG_DATELINE_COLOR_NOT_PROVIDED);
-            });
-
-            /**
-             * Verify that if an indicator is specified for the dateline and a shape is not supplied by the consumer, an Invalid property message is displayed, 'a valid shape valid must be provided'
-             */
-            it("Throws error when dateline shape is not provided when indicators are true", () => {
-                axisObj.dateline = utils.deepClone(datelineJSON);
-                axisObj.dateline[0].shape = "";
-                expect(() => {
-                    gantt = new Gantt(axisObj);
-                }).toThrowError(errors.THROW_MSG_DATELINE_SHAPE_NOT_PROVIDED);
-            });
-            it("Does not throws error when dateline shape is not provided when indicators are false", () => {
-                axisObj.dateline = utils.deepClone(datelineJSON);
-                axisObj.dateline[0].showDatelineIndicator = false;
-                axisObj.dateline[0].shape = "";
-                gantt = new Gantt(axisObj);
-            });
-
-            it("Throws error when dateline value is not provided", () => {
-                axisObj.dateline = utils.deepClone(datelineJSON);
-                axisObj.dateline[0].value = "HELLO";
-                expect(() => {
-                    gantt = new Gantt(axisObj);
-                }).toThrowError(errors.THROW_MSG_DATELINE_TYPE_NOT_VALID);
-            });
             it("Creates dateline group element", () => {
                 axisObj.dateline = utils.deepClone(datelineJSON);
                 gantt = new Gantt(axisObj);
@@ -1299,6 +1308,7 @@ describe("Gantt", () => {
                 axisObj.dateline = utils.deepClone(datelineJSON);
                 gantt = new Gantt(axisObj);
                 const dateline = fetchElementByClass(styles.ganttDateline);
+                expect(dateline.getAttribute("pointer-events")).toBe("auto");
                 expect(dateline).not.toBeNull();
             });
             it("creates multiple datelines correctly", () => {
@@ -1328,6 +1338,12 @@ describe("Gantt", () => {
                     `.${styles.ganttDateline}`
                 );
                 expect(datelines.length).toBe(2);
+                expect(datelines[0].getAttribute("pointer-events")).toBe(
+                    "auto"
+                );
+                expect(datelines[1].getAttribute("pointer-events")).toBe(
+                    "auto"
+                );
             });
             it("Creates dateline point correctly", () => {
                 axisObj.dateline = utils.deepClone(datelineJSON);
@@ -1338,6 +1354,9 @@ describe("Gantt", () => {
                 const datelinePointPath = datelinePoint.firstChild;
                 expect(datelinePoint).not.toBeNull();
                 expect(datelinePoint.getAttribute("aria-hidden")).toBe("false");
+                expect(datelinePoint.getAttribute("pointer-events")).toBe(
+                    "auto"
+                );
                 expect(datelinePointPath.getAttribute("d")).not.toBeNull();
                 expect(datelinePointPath.getAttribute("d")).toBe(
                     datelineJSON[0].shape.path.d
@@ -1357,6 +1376,9 @@ describe("Gantt", () => {
                 expect(datelineGroupElement.childNodes.length).toBe(2);
                 expect(datelinePoint).not.toBeNull();
                 expect(datelinePoint.getAttribute("aria-hidden")).toBe("true");
+                expect(datelinePoint.getAttribute("pointer-events")).toBe(
+                    "auto"
+                );
             });
             it("Hides dateline point on consumer disable when shape available", () => {
                 axisObj.dateline = utils.deepClone(datelineJSON);
@@ -1444,6 +1466,79 @@ describe("Gantt", () => {
                             ).getAttribute("aria-selected")
                         ).toBe("false");
                         done();
+                    });
+                });
+            });
+            describe("Pass Through's", () => {
+                describe("clickPassThrough - undefined", () => {
+                    beforeEach(() => {
+                        axisObj = getAxes(axisJSON);
+                        axisObj.dateline = utils.deepClone(datelineJSON);
+                        gantt = new Gantt(axisObj);
+                    });
+                    it("set pointer-events correctly", () => {
+                        const dateline = fetchElementByClass(
+                            styles.ganttDateline
+                        );
+                        expect(dateline.getAttribute("pointer-events")).toBe(
+                            "auto"
+                        );
+                        const datelinePoint = fetchElementByClass(
+                            styles.ganttDatelinePoint
+                        );
+                        expect(
+                            datelinePoint.getAttribute("pointer-events")
+                        ).toBe("auto");
+                    });
+                });
+                describe("clickPassThrough - true", () => {
+                    beforeEach(() => {
+                        axisObj = Object.assign(getAxes(axisJSON), {
+                            clickPassThrough: {
+                                datelines: true
+                            }
+                        });
+                        axisObj.dateline = utils.deepClone(datelineJSON);
+                        gantt = new Gantt(axisObj);
+                    });
+                    it("set pointer-events correctly", () => {
+                        const dateline = fetchElementByClass(
+                            styles.ganttDateline
+                        );
+                        expect(dateline.getAttribute("pointer-events")).toBe(
+                            "none"
+                        );
+                        const datelinePoint = fetchElementByClass(
+                            styles.ganttDatelinePoint
+                        );
+                        expect(
+                            datelinePoint.getAttribute("pointer-events")
+                        ).toBe("auto");
+                    });
+                });
+                describe("clickPassThrough - false", () => {
+                    beforeEach(() => {
+                        axisObj = Object.assign(getAxes(axisJSON), {
+                            clickPassThrough: {
+                                datelines: false
+                            }
+                        });
+                        axisObj.dateline = utils.deepClone(datelineJSON);
+                        gantt = new Gantt(axisObj);
+                    });
+                    it("set pointer-events correctly", () => {
+                        const dateline = fetchElementByClass(
+                            styles.ganttDateline
+                        );
+                        expect(dateline.getAttribute("pointer-events")).toBe(
+                            "auto"
+                        );
+                        const datelinePoint = fetchElementByClass(
+                            styles.ganttDatelinePoint
+                        );
+                        expect(
+                            datelinePoint.getAttribute("pointer-events")
+                        ).toBe("auto");
                     });
                 });
             });

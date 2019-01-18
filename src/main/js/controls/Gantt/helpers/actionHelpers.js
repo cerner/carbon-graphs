@@ -55,7 +55,10 @@ export const processActionItems = (graphConfig, trackLabel, dataTarget) => {
         y: trackLabel.display,
         label: legendItem.label,
         color: legendItem.color || constants.DEFAULT_COLOR,
-        shape: legendItem.shape || SHAPES.CIRCLE
+        shape: legendItem.shape || SHAPES.CIRCLE,
+        clickPassThrough: utils.isDefined(graphConfig.clickPassThrough)
+            ? graphConfig.clickPassThrough.actions
+            : false
     }));
 };
 /**
@@ -234,6 +237,11 @@ const renderDataPointPath = (scale, config, path, dataPoint, index) =>
                     "aria-hidden": false,
                     "aria-describedby": dataPoint.key,
                     "aria-disabled": !utils.isFunction(dataPoint.onClick)
+                },
+                additionalAttributes: {
+                    "pointer-events":
+                        dataPoint.clickPassThrough &&
+                        !utils.isFunction(dataPoint.onClick)
                 }
             })
         )

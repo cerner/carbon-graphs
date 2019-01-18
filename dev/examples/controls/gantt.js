@@ -613,10 +613,130 @@ export const renderGanttCustomPadding = (el, id, title) => () => {
 };
 export const renderGanttTrackSelection = (el, id, title) => () => {
     shell.render(el, id, title);
-    const data = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
+    const data = Object.assign(
+        utils.deepClone(getDemoData(`#${id}`, "GANTT")),
+        {
+            clickPassThrough: {
+                tasks: false,
+                activities: true,
+                events: true,
+                actions: false,
+                datelines: true
+            }
+        }
+    );
     data.showActionLegend = true;
+    data.dateline = [
+        {
+            showDatelineIndicator: true,
+            label: {
+                display: "DST Start"
+            },
+            color: "#D3D4D5",
+            shape: Carbon.helpers.SHAPES.TRIANGLE,
+            value: new Date(2018, 2, 10).toISOString()
+        },
+        {
+            showDatelineIndicator: true,
+            label: {
+                display: "Current Date"
+            },
+            color: "#FFDF00",
+            shape: Carbon.helpers.SHAPES.SQUARE,
+            value: new Date(2018, 8, 5).toISOString()
+        }
+    ];
     const ganttDefault = Carbon.api.gantt(data);
-    loadTracks(ganttDefault, tasks, activities, events, actions, 1, true);
+    const passThroughActivities = [
+        [
+            {
+                key: "activity1",
+                label: {
+                    display: "activity1"
+                },
+                color: "#FFDF00",
+                startDate: new Date(2018, 1, 1).toISOString(),
+                endDate: new Date(2018, 4, 10).toISOString(),
+                style: {
+                    isDotted: false,
+                    isHollow: false
+                }
+            }
+        ]
+    ];
+    const passThroughTasks = [
+        [
+            {
+                key: "task1",
+                label: {
+                    display: "Story Apex"
+                },
+                startDate: new Date(2018, 2, 1).toISOString(),
+                endDate: new Date(2018, 3, 10).toISOString()
+            },
+            {
+                key: "task2",
+                label: {
+                    display: "Story Broccoli"
+                },
+                startDate: new Date(2018, 8, 1).toISOString(),
+                endDate: new Date(2018, 9, 10).toISOString()
+            }
+        ]
+    ];
+    const passThroughEvents = [
+        [
+            {
+                key: "uid_event_1",
+                label: {
+                    display: "Defect A"
+                },
+                shape: caretUp,
+                values: [new Date(2018, 4, 30).toISOString()]
+            },
+            {
+                key: "uid_event_2",
+                label: {
+                    display: "Defect B"
+                },
+                shape: caretDown,
+                color: Carbon.helpers.COLORS.GREEN,
+                values: [new Date(2018, 5, 4).toISOString()]
+            },
+            {
+                key: "uid_event_3",
+                label: {
+                    display: "Defect C"
+                },
+                onClick: loadPopup,
+                shape: caretDown,
+                color: Carbon.helpers.COLORS.GREEN,
+                values: [new Date(2018, 9, 5).toISOString()]
+            }
+        ]
+    ];
+    const passThroughActions = [
+        [
+            {
+                key: "uid_action_1",
+                values: [new Date(2018, 2, 1, 6, 15).toISOString()]
+            },
+            {
+                key: "uid_action_2",
+                onClick: loadPopup,
+                values: [new Date(2018, 7, 1, 6, 15).toISOString()]
+            }
+        ]
+    ];
+    loadTracks(
+        ganttDefault,
+        passThroughTasks,
+        passThroughActivities,
+        passThroughEvents,
+        passThroughActions,
+        1,
+        true
+    );
     return ganttDefault;
 };
 /**

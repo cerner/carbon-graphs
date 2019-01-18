@@ -305,6 +305,7 @@ describe("Gantt -> Track -> Task", () => {
             expect(taskData.style).toContain("fill");
             expect(taskData.style).toContain(COLORS.BLUE);
             expect(taskData.style).toContain("stroke");
+            expect(taskData.clickPassThrough).toEqual(false);
         });
         it("Renders bar correctly", () => {
             loadData(gantt);
@@ -315,6 +316,7 @@ describe("Gantt -> Track -> Task", () => {
             expect(taskElement.getAttribute("aria-describedby")).toBe(
                 taskValuesJSON[0].key
             );
+            expect(taskElement.getAttribute("pointer-events")).toBe("auto");
             expect(taskElement.childNodes.length).toBe(2);
             expect(taskElement.childNodes[1]).not.toBeNull();
             expect(taskElement.childNodes[1].nodeName).toBe("rect");
@@ -352,6 +354,7 @@ describe("Gantt -> Track -> Task", () => {
             expect(taskElement.getAttribute("aria-describedby")).toBe(
                 taskValuesJSON[1].key
             );
+            expect(taskElement.getAttribute("pointer-events")).toBe("auto");
             expect(taskElement.childNodes.length).toBe(2);
             expect(taskElement.childNodes[1]).not.toBeNull();
             expect(taskElement.childNodes[1].nodeName).toBe("rect");
@@ -386,6 +389,7 @@ describe("Gantt -> Track -> Task", () => {
             expect(taskElement.getAttribute("aria-describedby")).toBe(
                 taskValuesJSON[2].key
             );
+            expect(taskElement.getAttribute("pointer-events")).toBe("auto");
             expect(taskElement.getAttribute("aria-selected")).toBe("false");
             expect(taskElement.childNodes.length).toBe(3);
             expect(taskElement.childNodes[1]).not.toBeNull();
@@ -454,6 +458,7 @@ describe("Gantt -> Track -> Task", () => {
             loadData(gantt);
             delay(() => {
                 const taskElement = fetchElementByClass(styles.task);
+                expect(taskElement.getAttribute("pointer-events")).toBe("auto");
                 const indicatorElement = taskElement.childNodes[0];
                 const taskBarElement = taskElement.childNodes[1];
                 expect(indicatorElement).not.toBeNull();
@@ -487,6 +492,7 @@ describe("Gantt -> Track -> Task", () => {
                 const taskElement = document.querySelectorAll(
                     `.${styles.task}`
                 )[1];
+                expect(taskElement.getAttribute("pointer-events")).toBe("auto");
                 const indicatorElement = taskElement.childNodes[0];
                 const taskBarElement = taskElement.childNodes[1];
                 expect(indicatorElement).not.toBeNull();
@@ -520,6 +526,7 @@ describe("Gantt -> Track -> Task", () => {
                 const taskElement = document.querySelectorAll(
                     `.${styles.task}`
                 )[2];
+                expect(taskElement.getAttribute("pointer-events")).toBe("auto");
                 const indicatorElement = taskElement.childNodes[0];
                 const taskBarElement = taskElement.childNodes[1];
                 expect(indicatorElement).not.toBeNull();
@@ -553,6 +560,7 @@ describe("Gantt -> Track -> Task", () => {
                 const taskElement = document.querySelectorAll(
                     `.${styles.task}`
                 )[3];
+                expect(taskElement.getAttribute("pointer-events")).toBe("auto");
                 const indicatorElement = taskElement.childNodes[0];
                 const taskBarElement = taskElement.childNodes[1];
                 expect(indicatorElement).not.toBeNull();
@@ -1647,6 +1655,250 @@ describe("Gantt -> Track -> Task", () => {
             const taskElement = fetchElementByClass(styles.taskBar);
             // 23 px height, even when track length is 160
             expect(taskElement.getAttribute("height")).toEqual("23");
+        });
+    });
+    describe("Pass Through's", () => {
+        const tasks = [
+            {
+                key: "taskNormal",
+                label: {
+                    display: "Story Apex Task Something"
+                },
+                startDate: taskStartDate,
+                endDate: taskEndDate
+            },
+            {
+                key: "taskChunk",
+                label: {
+                    display: "Story Broccoli"
+                },
+                startDate: taskStartDate,
+                endDate: taskStartDate
+            },
+            {
+                key: "taskPercentage",
+                label: {
+                    display: "Story Charming"
+                },
+                percentage: 50,
+                startDate: taskStartDate,
+                endDate: taskEndDate
+            },
+            {
+                key: "taskHash",
+                label: {
+                    display: "Story Charming"
+                },
+                startDate: taskStartDate,
+                endDate: taskEndDate,
+                style: {
+                    isHashed: true
+                }
+            }
+        ];
+        describe("clickPassThrough - undefined", () => {
+            beforeEach(() => {
+                gantt.destroy();
+                ganttChartContainer = document.createElement("div");
+                ganttChartContainer.id = "testCarbonGantt";
+                ganttChartContainer.setAttribute(
+                    "style",
+                    "width: 1024px; height: 400px;"
+                );
+                ganttChartContainer.setAttribute("class", "carbon-test-class");
+                document.body.appendChild(ganttChartContainer);
+                const globalPassThroughData = Object.assign(getAxes(axisJSON), {
+                    showActionLegend: false
+                });
+                gantt = new Gantt(globalPassThroughData);
+                gantt.loadContent(
+                    Object.assign(getData(), {
+                        trackLabel: {
+                            display: "Project A Really long",
+                            onClick: onClickFunctionSpy
+                        },
+                        tasks
+                    })
+                );
+            });
+            afterEach(() => {
+                document.body.innerHTML = "";
+            });
+            it("Prepares data with clickPassThrough", () => {
+                const d3TaskElement = d3.select(`.${styles.task}`);
+                const taskData = d3TaskElement.datum();
+                expect(taskData.clickPassThrough).toEqual(false);
+            });
+            it("Renders bar correctly with pass through", () => {
+                const taskElement = fetchElementByClass(styles.task);
+                expect(taskElement.getAttribute("pointer-events")).toBe("auto");
+            });
+            it("Renders chunk correctly with pass through", () => {
+                const taskElement = document.querySelectorAll(
+                    `.${styles.task}`
+                )[1];
+                expect(taskElement.getAttribute("pointer-events")).toBe("auto");
+            });
+            it("Renders selection for bar correctly with pass through", () => {
+                const taskElement = fetchElementByClass(styles.task);
+                expect(taskElement.getAttribute("pointer-events")).toBe("auto");
+            });
+            it("Renders selection for chunk correctly with pass through", () => {
+                const taskElement = document.querySelectorAll(
+                    `.${styles.task}`
+                )[1];
+                expect(taskElement.getAttribute("pointer-events")).toBe("auto");
+            });
+            it("Renders selection for percentage bar correctly with pass through", () => {
+                const taskElement = document.querySelectorAll(
+                    `.${styles.task}`
+                )[2];
+                expect(taskElement.getAttribute("pointer-events")).toBe("auto");
+            });
+            it("Renders selection for hashed tasks correctly with pass through", () => {
+                const taskElement = document.querySelectorAll(
+                    `.${styles.task}`
+                )[3];
+                expect(taskElement.getAttribute("pointer-events")).toBe("auto");
+            });
+        });
+        describe("clickPassThrough - true", () => {
+            beforeEach(() => {
+                gantt.destroy();
+                ganttChartContainer = document.createElement("div");
+                ganttChartContainer.id = "testCarbonGantt";
+                ganttChartContainer.setAttribute(
+                    "style",
+                    "width: 1024px; height: 400px;"
+                );
+                ganttChartContainer.setAttribute("class", "carbon-test-class");
+                document.body.appendChild(ganttChartContainer);
+                const globalPassThroughData = Object.assign(getAxes(axisJSON), {
+                    showActionLegend: false,
+                    clickPassThrough: {
+                        tasks: true
+                    }
+                });
+                gantt = new Gantt(globalPassThroughData);
+                gantt.loadContent(
+                    Object.assign(getData(), {
+                        trackLabel: {
+                            display: "Project A Really long",
+                            onClick: onClickFunctionSpy
+                        },
+                        tasks
+                    })
+                );
+            });
+            afterEach(() => {
+                document.body.innerHTML = "";
+            });
+            it("Prepares data with clickPassThrough", () => {
+                const d3TaskElement = d3.select(`.${styles.task}`);
+                const taskData = d3TaskElement.datum();
+                expect(taskData.clickPassThrough).toEqual(true);
+            });
+            it("Renders bar correctly with pass through", () => {
+                const taskElement = fetchElementByClass(styles.task);
+                expect(taskElement.getAttribute("pointer-events")).toBe("none");
+            });
+            it("Renders chunk correctly with pass through", () => {
+                const taskElement = document.querySelectorAll(
+                    `.${styles.task}`
+                )[1];
+                expect(taskElement.getAttribute("pointer-events")).toBe("none");
+            });
+            it("Renders selection for bar correctly with pass through", () => {
+                const taskElement = fetchElementByClass(styles.task);
+                expect(taskElement.getAttribute("pointer-events")).toBe("none");
+            });
+            it("Renders selection for chunk correctly with pass through", () => {
+                const taskElement = document.querySelectorAll(
+                    `.${styles.task}`
+                )[1];
+                expect(taskElement.getAttribute("pointer-events")).toBe("none");
+            });
+            it("Renders selection for percentage bar correctly with pass through", () => {
+                const taskElement = document.querySelectorAll(
+                    `.${styles.task}`
+                )[2];
+                expect(taskElement.getAttribute("pointer-events")).toBe("none");
+            });
+            it("Renders selection for hashed tasks correctly with pass through", () => {
+                const taskElement = document.querySelectorAll(
+                    `.${styles.task}`
+                )[3];
+                expect(taskElement.getAttribute("pointer-events")).toBe("none");
+            });
+        });
+        describe("clickPassThrough - false", () => {
+            beforeEach(() => {
+                gantt.destroy();
+                ganttChartContainer = document.createElement("div");
+                ganttChartContainer.id = "testCarbonGantt";
+                ganttChartContainer.setAttribute(
+                    "style",
+                    "width: 1024px; height: 400px;"
+                );
+                ganttChartContainer.setAttribute("class", "carbon-test-class");
+                document.body.appendChild(ganttChartContainer);
+                const globalPassThroughData = Object.assign(getAxes(axisJSON), {
+                    showActionLegend: false,
+                    clickPassThrough: {
+                        tasks: false
+                    }
+                });
+                gantt = new Gantt(globalPassThroughData);
+                gantt.loadContent(
+                    Object.assign(getData(), {
+                        trackLabel: {
+                            display: "Project A Really long",
+                            onClick: onClickFunctionSpy
+                        },
+                        tasks
+                    })
+                );
+            });
+            afterEach(() => {
+                document.body.innerHTML = "";
+            });
+            it("Prepares data with clickPassThrough", () => {
+                const d3TaskElement = d3.select(`.${styles.task}`);
+                const taskData = d3TaskElement.datum();
+                expect(taskData.clickPassThrough).toEqual(false);
+            });
+            it("Renders bar correctly with pass through", () => {
+                const taskElement = fetchElementByClass(styles.task);
+                expect(taskElement.getAttribute("pointer-events")).toBe("auto");
+            });
+            it("Renders chunk correctly with pass through", () => {
+                const taskElement = document.querySelectorAll(
+                    `.${styles.task}`
+                )[1];
+                expect(taskElement.getAttribute("pointer-events")).toBe("auto");
+            });
+            it("Renders selection for bar correctly with pass through", () => {
+                const taskElement = fetchElementByClass(styles.task);
+                expect(taskElement.getAttribute("pointer-events")).toBe("auto");
+            });
+            it("Renders selection for chunk correctly with pass through", () => {
+                const taskElement = document.querySelectorAll(
+                    `.${styles.task}`
+                )[1];
+                expect(taskElement.getAttribute("pointer-events")).toBe("auto");
+            });
+            it("Renders selection for percentage bar correctly with pass through", () => {
+                const taskElement = document.querySelectorAll(
+                    `.${styles.task}`
+                )[2];
+                expect(taskElement.getAttribute("pointer-events")).toBe("auto");
+            });
+            it("Renders selection for hashed tasks correctly with pass through", () => {
+                const taskElement = document.querySelectorAll(
+                    `.${styles.task}`
+                )[3];
+                expect(taskElement.getAttribute("pointer-events")).toBe("auto");
+            });
         });
     });
 });

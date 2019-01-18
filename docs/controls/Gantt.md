@@ -11,6 +11,8 @@ A native gantt chart using d3 based on standard design patterns.
         -   [Axis](#axis)
             -   [Required](#required-1)
             -   [Optional](#optional-1)
+        -   [Pass Through](#pass-Through)
+            -   [Optional](#optional-1)
         -   [Tracks](#tracks)
             -   [Required](#required-2)
             -   [Optional](#optional-2)
@@ -23,18 +25,24 @@ A native gantt chart using d3 based on standard design patterns.
         -   [Tasks](#tasks)
             -   [Required](#required-5)
             -   [Optional](#optional-5)
+            -   [Conditionally Required](#conditionally-required)
         -   [Activities](#activities)
             -   [Required](#required-6)
             -   [Optional](#optional-6)
-        -   [Actions](#actions)
+        -   [Events](#events)
             -   [Required](#required-7)
             -   [Optional](#optional-7)
-        -   [Dateline](#dateline)
+            -   [Conditionally Required](#conditionally-required-1)
+        -   [Actions](#actions)
             -   [Required](#required-8)
-            -   [Optional](#optional-8)
-        -   [Action Legend](#action-legend)
+            -   [Conditionally Required](#conditionally-required-2)
+        -   [Dateline](#dateline)
             -   [Required](#required-9)
             -   [Optional](#optional-9)
+            -   [Conditionally Required](#conditionally-required-3)
+        -   [Action Legend](#action-legend)
+            -   [Required](#required-10)
+            -   [Optional](#optional-10)
         -   [Structure](#structure)
 
 ## Usage
@@ -101,6 +109,33 @@ Y Axis should have the following properties:
 | Property Name | Expected | Default | Description                 |
 | ------------- | -------- | ------- | --------------------------- |
 | show          | boolean  | true    | Toggle for showing the axis |
+
+### Pass Through
+
+#### Optional
+
+| Property Name    | Expected | Default | Description                                       |
+| ---------------- | -------- | ------- | ------------------------------------------------- |
+| clickPassThrough | object   | null    | Refer [Click Pass Throughs](#click-Pass-Throughs) |
+
+#### Click Pass Throughs
+
+Here is a truth table on how clickPassThroughs work in conjuction with onClicks -
+
+-   If `clickPassThrough` is set to `true` and `onClick` function is provided, we honor the onClick functionality and show cursor-pointer on top of the element.
+-   If `clickPassThrough` is set to `true` and `onClick` function is not provided, we would be able to click the element beneath it. We also show cursor-pointer here, if bottom element is selectable.
+-   If `clickPassThrough` is set to `false` and `onClick` function is provided, we honor the onClick functionality and show cursor-pointer on top of the element.
+-   If `clickPassThrough` is set to `false` and `onClick` function is not-provided, the element doesn't interact upon mouse events.
+
+```javascript
+clickPassThrough = {
+    tasks: false,
+    activities: false,
+    events: false,
+    actions: false,
+    dateline: false
+};
+```
 
 ### Tracks
 
@@ -175,12 +210,19 @@ A task can be styled as follows:
 
 | Property Name | Expected | Default                                            | Description                                                                                    |
 | ------------- | -------- | -------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| onClick       | Function | null                                               | Any action that can be performed when clicking on the task                                     |
 | duration      | Function | null                                               | Function that returns a number that is relative to start or end date                           |
 | color         | string   | COLORS.BLUE                                        | Color for the bar                                                                              |
 | label         | object   | {}                                                 | `display` property needs to be provided for label                                              |
 | percentage    | number   | null                                               | Transforms `bar` into Percentage bar and fill the bar with color opted for in `color` property |
 | style         | object   | `{isDotted: true, isHollow: true, isHashed: true}` | Styling for `bar`                                                                              |
+
+#### Conditionally Required
+
+If clickPassThrough.tasks is provided, onClick parameter would be required for any non-pass through operations.
+
+| Property Name | Expected | Default | Description                                                |
+| ------------- | -------- | ------- | ---------------------------------------------------------- |
+| onClick       | Function | null    | Any action that can be performed when clicking on the task |
 
 ### Activities
 
@@ -214,6 +256,31 @@ An activity can be styled as follows:
 | label         | object   | {}                 | `display` property needs to be provided for label                    |
 | style         | object   | `{isHashed: true}` | Styling for `bar`                                                    |
 
+### Events
+
+#### Required
+
+| Property Name | Expected | Description                                                           |
+| ------------- | -------- | --------------------------------------------------------------------- |
+| key           | string   | Unique id which represents the actions within the tracks              |
+| values        | array    | List of string(ISO8601) where a data point `event` needs to be placed |
+| shape         | object   | svg represented as json, which got transpiled from `svg-to-carbon`    |
+
+#### Optional
+
+| Property Name | Expected | Default     | Description                  |
+| ------------- | -------- | ----------- | ---------------------------- |
+| label         | object   | {}          | To address a group of events |
+| color         | string   | COLORS.BLUE | color of the data point      |
+
+#### Conditionally Required
+
+If clickPassThrough.events is provided, onClick parameter would be required for any non-pass through operations.
+
+| Property Name | Expected | Default | Description                                                     |
+| ------------- | -------- | ------- | --------------------------------------------------------------- |
+| onClick       | Function | null    | Any event that can be performed when clicking on the data point |
+
 ### Actions
 
 #### Required
@@ -223,7 +290,9 @@ An activity can be styled as follows:
 | key           | string   | Unique id which needs to be same as `key` in `actionLegend`             |
 | values        | array    | List of string (ISO8601) where a data point `action` needs to be placed |
 
-#### Optional
+#### Conditionally Required
+
+If clickPassThrough.actions is provided, onClick parameter would be required for any non-pass through operations.
 
 | Property Name | Expected | Default | Description                                                      |
 | ------------- | -------- | ------- | ---------------------------------------------------------------- |
@@ -243,11 +312,18 @@ If Dateline is provided then the `value` property is mandatory.
 
 #### Optional
 
-| Property Name         | Expected | Default   | Description                                                      |
-| --------------------- | -------- | --------- | ---------------------------------------------------------------- |
-| showDatelineIndicator | boolean  | true      | Shows the indicator above dateline, this can be clicked          |
-| label                 | object   | {}        | `display` property needs to be provided for label                |
-| onClick               | Function | undefined | Any action that can be performed when clicking on the data point |
+| Property Name         | Expected | Default | Description                                             |
+| --------------------- | -------- | ------- | ------------------------------------------------------- |
+| showDatelineIndicator | boolean  | true    | Shows the indicator above dateline, this can be clicked |
+| label                 | object   | {}      | `display` property needs to be provided for label       |
+
+#### Conditionally Required
+
+If clickPassThrough.datelines is provided, onClick parameter would be required for any non-pass through operations.
+
+| Property Name | Expected | Default   | Description                                                      |
+| ------------- | -------- | --------- | ---------------------------------------------------------------- |
+| onClick       | Function | undefined | Any action that can be performed when clicking on the data point |
 
 ### Action Legend
 
@@ -269,24 +345,6 @@ Loads the legend for `actions`.
 | label         | object   | {}            | `display` property: Display value for the data set which the data points belong to |
 | color         | string   | COLORS.BLACK  | Color for the data point `action`                                                  |
 | shape         | string   | SHAPES.CIRCLE | Shape for representing the data points                                             |
-
-### Events
-
-#### Required
-
-| Property Name | Expected | Description                                                           |
-| ------------- | -------- | --------------------------------------------------------------------- |
-| key           | string   | Unique id which represents the actions within the tracks              |
-| values        | array    | List of string(ISO8601) where a data point `event` needs to be placed |
-| shape         | object   | svg represented as json, which got transpiled from `svg-to-carbon`    |
-
-#### Optional
-
-| Property Name | Expected | Default     | Description                                                     |
-| ------------- | -------- | ----------- | --------------------------------------------------------------- |
-| onClick       | Function | null        | Any event that can be performed when clicking on the data point |
-| label         | object   | {}          | To address a group of events                                    |
-| color         | string   | COLORS.BLUE | color of the data point                                         |
 
 ### Layering
 
@@ -360,6 +418,13 @@ var data = {
     trackLabel: {
         display: "Project A",
         onClick: (label) => {}
+    },
+    onClickPassThrough: {
+        tasks: false,
+        activities: false,
+        events: false,
+        actions: false,
+        datelines: false
     },
     tasks: [
         {

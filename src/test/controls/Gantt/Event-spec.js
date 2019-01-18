@@ -140,6 +140,7 @@ describe("Gantt -> Track -> Event", () => {
             expect(eventData.color).toBe(COLORS.BLUE);
             expect(eventData.y).toBe("Project A");
             expect(eventData.x).toEqual(new Date(xVal));
+            expect(eventData.clickPassThrough).toEqual(false);
         });
         /**
          * BF11272018.03 - Verify the (Events) are displayed as a shape.
@@ -166,6 +167,7 @@ describe("Gantt -> Track -> Event", () => {
             expect(pointElement.getAttribute("aria-describedby")).toBe(
                 "uid_event_1"
             );
+            expect(pointElement.getAttribute("pointer-events")).toBe("auto");
             expect(pointElement.getAttribute("aria-hidden")).toBe("false");
             expect(pointElement.firstChild.getAttribute("d")).not.toBeNull();
             expect(pointElement.firstChild.getAttribute("d")).toBe(
@@ -184,6 +186,12 @@ describe("Gantt -> Track -> Event", () => {
             );
             expect(pointElements[0].getAttribute("aria-hidden")).toBe("false");
             expect(pointElements[1].getAttribute("aria-hidden")).toBe("false");
+            expect(pointElements[0].getAttribute("pointer-events")).toBe(
+                "auto"
+            );
+            expect(pointElements[1].getAttribute("pointer-events")).toBe(
+                "auto"
+            );
             expect(
                 pointElements[0].firstChild.getAttribute("transform")
             ).not.toBeNull();
@@ -224,8 +232,14 @@ describe("Gantt -> Track -> Event", () => {
             );
             const pointElements = document.querySelectorAll(`.${styles.point}`);
             expect(pointElements.length).toBe(2);
+            expect(pointElements[0].getAttribute("pointer-events")).toBe(
+                "auto"
+            );
             expect(pointElements[0].getAttribute("aria-describedby")).toBe(
                 "uid_event_1"
+            );
+            expect(pointElements[1].getAttribute("pointer-events")).toBe(
+                "auto"
             );
             expect(pointElements[1].getAttribute("aria-describedby")).toBe(
                 "uid_event_2"
@@ -246,6 +260,9 @@ describe("Gantt -> Track -> Event", () => {
                 styles.dataPointSelection
             );
             expect(selectionPointElement.tagName).toBe("svg");
+            expect(selectionPointElement.getAttribute("pointer-events")).toBe(
+                "auto"
+            );
             expect(selectionPointElement.firstChild.nodeName).toBe("path");
             expect(selectionPointElement.firstChild.getAttribute("id")).toBe(
                 "circle"
@@ -577,27 +594,107 @@ describe("Gantt -> Track -> Event", () => {
                 );
             });
         });
-        describe("When datapoints are non selectable", () => {
-            it("Does not call the onClick function given in input", () => {
-                const onClickSpy = sinon.spy();
-                gantt.loadContent(
-                    Object.assign(getData(), {
-                        events: [
-                            {
-                                key: "uid_event_1",
-                                onClick: onClickSpy,
-                                shape: SHAPES.CIRCLE,
-                                color: COLORS.BLUE,
-                                values: [xVal]
-                            }
-                        ]
-                    })
-                );
-                const pointElements = document.querySelectorAll(
-                    `.${styles.point}`
-                );
-                expect(pointElements.length).toBe(1);
-                expect(onClickSpy.notCalled).toBe(true);
+        describe("Pass Through's", () => {
+            describe("clickPassThrough - undefined", () => {
+                const axisData = getAxes(axisJSON);
+                beforeEach(() => {
+                    gantt.destroy();
+                    gantt = new Gantt(axisData);
+                    gantt.loadContent(
+                        Object.assign(getData(), {
+                            events: [
+                                {
+                                    key: "uid_event_1",
+                                    shape: SHAPES.CIRCLE,
+                                    color: COLORS.BLUE,
+                                    values: [xVal]
+                                }
+                            ]
+                        })
+                    );
+                });
+                it("Prepares events with clickPassThrough", () => {
+                    const d3DataPointElement = d3.select(`.${styles.point}`);
+                    const eventData = d3DataPointElement.datum();
+                    expect(eventData.clickPassThrough).toEqual(false);
+                });
+                it("Renders data points correctly with pointer-events", () => {
+                    const pointElement = fetchElementByClass(styles.point);
+                    expect(pointElement.nodeName).toBe("svg");
+                    expect(pointElement.getAttribute("pointer-events")).toBe(
+                        "auto"
+                    );
+                });
+            });
+            describe("clickPassThrough - true", () => {
+                const axisData = Object.assign(getAxes(axisJSON), {
+                    clickPassThrough: {
+                        events: true
+                    }
+                });
+                beforeEach(() => {
+                    gantt.destroy();
+                    gantt = new Gantt(axisData);
+                    gantt.loadContent(
+                        Object.assign(getData(), {
+                            events: [
+                                {
+                                    key: "uid_event_1",
+                                    shape: SHAPES.CIRCLE,
+                                    color: COLORS.BLUE,
+                                    values: [xVal]
+                                }
+                            ]
+                        })
+                    );
+                });
+                it("Prepares events with clickPassThrough", () => {
+                    const d3DataPointElement = d3.select(`.${styles.point}`);
+                    const eventData = d3DataPointElement.datum();
+                    expect(eventData.clickPassThrough).toEqual(true);
+                });
+                it("Renders data points correctly with pointer-events", () => {
+                    const pointElement = fetchElementByClass(styles.point);
+                    expect(pointElement.nodeName).toBe("svg");
+                    expect(pointElement.getAttribute("pointer-events")).toBe(
+                        "none"
+                    );
+                });
+            });
+            describe("clickPassThrough - false", () => {
+                const axisData = Object.assign(getAxes(axisJSON), {
+                    clickPassThrough: {
+                        events: false
+                    }
+                });
+                beforeEach(() => {
+                    gantt.destroy();
+                    gantt = new Gantt(axisData);
+                    gantt.loadContent(
+                        Object.assign(getData(), {
+                            events: [
+                                {
+                                    key: "uid_event_1",
+                                    shape: SHAPES.CIRCLE,
+                                    color: COLORS.BLUE,
+                                    values: [xVal]
+                                }
+                            ]
+                        })
+                    );
+                });
+                it("Prepares events with clickPassThrough", () => {
+                    const d3DataPointElement = d3.select(`.${styles.point}`);
+                    const eventData = d3DataPointElement.datum();
+                    expect(eventData.clickPassThrough).toEqual(false);
+                });
+                it("Renders data points correctly with pointer-events", () => {
+                    const pointElement = fetchElementByClass(styles.point);
+                    expect(pointElement.nodeName).toBe("svg");
+                    expect(pointElement.getAttribute("pointer-events")).toBe(
+                        "auto"
+                    );
+                });
             });
         });
         describe("Renders data points with default values", () => {

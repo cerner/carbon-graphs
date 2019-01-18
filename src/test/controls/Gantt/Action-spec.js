@@ -150,6 +150,7 @@ describe("Gantt -> Track -> Action", () => {
             expect(actionData.label.display).toBe(legendJSON[0].label.display);
             expect(actionData.y).toBe("Project A");
             expect(actionData.x).toEqual(new Date(xVal));
+            expect(actionData.clickPassThrough).toEqual(false);
         });
         it("Renders action groups correctly", () => {
             loadData(gantt);
@@ -173,6 +174,7 @@ describe("Gantt -> Track -> Action", () => {
             expect(pointElement.getAttribute("aria-describedby")).toBe(
                 "uid_action_1"
             );
+            expect(pointElement.getAttribute("pointer-events")).toBe("auto");
             expect(pointElement.getAttribute("aria-hidden")).toBe("false");
             expect(pointElement.firstChild.getAttribute("d")).not.toBeNull();
             expect(pointElement.firstChild.getAttribute("d")).toBe(
@@ -206,6 +208,12 @@ describe("Gantt -> Track -> Action", () => {
             );
             expect(pointElements[0].getAttribute("aria-hidden")).toBe("false");
             expect(pointElements[1].getAttribute("aria-hidden")).toBe("false");
+            expect(pointElements[0].getAttribute("pointer-events")).toBe(
+                "auto"
+            );
+            expect(pointElements[1].getAttribute("pointer-events")).toBe(
+                "auto"
+            );
             expect(
                 pointElements[0].firstChild.getAttribute("transform")
             ).not.toBeNull();
@@ -248,6 +256,12 @@ describe("Gantt -> Track -> Action", () => {
             expect(pointElements[1].getAttribute("aria-describedby")).toBe(
                 "uid_action_2"
             );
+            expect(pointElements[0].getAttribute("pointer-events")).toBe(
+                "auto"
+            );
+            expect(pointElements[1].getAttribute("pointer-events")).toBe(
+                "auto"
+            );
             expect(
                 pointElements[0].firstChild.getAttribute("transform")
             ).not.toBe(pointElements[1].firstChild.getAttribute("transform"));
@@ -264,6 +278,9 @@ describe("Gantt -> Track -> Action", () => {
                 styles.dataPointSelection
             );
             expect(selectionPointElement.tagName).toBe("svg");
+            expect(selectionPointElement.getAttribute("pointer-events")).toBe(
+                "auto"
+            );
             expect(selectionPointElement.firstChild.nodeName).toBe("path");
             expect(selectionPointElement.firstChild.getAttribute("id")).toBe(
                 "circle"
@@ -642,6 +659,102 @@ describe("Gantt -> Track -> Action", () => {
                         done();
                     }
                 );
+            });
+        });
+        describe("Pass through's", () => {
+            const actions = [
+                {
+                    key: "uid_action_1",
+                    values: [xVal]
+                },
+                {
+                    key: "uid_action_2",
+                    values: [xVal]
+                }
+            ];
+            describe("clickPassThrough - undefined", () => {
+                const axisData = Object.assign(getAxes(axisJSON), {
+                    showActionLegend: true,
+                    actionLegend: legendJSON
+                });
+                beforeEach(() => {
+                    gantt.destroy();
+                    gantt = new Gantt(axisData);
+                    gantt.loadContent(
+                        Object.assign(getData(), {
+                            actions
+                        })
+                    );
+                });
+                it("Prepares actions with clickPassThrough", () => {
+                    const d3DataPointElement = d3.select(`.${styles.point}`);
+                    const actionData = d3DataPointElement.datum();
+                    expect(actionData.clickPassThrough).toEqual(false);
+                });
+                it("Renders data points correctly with pointer-events", () => {
+                    const pointElement = fetchElementByClass(styles.point);
+                    expect(pointElement.getAttribute("pointer-events")).toBe(
+                        "auto"
+                    );
+                });
+            });
+            describe("clickPassThrough - true", () => {
+                const axisData = Object.assign(getAxes(axisJSON), {
+                    showActionLegend: true,
+                    actionLegend: legendJSON,
+                    clickPassThrough: {
+                        actions: true
+                    }
+                });
+                beforeEach(() => {
+                    gantt.destroy();
+                    gantt = new Gantt(axisData);
+                    gantt.loadContent(
+                        Object.assign(getData(), {
+                            actions
+                        })
+                    );
+                });
+                it("Prepares actions with clickPassThrough", () => {
+                    const d3DataPointElement = d3.select(`.${styles.point}`);
+                    const actionData = d3DataPointElement.datum();
+                    expect(actionData.clickPassThrough).toEqual(true);
+                });
+                it("Renders data points correctly with pointer-events", () => {
+                    const pointElement = fetchElementByClass(styles.point);
+                    expect(pointElement.getAttribute("pointer-events")).toBe(
+                        "none"
+                    );
+                });
+            });
+            describe("clickPassThrough - false", () => {
+                const axisData = Object.assign(getAxes(axisJSON), {
+                    showActionLegend: true,
+                    actionLegend: legendJSON,
+                    clickPassThrough: {
+                        actions: false
+                    }
+                });
+                beforeEach(() => {
+                    gantt.destroy();
+                    gantt = new Gantt(axisData);
+                    gantt.loadContent(
+                        Object.assign(getData(), {
+                            actions
+                        })
+                    );
+                });
+                it("Prepares actions with clickPassThrough", () => {
+                    const d3DataPointElement = d3.select(`.${styles.point}`);
+                    const actionData = d3DataPointElement.datum();
+                    expect(actionData.clickPassThrough).toEqual(false);
+                });
+                it("Renders data points correctly with pointer-events", () => {
+                    const pointElement = fetchElementByClass(styles.point);
+                    expect(pointElement.getAttribute("pointer-events")).toBe(
+                        "auto"
+                    );
+                });
             });
         });
     });

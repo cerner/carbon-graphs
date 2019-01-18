@@ -269,6 +269,9 @@ describe("Gantt -> Track -> Activity", () => {
             expect(activityGroup.length).toBe(1);
             expect(activityGroup[0].childNodes.length).toBe(2);
             expect(activityGroup[0].getAttribute("transform")).not.toBeNull();
+            expect(
+                activityGroup[0].childNodes[0].getAttribute("pointer-events")
+            ).toBe("auto");
         });
         it("Adds data to each activity correctly", () => {
             loadData(gantt);
@@ -299,6 +302,7 @@ describe("Gantt -> Track -> Activity", () => {
             expect(activityData.style).toContain("fill");
             expect(activityData.style).toContain(COLORS.BLUE);
             expect(activityData.style).toContain("opacity");
+            expect(activityData.clickPassThrough).toBe(false);
         });
 
         /**
@@ -436,6 +440,7 @@ describe("Gantt -> Track -> Activity", () => {
             expect(
                 activityElement.childNodes[1].getAttribute("style")
             ).toContain("fill: url(#pattern-stripe-gantt-activity);");
+            expect(activityElement.getAttribute("pointer-events")).toBe("auto");
         });
 
         /**
@@ -631,6 +636,177 @@ describe("Gantt -> Track -> Activity", () => {
                 constants.DEFAULT_ACTIVITY_BAR_HASH_COLOR
             );
             expect(styleSettings).toContain("opacity");
+        });
+    });
+
+    describe("Pass Through's", () => {
+        const activities = [
+            {
+                key: "activity",
+                label: {
+                    display: "Story Dino background"
+                },
+                startDate: taskStartDate,
+                endDate: taskEndDate
+            },
+            {
+                key: "activity",
+                label: {
+                    display: "Story Dino background"
+                },
+                startDate: taskStartDate,
+                endDate: taskStartDate
+            }
+        ];
+        describe("clickPassThrough - undefined", () => {
+            beforeEach(() => {
+                gantt.destroy();
+                ganttChartContainer = document.createElement("div");
+                ganttChartContainer.id = "testCarbonGantt";
+                ganttChartContainer.setAttribute(
+                    "style",
+                    "width: 1024px; height: 400px;"
+                );
+                ganttChartContainer.setAttribute("class", "carbon-test-class");
+                document.body.appendChild(ganttChartContainer);
+                const globalPassThroughData = Object.assign(getAxes(axisJSON), {
+                    showActionLegend: false
+                });
+                gantt = new Gantt(globalPassThroughData);
+                gantt.loadContent(
+                    Object.assign(getData(), {
+                        trackLabel: {
+                            display: "Project A Really long",
+                            onClick: onClickFunctionSpy
+                        },
+                        activities
+                    })
+                );
+            });
+            afterEach(() => {
+                document.body.innerHTML = "";
+            });
+            it("Prepares data with enableTaskPassThrough", () => {
+                const d3ActivityElement = d3.select(`.${styles.activity}`);
+                const activityData = d3ActivityElement.datum();
+                expect(activityData.clickPassThrough).toEqual(false);
+            });
+            it("Renders bar correctly with pass through", () => {
+                const activityElement = fetchElementByClass(styles.activity);
+                expect(activityElement.getAttribute("pointer-events")).toBe(
+                    "auto"
+                );
+            });
+            it("Renders chunk correctly with pass through", () => {
+                const activityElement = document.querySelectorAll(
+                    `.${styles.activity}`
+                )[1];
+                expect(activityElement.getAttribute("pointer-events")).toBe(
+                    "auto"
+                );
+            });
+        });
+        describe("clickPassThrough - true", () => {
+            beforeEach(() => {
+                gantt.destroy();
+                ganttChartContainer = document.createElement("div");
+                ganttChartContainer.id = "testCarbonGantt";
+                ganttChartContainer.setAttribute(
+                    "style",
+                    "width: 1024px; height: 400px;"
+                );
+                ganttChartContainer.setAttribute("class", "carbon-test-class");
+                document.body.appendChild(ganttChartContainer);
+                const globalPassThroughData = Object.assign(getAxes(axisJSON), {
+                    showActionLegend: false,
+                    clickPassThrough: {
+                        activities: true
+                    }
+                });
+                gantt = new Gantt(globalPassThroughData);
+                gantt.loadContent(
+                    Object.assign(getData(), {
+                        trackLabel: {
+                            display: "Project A Really long",
+                            onClick: onClickFunctionSpy
+                        },
+                        activities
+                    })
+                );
+            });
+            afterEach(() => {
+                document.body.innerHTML = "";
+            });
+            it("Prepares data with enableTaskPassThrough", () => {
+                const d3ActivityElement = d3.select(`.${styles.activity}`);
+                const activityData = d3ActivityElement.datum();
+                expect(activityData.clickPassThrough).toEqual(true);
+            });
+            it("Renders bar correctly with pass through", () => {
+                const activityElement = fetchElementByClass(styles.activity);
+                expect(activityElement.getAttribute("pointer-events")).toBe(
+                    "none"
+                );
+            });
+            it("Renders chunk correctly with pass through", () => {
+                const activityElement = document.querySelectorAll(
+                    `.${styles.activity}`
+                )[1];
+                expect(activityElement.getAttribute("pointer-events")).toBe(
+                    "none"
+                );
+            });
+        });
+        describe("clickPassThrough - false", () => {
+            beforeEach(() => {
+                gantt.destroy();
+                ganttChartContainer = document.createElement("div");
+                ganttChartContainer.id = "testCarbonGantt";
+                ganttChartContainer.setAttribute(
+                    "style",
+                    "width: 1024px; height: 400px;"
+                );
+                ganttChartContainer.setAttribute("class", "carbon-test-class");
+                document.body.appendChild(ganttChartContainer);
+                const globalPassThroughData = Object.assign(getAxes(axisJSON), {
+                    showActionLegend: false,
+                    clickPassThrough: {
+                        activities: false
+                    }
+                });
+                gantt = new Gantt(globalPassThroughData);
+                gantt.loadContent(
+                    Object.assign(getData(), {
+                        trackLabel: {
+                            display: "Project A Really long",
+                            onClick: onClickFunctionSpy
+                        },
+                        activities
+                    })
+                );
+            });
+            afterEach(() => {
+                document.body.innerHTML = "";
+            });
+            it("Prepares data with enableTaskPassThrough", () => {
+                const d3ActivityElement = d3.select(`.${styles.activity}`);
+                const activityData = d3ActivityElement.datum();
+                expect(activityData.clickPassThrough).toEqual(false);
+            });
+            it("Renders bar correctly with pass through", () => {
+                const activityElement = fetchElementByClass(styles.activity);
+                expect(activityElement.getAttribute("pointer-events")).toBe(
+                    "auto"
+                );
+            });
+            it("Renders chunk correctly with pass through", () => {
+                const activityElement = document.querySelectorAll(
+                    `.${styles.activity}`
+                )[1];
+                expect(activityElement.getAttribute("pointer-events")).toBe(
+                    "auto"
+                );
+            });
         });
     });
 });

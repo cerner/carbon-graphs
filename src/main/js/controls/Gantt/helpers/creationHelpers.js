@@ -507,10 +507,19 @@ const createDateline = (scale, config, canvasSVG) => {
             .datum(dateline)
             .attr("style", (val) => `fill: ${val.color}; stroke: ${val.color};`)
             .attr("aria-selected", false);
+        const graphConfigClickPassThrough = utils.isDefined(
+            config.clickPassThrough
+        )
+            ? config.clickPassThrough.datelines
+            : false;
         datelineGroup
             .append("line")
             .classed(styles.ganttDateline, true)
-            .attr("style", (d) => `fill: ${d.color}; stroke: ${d.color}`);
+            .attr("style", (d) => `fill: ${d.color}; stroke: ${d.color}`)
+            .attr(
+                "pointer-events",
+                graphConfigClickPassThrough ? "none" : "auto"
+            );
         datelineGroup.append((d) =>
             new Shape(getShapeForTarget(d)).getShapeElement(
                 getDefaultSVGProps({

@@ -47,7 +47,10 @@ const processActivities = (graphConfig, trackLabel, dataTarget) => {
         label: dataTarget.label || null,
         key: dataTarget.key,
         style: getActivityStyle(dataTarget),
-        isHashed: isHashed(dataTarget.style)
+        isHashed: isHashed(dataTarget.style),
+        clickPassThrough: utils.isDefined(graphConfig.clickPassThrough)
+            ? graphConfig.clickPassThrough.activities
+            : false
     };
 };
 
@@ -90,7 +93,7 @@ const renderActivityGroup = (scale, data, path) => {
         _args.width,
         _args.height,
         data.style
-    );
+    ).attr("pointer-events", () => (data.clickPassThrough ? "none" : "auto"));
 };
 
 /**
@@ -113,7 +116,7 @@ const renderHashedActivityGroup = (canvasSVG, scale, data, path) => {
         _args.width,
         _args.height,
         data.style
-    );
+    ).attr("pointer-events", () => (data.clickPassThrough ? "none" : "auto"));
 };
 
 /**

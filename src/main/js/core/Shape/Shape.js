@@ -21,13 +21,15 @@ export const getDefaultSVGProps = ({
     svgStyles = "",
     transformFn = () => {},
     onClickFn = () => {},
-    a11yAttributes = {}
+    a11yAttributes = {},
+    additionalAttributes = {}
 } = {}) => ({
     svgClassNames,
     svgStyles,
     transformFn,
     onClickFn,
-    a11yAttributes
+    a11yAttributes,
+    additionalAttributes
 });
 /**
  * Creates an element with SVG specs. SVG or path
@@ -115,13 +117,20 @@ const setViewBoxProperty = (d3Elem) =>
  * Default icon width and height is 1rem
  * @private
  * @param {string} shape -  Path object of the shape
- * @param {string} svgElementProps -  SVG element props
+ * @param {Object} svgElementProps -  SVG element props
  * @param {boolean} [includeViewBox] -  Include viewBox in the SVG element or otherwise. False by default
  * @returns {HTMLElement} Returns the SVG element with the "icon" path
  */
 const createSVG = (
     shape,
-    { svgClassNames, svgStyles, transformFn, onClickFn, a11yAttributes },
+    {
+        svgClassNames,
+        svgStyles,
+        transformFn,
+        onClickFn,
+        a11yAttributes,
+        additionalAttributes
+    },
     includeViewBox = false
 ) => {
     const d3SVGElement = d3
@@ -131,6 +140,10 @@ const createSVG = (
         .attr("style", svgStyles)
         .attr("class", `${styles.svgIcon} ${svgClassNames}`)
         .attr("role", "img")
+        .attr(
+            "pointer-events",
+            additionalAttributes["pointer-events"] ? "none" : "auto"
+        )
         .on("click", onClickFn);
     if (includeViewBox) {
         setViewBoxProperty(d3SVGElement);

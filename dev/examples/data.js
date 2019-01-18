@@ -853,6 +853,13 @@ const DATA = [
                     upperLimit: new Date(2019, 1, 1, 12).toISOString()
                 }
             },
+            clickPassThrough: {
+                task: false,
+                activity: false,
+                event: false,
+                action: false,
+                dateline: false
+            },
             tracks: [
                 {
                     key: "track 1",
