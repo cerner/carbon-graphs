@@ -33,6 +33,15 @@ Each axis - X, Y and Y2 should have the following properties:
 | type          | string   | AXIS_TYPE.DEFAULT | Normal number value or time-based |
 | show          | boolean  | true              | Toggle for showing the axis       |
 | ticks         | object   | null              | Refer [Ticks](Ticks.md)           |
+| padDomain     | boolean  | true              | Toggle for disabling the padding  |
+
+**Note:**
+
+-   `padDomain` property is only for Y and Y2 axes.
+
+#### Constraints
+
+-   For Bar Graphs, `padDomain` property will be overridden to false.
 
 ## AXIS_TYPE
 

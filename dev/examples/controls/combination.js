@@ -69,6 +69,7 @@ export const renderCombinationBar = (el, id, title) => () => {
     };
     axisData.showVGrid = false;
     axisData.axis.y2.show = true;
+    axisData.axis.y2.padDomain = false;
     const barTest = Carbon.api.graph(axisData);
     barTest.loadContent(
         Carbon.api.bar(getDemoData(`#${id}`, "BAR_DEFAULT").data[0])

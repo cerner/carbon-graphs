@@ -290,6 +290,70 @@ describe("Graph", () => {
             expect(graph.config.axis.x.orientation).toEqual(
                 AXES_ORIENTATION.X.BOTTOM
             );
+            expect(graph.config.axisPadding.y).toEqual(true);
+        });
+        it("processes the input when y axis padDomain is set to false", () => {
+            axisDefault.y.padDomain = false;
+            const input = getAxes(axisDefault);
+            graph = new Graph(input);
+            expect(graph.config.axisPadding.y).toEqual(false);
+        });
+        it("processes the input when y axis padDomain is set to true", () => {
+            axisDefault.y.padDomain = true;
+            const input = getAxes(axisDefault);
+            graph = new Graph(input);
+            expect(graph.config.axisPadding.y).toEqual(true);
+        });
+        it("processes the input when y axis padDomain is set to undefined", () => {
+            axisDefault.y.padDomain = undefined;
+            const input = getAxes(axisDefault);
+            graph = new Graph(input);
+            expect(graph.config.axisPadding.y).toEqual(true);
+        });
+        it("processes the input when y2 axis padDomain is set to true", () => {
+            const input = getAxes({
+                x: axisDefault.x,
+                y: axisDefault.y,
+                y2: {
+                    show: true,
+                    label: "Some Y2 label",
+                    lowerLimit: 0,
+                    upperLimit: 200,
+                    padDomain: true
+                }
+            });
+            graph = new Graph(input);
+            expect(graph.config.axisPadding.y2).toEqual(true);
+        });
+        it("processes the input when y2 axis padDomain is set to false", () => {
+            const input = getAxes({
+                x: axisDefault.x,
+                y: axisDefault.y,
+                y2: {
+                    show: true,
+                    label: "Some Y2 label",
+                    lowerLimit: 0,
+                    upperLimit: 200,
+                    padDomain: false
+                }
+            });
+            graph = new Graph(input);
+            expect(graph.config.axisPadding.y2).toEqual(false);
+        });
+        it("processes the input when y2 axis padDomain is set to undefined", () => {
+            const input = getAxes({
+                x: axisDefault.x,
+                y: axisDefault.y,
+                y2: {
+                    show: true,
+                    label: "Some Y2 label",
+                    lowerLimit: 0,
+                    upperLimit: 200,
+                    padDomain: undefined
+                }
+            });
+            graph = new Graph(input);
+            expect(graph.config.axisPadding.y2).toEqual(true);
         });
         it("processes the timeseries input correctly", () => {
             const input = getAxes(axisTimeSeries);
@@ -312,6 +376,7 @@ describe("Graph", () => {
             expect(graph.config.axis.x.orientation).toEqual(
                 AXES_ORIENTATION.X.BOTTOM
             );
+            expect(graph.config.axisPadding.y).toEqual(true);
         });
         it("process bindLegendTo correctly", () => {
             const input = utils.deepClone(getAxes(axisDefault));
@@ -708,7 +773,8 @@ describe("Graph", () => {
                             show: true,
                             label: "Some Y2 label",
                             lowerLimit: 0,
-                            upperLimit: 200
+                            upperLimit: 200,
+                            padDomain: true
                         }
                     })
                 );
@@ -730,6 +796,29 @@ describe("Graph", () => {
                     "true"
                 );
                 expect(referenceElement.getAttribute("d")).not.toBeNull();
+            });
+            it("sets y2 axis start from 0 when padDomain is false", () => {
+                graph.destroy();
+                graph = new Graph(
+                    getAxes({
+                        x: axisDefault.x,
+                        y: axisDefault.y,
+                        y2: {
+                            show: true,
+                            label: "Some Y2 label",
+                            lowerLimit: 0,
+                            upperLimit: 200,
+                            padDomain: false
+                        }
+                    })
+                );
+                const y2AxisElement = document.querySelectorAll(
+                    `.${styles.axisY2}`
+                );
+                expect(
+                    y2AxisElement[0].childNodes[0].querySelector("text")
+                        .textContent
+                ).toBe("0");
             });
             it("sets x axis orientation to bottom", () => {
                 const xAxisBottomOrientation = utils.deepClone(axisDefault);
@@ -1920,6 +2009,7 @@ describe("Graph", () => {
             expect(graph.config.axis.x.orientation).toEqual(
                 AXES_ORIENTATION.X.TOP
             );
+            expect(graph.config.axisPadding.y).toEqual(true);
         });
         it("creates label x axis when text is present", () => {
             graph.destroy();
