@@ -16,15 +16,15 @@ import {
     createTrackContainer,
     updateTrackProps
 } from "./helpers/creationHelpers";
-import { loadGanttTrackSelector } from "./helpers/trackHelpers";
 import { loadEvents, unloadEvents } from "./helpers/eventHelpers";
 import { loadTasks, unloadTasks } from "./helpers/taskHelpers";
+import { loadGanttTrackSelector } from "./helpers/trackHelpers";
 import {
     translateActivities,
     translateDataPoints,
     translateTasks,
-    truncateTrackLabelText,
-    translateTrackSelector
+    translateTrackSelector,
+    truncateTrackLabelText
 } from "./helpers/translateHelpers";
 
 /**

@@ -1,13 +1,13 @@
 "use strict";
-import styles from "../../../helpers/styles";
-import {
-    getXAxisXPosition,
-    getXAxisYPosition,
-    getXAxisWidth
-} from "./creationHelpers";
-import constants from "../../../helpers/constants";
 import { getRect } from "../../../helpers/barType";
+import constants from "../../../helpers/constants";
+import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
+import {
+    getXAxisWidth,
+    getXAxisXPosition,
+    getXAxisYPosition
+} from "./creationHelpers";
 
 /**
  * Generates arguments for creating track rectangles

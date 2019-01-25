@@ -1,26 +1,26 @@
+import { renderBarTimeSeriesXOrientationTop } from "../controls/bar";
 import {
-    renderGanttDateTimeBuckets,
-    renderGanttCustomPadding
+    renderGanttCustomPadding,
+    renderGanttDateTimeBuckets
 } from "../controls/gantt";
 import {
     renderLineDateTimeBuckets,
     renderLineXAlternateLocale,
     renderLineXAxisFormatted,
     renderLineXHidden,
+    renderLineXOrientationTop,
     renderLineXStaticTicks,
-    renderLineYHidden,
-    renderLineXOrientationTop
+    renderLineYHidden
 } from "../controls/line";
 import {
     renderPairedResultDateTimeBuckets,
     renderPairedResultXAlternateLocale,
     renderPairedResultXAxisFormatted,
     renderPairedResultXHidden,
+    renderPairedResultXOrientationTop,
     renderPairedResultXStaticTicks,
-    renderPairedResultYHidden,
-    renderPairedResultXOrientationTop
+    renderPairedResultYHidden
 } from "../controls/pairedResult";
-import { renderBarTimeSeriesXOrientationTop } from "../controls/bar";
 import {
     btn,
     clearContent,

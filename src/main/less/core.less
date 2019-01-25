@@ -222,9 +222,11 @@ svg:not(:root) {
     user-select: none;
     shape-rendering: crispEdges;
     stroke-width: 0;
+
     &[aria-disabled="false"] {
         cursor: pointer;
     }
+
     &[aria-hidden="true"] {
         .opacity-hide();
     }

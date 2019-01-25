@@ -11,6 +11,7 @@
 
 .carbon-data-task {
     cursor: pointer;
+
     &[aria-disabled="true"] {
         cursor: default;
     }
@@ -19,6 +20,7 @@
 .carbon-data-track-group {
     .carbon-selected-data-point {
         .selected-indicator-styles();
+
         &[aria-hidden="true"] {
             .opacity-hide();
         }
@@ -38,9 +40,11 @@
 .carbon-track-selected-bar {
     display: block;
     fill-opacity: 0;
+
     &[aria-disabled="false"] {
         cursor: pointer;
     }
+
     &[aria-selected="true"] {
         .selected-indicator-styles();
         shape-rendering: geometricPrecision;

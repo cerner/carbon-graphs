@@ -2,22 +2,22 @@
 import d3 from "d3";
 import sinon from "sinon";
 import Gantt from "../../../main/js/controls/Gantt";
+import {
+    getXAxisWidth,
+    getXAxisXPosition
+} from "../../../main/js/controls/Gantt/helpers/creationHelpers";
+import constants from "../../../main/js/helpers/constants";
 import errors from "../../../main/js/helpers/errors";
 import styles from "../../../main/js/helpers/styles";
-import constants from "../../../main/js/helpers/constants";
 import { triggerEvent } from "../helpers/commonHelpers";
 import {
     axisJSON,
     fetchElementByClass,
     getAxes,
     getData,
-    TRANSITION_DELAY,
-    onClickFunctionSpy
+    onClickFunctionSpy,
+    TRANSITION_DELAY
 } from "./helpers";
-import {
-    getXAxisXPosition,
-    getXAxisWidth
-} from "../../../main/js/controls/Gantt/helpers/creationHelpers";
 
 describe("Gantt -> Track", () => {
     let gantt = null;

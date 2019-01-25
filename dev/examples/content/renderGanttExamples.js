@@ -1,12 +1,12 @@
 import {
     renderGantt,
     renderGanttAction,
-    renderGanttEvents,
     renderGanttActivities,
+    renderGanttEvents,
     renderGanttPercentage,
     renderGanttStyle,
-    renderGanttTruncate,
-    renderGanttTrackSelection
+    renderGanttTrackSelection,
+    renderGanttTruncate
 } from "../controls/gantt";
 import {
     btn,
