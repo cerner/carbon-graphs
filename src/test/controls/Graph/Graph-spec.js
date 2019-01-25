@@ -284,7 +284,9 @@ describe("Graph", () => {
             expect(graph.config.dimension).toEqual({});
             expect(graph.config.axis.x.type).toEqual(AXIS_TYPE.DEFAULT);
             expect(graph.config.axis.x.ticks).toEqual({});
+            expect(graph.config.axis.x.rangeRounding).toEqual(true);
             expect(graph.config.axis.y.ticks).toEqual({});
+            expect(graph.config.axis.y.rangeRounding).toEqual(true);
             expect(graph.config.axis.x.show).toEqual(true);
             expect(graph.config.axis.y.show).toEqual(true);
             expect(graph.config.axis.x.orientation).toEqual(
@@ -369,8 +371,10 @@ describe("Graph", () => {
             expect(graph.config.showVGrid).toEqual(true);
             expect(graph.config.dimension).toEqual({});
             expect(graph.config.axis.x.type).toEqual(AXIS_TYPE.TIME_SERIES);
+            expect(graph.config.axis.x.rangeRounding).toEqual(true);
             expect(graph.config.axis.x.ticks).toEqual({});
             expect(graph.config.axis.y.ticks).toEqual({});
+            expect(graph.config.axis.y.rangeRounding).toEqual(true);
             expect(graph.config.axis.x.show).toEqual(true);
             expect(graph.config.axis.y.show).toEqual(true);
             expect(graph.config.axis.x.orientation).toEqual(
@@ -548,10 +552,44 @@ describe("Graph", () => {
             it("calculates X axis d3 scale using domain and range", () => {
                 expect(graph.scale.x).not.toBeNull();
                 expect(graph.scale.x).toEqual(jasmine.any(Function));
+                expect(graph.scale.x.domain()).toEqual([
+                    axisDefault.x.lowerLimit,
+                    axisDefault.x.upperLimit
+                ]);
             });
             it("calculates Y axis d3 scale using domain and range", () => {
                 expect(graph.scale.y).not.toBeNull();
                 expect(graph.scale.y).toEqual(jasmine.any(Function));
+                expect(graph.scale.y.domain()).toEqual([
+                    axisDefault.y.lowerLimit,
+                    axisDefault.y.upperLimit
+                ]);
+            });
+            describe("when domains are not extended using d3.nice", () => {
+                beforeEach(() => {
+                    const config = getAxes(axisDefault);
+                    config.axis.x.rangeRounding = false;
+                    config.axis.y.rangeRounding = false;
+                    graph = new Graph(config);
+                });
+                it("calculates X axis d3 scale using domain and range", () => {
+                    expect(graph.config.axis.x.rangeRounding).toEqual(false);
+                    expect(graph.scale.x).not.toBeNull();
+                    expect(graph.scale.x).toEqual(jasmine.any(Function));
+                    expect(graph.scale.x.domain()).toEqual([
+                        axisDefault.x.lowerLimit,
+                        axisDefault.x.upperLimit
+                    ]);
+                });
+                it("calculates Y axis d3 scale using domain and range", () => {
+                    expect(graph.config.axis.y.rangeRounding).toEqual(false);
+                    expect(graph.scale.y).not.toBeNull();
+                    expect(graph.scale.y).toEqual(jasmine.any(Function));
+                    expect(graph.scale.y.domain()).toEqual([
+                        axisDefault.y.lowerLimit,
+                        axisDefault.y.upperLimit
+                    ]);
+                });
             });
         });
         describe("with timeseries type values", () => {
@@ -561,10 +599,42 @@ describe("Graph", () => {
             it("calculates X axis d3 scale using domain and range", () => {
                 expect(graph.scale.x).not.toBeNull();
                 expect(graph.scale.x).toEqual(jasmine.any(Function));
+                expect(graph.scale.x.domain()[0].toISOString()).not.toEqual(
+                    axisTimeSeries.x.lowerLimit
+                );
+                expect(graph.scale.x.domain()[1].toISOString()).not.toEqual(
+                    axisTimeSeries.y.lowerLimit
+                );
             });
             it("calculates Y axis d3 scale using domain and range", () => {
                 expect(graph.scale.y).not.toBeNull();
                 expect(graph.scale.y).toEqual(jasmine.any(Function));
+                expect(graph.scale.y.domain()).toEqual([0, 20]);
+            });
+            describe("when domains are not extended using d3.nice", () => {
+                beforeEach(() => {
+                    const timeSeriesConfig = getAxes(axisTimeSeries);
+                    timeSeriesConfig.axis.x.rangeRounding = false;
+                    timeSeriesConfig.axis.y.rangeRounding = false;
+                    graph = new Graph(timeSeriesConfig);
+                });
+                it("calculates X axis d3 scale using domain and range", () => {
+                    expect(graph.config.axis.x.rangeRounding).toEqual(false);
+                    expect(graph.scale.x).not.toBeNull();
+                    expect(graph.scale.x).toEqual(jasmine.any(Function));
+                    expect(graph.scale.x.domain()[0].toISOString()).toEqual(
+                        axisTimeSeries.x.lowerLimit
+                    );
+                    expect(graph.scale.x.domain()[1].toISOString()).toEqual(
+                        axisTimeSeries.x.upperLimit
+                    );
+                });
+                it("calculates Y axis d3 scale using domain and range", () => {
+                    expect(graph.config.axis.y.rangeRounding).toEqual(false);
+                    expect(graph.scale.y).not.toBeNull();
+                    expect(graph.scale.y).toEqual(jasmine.any(Function));
+                    expect(graph.scale.y.domain()).toEqual([0, 20]);
+                });
             });
         });
     });
@@ -1018,7 +1088,6 @@ describe("Graph", () => {
                         gridLowerStepElement.querySelectorAll(".tick").length
                     ).toBe(3);
                 });
-
                 it("creates x axis with UpperTickValues", () => {
                     graph.destroy();
                     const localeAxisObj = utils.deepClone(axisTimeSeries);

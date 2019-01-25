@@ -423,8 +423,7 @@ const scaleGraph = (scale, config) => {
     scale.x = getScale(config.axis.x.type)
         .domain(config.axis.x.domain)
         .range(getXAxisRange(config))
-        .clamp(true)
-        .nice();
+        .clamp(true);
     scale.y = d3.scale
         .linear()
         .domain([
@@ -432,8 +431,13 @@ const scaleGraph = (scale, config) => {
             config.axis.y.domain.upperLimit
         ])
         .range(getYAxisRange(config))
-        .clamp(true)
-        .nice();
+        .clamp(true);
+    if (config.axis.x.rangeRounding) {
+        scale.x.nice();
+    }
+    if (config.axis.y.rangeRounding) {
+        scale.y.nice();
+    }
     if (hasY2Axis(config.axis)) {
         scale.y2 = d3.scale
             .linear()
@@ -442,8 +446,10 @@ const scaleGraph = (scale, config) => {
                 config.axis.y2.domain.upperLimit
             ])
             .range(getYAxisRange(config))
-            .clamp(true)
-            .nice();
+            .clamp(true);
+        if (config.axis.y2.rangeRounding) {
+            scale.y2.nice();
+        }
     }
 };
 /**

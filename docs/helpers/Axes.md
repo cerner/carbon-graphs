@@ -33,6 +33,7 @@ Each axis - X, Y and Y2 should have the following properties:
 | type          | string   | AXIS_TYPE.DEFAULT | Normal number value or time-based |
 | show          | boolean  | true              | Toggle for showing the axis       |
 | ticks         | object   | null              | Refer [Ticks](Ticks.md)           |
+| rangeRounding | boolean  | true              | Toggle for range rounding         |
 | padDomain     | boolean  | true              | Toggle for disabling the padding  |
 
 **Note:**

@@ -298,12 +298,14 @@ const scaleGraph = (scale, config) => {
         .scale()
         .domain(config.axis.x.domain)
         .range([0, getXAxisWidth(config)])
-        .clamp(true)
-        .nice();
+        .clamp(true);
     scale.y = d3.scale
         .ordinal()
         .domain(getYAxisDomain(config.axis.y.trackList))
         .range([0, ...getYAxisRange(config.axis.y.trackList)]);
+    if (config.axis.x.rangeRounding) {
+        scale.x.nice();
+    }
 };
 /**
  * Added defs element for the canvas. This currently holds the clip paths for the entire chart.

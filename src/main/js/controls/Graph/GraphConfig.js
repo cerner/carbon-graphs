@@ -70,6 +70,10 @@ export const processInput = (input, config, type) => {
             lowerLimit: utils.getNumber(axisObj[yAxis].lowerLimit),
             upperLimit: utils.getNumber(axisObj[yAxis].upperLimit)
         };
+        config.axis[yAxis].rangeRounding = getDefaultValue(
+            axisObj[yAxis].rangeRounding,
+            true
+        );
         return config;
     };
     config.clipPathId = generateClipPathId();
@@ -100,6 +104,7 @@ export const processInput = (input, config, type) => {
         _axis.x.lowerLimit,
         _axis.x.upperLimit
     );
+    config.axis.x.rangeRounding = getDefaultValue(_axis.x.rangeRounding, true);
     if (input.axis.y) {
         getAxisDomain(config, constants.Y_AXIS, _axis, true);
     } else {

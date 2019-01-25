@@ -241,6 +241,7 @@ describe("Gantt", () => {
             expect(gantt.config.axis.x.domain[1]).toEqual(
                 utils.parseDateTime(input.axis.x.upperLimit)
             );
+            expect(gantt.config.axis.x.rangeRounding).toEqual(true);
             expect(gantt.config.axis.x.show).toEqual(true);
             expect(gantt.config.axis.y.show).toEqual(true);
             expect(gantt.config.shownTargets).toEqual([]);
@@ -488,6 +489,12 @@ describe("Gantt", () => {
             it("Calculates X axis d3 scale using domain and range", () => {
                 expect(gantt.scale.x).not.toBeNull();
                 expect(gantt.scale.x).toEqual(jasmine.any(Function));
+                expect(gantt.scale.x.domain()[0]).not.toEqual(
+                    axisJSON.x.lowerLimit
+                );
+                expect(gantt.scale.x.domain()[1]).not.toEqual(
+                    axisJSON.x.upperLimit
+                );
                 expect(gantt.scale.x.range()).toEqual([
                     0,
                     getXAxisWidth(gantt.config)
@@ -498,6 +505,41 @@ describe("Gantt", () => {
                 expect(gantt.scale.y).toEqual(jasmine.any(Function));
                 expect(gantt.scale.y.domain()).toEqual(["Project A"]);
                 expect(gantt.scale.y.range()).toEqual([0, 41]);
+            });
+        });
+        describe("With content loaded when domain is not extended using d3.nice", () => {
+            let domains;
+            beforeEach(() => {
+                const axis = utils.deepClone(axisJSON);
+                axis.x.rangeRounding = false;
+                const config = {
+                    bindTo: "#testCarbonGantt",
+                    axis
+                };
+                gantt = new Gantt(config);
+                domains = gantt.scale.x.domain();
+            });
+            it("Calculates X axis d3 scale using domain and range", () => {
+                expect(gantt.config.axis.x.rangeRounding).toEqual(false);
+                expect(gantt.scale.x).not.toBeNull();
+                expect(gantt.scale.x).toEqual(jasmine.any(Function));
+                expect(gantt.scale.x.domain()[0].toISOString()).toEqual(
+                    axisJSON.x.lowerLimit
+                );
+                expect(gantt.scale.x.domain()[1].toISOString()).toEqual(
+                    axisJSON.x.upperLimit
+                );
+                expect(gantt.scale.x.range()).toEqual([
+                    0,
+                    getXAxisWidth(gantt.config)
+                ]);
+            });
+            it("Domains change when d3.nice is enabled", () => {
+                gantt.destroy();
+                gantt = new Gantt(getAxes(axisJSON));
+                const currentDomains = gantt.scale.x.domain();
+                expect(domains[0]).not.toEqual(currentDomains[0]);
+                expect(domains[1]).not.toEqual(currentDomains[1]);
             });
         });
     });

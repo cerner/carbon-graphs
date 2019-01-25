@@ -542,7 +542,6 @@ describe("Gantt -> Track -> Event", () => {
             });
             /**
              * BF11272018.1 - Verify the system allows an event to be select-able.
-             * BF11272018.13 - Verify an event is select-able by default.
              */
             it("Calls onClick when selected, if provided", (done) => {
                 gantt.loadContent(

@@ -312,18 +312,11 @@ If Dateline is provided then the `value` property is mandatory.
 
 #### Optional
 
-| Property Name         | Expected | Default | Description                                             |
-| --------------------- | -------- | ------- | ------------------------------------------------------- |
-| showDatelineIndicator | boolean  | true    | Shows the indicator above dateline, this can be clicked |
-| label                 | object   | {}      | `display` property needs to be provided for label       |
-
-#### Conditionally Required
-
-If clickPassThrough.datelines is provided, onClick parameter would be required for any non-pass through operations.
-
-| Property Name | Expected | Default   | Description                                                      |
-| ------------- | -------- | --------- | ---------------------------------------------------------------- |
-| onClick       | Function | undefined | Any action that can be performed when clicking on the data point |
+| Property Name         | Expected | Default   | Description                                                      |
+| --------------------- | -------- | --------- | ---------------------------------------------------------------- |
+| onClick               | Function | undefined | Any action that can be performed when clicking on the data point |
+| showDatelineIndicator | boolean  | true      | Shows the indicator above dateline, this can be clicked          |
+| label                 | object   | {}        | `display` property needs to be provided for label                |
 
 ### Action Legend
 

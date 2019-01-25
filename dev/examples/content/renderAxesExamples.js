@@ -148,6 +148,7 @@ export const triggerAxesExample = (
             "Gantt - Custom Padding"
         )
     );
+
     instance.load(
         renderBarTimeSeriesXOrientationTop(
             contentSection,

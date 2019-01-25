@@ -176,12 +176,16 @@ export const processInput = (input, config) => {
             AXIS_TYPE.TIME_SERIES,
             _axis.x.lowerLimit,
             _axis.x.upperLimit
-        )
+        ),
+        rangeRounding: getDefaultValue(_axis.x.rangeRounding, true)
     });
     config.axis.y = {
         show: _axis.y ? getDefaultValue(_axis.y.show, true) : true,
         trackCount: 0,
-        trackList: {}
+        trackList: {},
+        rangeRounding: _axis.y
+            ? getDefaultValue(_axis.y.rangeRounding, true)
+            : false
     };
     config.shownTargets = [];
     return config;

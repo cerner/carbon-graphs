@@ -31,8 +31,8 @@ export const axisTimeSeries = {
     x: {
         type: AXIS_TYPE.TIME_SERIES,
         label: "Some X Label",
-        lowerLimit: "2016-01-01T12:00:00Z",
-        upperLimit: "2017-01-01T12:00:00Z"
+        lowerLimit: new Date(2016, 0, 1, 12).toISOString(),
+        upperLimit: new Date(2017, 0, 1, 12).toISOString()
     },
     y: {
         label: "Some Y Label",

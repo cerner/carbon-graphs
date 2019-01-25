@@ -246,6 +246,7 @@ describe("Timeline", () => {
             expect(timeline.config.showLegend).toBeTruthy();
             expect(timeline.config.axis.x.type).toEqual(AXIS_TYPE.TIME_SERIES);
             expect(timeline.config.axis.x.ticks).toEqual({});
+            expect(timeline.config.axis.x.rangeRounding).toEqual(true);
             expect(timeline.config.axis.x.domain[0]).toEqual(
                 utils.parseDateTime(input.axis.x.lowerLimit)
             );
@@ -318,11 +319,40 @@ describe("Timeline", () => {
             it("Calculates X axis d3 scale using domain and range", () => {
                 expect(timeline.scale.x).not.toBeNull();
                 expect(timeline.scale.x).toEqual(jasmine.any(Function));
+                expect(timeline.scale.x.domain()[0].toISOString()).not.toEqual(
+                    axisJSON.x.lowerLimit
+                );
+                expect(timeline.scale.x.domain()[1].toISOString()).not.toEqual(
+                    axisJSON.x.upperLimit
+                );
                 expect(timeline.scale.x.range()).toEqual([
                     0,
                     getXAxisWidth(timeline.config)
                 ]);
                 expect(timeline.scale.y).toBeUndefined();
+            });
+            describe("when domains are not extended using d3.nice", () => {
+                beforeEach(() => {
+                    const timelineConfig = getAxes(axisJSON);
+                    timelineConfig.axis.x.rangeRounding = false;
+                    timeline = new Timeline(timelineConfig);
+                });
+                it("Calculates X axis d3 scale using domain and range", () => {
+                    expect(timeline.config.axis.x.rangeRounding).toEqual(false);
+                    expect(timeline.scale.x).not.toBeNull();
+                    expect(timeline.scale.x).toEqual(jasmine.any(Function));
+                    expect(timeline.scale.x.domain()[0].toISOString()).toEqual(
+                        axisJSON.x.lowerLimit
+                    );
+                    expect(timeline.scale.x.domain()[1].toISOString()).toEqual(
+                        axisJSON.x.upperLimit
+                    );
+                    expect(timeline.scale.x.range()).toEqual([
+                        0,
+                        getXAxisWidth(timeline.config)
+                    ]);
+                    expect(timeline.scale.y).toBeUndefined();
+                });
             });
         });
         describe("With content loaded", () => {
@@ -337,6 +367,35 @@ describe("Timeline", () => {
                     0,
                     getXAxisWidth(timeline.config)
                 ]);
+                expect(timeline.scale.x.domain()[0].toISOString()).not.toEqual(
+                    axisJSON.x.lowerLimit
+                );
+                expect(timeline.scale.x.domain()[1].toISOString()).not.toEqual(
+                    axisJSON.x.upperLimit
+                );
+            });
+            describe("when domains are not extended using d3.nice", () => {
+                beforeEach(() => {
+                    const timelineConfig = getAxes(axisJSON);
+                    timelineConfig.axis.x.rangeRounding = false;
+                    timeline = new Timeline(timelineConfig);
+                });
+                it("Calculates X axis d3 scale using domain and range", () => {
+                    expect(timeline.config.axis.x.rangeRounding).toEqual(false);
+                    expect(timeline.scale.x).not.toBeNull();
+                    expect(timeline.scale.x).toEqual(jasmine.any(Function));
+                    expect(timeline.scale.x.domain()[0].toISOString()).toEqual(
+                        axisJSON.x.lowerLimit
+                    );
+                    expect(timeline.scale.x.domain()[1].toISOString()).toEqual(
+                        axisJSON.x.upperLimit
+                    );
+                    expect(timeline.scale.x.range()).toEqual([
+                        0,
+                        getXAxisWidth(timeline.config)
+                    ]);
+                    expect(timeline.scale.y).toBeUndefined();
+                });
             });
         });
     });

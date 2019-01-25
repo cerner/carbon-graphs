@@ -40,7 +40,8 @@ export const processInput = (input, config) => {
             AXIS_TYPE.TIME_SERIES,
             _axis.x.lowerLimit,
             _axis.x.upperLimit
-        )
+        ),
+        rangeRounding: getDefaultValue(_axis.x.rangeRounding, true)
     });
     config.shownTargets = [];
     return config;
