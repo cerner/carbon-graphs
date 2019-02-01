@@ -565,6 +565,11 @@ describe("Graph", () => {
                     axisDefault.y.upperLimit
                 ]);
             });
+            /**
+             * CH01312019.01 - Verify the consumer will have the option to disable axis range rounding for the X axis
+             * CH01312019.01 - Verify the consumer will have the option to disable axis range rounding for the Y axis
+             * CH01312019.01 - Verify the consumer will have the option to disable axis range rounding for the second Y axis (Y2)
+             */
             describe("when domains are not extended using d3.nice", () => {
                 beforeEach(() => {
                     const config = getAxes(axisDefault);
@@ -589,6 +594,22 @@ describe("Graph", () => {
                         axisDefault.y.lowerLimit,
                         axisDefault.y.upperLimit
                     ]);
+                });
+                it("calculates Y2 axis d3 scale using domain and range", () => {
+                    graph.destroy();
+                    const config = getAxes(axisDefault);
+                    config.axis.y2 = {
+                        show: true,
+                        label: "Some Y2 label",
+                        lowerLimit: 0,
+                        upperLimit: 200,
+                        rangeRounding: false
+                    };
+                    graph = new Graph(config);
+                    expect(graph.config.axis.y2.rangeRounding).toEqual(false);
+                    expect(graph.scale.y2).not.toBeNull();
+                    expect(graph.scale.y2).toEqual(jasmine.any(Function));
+                    expect(graph.scale.y2.domain()).toEqual([0, 200]);
                 });
             });
         });

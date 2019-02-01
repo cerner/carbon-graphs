@@ -331,6 +331,9 @@ describe("Timeline", () => {
                 ]);
                 expect(timeline.scale.y).toBeUndefined();
             });
+            /**
+             * CH01312019.01 - Verify the consumer will have the option to disable axis range rounding for the X axis
+             */
             describe("when domains are not extended using d3.nice", () => {
                 beforeEach(() => {
                     const timelineConfig = getAxes(axisJSON);

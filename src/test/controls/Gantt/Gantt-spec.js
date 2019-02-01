@@ -507,6 +507,9 @@ describe("Gantt", () => {
                 expect(gantt.scale.y.range()).toEqual([0, 41]);
             });
         });
+        /**
+         * CH01312019.01 - Verify the consumer will have the option to disable axis range rounding for the X axis
+         */
         describe("With content loaded when domain is not extended using d3.nice", () => {
             let domains;
             beforeEach(() => {
