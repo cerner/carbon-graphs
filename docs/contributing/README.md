@@ -124,20 +124,23 @@ The issue number should be mentioned at the end.
 
 Follow [Semantic Versioning](https://semver.org/) when preparing for a release.
 
-```
-npm run release:<patch, minor or major>
-```
+-   Ensure you have `write` privileges.
+-   Ensure you have do not have any unstaged changes.
+-   Check the commit log to figure out the version.
+    -   `Breaking` implementation would constitute as a `Major` release.
+    -   `Update` and `New` implementations would constitute as a `Minor` release.
+    -   `Fix` and multiple `Chore` implementations would constitute as a `Patch` release.
+-   Run `npm run release:<patch, minor or major>`.
+-   Once the release is complete, [deploy](#deploying-the-site-to-github) the site
 
 **Ensure released version is present in [cernerrepos](https://cernerrepos.net)**
 
 ## Deploying the site to GitHub
 
-Once the PR is merged, you need to ensure that the site is up-to-date with your latest changes.
-To deploy the site to the GitHub pages, run the deploy-site script:
-
-```
-npm run deploy:site
-```
+-   Ensure you have `write` privileges.
+-   Ensure you have do not have any unstaged changes.
+-   Get latest from repo `git pull`.
+-   To deploy the site to the GitHub pages, run the deploy-site script `npm run deploy:site`.
 
 # Breaking changes
 

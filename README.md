@@ -9,19 +9,20 @@
 Carbon is a graphing library built using d3 visualization library. It provides an API for generating native graphs such as Line and Paired Result graphs based on design standards.
 Carbon provides an abstraction for c3 and d3.
 
-- [Carbon (carbon-graphs)](#carbon-carbon-graphs)
-  - [Resources](#resources)
-  - [Features](#features)
-    - [Other highlights](#other-highlights)
-  - [Dependencies](#dependencies)
-  - [Potential features](#potential-features)
-  - [Usage](#usage)
-  - [Install](#install)
-  - [Browser support](#browser-support)
+-   [Carbon (carbon-graphs)](#carbon-carbon-graphs)
+    -   [Resources](#resources)
+    -   [Features](#features)
+        -   [Other highlights](#other-highlights)
+    -   [Dependencies](#dependencies)
+    -   [Potential features](#potential-features)
+    -   [Usage](#usage)
+    -   [Install](#install)
+    -   [Browser support](#browser-support)
 
 ## Resources
 
 -   [Demo](https://pages.github.cerner.com/Geneva/carbon-graphs/)
+-   [Contributing to Carbon](docs/contributing/README.md)
 -   [API Reference](docs/README.md)
 -   [JSDocs](https://pages.github.cerner.com/Geneva/carbon-graphs/docs/)
 -   [Release Notes](https://github.cerner.com/Geneva/carbon-graphs/releases)
