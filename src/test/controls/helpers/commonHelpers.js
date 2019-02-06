@@ -18,7 +18,7 @@ export const flushAllD3Transitions = () => {
 };
 /**
  * Triggers an event on provided element
- * @param {HTMLElement|Node} element - DOM element
+ * @param {HTMLElement|Node|Window} element - DOM element
  * @param {string} eventName - event name
  * @param {Function} [cb] - callback function that needs to be executed post event trigger
  * @param {number} [delayDuration=TRANSITION_DELAY] - delay duration before calling the callback function

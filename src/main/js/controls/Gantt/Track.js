@@ -83,8 +83,13 @@ const addTrackLabelEventHandler = (canvasSVG, labelObj) =>
                 !utils.isFunction(labelObj.onClick) ||
                 !hasMatchingTrackLabel(this, labelObj.display)
             ) {
-                d3.select(this).attr("aria-disabled", true);
                 return;
+            }
+            if (utils.isEmpty(d3.select(this).attr("aria-disabled"))) {
+                d3.select(this).attr(
+                    "aria-disabled",
+                    !utils.isFunction(labelObj.onClick)
+                );
             }
             d3.select(this).on("click", () => {
                 labelObj.onClick(labelObj.display, d3.select(this));

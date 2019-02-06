@@ -115,6 +115,13 @@ describe("Gantt -> Track", () => {
                     `.${styles.axisYTrackLabel} .tick text`
                 )[0].textContent
             ).toBe("Project long...");
+            expect(
+                document
+                    .querySelectorAll(
+                        `.${styles.axisYTrackLabel} .tick text`
+                    )[0]
+                    .getAttribute("aria-disabled")
+            ).toBe(null);
         });
         it("Does not truncate if not long", () => {
             expect(
@@ -151,6 +158,12 @@ describe("Gantt -> Track", () => {
                 fetchElementByClass(`${styles.axisYTrackLabel} .tick text`),
                 "click",
                 () => {
+                    const labelPath = fetchElementByClass(
+                        `${styles.axisYTrackLabel} .tick text`
+                    );
+                    expect(labelPath.getAttribute("aria-disabled")).toBe(
+                        "false"
+                    );
                     expect(onClickPrimaryFunctionSpy.calledOnce).toBeTruthy();
                     expect(onClickPrimaryFunctionSpy.getCall(0).args[0]).toBe(
                         smallLabel

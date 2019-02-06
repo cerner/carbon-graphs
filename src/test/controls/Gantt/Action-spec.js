@@ -800,6 +800,7 @@ describe("Gantt -> Track -> Action", () => {
                 "style",
                 "width: 800px; height: 400px;"
             );
+            gantt.resize();
             triggerEvent(
                 window,
                 "resize",
@@ -827,6 +828,7 @@ describe("Gantt -> Track -> Action", () => {
                 "style",
                 "width: 800px; height: 400px;"
             );
+            gantt.resize();
             triggerEvent(
                 window,
                 "resize",

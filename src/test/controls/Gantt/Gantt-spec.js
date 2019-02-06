@@ -1830,6 +1830,7 @@ describe("Gantt", () => {
                 "style",
                 "width: 800px; height: 200px"
             );
+            gantt.resize();
             triggerEvent(
                 window,
                 "resize",
@@ -1859,6 +1860,7 @@ describe("Gantt", () => {
             });
         });
         it("Calculates X axis d3 scale using domain and range", (done) => {
+            gantt.resize();
             triggerEvent(window, "resize", () => {
                 expect(gantt.scale.x).not.toBeNull();
                 expect(gantt.scale.x).toEqual(jasmine.any(Function));
@@ -1866,6 +1868,7 @@ describe("Gantt", () => {
             });
         });
         it("Calculates Y axis d3 scale using domain and range", (done) => {
+            gantt.resize();
             triggerEvent(
                 window,
                 "resize",
@@ -1882,6 +1885,7 @@ describe("Gantt", () => {
                 "style",
                 "width: 800px; height: 200px"
             );
+            gantt.resize();
             triggerEvent(
                 window,
                 "resize",
@@ -1952,6 +1956,7 @@ describe("Gantt", () => {
                 "style",
                 "width: 600px; height: 200px"
             );
+            gantt.resize();
             triggerEvent(
                 window,
                 "resize",
@@ -1972,6 +1977,7 @@ describe("Gantt", () => {
                 "style",
                 "width: 400px; height: 200px"
             );
+            gantt.resize();
             triggerEvent(
                 window,
                 "resize",
@@ -1998,6 +2004,7 @@ describe("Gantt", () => {
                 "style",
                 "width: 800px; height: 200px"
             );
+            gantt.resize();
             triggerEvent(
                 window,
                 "resize",
