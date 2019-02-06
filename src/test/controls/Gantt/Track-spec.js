@@ -2,22 +2,23 @@
 import d3 from "d3";
 import sinon from "sinon";
 import Gantt from "../../../main/js/controls/Gantt";
-import {
-    getXAxisWidth,
-    getXAxisXPosition
-} from "../../../main/js/controls/Gantt/helpers/creationHelpers";
+import { getXAxisWidth } from "../../../main/js/controls/Gantt/helpers/creationHelpers";
 import constants from "../../../main/js/helpers/constants";
 import errors from "../../../main/js/helpers/errors";
 import styles from "../../../main/js/helpers/styles";
-import { triggerEvent } from "../helpers/commonHelpers";
+import {
+    delay,
+    triggerEvent,
+    TRANSITION_DELAY
+} from "../helpers/commonHelpers";
 import {
     axisJSON,
     fetchElementByClass,
     getAxes,
     getData,
-    onClickFunctionSpy,
-    TRANSITION_DELAY
+    onClickFunctionSpy
 } from "./helpers";
+import { fetchAllElementsByClass } from "../Bar/helpers";
 
 describe("Gantt -> Track", () => {
     let gantt = null;
@@ -306,18 +307,11 @@ describe("Gantt -> Track", () => {
                         const container = d3.select(
                             `.${styles.contentContainer}`
                         );
-                        expect(
-                            Number.parseInt(selectionBar.attr("x"))
-                        ).toBeGreaterThan(Number.parseInt(container.attr("x")));
                         expect(Number.parseInt(selectionBar.attr("x"))).toEqual(
-                            getXAxisXPosition(gantt.config) +
-                                constants.DEFAULT_GANTT_TRACK_SELECTION.x
+                            constants.DEFAULT_GANTT_TRACK_SELECTION.x
                         );
-                        expect(
-                            Number.parseInt(selectionBar.attr("y"))
-                        ).toBeGreaterThan(Number.parseInt(container.attr("y")));
                         expect(Number.parseInt(selectionBar.attr("y"))).toEqual(
-                            31
+                            constants.DEFAULT_GANTT_TRACK_SELECTION.y
                         );
                         expect(
                             Number.parseInt(selectionBar.attr("width"))
@@ -399,6 +393,17 @@ describe("Gantt -> Track", () => {
                     () => {
                         expect(args).not.toBeNull();
                         expect(args.cb).toEqual(jasmine.any(Function));
+                        expect(
+                            fetchElementByClass(
+                                `${styles.ganttTrackBarSelection}`
+                            ).getAttribute("aria-selected")
+                        ).toBe("true");
+                        args.cb();
+                        expect(
+                            fetchElementByClass(
+                                `${styles.ganttTrackBarSelection}`
+                            ).getAttribute("aria-selected")
+                        ).toBe("false");
                         expect(args.key).toBe("track 1");
                         expect(args.val).not.toBeNull();
                         expect(args.val.tasks).toEqual([]);
@@ -469,20 +474,12 @@ describe("Gantt -> Track", () => {
                         const container = d3.select(
                             `.${styles.contentContainer}`
                         );
-                        expect(
-                            Number.parseInt(selectionBar.attr("x"))
-                        ).toBeGreaterThan(Number.parseInt(container.attr("x")));
                         expect(Number.parseInt(selectionBar.attr("x"))).toEqual(
-                            getXAxisXPosition(gantt.config) +
-                                constants.DEFAULT_GANTT_TRACK_SELECTION.x
+                            constants.DEFAULT_GANTT_TRACK_SELECTION.x
                         );
-                        // intially config height would be 0, so (top + bottom) * 2 padding + 1
                         expect(Number.parseInt(selectionBar.attr("y"))).toEqual(
-                            31
+                            constants.DEFAULT_GANTT_TRACK_SELECTION.y
                         );
-                        expect(
-                            Number.parseInt(selectionBar.attr("y"))
-                        ).toBeGreaterThan(Number.parseInt(container.attr("y")));
                         expect(
                             Number.parseInt(selectionBar.attr("width"))
                         ).toBeLessThan(
@@ -547,6 +544,91 @@ describe("Gantt -> Track", () => {
                     },
                     TRANSITION_DELAY
                 );
+            });
+        });
+        describe("When unloaded", () => {
+            it("Removes selection-bar", () => {
+                gantt.loadContent({
+                    key: "track 1",
+                    trackLabel: {
+                        display: "label"
+                    },
+                    dimension: {
+                        trackHeight: 160
+                    },
+                    onClick: onClickFunctionSpy,
+                    tasks: [],
+                    activities: []
+                });
+                gantt.unloadContent({
+                    key: "track 1",
+                    trackLabel: {
+                        display: "label"
+                    }
+                });
+                expect(
+                    fetchElementByClass(`${styles.ganttTrackBarSelection}`)
+                ).toBe(null);
+            });
+            it("Translates to new location when one of the tracks is unloaded", (done) => {
+                gantt.loadContent({
+                    key: "track 1",
+                    trackLabel: {
+                        display: "label"
+                    },
+                    dimension: {
+                        trackHeight: 160
+                    },
+                    onClick: onClickFunctionSpy,
+                    tasks: [],
+                    activities: []
+                });
+                gantt.loadContent({
+                    key: "track 2",
+                    trackLabel: {
+                        display: "label 2"
+                    },
+                    dimension: {
+                        trackHeight: 160
+                    },
+                    onClick: onClickFunctionSpy,
+                    tasks: [],
+                    activities: []
+                });
+                const beforeUnload = fetchAllElementsByClass(
+                    ganttChartContainer,
+                    `${styles.ganttTrackBarSelection}`
+                );
+                expect(beforeUnload.length).toBe(2);
+                expect(beforeUnload[0].getAttribute("x")).toBe("1");
+                expect(beforeUnload[0].getAttribute("y")).toBe("1");
+                expect(beforeUnload[0].getAttribute("aria-describedby")).toBe(
+                    "track 1"
+                );
+                expect(beforeUnload[1].getAttribute("x")).toBe("1");
+                expect(beforeUnload[1].getAttribute("y")).toBe("161");
+                expect(beforeUnload[1].getAttribute("aria-describedby")).toBe(
+                    "track 2"
+                );
+                gantt.unloadContent({
+                    key: "track 1",
+                    trackLabel: {
+                        display: "label"
+                    }
+                });
+                delay(() => {
+                    const afterUnload = fetchAllElementsByClass(
+                        ganttChartContainer,
+                        `${styles.ganttTrackBarSelection}`
+                    );
+                    expect(afterUnload.length).toBe(1);
+                    expect(afterUnload[0].getAttribute("x")).toBe("1");
+                    expect(afterUnload[0].getAttribute("y")).toBe("1");
+                    expect(
+                        afterUnload[0].getAttribute("aria-describedby")
+                    ).toBe("track 2");
+                    done();
+                }, TRANSITION_DELAY);
             });
         });
     });

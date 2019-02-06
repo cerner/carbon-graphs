@@ -483,10 +483,10 @@ describe("Gantt -> Track -> Activity", () => {
                 })
             );
             const trackElement = d3.select(`.${styles.trackGroup}`);
-            expect(trackElement[0][0].childNodes[0].getAttribute("class")).toBe(
+            expect(trackElement[0][0].childNodes[1].getAttribute("class")).toBe(
                 "carbon-data-activity-group"
             );
-            expect(trackElement[0][0].childNodes[1].getAttribute("class")).toBe(
+            expect(trackElement[0][0].childNodes[2].getAttribute("class")).toBe(
                 "carbon-data-task-group"
             );
         });
@@ -527,12 +527,12 @@ describe("Gantt -> Track -> Activity", () => {
             );
             const trackElement = d3.select(`.${styles.trackGroup}`);
             expect(
-                trackElement[0][0].childNodes[0].childNodes[0].childNodes[0].getAttribute(
+                trackElement[0][0].childNodes[1].childNodes[0].childNodes[0].getAttribute(
                     "height"
                 )
             ).toBe("31");
             expect(
-                trackElement[0][0].childNodes[1].childNodes[0].childNodes[1].getAttribute(
+                trackElement[0][0].childNodes[2].childNodes[0].childNodes[1].getAttribute(
                     "height"
                 )
             ).toBe("23");

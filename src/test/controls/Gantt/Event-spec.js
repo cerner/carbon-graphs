@@ -244,9 +244,9 @@ describe("Gantt -> Track -> Event", () => {
             expect(pointElements[1].getAttribute("aria-describedby")).toBe(
                 "uid_event_2"
             );
-            expect(
-                pointElements[0].firstChild.getAttribute("transform")
-            ).not.toBe(pointElements[1].firstChild.getAttribute("transform"));
+            expect(pointElements[0].firstChild.getAttribute("transform")).toBe(
+                pointElements[1].firstChild.getAttribute("transform")
+            );
             expect(
                 pointElements[0].firstChild.getAttribute("transform")
             ).not.toBeNull();
@@ -795,11 +795,12 @@ describe("Gantt -> Track -> Event", () => {
                             fetchElementByClass(styles.point).firstChild
                         )[0]
                     ).not.toEqual(currentPointPos[0]);
+                    // currentPointPos[1] referes to y-value of translate. Since the updateTrackProps happen prior to loadEvents, the y-value doesn't change.
                     expect(
                         getTranslate(
                             fetchElementByClass(styles.point).firstChild
                         )[1]
-                    ).not.toEqual(currentPointPos[1]);
+                    ).toEqual(currentPointPos[1]);
                     done();
                 },
                 TRANSITION_DELAY
@@ -824,12 +825,13 @@ describe("Gantt -> Track -> Event", () => {
                                 .firstChild
                         )[0]
                     ).not.toEqual(currentPointPos[0]);
+                    // currentPointPos[1] referes to y-value of translate. Since the updateTrackProps happen prior to loadEvents, the y-value doesn't change.
                     expect(
                         getTranslate(
                             fetchElementByClass(styles.dataPointSelection)
                                 .firstChild
                         )[1]
-                    ).not.toEqual(currentPointPos[1]);
+                    ).toEqual(currentPointPos[1]);
                     done();
                 },
                 TRANSITION_DELAY

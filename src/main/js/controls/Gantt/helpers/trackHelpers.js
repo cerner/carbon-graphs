@@ -13,21 +13,26 @@ import {
  * Generates arguments for creating track rectangles
  * @private
  * @param {Object} config - config object derived from input JSON.
+ * @param {Object} scale - d3 scale for Graph
  * @param {Selection} ganttSelectorGroupPath - d3 track bar selection element
- * @param {String} key - track key
+ * @param {Object} trackConfig - config for the track
  * @returns {Object} List of arguments - target element, x, y, width, height
  */
-const generatorArgs = (config, ganttSelectorGroupPath, key) => ({
+export const generatorArgs = (
+    config,
+    scale,
+    ganttSelectorGroupPath,
+    trackConfig
+) => ({
     path: ganttSelectorGroupPath,
-    x: getXAxisXPosition(config) + constants.DEFAULT_GANTT_TRACK_SELECTION.x,
+    x: constants.DEFAULT_GANTT_TRACK_SELECTION.x,
     y:
-        config.height +
-        getXAxisYPosition(config) +
+        scale.y(trackConfig.trackLabel.display) +
         constants.DEFAULT_GANTT_TRACK_SELECTION.y,
     width:
         getXAxisWidth(config) - constants.DEFAULT_GANTT_TRACK_SELECTION.width,
     height:
-        config.axis.y.trackList[key].trackHeight -
+        config.axis.y.trackList[trackConfig.key].trackHeight -
         constants.DEFAULT_GANTT_TRACK_SELECTION.height
 });
 
@@ -36,7 +41,7 @@ const generatorArgs = (config, ganttSelectorGroupPath, key) => ({
  * @private
  * @param {Object} indicatorArgs - arguments needed for generating rect for selection indicator
  * @param {Object} trackConfig - config dervied from input track JSON.
- * @returns {undefined} - returns nothing.
+ * @returns {void} - returns nothing.
  */
 const renderSelectionIndicator = (indicatorArgs, trackConfig) => {
     getRect(
@@ -81,7 +86,7 @@ const toggleTrackSelection = (target, key) => {
  * @private
  * @param {Object} path - DOM object of the  clicked track.
  * @param {Object} trackConfig - Config of the track derived from
- * @returns {undefined} - returns nothing.
+ * @returns {void} - returns nothing.
  */
 const trackClickActionHandler = (path, trackConfig) => {
     if (utils.isEmpty(trackConfig.onClick)) {
@@ -103,17 +108,42 @@ const trackClickActionHandler = (path, trackConfig) => {
 /**
  * Creates a container for gantt chart content
  * @private
- * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {Object} graphContext - Gantt instance
+ * @param {Object} trackPath - Track container element
  * @param {Object} trackConfig - track's config object
  * @returns {Object} d3 svg path
  */
-export const loadGanttTrackSelector = (config, canvasSVG, trackConfig) => {
-    const ganttTrackSelectorGroupPath = canvasSVG.select(
-        `.${styles.ganttTrackSelectorGroup}`
-    );
+export const loadGanttTrackSelector = (
+    graphContext,
+    trackPath,
+    trackConfig
+) => {
+    const ganttTrackSelectorGroupPath = trackPath
+        .append("g")
+        .classed(styles.ganttTrackSelectorGroup, true)
+        .attr(
+            "transform",
+            `translate(${getXAxisXPosition(
+                graphContext.config
+            )},${getXAxisYPosition(graphContext.config)})`
+        );
     renderSelectionIndicator(
-        generatorArgs(config, ganttTrackSelectorGroupPath, trackConfig.key),
+        generatorArgs(
+            graphContext.config,
+            graphContext.scale,
+            ganttTrackSelectorGroupPath,
+            trackConfig
+        ),
         trackConfig
     );
 };
+
+/**
+ * Selects the trackSelector group and removes them
+ * @private
+ * @param {Object} graphContext - Gantt instance
+ * @param {Object} trackPath - Track container element
+ * @returns {Selection} - track container element
+ */
+export const unloadGanttTrackSelector = (graphContext, trackPath) =>
+    trackPath.select(`g.${styles.ganttTrackSelectorGroup}`).remove();

@@ -23,6 +23,7 @@ import {
     getYAxisYPosition
 } from "./creationHelpers";
 import { calculatePercentage } from "./durationHelpers";
+import { generatorArgs } from "./trackHelpers";
 
 const TRACK_LABEL_TEXT_CLASS = `.${styles.axisYTrackLabel} .tick text`;
 /**
@@ -520,28 +521,23 @@ const translateTasks = (scale, config, trackPath) =>
 /**
  * Translates track selector based on container width.
  * @private
+ * @param {Object} scale - d3 scale for Graph
  * @param {Object} config - base config derived from input JSON.
- * @param {*} canvasSVG - d3 object of canvas svg
- * @param {*} trackConfig - config derived from input track JSON.
+ * @param {Object} trackPathSVG - Track container element
+ * @param {Object} trackConfig - config derived from input track JSON.
  * @returns {undefined} - returns nothing.
  */
-const translateTrackSelector = (config, canvasSVG, trackConfig) => {
-    const ganttTrackSelectorGroupPath = canvasSVG.select(
+const translateTrackSelector = (scale, config, trackPathSVG, trackConfig) => {
+    const ganttTrackSelectorGroupPath = trackPathSVG.select(
         `.${styles.ganttTrackSelectorGroup}`
     );
-    ganttTrackSelectorGroupPath.selectAll("rect").each(function() {
+    ganttTrackSelectorGroupPath.select("rect").each(function() {
         const path = d3.select(this);
+        const _args = generatorArgs(config, scale, path, trackConfig);
         path.transition(constants.d3Transition)
-            .attr(
-                "width",
-                getXAxisWidth(config) -
-                    constants.DEFAULT_GANTT_TRACK_SELECTION.width
-            )
-            .attr(
-                "height",
-                config.axis.y.trackList[trackConfig.key].trackHeight -
-                    constants.DEFAULT_GANTT_TRACK_SELECTION.height
-            );
+            .attr("y", _args.y)
+            .attr("width", _args.width)
+            .attr("height", _args.height);
     });
 };
 /**

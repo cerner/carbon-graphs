@@ -18,7 +18,10 @@ import {
 } from "./helpers/creationHelpers";
 import { loadEvents, unloadEvents } from "./helpers/eventHelpers";
 import { loadTasks, unloadTasks } from "./helpers/taskHelpers";
-import { loadGanttTrackSelector } from "./helpers/trackHelpers";
+import {
+    loadGanttTrackSelector,
+    unloadGanttTrackSelector
+} from "./helpers/trackHelpers";
 import {
     translateActivities,
     translateDataPoints,
@@ -136,6 +139,15 @@ class Track extends GraphContent {
             graph.svg,
             this.config
         );
+        /**
+         * To load the gantt track selector, we need to find the track-height, this gets updated only when updateTrackProps gets called.
+         *
+         * We Need to loadGanttTrackSelector prior to all other components, since trackSelector is part of trackGroup and should be layered bottom,
+         * to ensure the clicable functionality.
+         */
+
+        updateTrackProps(graph.config, this.config, true);
+        loadGanttTrackSelector(graph, this.trackGroupPath, this.config);
         if (utils.notEmpty(this.config.activities)) {
             loadActivities(
                 graph,
@@ -168,8 +180,6 @@ class Track extends GraphContent {
                 this.config.actions
             );
         }
-        updateTrackProps(graph.config, this.config, true);
-        loadGanttTrackSelector(graph.config, graph.svg, this.config);
         return this;
     }
 
@@ -178,6 +188,7 @@ class Track extends GraphContent {
      */
     unload(graph) {
         updateTrackProps(graph.config, this.config);
+        unloadGanttTrackSelector(graph, this.trackGroupPath);
         if (utils.notEmpty(this.config.activities)) {
             unloadActivities(graph, this.trackGroupPath);
         }
@@ -199,7 +210,14 @@ class Track extends GraphContent {
      */
     resize(graph) {
         truncateTrackLabelText();
-        translateTrackSelector(graph.config, graph.svg, this.config);
+        if (utils.notEmpty(this.trackGroupPath)) {
+            translateTrackSelector(
+                graph.scale,
+                graph.config,
+                this.trackGroupPath,
+                this.config
+            );
+        }
         if (utils.notEmpty(this.config.activities)) {
             translateActivities(graph.scale, graph.config, this.trackGroupPath);
         }

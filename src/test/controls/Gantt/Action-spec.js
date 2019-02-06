@@ -810,11 +810,12 @@ describe("Gantt -> Track -> Action", () => {
                             fetchElementByClass(styles.point).firstChild
                         )[0]
                     ).not.toEqual(currentPointPos[0]);
+                    // currentPointPos[1] referes to y-value of translate. Since the updateTrackProps happen prior to loadActions, the y-value doesn't change.
                     expect(
                         getTranslate(
                             fetchElementByClass(styles.point).firstChild
                         )[1]
-                    ).not.toEqual(currentPointPos[1]);
+                    ).toEqual(currentPointPos[1]);
                     done();
                 },
                 TRANSITION_DELAY
@@ -839,12 +840,13 @@ describe("Gantt -> Track -> Action", () => {
                                 .firstChild
                         )[0]
                     ).not.toEqual(currentPointPos[0]);
+                    // currentPointPos[1] referes to y-value of translate. Since the updateTrackProps happen prior to loadActions, the y-value doesn't change.
                     expect(
                         getTranslate(
                             fetchElementByClass(styles.dataPointSelection)
                                 .firstChild
                         )[1]
-                    ).not.toEqual(currentPointPos[1]);
+                    ).toEqual(currentPointPos[1]);
                     done();
                 },
                 TRANSITION_DELAY
