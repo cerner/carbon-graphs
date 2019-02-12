@@ -35,7 +35,7 @@ describe("Bar", () => {
     afterEach(() => {
         document.body.innerHTML = "";
     });
-    describe("when constructed", () => {
+    describe("When constructed", () => {
         it("initializes properly", () => {
             const bar = new Bar(getInput(valuesDefault));
             expect(bar.config).not.toBeNull();
@@ -138,7 +138,7 @@ describe("Bar", () => {
             expect(bar.valuesRange.y2).toBeUndefined();
         });
     });
-    describe("when graph is loaded with input", () => {
+    describe("When graph is loaded with input", () => {
         afterEach(() => {
             graphDefault.destroy();
         });
@@ -1065,8 +1065,90 @@ describe("Bar", () => {
                 });
             });
         });
+        describe("Prepares to load label shape", () => {
+            let graph;
+            beforeEach(() => {
+                graphDefault.destroy();
+                graph = new Graph(getAxes(axisDefault));
+                const barPrimary = getInput(valuesDefault, true, true, true);
+                const barSecondary = getInput(valuesDefault, true, true, false);
+                barSecondary.key = "uid_2";
+                graph.loadContent(new Bar(barPrimary));
+                graph.loadContent(new Bar(barSecondary));
+            });
+            it("Does not load shape if Y2 axis is not loaded", () => {
+                graphDefault.destroy();
+                const axes = utils.deepClone(getAxes(axisDefault));
+                axes.axis.y2.show = false;
+                const graph = new Graph(axes);
+                const input = getInput(valuesDefault, true, true, false);
+                graph.loadContent(new Bar(input));
+                expect(
+                    graph.axesLabelShapeGroup[constants.Y_AXIS]
+                ).toBeUndefined();
+                expect(
+                    graph.axesLabelShapeGroup[constants.Y2_AXIS]
+                ).toBeUndefined();
+            });
+            it("Loads shape in Y Axis", () => {
+                const labelShapeContainer = fetchElementByClass(
+                    barGraphContainer,
+                    styles.axisLabelYShapeContainer
+                );
+                const svgPath = labelShapeContainer.children[0];
+                expect(
+                    graph.axesLabelShapeGroup[constants.Y_AXIS]
+                ).not.toBeUndefined();
+                expect(labelShapeContainer.children.length).toBe(1);
+                expect(svgPath.tagName).toBe("svg");
+                expect(svgPath.getAttribute("x")).toBe("0");
+                expect(svgPath.getAttribute("aria-describedby")).toBe("uid_2");
+            });
+            it("Loads shape for each data set in Y Axis", () => {
+                const barTertiary = getInput(valuesDefault, true, true, false);
+                barTertiary.key = "uid_3";
+                graph.loadContent(new Bar(barTertiary));
+                const labelShapeContainer = fetchElementByClass(
+                    barGraphContainer,
+                    styles.axisLabelYShapeContainer
+                );
+                const svgPath = labelShapeContainer.children[1];
+                expect(labelShapeContainer.children.length).toBe(2);
+                expect(svgPath.tagName).toBe("svg");
+                expect(svgPath.getAttribute("x")).toBe("20");
+                expect(svgPath.getAttribute("aria-describedby")).toBe("uid_3");
+            });
+            it("Loads shape in Y2 Axis", () => {
+                const labelShapeContainer = fetchElementByClass(
+                    barGraphContainer,
+                    styles.axisLabelY2ShapeContainer
+                );
+                const svgPath = labelShapeContainer.children[0];
+                expect(
+                    graph.axesLabelShapeGroup[constants.Y2_AXIS]
+                ).not.toBeUndefined();
+                expect(labelShapeContainer.children.length).toBe(1);
+                expect(svgPath.tagName).toBe("svg");
+                expect(svgPath.getAttribute("x")).toBe("0");
+                expect(svgPath.getAttribute("aria-describedby")).toBe("uid_1");
+            });
+            it("Loads shape for each data set in Y2 Axis", () => {
+                const barTertiary = getInput(valuesDefault, true, true, true);
+                barTertiary.key = "uid_4";
+                graph.loadContent(new Bar(barTertiary));
+                const labelShapeContainer = fetchElementByClass(
+                    barGraphContainer,
+                    styles.axisLabelY2ShapeContainer
+                );
+                const svgPath = labelShapeContainer.children[1];
+                expect(labelShapeContainer.children.length).toBe(2);
+                expect(svgPath.tagName).toBe("svg");
+                expect(svgPath.getAttribute("x")).toBe("20");
+                expect(svgPath.getAttribute("aria-describedby")).toBe("uid_4");
+            });
+        });
     });
-    describe("when graph is unloaded off input", () => {
+    describe("When graph is unloaded off input", () => {
         let bar;
         beforeEach(() => {
             bar = new Bar(getInput(valuesDefault, false, false));
@@ -1104,6 +1186,85 @@ describe("Bar", () => {
             graphDefault.unloadContent(bar);
             expect(bar.dataTarget).toEqual({});
             expect(bar.config).toEqual({});
+        });
+        describe("Removes label shape from label container", () => {
+            let graph;
+            let barPrimary;
+            let barSecondary;
+            beforeEach(() => {
+                graphDefault.destroy();
+                graph = new Graph(getAxes(axisDefault));
+                barPrimary = new Bar(getInput(valuesDefault, true, true, true));
+                barSecondary = new Bar(
+                    getInput(valuesDefault, true, true, false, "uid_2")
+                );
+                graph.loadContent(barPrimary);
+                graph.loadContent(barSecondary);
+            });
+            it("Verifies content is present", () => {
+                expect(
+                    graph.axesLabelShapeGroup[constants.Y_AXIS]
+                ).not.toBeUndefined();
+                expect(
+                    graph.axesLabelShapeGroup[constants.Y2_AXIS]
+                ).not.toBeUndefined();
+            });
+            it("For Y axis", () => {
+                graph.unloadContent(barSecondary);
+                const labelShapeContainer = fetchElementByClass(
+                    barGraphContainer,
+                    styles.axisLabelYShapeContainer
+                );
+                expect(labelShapeContainer.children.length).toBe(0);
+            });
+            it("For Y axis with multiple data set", () => {
+                graph.loadContent(
+                    new Bar(getInput(valuesDefault, true, true, false, "uid_3"))
+                );
+                graph.unloadContent(barSecondary);
+                const labelShapeContainer = fetchElementByClass(
+                    barGraphContainer,
+                    styles.axisLabelYShapeContainer
+                );
+                expect(labelShapeContainer.children.length).toBe(1);
+                expect(labelShapeContainer.children[0].tagName).toBe("svg");
+                expect(labelShapeContainer.children[0].getAttribute("x")).toBe(
+                    "0"
+                );
+                expect(
+                    labelShapeContainer.children[0].getAttribute(
+                        "aria-describedby"
+                    )
+                ).toBe("uid_3");
+            });
+            it("For Y2 axis", () => {
+                graph.unloadContent(barPrimary);
+                const labelShapeContainer = fetchElementByClass(
+                    barGraphContainer,
+                    styles.axisLabelY2ShapeContainer
+                );
+                expect(labelShapeContainer.children.length).toBe(0);
+            });
+            it("For Y2 axis with multiple data set", () => {
+                graph.loadContent(
+                    new Bar(getInput(valuesDefault, true, true, true, "uid_4"))
+                );
+                graph.unloadContent(barPrimary);
+                const labelShapeContainer = fetchElementByClass(
+                    barGraphContainer,
+                    styles.axisLabelY2ShapeContainer
+                );
+                expect(labelShapeContainer.children.length).toBe(1);
+                expect(labelShapeContainer.children[0].tagName).toBe("svg");
+                expect(labelShapeContainer.children[0].getAttribute("x")).toBe(
+                    "0"
+                );
+                expect(
+                    labelShapeContainer.children[0].getAttribute(
+                        "aria-describedby"
+                    )
+                ).toBe("uid_4");
+            });
         });
     });
     describe("Region", () => {
@@ -1483,7 +1644,7 @@ describe("Bar", () => {
                     styles.region
                 );
                 expect(+regionElement.getAttribute("height")).toBe(
-                    constants.PADDING.top
+                    constants.DEFAULT_REGION_GOAL_LINE_STROKE_WIDTH
                 );
             });
             it("Creates region correctly when start is not provided", () => {

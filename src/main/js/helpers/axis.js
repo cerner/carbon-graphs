@@ -320,7 +320,7 @@ const getXAxisLabelYPosition = (config) =>
         ? calculateVerticalPadding(config) - config.axisLabelHeights.x * 2
         : getXAxisYPosition(config) +
           config.axisLabelHeights.x * 2 +
-          config.padding.bottom;
+          config.padding.bottom * 2;
 /**
  * Y Axis label's starting position vertically beside the graph
  * @private
@@ -328,7 +328,7 @@ const getXAxisLabelYPosition = (config) =>
  * @returns {number} Position for the label
  */
 const getYAxisLabelXPosition = (config) =>
-    getYAxisXPosition(config) - config.axisSizes.y + config.axisLabelWidths.y;
+    config.padding.left - config.axisLabelWidths.y;
 /**
  * Y Axis label's position distance away from the graph
  * @private
@@ -337,7 +337,40 @@ const getYAxisLabelXPosition = (config) =>
  */
 const getYAxisLabelYPosition = (config) =>
     getYAxisYPosition(config) +
-    (getYAxisHeight(config) - config.padding.top - config.padding.bottom) / 2;
+    (getYAxisHeight(config) - config.padding.left / 2) / 2;
+/**
+ * Y Axis label shape starting position vertically beside the graph
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @returns {number} Position for the label shape
+ */
+const getYAxisLabelShapeXPosition = (config) =>
+    getYAxisLabelXPosition(config) + constants.BASE_LABEL_ICON_HEIGHT_PADDING;
+/**
+ * Y Axis label shape position distance away from the graph.
+ * We are taking the Container height and adding it with
+ * half of the width for label shape container so that it centers to the graph.
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @param {Selection} labelShapeContainer - d3 element for label shape container
+ * @returns {number} Position for the label
+ */
+const getYAxisLabelShapeYPosition = (config, labelShapeContainer) =>
+    getYAxisHeight(config) / 2 +
+    labelShapeContainer.node().getBoundingClientRect().height / 2;
+/**
+ * Y2 Axis label shape position distance away from the graph.
+ * We are taking the Container height and subtracting it with
+ * Label shape container width to center it with respect to the
+ * container in reverse order.
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @param {Selection} labelShapeContainer - d3 element for label shape container
+ * @returns {number} Position for the label
+ */
+const getY2AxisLabelShapeYPosition = (config, labelShapeContainer) =>
+    getYAxisHeight(config) / 2 -
+    labelShapeContainer.node().getBoundingClientRect().height / 2;
 /**
  * Y2 Axis label's starting position vertically beside the graph
  * @private
@@ -346,9 +379,16 @@ const getYAxisLabelYPosition = (config) =>
  */
 const getY2AxisLabelXPosition = (config) =>
     getY2AxisXPosition(config) +
-    config.axisSizes.y2 -
     config.padding.right +
     config.axisLabelWidths.y2;
+/**
+ * Y2 Axis label shape starting position vertically beside the graph
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @returns {number} Position for the label shape
+ */
+const getY2AxisLabelShapeXPosition = (config) =>
+    getY2AxisLabelXPosition(config) - constants.BASE_LABEL_ICON_HEIGHT_PADDING;
 /**
  * Calculates Vertical Padding according to X Axis orientation
  * @private
@@ -701,12 +741,12 @@ const determineOutlierStretchFactor = (config) => {
 /**
  * Returns the d3 html element after appending axis label text
  * @private
- * @param {Array} grouper - d3 html element
+ * @param {Array} group - d3 html element
  * @param {string} label - Label text
  * @returns {Array} d3 html element
  */
-const buildAxisLabel = (grouper, label) =>
-    grouper
+const buildAxisLabel = (group, label) =>
+    group
         .append("text")
         .attr("text-anchor", "middle")
         .append("tspan")
@@ -908,8 +948,12 @@ export {
     getXAxisLabelXPosition,
     getXAxisLabelYPosition,
     getYAxisLabelXPosition,
+    getYAxisLabelShapeXPosition,
     getYAxisLabelYPosition,
     getY2AxisLabelXPosition,
+    getY2AxisLabelShapeXPosition,
+    getYAxisLabelShapeYPosition,
+    getY2AxisLabelShapeYPosition,
     getXAxisXPosition,
     getXAxisYPosition,
     getYAxisXPosition,

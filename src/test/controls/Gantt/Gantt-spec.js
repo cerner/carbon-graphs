@@ -262,10 +262,10 @@ describe("Gantt", () => {
             const ganttConfig = getAxes(axisJSON);
             gantt = new Gantt(ganttConfig);
             const expectedOutput = {
-                top: 5,
-                bottom: 10,
+                top: 10,
+                bottom: 5,
                 left: 100, // defaults to constants trackLabel
-                right: 30,
+                right: 50,
                 hasCustomPadding: false
             };
             expect(gantt.config.padding).toEqual(expectedOutput);
@@ -287,9 +287,9 @@ describe("Gantt", () => {
             gantt = new Gantt(ganttConfig);
             const expectedOutput = {
                 top: 50,
-                bottom: 10,
+                bottom: 5,
                 left: 100,
-                right: 30,
+                right: 50,
                 hasCustomPadding: true
             };
             expect(gantt.config.padding).toEqual(expectedOutput);
@@ -299,7 +299,7 @@ describe("Gantt", () => {
                 gantt.config.axisSizes.y + gantt.config.axisLabelWidths.y
             );
             expect(Number.parseInt(contentContainer.attr("y"), 10)).toEqual(
-                (50 + 10) * 2
+                (50 + 5) * 2
             );
         });
         it("position of content container starts where canvas starts", () => {

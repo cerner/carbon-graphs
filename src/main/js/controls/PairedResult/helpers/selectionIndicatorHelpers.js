@@ -3,7 +3,7 @@ import Shape, { getDefaultSVGProps } from "../../../core/Shape";
 import constants, { SHAPES } from "../../../helpers/constants";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
-import { getTransformScale } from "../../Graph/helpers/helpers";
+import { getTransformScale } from "../../../helpers/transformUtils";
 import { getSVGObject } from "./helpers";
 
 /**

@@ -10,11 +10,9 @@ import constants, { AXES_ORIENTATION } from "../../../helpers/constants";
 import { prepareHAxis, translateVGrid } from "../../../helpers/datetimeBuckets";
 import { shouldTruncateLabel, truncateLabel } from "../../../helpers/label";
 import styles from "../../../helpers/styles";
+import { getTransformScale } from "../../../helpers/transformUtils";
 import utils from "../../../helpers/utils";
-import {
-    getTransformScale,
-    translateCanvas
-} from "../../Graph/helpers/helpers";
+import { translateCanvas } from "../../Graph/helpers/helpers";
 import {
     getAxesScale,
     getXAxisWidth,

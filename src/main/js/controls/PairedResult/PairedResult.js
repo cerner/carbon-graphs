@@ -1,6 +1,8 @@
 "use strict";
 import { GraphContent } from "../../core";
+import { getDefaultValue } from "../../core/BaseConfig";
 import constants from "../../helpers/constants";
+import { prepareLabelItem, removeLabelShapeItem } from "../../helpers/label";
 import { removeLegendItem } from "../../helpers/legend";
 import {
     hideAllRegions,
@@ -13,7 +15,9 @@ import {
     clear,
     clickHandler,
     draw,
+    getValue,
     hoverHandler,
+    iterateOnPairType,
     prepareLegendItems,
     processDataPoints,
     renderRegion,
@@ -103,6 +107,10 @@ class PairedResult extends GraphContent {
     constructor(input) {
         super();
         this.config = loadInput(input);
+        this.config.yAxis = getDefaultValue(
+            this.config.yAxis,
+            constants.Y_AXIS
+        );
         this.valuesRange = calculateValuesRange(
             this.config.values,
             this.config.yAxis
@@ -133,6 +141,20 @@ class PairedResult extends GraphContent {
             this.dataTarget,
             graph.legendSVG
         );
+        if (graph.axesLabelShapeGroup[this.config.yAxis]) {
+            iterateOnPairType((type) => {
+                prepareLabelItem(
+                    graph.config,
+                    {
+                        key: `${this.dataTarget.key}_${type}`,
+                        label: getValue(this.dataTarget.label, type),
+                        color: getValue(this.dataTarget.color, type),
+                        shape: getValue(this.dataTarget.shape, type)
+                    },
+                    graph.axesLabelShapeGroup[this.config.yAxis]
+                );
+            });
+        }
         return this;
     }
 
@@ -145,7 +167,15 @@ class PairedResult extends GraphContent {
             graph.svg.select(`.${styles.regionGroup}`),
             this.dataTarget
         );
-        removeLegendItem(graph.legendSVG, this.dataTarget);
+        iterateOnPairType((type) => {
+            const key = `${this.dataTarget.key}_${type}`;
+            removeLegendItem(graph.legendSVG, {
+                key
+            });
+            removeLabelShapeItem(graph.axesLabelShapeGroup[this.config.yAxis], {
+                key
+            });
+        });
         this.dataTarget = {};
         this.config = {};
         return this;
@@ -168,6 +198,7 @@ class PairedResult extends GraphContent {
                 )
             );
         }
+
         translatePairedResultGraph(graph.scale, graph.config, graph.svg);
         return this;
     }

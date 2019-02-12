@@ -115,16 +115,19 @@ export const AXES_ORIENTATION = {
  */
 export default {
     PADDING: {
-        top: 5,
-        bottom: 10,
+        top: 10,
+        bottom: 5,
         left: 30,
-        right: 30,
+        right: 50,
         trackLabel: 100
     },
     PAIR_ITEM_TYPES: ["high", "mid", "low"],
     ISO8601_DATE_TIME_MILLI: /(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}(:\d{2}(\.\d+)*)*)Z/,
     RESIZE_THROTTLE: 1000 / 60,
     BASE_CANVAS_WIDTH_PADDING: 10,
+    BASE_LABEL_ICON_SPACING: 20,
+    BASE_LABEL_ICON_WIDTH_PADDING: 5,
+    BASE_LABEL_ICON_HEIGHT_PADDING: 12,
     TIMELINE_HEIGHT: 40,
     DEFAULT_HEIGHT: 250,
     DEFAULT_PLOT_SCALE: 0.275,
@@ -165,6 +168,7 @@ export default {
     DEFAULT_BAR_HASH_COLOR: "#d3d4d5",
     DEFAULT_BAR_COLOR: COLORS.BLUE,
     DEFAULT_BAR_REGION_COLOR: "#bcbfc0",
+    DEFAULT_REGION_GOAL_LINE_STROKE_WIDTH: 5,
     DEFAULT_BAR_SELECTION_PADDING: 5,
     DEFAULT_ACTIVITY_BAR_HASH_COLOR: "#d3d4d5",
     DEFAULT_TASK_BAR_HASH_COLOR: "#007cc3",

@@ -71,7 +71,7 @@ barDefault.loadContent(Carbon.api.bar(/* Data array D */));
 | showLegend    | boolean  | true                                          | Toggle to show graph legend                                                          |
 | showVGrid     | boolean  | true                                          | Toggle to show vertical grid                                                         |
 | showHGrid     | boolean  | true                                          | Toggle to show horizontal grid                                                       |
-| padding       | object   | `{ top: 5, bottom: 10, left: 30, right: 30 }` | Refer [Padding](Padding.md)                                                          |
+| padding       | object   | `{ top: 10, bottom: 5, left: 30, right: 50 }` | Refer [Padding](Padding.md)                                                          |
 
 ### Data
 

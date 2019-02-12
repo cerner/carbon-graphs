@@ -84,7 +84,7 @@ ganttInstance.loadContent(/* Data Object D */);
 | dateline         | object   | {}                                             | Refer [Dateline](#dateline)                                                          |
 | actionLegend     | array    | []                                             | Refer [Action Legend](#action-legend)                                                |
 | showActionLegend | boolean  | true                                           | Toggle to show graph legend                                                          |
-| padding          | object   | `{ top: 5, bottom: 10, left: 100, right: 30 }` | Refer [Padding](Padding.md)                                                          |
+| padding          | object   | `{ top: 10, bottom: 5, left: 100, right: 50 }` | Refer [Padding](Padding.md)                                                          |
 
 ### Axis
 

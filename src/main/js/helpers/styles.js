@@ -28,6 +28,8 @@ export default {
     axisLabelX: "carbon-x-axis-label",
     axisLabelY: "carbon-y-axis-label",
     axisLabelY2: "carbon-y2-axis-label",
+    axisLabelYShapeContainer: "carbon-y-axis-label-shape-container",
+    axisLabelY2ShapeContainer: "carbon-y2-axis-label-shape-container",
     axisLabelRow: "carbon-axis-label-row",
     axisLabel: "carbon-axis-label-item",
     axisYTrackLabel: "carbon-y-axis-track-label",

@@ -15,7 +15,6 @@ import {
 } from "../controls/line";
 import {
     renderMultiPairedResultRegion,
-    renderPairedResultRegionMultiple,
     renderPairedResultRegionSimple
 } from "../controls/pairedResult";
 import {
@@ -75,13 +74,6 @@ export const triggerRegionsExample = (
             contentSection,
             "lineRegionMultiple",
             "Line - Multiple Regions"
-        )
-    );
-    instance.load(
-        renderPairedResultRegionMultiple(
-            contentSection,
-            "pairedRegionMultiple",
-            "Paired Result - Multiple Regions"
         )
     );
     instance.load(

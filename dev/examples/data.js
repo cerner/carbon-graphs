@@ -1026,7 +1026,7 @@ const DATA = [
                     onClick: loadTimelinePopup,
                     values: [
                         {
-                            x: new Date(2016, 0, 1, 1, 5).toISOString(),
+                            x: new Date(2016, 0, 1, 1, 30).toISOString(),
                             content: bobRossIpsum
                         },
                         {

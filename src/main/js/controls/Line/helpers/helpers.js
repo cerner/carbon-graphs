@@ -24,12 +24,12 @@ import {
 } from "../../../helpers/region";
 import { getSVGObject } from "../../../helpers/shapeSVG";
 import styles from "../../../helpers/styles";
+import { getTransformScale } from "../../../helpers/transformUtils";
 import utils from "../../../helpers/utils";
 import {
     d3RemoveElement,
     getColorForTarget,
-    getShapeForTarget,
-    getTransformScale
+    getShapeForTarget
 } from "../../Graph/helpers/helpers";
 
 /**

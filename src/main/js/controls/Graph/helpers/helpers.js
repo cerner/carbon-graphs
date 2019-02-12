@@ -25,6 +25,11 @@ import {
 } from "../../../helpers/axis";
 import constants, { SHAPES } from "../../../helpers/constants";
 import { createVGrid, translateVGrid } from "../../../helpers/datetimeBuckets";
+import {
+    buildY2AxisLabelShapeContainer,
+    buildYAxisLabelShapeContainer,
+    translateLabelShapeContainer
+} from "../../../helpers/label";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 
@@ -235,7 +240,7 @@ const translateLabel = (config, canvasSVG) => {
  * If the consumer needs to pad the X Axis then they can provide the range with sufficient padding.
  * @private
  * @param {Object} config - config object derived from input JSON
- * @param {Array} [input] - array of target objects
+ * @param {Object} [input] - array of target objects
  * @returns {Object} config - config object derived from input JSON
  */
 const updateAxesDomain = (config, input = {}) => {
@@ -334,14 +339,13 @@ const createVGridHandler = (gridSVG, axis, style, config) => {
  * Only if showLabel is enabled. X Axis is 0 deg rotated, Y Axis is rotated 90 deg
  * Y2 Axis is rotated -90 deg along its horizontal axis.
  * @private
- * @todo Add shapes for each datapoint set into corresponding axis
- * @todo Add datapoint set label to corresponding axis
  * @todo Label overflow formatting, adding ellipsis?
  * @param {Object} config - config object derived from input JSON
  * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {Object} control - Graph instance
  * @returns {undefined} - returns nothing
  */
-const createLabel = (config, canvasSVG) => {
+const createLabel = (config, canvasSVG, control) => {
     if (config.showLabel) {
         if (config.axis.x.label) {
             const labelPath = canvasSVG
@@ -384,6 +388,19 @@ const createLabel = (config, canvasSVG) => {
                     )}) rotate(${getRotationForAxis(constants.Y2_AXIS)})`
                 );
             buildAxisLabel(labelPath, utils.sanitize(config.axis.y2.label));
+            /*
+             * Label shapes are only applicable when we have a Y2 Axis
+             * */
+            control.axesLabelShapeGroup = {
+                [constants.Y_AXIS]: buildYAxisLabelShapeContainer(
+                    config,
+                    canvasSVG
+                ),
+                [constants.Y2_AXIS]: buildY2AxisLabelShapeContainer(
+                    config,
+                    canvasSVG
+                )
+            };
         }
     }
 };
@@ -470,6 +487,7 @@ const translateGraph = (control) => {
     translateGrid(control.axis, control.scale, control.config, control.svg);
     translateContentContainer(control.config, control.svg);
     translateLabel(control.config, control.svg);
+    translateLabelShapeContainer(control.config, control.axesLabelShapeGroup);
     translateAxisReferenceLine(
         control.axis,
         control.scale,
@@ -535,34 +553,6 @@ const getShapeForTarget = (dataPoint) => dataPoint.shape || SHAPES.CIRCLE;
  */
 const getColorForTarget = (dataPoint) =>
     dataPoint.color || constants.DEFAULT_COLOR;
-/**
- * Returns the current d3 transform attribute object from context object
- * @private
- * @param {Object} context - d3 element
- * @returns {Object} returns the current d3 transform attribute object
- */
-const getCurrentTransform = (context) => d3.select(context).attr("transform");
-/**
- * Rounds to 2 decimals places. Use scaling technique
- * to bring two figures across the decimal point turning the figure into a whole number by
- * adding 0.00001 and then rounding it to 2 decimal places.
- * @private
- * @param {number} v - A long decimal
- * @returns {number} decimal rounded to 2 decimal places
- */
-const round2Decimals = (v) => Math.round((v + 0.00001) * 100) / 100;
-/**
- * Returns the scale from current d3 transform attribute object within context object
- * d3 transform for a scale returns decimal number like: 1.9000000953674316 for 1.9 or
- * 1.100000023841858 for 1.1. We are going to round this to 2 decimal places.
- * @private
- * @param {Object} context - d3 element
- * @returns {Array<number>} returns the scale from d3 element
- */
-const getTransformScale = (context) =>
-    d3
-        .transform(getCurrentTransform(context))
-        .scale.map((v) => round2Decimals(v));
 /**
  * Attach event handlers for Line graph.
  * requestAnimationFrame will be used if consumer doesn't need
@@ -647,9 +637,6 @@ export {
     determineHeight,
     getShapeForTarget,
     getColorForTarget,
-    round2Decimals,
-    getCurrentTransform,
-    getTransformScale,
     attachEventHandlers,
     detachEventHandlers,
     d3RemoveElement,

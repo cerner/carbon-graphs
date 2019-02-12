@@ -37,7 +37,7 @@ describe("Graph", () => {
     afterEach(() => {
         document.body.innerHTML = "";
     });
-    describe("when constructed", () => {
+    describe("When constructed", () => {
         it("throws error on undefined input", () => {
             expect(() => {
                 graph = new Graph();
@@ -56,7 +56,7 @@ describe("Graph", () => {
             expect(graph.resizeHandler).toEqual(jasmine.any(Function));
         });
     });
-    describe("when input is loaded", () => {
+    describe("When input is loaded", () => {
         it("throws error if no bind is present", () => {
             expect(() => {
                 const input = getAxes(axisDefault);
@@ -389,7 +389,7 @@ describe("Graph", () => {
             expect(graph.config.bindLegendTo).toEqual(input.bindLegendTo);
         });
     });
-    describe("when beforeInit is called", () => {
+    describe("When beforeInit is called", () => {
         describe("with normal type values", () => {
             beforeEach(() => {
                 graph = new Graph(getAxes(axisDefault));
@@ -497,7 +497,7 @@ describe("Graph", () => {
             });
         });
     });
-    describe("when init is called", () => {
+    describe("When init is called", () => {
         describe("with normal type values", () => {
             beforeEach(() => {
                 graph = new Graph(getAxes(axisDefault));
@@ -516,7 +516,7 @@ describe("Graph", () => {
             it("sets X axis position correctly", () => {
                 const axisXElement = fetchElementByClass(styles.axisX);
                 expect(axisXElement.getAttribute("transform")).toContain(
-                    "translate(72, 240)"
+                    "translate(72, 245)"
                 );
             });
             it("returns the consumer set height if dimension is provided", () => {
@@ -659,7 +659,7 @@ describe("Graph", () => {
             });
         });
     });
-    describe("when generate is called", () => {
+    describe("When generate is called", () => {
         beforeEach(() => {
             graph = new Graph(getAxes(axisDefault));
         });
@@ -1533,10 +1533,10 @@ describe("Graph", () => {
                     "rotate(-90)"
                 );
                 expect(yLabelElement.getAttribute("transform")).toContain(
-                    "translate(34, 115)"
+                    "translate(13, 120)"
                 );
             });
-            it("changes label y axis position when height proprty of graph is set to custom value", () => {
+            it("changes label y axis position when height property of graph is set to custom value", () => {
                 graph.destroy();
                 const axes = getAxes(axisDefault);
                 axes.dimension = { height: 100 };
@@ -1544,10 +1544,10 @@ describe("Graph", () => {
 
                 const yLabelElement = fetchElementByClass(styles.axisLabelY);
                 expect(yLabelElement.getAttribute("transform")).not.toContain(
-                    "translate(34, 115)"
+                    "translate(13, 120)"
                 );
                 expect(yLabelElement.getAttribute("transform")).toContain(
-                    "translate(34, 47.5)"
+                    "translate(13, 52.5)"
                 );
             });
             it("doesnt create label x axis when text is not present", () => {
@@ -1590,6 +1590,75 @@ describe("Graph", () => {
                 expect(yLabelElement.querySelector("tspan").textContent).toBe(
                     "&lt;HELLO DUMMY Y LABEL&gt;"
                 );
+            });
+            it("Does not create label shape container when Y2 axis is not provided", () => {
+                graph.destroy();
+                graph = new Graph(getAxes(utils.deepClone(axisDefault)));
+                const canvasElement = fetchElementByClass(styles.canvas);
+                expect(
+                    canvasElement.querySelector(
+                        `.${styles.axisLabelYShapeContainer}`
+                    )
+                ).toBeNull();
+                expect(
+                    canvasElement.querySelector(
+                        `.${styles.axisLabelY2ShapeContainer}`
+                    )
+                ).toBeNull();
+            });
+            it("Creates label shape container when Y2 axis is provided", () => {
+                graph.destroy();
+                graph = new Graph(
+                    getAxes({
+                        x: axisDefault.x,
+                        y: axisDefault.y,
+                        y2: {
+                            show: true,
+                            lowerLimit: 0,
+                            upperLimit: 200,
+                            label: "Some Y2 label"
+                        }
+                    })
+                );
+                const canvasElement = fetchElementByClass(styles.canvas);
+                const yAxisShapeContainer = canvasElement.querySelector(
+                    `.${styles.axisLabelYShapeContainer}`
+                );
+                const y2AxisShapeContainer = canvasElement.querySelector(
+                    `.${styles.axisLabelY2ShapeContainer}`
+                );
+                expect(yAxisShapeContainer).not.toBeNull();
+                expect(y2AxisShapeContainer).not.toBeNull();
+                expect(yAxisShapeContainer.tagName).toBe("g");
+                expect(y2AxisShapeContainer.tagName).toBe("g");
+            });
+            it("Hides label shape container if flag is turned off", () => {
+                graph.destroy();
+                const labelAxisObj = utils.deepClone(
+                    getAxes({
+                        x: axisDefault.x,
+                        y: axisDefault.y,
+                        y2: {
+                            show: true,
+                            lowerLimit: 0,
+                            upperLimit: 200,
+                            label: "Some Y2 label"
+                        }
+                    })
+                );
+                labelAxisObj.showLabel = false;
+                graph = new Graph(labelAxisObj);
+                const canvasElement = fetchElementByClass(styles.canvas);
+                expect(
+                    canvasElement.querySelector(
+                        `.${styles.axisLabelYShapeContainer}`
+                    )
+                ).toBeNull();
+                expect(
+                    canvasElement.querySelector(
+                        `.${styles.axisLabelY2ShapeContainer}`
+                    )
+                ).toBeNull();
             });
         });
         describe("legend", () => {
@@ -1688,7 +1757,7 @@ describe("Graph", () => {
             expect(graph.resizeHandler).toEqual(jasmine.any(Function));
         });
     });
-    describe("when resize is called", () => {
+    describe("When resize is called", () => {
         beforeEach(() => {
             graph = new Graph(getAxes(axisDefault));
         });
@@ -1801,6 +1870,44 @@ describe("Graph", () => {
                 throttledInput.throttle
             );
         });
+        it("translates label shape container when Y2 axis is provided", (done) => {
+            graph.destroy();
+            graph = new Graph(
+                getAxes({
+                    x: axisDefault.x,
+                    y: axisDefault.y,
+                    y2: {
+                        show: true,
+                        lowerLimit: 0,
+                        upperLimit: 200,
+                        label: "Some Y2 label"
+                    }
+                })
+            );
+            graphContainer.setAttribute("style", "width: 400px; height: 200px");
+            triggerEvent(window, "resize", () => {
+                const canvasElement = fetchElementByClass(styles.canvas);
+                const yAxisShapeContainer = canvasElement.querySelector(
+                    `.${styles.axisLabelYShapeContainer}`
+                );
+                const y2AxisShapeContainer = canvasElement.querySelector(
+                    `.${styles.axisLabelY2ShapeContainer}`
+                );
+                expect(yAxisShapeContainer.getAttribute("transform")).toContain(
+                    "translate"
+                );
+                expect(yAxisShapeContainer.getAttribute("transform")).toContain(
+                    "rotate(-90)"
+                );
+                expect(
+                    y2AxisShapeContainer.getAttribute("transform")
+                ).toContain("translate");
+                expect(
+                    y2AxisShapeContainer.getAttribute("transform")
+                ).toContain("rotate(90)");
+                done();
+            });
+        });
         /**
          * BF12182018.01 - Verify the consumer has the option to provide custom padding for the graph-container.
          */
@@ -1810,10 +1917,10 @@ describe("Graph", () => {
                 graph.destroy();
                 graph = new Graph(axisData);
                 const expectedOutput = {
-                    top: 5,
-                    bottom: 10,
+                    top: 10,
+                    bottom: 5,
                     left: 30,
-                    right: 30,
+                    right: 50,
                     hasCustomPadding: false
                 };
                 expect(graph.config.padding).toEqual(expectedOutput);
@@ -1827,9 +1934,9 @@ describe("Graph", () => {
                 graph = new Graph(axisData);
                 const expectedOutput = {
                     top: 40,
-                    bottom: 10,
+                    bottom: 5,
                     left: 30,
-                    right: 30,
+                    right: 50,
                     hasCustomPadding: true
                 };
                 expect(graph.config.padding).toEqual(expectedOutput);
@@ -1968,7 +2075,7 @@ describe("Graph", () => {
             });
         });
     });
-    describe("when unload is called", () => {
+    describe("When unload is called", () => {
         const primaryContent = new Line(getData(valuesDefault));
         const secondaryContent = new Line(getData(valuesDefault));
         it("throws error when unloading a content which isnt loaded", () => {
@@ -2031,7 +2138,7 @@ describe("Graph", () => {
             );
         });
     });
-    describe("when destruct is called", () => {
+    describe("When destruct is called", () => {
         beforeEach(() => {
             graph = new Graph(getAxes(axisDefault));
             graph.destroy();
@@ -2075,7 +2182,7 @@ describe("Graph", () => {
             expect(graph.contentTargets).toEqual([]);
         });
     });
-    describe("when x axis orientation is set to top", () => {
+    describe("When x axis orientation is set to top", () => {
         it("processes the default input correctly", () => {
             const xAxisTopOrientation = utils.deepClone(axisDefault);
             xAxisTopOrientation.x.orientation = AXES_ORIENTATION.X.TOP;
@@ -2121,7 +2228,7 @@ describe("Graph", () => {
             graph = new Graph(input);
             const axisXElement = fetchElementByClass(styles.axisX);
             expect(axisXElement.getAttribute("transform")).toContain(
-                "translate(72, 44)"
+                "translate(72, 39)"
             );
         });
         it("sets x axis position correctly when x axis is hidden", () => {
@@ -2132,7 +2239,7 @@ describe("Graph", () => {
             graph = new Graph(getAxes(hiddenAxisObj));
             const axisXElement = fetchElementByClass(styles.axisX);
             expect(axisXElement.getAttribute("transform")).toContain(
-                "translate(72, 44)"
+                "translate(72, 39)"
             );
         });
         it("sets x axis position correctly when labels are hidden", () => {
@@ -2149,7 +2256,7 @@ describe("Graph", () => {
             );
             const axisXElement = fetchElementByClass(styles.axisX);
             expect(axisXElement.getAttribute("transform")).toContain(
-                "translate(55, 20)"
+                "translate(55, 10)"
             );
         });
         it("sets x axis position correctly when x axis label is hidden", () => {
@@ -2161,7 +2268,7 @@ describe("Graph", () => {
             graph = new Graph(input);
             const axisXElement = fetchElementByClass(styles.axisX);
             expect(axisXElement.getAttribute("transform")).toContain(
-                "translate(72, 20)"
+                "translate(72, 10)"
             );
         });
     });

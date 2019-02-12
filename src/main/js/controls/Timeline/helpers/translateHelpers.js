@@ -3,10 +3,8 @@ import d3 from "d3";
 import { getRotationForAxis, getYAxisHeight } from "../../../helpers/axis";
 import constants from "../../../helpers/constants";
 import styles from "../../../helpers/styles";
-import {
-    getTransformScale,
-    translateCanvas
-} from "../../Graph/helpers/helpers";
+import { getTransformScale } from "../../../helpers/transformUtils";
+import { translateCanvas } from "../../Graph/helpers/helpers";
 import {
     getAxesScale,
     getXAxisLabelXPosition,

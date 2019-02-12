@@ -1,6 +1,8 @@
 "use strict";
 import { GraphContent } from "../../core";
+import { getDefaultValue } from "../../core/BaseConfig";
 import constants from "../../helpers/constants";
+import { prepareLabelItem, removeLabelShapeItem } from "../../helpers/label";
 import { removeLegendItem } from "../../helpers/legend";
 import {
     createRegion,
@@ -75,6 +77,10 @@ class Line extends GraphContent {
     constructor(input) {
         super();
         this.config = loadInput(input);
+        this.config.yAxis = getDefaultValue(
+            this.config.yAxis,
+            constants.Y_AXIS
+        );
         this.valuesRange = calculateValuesRange(
             this.config.values,
             this.config.yAxis
@@ -112,6 +118,11 @@ class Line extends GraphContent {
             this.dataTarget,
             graph.legendSVG
         );
+        prepareLabelItem(
+            graph.config,
+            this.dataTarget,
+            graph.axesLabelShapeGroup[this.config.yAxis]
+        );
         return this;
     }
 
@@ -125,6 +136,10 @@ class Line extends GraphContent {
             this.dataTarget
         );
         removeLegendItem(graph.legendSVG, this.dataTarget);
+        removeLabelShapeItem(
+            graph.axesLabelShapeGroup[this.config.yAxis],
+            this.dataTarget
+        );
         this.dataTarget = {};
         this.config = {};
         return this;

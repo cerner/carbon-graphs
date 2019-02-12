@@ -2,12 +2,7 @@
 import d3 from "d3";
 import sinon from "sinon";
 import Graph from "../../../main/js/controls/Graph/Graph";
-import {
-    getCurrentTransform,
-    getShapeForTarget,
-    getTransformScale,
-    round2Decimals
-} from "../../../main/js/controls/Graph/helpers/helpers";
+import { getShapeForTarget } from "../../../main/js/controls/Graph/helpers/helpers";
 import Line from "../../../main/js/controls/Line";
 import { Shape } from "../../../main/js/core";
 import {
@@ -22,6 +17,11 @@ import constants, {
 } from "../../../main/js/helpers/constants";
 import errors from "../../../main/js/helpers/errors";
 import styles from "../../../main/js/helpers/styles";
+import {
+    getCurrentTransform,
+    getTransformScale,
+    round2Decimals
+} from "../../../main/js/helpers/transformUtils";
 import utils from "../../../main/js/helpers/utils";
 import { triggerEvent } from "../helpers/commonHelpers";
 import {
@@ -52,7 +52,7 @@ describe("Line", () => {
     afterEach(() => {
         document.body.innerHTML = "";
     });
-    describe("when constructed", () => {
+    describe("When constructed", () => {
         it("initializes properly", () => {
             const line = new Line(getInput(valuesDefault));
             expect(line.config).not.toBeNull();
@@ -279,7 +279,7 @@ describe("Line", () => {
             expect(line.valuesRange.y2.max).toBe(35);
         });
     });
-    describe("when graph is loaded with input", () => {
+    describe("When graph is loaded with input", () => {
         it("returns the graph instance", () => {
             const loadedLine = new Line(getInput(valuesDefault, false, false));
             loadedLine.load(graphDefault);
@@ -1189,8 +1189,95 @@ describe("Line", () => {
                 });
             });
         });
+        describe("Prepares to load label shape", () => {
+            let graph;
+            beforeEach(() => {
+                graphDefault.destroy();
+                graph = new Graph(getAxes(axisDefault));
+                const linePrimary = getInput(valuesDefault, true, true, true);
+                const lineSecondary = getInput(
+                    valuesDefault,
+                    true,
+                    true,
+                    false
+                );
+                lineSecondary.key = "uid_2";
+                graph.loadContent(new Line(linePrimary));
+                graph.loadContent(new Line(lineSecondary));
+            });
+            it("Does not load shape if Y2 axis is not loaded", () => {
+                graphDefault.destroy();
+                const axes = utils.deepClone(getAxes(axisDefault));
+                axes.axis.y2.show = false;
+                const graph = new Graph(axes);
+                const input = getInput(valuesDefault, true, true, false);
+                graph.loadContent(new Line(input));
+                expect(
+                    graph.axesLabelShapeGroup[constants.Y_AXIS]
+                ).toBeUndefined();
+                expect(
+                    graph.axesLabelShapeGroup[constants.Y2_AXIS]
+                ).toBeUndefined();
+            });
+            it("Loads shape in Y Axis", () => {
+                const labelShapeContainer = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.axisLabelYShapeContainer
+                );
+                const svgPath = labelShapeContainer.children[0];
+                expect(
+                    graph.axesLabelShapeGroup[constants.Y_AXIS]
+                ).not.toBeUndefined();
+                expect(labelShapeContainer.children.length).toBe(1);
+                expect(svgPath.tagName).toBe("svg");
+                expect(svgPath.getAttribute("x")).toBe("0");
+                expect(svgPath.getAttribute("aria-describedby")).toBe("uid_2");
+            });
+            it("Loads shape for each data set in Y Axis", () => {
+                const lineTertiary = getInput(valuesDefault, true, true, false);
+                lineTertiary.key = "uid_3";
+                graph.loadContent(new Line(lineTertiary));
+                const labelShapeContainer = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.axisLabelYShapeContainer
+                );
+                const svgPath = labelShapeContainer.children[1];
+                expect(labelShapeContainer.children.length).toBe(2);
+                expect(svgPath.tagName).toBe("svg");
+                expect(svgPath.getAttribute("x")).toBe("20");
+                expect(svgPath.getAttribute("aria-describedby")).toBe("uid_3");
+            });
+            it("Loads shape in Y2 Axis", () => {
+                const labelShapeContainer = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.axisLabelY2ShapeContainer
+                );
+                const svgPath = labelShapeContainer.children[0];
+                expect(
+                    graph.axesLabelShapeGroup[constants.Y2_AXIS]
+                ).not.toBeUndefined();
+                expect(labelShapeContainer.children.length).toBe(1);
+                expect(svgPath.tagName).toBe("svg");
+                expect(svgPath.getAttribute("x")).toBe("0");
+                expect(svgPath.getAttribute("aria-describedby")).toBe("uid_1");
+            });
+            it("Loads shape for each data set in Y2 Axis", () => {
+                const lineTertiary = getInput(valuesDefault, true, true, true);
+                lineTertiary.key = "uid_4";
+                graph.loadContent(new Line(lineTertiary));
+                const labelShapeContainer = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.axisLabelY2ShapeContainer
+                );
+                const svgPath = labelShapeContainer.children[1];
+                expect(labelShapeContainer.children.length).toBe(2);
+                expect(svgPath.tagName).toBe("svg");
+                expect(svgPath.getAttribute("x")).toBe("20");
+                expect(svgPath.getAttribute("aria-describedby")).toBe("uid_4");
+            });
+        });
     });
-    describe("when graph is unloaded off input", () => {
+    describe("When graph is unloaded off input", () => {
         it("returns the line instance", () => {
             const line = new Line(getInput(valuesDefault, false, false));
             graphDefault.loadContent(line);
@@ -1225,6 +1312,98 @@ describe("Line", () => {
             line.unload(graphDefault);
             expect(line.dataTarget).toEqual({});
             expect(line.config).toEqual({});
+        });
+        describe("Removes label shape from label container", () => {
+            let graph;
+            let linePrimary;
+            let lineSecondary;
+            beforeEach(() => {
+                graphDefault.destroy();
+                graph = new Graph(getAxes(axisDefault));
+                linePrimary = new Line(
+                    getInput(valuesDefault, true, true, true)
+                );
+                lineSecondary = new Line(inputSecondary);
+                graph.loadContent(linePrimary);
+                graph.loadContent(lineSecondary);
+            });
+            it("Verifies content is present", () => {
+                expect(
+                    graph.axesLabelShapeGroup[constants.Y_AXIS]
+                ).not.toBeUndefined();
+                expect(
+                    graph.axesLabelShapeGroup[constants.Y2_AXIS]
+                ).not.toBeUndefined();
+            });
+            it("For Y axis", () => {
+                graph.unloadContent(lineSecondary);
+                const labelShapeContainer = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.axisLabelYShapeContainer
+                );
+                expect(labelShapeContainer.children.length).toBe(0);
+            });
+            it("For Y axis with multiple data set", () => {
+                graph.loadContent(
+                    new Line({
+                        key: `uid_3`,
+                        label: {
+                            display: "Data Label B"
+                        },
+                        values: valuesDefault
+                    })
+                );
+                graph.unloadContent(lineSecondary);
+                const labelShapeContainer = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.axisLabelYShapeContainer
+                );
+                expect(labelShapeContainer.children.length).toBe(1);
+                expect(labelShapeContainer.children[0].tagName).toBe("svg");
+                expect(labelShapeContainer.children[0].getAttribute("x")).toBe(
+                    "0"
+                );
+                expect(
+                    labelShapeContainer.children[0].getAttribute(
+                        "aria-describedby"
+                    )
+                ).toBe("uid_3");
+            });
+            it("For Y2 axis", () => {
+                graph.unloadContent(linePrimary);
+                const labelShapeContainer = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.axisLabelY2ShapeContainer
+                );
+                expect(labelShapeContainer.children.length).toBe(0);
+            });
+            it("For Y2 axis with multiple data set", () => {
+                graph.loadContent(
+                    new Line({
+                        key: `uid_4`,
+                        label: {
+                            display: "Data Label C"
+                        },
+                        yAxis: "y2",
+                        values: valuesDefault
+                    })
+                );
+                graph.unloadContent(linePrimary);
+                const labelShapeContainer = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.axisLabelY2ShapeContainer
+                );
+                expect(labelShapeContainer.children.length).toBe(1);
+                expect(labelShapeContainer.children[0].tagName).toBe("svg");
+                expect(labelShapeContainer.children[0].getAttribute("x")).toBe(
+                    "0"
+                );
+                expect(
+                    labelShapeContainer.children[0].getAttribute(
+                        "aria-describedby"
+                    )
+                ).toBe("uid_4");
+            });
         });
     });
     describe("Region", () => {
@@ -1645,7 +1824,7 @@ describe("Line", () => {
                     styles.region
                 );
                 expect(+regionElement.getAttribute("height")).toBe(
-                    constants.PADDING.top
+                    constants.DEFAULT_REGION_GOAL_LINE_STROKE_WIDTH
                 );
             });
             it("Creates region correctly when start is not provided", () => {

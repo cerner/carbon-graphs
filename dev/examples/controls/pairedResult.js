@@ -253,24 +253,6 @@ export const renderPairedResultRegionSimple = (el, id, title) => () => {
     pairedDefault.loadContent(Carbon.api.pairedResult(data));
     return pairedDefault;
 };
-export const renderPairedResultRegionMultiple = (el, id, title) => () => {
-    shell.render(
-        el,
-        id,
-        title,
-        "* A Paired Result based graph where multiple regions are present for High data type. " +
-            "By default, they are rendered face-up."
-    );
-    const pairedDefault = Carbon.api.graph(
-        getDemoData(`#${id}`, "PAIRED_DEFAULT")
-    );
-    const data = utils.deepClone(
-        getDemoData(`#${id}`, "PAIRED_DEFAULT").data[0]
-    );
-    data.regions = regions;
-    pairedDefault.loadContent(Carbon.api.pairedResult(data));
-    return pairedDefault;
-};
 export const renderMultiPairedResultRegion = (el, id, title) => () => {
     shell.render(
         el,

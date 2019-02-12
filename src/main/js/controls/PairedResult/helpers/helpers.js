@@ -24,12 +24,12 @@ import {
 } from "../../../helpers/region";
 import { getSVGObject } from "../../../helpers/shapeSVG";
 import styles from "../../../helpers/styles";
+import { getTransformScale } from "../../../helpers/transformUtils";
 import utils from "../../../helpers/utils";
 import {
     d3RemoveElement,
     getColorForTarget,
-    getShapeForTarget,
-    getTransformScale
+    getShapeForTarget
 } from "../../Graph/helpers/helpers";
 import {
     dataPointActionHandler,
@@ -51,7 +51,7 @@ const getValue = (val, type) => (val ? val[type] : "");
  * Iterates each type of a pair. High, low and mid.
  * @private
  * @param {function} fn - A function
- * @returns {undefined} - returns nothing
+ * @returns {void} - returns nothing
  */
 const iterateOnPairType = (fn) => constants.PAIR_ITEM_TYPES.forEach(fn);
 /**
@@ -628,6 +628,7 @@ const clear = (canvasSVG, dataTarget) =>
 
 export {
     getSVGObject,
+    getValue,
     translatePoints,
     translateLines,
     createLine,

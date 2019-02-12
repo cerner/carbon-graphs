@@ -38,9 +38,9 @@ Use of padding property is strictly use-case specific. Flags such as `showLabel`
 
 ```javascript
 var padding = {
-    top: 5,
-    bottom: 10,
+    top: 10,
+    bottom: 5,
     left: 30,
-    right: 30,
-},
+    right: 50
+};
 ```

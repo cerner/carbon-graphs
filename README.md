@@ -57,6 +57,7 @@ Carbon provides an abstraction for c3 and d3.
 -   Criticality indicators for data point
 -   Non-contiguous data point Line graph
 -   Locale support for axes ticks
+-   Y and Y2 Axes label along with shapes
 
 ## Dependencies
 

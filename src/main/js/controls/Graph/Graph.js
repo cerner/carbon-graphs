@@ -123,6 +123,7 @@ const initConfig = (control) => {
     control.scale = {};
     control.svg = null;
     control.legendSVG = null;
+    control.axesLabelShapeGroup = {};
     control.content = [];
     control.contentTargets = [];
     control.resizeHandler = null;
@@ -222,7 +223,7 @@ class Graph extends Construct {
         createGrid(this.axis, this.scale, this.config, this.svg);
         createContentContainer(this.config, this.svg);
         createAxes(this.axis, this.scale, this.config, this.svg);
-        createLabel(this.config, this.svg);
+        createLabel(this.config, this.svg, this);
         createAxisReferenceLine(this.axis, this.scale, this.config, this.svg);
         if (this.config.showLegend) {
             /*

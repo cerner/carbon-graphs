@@ -1,6 +1,8 @@
 "use strict";
 import { GraphContent } from "../../core";
+import { getDefaultValue } from "../../core/BaseConfig";
 import constants from "../../helpers/constants";
+import { prepareLabelItem, removeLabelShapeItem } from "../../helpers/label";
 import { removeLegendItem } from "../../helpers/legend";
 import utils from "../../helpers/utils";
 import BarConfig from "./BarConfig";
@@ -89,6 +91,10 @@ class Bar extends GraphContent {
         super();
         initConfig(this);
         this.config = loadInput(input);
+        this.config.yAxis = getDefaultValue(
+            this.config.yAxis,
+            constants.Y_AXIS
+        );
         this.config.axisPadding = false;
         this.valuesRange = calculateValuesRange(
             this.config.values,
@@ -129,6 +135,11 @@ class Bar extends GraphContent {
             this.dataTarget,
             graph.legendSVG
         );
+        prepareLabelItem(
+            graph.config,
+            this.dataTarget,
+            graph.axesLabelShapeGroup[this.config.yAxis]
+        );
         return this;
     }
 
@@ -138,6 +149,10 @@ class Bar extends GraphContent {
     unload(graph) {
         clear(graph.svg, this.dataTarget.key);
         removeLegendItem(graph.legendSVG, this.dataTarget);
+        removeLabelShapeItem(
+            graph.axesLabelShapeGroup[this.config.yAxis],
+            this.dataTarget
+        );
         clearSelectionDatum(graph.svg, this.dataTarget.key);
         initConfig(this);
         return this;
