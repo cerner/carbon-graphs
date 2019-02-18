@@ -70,7 +70,7 @@ const createDatetimeBuckets = (gridSVG, axis, config, createVGridHandler) => {
 /**
  * Helper to translate d3 Axis ticks (X-Axis ticks) of different types and append into the canvas.
  * @private
- * @param {Object} canvasSVG - d3 object of the canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Object} axis - Axis scaled according to input parameters
  * @param {Object} config - config object derived from input JSON
  * @param {Function} translateVGridHandler - Call back function to translate grid.
@@ -161,7 +161,7 @@ const createVGridForDatetimeBuckets = (
 /**
  * Helper to translate the d3 Axis ticks (X-Axis ticks) of different types based on if its gantt or not.
  * @private
- * @param {Object} canvasSVG - d3 object of the grid
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Object} axis - Axis scaled according to input parameters
  * @param {array} values - List of all tick values.
  * @param {string} orientation - X axis orientation.
@@ -316,7 +316,7 @@ const prepareHAxis = (
 /**
  * Helper function to translate Vertical grid
  * @private
- * @param {Object} canvasSVG - d3 object of canvas SVG
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Object} axis - Axis scaled according to input parameters
  * @param {Object} config - config object derived from input JSON * @param gridSVG
  * @param {Function} translateVGridHandler - Call back function to translate grid.

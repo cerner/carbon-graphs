@@ -163,7 +163,7 @@ const scaleGraph = (scale, config) => {
  * Added defs element for the canvas. This currently holds the clip paths for the entire chart.
  * @private
  * @param {Object} config - config object derived from input JSON
- * @param {d3.Selection} canvasSVG - d3 object of canvas svg
+ * @param {d3.Selection} canvasSVG - d3 selection node of canvas svg
  * @returns {Object} d3 svg path
  */
 const createDefs = (config, canvasSVG) =>
@@ -182,7 +182,7 @@ const createDefs = (config, canvasSVG) =>
  * @param {Object} axis - Axis scaled according to input parameters
  * @param {Object} scale - d3 scale taking into account the input parameters
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
 const createAxes = (axis, scale, config, canvasSVG) => {
@@ -206,7 +206,7 @@ const createAxes = (axis, scale, config, canvasSVG) => {
  * @private
  * @todo Label overflow formatting, adding ellipsis?
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
 const createLabel = (config, canvasSVG) => {
@@ -231,7 +231,7 @@ const createLabel = (config, canvasSVG) => {
  * Creates a container for timeline graph
  * @private
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {Object} d3 svg path
  */
 const createTimelineContent = (config, canvasSVG) =>
@@ -243,7 +243,7 @@ const createTimelineContent = (config, canvasSVG) =>
  * Creates a group for each timeline content loaded
  * @private
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Object} contentConfig - content config object
  * @returns {Object} d3 svg path
  */
@@ -309,7 +309,7 @@ const dataPointActionHandler = (value, index, target) => {
  * @private
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} config - Graph config object derived from input JSON
- * @param {Array} canvasSVG - d3 html element of the canvas
+ * @param {d3.selection} canvasSVG - d3 html element of the canvas
  * @returns {undefined} - returns nothing
  */
 const createPoints = (scale, config, canvasSVG) => {
@@ -409,7 +409,7 @@ const onAnimationHandler = (graphContext, control) => () => {
  * @param {Object} graphContext - Graph instance
  * @param {TimelineContent} control - TimelineContent instance
  * @param {Object} config - Graph config object derived from input JSON
- * @param {Array} canvasSVG - d3 html element of canvas
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {function} - returns callback function that handles click action on legend item
  */
 const clickHandler = (graphContext, control, config, canvasSVG) => (
@@ -436,7 +436,7 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
  * if present.
  * @private
  * @param {Array} graphTargets - List of all the items in the Graph
- * @param {Array} canvasSVG - d3 html element of canvas
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {function} - returns callback function that handles hover action on legend item
  */
 const hoverHandler = (graphTargets, canvasSVG) => (item, state) => {
@@ -458,7 +458,7 @@ const hoverHandler = (graphTargets, canvasSVG) => (item, state) => {
 /**
  * CLear the graph data points and lines currently rendered
  * @private
- * @param {Array} canvasSVG - d3 html element of canvas
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Object} dataTarget - Data points object
  * @returns {Object} - d3 select object
  */

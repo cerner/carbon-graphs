@@ -83,7 +83,7 @@ export const validateContent = (input) => {
  * @param {TimelineContent} control - TimelineContent instance
  * @param {Object} scale - d3 scale taking into account the input parameters
  * @param {Object} config - config object derived from input JSON
- * @param {Array} timelineGraphContentSVG - d3 object of canvas svg
+ * @param {Array} timelineGraphContentSVG - d3 selection node of canvas svg
  * @param {Array} dataTarget - Data points
  * @returns {undefined} - returns nothing
  */

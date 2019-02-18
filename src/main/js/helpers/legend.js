@@ -125,7 +125,7 @@ const legendClickHandler = (element) => {
  * Hover handler for legend items.
  * @private
  * @param {Array} shownTargets - Targets/data sets that are currently displayed in graph
- * @param {Array} canvasSVG - d3 html element of canvas
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {string} key - Data points set unique key
  * @param {string} hoverState - state of mouse hover => enter or leave
  * @param {Array} [additionalHandlers] - Additional set of handlers that consumers can execute on

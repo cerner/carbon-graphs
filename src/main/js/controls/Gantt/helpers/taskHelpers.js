@@ -227,7 +227,7 @@ const renderTaskGroup = (scale, taskData, index, taskPath) => {
 /**
  * Based on startDate and endDate, we render a hashed bar.
  * @private
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} data - Current activity data
  * @param {number} index - Current task data index
@@ -259,7 +259,7 @@ const renderHashedTaskGroup = (canvasSVG, scale, data, index, path) => {
  * Renders the tasks for a track. Each task is created based on start and end datetime.
  * Values needs to be in ISO8601 datetime format, along with the unique key for each task.
  * @private
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} config - Graph config object derived from input JSON
  * @param {Object} trackLabel - Track label

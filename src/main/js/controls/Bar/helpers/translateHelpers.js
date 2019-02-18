@@ -7,7 +7,7 @@ import { translateSelectBars } from "./selectionHelpers";
  * @private
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} ordinalScale - bar x-axis ordinal scale
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Object} dataTarget - Data points object
  * @param {Object} config - graph config object
  * @returns {Object} d3 select object

@@ -62,7 +62,7 @@ const renderDataPointPath = (scale, config, path, dataPoint, index) =>
  * @callback drawEventDataPoints
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} config - Graph config object derived from input JSON
- * @param {Array} canvasSVG - d3 html element of the canvas
+ * @param {d3.selection} canvasSVG - d3 html element of the canvas
  * @returns {Object} - d3 append object
  */
 const drawEventDataPoints = (scale, config, canvasSVG) => {

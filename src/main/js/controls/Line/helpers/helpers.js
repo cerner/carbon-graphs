@@ -63,7 +63,7 @@ const transformPoint = (scale) => (value) => (scaleFactor) => {
  * Transforms lines for a data point set in the Line graph on resize
  * @private
  * @param {Object} scale - d3 scale for Graph
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {Object} d3 select object
  */
 const translateLines = (scale, canvasSVG) =>
@@ -76,7 +76,7 @@ const translateLines = (scale, canvasSVG) =>
  * Transforms points for a data point set in the Line graph on resize
  * @private
  * @param {Object} scale - d3 scale for Graph
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {string} cls - selector for the data point translation
  * @returns {Object} d3 select object
  */
@@ -148,7 +148,7 @@ const dataPointActionHandler = (value, index, target) => {
  *  Selected point indicators
  * @private
  * @param {Object} scale - d3 scale for Graph
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
 const translateLineGraph = (scale, canvasSVG) => {
@@ -166,7 +166,7 @@ const translateLineGraph = (scale, canvasSVG) => {
  * @private
  * @param {Object} scale - d3 scale taking into account the input parameters
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Array} dataTarget - Data points
  * @returns {undefined} - returns nothing
  */
@@ -414,7 +414,7 @@ const drawDataPoints = (scale, config, pointGroupPath) => {
  * @param {Object} graphContext - Graph instance
  * @param {Line} control - Line instance
  * @param {Object} config - Graph config object derived from input JSON
- * @param {Array} canvasSVG - d3 html element of canvas
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {function()} callback function handler for RAF
  */
 const onAnimationHandler = (graphContext, control, config, canvasSVG) => () => {
@@ -427,7 +427,7 @@ const onAnimationHandler = (graphContext, control, config, canvasSVG) => () => {
  * @param {Object} graphContext - Graph instance
  * @param {Line} control - Line instance
  * @param {Object} config - Graph config object derived from input JSON
- * @param {Array} canvasSVG - d3 html element of canvas
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {function} - returns callback function that handles click action on legend item
  */
 const clickHandler = (graphContext, control, config, canvasSVG) => (
@@ -459,7 +459,7 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
  * if present.
  * @private
  * @param {Array} graphTargets - List of all the items in the Graph
- * @param {Array} canvasSVG - d3 html element of canvas
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {function} - returns callback function that handles hover action on legend item
  */
 const hoverHandler = (graphTargets, canvasSVG) => (item, state) => {
@@ -513,7 +513,7 @@ const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
 /**
  * CLear the graph data points and lines currently rendered
  * @private
- * @param {Array} canvasSVG - d3 html element of canvas
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Object} dataTarget - Data points object
  * @returns {Object} - d3 select object
  */

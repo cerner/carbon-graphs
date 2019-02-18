@@ -40,7 +40,7 @@ const DEFAULT_HEIGHT = constants.DEFAULT_HEIGHT;
  * Updates the height and width of the canvas on resize
  * @private
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {Object} d3 svg path
  */
 const translateCanvas = (config, canvasSVG) =>
@@ -58,7 +58,7 @@ const translateCanvas = (config, canvasSVG) =>
  * the necessary parameters on resize so that data points are not cut off
  * @private
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {Object} d3 svg path
  */
 const translateDefs = (config, canvasSVG) =>
@@ -128,7 +128,7 @@ const translateVerticalGrid = (axis, config) => {
  * @param {Object} axis - Axis scaled according to input parameters
  * @param {Object} scale - d3 scale taking into account the input parameters
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
 const translateGrid = (axis, scale, config, canvasSVG) => {
@@ -156,7 +156,7 @@ const translateGrid = (axis, scale, config, canvasSVG) => {
 /**
  * Function to translate the vertical-grid with a specific style and config.
  * @private
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Object} axis - Axis scaled according to input parameters
  * @param {string} style - Style with which, grid needs to be created.
  * @param {Object} config - config object derived from input JSON
@@ -172,7 +172,7 @@ const translateVGridHandler = (canvasSVG, axis, style, config) => {
  * Translates the rectangle which forms the container for graph content
  * @private
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {Object} d3 svg path
  */
 const translateContentContainer = (config, canvasSVG) =>
@@ -185,7 +185,7 @@ const translateContentContainer = (config, canvasSVG) =>
  * Updates the x, y, y2 axes label positions on resize
  * @private
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
 const translateLabel = (config, canvasSVG) => {
@@ -274,7 +274,7 @@ const updateAxesDomain = (config, input = {}) => {
  * Added defs element for the canvas. This currently holds the clip paths for the entire chart.
  * @private
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {Object} d3 svg path
  */
 const createDefs = (config, canvasSVG) =>
@@ -294,7 +294,7 @@ const createDefs = (config, canvasSVG) =>
  * @param {Object} axis - Axis scaled according to input parameters
  * @param {Object} scale - d3 scale taking into account the input parameters
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
 const createGrid = (axis, scale, config, canvasSVG) => {
@@ -341,7 +341,7 @@ const createVGridHandler = (gridSVG, axis, style, config) => {
  * @private
  * @todo Label overflow formatting, adding ellipsis?
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Object} control - Graph instance
  * @returns {undefined} - returns nothing
  */
@@ -408,7 +408,7 @@ const createLabel = (config, canvasSVG, control) => {
  * Creates a container for graph content (evident when there are no boundary ticks)
  * @private
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {Object} d3 svg path
  */
 const createContentContainer = (config, canvasSVG) =>

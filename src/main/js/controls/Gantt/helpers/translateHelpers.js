@@ -112,7 +112,7 @@ const getTrackLabelTransformProperty = (scale, config) => (trackName) =>
  * the necessary parameters on resize so that data points are not cut off
  * @private
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {Object} d3 svg path
  */
 const translateDefs = (config, canvasSVG) =>
@@ -127,7 +127,7 @@ const translateDefs = (config, canvasSVG) =>
  * @param {Object} axis - Axis scaled according to input parameters
  * @param {Object} scale - d3 scale taking into account the input parameters
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
 const translateAxes = (axis, scale, config, canvasSVG) => {
@@ -206,7 +206,7 @@ const translateHorizontalGrid = (axis, config) =>
  * @param {Object} axis - Axis scaled according to input parameters
  * @param {Object} scale - d3 scale taking into account the input parameters
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
 const translateGrid = (axis, scale, config, canvasSVG) => {
@@ -229,7 +229,7 @@ const translateGrid = (axis, scale, config, canvasSVG) => {
 /**
  * Function to create the vertical-grid with a specific style and config.
  * @private
- * @param {Object} canvasSVG - d3 object of the canvas
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Object} axis - Axis scaled according to input parameters
  * @param {string} style - Style with which, grid needs to be created.
  * @param {Object} config - config required for translating vertical grid.
@@ -245,7 +245,7 @@ const translateVGridHandler = (canvasSVG, axis, style, config) => {
  * Translates the rectangle which forms the container for graph content
  * @private
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {Object} d3 svg path
  */
 const translateContentContainer = (config, canvasSVG) =>
@@ -262,7 +262,7 @@ const translateContentContainer = (config, canvasSVG) =>
  * @private
  * @param {Object} scale - d3 scale taking into account the input parameters
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
 const translateDateline = (scale, config, canvasSVG) => {
@@ -303,7 +303,7 @@ const translateDateline = (scale, config, canvasSVG) => {
  * @private
  * @param {Object} scale - d3 scale taking into account the input parameters
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
 const translateLabelText = (scale, config, canvasSVG) =>

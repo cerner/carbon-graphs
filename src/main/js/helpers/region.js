@@ -75,7 +75,7 @@ const removeRegion = (regionGroupSVG, dataTarget) =>
  * their respective unique ids
  * @private
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {Object} d3 svg path
  */
 const createRegionContainer = (config, canvasSVG) =>
@@ -208,7 +208,7 @@ const isSingleTargetDisplayed = (graphTargets) => graphTargets.length === 1;
 /**
  * Hides all the regions within a graph
  * @private
- * @param {Array} canvasSVG - d3 html element of canvas
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {Object} d3 svg path
  */
 const hideAllRegions = (canvasSVG) =>
@@ -216,7 +216,7 @@ const hideAllRegions = (canvasSVG) =>
 /**
  * Hides/shows the region given the region path and unique identifier of the region
  * @private
- * @param {Array} canvasSVG - d3 html element of canvas
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {string} key - Data points set unique key
  * @param {boolean} shouldShow - true if enabled
  * @returns {Object} d3 svg path
@@ -228,7 +228,7 @@ const showHideRegion = (canvasSVG, key, shouldShow) =>
 /**
  * Toggles region based on current display status for that region.
  * @private
- * @param {Array} canvasSVG - d3 html element of canvas
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {string} key - Data points set unique key
  * @returns {Object} d3 svg path
  */
@@ -244,7 +244,7 @@ const toggleRegion = (canvasSVG, key) =>
  * * If only 1 target is displayed -> show the region using unique data set key
  * @private
  * @param {Array} shownTargets - Targets/data sets that are currently displayed in graph
- * @param {Array} canvasSVG - d3 html element of canvas
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {Object} d3 svg path
  */
 const processRegions = (shownTargets, canvasSVG) =>
@@ -255,7 +255,7 @@ const processRegions = (shownTargets, canvasSVG) =>
  * Handler for show/hide region(s) when hovered over a legend item
  * @private
  * @param {Array} shownTargets - Targets/data sets that are currently displayed in graph
- * @param {Array} canvasSVG - d3 html element of canvas
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {string} key - Data points set unique key
  * @param {string} hoverState - state of mouse hover => enter or leave
  * @returns {undefined} - returns nothing

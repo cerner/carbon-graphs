@@ -62,7 +62,6 @@ const setCanvasHeight = (config) => {
             config.axisLabelHeights.x) *
             2;
 };
-
 /**
  * Checks if the min max range of the values have changed or otherwise
  * @private
@@ -72,7 +71,6 @@ const setCanvasHeight = (config) => {
  */
 const isRangeModified = (config, yAxis = constants.Y_AXIS) =>
     config.axis[yAxis].dataRange.isRangeModified;
-
 /**
  * Data point sets can be loaded using this function.
  * Load function validates, clones and stores the input onto a config object.
@@ -196,7 +194,7 @@ class Graph extends Construct {
      *  * Reference line when Y Axis shows/pads negative values
      *  * Data [In our case we have load and unload]
      * @param {Object} input - Input JSON
-     * @returns {HTMLElement} d3 HTML element SVG.
+     * @returns {d3.selection} d3 selection node of svg.
      */
     generate(input) {
         this.config = loadInput(input);

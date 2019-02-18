@@ -115,7 +115,7 @@ const getPercentageBar = (path, x, y, width, height, percent, color) => {
 /**
  * Creates a patterned bar with forward backslashes
  * @private
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Selection} defs - d3 selection path for defs element in the graph
  * @param {Selection} path - d3 selection path for the SVG group element
  * @param {number} x - Scaled x co-ordinate

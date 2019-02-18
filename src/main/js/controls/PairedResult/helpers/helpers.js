@@ -96,7 +96,7 @@ const transformPoint = (scale, type) => (value) => (scaleFactor) => {
  * @private
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {Object} - d3 select object
  */
 const translateLines = (scale, config, canvasSVG) =>
@@ -108,7 +108,7 @@ const translateLines = (scale, config, canvasSVG) =>
  * Transforms points for a data point set (high, low and mid) in the Paired Result graph on resize
  * @private
  * @param {Object} scale - d3 scale for Graph
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {Object} - d3 select object
  */
 const translatePoints = (scale, canvasSVG) =>
@@ -140,7 +140,7 @@ const translatePoints = (scale, canvasSVG) =>
  * @private
  * @param {Object} scale - d3 scale taking into account the input parameters
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Array} dataTarget - Data points
  * @returns {undefined} - returns nothing
  */
@@ -272,7 +272,7 @@ const drawLine = (scale, config, boxPath) =>
  * @private
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} config - Graph config object derived from input JSON
- * @param {Array} canvasSVG - d3 html element of the canvas
+ * @param {d3.selection} canvasSVG - d3 html element of the canvas
  * @returns {undefined} - returns nothing
  */
 const drawPoints = (scale, config, canvasSVG) => {
@@ -406,7 +406,7 @@ const drawCriticalityPoints = (
  * @private
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
 const translatePairedResultGraph = (scale, config, canvasSVG) => {
@@ -422,7 +422,7 @@ const translatePairedResultGraph = (scale, config, canvasSVG) => {
  * @private
  * @param {Object} graphContext - Graph instance
  * @param {Object} config - Graph config object derived from input JSON
- * @param {Array} canvasSVG - d3 html element of canvas
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {string} key - Pair type - high, low or mid pair object containing the key
  * @returns {undefined} - returns nothing
  */
@@ -446,7 +446,7 @@ const processRegions = (graphContext, config, canvasSVG, { key }) => {
  * @param {Object} graphContext - Graph instance
  * @param {Line} control - Paired Result instance
  * @param {Object} config - Graph config object derived from input JSON
- * @param {Array} canvasSVG - d3 html element of canvas
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {string} item - paired result type unique key
  * @returns {function()} callback function handler for RAF
  */
@@ -466,7 +466,7 @@ const onAnimationHandler = (
  * @param {Object} graphContext - Graph instance
  * @param {PairedResult} control - Paired Result instance
  * @param {Object} config - Graph config object derived from input JSON
- * @param {Array} canvasSVG - d3 html element of canvas
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
 const clickHandler = (graphContext, control, config, canvasSVG) => (
@@ -498,7 +498,7 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
  * if present.
  * @private
  * @param {Array} config - Graph config object derived from input JSON
- * @param {Array} canvasSVG - d3 html element of canvas
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
 const hoverHandler = (config, canvasSVG) => (item, state) => {
@@ -582,7 +582,7 @@ const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
  * @private
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Object} dataTarget - Data points object
  * @returns {undefined} - returns nothing
  */
@@ -619,7 +619,7 @@ const renderRegion = (scale, config, canvasSVG, dataTarget) => {
  * We are selecting all the box pairs along
  * with all the data sets before clearing them.
  * @private
- * @param {Array} canvasSVG - d3 html element of canvas
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Object} dataTarget - Data points object
  * @returns {Object} - d3 select object
  */

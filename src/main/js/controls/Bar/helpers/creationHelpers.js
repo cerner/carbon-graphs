@@ -127,7 +127,7 @@ const getXAxisXPosition = (config) =>
  * @param {Object} scale - d3 scale taking into account the input parameters
  * @param {Object} ordinalScale - bar x-axis ordinal scale
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Object} dataTarget - Data points
  * @returns {undefined} - returns nothing
  */
@@ -205,7 +205,7 @@ const barAttributesHelper = (scale, ordinalScale) => {
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} ordinalScale - bar x-axis ordinal scale
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Object} barGroupSVG - d3 object for bar group svg
  * @param {Array} regionList - List of regions to be shown within graph
  * @returns {Object} d3 bar object
@@ -297,7 +297,7 @@ const setGroupName = (config, content) => {
 /**
  * CLear the graph data points and bars currently rendered
  * @private
- * @param {Object} canvasSVG - d3 html element of canvas
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {string} key - identifier
  * @returns {Object} - d3 select object
  */
@@ -330,7 +330,7 @@ const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
  * Toggles the selection of a bar, executes on click of a bar.
  * @private
  * @param {Object} value - data point object
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {string} type - x-axis type
  * @param {Array} tickValues - X axis ticks array
  * @returns {Array} d3 html element of the selected bar
@@ -360,7 +360,7 @@ const toggleDataPointSelection = (value, canvasSVG, type, tickValues) => {
  * @private
  * @param {Object} value - data point object
  * @param {number} index - data point index for the set
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {string} type - x-axis type
  * @param {Array} tickValues - X axis ticks array
  * @param {Array} datum - selected bar data to be passed to onclick function

@@ -11,7 +11,7 @@ const PADDING = constants.DEFAULT_BAR_SELECTION_PADDING;
  * Returns selected data on click of a bar.
  * This will return only content that is present in shownTargets. Array also maintains order in which content is loaded.
  * @private
- * @param {Object} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Object} value - selected value
  * @param {Object} config - graph config object
  * @returns {Array} - array of selected content
@@ -34,7 +34,7 @@ const getSelectedData = (canvasSVG, value, config) =>
 /**
  * This method is called when bar content is unloaded off graph. This will remove objects related to the unloaded content.
  * @private
- * @param {Object} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {string} key - unloaded content key
  * @returns {undefined} - returns nothing
  */
@@ -52,7 +52,7 @@ const clearSelectionDatum = (canvasSVG, key) => {
  * Updates selection datum with newly loaded content.
  * @private
  * @param {Array} internalValueSubset - input internalValueSubset array
- * @param {Object} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Object} config - graph config object
  * @returns {undefined} - returns nothing
  */
@@ -75,7 +75,7 @@ const updateSelectionBars = (internalValueSubset, canvasSVG, config) => {
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} ordinalScale - bar x-axis ordinal scale
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
 const drawSelectionBars = (scale, ordinalScale, config, canvasSVG) => {
@@ -201,7 +201,7 @@ const selectionAttributeHelper = (scale, ordinalScale, shownTargets, datum) => {
  * @private
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} ordinalScale - bar x-axis ordinal scale
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Object} config - config object derived from input JSON
  * @returns {Object} d3 object for selection bars
  */

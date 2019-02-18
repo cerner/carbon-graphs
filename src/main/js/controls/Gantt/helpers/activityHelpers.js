@@ -99,7 +99,7 @@ const renderActivityGroup = (scale, data, path) => {
 /**
  * Based on startDate and endDate, we render a hashed bar.
  * @private
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} data - Current activity data
  * @param {Selection} path - d3 activity bar selection element
@@ -123,7 +123,7 @@ const renderHashedActivityGroup = (canvasSVG, scale, data, path) => {
  * Renders the activities for a track. Each activity is created based on start and end datetime.
  * Values needs to be in ISO8601 datetime format, along with the unique key for each activity.
  * @private
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} config - Graph config object derived from input JSON
  * @param {Object} trackLabel - Track label
@@ -198,7 +198,7 @@ const loadActivities = (graphContext, trackPathSVG, trackLabel, activities) => {
 /**
  * Creates a patterned bar with forward backslashes
  * @private
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Selection} defs - d3 selection path for defs element in the graph
  * @param {Selection} path - d3 selection path for the SVG group element
  * @param {number} x - Scaled x co-ordinate

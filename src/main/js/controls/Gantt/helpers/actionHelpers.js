@@ -83,7 +83,7 @@ const updateShownTarget = (shownTargets, key) => {
  * @private
  * @param {Object} graphContext - Graph instance
  * @param {Object} config - Graph config object derived from input JSON
- * @param {Array} canvasSVG - d3 html element of canvas
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {function} - returns callback function that handles click action on legend item
  */
 export const clickHandler = (graphContext, config, canvasSVG) => (
@@ -103,7 +103,7 @@ export const clickHandler = (graphContext, config, canvasSVG) => (
  * if present.
  * @private
  * @param {Array} graphTargets - List of all the items in the Graph
- * @param {Array} canvasSVG - d3 html element of canvas
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {function} - returns callback function that handles hover action on legend item
  */
 export const hoverHandler = (graphTargets, canvasSVG) => (item, state) => {
@@ -126,7 +126,7 @@ export const hoverHandler = (graphTargets, canvasSVG) => (item, state) => {
  * @private
  * @param {Gantt} control - gantt chart instance
  * @param {Object} config - Graph config object derived from input JSON
- * @param {Array} canvasSVG - d3 html element of the canvas
+ * @param {d3.selection} canvasSVG - d3 html element of the canvas
  * @param {Array} shownTargets - graph targets config object
  * @returns {{clickHandler: Function, hoverHandler: Function}} - event handlers for legend items
  */
@@ -253,7 +253,7 @@ const renderDataPointPath = (scale, config, path, dataPoint, index) =>
  * @private
  * @param {Object} scale - d3 scale for Graph
  * @param {Object} config - Graph config object derived from input JSON
- * @param {Array} canvasSVG - d3 html element of the canvas
+ * @param {d3.selection} canvasSVG - d3 html element of the canvas
  * @returns {Object} - d3 append object
  */
 const drawActionDataPoints = (scale, config, canvasSVG) =>

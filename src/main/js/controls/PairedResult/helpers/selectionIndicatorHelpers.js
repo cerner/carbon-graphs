@@ -214,7 +214,7 @@ const transformPartialPoint = (scale) => (value) => (scaleFactor) => {
  * Needs to have both high and low data points for translation of a "box" to occur.
  * @private
  * @param {Object} scale - d3 scale for Graph
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {Object} - d3 select object
  */
 export const translateSelectionBox = (scale, canvasSVG) =>
@@ -236,7 +236,7 @@ export const translateSelectionBox = (scale, canvasSVG) =>
  * If both high and low are not present then we load a circle as a selection indicator.
  * @private
  * @param {Object} scale - d3 scale for Graph
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {Object} - d3 select object
  */
 export const translateSelectionItem = (scale, canvasSVG) =>

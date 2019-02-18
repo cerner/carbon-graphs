@@ -73,7 +73,7 @@ const hasMatchingTrackLabel = (control, display) =>
  *  * Text needs to have a unique display value
  *  * Text needs to have a valid function for onClick
  * @private
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Object} labelObj - Label object provided by the consumer
  * @returns {Object} d3 svg path
  */

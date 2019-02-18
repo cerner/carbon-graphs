@@ -161,7 +161,7 @@ class Timeline extends Construct {
      *  * Legend
      *  * Data [In our case we have load and unload]
      * @param {Object} input - Input JSON
-     * @returns {HTMLElement} d3 HTML element SVG.
+     * @returns {HTMLElement} d3 selection node of svg.
      */
     generate(input) {
         this.config = loadInput(input);

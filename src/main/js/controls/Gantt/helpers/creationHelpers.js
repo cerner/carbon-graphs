@@ -311,7 +311,7 @@ const scaleGraph = (scale, config) => {
  * Added defs element for the canvas. This currently holds the clip paths for the entire chart.
  * @private
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {Object} d3 svg path
  */
 const createDefs = (config, canvasSVG) =>
@@ -331,7 +331,7 @@ const createDefs = (config, canvasSVG) =>
  * @param {Object} axis - Axis scaled according to input parameters
  * @param {Object} scale - d3 scale taking into account the input parameters
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
 const createGrid = (axis, scale, config, canvasSVG) => {
@@ -375,7 +375,7 @@ const createVGridHandler = (gridSVG, axis, style, config) => {
  * @param {Object} axis - Axis scaled according to input parameters
  * @param {Object} scale - d3 scale taking into account the input parameters
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
 const createAxes = (axis, scale, config, canvasSVG) => {
@@ -418,7 +418,7 @@ const createAxes = (axis, scale, config, canvasSVG) => {
  * Creates a container for graph content (evident when there are no boundary ticks)
  * @private
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {Object} d3 svg path
  */
 const createContentContainer = (config, canvasSVG) =>
@@ -434,7 +434,7 @@ const createContentContainer = (config, canvasSVG) =>
  * Creates a container for gantt chart track content
  * @private
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {Object} d3 svg path
  */
 const createTrackSelectionContainer = (config, canvasSVG) =>
@@ -443,7 +443,7 @@ const createTrackSelectionContainer = (config, canvasSVG) =>
  * Creates a container for gantt chart content
  * @private
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {Object} d3 svg path
  */
 const createGanttContent = (config, canvasSVG) =>
@@ -495,7 +495,7 @@ const datelineClickHandler = (value, target) => {
  * @private
  * @param {Object} scale - d3 scale taking into account the input parameters
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {Object} d3 svg path
  */
 const createDateline = (scale, config, canvasSVG) => {
@@ -551,7 +551,7 @@ const createTrack = (content) => new Track(content);
  * Creates a container for track contents
  * @private
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Object} trackConfig - track's config object
  * @returns {Selection} d3 svg path
  */

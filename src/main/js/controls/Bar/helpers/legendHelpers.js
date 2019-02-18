@@ -26,7 +26,7 @@ const onAnimationHandler = (graphContext, control) => () => {
  * @param {Object} graphContext - Graph instance
  * @param {Bar} control - Bar instance
  * @param {Object} config - Graph config object derived from input JSON
- * @param {Array} canvasSVG - d3 html element of canvas
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {function} - returns callback function that handles click action on legend item
  */
 const clickHandler = (graphContext, control, config, canvasSVG) => (
@@ -57,7 +57,7 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
  * if present.
  * @private
  * @param {Array} graphTargets - List of all the items in the Graph
- * @param {Array} canvasSVG - d3 html element of canvas
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {function} - returns callback function that handles hover action on legend item
  */
 const hoverHandler = (graphTargets, canvasSVG) => (item, state) => {

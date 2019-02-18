@@ -20,7 +20,7 @@ import {
  * the necessary parameters on resize so that data points are not cut off
  * @private
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {Object} d3 svg path
  */
 const translateDefs = (config, canvasSVG) =>
@@ -35,7 +35,7 @@ const translateDefs = (config, canvasSVG) =>
  * @param {Object} axis - Axis scaled according to input parameters
  * @param {Object} scale - d3 scale taking into account the input parameters
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
 const translateAxes = (axis, scale, config, canvasSVG) => {
@@ -55,7 +55,7 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
  * Updates the x, y, y2 axes label positions on resize
  * @private
  * @param {Object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 object of canvas svg
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
 const translateLabel = (config, canvasSVG) => {
@@ -91,7 +91,7 @@ const transformPoint = (scale, config) => (value) => (scaleFactor) => {
  * @private
  * @param {Object} scale - d3 scale for Graph
  * @param {object} config - config object derived from input JSON
- * @param {Array} canvasSVG - d3 html element of canvas
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {string} key - d3 object of points group key
  * @param {string} style - CSS style representing the data points
  * @returns {Object} d3 select object
