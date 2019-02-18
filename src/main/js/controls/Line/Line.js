@@ -2,7 +2,10 @@
 import { GraphContent } from "../../core";
 import { getDefaultValue } from "../../core/BaseConfig";
 import constants from "../../helpers/constants";
-import { prepareLabelItem, removeLabelShapeItem } from "../../helpers/label";
+import {
+    prepareLabelShapeItem,
+    removeLabelShapeItem
+} from "../../helpers/label";
 import { removeLegendItem } from "../../helpers/legend";
 import {
     createRegion,
@@ -118,7 +121,7 @@ class Line extends GraphContent {
             this.dataTarget,
             graph.legendSVG
         );
-        prepareLabelItem(
+        prepareLabelShapeItem(
             graph.config,
             this.dataTarget,
             graph.axesLabelShapeGroup[this.config.yAxis]

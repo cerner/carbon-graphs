@@ -23,7 +23,6 @@ import {
 } from "./axis";
 import constants, { SHAPES } from "./constants";
 import styles from "./styles";
-import { getCurrentTransform } from "./transformUtils";
 import utils from "./utils";
 
 /**
@@ -140,16 +139,6 @@ const buildY2AxisLabelShapeContainer = (config, shapeContainerPath) =>
             `translate(0,0) rotate(${getRotationForAxis(constants.Y2_AXIS)})`
         );
 /**
- * Returns a string containing translate and rotate properties as a string
- * @private
- * @param {number} posX - X Position
- * @param {number} posY - Y Position
- * @param {number} rotate - 90 or -90 for Y or Y2 axis
- * @return {string} A string containing translate and rotate for Transform
- */
-const getTranslateWithRotateAsString = (posX, posY, rotate) =>
-    `translate(${posX}, ${posY}) rotate(${rotate})`;
-/**
  * Translates all the shapes within the container to space correct beside each other
  * The amount of spacing is determined by constants.BASE_LABEL_ICON_SPACING
  * @private
@@ -176,30 +165,9 @@ const translateAllLabelShapeItem = (shapeContainerPath) =>
  * @param {Selection} shapeContainerPath - d3 html element of label item
  * @returns {undefined} - returns nothing
  */
-const prepareLabelItem = (config, dataTarget, shapeContainerPath) => {
+const prepareLabelShapeItem = (config, dataTarget, shapeContainerPath) => {
     if (dataTarget.label && dataTarget.label.display && shapeContainerPath) {
         loadLabelShape(shapeContainerPath, dataTarget);
-        addLabelShapeItem(shapeContainerPath);
-    }
-};
-/**
- * Adds the label item shape into the container provided in the argument
- * @private
- * @param {Selection} shapeContainerPath - d3 html element of label item
- * @returns {undefined} - returns nothing
- */
-const addLabelShapeItem = (shapeContainerPath) => {
-    if (utils.notEmpty(shapeContainerPath)) {
-        shapeContainerPath.attr("transform", function() {
-            const currentTransform = d3.transform(getCurrentTransform(this));
-            const currentTranslate = currentTransform.translate;
-            const currentRotate = currentTransform.rotate;
-            return getTranslateWithRotateAsString(
-                currentTranslate[0],
-                currentTranslate[1] + constants.BASE_LABEL_ICON_HEIGHT_PADDING,
-                currentRotate
-            );
-        });
         translateAllLabelShapeItem(shapeContainerPath);
     }
 };
@@ -216,16 +184,6 @@ const removeLabelShapeItem = (shapeContainerPath, dataTarget) => {
             shapeContainerPath,
             `svg[aria-describedby="${dataTarget.key}"]`
         );
-        shapeContainerPath.attr("transform", function() {
-            const currentTransform = d3.transform(getCurrentTransform(this));
-            const currentTranslate = currentTransform.translate;
-            const currentRotate = currentTransform.rotate;
-            return getTranslateWithRotateAsString(
-                currentTranslate[0],
-                currentTranslate[1] - constants.BASE_LABEL_ICON_HEIGHT_PADDING,
-                currentRotate
-            );
-        });
         translateAllLabelShapeItem(shapeContainerPath);
     }
 };
@@ -257,7 +215,7 @@ const translateLabelShapeContainer = (config, shapeContainerPath) => {
 export {
     buildYAxisLabelShapeContainer,
     buildY2AxisLabelShapeContainer,
-    prepareLabelItem,
+    prepareLabelShapeItem,
     translateLabelShapeContainer,
     removeLabelShapeItem,
     shouldTruncateLabel,

@@ -2,7 +2,10 @@
 import { GraphContent } from "../../core";
 import { getDefaultValue } from "../../core/BaseConfig";
 import constants from "../../helpers/constants";
-import { prepareLabelItem, removeLabelShapeItem } from "../../helpers/label";
+import {
+    prepareLabelShapeItem,
+    removeLabelShapeItem
+} from "../../helpers/label";
 import { removeLegendItem } from "../../helpers/legend";
 import {
     hideAllRegions,
@@ -143,7 +146,7 @@ class PairedResult extends GraphContent {
         );
         if (graph.axesLabelShapeGroup[this.config.yAxis]) {
             iterateOnPairType((type) => {
-                prepareLabelItem(
+                prepareLabelShapeItem(
                     graph.config,
                     {
                         key: `${this.dataTarget.key}_${type}`,

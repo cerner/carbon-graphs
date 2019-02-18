@@ -356,7 +356,7 @@ const getYAxisLabelShapeXPosition = (config) =>
  * @returns {number} Position for the label
  */
 const getYAxisLabelShapeYPosition = (config, labelShapeContainer) =>
-    getYAxisHeight(config) / 2 +
+    getYAxisLabelYPosition(config) +
     labelShapeContainer.node().getBoundingClientRect().height / 2;
 /**
  * Y2 Axis label shape position distance away from the graph.
@@ -369,7 +369,7 @@ const getYAxisLabelShapeYPosition = (config, labelShapeContainer) =>
  * @returns {number} Position for the label
  */
 const getY2AxisLabelShapeYPosition = (config, labelShapeContainer) =>
-    getYAxisHeight(config) / 2 -
+    getYAxisLabelYPosition(config) -
     labelShapeContainer.node().getBoundingClientRect().height / 2;
 /**
  * Y2 Axis label's starting position vertically beside the graph
