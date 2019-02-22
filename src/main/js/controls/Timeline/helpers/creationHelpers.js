@@ -109,7 +109,7 @@ const getXAxisLabelXPosition = (config) =>
 const getXAxisLabelYPosition = (config) =>
     getXAxisYPosition(config) +
     config.axisLabelHeights.x * 2 +
-    config.padding.bottom;
+    config.padding.bottom * 4;
 /**
  * Prepares X,Y and Y2 Axes according to their scale and available container width and height
  * @private

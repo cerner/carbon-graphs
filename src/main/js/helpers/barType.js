@@ -20,7 +20,7 @@ const getBarStyle = (style = {}, dataTarget) => {
         return currentStyle;
     }
     if (style.isDotted === true) {
-        currentStyle = `${currentStyle} stroke-width: 1; stroke-dasharray: 2, 2;`;
+        currentStyle = `${currentStyle}; stroke-width: 1; stroke-dasharray: 2, 2;`;
     }
     if (style.isHollow === true) {
         currentStyle = `${currentStyle} fill: ${
@@ -28,7 +28,7 @@ const getBarStyle = (style = {}, dataTarget) => {
         }; stroke-width: 1;`;
     }
     if (style.isHashed === true) {
-        currentStyle = `${currentStyle} stroke-width: 1`;
+        currentStyle = `${currentStyle} stroke-width: 1;`;
     }
     return currentStyle;
 };

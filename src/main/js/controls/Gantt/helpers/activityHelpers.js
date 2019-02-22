@@ -240,14 +240,14 @@ const getActivityHashedBar = (
         .attr(
             "style",
             style ||
-                `fill: ${constants.DEFAULT_ACTIVITY_BAR_HASH_COLOR}; opacity: ${
-                    constants.DEFAULT_GANTT_ACTIVITY_OPACITY
-                };`
+                `fill: ${
+                    constants.DEFAULT_ACTIVITY_BAR_HASH_COLOR
+                }; fill-opacity: ${constants.DEFAULT_GANTT_ACTIVITY_OPACITY};`
         );
     // Opacity for bar with hashes
     getRect(path, x, y, width, height)
         .classed(styles.activityBar, true)
-        .attr("style", `fill: url(#${patternId}); opacity: 0.7;`);
+        .attr("style", `fill: url(#${patternId}); fill-opacity: 0.7;`);
     return path;
 };
 

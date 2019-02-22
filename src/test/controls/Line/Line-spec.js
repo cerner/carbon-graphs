@@ -904,7 +904,7 @@ describe("Line", () => {
                 expect(iconSVG).not.toBeNull();
                 expect(iconSVG.classList).toContain(styles.legendItemIcon);
                 expect(iconSVG.getAttribute("style")).toBe(
-                    `fill: ${COLORS.BLUE}`
+                    `fill: ${COLORS.BLUE};`
                 );
                 expect(iconPath).not.toBeNull();
                 expect(iconPath.getAttribute("d")).not.toBeNull();

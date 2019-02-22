@@ -19,13 +19,12 @@ Carbon provides an abstraction for c3 and d3.
     -   [Install](#install)
     -   [Browser support](#browser-support)
 
-## Resources
+## Dependencies
 
--   [Demo](https://pages.github.cerner.com/Geneva/carbon-graphs/)
--   [Contributing to Carbon](docs/contributing/README.md)
--   [API Reference](docs/README.md)
--   [JSDocs](https://pages.github.cerner.com/Geneva/carbon-graphs/docs/)
--   [Release Notes](https://github.cerner.com/Geneva/carbon-graphs/releases)
+-   **d3** [_v3.5.17_]
+-   Polyfills:
+    -   Object.assign
+    -   Object.values
 
 ## Features
 
@@ -34,41 +33,33 @@ Carbon provides an abstraction for c3 and d3.
 -   Native-built graphs
 -   Default theme for data points
 
-    | Graph types   |
-    | ------------- |
-    | Line          |
-    | Multi-line    |
-    | Paired Result |
-    | Spline line   |
-    | Timeline      |
-    | Bar           |
-    | Gantt         |
+### Graph types
 
-    | Settings                     |
-    | ---------------------------- |
-    | Legend                       |
-    | Labels                       |
-    | Grid `Vertical & Horizontal` |
-    | Axes `x, y or y2`            |
-    | Regions `Horizontal`         |
+-   Line
+-   Multi-line
+-   Paired Result
+-   Spline line
+-   Timeline
+-   Bar
+-   Gantt
+
+### Graph Settings/Toggles
+
+-   Legend
+-   Labels
+-   Grid `Vertical & Horizontal`
+-   Axes `x, y or y2`
+-   Regions `Horizontal`
 
 ### Other highlights
 
 -   Criticality indicators for data point
 -   Non-contiguous data point Line graph
 -   Locale support for axes ticks
--   Y and Y2 Axes label along with shapes
-
-## Dependencies
-
--   **d3** [_v3.5.17_]
--   Polyfills:
-    -   Object.assign
-    -   Object.values
+-   Y and Y2 Axes label along with respective shapes
 
 ## Potential features
 
--   [ ] Axes labelling along with shapes
 -   [ ] Sparkline graph
 -   [ ] Scatter-plot graph
 -   [ ] Area graphs
@@ -77,6 +68,14 @@ Carbon provides an abstraction for c3 and d3.
 -   [ ] Tick counts
 -   [ ] Show/hide ticks
 -   [ ] Pan
+
+## Resources
+
+-   [Demo](https://pages.github.cerner.com/Geneva/carbon-graphs/)
+-   [Contributing to Carbon](docs/contributing/README.md)
+-   [API Reference](docs/README.md)
+-   [JSDocs](https://pages.github.cerner.com/Geneva/carbon-graphs/docs/)
+-   [Release Notes](https://github.cerner.com/Geneva/carbon-graphs/releases)
 
 ## Usage
 

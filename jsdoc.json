@@ -41,6 +41,9 @@
             "description": "A graphing library built using d3 based on Cerner design standards",
             "keyword": "carbon"
         },
+        "private": [
+            false
+        ],
         "search": [
             true
         ],
