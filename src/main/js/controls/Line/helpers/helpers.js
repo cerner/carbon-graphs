@@ -294,10 +294,10 @@ const drawDataLines = (scale, config, lineGroupSVG) =>
         .attr(
             "style",
             (value) =>
-                `stroke: ${getColorForTarget(value)}${
+                `stroke: ${getColorForTarget(value)};${
                     config.shownTargets.indexOf(value.key) < 0
-                        ? "; display: none;"
-                        : ";"
+                        ? " display: none;"
+                        : ""
                 }`
         )
         .attr("aria-describedby", (target) => target.key);
@@ -317,10 +317,10 @@ const drawDataPoints = (scale, config, pointGroupPath) => {
             new Shape(getShapeForTarget(value)).getShapeElement(
                 getDefaultSVGProps({
                     svgClassNames: styles.point,
-                    svgStyles: `fill: ${getColorForTarget(value)}${
+                    svgStyles: `fill: ${getColorForTarget(value)};${
                         shouldHideDataPoints(config.shownTargets, value)
-                            ? "; display: none;"
-                            : ";"
+                            ? " display: none;"
+                            : ""
                     }`,
                     transformFn: transformPoint(scale)(value),
                     onClickFn() {

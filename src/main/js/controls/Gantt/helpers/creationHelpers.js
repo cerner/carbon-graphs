@@ -517,7 +517,7 @@ const createDateline = (scale, config, canvasSVG) => {
         datelineGroup
             .append("line")
             .classed(styles.ganttDateline, true)
-            .attr("style", (d) => `fill: ${d.color}; stroke: ${d.color}`)
+            .attr("style", (d) => `fill: ${d.color}; stroke: ${d.color};`)
             .attr(
                 "pointer-events",
                 graphConfigClickPassThrough ? "none" : "auto"
@@ -526,7 +526,7 @@ const createDateline = (scale, config, canvasSVG) => {
             new Shape(getShapeForTarget(d)).getShapeElement(
                 getDefaultSVGProps({
                     svgClassNames: styles.ganttDatelinePoint,
-                    svgStyles: `fill: ${d.color}; stroke: ${d.color}`,
+                    svgStyles: `fill: ${d.color}; stroke: ${d.color};`,
                     transformFn: (scale) => `scale(${scale})`,
                     onClickFn() {
                         datelineClickHandler(d, this);

@@ -1275,7 +1275,7 @@ describe("Timeline", () => {
                     getShapeForTarget(input).path.d
                 );
                 expect(iconSVG.getAttribute("style")).toBe(
-                    `fill: ${COLORS.BLUE}`
+                    `fill: ${COLORS.BLUE};`
                 );
             });
             it("Attaches click event handlers correctly", (done) => {

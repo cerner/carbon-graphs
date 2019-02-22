@@ -224,10 +224,10 @@ const renderDataPointPath = (scale, config, path, dataPoint, index) =>
         new Shape(getShapeForTarget(dataPoint)).getShapeElement(
             getDefaultSVGProps({
                 svgClassNames: styles.point,
-                svgStyles: `fill: ${getColorForTarget(dataPoint)}${
+                svgStyles: `fill: ${getColorForTarget(dataPoint)};${
                     shouldHideDataPoints(config.shownTargets, dataPoint)
-                        ? "; display: none;"
-                        : ";"
+                        ? " display: none;"
+                        : ""
                 }`,
                 transformFn: transformPoint(scale, config)(dataPoint),
                 onClickFn() {

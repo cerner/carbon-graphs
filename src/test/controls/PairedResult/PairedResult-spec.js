@@ -1359,7 +1359,7 @@ describe("PairedResult", () => {
                     getShapeForTarget(input).high.path.d
                 );
                 expect(iconSVG.getAttribute("style")).toBe(
-                    `fill: ${COLORS.BLUE}`
+                    `fill: ${COLORS.BLUE};`
                 );
             });
             it("attaches click event handlers correctly", (done) => {

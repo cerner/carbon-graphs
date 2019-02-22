@@ -73,7 +73,7 @@ const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
             new Shape(getShapeForTarget(t)).getShapeElement(
                 getDefaultSVGProps({
                     svgClassNames: styles.legendItemIcon,
-                    svgStyles: `fill: ${getColorForTarget(t)}`
+                    svgStyles: `fill: ${getColorForTarget(t)};`
                 }),
                 true
             )

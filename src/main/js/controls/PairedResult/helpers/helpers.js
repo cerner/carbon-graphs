@@ -286,11 +286,11 @@ const drawPoints = (scale, config, canvasSVG) => {
                     )}`,
                     svgStyles: `fill: ${getColorForTarget(
                         getValue(value, type)
-                    )}${
+                    )};${
                         config.shownTargets.indexOf(getValue(value, type).key) <
                         0
-                            ? "; display: none;"
-                            : ";"
+                            ? " display: none;"
+                            : ""
                     }`,
                     transformFn: transformPoint(scale, type)(value),
                     onClickFn() {
