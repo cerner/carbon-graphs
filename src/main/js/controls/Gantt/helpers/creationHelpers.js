@@ -22,11 +22,12 @@ import {
     getShapeForTarget,
     translateCanvas
 } from "../../Graph/helpers/helpers";
-import Track from "../Track";
+import Track, { validateContent } from "../Track";
 import {
     translateHorizontalGrid,
     translateVerticalGrid
 } from "./translateHelpers";
+import errors from "../../../helpers/errors";
 
 /**
  * Calculates the height for Y and Y2 axes.
@@ -48,49 +49,39 @@ const determineHeight = (config) =>
  */
 const updateTrackCount = (config, isLoad = false) =>
     isLoad ? config.axis.y.trackCount++ : config.axis.y.trackCount--;
+
 /**
- * Updates the unique track key into a dictionary for loading and unloading
+ * Updates the trackList object to include new track info, by converting trackListObject
+ * to array, insert new trackObject and convert it back to object.
  * @private
- * @param {Object} config - config object derived from input JSON
- * @param {string} key - Unique key for each track
- * @param {boolean} [isLoad] True if load workflow, false if unload
- * @returns {undefined} - returns nothing
+ * @param {Object} content - track Content
+ * @param {Number} trackIndex - index at which track needs to be loaded
+ * @param {Object} trackListObject - Object which holds list of Tracks
+ * @returns {Object} Updated object which now holds the new track.
  */
-const updateTrackKeyList = (config, key, isLoad) => {
-    if (isLoad) {
-        Object.assign(config.axis.y.trackList, {
-            [key]: {
-                trackLabel: "",
-                trackHeight: constants.DEFAULT_GANTT_TRACK_HEIGHT
-            }
-        });
-    } else {
-        delete config.axis.y.trackList[key];
-    }
+const updateTrackList = (content, trackIndex, trackListObject) => {
+    // convert trackListObject to an actual array (its an object)
+    const trackList = Object.keys(trackListObject).map((key) => [
+        key,
+        trackListObject[key]
+    ]);
+    trackList.splice(trackIndex, 0, [
+        content.key,
+        {
+            trackHeight: content.dimension
+                ? content.dimension.trackHeight
+                : constants.DEFAULT_GANTT_TRACK_HEIGHT,
+            trackLabel: content.trackLabel.display
+        }
+    ]);
+    // convert the list back to an object
+    const trackListObj = {};
+    trackList.forEach((track) => {
+        trackListObj[track[0]] = track[1];
+    });
+    return trackListObj;
 };
-/**
- * Updates the unique track label display values into a dictionary for loading and unloading
- * @private
- * @param {Object} config - config object derived from input JSON
- * @param {string} trackLabel - Unique label for each track
- * @param {string} key - Unique key for each track
- * @returns {undefined} - returns nothing
- */
-const updateTrackLabel = (config, trackLabel, key) => {
-    config.axis.y.trackList[key].trackLabel = trackLabel;
-};
-/**
- * Updates the array which contains the list of track height needed to compute the
- * range for the Y Axis. Using this range we can compute the domain for the graph.
- * @private
- * @param {Object} config - config object derived from input JSON
- * @param {number} height - custom track height provided by consumer
- * @param {string} key - Unique key for each track
- * @returns {undefined} - returns nothing
- */
-const updateTrackHeight = (config, height, key) => {
-    config.axis.y.trackList[key].trackHeight = height;
-};
+
 /**
  * Updates the track properties such as label, key and height lists.
  * Required props:
@@ -107,16 +98,8 @@ const updateTrackHeight = (config, height, key) => {
  */
 const updateTrackProps = (config, content, isLoad = false) => {
     updateTrackCount(config, isLoad);
-    updateTrackKeyList(config, content.key, isLoad);
-    if (isLoad) {
-        updateTrackLabel(config, content.trackLabel.display, content.key);
-        updateTrackHeight(
-            config,
-            content.dimension
-                ? content.dimension.trackHeight
-                : constants.DEFAULT_GANTT_TRACK_HEIGHT,
-            content.key
-        );
+    if (!isLoad) {
+        delete config.axis.y.trackList[content.key];
     }
 };
 /**
@@ -452,6 +435,42 @@ const createGanttContent = (config, canvasSVG) =>
         .classed(styles.ganttChartContent, true)
         .attr("clip-path", `url(#${config.clipPathId})`);
 /**
+ * Prepares the appropriate index value for inserting the track, and scaling the graph, if the trackContent has an index.
+ * If no index is provided, we return the size of the trackList to insert at the end.
+ * If the index is too large than the current track length, we insert it at end. If not, we insert at the index provided.
+ * If the loading index is below 0, we throw an error.
+ * @private
+ * @param {Object} scale - d3 scale
+ * @param {Object} config - config object derived from input JSON
+ * @param {Object} content - track content which needs to be laoded
+ * @param {Number} length - length of all tracks
+ * @throws module:errors.THROW_MSG_INVALID_LOAD_CONTENT_AT_INDEX
+ * @returns {Number} - index where we would insert the new track content
+ */
+const prepareLoadAtIndex = (scale, config, content, length) => {
+    validateContent(content);
+    if (utils.notEmpty(content) && utils.notEmpty(content.loadAtIndex)) {
+        if (content.loadAtIndex < 0) {
+            throw new Error(errors.THROW_MSG_INVALID_LOAD_CONTENT_AT_INDEX);
+        }
+        const index = content.loadAtIndex;
+        config.axis.y.trackList = updateTrackList(
+            content,
+            index,
+            config.axis.y.trackList
+        );
+        scaleGraph(scale, config);
+        return index;
+    }
+    config.axis.y.trackList = updateTrackList(
+        content,
+        length,
+        config.axis.y.trackList
+    );
+    return length;
+};
+
+/**
  * Toggles the selection of a dateline indicator, executes on click of a data point.
  * @private
  * @param {Object} target - DOM element of the data point clicked
@@ -597,5 +616,6 @@ export {
     detachEventHandlers,
     updateAxesDomain,
     updateTrackProps,
+    prepareLoadAtIndex,
     isHashed
 };

@@ -106,10 +106,7 @@ const addTrackLabelEventHandler = (canvasSVG, labelObj) =>
  * @param {Object} inputJSON - Input JSON provided by the consumer
  * @returns {Object} config object containing consumer data
  */
-const loadInput = (inputJSON) => {
-    validateContent(inputJSON);
-    return utils.deepClone(inputJSON);
-};
+const loadInput = (inputJSON) => utils.deepClone(inputJSON);
 
 /**
  * Track sub-graph part of a Gantt chart, which forms the foreground task
@@ -145,7 +142,6 @@ class Track extends GraphContent {
          * We Need to loadGanttTrackSelector prior to all other components, since trackSelector is part of trackGroup and should be layered bottom,
          * to ensure the clicable functionality.
          */
-
         updateTrackProps(graph.config, this.config, true);
         loadGanttTrackSelector(graph, this.trackGroupPath, this.config);
         if (utils.notEmpty(this.config.activities)) {

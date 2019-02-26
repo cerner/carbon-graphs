@@ -26,7 +26,8 @@ import {
     detachEventHandlers,
     determineHeight,
     scaleGraph,
-    updateAxesDomain
+    updateAxesDomain,
+    prepareLoadAtIndex
 } from "./helpers/creationHelpers";
 import { translateGraph, translateLabelText } from "./helpers/translateHelpers";
 
@@ -253,10 +254,16 @@ class Gantt extends Construct {
      * @returns {Gantt} - Gantt instance
      */
     loadContent(content) {
+        const index = prepareLoadAtIndex(
+            this.scale,
+            this.config,
+            content,
+            this.tracks.length
+        );
         const track = createTrack(content);
-        this.trackConfig.push(track);
+        this.trackConfig.splice(index, 0, track);
         track.load(this);
-        this.tracks.push(content.key);
+        this.tracks.splice(index, 0, content.key);
         updateAxesDomain(this.config);
         this.config.height = determineHeight(this.config);
         setCanvasHeight(this.config);

@@ -25,6 +25,7 @@ import {
     datelineAlt,
     datelineJSON,
     fetchElementByClass,
+    fetchAllElementsByClass,
     getAxes,
     getData,
     legendJSON,
@@ -1770,6 +1771,202 @@ describe("Gantt", () => {
                 expect(Number.parseInt(contentContainer.attr("y"), 10)).toEqual(
                     (ganttConfig.padding.top + ganttConfig.padding.bottom) * 2
                 );
+            });
+        });
+        /**
+         * CH02152019.01 - Verify when the track is loading, the system positions the track according to the index position.
+         */
+        describe("Track loading at a index", () => {
+            describe("Validation", () => {
+                it("Throws error if input index is not valid", () => {
+                    const content = utils.deepClone(primaryContent);
+                    content.loadAtIndex = -2;
+                    expect(() => {
+                        gantt.loadContent(content);
+                    }).toThrow(
+                        new Error(
+                            errors.THROW_MSG_INVALID_LOAD_CONTENT_AT_INDEX
+                        )
+                    );
+                });
+                it("Doesn't Throw an error if input index is valid", () => {
+                    const content = utils.deepClone(primaryContent);
+                    content.loadAtIndex = 1;
+                    expect(() => {
+                        gantt.loadContent(content);
+                    }).not.toThrow(
+                        new Error(
+                            errors.THROW_MSG_INVALID_LOAD_CONTENT_AT_INDEX
+                        )
+                    );
+                });
+                it("Doesn't throw an error if loadAtIndex is not used", () => {
+                    const content = utils.deepClone(primaryContent);
+                    expect(() => {
+                        gantt.loadContent(content);
+                    }).not.toThrow(
+                        new Error(
+                            errors.THROW_MSG_INVALID_LOAD_CONTENT_AT_INDEX
+                        )
+                    );
+                });
+            });
+            it("Inserts at head, if index is 0", (done) => {
+                const content = utils.deepClone(primaryContent);
+                content.key = "track 2";
+                content.trackLabel.display = "Project B";
+                content.loadAtIndex = 0;
+                gantt.loadContent(content);
+                expect(Object.keys(gantt.config.axis.y.trackList)[0]).toBe(
+                    "track 2"
+                );
+                expect(Object.keys(gantt.config.axis.y.trackList)[1]).toBe(
+                    "track 1"
+                );
+                gantt.resize();
+                delay(() => {
+                    const trackGroups = fetchAllElementsByClass(
+                        ganttChartContainer,
+                        `${styles.trackGroup}`
+                    );
+                    expect(
+                        trackGroups[0].childNodes[0].childNodes[0].getAttribute(
+                            "y"
+                        )
+                    ).toBe("42");
+                    expect(
+                        trackGroups[1].childNodes[0].childNodes[0].getAttribute(
+                            "y"
+                        )
+                    ).toBe("1");
+                    done();
+                }, TRANSITION_DELAY);
+            });
+            it("Inserts in between, if index is less than trackLength", (done) => {
+                const secondaryContent = utils.deepClone(primaryContent);
+                secondaryContent.key = "track 2";
+                secondaryContent.trackLabel.display = "Project B";
+                gantt.loadContent(secondaryContent);
+                const ternaryContent = utils.deepClone(primaryContent);
+                ternaryContent.key = "track 3";
+                ternaryContent.trackLabel.display = "Project C";
+                ternaryContent.loadAtIndex = 1;
+                gantt.loadContent(ternaryContent);
+                expect(Object.keys(gantt.config.axis.y.trackList)[0]).toBe(
+                    "track 1"
+                );
+                expect(Object.keys(gantt.config.axis.y.trackList)[1]).toBe(
+                    "track 3"
+                );
+                expect(Object.keys(gantt.config.axis.y.trackList)[2]).toBe(
+                    "track 2"
+                );
+                delay(() => {
+                    const trackGroups = fetchAllElementsByClass(
+                        ganttChartContainer,
+                        `${styles.trackGroup}`
+                    );
+                    expect(
+                        trackGroups[0].childNodes[0].childNodes[0].getAttribute(
+                            "y"
+                        )
+                    ).toBe("1");
+                    expect(
+                        trackGroups[1].childNodes[0].childNodes[0].getAttribute(
+                            "y"
+                        )
+                    ).toBe("83");
+                    expect(
+                        trackGroups[2].childNodes[0].childNodes[0].getAttribute(
+                            "y"
+                        )
+                    ).toBe("42");
+                    done();
+                }, TRANSITION_DELAY);
+            });
+            it("Inserts at end, if index is equal to trackLength", (done) => {
+                const secondaryContent = utils.deepClone(primaryContent);
+                secondaryContent.key = "track 2";
+                secondaryContent.trackLabel.display = "Project B";
+                gantt.loadContent(secondaryContent);
+                const ternaryContent = utils.deepClone(primaryContent);
+                ternaryContent.key = "track 3";
+                ternaryContent.trackLabel.display = "Project C";
+                ternaryContent.loadAtIndex = 2;
+                gantt.loadContent(ternaryContent);
+                expect(Object.keys(gantt.config.axis.y.trackList)[0]).toBe(
+                    "track 1"
+                );
+                expect(Object.keys(gantt.config.axis.y.trackList)[1]).toBe(
+                    "track 2"
+                );
+                expect(Object.keys(gantt.config.axis.y.trackList)[2]).toBe(
+                    "track 3"
+                );
+                delay(() => {
+                    const trackGroups = fetchAllElementsByClass(
+                        ganttChartContainer,
+                        `${styles.trackGroup}`
+                    );
+                    expect(
+                        trackGroups[0].childNodes[0].childNodes[0].getAttribute(
+                            "y"
+                        )
+                    ).toBe("1");
+                    expect(
+                        trackGroups[1].childNodes[0].childNodes[0].getAttribute(
+                            "y"
+                        )
+                    ).toBe("42");
+                    expect(
+                        trackGroups[2].childNodes[0].childNodes[0].getAttribute(
+                            "y"
+                        )
+                    ).toBe("83");
+                    done();
+                }, TRANSITION_DELAY);
+            });
+            it("Inserts at end, if index is too big than trackLength", (done) => {
+                const secondaryContent = utils.deepClone(primaryContent);
+                secondaryContent.key = "track 2";
+                secondaryContent.trackLabel.display = "Project B";
+                gantt.loadContent(secondaryContent);
+                const ternaryContent = utils.deepClone(primaryContent);
+                ternaryContent.key = "track 3";
+                ternaryContent.trackLabel.display = "Project C";
+                ternaryContent.loadAtIndex = 99;
+                gantt.loadContent(ternaryContent);
+                expect(Object.keys(gantt.config.axis.y.trackList)[0]).toBe(
+                    "track 1"
+                );
+                expect(Object.keys(gantt.config.axis.y.trackList)[1]).toBe(
+                    "track 2"
+                );
+                expect(Object.keys(gantt.config.axis.y.trackList)[2]).toBe(
+                    "track 3"
+                );
+                delay(() => {
+                    const trackGroups = fetchAllElementsByClass(
+                        ganttChartContainer,
+                        `${styles.trackGroup}`
+                    );
+                    expect(
+                        trackGroups[0].childNodes[0].childNodes[0].getAttribute(
+                            "y"
+                        )
+                    ).toBe("1");
+                    expect(
+                        trackGroups[1].childNodes[0].childNodes[0].getAttribute(
+                            "y"
+                        )
+                    ).toBe("42");
+                    expect(
+                        trackGroups[2].childNodes[0].childNodes[0].getAttribute(
+                            "y"
+                        )
+                    ).toBe("83");
+                    done();
+                }, TRANSITION_DELAY);
             });
         });
         describe("Validates content for unique keys", () => {

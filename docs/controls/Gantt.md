@@ -43,6 +43,7 @@ A native gantt chart using d3 based on standard design patterns.
         -   [Action Legend](#action-legend)
             -   [Required](#required-10)
             -   [Optional](#optional-10)
+        -   [Constraints](#constraints)
         -   [Structure](#structure)
 
 ## Usage
@@ -150,6 +151,7 @@ clickPassThrough = {
 
 | Property Name | Expected | Default | Description                                             |
 | ------------- | -------- | ------- | ------------------------------------------------------- |
+| loadAtIndex   | number   | null    | Index where the track needs to be loaded.               |
 | onClick       | Function | null    | Any action that can be performed when clicking on track |
 | dimension     | object   | {}      | Refer [Dimension](#dimension)                           |
 | tasks         | array    | []      | Refer [Tasks](#tasks)                                   |
@@ -347,6 +349,12 @@ Here is a list of how layering will be followed inside `Gantt`. Layering here fo
 -   `Tasks`
 -   `Events`
 -   `Actions`
+
+### Constraints
+
+-   If ganttContent's `loadAtIndex` is below 0, we throw an error.
+-   If ganttContent's `loadAtIndex` is equal to trackLength or exceeds trackLength, we insert at the end.
+-   If ganttContent's `loadAtIndex` is in between 0 and trackLength, we insert in between.
 
 ### Structure
 

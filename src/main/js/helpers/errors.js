@@ -81,6 +81,8 @@ export default {
         "Input validation has not been implemented.",
     THROW_MSG_CONFIG_CLONE_INPUT_NOT_IMPLEMENTED:
         "Clone input function has not been implemented.",
+    THROW_MSG_INVALID_LOAD_CONTENT_AT_INDEX:
+        "Invalid input provided. Content cannot be loaded at index less than zero.",
     /**
      * @description Region
      */
