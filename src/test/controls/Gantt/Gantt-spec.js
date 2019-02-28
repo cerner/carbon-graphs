@@ -2335,6 +2335,12 @@ describe("Gantt", () => {
             expect(gantt.config.canvasHeight).toBe(
                 141 + BASE_CANVAS_HEIGHT_PADDING
             );
+            expect(
+                document.querySelector(`[aria-describedby="track 2"]`)
+            ).toBeNull();
+            expect(
+                document.querySelector(`[aria-describedby="track 1"]`)
+            ).not.toBeNull();
         });
         it("When custom padding is used", () => {
             gantt.destroy();

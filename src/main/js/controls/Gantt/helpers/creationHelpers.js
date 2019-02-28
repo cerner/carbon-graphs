@@ -581,6 +581,15 @@ const createTrackContainer = (config, canvasSVG, trackConfig) =>
         .classed(styles.trackGroup, true)
         .attr("aria-labelledby", trackConfig.trackLabel.display)
         .attr("aria-describedby", trackConfig.key);
+/**
+ * Removes the container for track contents
+ * @private
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
+ * @param {Object} trackConfig - track's config object
+ * @returns {void} - returns nothing
+ */
+const removeTrackContainer = (canvasSVG, trackConfig) =>
+    canvasSVG.select(`[aria-describedby="${trackConfig.key}"]`).remove();
 
 /**
  * Checks if hashing style is available.
@@ -607,6 +616,7 @@ export {
     createTrackSelectionContainer,
     createGanttContent,
     createTrackContainer,
+    removeTrackContainer,
     createDateline,
     scaleGraph,
     determineHeight,

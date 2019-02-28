@@ -14,7 +14,8 @@ import { loadActions, unloadActions } from "./helpers/actionHelpers";
 import { loadActivities, unloadActivities } from "./helpers/activityHelpers";
 import {
     createTrackContainer,
-    updateTrackProps
+    updateTrackProps,
+    removeTrackContainer
 } from "./helpers/creationHelpers";
 import { loadEvents, unloadEvents } from "./helpers/eventHelpers";
 import { loadTasks, unloadTasks } from "./helpers/taskHelpers";
@@ -197,6 +198,7 @@ class Track extends GraphContent {
         if (utils.notEmpty(this.config.actions)) {
             unloadActions(graph, this.trackGroupPath);
         }
+        removeTrackContainer(graph.svg, this.config);
         this.config = {};
         return this;
     }
