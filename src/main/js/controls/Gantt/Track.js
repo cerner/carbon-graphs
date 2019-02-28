@@ -198,7 +198,7 @@ class Track extends GraphContent {
         if (utils.notEmpty(this.config.actions)) {
             unloadActions(graph, this.trackGroupPath);
         }
-        removeTrackContainer(graph.svg, this.config);
+        removeTrackContainer(graph.svg, this.config.key);
         this.config = {};
         return this;
     }

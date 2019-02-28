@@ -585,11 +585,11 @@ const createTrackContainer = (config, canvasSVG, trackConfig) =>
  * Removes the container for track contents
  * @private
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @param {Object} trackConfig - track's config object
- * @returns {void} - returns nothing
+ * @param {string} key - Unique identifier of the track.
+ * @returns {Selection} - d3 svg path
  */
-const removeTrackContainer = (canvasSVG, trackConfig) =>
-    canvasSVG.select(`[aria-describedby="${trackConfig.key}"]`).remove();
+const removeTrackContainer = (canvasSVG, key) =>
+    canvasSVG.select(`g[aria-describedby="${key}"]`).remove();
 
 /**
  * Checks if hashing style is available.
