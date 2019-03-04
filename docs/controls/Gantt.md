@@ -420,7 +420,7 @@ var data = {
         display: "Project A",
         onClick: (label) => {}
     },
-    onClickPassThrough: {
+    clickPassThrough: {
         tasks: false,
         activities: false,
         events: false,
