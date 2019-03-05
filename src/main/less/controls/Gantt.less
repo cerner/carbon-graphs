@@ -30,7 +30,7 @@
 .carbon-data-selected-bar {
     display: block;
     .selected-indicator-styles();
-    shape-rendering: geometricPrecision;
+    .carbon-shape-rendering();
 
     &[aria-hidden="true"] {
         .opacity-hide();
@@ -47,15 +47,15 @@
 
     &[aria-selected="true"] {
         .selected-indicator-styles();
-        shape-rendering: geometricPrecision;
+        .carbon-shape-rendering();
     }
 }
 
 .carbon-gantt-dateline-group {
     .carbon-gantt-dateline {
         stroke-width: 3px;
-        shape-rendering: crispEdges;
         opacity: 0.3;
+        .carbon-shape-rendering();
     }
 
     .carbon-gantt-dateline-point {

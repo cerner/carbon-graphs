@@ -37,7 +37,7 @@ svg:not(:root) {
 .carbon-axis,
 .carbon-grid line,
 .carbon-content-container {
-    shape-rendering: crispEdges;
+    .carbon-shape-rendering();
 }
 
 .carbon-axis-x,
@@ -220,7 +220,7 @@ svg:not(:root) {
 .carbon-data-completion-bar,
 .carbon-data-bar {
     user-select: none;
-    shape-rendering: crispEdges;
+    .carbon-shape-rendering();
     stroke-width: 0;
 
     &[aria-disabled="false"] {
