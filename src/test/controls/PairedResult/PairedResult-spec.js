@@ -2715,7 +2715,7 @@ describe("PairedResult", () => {
                     getXAxisXPosition(graphDefault.config)
                 );
                 expect(+regionElement.getAttribute("y")).toBe(
-                    graphDefault.scale.y(220) + constants.PADDING.top
+                    graphDefault.scale.y(220) + constants.PADDING.bottom
                 );
             });
             it("Does not hide regions is graph has only 1 data-set", () => {
@@ -2920,7 +2920,7 @@ describe("PairedResult", () => {
                     getXAxisXPosition(graphDefault.config)
                 );
                 expect(+regionElement.getAttribute("y")).toBe(
-                    constants.PADDING.top
+                    constants.PADDING.bottom
                 );
             });
             it("Creates region correctly for y2 axis", () => {
@@ -2947,7 +2947,7 @@ describe("PairedResult", () => {
                     getXAxisXPosition(graphDefault.config)
                 );
                 expect(+regionElement.getAttribute("y")).toBe(
-                    graphDefault.scale.y2(15) + constants.PADDING.top
+                    graphDefault.scale.y2(15) + constants.PADDING.bottom
                 );
             });
             it("Creates region with correct, color if provided", () => {

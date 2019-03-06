@@ -10,7 +10,7 @@ Thanks for contributing to Carbon! :1st_place_medal: :1st_place_medal:
     -   [Development](#development)
         -   [Pulling in dependencies](#pulling-in-dependencies)
         -   [Building the project](#building-the-project)
-        -   [Guidelines](#guidelines)
+        -   [Process checklist](#process-checklist)
         -   [Commit message format](#commit-message-format)
     -   [Code Review](#code-review)
         -   [Pull Request](#pull-request)

@@ -397,11 +397,11 @@ const getY2AxisLabelShapeXPosition = (config) =>
  */
 const calculateVerticalPadding = (config) => {
     if (!isXAxisOrientationTop(config.axis.x.orientation)) {
-        return config.padding.top;
+        return config.padding.bottom;
     } else if (!config.axisLabelHeights.x) {
-        return config.padding.bottom * 2;
+        return config.padding.top;
     }
-    return config.axisLabelHeights.x * 2 + config.padding.bottom;
+    return config.axisLabelHeights.x * 2 + config.padding.top;
 };
 /**
  * X Axis's starting position within the canvas

@@ -6,8 +6,9 @@ Any graph that inherits from `Graph` API will inherit the following `Axis` and `
     -   [JSON Properties](#json-properties)
         -   [Required](#required)
         -   [Optional](#optional)
-    -   [AXIS_TYPE](#axis_type)
-    -   [AXES_ORIENTATION](#axes_orientation)
+            -   [Constraints](#constraints)
+    -   [AXIS_TYPE](#axistype)
+    -   [AXES_ORIENTATION](#axesorientation)
 
 ## JSON Properties
 

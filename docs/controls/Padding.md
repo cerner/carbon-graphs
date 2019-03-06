@@ -5,12 +5,12 @@ Padding applied to all graph types
 **WARNING:**
 Use of padding property is strictly use-case specific. Flags such as `showLabel` and `axis.x.show` and `axis.y.show` needs to be set appropriately by the consumer if padding is employed.
 
--   [padding](#padding)
+-   [Padding](#padding)
     -   [JSON Properties](#json-properties)
         -   [Root](#root)
             -   [Required](#required)
-            -   [Default Padding](#default-padding)
     -   [Constraints](#constraints)
+    -   [Default Padding](#default-padding)
 
 ## JSON Properties
 

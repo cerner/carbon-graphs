@@ -3,7 +3,7 @@ import d3 from "d3";
 /**
  * @type {number} Delay duration
  */
-export const TRANSITION_DELAY = 400;
+export const TRANSITION_DELAY = 300;
 /**
  * Disables all animations for unit testing
  * @returns {undefined} returns nothing

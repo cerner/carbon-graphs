@@ -11,8 +11,7 @@ A native gantt chart using d3 based on standard design patterns.
         -   [Axis](#axis)
             -   [Required](#required-1)
             -   [Optional](#optional-1)
-        -   [Pass Through](#pass-Through)
-            -   [Optional](#optional-1)
+        -   [Pass Through](#pass-through)
         -   [Tracks](#tracks)
             -   [Required](#required-2)
             -   [Optional](#optional-2)
@@ -38,11 +37,11 @@ A native gantt chart using d3 based on standard design patterns.
             -   [Conditionally Required](#conditionally-required-2)
         -   [Dateline](#dateline)
             -   [Required](#required-9)
-            -   [Optional](#optional-9)
-            -   [Conditionally Required](#conditionally-required-3)
+            -   [Optional](#optional-8)
         -   [Action Legend](#action-legend)
             -   [Required](#required-10)
-            -   [Optional](#optional-10)
+            -   [Optional](#optional-9)
+        -   [Layering](#layering)
         -   [Constraints](#constraints)
         -   [Structure](#structure)
 
@@ -86,6 +85,7 @@ ganttInstance.loadContent(/* Data Object D */);
 | actionLegend     | array    | []                                             | Refer [Action Legend](#action-legend)                                                |
 | showActionLegend | boolean  | true                                           | Toggle to show graph legend                                                          |
 | padding          | object   | `{ top: 10, bottom: 5, left: 100, right: 50 }` | Refer [Padding](Padding.md)                                                          |
+| clickPassThrough | object   | null                                           | Refer [Pass Through](#Pass-Through)                                                  |
 
 ### Axis
 
@@ -113,15 +113,7 @@ Y Axis should have the following properties:
 
 ### Pass Through
 
-#### Optional
-
-| Property Name    | Expected | Default | Description                                       |
-| ---------------- | -------- | ------- | ------------------------------------------------- |
-| clickPassThrough | object   | null    | Refer [Click Pass Throughs](#click-Pass-Throughs) |
-
-#### Click Pass Throughs
-
-Here is a truth table on how clickPassThroughs work in conjuction with onClicks -
+Here is a `truth table` on how `clickPassThrough`s work in conjunction with `onClick`s -
 
 -   If `clickPassThrough` is set to `true` and `onClick` function is provided, we honor the onClick functionality and show cursor-pointer on top of the element.
 -   If `clickPassThrough` is set to `true` and `onClick` function is not provided, we would be able to click the element beneath it. We also show cursor-pointer here, if bottom element is selectable.
@@ -142,10 +134,10 @@ clickPassThrough = {
 
 #### Required
 
-| Property Name | Expected | Description                            |
-| ------------- | -------- | -------------------------------------- |
-| key           | string   | Unique id which represents the content |
-| trackLabel    | object   | Refer [Track Label](#track-label)      |
+| Property Name | Expected | Description                              |
+| ------------- | -------- | ---------------------------------------- |
+| key           | string   | Unique `id` which represents the content |
+| trackLabel    | object   | Refer [Track Label](#track-label)        |
 
 #### Optional
 
@@ -306,11 +298,11 @@ If Dateline is provided then the `value` property is mandatory.
 
 #### Required
 
-| Property Name | Expected         | Description                                                                                                                              |
-| ------------- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| value         | string (ISO8601) | Position where dateline needs to be placed                                                                                               |
-| color         | string (ISO8601) | color of the dateline                                                                                                                    |
-| shape         | string (ISO8601) | `Shape` of the indicator above dateline. Required field if `showDatelineIndicator` is set to true. Refer [a Shapes](../README.md#Shapes) |
+| Property Name | Expected         | Description                                                                                                                            |
+| ------------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| value         | string (ISO8601) | Position where dateline needs to be placed                                                                                             |
+| color         | string (ISO8601) | color of the dateline                                                                                                                  |
+| shape         | string (ISO8601) | `Shape` of the indicator above dateline. Required field if `showDatelineIndicator` is set to true. Refer [Shapes](../README.md#Shapes) |
 
 #### Optional
 
@@ -368,6 +360,13 @@ var input = {
             upperLimit: new Date(2019, 1, 1, 12).toISOString()
         }
     },
+    clickPassThrough: {
+        tasks: false,
+        activities: false,
+        events: false,
+        actions: false,
+        datelines: false
+    },
     actionLegend: [
         {
             key: "uid_action_1",
@@ -419,13 +418,6 @@ var data = {
     trackLabel: {
         display: "Project A",
         onClick: (label) => {}
-    },
-    clickPassThrough: {
-        tasks: false,
-        activities: false,
-        events: false,
-        actions: false,
-        datelines: false
     },
     tasks: [
         {

@@ -516,7 +516,7 @@ describe("Graph", () => {
             it("sets X axis position correctly", () => {
                 const axisXElement = fetchElementByClass(styles.axisX);
                 expect(axisXElement.getAttribute("transform")).toContain(
-                    "translate(72, 245)"
+                    "translate(72, 240)"
                 );
             });
             it("returns the consumer set height if dimension is provided", () => {
@@ -785,16 +785,16 @@ describe("Graph", () => {
             graph.destroy();
             const ganttConfig = getAxes(axisDefault);
             ganttConfig.padding = {
-                top: -17,
+                top: 0,
                 left: -17,
                 right: 0,
-                bottom: 0
+                bottom: -17
             };
             graph = new Graph(ganttConfig);
             const contentContainer = d3.select(`.${styles.contentContainer}`);
             expect(Number.parseInt(contentContainer.attr("x"), 10)).toEqual(0);
             expect(Number.parseInt(contentContainer.attr("y"), 10)).toEqual(
-                ganttConfig.padding.left
+                ganttConfig.padding.bottom
             );
             expect(
                 graph.config.axisSizes.y + graph.config.axisLabelWidths.y
@@ -819,6 +819,41 @@ describe("Graph", () => {
                     done();
                 },
                 TRANSITION_DELAY
+            );
+        });
+        it("when custom padding is used with X Axis orientation Top", () => {
+            graph.destroy();
+            const ganttConfig = getAxes(axisDefault);
+            ganttConfig.axis.x.orientation = AXES_ORIENTATION.X.TOP;
+            ganttConfig.padding = {
+                top: -17,
+                left: -17,
+                right: 0,
+                bottom: 0
+            };
+            graph = new Graph(ganttConfig);
+            const contentContainer = d3.select(`.${styles.contentContainer}`);
+            expect(Number.parseInt(contentContainer.attr("x"), 10)).toEqual(0);
+            expect(Number.parseInt(contentContainer.attr("y"), 10)).toEqual(
+                graph.config.axisLabelHeights.x * 2 + ganttConfig.padding.top
+            );
+        });
+        it("when custom padding is used with X Axis orientation Top without Label", () => {
+            graph.destroy();
+            const ganttConfig = getAxes(axisDefault);
+            ganttConfig.axis.x.orientation = AXES_ORIENTATION.X.TOP;
+            ganttConfig.axis.x.label = "";
+            ganttConfig.padding = {
+                top: -17,
+                left: -17,
+                right: 0,
+                bottom: 0
+            };
+            graph = new Graph(ganttConfig);
+            const contentContainer = d3.select(`.${styles.contentContainer}`);
+            expect(Number.parseInt(contentContainer.attr("x"), 10)).toEqual(0);
+            expect(Number.parseInt(contentContainer.attr("y"), 10)).toEqual(
+                ganttConfig.padding.top
             );
         });
         describe("axes", () => {
@@ -1474,7 +1509,7 @@ describe("Graph", () => {
                     graph.config.axisSizes.y + graph.config.axisLabelWidths.y
                 );
                 expect(+containerElement.getAttribute("y")).toBe(
-                    constants.PADDING.top
+                    constants.PADDING.bottom
                 );
             });
         });
@@ -1533,7 +1568,7 @@ describe("Graph", () => {
                     "rotate(-90)"
                 );
                 expect(yLabelElement.getAttribute("transform")).toContain(
-                    "translate(13, 120)"
+                    "translate(13, 115)"
                 );
             });
             it("changes label y axis position when height property of graph is set to custom value", () => {
@@ -1547,7 +1582,7 @@ describe("Graph", () => {
                     "translate(13, 120)"
                 );
                 expect(yLabelElement.getAttribute("transform")).toContain(
-                    "translate(13, 52.5)"
+                    "translate(13, 47.5)"
                 );
             });
             it("doesnt create label x axis when text is not present", () => {
@@ -2109,9 +2144,7 @@ describe("Graph", () => {
             graph.unloadContent(primaryContent);
             const contentContainer = d3.select(`.${styles.contentContainer}`);
             expect(Number.parseInt(contentContainer.attr("x"), 10)).toEqual(0);
-            expect(Number.parseInt(contentContainer.attr("y"), 10)).toEqual(
-                graphConfig.padding.left
-            );
+            expect(Number.parseInt(contentContainer.attr("y"), 10)).toEqual(0);
             expect(
                 graph.config.axisSizes.y + graph.config.axisLabelWidths.y
             ).toEqual(0);
@@ -2228,7 +2261,7 @@ describe("Graph", () => {
             graph = new Graph(input);
             const axisXElement = fetchElementByClass(styles.axisX);
             expect(axisXElement.getAttribute("transform")).toContain(
-                "translate(72, 39)"
+                "translate(72, 44)"
             );
         });
         it("sets x axis position correctly when x axis is hidden", () => {
@@ -2239,7 +2272,7 @@ describe("Graph", () => {
             graph = new Graph(getAxes(hiddenAxisObj));
             const axisXElement = fetchElementByClass(styles.axisX);
             expect(axisXElement.getAttribute("transform")).toContain(
-                "translate(72, 39)"
+                "translate(72, 44)"
             );
         });
         it("sets x axis position correctly when labels are hidden", () => {
