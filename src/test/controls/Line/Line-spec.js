@@ -778,6 +778,119 @@ describe("Line", () => {
                     expect(data.interpolationType).toBe(LINE_TYPE.SPLINE);
                 });
             });
+            describe("When values are non-contiguous", () => {
+                const axis = {
+                    x: {
+                        label: "Some X Label",
+                        lowerLimit: 0,
+                        upperLimit: 100
+                    },
+                    y: {
+                        label: "Some Y Label",
+                        lowerLimit: 20,
+                        upperLimit: 200
+                    },
+                    y2: {
+                        show: true,
+                        label: "Some Y2 Label",
+                        lowerLimit: 20,
+                        upperLimit: 200
+                    }
+                };
+                const values = [
+                    { x: 35, y: 40 },
+                    { x: 55, y: 50 },
+                    { x: 45, y: null },
+                    { x: 25, y: 100 },
+                    { x: 45, y: 150 }
+                ];
+                describe("In Y Axis", () => {
+                    it("Displays graph properly", () => {
+                        graphDefault.destroy();
+                        const graph = new Graph(getAxes(axis));
+                        const input = getInput(values, true, true, false);
+                        input.values = values;
+                        graph.loadContent(new Line(input));
+                        graph.resize();
+                        const lineGroup = lineGraphContainer.querySelectorAll(
+                            `.${styles.currentLinesGroup}`
+                        );
+                        expect(lineGroup.length).toBe(1);
+                        expect(
+                            lineGraphContainer.querySelectorAll(
+                                `.${styles.point}`
+                            )[2].style.display
+                        ).toBe("none");
+                        expect(graph.config.axis.y.domain.lowerLimit).toBe(11);
+                        expect(graph.config.axis.y.domain.upperLimit).toBe(209);
+                    });
+                    it("Displays graph properly without domain padding", () => {
+                        graphDefault.destroy();
+                        const data = getAxes(axis);
+                        data.axis.y.padDomain = false;
+                        const graph = new Graph(data);
+                        const input = getInput(values, true, true, false);
+                        input.values = values;
+                        graph.loadContent(new Line(input));
+                        graph.resize();
+                        const lineGroup = lineGraphContainer.querySelectorAll(
+                            `.${styles.currentLinesGroup}`
+                        );
+                        expect(lineGroup.length).toBe(1);
+                        expect(
+                            lineGraphContainer.querySelectorAll(
+                                `.${styles.point}`
+                            )[2].style.display
+                        ).toBe("none");
+                        expect(graph.config.axis.y.domain.lowerLimit).toBe(20);
+                        expect(graph.config.axis.y.domain.upperLimit).toBe(200);
+                    });
+                });
+                describe("In Y2 Axis", () => {
+                    it("Displays graph properly", () => {
+                        graphDefault.destroy();
+                        const graph = new Graph(getAxes(axis));
+                        const input = getInput(values, true, true, true);
+                        graph.loadContent(new Line(input));
+                        graph.resize();
+                        const lineGroup = lineGraphContainer.querySelectorAll(
+                            `.${styles.currentLinesGroup}`
+                        );
+                        expect(lineGroup.length).toBe(1);
+                        expect(
+                            lineGraphContainer.querySelectorAll(
+                                `.${styles.point}`
+                            )[2].style.display
+                        ).toBe("none");
+                        expect(graph.config.axis.y2.domain.lowerLimit).toBe(11);
+                        expect(graph.config.axis.y2.domain.upperLimit).toBe(
+                            209
+                        );
+                    });
+                    it("Displays graph properly without domain padding", () => {
+                        graphDefault.destroy();
+                        const data = getAxes(axis);
+                        data.axis.y2.padDomain = false;
+                        const graph = new Graph(data);
+                        const input = getInput(values, true, true, true);
+                        graph.loadContent(new Line(input));
+                        graph.resize();
+                        const lineGroup = lineGraphContainer.querySelectorAll(
+                            `.${styles.currentLinesGroup}`
+                        );
+                        expect(lineGroup.length).toBe(1);
+                        expect(
+                            lineGraphContainer.querySelectorAll(
+                                `.${styles.point}`
+                            )[2].style.display
+                        ).toBe("none");
+                        expect(graph.config.axis.y2.domain.lowerLimit).toBe(20);
+                        expect(graph.config.axis.y2.domain.upperLimit).toBe(
+                            200
+                        );
+                    });
+                });
+            });
         });
         describe("prepares to load legend item", () => {
             it("does not load if legend is opted to be hidden", () => {

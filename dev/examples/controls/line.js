@@ -387,14 +387,13 @@ export const renderGoalLine = (el, id, title) => () => {
 };
 export const renderLineBlankDataPoint = (el, id, title) => () => {
     const data = utils.deepClone(
-        getDemoData(`#${id}`, "LINE_TIMESERIES").data[0]
+        getDemoData(`#${id}`, "LINE_TIMESERIES").data[2]
     );
-    data.values[6].y = null;
     shell.render(
         el,
         id,
         title,
-        "* A Line graph where not all data points are present. In the example below, Data point at 7.00 AM is unavailable."
+        "* A Line graph where not all data points are present. In the example below, Data point at 3 AM is unavailable."
     );
     const lineTime = Carbon.api.graph(getDemoData(`#${id}`, "LINE_TIMESERIES"));
     lineTime.loadContent(Carbon.api.line(data));

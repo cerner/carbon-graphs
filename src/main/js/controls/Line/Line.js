@@ -33,18 +33,24 @@ import LineConfig from "./LineConfig";
  * @typedef {Object} LineConfig
  */
 /**
- * Calculates the min and max values for Y Axis or Y2 Axis
+ * Calculates the min and max values for Y Axis or Y2 Axis.
+ * First we filter out values that are `null`, this is a result of
+ * datapoint being part of being in a non-contiguous series and then we
+ * get the min and max values for the Y or Y2 axis domain.
  * @private
  * @param {Array} values - Datapoint values
  * @param {string} axis - y or y2
- * @returns {Object} - Contains min and max values for the data points
+ * @returns {Object} - Contains min and max values for the data points for Y and Y2 axis
  */
-const calculateValuesRange = (values, axis = constants.Y_AXIS) => ({
-    [axis]: {
-        min: Math.min(...values.map((i) => i.y)),
-        max: Math.max(...values.map((i) => i.y))
-    }
-});
+const calculateValuesRange = (values, axis = constants.Y_AXIS) => {
+    const yAxisValuesList = values.filter((i) => i.y !== null).map((i) => i.y);
+    return {
+        [axis]: {
+            min: Math.min(...yAxisValuesList),
+            max: Math.max(...yAxisValuesList)
+        }
+    };
+};
 
 /**
  * Data point sets can be loaded using this function.

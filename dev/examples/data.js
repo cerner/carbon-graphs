@@ -160,7 +160,7 @@ const DATA = [
                 },
                 y: {
                     label: "Line Set A",
-                    lowerLimit: 5,
+                    lowerLimit: 10,
                     upperLimit: 30
                 },
                 y2: {
@@ -237,7 +237,7 @@ const DATA = [
                             y: 14
                         }
                     ],
-                    yAxis: "y" // Default is "y", only need to specify if "y2"
+                    yAxis: "y"
                 },
                 {
                     key: "uid_2",
@@ -290,6 +290,62 @@ const DATA = [
                         }
                     ],
                     yAxis: "y2"
+                },
+                {
+                    key: "uid_3",
+                    label: {
+                        display: "Data Label 3"
+                    },
+                    shape: Carbon.helpers.SHAPES.CIRCLE,
+                    color: Carbon.helpers.COLORS.BLUE,
+                    onClick: loadPopup,
+                    values: [
+                        {
+                            x: new Date(2016, 0, 1, 1, 5).toISOString(),
+                            y: 15
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 2, 15).toISOString(),
+                            y: 21
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 3, 15).toISOString(),
+                            y: null
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 4, 15).toISOString(),
+                            y: 16
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 5, 15).toISOString(),
+                            y: 17
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 6, 15).toISOString(),
+                            y: 19
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 9, 45).toISOString(),
+                            y: 16
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 12, 15).toISOString(),
+                            y: 17
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 13, 15).toISOString(),
+                            y: 28
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 14, 15).toISOString(),
+                            y: 22
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 19, 45).toISOString(),
+                            y: 23
+                        }
+                    ],
+                    yAxis: "y"
                 }
             ],
             showLabel: true,
