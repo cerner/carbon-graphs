@@ -612,15 +612,20 @@ export const renderGanttCustomPadding = (el, id, title) => () => {
     return ganttDefault;
 };
 export const renderGanttTrackSelection = (el, id, title) => () => {
-    shell.render(el, id, title);
+    shell.render(
+        el,
+        id,
+        title,
+        "Any click on the content will pass-through and enable entire row selection."
+    );
     const data = Object.assign(
         utils.deepClone(getDemoData(`#${id}`, "GANTT")),
         {
             clickPassThrough: {
-                tasks: false,
+                tasks: true,
                 activities: true,
                 events: true,
-                actions: false,
+                actions: true,
                 datelines: true
             }
         }
@@ -708,7 +713,6 @@ export const renderGanttTrackSelection = (el, id, title) => () => {
                 label: {
                     display: "Defect C"
                 },
-                onClick: loadPopup,
                 shape: caretDown,
                 color: Carbon.helpers.COLORS.GREEN,
                 values: [new Date(2018, 9, 5).toISOString()]
@@ -723,7 +727,6 @@ export const renderGanttTrackSelection = (el, id, title) => () => {
             },
             {
                 key: "uid_action_2",
-                onClick: loadPopup,
                 values: [new Date(2018, 7, 1, 6, 15).toISOString()]
             }
         ]

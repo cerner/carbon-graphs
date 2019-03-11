@@ -46,7 +46,7 @@ export const triggerGanttExample = (
         renderGanttTrackSelection(
             contentSection,
             "ganttTrackSelection",
-            "Gantt Track Selection"
+            "Track Selection"
         )
     );
     instance.load(renderGanttStyle(contentSection, "ganttStyles", "Bar types"));
