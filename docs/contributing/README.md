@@ -40,6 +40,16 @@ Close the issue when the PR is merged.
 
 **Note:** This process is automatic when PR commit message has `(fixes #<issue number>)` and that PR gets merged.
 
+## Project Setup
+
+Before starting development on a Carbon project, please complete the following steps:
+
+1. Create a project in <a href="https://ppm.cerner.com/">PPM</a>.
+2. Submit a <a href="http://ip-pmo/Requests/ProjectCode.html">request</a> for a new project code.
+3. Complete your <a href="https://wiki.cerner.com/x/nk4ETw">Technical Feasibility</a>.
+
+If you have any questions about this process, please contact <a href="mailto:Nate.Baker@Cerner.com">Nate Baker</a>.
+
 ## Development
 
 ### Pulling in dependencies
