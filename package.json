@@ -80,7 +80,7 @@
     "sinon": "^7.2.3",
     "style-loader": "^0.23.1",
     "stylelint": "^9.10.1",
-    "svg-to-carbon": "1.0.0",
+    "svg-to-carbon": "1.1.1",
     "url-loader": "^1.1.2",
     "webpack": "^4.29.0",
     "webpack-cli": "^3.1.2",
