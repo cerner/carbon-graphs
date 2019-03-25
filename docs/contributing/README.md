@@ -7,6 +7,7 @@ Thanks for contributing to Carbon! :1st_place_medal: :1st_place_medal:
     -   [Submitting Issues](#submitting-issues)
         -   [Creating Issues](#creating-issues)
         -   [Closing Issues](#closing-issues)
+    -   [Project Setup](#project-setup)
     -   [Development](#development)
         -   [Pulling in dependencies](#pulling-in-dependencies)
         -   [Building the project](#building-the-project)
@@ -42,11 +43,16 @@ Close the issue when the PR is merged.
 
 ## Project Setup
 
+### Setting up your Carbon project
+
 Before starting development on a Carbon project, please complete the following steps:
 
 1. Create a project in <a href="https://ppm.cerner.com/">PPM</a>.
 2. Submit a <a href="http://ip-pmo/Requests/ProjectCode.html">request</a> for a new project code.
 3. Complete your <a href="https://wiki.cerner.com/x/nk4ETw">Technical Feasibility</a>.
+4. Create your work in the Carbon Jira project using the appropriate template:
+    * <a href="https://jira3.cerner.com/browse/CARBON-1/">Enhancement</a>
+    * <a href="https://jira3.cerner.com/browse/CARBON-2/">Defect</a>
 
 If you have any questions about this process, please contact <a href="mailto:Nate.Baker@Cerner.com">Nate Baker</a>.
 
