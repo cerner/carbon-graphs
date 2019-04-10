@@ -70,7 +70,8 @@ const translateLines = (scale, canvasSVG) =>
     canvasSVG
         .selectAll(`.${styles.lineGraphContent} .${styles.line}`)
         .select("path")
-        .transition(constants.d3Transition)
+        .transition()
+        .call(constants.d3Transition)
         .attr("d", (value) => createLine(scale, value));
 /**
  * Transforms points for a data point set in the Line graph on resize
@@ -87,7 +88,8 @@ const translatePoints = (scale, canvasSVG, cls) =>
             const pointSVG = d3.select(this);
             pointSVG
                 .selectAll("path")
-                .transition(constants.d3Transition)
+                .transition()
+                .call(constants.d3Transition)
                 .attr("transform", function() {
                     return transformPoint(scale)(d)(getTransformScale(this));
                 });
@@ -192,7 +194,8 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
     drawDataLines(scale, config, linePath.enter());
     linePath
         .exit()
-        .transition(constants.d3Transition)
+        .transition()
+        .call(constants.d3Transition)
         .remove();
 
     if (config.showShapes) {
@@ -211,7 +214,8 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
             );
         currentPointsPath
             .exit()
-            .transition(constants.d3Transition)
+            .transition()
+            .call(constants.d3Transition)
             .remove();
         const pointPath = lineSVG
             .select(`.${styles.currentPointsGroup}`)
@@ -220,7 +224,8 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
         drawDataPoints(scale, config, pointPath.enter());
         pointPath
             .exit()
-            .transition(constants.d3Transition)
+            .transition()
+            .call(constants.d3Transition)
             .remove();
     }
 };

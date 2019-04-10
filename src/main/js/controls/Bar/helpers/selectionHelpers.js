@@ -107,7 +107,8 @@ const drawSelectionBars = (scale, ordinalScale, config, canvasSVG) => {
         .attr("ry", 3);
     selectionPath
         .exit()
-        .transition(constants.d3Transition)
+        .transition()
+        .call(constants.d3Transition)
         .remove();
 };
 /**
@@ -215,7 +216,8 @@ const translateSelectBars = (scale, ordinalScale, canvasSVG, config) =>
         );
         canvasSVG
             .select(`rect[aria-describedby=bar-selector-${i}]`)
-            .transition(constants.d3Transition)
+            .transition()
+            .call(constants.d3Transition)
             .attr("x", selectionAttrHelper.x())
             .attr("y", selectionAttrHelper.y())
             .attr("height", selectionAttrHelper.height())

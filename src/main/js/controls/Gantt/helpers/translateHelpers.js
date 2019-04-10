@@ -141,7 +141,8 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
     );
     canvasSVG
         .select(`.${styles.axisX}`)
-        .transition(constants.d3Transition)
+        .transition()
+        .call(constants.d3Transition)
         .attr(
             "transform",
             `translate(${getXAxisXPosition(config)},${getXAxisYPosition(
@@ -151,7 +152,8 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
         .call(axis.x);
     canvasSVG
         .select(`.${styles.axisY}`)
-        .transition(constants.d3Transition)
+        .transition()
+        .call(constants.d3Transition)
         .attr(
             "transform",
             `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition(
@@ -221,7 +223,8 @@ const translateGrid = (axis, scale, config, canvasSVG) => {
         );
     canvasSVG
         .select(`.${styles.gridH}`)
-        .transition(constants.d3Transition)
+        .transition()
+        .call(constants.d3Transition)
         .call(translateHorizontalGrid(axis, config));
     translateVGrid(canvasSVG, axis, config, translateVGridHandler);
 };
@@ -238,7 +241,8 @@ const translateGrid = (axis, scale, config, canvasSVG) => {
 const translateVGridHandler = (canvasSVG, axis, style, config) => {
     canvasSVG
         .select(`.${style}`)
-        .transition(constants.d3Transition)
+        .transition()
+        .call(constants.d3Transition)
         .call(translateVerticalGrid(axis, config));
 };
 /**
@@ -251,7 +255,8 @@ const translateVGridHandler = (canvasSVG, axis, style, config) => {
 const translateContentContainer = (config, canvasSVG) =>
     canvasSVG
         .select(`.${styles.contentContainer}`)
-        .transition(constants.d3Transition)
+        .transition()
+        .call(constants.d3Transition)
         .attr("width", getXAxisWidth(config))
         .attr("height", getYAxisHeight(config));
 /**
@@ -271,7 +276,8 @@ const translateDateline = (scale, config, canvasSVG) => {
     }
     const datelineGroup = canvasSVG
         .selectAll(`.${styles.ganttDatelineGroup}`)
-        .transition(constants.d3Transition)
+        .transition()
+        .call(constants.d3Transition)
         .attr(
             "transform",
             `translate(${getXAxisXPosition(config)},${getXAxisYPosition(
@@ -357,7 +363,8 @@ const translatePoints = (scale, config, trackPath, style) =>
         const pointSVG = d3.select(this);
         pointSVG
             .selectAll("path")
-            .transition(constants.d3Transition)
+            .transition()
+            .call(constants.d3Transition)
             .attr("transform", function() {
                 return transformPoint(
                     scale,
@@ -415,7 +422,8 @@ const translateDataPoints = (scale, config, trackPath) => {
  */
 const translateTaskBar = (scale, path) =>
     path
-        .transition(constants.d3Transition)
+        .transition()
+        .call(constants.d3Transition)
         .attr("x", (val) => scale.x(val.startDate))
         .attr(
             "y",
@@ -449,7 +457,8 @@ const translateTaskBar = (scale, path) =>
  */
 const translateActivityBar = (scale, path) =>
     path
-        .transition(constants.d3Transition)
+        .transition()
+        .call(constants.d3Transition)
         .attr("x", (val) => scale.x(val.startDate))
         .attr(
             "y",
@@ -481,7 +490,8 @@ const translateTaskIndicator = (scale, path) => {
     const positionAdjustment = Math.floor(
         constants.DEFAULT_GANTT_TASK_SELECTION_PADDING / 4
     );
-    path.transition(constants.d3Transition)
+    path.transition()
+        .call(constants.d3Transition)
         .attr("x", (val) => scale.x(val.startDate) - positionAdjustment)
         .attr(
             "y",
@@ -532,7 +542,8 @@ const translateTrackSelector = (scale, config, trackPathSVG, trackConfig) => {
     ganttTrackSelectorGroupPath.select("rect").each(function() {
         const path = d3.select(this);
         const _args = generatorArgs(config, scale, path, trackConfig);
-        path.transition(constants.d3Transition)
+        path.transition()
+            .call(constants.d3Transition)
             .attr("y", _args.y)
             .attr("width", _args.width)
             .attr("height", _args.height);

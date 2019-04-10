@@ -4,7 +4,6 @@
  * @module constants
  * @alias module:constants
  */
-import d3 from "d3";
 import * as DEFAULT_SHAPES from "../core/Shape/shapeDefinitions";
 
 /**
@@ -192,10 +191,7 @@ export default {
     DEFAULT_INTERPOLATION: "linear",
     SELECTION_INDICATOR_X_POSITION: 10,
     SELECTION_INDICATOR_Y_POSITION: 12.5,
-    d3Transition: d3
-        .transition()
-        .duration(250)
-        .ease(),
+    d3Transition: (transition) => transition.duration(250).ease("linear"),
     TICK_ORIENTATION: {
         TOP: -1,
         BOTTOM: 1

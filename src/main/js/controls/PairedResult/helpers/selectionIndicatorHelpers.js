@@ -222,10 +222,14 @@ export const translateSelectionBox = (scale, canvasSVG) =>
         .selectAll(
             `.${styles.pairedBoxGroup} rect.${styles.dataPointSelection}`
         )
-        .transition(constants.d3Transition)
+        .transition()
+        .call(constants.d3Transition)
         .each(function(value) {
             return updateSelectionIndicatorAttributes(
-                d3.select(this).transition(constants.d3Transition),
+                d3
+                    .select(this)
+                    .transition()
+                    .call(constants.d3Transition),
                 scale,
                 value
             );
@@ -246,7 +250,8 @@ export const translateSelectionItem = (scale, canvasSVG) =>
             return d3
                 .select(this)
                 .selectAll("path")
-                .transition(constants.d3Transition)
+                .transition()
+                .call(constants.d3Transition)
                 .attr("transform", function() {
                     return transformPartialPoint(
                         scale

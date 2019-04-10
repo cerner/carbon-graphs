@@ -99,7 +99,8 @@ const draw = (control, scale, config, timelineGraphContentSVG, dataTarget) => {
     createPoints(scale, config, pointPath.enter());
     pointPath
         .exit()
-        .transition(constants.d3Transition)
+        .transition()
+        .call(constants.d3Transition)
         .remove();
 };
 /**

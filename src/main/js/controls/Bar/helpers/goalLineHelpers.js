@@ -122,7 +122,8 @@ const createRegion = (scale, config, regionGroupSVG, regionList, uniqueKey) => {
         });
     regionPath
         .exit()
-        .transition(constants.d3Transition)
+        .transition()
+        .call(constants.d3Transition)
         .remove();
 };
 /**
@@ -138,7 +139,8 @@ const translateRegion = (scale, config, regionGroupSVG) => {
     regionGroupSVG
         .attr(constants.X_AXIS, (d) => d.xRange | 0)
         .attr(constants.Y_AXIS, getYAxisRangePosition(scale, config))
-        .transition(constants.d3Transition)
+        .transition()
+        .call(constants.d3Transition)
         .attr("width", (d) => d.width | 0)
         .attr("height", function(d) {
             return getRegionHeight(d3.select(this), d, scale, config);

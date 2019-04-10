@@ -3,8 +3,9 @@
 @demo-font-color: #212121;
 @demo-banner-bg: #007cc3;
 @demo-banner-font-color: #fff;
+@demo-nav-bg: #eff6fb;
 @demo-nav-btn: #212121;
-@demo-nav-bg: #007cc3;
+@demo-nav-btn-bg: #007cc3;
 
 body {
     margin: 0;
@@ -121,8 +122,7 @@ body {
     flex-flow: row nowrap;
     flex: 1 1 auto;
     overflow-y: auto;
-    padding-top: 0.25rem;
-    height: ~"calc(93vh - 1rem)";
+    height: ~"calc(100vh - 66px)";
 }
 
 .nav-section {
@@ -132,6 +132,7 @@ body {
     padding: 0 0.5rem;
     width: 100%;
     overflow-y: auto;
+    background-color: @demo-nav-bg;
     @media screen and (max-width: 800px) {
         display: none;
     }
@@ -164,7 +165,7 @@ body {
         }
 
         color: @demo-banner-font-color;
-        background-color: @demo-nav-bg;
+        background-color: @demo-nav-btn-bg;
     }
 
     &:hover {

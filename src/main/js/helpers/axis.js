@@ -772,7 +772,8 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
     prepareHAxis(scale, axis, config, prepareHorizontalAxis);
     canvasSVG
         .select(`.${styles.axisX}`)
-        .transition(constants.d3Transition)
+        .transition()
+        .call(constants.d3Transition)
         .attr(
             "transform",
             `translate(${getXAxisXPosition(config)},${getXAxisYPosition(
@@ -782,7 +783,8 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
         .call(axis.x);
     canvasSVG
         .select(`.${styles.axisY}`)
-        .transition(constants.d3Transition)
+        .transition()
+        .call(constants.d3Transition)
         .attr(
             "transform",
             `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition(
@@ -793,7 +795,8 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
     if (hasY2Axis(config.axis)) {
         canvasSVG
             .select(`.${styles.axisY2}`)
-            .transition(constants.d3Transition)
+            .transition()
+            .call(constants.d3Transition)
             .attr(
                 "transform",
                 `translate(${getY2AxisXPosition(config)}, ${getY2AxisYPosition(
@@ -816,7 +819,8 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
 const translateAxisReferenceLine = (axis, scale, config, canvasSVG) => {
     const setTranslate = (path, style) =>
         path
-            .transition(constants.d3Transition)
+            .transition()
+            .call(constants.d3Transition)
             .attr("aria-hidden", false)
             .attr(
                 "d",

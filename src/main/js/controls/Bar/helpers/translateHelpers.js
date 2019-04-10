@@ -23,7 +23,8 @@ const translateBarGraph = (
     translateSelectBars(scale, ordinalScale, canvasSVG, config);
     return canvasSVG
         .selectAll(`rect[aria-describedby=${dataTarget.key}]`)
-        .transition(constants.d3Transition)
+        .transition()
+        .call(constants.d3Transition)
         .attr("x", (d) => attributeHelper.x(d))
         .attr("y", (d) => attributeHelper.y(d))
         .attr("width", attributeHelper.width)

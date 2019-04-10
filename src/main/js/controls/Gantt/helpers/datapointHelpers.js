@@ -43,7 +43,8 @@ export const drawDataPoints = (
     drawDataPointsHandler(scale, config, pointPath.enter());
     pointPath
         .exit()
-        .transition(constants.d3Transition)
+        .transition()
+        .call(constants.d3Transition)
         .remove();
 };
 

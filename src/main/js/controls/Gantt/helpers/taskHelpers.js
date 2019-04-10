@@ -299,7 +299,8 @@ const drawTasks = (
         });
     taskPath
         .exit()
-        .transition(constants.d3Transition)
+        .transition()
+        .call(constants.d3Transition)
         .remove();
 };
 

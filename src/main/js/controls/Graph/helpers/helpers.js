@@ -144,7 +144,8 @@ const translateGrid = (axis, scale, config, canvasSVG) => {
     if (config.showHGrid) {
         canvasSVG
             .select(`.${styles.gridH}`)
-            .transition(constants.d3Transition)
+            .transition()
+            .call(constants.d3Transition)
             .call(translateHorizontalGrid(axis, config));
     }
 
@@ -165,7 +166,8 @@ const translateGrid = (axis, scale, config, canvasSVG) => {
 const translateVGridHandler = (canvasSVG, axis, style, config) => {
     canvasSVG
         .select(`.${style}`)
-        .transition(constants.d3Transition)
+        .transition()
+        .call(constants.d3Transition)
         .call(translateVerticalGrid(axis, config));
 };
 /**
@@ -178,7 +180,8 @@ const translateVGridHandler = (canvasSVG, axis, style, config) => {
 const translateContentContainer = (config, canvasSVG) =>
     canvasSVG
         .select(`.${styles.contentContainer}`)
-        .transition(constants.d3Transition)
+        .transition()
+        .call(constants.d3Transition)
         .attr("width", getXAxisWidth(config))
         .attr("height", config.height);
 /**
@@ -192,7 +195,8 @@ const translateLabel = (config, canvasSVG) => {
     if (config.axis.x.label) {
         canvasSVG
             .select(`.${styles.axisLabelX}`)
-            .transition(constants.d3Transition)
+            .transition()
+            .call(constants.d3Transition)
             .attr(
                 "transform",
                 `translate(${getXAxisLabelXPosition(
@@ -206,7 +210,8 @@ const translateLabel = (config, canvasSVG) => {
     if (config.axis.y.label) {
         canvasSVG
             .select(`.${styles.axisLabelY}`)
-            .transition(constants.d3Transition)
+            .transition()
+            .call(constants.d3Transition)
             .attr(
                 "transform",
                 `translate(${getYAxisLabelXPosition(
@@ -220,7 +225,8 @@ const translateLabel = (config, canvasSVG) => {
     if (hasY2Axis(config.axis)) {
         canvasSVG
             .select(`.${styles.axisLabelY2}`)
-            .transition(constants.d3Transition)
+            .transition()
+            .call(constants.d3Transition)
             .attr(
                 "transform",
                 `translate(${getY2AxisLabelXPosition(

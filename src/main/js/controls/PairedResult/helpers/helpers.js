@@ -102,7 +102,8 @@ const transformPoint = (scale, type) => (value) => (scaleFactor) => {
 const translateLines = (scale, config, canvasSVG) =>
     canvasSVG
         .selectAll(`.${styles.pairedBoxGroup} .${styles.pairedLine}`)
-        .transition(constants.d3Transition)
+        .transition()
+        .call(constants.d3Transition)
         .attr("d", (d) => (d.high && d.low ? createLine(scale, d) : ""));
 /**
  * Transforms points for a data point set (high, low and mid) in the Paired Result graph on resize
@@ -124,7 +125,8 @@ const translatePoints = (scale, canvasSVG) =>
                 const pairedPointSVG = d3.select(this);
                 pairedPointSVG
                     .selectAll("path")
-                    .transition(constants.d3Transition)
+                    .transition()
+                    .call(constants.d3Transition)
                     .attr("transform", function() {
                         return transformPoint(
                             scale,
@@ -172,7 +174,8 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
         .call(drawBox);
     pairedBoxPath
         .exit()
-        .transition(constants.d3Transition)
+        .transition()
+        .call(constants.d3Transition)
         .remove();
 };
 /**

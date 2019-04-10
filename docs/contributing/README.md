@@ -51,8 +51,8 @@ Before starting development on a Carbon project, please complete the following s
 2. Submit a <a href="http://ip-pmo/Requests/ProjectCode.html">request</a> for a new project code.
 3. Complete your <a href="https://wiki.cerner.com/x/nk4ETw">Technical Feasibility</a>.
 4. Create your work in the Carbon Jira project using the appropriate template:
-    * <a href="https://jira3.cerner.com/browse/CARBON-1/">Enhancement</a>
-    * <a href="https://jira3.cerner.com/browse/CARBON-2/">Defect</a>
+    - <a href="https://jira3.cerner.com/browse/CARBON-1/">Enhancement</a>
+    - <a href="https://jira3.cerner.com/browse/CARBON-2/">Defect</a>
 
 If you have any questions about this process, please contact <a href="mailto:Nate.Baker@Cerner.com">Nate Baker</a>.
 

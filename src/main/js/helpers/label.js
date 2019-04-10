@@ -77,7 +77,8 @@ const loadLabelShape = (shapeContainerPath, dataTarget) =>
  */
 const translateYAxisLabelShapeContainer = (config, shapeContainerPath) =>
     shapeContainerPath
-        .transition(constants.d3Transition)
+        .transition()
+        .call(constants.d3Transition)
         .attr(
             "transform",
             `translate(${getYAxisLabelShapeXPosition(
@@ -98,7 +99,8 @@ const translateYAxisLabelShapeContainer = (config, shapeContainerPath) =>
  */
 const translateY2AxisLabelShapeContainer = (config, shapeContainerPath) =>
     shapeContainerPath
-        .transition(constants.d3Transition)
+        .transition()
+        .call(constants.d3Transition)
         .attr(
             "transform",
             `translate(${getY2AxisLabelShapeXPosition(
@@ -149,7 +151,8 @@ const buildY2AxisLabelShapeContainer = (config, shapeContainerPath) =>
 const translateAllLabelShapeItem = (shapeContainerPath) =>
     shapeContainerPath
         .selectAll("svg")
-        .transition(constants.d3Transition)
+        .transition()
+        .call(constants.d3Transition)
         .each(function(data, index) {
             d3.select(this).attr(
                 "x",

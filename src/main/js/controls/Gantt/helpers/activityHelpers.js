@@ -159,7 +159,8 @@ const drawActivities = (
         });
     activityPath
         .exit()
-        .transition(constants.d3Transition)
+        .transition()
+        .call(constants.d3Transition)
         .remove();
 };
 
