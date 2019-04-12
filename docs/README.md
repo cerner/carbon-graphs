@@ -122,6 +122,7 @@ Carbon supports custom shapes as well! For more information on custom icon suppo
 | Language |
 | -------- |
 | de_DE    |
+| en_AU    |
 | en_CA    |
 | en_GB    |
 | en_US    |

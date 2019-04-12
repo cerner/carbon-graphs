@@ -1,5 +1,6 @@
 "use strict";
 import { default as de } from "./de-DE";
+import { default as au } from "./en-AU";
 import { default as ca } from "./en-CA";
 import { default as gb } from "./en-GB";
 import { default as us } from "./en-US";
@@ -26,6 +27,7 @@ export const DEFAULT_LOCALE = us;
  * axes ticks will honor when the locale is set.
  * @public
  * @property {Object} de_DE Carbon locale DE
+ * @property {Object} en_AU Carbon locale AU
  * @property {Object} en_CA Carbon locale CA
  * @property {Object} en_GB Carbon locale GB
  * @property {Object} en_US Carbon locale default
@@ -33,10 +35,11 @@ export const DEFAULT_LOCALE = us;
  * @property {Object} fr_FR Carbon locale FR
  * @property {Object} pt_BR Carbon locale BR
  * @property {Object} ja_JP Carbon locale JP
- * @type {{de_DE: *, en_CA: *, en_GB: *, en_US: *, es_ES: *, fr_FR: *, pt_BR: *, ja_JP: *}}
+ * @type {{de_DE: *, en_AU: *, en_CA: *, en_GB: *, en_US: *, es_ES: *, fr_FR: *, pt_BR: *, ja_JP: *}}
  */
 const LOCALE = {
     de_DE: de,
+    en_AU: au,
     en_CA: ca,
     en_GB: gb,
     en_US: us,
