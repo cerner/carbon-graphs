@@ -1,3 +1,4 @@
+/* eslint-disable */
 import d3 from "d3";
 import constants from "../../src/main/js/helpers/constants";
 import utils from "../../src/main/js/helpers/utils";

@@ -1,5 +1,13 @@
 {
+    "parserOptions": {
+        "ecmaVersion": 2017
+    },
+    "globals": {
+        "LOAD_TIMEOUT": true,
+        "URL_PATH": true
+    },
     "env": {
+        "jest": true,
         "jasmine": true
     },
     "rules": {

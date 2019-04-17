@@ -2,11 +2,14 @@ const WebpackDevServer = require("webpack-dev-server");
 const path = require("path");
 const webpack = require("webpack");
 const { jsOptions, cssOptions } = require("./helpers/rules");
-const port = Number(process.env.PORT || 9991);
+const port = Number(process.argv[2] || 9991);
 const compiler = webpack({
     mode: "development",
     devtool: "inline-source-map",
-    entry: ["webpack-dev-server/client?http://localhost:9991/", "./dev/app.js"],
+    entry: [
+        `webpack-dev-server/client?http://localhost:${port}/`,
+        "./dev/app.js"
+    ],
     output: {
         path: path.join(process.cwd(), "dist"),
         filename: "bundle.js",
