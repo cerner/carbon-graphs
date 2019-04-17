@@ -1,4 +1,5 @@
 "use strict";
+import Carbon from "../../../main/js/carbon";
 import Bar from "../../../main/js/controls/Bar/Bar";
 import Graph from "../../../main/js/controls/Graph/Graph";
 import constants, { COLORS, SHAPES } from "../../../main/js/helpers/constants";
@@ -8,6 +9,7 @@ import utils from "../../../main/js/helpers/utils";
 import { triggerEvent } from "../helpers/commonHelpers";
 import {
     axisDefault,
+    axisInfoRowDefault,
     axisTimeSeries,
     barClickHandlerSpy,
     fetchAllElementsByClass,
@@ -16,10 +18,8 @@ import {
     getInput,
     regionsDefault,
     valuesDefault,
-    valuesTimeSeries,
-    axisInfoRowDefault
+    valuesTimeSeries
 } from "./helpers";
-import Carbon from "../../../main/js/carbon";
 
 describe("Bar", () => {
     let graphDefault = null;

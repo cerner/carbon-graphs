@@ -1,6 +1,6 @@
 import d3 from "d3";
-import utils from "../../src/main/js/helpers/utils";
 import constants from "../../src/main/js/helpers/constants";
+import utils from "../../src/main/js/helpers/utils";
 
 const getDate = (d) => new Date(d).toLocaleString();
 const getPairData = (value) =>

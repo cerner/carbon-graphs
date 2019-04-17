@@ -25,9 +25,9 @@ import {
     createTrack,
     detachEventHandlers,
     determineHeight,
+    prepareLoadAtIndex,
     scaleGraph,
-    updateAxesDomain,
-    prepareLoadAtIndex
+    updateAxesDomain
 } from "./helpers/creationHelpers";
 import { translateGraph, translateLabelText } from "./helpers/translateHelpers";
 

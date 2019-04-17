@@ -1,5 +1,6 @@
 "use strict";
 import sinon from "sinon";
+import Carbon from "../../../main/js/carbon";
 import Bar from "../../../main/js/controls/Bar/Bar";
 import Graph from "../../../main/js/controls/Graph/Graph";
 import { AXES_ORIENTATION } from "../../../main/js/helpers/constants";
@@ -8,17 +9,16 @@ import utils from "../../../main/js/helpers/utils";
 import { TRANSITION_DELAY, triggerEvent } from "../helpers/commonHelpers";
 import {
     axisDefault,
+    axisInfoRowDefault,
+    axisInfoRowTimeSeries,
     axisTimeSeries,
     fetchAllElementsByClass,
     fetchElementByClass,
     getAxes,
     getInput,
     valuesDefault,
-    valuesTimeSeries,
-    axisInfoRowDefault,
-    axisInfoRowTimeSeries
+    valuesTimeSeries
 } from "./helpers";
-import Carbon from "../../../main/js/carbon";
 
 describe("Bar", () => {
     let graphDefault = null;

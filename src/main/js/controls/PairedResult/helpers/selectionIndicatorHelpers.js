@@ -2,8 +2,8 @@ import d3 from "d3";
 import Shape, { getDefaultSVGProps } from "../../../core/Shape";
 import constants, { SHAPES } from "../../../helpers/constants";
 import styles from "../../../helpers/styles";
-import utils from "../../../helpers/utils";
 import { getTransformScale } from "../../../helpers/transformUtils";
+import utils from "../../../helpers/utils";
 import { getSVGObject } from "./helpers";
 
 /**

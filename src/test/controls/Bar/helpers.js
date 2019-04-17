@@ -1,7 +1,7 @@
 import sinon from "sinon";
+import Carbon from "../../../main/js/carbon";
 import { AXIS_TYPE, COLORS } from "../../../main/js/helpers/constants";
 import utils from "../../../main/js/helpers/utils";
-import Carbon from "../../../main/js/carbon";
 
 export const barClickHandlerSpy = sinon.spy();
 

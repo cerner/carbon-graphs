@@ -7,8 +7,10 @@ import {
     removeLabelShapeItem
 } from "../../helpers/label";
 import { removeLegendItem } from "../../helpers/legend";
+import styles from "../../helpers/styles";
 import utils from "../../helpers/utils";
 import BarConfig from "./BarConfig";
+import { removeAxisInfoRowLabels } from "./helpers/axisInfoRowHelpers";
 import {
     clear,
     draw,
@@ -27,8 +29,6 @@ import {
     translateBarGraph,
     translateTextLabel
 } from "./helpers/translateHelpers";
-import styles from "../../helpers/styles";
-import { removeAxisInfoRowLabels } from "./helpers/axisInfoRowHelpers";
 
 /**
  * Calculates the min and max values for Y Axis or Y2 Axis

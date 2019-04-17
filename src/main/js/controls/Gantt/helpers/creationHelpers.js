@@ -13,6 +13,7 @@ import {
 } from "../../../helpers/axis";
 import constants, { AXES_ORIENTATION } from "../../../helpers/constants";
 import { createVGrid, prepareHAxis } from "../../../helpers/datetimeBuckets";
+import errors from "../../../helpers/errors";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 import {
@@ -27,7 +28,6 @@ import {
     translateHorizontalGrid,
     translateVerticalGrid
 } from "./translateHelpers";
-import errors from "../../../helpers/errors";
 
 /**
  * Calculates the height for Y and Y2 axes.

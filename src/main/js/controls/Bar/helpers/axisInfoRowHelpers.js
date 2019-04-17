@@ -1,21 +1,21 @@
 "use strict";
 import d3 from "d3";
-import constants, { AXIS_TYPE } from "../../../helpers/constants";
-import styles from "../../../helpers/styles";
-import { barAttributesHelper } from "./creationHelpers";
-import {
-    isXAxisOrientationTop,
-    getAxisLabelWidth
-} from "../../../helpers/axis";
-import utils from "../../../helpers/utils";
 import { Shape } from "../../../core";
 import { getDefaultSVGProps } from "../../../core/Shape";
 import {
-    getColorForTarget,
-    getShapeForTarget,
-    d3RemoveElement
-} from "../../Graph/helpers/helpers";
+    getAxisLabelWidth,
+    isXAxisOrientationTop
+} from "../../../helpers/axis";
+import constants, { AXIS_TYPE } from "../../../helpers/constants";
 import { shouldTruncateLabel, truncateLabel } from "../../../helpers/label";
+import styles from "../../../helpers/styles";
+import utils from "../../../helpers/utils";
+import {
+    d3RemoveElement,
+    getColorForTarget,
+    getShapeForTarget
+} from "../../Graph/helpers/helpers";
+import { barAttributesHelper } from "./creationHelpers";
 
 /**
  * Creates text labels based on input object provided. Text label can be one or many.

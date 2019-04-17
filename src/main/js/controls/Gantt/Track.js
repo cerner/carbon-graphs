@@ -14,8 +14,8 @@ import { loadActions, unloadActions } from "./helpers/actionHelpers";
 import { loadActivities, unloadActivities } from "./helpers/activityHelpers";
 import {
     createTrackContainer,
-    updateTrackProps,
-    removeTrackContainer
+    removeTrackContainer,
+    updateTrackProps
 } from "./helpers/creationHelpers";
 import { loadEvents, unloadEvents } from "./helpers/eventHelpers";
 import { loadTasks, unloadTasks } from "./helpers/taskHelpers";

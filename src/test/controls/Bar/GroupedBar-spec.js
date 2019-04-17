@@ -3,20 +3,20 @@ import d3 from "d3";
 import Bar from "../../../main/js/controls/Bar/Bar";
 import Graph from "../../../main/js/controls/Graph/Graph";
 import styles from "../../../main/js/helpers/styles";
-import utils from "../../../main/js/helpers/utils";
 import {
     getCurrentTransform,
     round2Decimals
 } from "../../../main/js/helpers/transformUtils";
+import utils from "../../../main/js/helpers/utils";
 import {
     axisDefault,
+    axisInfoRowDefault,
     fetchAllElementsByClass,
     getAxes,
     getInput,
     regionsDefault,
     valuesDefault,
-    valuesNegativeDefault,
-    axisInfoRowDefault
+    valuesNegativeDefault
 } from "./helpers";
 
 describe("Grouped Bar", () => {

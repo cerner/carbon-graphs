@@ -3,8 +3,8 @@ import d3 from "d3";
 import { getType } from "../../../core/BaseConfig";
 import {
     calculateVerticalPadding,
-    isValidAxisType,
-    getAxisLabelHeight
+    getAxisLabelHeight,
+    isValidAxisType
 } from "../../../helpers/axis";
 import { getBarStyle, getHashedBar, getRect } from "../../../helpers/barType";
 import constants, {
@@ -17,8 +17,8 @@ import { loadLegendItem } from "../../../helpers/legend";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 import { d3RemoveElement } from "../../Graph/helpers/helpers";
-import { createRegion } from "./goalLineHelpers";
 import { createAxisInfoRowLabel } from "./axisInfoRowHelpers";
+import { createRegion } from "./goalLineHelpers";
 import { drawSelectionBars, getSelectedData } from "./selectionHelpers";
 
 /**

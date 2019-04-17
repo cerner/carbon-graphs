@@ -6,10 +6,11 @@ import { getXAxisWidth } from "../../../main/js/controls/Gantt/helpers/creationH
 import constants from "../../../main/js/helpers/constants";
 import errors from "../../../main/js/helpers/errors";
 import styles from "../../../main/js/helpers/styles";
+import { fetchAllElementsByClass } from "../Bar/helpers";
 import {
     delay,
-    triggerEvent,
-    TRANSITION_DELAY
+    TRANSITION_DELAY,
+    triggerEvent
 } from "../helpers/commonHelpers";
 import {
     axisJSON,
@@ -18,7 +19,6 @@ import {
     getData,
     onClickFunctionSpy
 } from "./helpers";
-import { fetchAllElementsByClass } from "../Bar/helpers";
 
 describe("Gantt -> Track", () => {
     let gantt = null;

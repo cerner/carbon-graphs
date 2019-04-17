@@ -5,8 +5,8 @@ import {
     calculateAxesLabelSize,
     calculateAxesSize,
     createAxes,
-    createXAxisInfoRow,
     createAxisReferenceLine,
+    createXAxisInfoRow,
     getAxesDataRange,
     getYAxisHeight
 } from "../../helpers/axis";

@@ -118,9 +118,9 @@ barDefault.loadContent(Carbon.api.bar(/* Data array D */));
 
 #### Optional
 
-| Property Name | Expected | Default | Description                                            |
-| ------------- | -------- | ------- | ------------------------------------------------------ |
-| style         | object   | {}      | Any style that can be applied. Refer [Styles](#styles) |
+| Property Name | Expected | Default | Description                                           |
+| ------------- | -------- | ------- | ----------------------------------------------------- |
+| style         | object   | {}      | Any style that can be applied. Refer [Styles](#style) |
 
 ### Regions
 
@@ -267,43 +267,44 @@ var data = {
         //onCloseCB needs to called by the consumer after popup is closed;
         //This is so that graphing api can remove the selected indicator from data point
     },
-    axisInfoRow = [
-    {
-        axis: "x",
-        x: 1,
-        value: {
-            onClick: () => {},
-            characterCount: 4,
-            color: Carbon.helpers.COLORS.ORANGE,
-            shape: {
-                path: {
-                    d: "M24,0l24,24L24,48L0,24L24,0z",
-                    fill: Carbon.helpers.COLORS.ORANGE
+    axisInfoRow: [
+        {
+            axis: "x",
+            x: 1,
+            value: {
+                onClick: () => {},
+                characterCount: 4,
+                color: Carbon.helpers.COLORS.ORANGE,
+                shape: {
+                    path: {
+                        d: "M24,0l24,24L24,48L0,24L24,0z",
+                        fill: Carbon.helpers.COLORS.ORANGE
+                    },
+                    options: {
+                        x: -6,
+                        y: -6,
+                        scale: 0.25
+                    }
                 },
-                options: {
-                    x: -6,
-                    y: -6,
-                    scale: 0.25
+                label: {
+                    display: "1234567",
+                    secondaryDisplay: "ICU"
                 }
-            },
-            label: {
-                display: "1234567",
-                secondaryDisplay: "ICU"
+            }
+        },
+        {
+            axis: "x",
+            x: 2,
+            value: {
+                onClick: () => {},
+                color: Carbon.helpers.COLORS.BLACK,
+                shape: {},
+                label: {
+                    display: "65"
+                }
             }
         }
-    },
-    {
-        axis: "x",
-        x: 2,
-        value: {
-            onClick: () => {},
-            color: Carbon.helpers.COLORS.BLACK,
-            shape: {},
-            label: {
-                display: "65",
-            }
-        }
-    },
+    ],
     values: [
         {
             x: "1",

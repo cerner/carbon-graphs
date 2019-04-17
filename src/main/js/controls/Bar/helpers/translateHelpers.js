@@ -1,11 +1,11 @@
 import constants from "../../../helpers/constants";
-import { barAttributesHelper } from "./creationHelpers";
-import { translateSelectBars } from "./selectionHelpers";
 import styles from "../../../helpers/styles";
 import {
-    getTextLabelsYPosition,
-    getTextLabelsXPosition
+    getTextLabelsXPosition,
+    getTextLabelsYPosition
 } from "./axisInfoRowHelpers";
+import { barAttributesHelper } from "./creationHelpers";
+import { translateSelectBars } from "./selectionHelpers";
 
 /**
  * Transforms bars for a data point set in the Bar graph on resize
