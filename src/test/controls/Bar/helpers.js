@@ -1,6 +1,7 @@
 import sinon from "sinon";
 import { AXIS_TYPE, COLORS } from "../../../main/js/helpers/constants";
 import utils from "../../../main/js/helpers/utils";
+import Carbon from "../../../main/js/carbon";
 
 export const barClickHandlerSpy = sinon.spy();
 
@@ -149,6 +150,114 @@ export const regionsDefault = [
         x: 2,
         start: 13,
         end: 13
+    }
+];
+export const axisInfoRowDefault = [
+    {
+        axis: "x",
+        x: 1,
+        value: {
+            onClick: () => {},
+            characterCount: 9,
+            color: Carbon.helpers.COLORS.ORANGE,
+            shape: {
+                path: {
+                    d: "M24,0l24,24L24,48L0,24L24,0z",
+                    fill: Carbon.helpers.COLORS.ORANGE
+                },
+                options: {
+                    x: -6,
+                    y: -6,
+                    scale: 0.25
+                }
+            },
+            label: {
+                display: "51",
+                secondaryDisplay: "ICU"
+            }
+        }
+    },
+    {
+        axis: "x",
+        x: 2,
+        value: {
+            onClick: () => {},
+            characterCount: 9,
+            color: Carbon.helpers.COLORS.ORANGE,
+            shape: {},
+            label: {
+                display: "51",
+                secondaryDisplay: "ICU"
+            }
+        }
+    },
+    {
+        axis: "x",
+        x: 3,
+        value: {
+            onClick: () => {},
+            characterCount: 9,
+            color: Carbon.helpers.COLORS.ORANGE,
+            shape: {},
+            label: {
+                display: "51",
+                secondaryDisplay: "ICU"
+            }
+        }
+    }
+];
+export const axisInfoRowTimeSeries = [
+    {
+        axis: "x",
+        x: "2016-02-03T12:00:00Z",
+        value: {
+            onClick: () => {},
+            characterCount: 9,
+            color: Carbon.helpers.COLORS.ORANGE,
+            shape: {
+                path: {
+                    d: "M24,0l24,24L24,48L0,24L24,0z",
+                    fill: Carbon.helpers.COLORS.ORANGE
+                },
+                options: {
+                    x: -6,
+                    y: -6,
+                    scale: 0.25
+                }
+            },
+            label: {
+                display: "51",
+                secondaryDisplay: "ICU"
+            }
+        }
+    },
+    {
+        axis: "x",
+        x: "2016-03-03T12:00:00Z",
+        value: {
+            onClick: () => {},
+            characterCount: 9,
+            color: Carbon.helpers.COLORS.ORANGE,
+            shape: {},
+            label: {
+                display: "51",
+                secondaryDisplay: "ICU"
+            }
+        }
+    },
+    {
+        axis: "x",
+        x: "2016-06-03T12:00:00Z",
+        value: {
+            onClick: () => {},
+            characterCount: 9,
+            color: Carbon.helpers.COLORS.ORANGE,
+            shape: {},
+            label: {
+                display: "51",
+                secondaryDisplay: "ICU"
+            }
+        }
     }
 ];
 /**

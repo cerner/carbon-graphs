@@ -163,5 +163,13 @@ export default {
     THROW_MSG_INVALID_REGION_X_AXIS_TICK:
         "Invalid X Axis, tick values are required for Bar region.",
     THROW_MSG_REGION_INVALID_FORMAT:
-        "Region x type for bar graph cannot be default, if data-points are in date time format."
+        "Region x type for bar graph cannot be default, if data-points are in date time format.",
+    THROW_MSG_AXIS_INFO_ROW_EMPTY_TICK_VALUES:
+        "Invalid X Axis Info Row, tick info values are required.",
+    THROW_MSG_AXIS_INFO_ROW_INVALID_TICK_VALUES:
+        "Invalid X Axis Info Row, tick info values should match with X Axis tick values.",
+    THROW_MSG_AXIS_INFO_ROW_VALUE_NOT_PROVIDED:
+        "Invalid X Axis Info Row input format, value property must be provided.",
+    THROW_MSG_AXIS_INFO_ROW_LABEL_DISPLAY_NOT_PROVIDED:
+        "Invalid X Axis Info Row input format, display must be provided for label property."
 };

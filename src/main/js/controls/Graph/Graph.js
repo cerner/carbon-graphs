@@ -5,6 +5,7 @@ import {
     calculateAxesLabelSize,
     calculateAxesSize,
     createAxes,
+    createXAxisInfoRow,
     createAxisReferenceLine,
     getAxesDataRange,
     getYAxisHeight
@@ -117,7 +118,11 @@ const initConfig = (control) => {
         },
         shownTargets: {}
     };
-    control.axis = {};
+    control.axis = {
+        axisInfoRow: {
+            x: {}
+        }
+    };
     control.scale = {};
     control.svg = null;
     control.legendSVG = null;
@@ -221,6 +226,7 @@ class Graph extends Construct {
         createGrid(this.axis, this.scale, this.config, this.svg);
         createContentContainer(this.config, this.svg);
         createAxes(this.axis, this.scale, this.config, this.svg);
+        createXAxisInfoRow(this.axis, this.scale, this.config, this.svg);
         createLabel(this.config, this.svg, this);
         createAxisReferenceLine(this.axis, this.scale, this.config, this.svg);
         if (this.config.showLegend) {

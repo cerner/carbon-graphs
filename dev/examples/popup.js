@@ -1,5 +1,6 @@
 import d3 from "d3";
 import utils from "../../src/main/js/helpers/utils";
+import constants from "../../src/main/js/helpers/constants";
 
 const getDate = (d) => new Date(d).toLocaleString();
 const getPairData = (value) =>
@@ -118,6 +119,39 @@ export const loadBarPopup = (onCloseCB, key, index, values) => {
     values.forEach((value) =>
         createItem(pair, `${value.label.display}`, `${value.y}`)
     );
+};
+export const loadTextLabelPopup = (onCloseCB, value, index) => {
+    removeOldPopup();
+    const path = renderPopup(onCloseCB);
+    const pair = path
+        .append("g")
+        .classed("popup-item", true)
+        .append("g")
+        .attr("style", `display: inline-block;`);
+    if (utils.notEmpty(value.shape)) {
+        pair.append("svg")
+            .attr("width", "15")
+            .attr("height", "12")
+            .append("path")
+            .attr(
+                "transform",
+                `translate(${0}, ${0}) scale(${value.shape.options.scale})`
+            )
+            .attr("d", value.shape.path.d)
+            .attr("fill", value.shape.path.fill || constants.DEFAULT_COLOR)
+            .attr("id", value.shape.path.id);
+    }
+    if (value.label.display) {
+        pair.append("text")
+            .classed("popup-text", true)
+            .attr("style", `color: ${value.color};`)
+            .text(`${value.label.display}`);
+    }
+    if (value.label.secondaryDisplay) {
+        pair.append("tspan")
+            .attr("style", `color: ${constants.DEFAULT_COLOR};`)
+            .text(` ${value.label.secondaryDisplay}`);
+    }
 };
 export const loadTrackLabelPopup = (d) => {
     removeOldPopup();

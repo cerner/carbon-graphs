@@ -1,8 +1,13 @@
 "use strict";
+import d3 from "d3";
 import Bar from "../../../main/js/controls/Bar/Bar";
 import Graph from "../../../main/js/controls/Graph/Graph";
 import styles from "../../../main/js/helpers/styles";
 import utils from "../../../main/js/helpers/utils";
+import {
+    getCurrentTransform,
+    round2Decimals
+} from "../../../main/js/helpers/transformUtils";
 import {
     axisDefault,
     fetchAllElementsByClass,
@@ -10,7 +15,8 @@ import {
     getInput,
     regionsDefault,
     valuesDefault,
-    valuesNegativeDefault
+    valuesNegativeDefault,
+    axisInfoRowDefault
 } from "./helpers";
 
 describe("Grouped Bar", () => {
@@ -246,6 +252,87 @@ describe("Grouped Bar", () => {
                 expect(regionElement[0].getAttribute("x")).not.toBe(
                     regionElement[2].getAttribute("x")
                 );
+            });
+        });
+    });
+    describe("Axis Info Row", () => {
+        let bar1;
+        let bar2;
+        describe("on load", () => {
+            beforeEach(() => {
+                const input1 = getInput(valuesDefault, false, false);
+                input1.axisInfoRow = axisInfoRowDefault;
+                bar1 = new Bar(input1);
+                let graph = graphDefault.loadContent(bar1);
+                bar1.redraw(graph);
+                const input2 = utils.deepClone(
+                    getInput(valuesDefault, false, false, false, "uid_2")
+                );
+                input2.group = "uid_11";
+                input2.axisInfoRow = axisInfoRowDefault;
+                bar2 = new Bar(input2);
+                graph = graphDefault.loadContent(bar2);
+                bar2.redraw(graph);
+                bar1.redraw(graph);
+            });
+            afterEach(() => {
+                graphDefault.destroy();
+            });
+
+            it("Translates axis info row labels correctly", () => {
+                const axisInfoRowElement = fetchAllElementsByClass(
+                    barGraphContainer,
+                    styles.axisInfoRowItem
+                );
+                expect(axisInfoRowElement.length).toBe(6);
+                expect(
+                    round2Decimals(
+                        d3.transform(getCurrentTransform(axisInfoRowElement[0]))
+                            .translate[0]
+                    )
+                ).toBe(169.83);
+                expect(
+                    round2Decimals(
+                        d3.transform(getCurrentTransform(axisInfoRowElement[0]))
+                            .translate[1]
+                    )
+                ).toBe(-10);
+                expect(
+                    round2Decimals(
+                        d3.transform(getCurrentTransform(axisInfoRowElement[1]))
+                            .translate[0]
+                    )
+                ).toBe(311.83);
+                expect(
+                    round2Decimals(
+                        d3.transform(getCurrentTransform(axisInfoRowElement[1]))
+                            .translate[1]
+                    )
+                ).toBe(-10);
+                expect(
+                    round2Decimals(
+                        d3.transform(getCurrentTransform(axisInfoRowElement[2]))
+                            .translate[0]
+                    )
+                ).toBe(453.83);
+                expect(
+                    round2Decimals(
+                        d3.transform(getCurrentTransform(axisInfoRowElement[3]))
+                            .translate[0]
+                    )
+                ).toBe(113.03);
+                expect(
+                    round2Decimals(
+                        d3.transform(getCurrentTransform(axisInfoRowElement[4]))
+                            .translate[0]
+                    )
+                ).toBe(255.03);
+                expect(
+                    round2Decimals(
+                        d3.transform(getCurrentTransform(axisInfoRowElement[5]))
+                            .translate[0]
+                    )
+                ).toBe(397.03);
             });
         });
     });

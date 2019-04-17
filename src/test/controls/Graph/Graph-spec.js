@@ -293,6 +293,7 @@ describe("Graph", () => {
                 AXES_ORIENTATION.X.BOTTOM
             );
             expect(graph.config.axisPadding.y).toEqual(true);
+            expect(graph.config.axisInfoRowLabelHeight).toEqual(0);
         });
         it("processes the input when y axis padDomain is set to false", () => {
             axisDefault.y.padDomain = false;
@@ -381,6 +382,7 @@ describe("Graph", () => {
                 AXES_ORIENTATION.X.BOTTOM
             );
             expect(graph.config.axisPadding.y).toEqual(true);
+            expect(graph.config.axisInfoRowLabelHeight).toEqual(0);
         });
         it("process bindLegendTo correctly", () => {
             const input = utils.deepClone(getAxes(axisDefault));
@@ -695,18 +697,21 @@ describe("Graph", () => {
                 .childNodes[4];
             const axisYElement = fetchElementByClass(styles.canvas)
                 .childNodes[5];
-            const axisXLabelElement = fetchElementByClass(styles.canvas)
+            const axisInfoRowElement = fetchElementByClass(styles.canvas)
                 .childNodes[6];
-            const axisYLabelElement = fetchElementByClass(styles.canvas)
+            const axisXLabelElement = fetchElementByClass(styles.canvas)
                 .childNodes[7];
-            const axisReferenceLintElement = fetchElementByClass(styles.canvas)
+            const axisYLabelElement = fetchElementByClass(styles.canvas)
                 .childNodes[8];
+            const axisReferenceLintElement = fetchElementByClass(styles.canvas)
+                .childNodes[9];
             expect(defsElement).not.toBeNull();
             expect(regionElement).not.toBeNull();
             expect(gridElement).not.toBeNull();
             expect(axisXElement).not.toBeNull();
             expect(axisYElement).not.toBeNull();
             expect(contentContainer).not.toBeNull();
+            expect(axisInfoRowElement).not.toBeNull();
             expect(axisXLabelElement).not.toBeNull();
             expect(axisYLabelElement).not.toBeNull();
             expect(axisReferenceLintElement).not.toBeNull();
@@ -717,6 +722,7 @@ describe("Graph", () => {
             expect(axisXElement.nodeName).toBe("g");
             expect(axisYElement.nodeName).toBe("g");
             expect(contentContainer.nodeName).toBe("rect");
+            expect(axisInfoRowElement.nodeName).toBe("g");
             expect(axisXLabelElement.nodeName).toBe("g");
             expect(axisYLabelElement.nodeName).toBe("g");
             expect(axisReferenceLintElement.nodeName).toBe("path");
@@ -732,6 +738,10 @@ describe("Graph", () => {
             expect(contentContainer.classList).toContain(
                 styles.contentContainer
             );
+            expect(axisInfoRowElement.getAttribute("class")).toContain(
+                styles.axisInfoRow
+            );
+            expect(axisInfoRowElement.childElementCount).toBe(1);
             expect(axisXLabelElement.getAttribute("class")).toBe(
                 styles.axisLabelX
             );
@@ -977,6 +987,25 @@ describe("Graph", () => {
                     `${styles.axis} ${styles.axisY}`
                 );
                 expect(yAxisElement.getAttribute("aria-hidden")).toBe("true");
+            });
+            it("sets axis info row orientation to top when x axis orientation is bottom", () => {
+                const xAxisBottomOrientation = utils.deepClone(axisDefault);
+                xAxisBottomOrientation.x.orientation =
+                    AXES_ORIENTATION.X.BOTTOM;
+                const input = getAxes(xAxisBottomOrientation);
+                graph = new Graph(input);
+                expect(graph.axis.axisInfoRow.x.orient()).toEqual(
+                    AXES_ORIENTATION.X.TOP
+                );
+            });
+            it("sets axis info row orientation to bottom when x axis orientation is top", () => {
+                const xAxisBottomOrientation = utils.deepClone(axisDefault);
+                xAxisBottomOrientation.x.orientation = AXES_ORIENTATION.X.TOP;
+                const input = getAxes(xAxisBottomOrientation);
+                graph = new Graph(input);
+                expect(graph.axis.axisInfoRow.x.orient()).toEqual(
+                    AXES_ORIENTATION.X.BOTTOM
+                );
             });
             it("creates the y axis reference line markup even when hidden", () => {
                 graph.destroy();
@@ -2207,7 +2236,11 @@ describe("Graph", () => {
                 }),
                 shownTargets: Object({})
             });
-            expect(graph.axis).toEqual({});
+            expect(graph.axis).toEqual({
+                axisInfoRow: Object({
+                    x: Object({})
+                })
+            });
             expect(graph.scale).toEqual({});
             expect(graph.svg).toBeNull();
             expect(graph.resizeHandler).toBeNull();

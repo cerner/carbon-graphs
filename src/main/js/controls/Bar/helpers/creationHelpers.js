@@ -3,7 +3,8 @@ import d3 from "d3";
 import { getType } from "../../../core/BaseConfig";
 import {
     calculateVerticalPadding,
-    isValidAxisType
+    isValidAxisType,
+    getAxisLabelHeight
 } from "../../../helpers/axis";
 import { getBarStyle, getHashedBar, getRect } from "../../../helpers/barType";
 import constants, {
@@ -17,6 +18,7 @@ import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 import { d3RemoveElement } from "../../Graph/helpers/helpers";
 import { createRegion } from "./goalLineHelpers";
+import { createAxisInfoRowLabel } from "./axisInfoRowHelpers";
 import { drawSelectionBars, getSelectedData } from "./selectionHelpers";
 
 /**
@@ -63,9 +65,53 @@ const processDataPoints = (graphConfig, dataTarget) => {
     if (hasInvalidTicks(graphConfig.axis.x.ticks.values, dataTarget.values)) {
         throw new Error(errors.THROW_MSG_INVALID_X_AXIS_TICK_VALUES);
     }
+    if (utils.isDefined(dataTarget.axisInfoRow)) {
+        if (utils.isEmpty(dataTarget.axisInfoRow)) {
+            throw new Error(errors.THROW_MSG_AXIS_INFO_ROW_EMPTY_TICK_VALUES);
+        }
+        if (
+            hasInvalidTicks(
+                graphConfig.axis.x.ticks.values,
+                dataTarget.axisInfoRow
+            )
+        ) {
+            throw new Error(errors.THROW_MSG_AXIS_INFO_ROW_INVALID_TICK_VALUES);
+        }
+        if (hasMissingAxisInfoRowValue(dataTarget.axisInfoRow)) {
+            throw new Error(errors.THROW_MSG_AXIS_INFO_ROW_VALUE_NOT_PROVIDED);
+        }
+        if (hasMissingAxisInfoRowLabelDisplay(dataTarget.axisInfoRow)) {
+            throw new Error(
+                errors.THROW_MSG_AXIS_INFO_ROW_LABEL_DISPLAY_NOT_PROVIDED
+            );
+        }
+    }
     graphConfig.shownTargets.push(dataTarget.key);
     return setDataPoints(graphConfig, dataTarget);
 };
+
+/**
+ * Checks if each axis info row input has value
+ * @private
+ * @param {Object} inputAxisInfoRow - input axis info row values
+ * @returns {boolean} - true if each axis info row input has value, false otherwise
+ */
+const hasMissingAxisInfoRowValue = (inputAxisInfoRow) =>
+    inputAxisInfoRow.some((axisInfoRow) =>
+        utils.isUndefined(axisInfoRow.value)
+    );
+/**
+ * Checks if each axis info row input value label has display
+ * @private
+ * @param {Object} inputAxisInfoRow - input axis info row values
+ * @returns {boolean} - true if each axis info row input value label has display , false otherwise
+ */
+const hasMissingAxisInfoRowLabelDisplay = (inputAxisInfoRow) =>
+    inputAxisInfoRow.some(
+        (axisInfoRow) =>
+            utils.isUndefined(axisInfoRow.value.label) ||
+            utils.isUndefined(axisInfoRow.value.label.display)
+    );
 
 /**
  * Processes the input JSON and adds the colors, labels etc. to each data points so that we
@@ -83,6 +129,18 @@ const setDataPoints = (graphConfig, dataTarget) => {
         }
         return utils.getNumber(x);
     };
+    if (utils.notEmpty(dataTarget.axisInfoRow)) {
+        dataTarget.axisInfoRow.forEach(
+            (axisInfoRowValue) => (axisInfoRowValue.group = dataTarget.group)
+        );
+        if (!graphConfig.axisInfoRowLabelHeight) {
+            graphConfig.axisInfoRowLabelHeight = hasSecondaryDisplay(dataTarget)
+                ? getAxisLabelHeight("dummyString") * 2
+                : getAxisLabelHeight("dummyString");
+            graphConfig.padding.bottom =
+                graphConfig.padding.bottom + graphConfig.axisInfoRowLabelHeight;
+        }
+    }
     dataTarget.internalValuesSubset = dataTarget.values.map((value) => {
         const isHashed = dataTarget.style ? dataTarget.style.isHashed : false;
         return {
@@ -106,6 +164,16 @@ const setDataPoints = (graphConfig, dataTarget) => {
     dataTarget.shape = SHAPES.SQUARE;
     return dataTarget;
 };
+/**
+ * Checks for the presence of secondary display inside axisInfoRow
+ * @private
+ * @param {Object} dataTarget - Data points object
+ * @returns {boolean} - true if secondary display is present, false otherwise
+ */
+const hasSecondaryDisplay = (dataTarget) =>
+    dataTarget.axisInfoRow.some(
+        (axisInfoRowItem) => axisInfoRowItem.value.label.secondaryDisplay
+    );
 
 /**
  * X Axis's starting position within the canvas
@@ -160,7 +228,8 @@ const draw = (scale, ordinalScale, config, canvasSVG, dataTarget) => {
         config,
         canvasSVG,
         bars.enter(),
-        dataTarget.regions
+        dataTarget.regions,
+        dataTarget.axisInfoRow
     );
 };
 
@@ -208,6 +277,7 @@ const barAttributesHelper = (scale, ordinalScale) => {
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Object} barGroupSVG - d3 object for bar group svg
  * @param {Array} regionList - List of regions to be shown within graph
+ * @param {Array} axisInfoRowList - List of text labels to be shown
  * @returns {Object} d3 bar object
  */
 const drawDataBars = (
@@ -216,7 +286,8 @@ const drawDataBars = (
     config,
     canvasSVG,
     barGroupSVG,
-    regionList
+    regionList,
+    axisInfoRowList
 ) => {
     const attributeHelper = barAttributesHelper(scale, ordinalScale);
     return barGroupSVG
@@ -271,6 +342,22 @@ const drawDataBars = (
                         dataPointSVG,
                         regions,
                         dataPoint.key
+                    );
+                }
+            }
+            if (utils.notEmpty(axisInfoRowList)) {
+                const textLabels = axisInfoRowList.filter((t) =>
+                    utils.isEqual(t.x, dataPoint.x)
+                );
+                if (utils.notEmpty(textLabels)) {
+                    createAxisInfoRowLabel(
+                        ordinalScale,
+                        scale,
+                        config,
+                        canvasSVG,
+                        textLabels[0],
+                        dataPoint.key,
+                        axisInfoRowList.indexOf(textLabels[0])
                     );
                 }
             }
@@ -403,5 +490,8 @@ export {
     prepareLegendItems,
     barAttributesHelper,
     getXAxisXPosition,
-    setSelectionIndicatorAttributes
+    setSelectionIndicatorAttributes,
+    hasInvalidTicks,
+    barActionHandler,
+    getSelectedData
 };

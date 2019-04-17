@@ -1351,6 +1351,41 @@ const DATA = [
                         y: Math.sin(i) * Math.PI + 20,
                         x: i + 0.5
                     }))
+                },
+                {
+                    key: "uid_bar_7",
+                    label: {
+                        display: "Data Label 7"
+                    },
+                    group: "uid_bar_1",
+                    color: Carbon.helpers.COLORS.YELLOW,
+                    onClick: loadBarPopup,
+                    values: [
+                        {
+                            x: 1,
+                            y: 10
+                        },
+                        {
+                            x: 2,
+                            y: 15
+                        },
+                        {
+                            x: 3,
+                            y: 18
+                        },
+                        {
+                            x: 4,
+                            y: 6
+                        },
+                        {
+                            x: 5,
+                            y: 0
+                        },
+                        {
+                            x: 6,
+                            y: 10
+                        }
+                    ]
                 }
             ],
             showLabel: true,

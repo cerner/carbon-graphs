@@ -105,5 +105,13 @@ export default {
     currentBarsGroup: "carbon-data-bars-group",
     barHashedRect: "carbon-data-bar--hashed",
     barSelectionGroup: "carbon-bar-selector-group",
-    barGoalLine: "carbon-bar-goal-line"
+    barGoalLine: "carbon-bar-goal-line",
+    /**
+     * Axis Info Row
+     */
+    axisInfoRow: "carbon-axis-info-row",
+    axisInfoRowItem: "carbon-axis-info-row-item",
+    axisInfoRowIcon: "carbon-axis-info-row-icon",
+    axisInfoRowDisplay: "carbon-axis-info-row-item-display",
+    axisInfoRowSecondaryDisplay: "carbon-axis-info-row-item-sec-display"
 };

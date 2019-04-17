@@ -28,7 +28,7 @@ svg:not(:root) {
     .font-smooth();
 }
 
-.carbon-axis path,
+.carbon-axis path.domain,
 .carbon-axis line {
     fill: none;
     stroke: @grey30;
@@ -42,7 +42,8 @@ svg:not(:root) {
 
 .carbon-axis-x,
 .carbon-axis-y,
-.carbon-axis-y2 {
+.carbon-axis-y2,
+.carbon-axis-info-row {
     &[aria-hidden="true"] {
         display: none;
     }
@@ -229,5 +230,15 @@ svg:not(:root) {
 
     &[aria-hidden="true"] {
         .opacity-hide();
+    }
+}
+
+.carbon-axis-info-row-item {
+    &[aria-hidden="true"] {
+        .opacity-hide();
+    }
+
+    &[aria-disabled="false"] {
+        cursor: pointer;
     }
 }

@@ -23,7 +23,12 @@ import {
     clearSelectionDatum,
     updateSelectionBars
 } from "./helpers/selectionHelpers";
-import { translateBarGraph } from "./helpers/translateHelpers";
+import {
+    translateBarGraph,
+    translateTextLabel
+} from "./helpers/translateHelpers";
+import styles from "../../helpers/styles";
+import { removeAxisInfoRowLabels } from "./helpers/axisInfoRowHelpers";
 
 /**
  * Calculates the min and max values for Y Axis or Y2 Axis
@@ -156,6 +161,10 @@ class Bar extends GraphContent {
             graph.axesLabelShapeGroup[this.config.yAxis],
             this.dataTarget
         );
+        removeAxisInfoRowLabels(
+            graph.svg.select(`.${styles.axisInfoRow}`),
+            this.dataTarget.key
+        );
         clearSelectionDatum(graph.svg, this.dataTarget.key);
         initConfig(this);
         return this;
@@ -180,6 +189,16 @@ class Bar extends GraphContent {
             this.dataTarget,
             graph.config
         );
+        if (utils.notEmpty(this.dataTarget.axisInfoRow)) {
+            translateTextLabel(
+                this.ordinalScale,
+                graph.scale,
+                graph.config,
+                graph.svg,
+                this.dataTarget.axisInfoRow,
+                this.dataTarget
+            );
+        }
         if (utils.notEmpty(this.dataTarget.regions)) {
             processGoalLines(
                 graph.scale,
@@ -204,6 +223,10 @@ class Bar extends GraphContent {
      */
     redraw(graph) {
         clear(graph.svg, this.dataTarget.key);
+        removeAxisInfoRowLabels(
+            graph.svg.select(`.${styles.axisInfoRow}`),
+            this.dataTarget.key
+        );
         draw(
             graph.scale,
             this.ordinalScale,

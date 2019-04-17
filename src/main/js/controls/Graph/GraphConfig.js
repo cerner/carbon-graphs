@@ -122,6 +122,7 @@ export const processInput = (input, config, type) => {
         y: getDefaultValue(_axis.y.padDomain, true),
         y2: getDefaultValue(_axis.y2.padDomain, true)
     };
+    config.axisInfoRowLabelHeight = 0; // specific only to  Bar Graphs (when axis info row labels are used in Bar Graphs)
     return config;
 };
 

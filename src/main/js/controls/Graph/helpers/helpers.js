@@ -45,13 +45,24 @@ const DEFAULT_HEIGHT = constants.DEFAULT_HEIGHT;
  */
 const translateCanvas = (config, canvasSVG) =>
     canvasSVG
-        .attr("height", config.canvasHeight)
+        .attr("height", config.canvasHeight + getAxisInfoRowLabelHeight(config))
         .attr(
             "width",
             config.padding.hasCustomPadding
                 ? config.canvasWidth
                 : config.canvasWidth - BASE_CANVAS_WIDTH_PADDING
         );
+/**
+ * Checks if axis info row labels are present and updates the canvas height
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @returns {number} - axis info row label height
+ */
+const getAxisInfoRowLabelHeight = (config) =>
+    utils.isDefined(config.axisInfoRowLabelHeight)
+        ? config.axisInfoRowLabelHeight
+        : 0;
+
 /**
  * Updates clipPath rectangle width and height on resize.
  * `clipPath` updates are necessary since the clip-path URL needs to get
@@ -66,7 +77,11 @@ const translateDefs = (config, canvasSVG) =>
         .select(`clipPath#${config.clipPathId}`)
         .selectAll("rect")
         .attr("height", config.height)
-        .attr("width", getXAxisWidth(config));
+        .attr("width", getXAxisWidth(config))
+        .attr(
+            constants.Y_AXIS,
+            config.axis.x.orientation && calculateVerticalPadding(config)
+        );
 /**
  * Translates the horizontal grid on the canvas, grids are only applicable to standard
  * X and Y Axis.
@@ -183,7 +198,11 @@ const translateContentContainer = (config, canvasSVG) =>
         .transition()
         .call(constants.d3Transition)
         .attr("width", getXAxisWidth(config))
-        .attr("height", config.height);
+        .attr("height", config.height)
+        .attr(
+            constants.Y_AXIS,
+            config.axis.x.orientation && calculateVerticalPadding(config)
+        );
 /**
  * Updates the x, y, y2 axes label positions on resize
  * @private
@@ -646,5 +665,6 @@ export {
     attachEventHandlers,
     detachEventHandlers,
     d3RemoveElement,
-    setAxisPadding
+    setAxisPadding,
+    getAxisInfoRowLabelHeight
 };

@@ -15,6 +15,7 @@ const compiler = webpack({
     resolve: {
         modules: [process.cwd(), "node_modules"]
     },
+	devtool: "inline-source-map",
     module: {
         rules: [
             {

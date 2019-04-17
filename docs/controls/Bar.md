@@ -93,6 +93,7 @@ barDefault.loadContent(Carbon.api.bar(/* Data array D */));
 | onClick       | Function | null         | Any action that can be performed when clicking on the data point               |
 | style         | object   | {}           | Any style that can be applied. Refer [Styles](#style)                          |
 | group         | string   | key          | Used for stacking bar content under another bar content. Refer [Group](#group) |
+| axisInfoRow   | array    | []           | Refer [Axis Info Row](#Axis-Info-Row)                                          |
 
 ### Dimension
 
@@ -169,6 +170,40 @@ Note:
 
 -   Not providing a `group` will load the content beside `Content 1`.
 
+### Axis Info Row
+
+Each bar can have Axis Info Row Labels. `axis`, `x` and `value` is necessary for rendering an axis info row label.
+
+-   Stacked Bar Graph has combined axis info row labels. Pass in `axisInfoRow` array for first bar content that is stacked.
+-   Grouped Bar Graph has separate axis info row labels for each content. Pass in different axis info row labels for each content.
+
+Note:
+
+-   For a Stacked Bar Graph, disable legend items while using Axis Info Row since toggling legend items will not change the Axis Info Row Labels.
+
+#### Required
+
+| Property Name | Expected | Description                                                  |
+| ------------- | -------- | ------------------------------------------------------------ |
+| x             | number   | X axis tick value for corresponding axis info row label item |
+| value         | object   | Refer [Axis Info Row Value](#Axis-Info-Row-Value)            |
+
+#### Optional
+
+| Property Name | Expected | Default | Description                                        |
+| ------------- | -------- | ------- | -------------------------------------------------- |
+| axis          | string   | "x"     | Axis where you want to render axis info row labels |
+
+#### Axis Info Row Value
+
+| Property Name  | Expected | Default                                                            | Description                                                                                                        |
+| -------------- | -------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| characterCount | number   | No Default Value                                                   | Maximum character length before truncation                                                                         |
+| color          | string   | ![#1c1f21](https://placehold.it/15/1c1f21/000000?text=+) `#1c1f21` | Default color of the display (For Primary label only)                                                              |
+| onClick        | Function | null                                                               | Any action that can be performed when clicking on the data point                                                   |
+| label          | object   | {}                                                                 | `display` property needs to be provided for label <br/> `secondaryDisplay` property can also be provided for label |
+| shape          | object   | {}                                                                 | svg represented as json, which got transpiled from `svg-to-carbon`. Refer [Shapes](../README.md#Shapes)            |
+
 ### Constraints
 
 -   If data-set `label` display is not provided then the legend item will not be shown as well
@@ -231,6 +266,43 @@ var data = {
     onClick: (onCloseCB, key, valuesArray) => {
         //onCloseCB needs to called by the consumer after popup is closed;
         //This is so that graphing api can remove the selected indicator from data point
+    },
+    axisInfoRow = [
+    {
+        axis: "x",
+        x: 1,
+        value: {
+            onClick: () => {},
+            characterCount: 4,
+            color: Carbon.helpers.COLORS.ORANGE,
+            shape: {
+                path: {
+                    d: "M24,0l24,24L24,48L0,24L24,0z",
+                    fill: Carbon.helpers.COLORS.ORANGE
+                },
+                options: {
+                    x: -6,
+                    y: -6,
+                    scale: 0.25
+                }
+            },
+            label: {
+                display: "1234567",
+                secondaryDisplay: "ICU"
+            }
+        }
+    },
+    {
+        axis: "x",
+        x: 2,
+        value: {
+            onClick: () => {},
+            color: Carbon.helpers.COLORS.BLACK,
+            shape: {},
+            label: {
+                display: "65",
+            }
+        }
     },
     values: [
         {

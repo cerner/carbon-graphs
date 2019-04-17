@@ -1,8 +1,13 @@
 "use strict";
+import d3 from "d3";
 import Bar from "../../../main/js/controls/Bar/Bar";
 import Graph from "../../../main/js/controls/Graph/Graph";
 import styles from "../../../main/js/helpers/styles";
 import utils from "../../../main/js/helpers/utils";
+import {
+    getCurrentTransform,
+    round2Decimals
+} from "../../../main/js/helpers/transformUtils";
 import {
     axisDefault,
     axisTimeSeries,
@@ -14,7 +19,8 @@ import {
     valuesDefault,
     valuesNegativeDefault,
     valuesOutliers,
-    valuesTimeSeries
+    valuesTimeSeries,
+    axisInfoRowDefault
 } from "./helpers";
 
 describe("Stacked Bar", () => {
@@ -446,6 +452,68 @@ describe("Stacked Bar", () => {
                 expect(regionElement[0].getAttribute("x")).toBe(
                     regionElement[2].getAttribute("x")
                 );
+            });
+        });
+    });
+    describe("Axis Info Row", () => {
+        let bar1;
+        let bar2;
+        describe("on load", () => {
+            beforeEach(() => {
+                const input1 = getInput(valuesDefault, false, false);
+                input1.axisInfoRow = axisInfoRowDefault;
+                bar1 = new Bar(input1);
+                let graph = graphDefault.loadContent(bar1);
+                bar1.redraw(graph);
+                const input2 = utils.deepClone(
+                    getInput(valuesDefault, false, false, false, "uid_2")
+                );
+                input2.group = "uid_1";
+                bar2 = new Bar(input2);
+                graph = graphDefault.loadContent(bar2);
+                bar2.redraw(graph);
+                bar1.redraw(graph);
+            });
+            afterEach(() => {
+                graphDefault.destroy();
+            });
+
+            it("Translates axis info row labels correctly", () => {
+                const axisInfoRowElement = fetchAllElementsByClass(
+                    barGraphContainer,
+                    styles.axisInfoRowItem
+                );
+                expect(axisInfoRowElement.length).toBe(3);
+                expect(
+                    round2Decimals(
+                        d3.transform(getCurrentTransform(axisInfoRowElement[0]))
+                            .translate[0]
+                    )
+                ).toBe(141.15);
+                expect(
+                    round2Decimals(
+                        d3.transform(getCurrentTransform(axisInfoRowElement[0]))
+                            .translate[1]
+                    )
+                ).toBe(-10);
+                expect(
+                    round2Decimals(
+                        d3.transform(getCurrentTransform(axisInfoRowElement[1]))
+                            .translate[0]
+                    )
+                ).toBe(283.15);
+                expect(
+                    round2Decimals(
+                        d3.transform(getCurrentTransform(axisInfoRowElement[1]))
+                            .translate[1]
+                    )
+                ).toBe(-10);
+                expect(
+                    round2Decimals(
+                        d3.transform(getCurrentTransform(axisInfoRowElement[2]))
+                            .translate[0]
+                    )
+                ).toBe(425.15);
             });
         });
     });

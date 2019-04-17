@@ -99,6 +99,31 @@ const createAxes = (axis, scale, config, canvasSVG) => {
 };
 
 /**
+ * Create the axis for text labels
+ * @private
+ * @param {Object} axis - Axis scaled according to input parameters
+ * @param {Object} scale - d3 scale taking into account the input parameters
+ * @param {Object} config - config object derived from input JSON
+ * @param {Array} canvasSVG - d3 object of canvas svg
+ * @returns {undefined} - returns nothing
+ */
+const createXAxisInfoRow = (axis, scale, config, canvasSVG) => {
+    getAxesScale(axis, scale, config);
+    canvasSVG
+        .append("g")
+        .classed(styles.axis, true)
+        .classed(styles.axisInfoRow, true)
+        .attr("aria-hidden", true)
+        .attr(
+            "transform",
+            `translate(${getXAxisXPosition(config)}, ${getAxisInfoRowYPosition(
+                config
+            )})`
+        )
+        .call(axis.axisInfoRow.x);
+};
+
+/**
  * Creates a horizontal reference line at 0, when Y Axis does not start at 0.
  * @private
  * @param {Object} axis - Axis scaled according to input parameters
@@ -130,7 +155,7 @@ const createAxisReferenceLine = (axis, scale, config, canvasSVG) => {
     }
 };
 /**
- * Prepares X,Y and Y2 Axes according to their scale and available container width and height
+ * Prepares X,Y,Y2 and an optional axis info row (label row for Bar graphs) Axes according to their scale and available container width and height
  * @private
  * @param {Object} axis - Axis scaled according to input parameters
  * @param {Object} scale - d3 scale taking into account the input parameters
@@ -148,6 +173,10 @@ const getAxesScale = (axis, scale, config) => {
             config.axis.x.type
         ),
         config.axis.x.orientation
+    );
+    axis.axisInfoRow.x = prepareXAxisInfoRow(
+        scale.x,
+        getAxisInfoOrientation(config.axis.x.orientation)
     );
     axis.y = prepareYAxis(
         scale.y,
@@ -203,6 +232,18 @@ const processTickValues = (ticks) => {
     return ticks.map((t) => (utils.isDate(t) ? utils.parseDateTime(t) : t));
 };
 /**
+ * Based on x axis orientation, sets the axis info row orientation.
+ * * If x axis orientation is top, axis info row orientation is bottom.
+ * * If x axis orientation is bottom, axis info row orientation is top.
+ * @private
+ * @param {string} xAxisOrientation - x axis orientation
+ * @returns {string} returns orientation for axis info row.
+ */
+const getAxisInfoOrientation = (xAxisOrientation) =>
+    isXAxisOrientationTop(xAxisOrientation)
+        ? AXES_ORIENTATION.X.BOTTOM
+        : AXES_ORIENTATION.X.TOP;
+/**
  * Creates the axis using the scale provided for X Axis using d3 svg axis.
  * If tickValues are provided then they are reserved precedence over ticks/tick counts.
  * @private
@@ -230,6 +271,20 @@ const prepareXAxis = (
         )
         .tickValues(processTickValues(tickValues))
         .tickFormat(format);
+
+/**
+ * Creates the axis using the scale provided for X Axis using d3 svg axis.
+ * @private
+ * @param {Object} scale - d3 scale calculated using domain and range
+ * @param {string} [orientation] - Axis orientation
+ * @returns {Object} d3 object which forms the text label axis scale
+ */
+const prepareXAxisInfoRow = (scale, orientation = AXES_ORIENTATION.X.BOTTOM) =>
+    d3.svg
+        .axis()
+        .scale(scale)
+        .orient(orientation)
+        .tickValues([]);
 
 /**
  * Helper function to Create the axis using the scale provided for X Axis using d3 svg axis.
@@ -320,7 +375,7 @@ const getXAxisLabelYPosition = (config) =>
         ? calculateVerticalPadding(config) - config.axisLabelHeights.x * 2
         : getXAxisYPosition(config) +
           config.axisLabelHeights.x * 2 +
-          config.padding.bottom * 2;
+          (config.padding.bottom - config.axisInfoRowLabelHeight) * 2;
 /**
  * Y Axis label's starting position vertically beside the graph
  * @private
@@ -413,6 +468,16 @@ const getXAxisXPosition = (config) =>
     config.axisSizes.y + config.axisLabelWidths.y;
 /**
  * X Axis's position vertically relative to the canvas
+ * @private
+ * @param {Object} config - config object derived from input JSON
+ * @returns {number} Position for the axis
+ */
+const getAxisInfoRowYPosition = (config) =>
+    isXAxisOrientationTop(config.axis.x.orientation)
+        ? getYAxisHeight(config) + calculateVerticalPadding(config)
+        : calculateVerticalPadding(config);
+/**
+ * Axis Info Row's position vertically relative to the canvas
  * @private
  * @param {Object} config - config object derived from input JSON
  * @returns {number} Position for the axis
@@ -626,6 +691,7 @@ const calculateAxesLabelSize = (config) => {
     config.axisLabelHeights.x = 0;
     config.axisLabelWidths.y = 0;
     config.axisLabelWidths.y2 = 0;
+    config.axisInfoRowLabelHeight = 0;
     if (config.showLabel) {
         if (config.axis.x.label) {
             config.axisLabelHeights.x = getAxisLabelHeight(config.axis.x.label);
@@ -759,7 +825,7 @@ const buildAxisLabel = (group, label) =>
  */
 const hasY2Axis = (axis) => utils.isDefined(axis.y2) && axis.y2.show;
 /**
- * Updates the x, y and y2 (if enabled) positions on resize
+ * Updates the x, y, y2 (if enabled) and axis info row(if enabled) positions on resize
  * @private
  * @param {Object} axis - Axis scaled according to input parameters
  * @param {Object} scale - d3 scale taking into account the input parameters
@@ -805,6 +871,16 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
             )
             .call(axis.y2);
     }
+    canvasSVG
+        .select(`.${styles.axisInfoRow}`)
+        .transition(constants.d3Transition)
+        .attr(
+            "transform",
+            `translate(${getXAxisXPosition(config)}, ${getAxisInfoRowYPosition(
+                config
+            )})`
+        )
+        .call(axis.axisInfoRow.x);
 };
 /**
  * Updates the Y axis reference line when resized. This is also called
@@ -978,6 +1054,7 @@ export {
     buildAxisLabel,
     getAxesScale,
     createAxes,
+    createXAxisInfoRow,
     createAxisReferenceLine,
     getAxesDataRange,
     processTickValues,
@@ -986,5 +1063,6 @@ export {
     translateAxisReferenceLine,
     isValidAxisType,
     calculateVerticalPadding,
-    isXAxisOrientationTop
+    isXAxisOrientationTop,
+    getAxisInfoRowYPosition
 };

@@ -16,8 +16,10 @@ import {
     getInput,
     regionsDefault,
     valuesDefault,
-    valuesTimeSeries
+    valuesTimeSeries,
+    axisInfoRowDefault
 } from "./helpers";
+import Carbon from "../../../main/js/carbon";
 
 describe("Bar", () => {
     let graphDefault = null;
@@ -89,6 +91,166 @@ describe("Bar", () => {
             expect(() => {
                 graphNoTicks.loadContent(new Bar(getInput(valuesDefault)));
             }).toThrowError(errors.THROW_MSG_INVALID_X_AXIS_TICK_VALUES);
+            graphNoTicks.destroy();
+        });
+        it("throws error when x-axis ticks are missing for input axis info row", () => {
+            const axisData = utils.deepClone(getAxes(axisDefault));
+            axisData.axis.x.ticks = {
+                values: [1, 2]
+            };
+            const graphNoTicks = new Graph(axisData);
+            const data = utils.deepClone(getInput(valuesDefault, false, false));
+            data.values = [
+                {
+                    x: 1,
+                    y: 10
+                },
+                {
+                    x: 2,
+                    y: 15
+                }
+            ];
+            data.axisInfoRow = axisInfoRowDefault;
+            const bar = new Bar(data);
+            expect(() => {
+                graphNoTicks.loadContent(bar);
+            }).toThrowError(errors.THROW_MSG_AXIS_INFO_ROW_INVALID_TICK_VALUES);
+            graphNoTicks.destroy();
+        });
+        it("throws error when input axis info row is empty", () => {
+            const axisData = utils.deepClone(getAxes(axisDefault));
+            const graphNoTicks = new Graph(axisData);
+            const data = utils.deepClone(getInput(valuesDefault, false, false));
+            data.axisInfoRow = [];
+            const bar = new Bar(data);
+            expect(() => {
+                graphNoTicks.loadContent(bar);
+            }).toThrowError(errors.THROW_MSG_AXIS_INFO_ROW_EMPTY_TICK_VALUES);
+            graphNoTicks.destroy();
+        });
+        it("throws error when input axis info row tick values do not match with X Axis tick values", () => {
+            const axisData = utils.deepClone(getAxes(axisDefault));
+            const graphNoTicks = new Graph(axisData);
+            const data = utils.deepClone(getInput(valuesDefault, false, false));
+            data.axisInfoRow = [
+                {
+                    axis: "x",
+                    x: 6,
+                    value: {
+                        onClick: () => {},
+                        characterCount: 9,
+                        color: Carbon.helpers.COLORS.ORANGE,
+                        shape: {
+                            path: {
+                                d: "M24,0l24,24L24,48L0,24L24,0z",
+                                fill: Carbon.helpers.COLORS.ORANGE
+                            },
+                            options: {
+                                x: -6,
+                                y: -6,
+                                scale: 0.25
+                            }
+                        },
+                        label: {
+                            display: "51",
+                            secondaryDisplay: "ICU"
+                        }
+                    }
+                }
+            ];
+            const bar = new Bar(data);
+            expect(() => {
+                graphNoTicks.loadContent(bar);
+            }).toThrowError(errors.THROW_MSG_AXIS_INFO_ROW_INVALID_TICK_VALUES);
+            graphNoTicks.destroy();
+        });
+        it("throws error when input axis info row does not have value property", () => {
+            const axisData = utils.deepClone(getAxes(axisDefault));
+            const graphNoTicks = new Graph(axisData);
+            const data = utils.deepClone(getInput(valuesDefault, false, false));
+            data.axisInfoRow = [
+                {
+                    axis: "x",
+                    x: 1,
+                    value: {
+                        onClick: () => {},
+                        characterCount: 9,
+                        color: Carbon.helpers.COLORS.ORANGE,
+                        shape: {
+                            path: {
+                                d: "M24,0l24,24L24,48L0,24L24,0z",
+                                fill: Carbon.helpers.COLORS.ORANGE
+                            },
+                            options: {
+                                x: -6,
+                                y: -6,
+                                scale: 0.25
+                            }
+                        },
+                        label: {
+                            display: "51",
+                            secondaryDisplay: "ICU"
+                        }
+                    }
+                },
+                {
+                    axis: "x",
+                    x: 2
+                }
+            ];
+            const bar = new Bar(data);
+            expect(() => {
+                graphNoTicks.loadContent(bar);
+            }).toThrowError(errors.THROW_MSG_AXIS_INFO_ROW_VALUE_NOT_PROVIDED);
+            graphNoTicks.destroy();
+        });
+        it("throws error when input axis info row label property is not provided", () => {
+            const axisData = utils.deepClone(getAxes(axisDefault));
+            const graphNoTicks = new Graph(axisData);
+            const data = utils.deepClone(getInput(valuesDefault, false, false));
+            data.axisInfoRow = [
+                {
+                    axis: "x",
+                    x: 1,
+                    value: {
+                        onClick: () => {},
+                        characterCount: 9,
+                        color: Carbon.helpers.COLORS.ORANGE,
+                        shape: {}
+                    }
+                }
+            ];
+            const bar = new Bar(data);
+            expect(() => {
+                graphNoTicks.loadContent(bar);
+            }).toThrowError(
+                errors.THROW_MSG_AXIS_INFO_ROW_LABEL_DISPLAY_NOT_PROVIDED
+            );
+            graphNoTicks.destroy();
+        });
+        it("throws error when input axis info row label property does not have display", () => {
+            const axisData = utils.deepClone(getAxes(axisDefault));
+            const graphNoTicks = new Graph(axisData);
+            const data = utils.deepClone(getInput(valuesDefault, false, false));
+            data.axisInfoRow = [
+                {
+                    axis: "x",
+                    x: 1,
+                    value: {
+                        onClick: () => {},
+                        characterCount: 9,
+                        color: Carbon.helpers.COLORS.ORANGE,
+                        shape: {},
+                        label: {}
+                    }
+                }
+            ];
+            const bar = new Bar(data);
+            expect(() => {
+                graphNoTicks.loadContent(bar);
+            }).toThrowError(
+                errors.THROW_MSG_AXIS_INFO_ROW_LABEL_DISPLAY_NOT_PROVIDED
+            );
             graphNoTicks.destroy();
         });
         it("clones the input object correctly", () => {
@@ -203,6 +365,64 @@ describe("Bar", () => {
             const graph = graphDefault.loadContent(new Bar(input));
             const data = graph.content[0].dataTarget;
             expect(data.group).toEqual(input.key);
+        });
+        it("sets axis info row group to respective bar group", () => {
+            const data = utils.deepClone(getInput(valuesDefault, false, false));
+            data.axisInfoRow = [
+                {
+                    axis: "x",
+                    x: 1,
+                    value: {
+                        onClick: () => {},
+                        characterCount: 9,
+                        color: Carbon.helpers.COLORS.ORANGE,
+                        shape: {},
+                        label: {
+                            display: "51",
+                            secondaryDisplay: "ICU"
+                        }
+                    }
+                }
+            ];
+            const bar = new Bar(data);
+            const graph = graphDefault.loadContent(bar);
+            expect(graph.content[0].dataTarget.axisInfoRow[0].group).toEqual(
+                graph.content[0].dataTarget.group
+            );
+        });
+        it("Adds axis info row label height to bottom padding when axis info row is used", () => {
+            const initialBottomPadding = graphDefault.config.padding.bottom;
+            const initialAxisInfoRowLabelHeight =
+                graphDefault.config.axisInfoRowLabelHeight;
+            const data = utils.deepClone(getInput(valuesDefault, false, false));
+            data.axisInfoRow = [
+                {
+                    axis: "x",
+                    x: 1,
+                    value: {
+                        onClick: () => {},
+                        characterCount: 9,
+                        color: Carbon.helpers.COLORS.ORANGE,
+                        shape: {},
+                        label: {
+                            display: "51",
+                            secondaryDisplay: "ICU"
+                        }
+                    }
+                }
+            ];
+            const bar = new Bar(data);
+            const graph = graphDefault.loadContent(bar);
+            const finalBottomPadding = graph.config.padding.bottom;
+            const finalAxisInfoRowLabelHeight =
+                graph.config.axisInfoRowLabelHeight;
+            expect(initialBottomPadding).toEqual(constants.PADDING.bottom);
+            expect(initialAxisInfoRowLabelHeight).toEqual(0);
+            expect(finalBottomPadding).toBeGreaterThan(initialBottomPadding);
+            expect(finalAxisInfoRowLabelHeight).not.toEqual(0);
+            expect(finalBottomPadding).toEqual(
+                initialBottomPadding + finalAxisInfoRowLabelHeight
+            );
         });
         describe("draws the graph", () => {
             let input = null;

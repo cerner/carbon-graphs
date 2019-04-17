@@ -3,7 +3,9 @@ import {
     renderBarGroup,
     renderBarNegative,
     renderBarStacked,
-    renderBarTimeSeries
+    renderBarTimeSeries,
+    renderSimpleBarAxisInfoTextLabels,
+    renderStackedBarAxisInfoTextLabels
 } from "../controls/bar";
 
 import {
@@ -41,6 +43,20 @@ export const triggerBarExample = (
     );
     instance.load(
         renderBarNegative(contentSection, "barNegative", "Bar - Negative bars")
+    );
+    instance.load(
+        renderSimpleBarAxisInfoTextLabels(
+            contentSection,
+            "barSimpleAxisInfoTextLabels",
+            "Bar - Simple - Axis Info Text Labels"
+        )
+    );
+    instance.load(
+        renderStackedBarAxisInfoTextLabels(
+            contentSection,
+            "barStackedAxisInfoTextLabels",
+            "Bar - Stacked - Axis Info Text Labels"
+        )
     );
     instance.render();
     setState(instance);
