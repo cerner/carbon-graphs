@@ -1,6 +1,6 @@
 {
   "name": "carbon-graphs",
-  "version": "0.21.1",
+  "version": "0.22.0",
   "description": "A graphing library built using d3 based on Cerner design standards",
   "keywords": [
     "carbon",
