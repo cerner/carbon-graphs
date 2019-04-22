@@ -6,6 +6,7 @@ import constants from "../../../helpers/constants";
 import errors from "../../../helpers/errors";
 import { validateRegion } from "../../../helpers/region";
 import styles from "../../../helpers/styles";
+import { round2Decimals } from "../../../helpers/transformUtils";
 import utils from "../../../helpers/utils";
 
 /**
@@ -157,11 +158,10 @@ const getRegionAxis = (region) => region.axis || constants.Y_AXIS;
  * Returns the function which returns Y Axis Vertical position for Range
  * @private
  * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {object} config - config derived from input JSON.
  * @returns {function(*=): number} Function which returns Y Axis Vertical position for Range
  */
 const getYAxisRangePosition = (scale) => (bounds) =>
-    bounds.end ? scale[getRegionAxis(bounds)](bounds.end) : 0;
+    bounds.end ? round2Decimals(scale[getRegionAxis(bounds)](bounds.end)) : 0;
 /**
  * Returns the height for range based on Y Axes, start and end bounds
  * If start and end bounds arent provided then a "goal line" number is returned with
@@ -174,9 +174,9 @@ const getYAxisRangePosition = (scale) => (bounds) =>
  * @returns {number} Height of the region for Y axes
  */
 const getRegionHeight = (regionPath, bounds, scale, config) => {
-    const upperBound = regionPath.attr(constants.Y_AXIS);
+    const upperBound = utils.getNumber(regionPath.attr(constants.Y_AXIS));
     const lowerBound = bounds.start
-        ? scale[getRegionAxis(bounds)](bounds.start) +
+        ? round2Decimals(scale[getRegionAxis(bounds)](bounds.start)) +
           constants.DEFAULT_REGION_GOAL_LINE_STROKE_WIDTH
         : config.height + constants.DEFAULT_REGION_GOAL_LINE_STROKE_WIDTH;
     // If start and end are the same then `constants.DEFAULT_REGION_GOAL_LINE_STROKE_WIDTH`

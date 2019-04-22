@@ -553,8 +553,8 @@ const getXAxisHeight = (config) => {
         .orient(AXES_ORIENTATION.X.BOTTOM);
     const dummy = d3.select("body").append("div");
     const svg = dummy.append("svg");
-    svg.append("g").call(axis);
-    const height = svg.node().getBoundingClientRect().height;
+    const group = svg.append("g").call(axis);
+    const height = group.node().getBoundingClientRect().height;
     dummy.remove();
     return height;
 };

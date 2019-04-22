@@ -9,6 +9,7 @@ import {
 import constants from "./constants";
 import errors from "./errors";
 import styles from "./styles";
+import { round2Decimals } from "./transformUtils";
 import utils from "./utils";
 
 /**
@@ -143,7 +144,7 @@ const getRegionAxis = (region) => region.axis || constants.Y_AXIS;
  */
 const getYAxisRangePosition = (scale, config) => (bounds) =>
     bounds.end
-        ? scale[getRegionAxis(bounds)](bounds.end) +
+        ? round2Decimals(scale[getRegionAxis(bounds)](bounds.end)) +
           calculateVerticalPadding(config)
         : calculateVerticalPadding(config);
 /**
@@ -159,9 +160,9 @@ const getYAxisRangePosition = (scale, config) => (bounds) =>
  */
 const getRegionHeight = (regionPath, bounds, scale, config) => {
     const graphHeight = config.height;
-    const upperBound = regionPath.attr(constants.Y_AXIS);
+    const upperBound = utils.getNumber(regionPath.attr(constants.Y_AXIS));
     const lowerBound = bounds.start
-        ? scale[getRegionAxis(bounds)](bounds.start) +
+        ? round2Decimals(scale[getRegionAxis(bounds)](bounds.start)) +
           calculateVerticalPadding(config)
         : graphHeight + calculateVerticalPadding(config);
     // If start and end are the same then `padding.top` worth of height is
