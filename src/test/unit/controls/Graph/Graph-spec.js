@@ -968,6 +968,131 @@ describe("Graph", () => {
                 );
                 expect(referenceElement.getAttribute("d")).not.toBeNull();
             });
+            it("does not create the y axis reference line markup when 0 to -ve", () => {
+                graph.destroy();
+                new Graph(
+                    getAxes({
+                        x: axisDefault.x,
+                        y: {
+                            padDomain: false,
+                            label: "Some Y Label",
+                            lowerLimit: 0,
+                            upperLimit: -20
+                        }
+                    })
+                );
+                const referenceElement = document.querySelector(
+                    `.${styles.axisReferenceLine}.${styles.axisY}`
+                );
+                expect(
+                    referenceElement.classList.contains(
+                        styles.axisReferenceLine
+                    )
+                ).toBeTruthy();
+                expect(referenceElement.getAttribute("aria-hidden")).toBe(
+                    "true"
+                );
+            });
+            it("does not create the y axis reference line markup when -ve to -ve", () => {
+                graph.destroy();
+                new Graph(
+                    getAxes({
+                        x: axisDefault.x,
+                        y: {
+                            padDomain: false,
+                            label: "Some Y Label",
+                            lowerLimit: -10,
+                            upperLimit: -20
+                        }
+                    })
+                );
+                const referenceElement = document.querySelector(
+                    `.${styles.axisReferenceLine}.${styles.axisY}`
+                );
+                expect(
+                    referenceElement.classList.contains(
+                        styles.axisReferenceLine
+                    )
+                ).toBeTruthy();
+                expect(referenceElement.getAttribute("aria-hidden")).toBe(
+                    "true"
+                );
+            });
+            it("creates the y axis reference line markup when in range +ve to -ve", () => {
+                graph.destroy();
+                new Graph(
+                    getAxes({
+                        x: axisDefault.x,
+                        y: {
+                            padDomain: false,
+                            label: "Some Y Label",
+                            lowerLimit: 20,
+                            upperLimit: -20
+                        }
+                    })
+                );
+                const referenceElement = document.querySelector(
+                    `.${styles.axisReferenceLine}.${styles.axisY}`
+                );
+                expect(
+                    referenceElement.classList.contains(
+                        styles.axisReferenceLine
+                    )
+                ).toBeTruthy();
+                expect(referenceElement.getAttribute("aria-hidden")).toBe(
+                    "false"
+                );
+            });
+            it("does not create the y axis reference line markup when in range 0 to +ve", () => {
+                graph.destroy();
+                new Graph(
+                    getAxes({
+                        x: axisDefault.x,
+                        y: {
+                            padDomain: false,
+                            label: "Some Y Label",
+                            lowerLimit: 0,
+                            upperLimit: 20
+                        }
+                    })
+                );
+                const referenceElement = document.querySelector(
+                    `.${styles.axisReferenceLine}.${styles.axisY}`
+                );
+                expect(
+                    referenceElement.classList.contains(
+                        styles.axisReferenceLine
+                    )
+                ).toBeTruthy();
+                expect(referenceElement.getAttribute("aria-hidden")).toBe(
+                    "true"
+                );
+            });
+            it("does not create the y axis reference line markup when in range +ve to +ve", () => {
+                graph.destroy();
+                new Graph(
+                    getAxes({
+                        x: axisDefault.x,
+                        y: {
+                            padDomain: false,
+                            label: "Some Y Label",
+                            lowerLimit: 10,
+                            upperLimit: 20
+                        }
+                    })
+                );
+                const referenceElement = document.querySelector(
+                    `.${styles.axisReferenceLine}.${styles.axisY}`
+                );
+                expect(
+                    referenceElement.classList.contains(
+                        styles.axisReferenceLine
+                    )
+                ).toBeTruthy();
+                expect(referenceElement.getAttribute("aria-hidden")).toBe(
+                    "true"
+                );
+            });
             it("sets y2 axis start from 0 when padDomain is false", () => {
                 graph.destroy();
                 graph = new Graph(
