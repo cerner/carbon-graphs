@@ -488,33 +488,33 @@ describe("Stacked Bar", () => {
                             .translate[0],
                         10
                     )
-                ).toBe(140);
+                ).toBeCloserTo(140);
                 expect(
                     round2Decimals(
                         d3.transform(getCurrentTransform(axisInfoRowElement[0]))
                             .translate[1]
                     )
-                ).toBe(-10);
+                ).toBeCloserTo(-10);
                 expect(
                     toNumber(
                         d3.transform(getCurrentTransform(axisInfoRowElement[1]))
                             .translate[0],
                         10
                     )
-                ).toBe(282);
+                ).toBeCloserTo(282);
                 expect(
                     round2Decimals(
                         d3.transform(getCurrentTransform(axisInfoRowElement[1]))
                             .translate[1]
                     )
-                ).toBe(-10);
+                ).toBeCloserTo(-10);
                 expect(
                     toNumber(
                         d3.transform(getCurrentTransform(axisInfoRowElement[2]))
                             .translate[0],
                         10
                     )
-                ).toBe(424);
+                ).toBeCloserTo(424);
             });
         });
     });

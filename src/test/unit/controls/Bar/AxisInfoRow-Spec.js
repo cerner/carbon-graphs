@@ -1,11 +1,11 @@
 "use strict";
 import sinon from "sinon";
-import Carbon from "../../../main/js/carbon";
-import Bar from "../../../main/js/controls/Bar/Bar";
-import Graph from "../../../main/js/controls/Graph/Graph";
-import { AXES_ORIENTATION } from "../../../main/js/helpers/constants";
-import styles from "../../../main/js/helpers/styles";
-import utils from "../../../main/js/helpers/utils";
+import Carbon from "../../../../main/js/carbon";
+import Bar from "../../../../main/js/controls/Bar/Bar";
+import Graph from "../../../../main/js/controls/Graph/Graph";
+import { AXES_ORIENTATION } from "../../../../main/js/helpers/constants";
+import styles from "../../../../main/js/helpers/styles";
+import utils from "../../../../main/js/helpers/utils";
 import { TRANSITION_DELAY, triggerEvent } from "../helpers/commonHelpers";
 import {
     axisDefault,

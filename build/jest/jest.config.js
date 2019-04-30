@@ -3,7 +3,6 @@
 
 module.exports = {
     name: "carbon-graphs",
-    bail: 1,
     globals: {
         VERSION: true
     },
