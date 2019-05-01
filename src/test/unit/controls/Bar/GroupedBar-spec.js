@@ -285,61 +285,61 @@ describe("Grouped Bar", () => {
                     barGraphContainer,
                     styles.axisInfoRowItem
                 );
-                expect(axisInfoRowElement.length).toBe(6);
+                expect(axisInfoRowElement.length).toBeCloserTo(6);
                 expect(
                     toNumber(
                         d3.transform(getCurrentTransform(axisInfoRowElement[0]))
                             .translate[0],
                         10
                     )
-                ).toBe(169);
+                ).toBeCloserTo(169);
                 expect(
                     round2Decimals(
                         d3.transform(getCurrentTransform(axisInfoRowElement[0]))
                             .translate[1]
                     )
-                ).toBe(-10);
+                ).toBeCloserTo(-10);
                 expect(
                     toNumber(
                         d3.transform(getCurrentTransform(axisInfoRowElement[1]))
                             .translate[0],
                         10
                     )
-                ).toBe(311);
+                ).toBeCloserTo(311);
                 expect(
                     round2Decimals(
                         d3.transform(getCurrentTransform(axisInfoRowElement[1]))
                             .translate[1]
                     )
-                ).toBe(-10);
+                ).toBeCloserTo(-10);
                 expect(
                     toNumber(
                         d3.transform(getCurrentTransform(axisInfoRowElement[2]))
                             .translate[0],
                         10
                     )
-                ).toBe(453);
+                ).toBeCloserTo(453);
                 expect(
                     toNumber(
                         d3.transform(getCurrentTransform(axisInfoRowElement[3]))
                             .translate[0],
                         10
                     )
-                ).toBe(112);
+                ).toBeCloserTo(112);
                 expect(
                     toNumber(
                         d3.transform(getCurrentTransform(axisInfoRowElement[4]))
                             .translate[0],
                         10
                     )
-                ).toBe(254);
+                ).toBeCloserTo(254);
                 expect(
                     toNumber(
                         d3.transform(getCurrentTransform(axisInfoRowElement[5]))
                             .translate[0],
                         10
                     )
-                ).toBe(396);
+                ).toBeCloserTo(396);
             });
         });
     });

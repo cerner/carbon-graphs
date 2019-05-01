@@ -528,8 +528,8 @@ describe("Graph", () => {
                 const translate = getSVGAnimatedTransformList(
                     axisXElement.getAttribute("transform")
                 ).translate;
-                expect(toNumber(translate[0], 10)).toBe(72);
-                expect(toNumber(translate[1], 10)).toBe(240);
+                expect(toNumber(translate[0], 10)).toBeCloserTo(72);
+                expect(toNumber(translate[1], 10)).toBeCloserTo(240);
             });
             it("returns the consumer set height if dimension is provided", () => {
                 graph = new Graph(
@@ -817,8 +817,10 @@ describe("Graph", () => {
                 const contentContainer = d3.select(
                     `.${styles.contentContainer}`
                 );
-                expect(toNumber(contentContainer.attr("x"), 10)).toEqual(0);
-                expect(toNumber(contentContainer.attr("y"), 10)).toEqual(
+                expect(toNumber(contentContainer.attr("x"), 10)).toBeCloserTo(
+                    0
+                );
+                expect(toNumber(contentContainer.attr("y"), 10)).toBeCloserTo(
                     graphConfig.padding.bottom
                 );
                 expect(
@@ -827,8 +829,8 @@ describe("Graph", () => {
                             graph.config.axisLabelWidths.y,
                         10
                     )
-                ).toEqual(0);
-                expect(getYAxisHeight(graph.config)).toEqual(267);
+                ).toBeCloserTo(0);
+                expect(getYAxisHeight(graph.config)).toBeCloserTo(267);
             });
             it("resizes correctly after rendering", (done) => {
                 graph.destroy();
@@ -847,8 +849,10 @@ describe("Graph", () => {
                 graph.resize();
                 triggerEvent(window, "resize", () => {
                     const canvas = d3.select(`.${styles.canvas}`);
-                    expect(800).toEqual(toNumber(canvas.attr("width"), 10));
-                    expect(200).toEqual(
+                    expect(800).toBeCloserTo(
+                        toNumber(canvas.attr("width"), 10)
+                    );
+                    expect(200).toBeCloserTo(
                         toNumber(canvas.attr("height"), 10) +
                             (graph.config.padding.bottom * 2 +
                                 graph.config.padding.top) *
@@ -871,8 +875,10 @@ describe("Graph", () => {
                 const contentContainer = d3.select(
                     `.${styles.contentContainer}`
                 );
-                expect(toNumber(contentContainer.attr("x"), 10)).toEqual(0);
-                expect(toNumber(contentContainer.attr("y"), 10)).toEqual(
+                expect(toNumber(contentContainer.attr("x"), 10)).toBeCloserTo(
+                    0
+                );
+                expect(toNumber(contentContainer.attr("y"), 10)).toBeCloserTo(
                     toNumber(
                         graph.config.axisLabelHeights.x * 2 +
                             graphConfig.padding.top,
@@ -895,8 +901,10 @@ describe("Graph", () => {
                 const contentContainer = d3.select(
                     `.${styles.contentContainer}`
                 );
-                expect(toNumber(contentContainer.attr("x"), 10)).toEqual(0);
-                expect(toNumber(contentContainer.attr("y"), 10)).toEqual(
+                expect(toNumber(contentContainer.attr("x"), 10)).toBeCloserTo(
+                    0
+                );
+                expect(toNumber(contentContainer.attr("y"), 10)).toBeCloserTo(
                     graphConfig.padding.top
                 );
             });
@@ -967,6 +975,131 @@ describe("Graph", () => {
                     "true"
                 );
                 expect(referenceElement.getAttribute("d")).not.toBeNull();
+            });
+            it("does not create the y axis reference line markup when 0 to -ve", () => {
+                graph.destroy();
+                new Graph(
+                    getAxes({
+                        x: axisDefault.x,
+                        y: {
+                            padDomain: false,
+                            label: "Some Y Label",
+                            lowerLimit: 0,
+                            upperLimit: -20
+                        }
+                    })
+                );
+                const referenceElement = document.querySelector(
+                    `.${styles.axisReferenceLine}.${styles.axisY}`
+                );
+                expect(
+                    referenceElement.classList.contains(
+                        styles.axisReferenceLine
+                    )
+                ).toBeTruthy();
+                expect(referenceElement.getAttribute("aria-hidden")).toBe(
+                    "true"
+                );
+            });
+            it("does not create the y axis reference line markup when -ve to -ve", () => {
+                graph.destroy();
+                new Graph(
+                    getAxes({
+                        x: axisDefault.x,
+                        y: {
+                            padDomain: false,
+                            label: "Some Y Label",
+                            lowerLimit: -10,
+                            upperLimit: -20
+                        }
+                    })
+                );
+                const referenceElement = document.querySelector(
+                    `.${styles.axisReferenceLine}.${styles.axisY}`
+                );
+                expect(
+                    referenceElement.classList.contains(
+                        styles.axisReferenceLine
+                    )
+                ).toBeTruthy();
+                expect(referenceElement.getAttribute("aria-hidden")).toBe(
+                    "true"
+                );
+            });
+            it("creates the y axis reference line markup when in range +ve to -ve", () => {
+                graph.destroy();
+                new Graph(
+                    getAxes({
+                        x: axisDefault.x,
+                        y: {
+                            padDomain: false,
+                            label: "Some Y Label",
+                            lowerLimit: 20,
+                            upperLimit: -20
+                        }
+                    })
+                );
+                const referenceElement = document.querySelector(
+                    `.${styles.axisReferenceLine}.${styles.axisY}`
+                );
+                expect(
+                    referenceElement.classList.contains(
+                        styles.axisReferenceLine
+                    )
+                ).toBeTruthy();
+                expect(referenceElement.getAttribute("aria-hidden")).toBe(
+                    "false"
+                );
+            });
+            it("does not create the y axis reference line markup when in range 0 to +ve", () => {
+                graph.destroy();
+                new Graph(
+                    getAxes({
+                        x: axisDefault.x,
+                        y: {
+                            padDomain: false,
+                            label: "Some Y Label",
+                            lowerLimit: 0,
+                            upperLimit: 20
+                        }
+                    })
+                );
+                const referenceElement = document.querySelector(
+                    `.${styles.axisReferenceLine}.${styles.axisY}`
+                );
+                expect(
+                    referenceElement.classList.contains(
+                        styles.axisReferenceLine
+                    )
+                ).toBeTruthy();
+                expect(referenceElement.getAttribute("aria-hidden")).toBe(
+                    "true"
+                );
+            });
+            it("does not create the y axis reference line markup when in range +ve to +ve", () => {
+                graph.destroy();
+                new Graph(
+                    getAxes({
+                        x: axisDefault.x,
+                        y: {
+                            padDomain: false,
+                            label: "Some Y Label",
+                            lowerLimit: 10,
+                            upperLimit: 20
+                        }
+                    })
+                );
+                const referenceElement = document.querySelector(
+                    `.${styles.axisReferenceLine}.${styles.axisY}`
+                );
+                expect(
+                    referenceElement.classList.contains(
+                        styles.axisReferenceLine
+                    )
+                ).toBeTruthy();
+                expect(referenceElement.getAttribute("aria-hidden")).toBe(
+                    "true"
+                );
             });
             it("sets y2 axis start from 0 when padDomain is false", () => {
                 graph.destroy();
@@ -1634,8 +1767,8 @@ describe("Graph", () => {
                 expect(yLabelElement.getAttribute("transform")).toContain(
                     "rotate(-90)"
                 );
-                expect(toNumber(translate[0], 10)).toBe(12);
-                expect(toNumber(translate[1], 10)).toBe(115);
+                expect(toNumber(translate[0], 10)).toBeCloserTo(12);
+                expect(toNumber(translate[1], 10)).toBeCloserTo(115);
             });
             it("changes label y axis position when height property of graph is set to custom value", () => {
                 graph.destroy();
@@ -1647,8 +1780,8 @@ describe("Graph", () => {
                 const translate = getSVGAnimatedTransformList(
                     yLabelElement.getAttribute("transform")
                 ).translate;
-                expect(toNumber(translate[0], 10)).toBe(12);
-                expect(toNumber(translate[1], 10)).toBe(47);
+                expect(toNumber(translate[0], 10)).toBeCloserTo(12);
+                expect(toNumber(translate[1], 10)).toBeCloserTo(47);
                 expect(toNumber(translate[1], 10)).not.toBe(120);
             });
             it("doesnt create label x axis when text is not present", () => {
@@ -2072,12 +2205,12 @@ describe("Graph", () => {
                 const contentContainer = fetchElementByClass(
                     styles.contentContainer
                 );
-                expect(toNumber(contentContainer.getAttribute("x"), 10)).toBe(
-                    0
-                );
-                expect(toNumber(contentContainer.getAttribute("y"), 10)).toBe(
-                    0
-                );
+                expect(
+                    toNumber(contentContainer.getAttribute("x"), 10)
+                ).toBeCloserTo(0);
+                expect(
+                    toNumber(contentContainer.getAttribute("y"), 10)
+                ).toBeCloserTo(0);
             });
             it("position of content container shifts right, when left padding is applied", () => {
                 const axisData = getAxes(axisDefault);
@@ -2145,10 +2278,12 @@ describe("Graph", () => {
                     const contentContainer = d3.select(
                         `.${styles.contentContainer}`
                     );
-                    expect(toNumber(contentContainer.attr("width"), 10)).toBe(
-                        762
-                    );
-                    expect(toNumber(contentContainer.attr("height"))).toBe(250);
+                    expect(
+                        toNumber(contentContainer.attr("width"), 10)
+                    ).toBeCloserTo(762);
+                    expect(
+                        toNumber(contentContainer.attr("height"))
+                    ).toBeCloserTo(250);
                     done();
                 });
             });
@@ -2249,16 +2384,20 @@ describe("Graph", () => {
                 const contentContainer = d3.select(
                     `.${styles.contentContainer}`
                 );
-                expect(toNumber(contentContainer.attr("x"), 10)).toEqual(0);
-                expect(toNumber(contentContainer.attr("y"), 10)).toEqual(0);
+                expect(toNumber(contentContainer.attr("x"), 10)).toBeCloserTo(
+                    0
+                );
+                expect(toNumber(contentContainer.attr("y"), 10)).toBeCloserTo(
+                    0
+                );
                 expect(
                     toNumber(
                         graph.config.axisSizes.y +
                             graph.config.axisLabelWidths.y,
                         10
                     )
-                ).toEqual(0);
-                expect(getYAxisHeight(graph.config)).toEqual(267);
+                ).toBeCloserTo(0);
+                expect(getYAxisHeight(graph.config)).toBeCloserTo(267);
             });
             it("renders correctly on another resize", (done) => {
                 graphContainer.setAttribute(
@@ -2377,8 +2516,8 @@ describe("Graph", () => {
             const translate = getSVGAnimatedTransformList(
                 axisXElement.getAttribute("transform")
             ).translate;
-            expect(toNumber(translate[0], 10)).toBe(72);
-            expect(toNumber(translate[1], 10)).toBe(45);
+            expect(toNumber(translate[0], 10)).toBeCloserTo(72);
+            expect(toNumber(translate[1], 10)).toBeCloserTo(45);
         });
         it("sets x axis position correctly when x axis is hidden", () => {
             graph.destroy();
@@ -2390,8 +2529,8 @@ describe("Graph", () => {
             const translate = getSVGAnimatedTransformList(
                 axisXElement.getAttribute("transform")
             ).translate;
-            expect(toNumber(translate[0], 10)).toBe(72);
-            expect(toNumber(translate[1], 10)).toBe(45);
+            expect(toNumber(translate[0], 10)).toBeCloserTo(72);
+            expect(toNumber(translate[1], 10)).toBeCloserTo(45);
         });
         it("sets x axis position correctly when labels are hidden", () => {
             graph.destroy();
@@ -2409,8 +2548,8 @@ describe("Graph", () => {
             const translate = getSVGAnimatedTransformList(
                 axisXElement.getAttribute("transform")
             ).translate;
-            expect(toNumber(translate[0], 10)).toBe(55);
-            expect(toNumber(translate[1], 10)).toBe(10);
+            expect(toNumber(translate[0], 10)).toBeCloserTo(55);
+            expect(toNumber(translate[1], 10)).toBeCloserTo(10);
         });
         it("sets x axis position correctly when x axis label is hidden", () => {
             graph.destroy();
@@ -2423,8 +2562,8 @@ describe("Graph", () => {
             const translate = getSVGAnimatedTransformList(
                 axisXElement.getAttribute("transform")
             ).translate;
-            expect(toNumber(translate[0], 10)).toBe(72);
-            expect(toNumber(translate[1], 10)).toBe(10);
+            expect(toNumber(translate[0], 10)).toBeCloserTo(72);
+            expect(toNumber(translate[1], 10)).toBeCloserTo(10);
         });
     });
 });

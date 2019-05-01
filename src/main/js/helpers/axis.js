@@ -21,7 +21,7 @@ import { prepareHAxis } from "./datetimeBuckets";
  * @returns {boolean} True if axis does not start from origin, false otherwise
  */
 const hasNegativeLowerBound = (scale, yAxis = constants.Y_AXIS) =>
-    d3.min(scale[yAxis].domain()) < 0 && d3.max(scale[yAxis].domain()) >= 0;
+    d3.min(scale[yAxis].domain()) < 0 && d3.max(scale[yAxis].domain()) > 0;
 /**
  * Parses the Y Axis lower and upper limits and returns it as an array for Y Axis reference line
  * @private

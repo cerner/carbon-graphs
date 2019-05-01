@@ -637,18 +637,22 @@ describe("Bar", () => {
                     triggerEvent(point, "click", () => {
                         expect(
                             toNumber(selectionPoint.getAttribute("x"))
-                        ).toEqual(toNumber(points[0].getAttribute("x")) - 5);
+                        ).toBeCloserTo(
+                            toNumber(points[0].getAttribute("x")) - 5
+                        );
                         expect(
                             toNumber(selectionPoint.getAttribute("y"))
-                        ).toEqual(toNumber(points[0].getAttribute("y")) - 5);
+                        ).toBeCloserTo(
+                            toNumber(points[0].getAttribute("y")) - 5
+                        );
                         expect(
                             toNumber(selectionPoint.getAttribute("height"))
-                        ).toEqual(
+                        ).toBeCloserTo(
                             toNumber(points[0].getAttribute("height")) + 10
                         );
                         expect(
                             toNumber(selectionPoint.getAttribute("width"))
-                        ).toEqual(
+                        ).toBeCloserTo(
                             toNumber(points[3].getAttribute("x")) -
                                 toNumber(points[0].getAttribute("x")) +
                                 toNumber(points[1].getAttribute("width")) +
@@ -693,20 +697,24 @@ describe("Bar", () => {
                     triggerEvent(point, "click", () => {
                         expect(
                             toNumber(selectionPoint.getAttribute("x"))
-                        ).toEqual(toNumber(points[0].getAttribute("x")) - 5);
+                        ).toBeCloserTo(
+                            toNumber(points[0].getAttribute("x")) - 5
+                        );
                         expect(
                             toNumber(selectionPoint.getAttribute("y"))
-                        ).toEqual(toNumber(points[0].getAttribute("y")) - 5);
+                        ).toBeCloserTo(
+                            toNumber(points[0].getAttribute("y")) - 5
+                        );
                         expect(
                             toNumber(selectionPoint.getAttribute("height"))
-                        ).toEqual(
+                        ).toBeCloserTo(
                             toNumber(points[0].getAttribute("height")) +
                                 toNumber(points[3].getAttribute("height")) +
                                 10
                         );
                         expect(
                             toNumber(selectionPoint.getAttribute("width"))
-                        ).toEqual(
+                        ).toBeCloserTo(
                             toNumber(points[0].getAttribute("width")) + 10
                         );
                         done();
@@ -758,20 +766,24 @@ describe("Bar", () => {
                     triggerEvent(point, "click", () => {
                         expect(
                             toNumber(selectionPoint.getAttribute("x"))
-                        ).toEqual(toNumber(points[0].getAttribute("x")) - 5);
+                        ).toBeCloserTo(
+                            toNumber(points[0].getAttribute("x")) - 5
+                        );
                         expect(
                             toNumber(selectionPoint.getAttribute("y"))
-                        ).toEqual(toNumber(points[0].getAttribute("y")) - 5);
+                        ).toBeCloserTo(
+                            toNumber(points[0].getAttribute("y")) - 5
+                        );
                         expect(
                             toNumber(selectionPoint.getAttribute("height"))
-                        ).toEqual(
+                        ).toBeCloserTo(
                             toNumber(points[0].getAttribute("height")) +
                                 toNumber(points[6].getAttribute("height")) +
                                 10
                         );
                         expect(
                             toNumber(selectionPoint.getAttribute("width"))
-                        ).toEqual(
+                        ).toBeCloserTo(
                             toNumber(points[3].getAttribute("x")) -
                                 toNumber(points[0].getAttribute("x")) +
                                 toNumber(points[1].getAttribute("width")) +
