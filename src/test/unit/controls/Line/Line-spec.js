@@ -1,4 +1,5 @@
 "use strict";
+import sinon from "sinon";
 import Graph from "../../../../main/js/controls/Graph/Graph";
 import { getShapeForTarget } from "../../../../main/js/controls/Graph/helpers/helpers";
 import Line from "../../../../main/js/controls/Line";
@@ -26,7 +27,6 @@ import { toNumber, triggerEvent } from "../helpers/commonHelpers";
 import {
     axisDefault,
     axisTimeSeries,
-    dataPointClickHandlerSpy,
     fetchElementByClass,
     getAxes,
     getInput,
@@ -631,13 +631,19 @@ describe("Line", () => {
                     });
                 });
                 it("calls onClick callback", (done) => {
+                    const dataPointClickHandlerSpy = sinon.spy();
+                    graphDefault.destroy();
+                    graphDefault = new Graph(getAxes(axisDefault));
+                    input = getInput(valuesDefault, false, false);
+                    input.onClick = dataPointClickHandlerSpy;
+                    graphDefault.loadContent(new Line(input));
                     const point = fetchElementByClass(
                         lineGraphContainer,
                         styles.point
                     );
                     triggerEvent(point, "click", () => {
                         expect(
-                            dataPointClickHandlerSpy.mock.calls.length === 1
+                            dataPointClickHandlerSpy.calledOnce
                         ).toBeTruthy();
                         done();
                     });
@@ -1035,7 +1041,10 @@ describe("Line", () => {
                 });
             });
             it("on click hides the line and points", (done) => {
-                const rafSpy = jest.spyOn(window, "requestAnimationFrame");
+                const rafSpy = spyOn(
+                    window,
+                    "requestAnimationFrame"
+                ).and.callThrough();
                 const input = getInput(valuesDefault, false, false);
                 const line = new Line(input);
                 const graph = graphDefault.loadContent(line);
@@ -1063,7 +1072,7 @@ describe("Line", () => {
                             fetchElementByClass(lineGraphContainer, styles.line)
                                 .firstChild.style.display
                         ).toBe("none");
-                        rafSpy.mockRestore();
+                        rafSpy.calls.reset();
                         done();
                     }
                 );
@@ -1137,7 +1146,10 @@ describe("Line", () => {
                 );
             });
             it("on clicking twice toggles the line and points back to visible", (done) => {
-                const rafSpy = jest.spyOn(window, "requestAnimationFrame");
+                const rafSpy = spyOn(
+                    window,
+                    "requestAnimationFrame"
+                ).and.callThrough();
                 const input = getInput(valuesDefault, false, false);
                 const line = new Line(input);
                 const graph = graphDefault.loadContent(line);
@@ -1168,7 +1180,7 @@ describe("Line", () => {
                             fetchElementByClass(lineGraphContainer, styles.line)
                                 .firstChild.style.display
                         ).toBe("");
-                        rafSpy.mockRestore();
+                        rafSpy.calls.reset();
                         done();
                     });
                 });
@@ -2530,7 +2542,7 @@ describe("Line", () => {
                 expect(criticalInnerElement.getAttribute("style")).toBe("");
             });
             it("Selects data point when clicked on outer indicator", (done) => {
-                const criticalOuterPointSpy = jest.fn();
+                const criticalOuterPointSpy = sinon.spy();
                 const valuesMutated = utils.deepClone(valuesDefault);
                 valuesMutated[0].isCritical = true;
                 inputPrimary = getInput(valuesMutated);
@@ -2542,9 +2554,7 @@ describe("Line", () => {
                     styles.criticalityOuterPoint
                 );
                 triggerEvent(point, "click", () => {
-                    expect(
-                        criticalOuterPointSpy.mock.calls.length === 1
-                    ).toBeTruthy();
+                    expect(criticalOuterPointSpy.calledOnce).toBeTruthy();
                     done();
                 });
             });
@@ -2579,7 +2589,7 @@ describe("Line", () => {
                 });
             });
             it("Selects data point when clicked on inner indicator", (done) => {
-                const criticalInnerPointSpy = jest.fn();
+                const criticalInnerPointSpy = sinon.spy();
                 const valuesMutated = utils.deepClone(valuesDefault);
                 valuesMutated[0].isCritical = true;
                 inputPrimary = getInput(valuesMutated);
@@ -2591,9 +2601,7 @@ describe("Line", () => {
                     styles.criticalityInnerPoint
                 );
                 triggerEvent(point, "click", () => {
-                    expect(
-                        criticalInnerPointSpy.mock.calls.length === 1
-                    ).toBeTruthy();
+                    expect(criticalInnerPointSpy.calledOnce).toBeTruthy();
                     done();
                 });
             });

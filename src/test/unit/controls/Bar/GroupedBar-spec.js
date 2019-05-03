@@ -8,7 +8,7 @@ import {
     round2Decimals
 } from "../../../../main/js/helpers/transformUtils";
 import utils from "../../../../main/js/helpers/utils";
-import { toNumber } from "../helpers/commonHelpers";
+import { loadCustomJasmineMatcher, toNumber } from "../helpers/commonHelpers";
 import {
     axisDefault,
     axisInfoRowDefault,
@@ -23,6 +23,9 @@ import {
 describe("Grouped Bar", () => {
     let graphDefault = null;
     let barGraphContainer;
+    beforeAll(() => {
+        loadCustomJasmineMatcher();
+    });
     beforeEach(() => {
         barGraphContainer = document.createElement("div");
         barGraphContainer.id = "testBar_carbon";

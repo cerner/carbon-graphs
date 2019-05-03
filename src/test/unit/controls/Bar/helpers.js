@@ -1,3 +1,4 @@
+import sinon from "sinon";
 import Carbon from "../../../../main/js/carbon";
 import { AXIS_TYPE, COLORS } from "../../../../main/js/helpers/constants";
 import utils from "../../../../main/js/helpers/utils";
@@ -73,7 +74,7 @@ export const getInput = (
 ) => ({
     key,
     color: !isDefaultColor ? COLORS[Object.keys(COLORS)[1]] : "",
-    onClick: jest.fn(),
+    onClick: sinon.spy(),
     yAxis: isY2Axis ? "y2" : "y",
     label: {
         display: "Data Label A"

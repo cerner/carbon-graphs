@@ -1,7 +1,8 @@
+import sinon from "sinon";
 import Carbon from "../../../../main/js/carbon";
 
-export const labelFormatSpy = jest.fn();
-export const onClickFunctionSpy = jest.fn();
+export const labelFormatSpy = sinon.spy();
+export const onClickFunctionSpy = sinon.spy();
 export const inputDefault = (id) => ({
     bindTo: `#${id}`,
     dimension: {

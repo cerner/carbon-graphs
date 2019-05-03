@@ -1,5 +1,6 @@
 "use strict";
 import d3 from "d3";
+import sinon from "sinon";
 import Timeline from "../../../../main/js/controls/Timeline";
 import {
     getShapeForTarget,
@@ -30,7 +31,6 @@ import {
     fetchElementByClass,
     getAxes,
     getData,
-    onClickFunctionSpy,
     secondaryValuesJSON,
     valuesJSON
 } from "./helpers";
@@ -1057,6 +1057,7 @@ describe("Timeline", () => {
             });
             describe("When clicked on a data point", () => {
                 it("Does not do anything if no onClick callback is provided", (done) => {
+                    const onClickFunctionSpy = sinon.spy();
                     timeline.destroy();
                     timeline = new Timeline(getAxes(axisJSON));
                     input = getData(valuesJSON, false, false);
@@ -1064,6 +1065,7 @@ describe("Timeline", () => {
                     timeline.loadContent(input);
                     const point = fetchElementByClass(styles.point);
                     triggerEvent(point, "click", () => {
+                        expect(onClickFunctionSpy.calledOnce).toBeFalsy();
                         expect(point.getAttribute("aria-disabled")).toBe(
                             "true"
                         );
@@ -1090,11 +1092,15 @@ describe("Timeline", () => {
                     });
                 });
                 it("Calls onClick callback", (done) => {
+                    const onClickFunctionSpy = sinon.spy();
+                    timeline.destroy();
+                    timeline = new Timeline(getAxes(axisJSON));
+                    input = getData(valuesJSON, false, false);
+                    input.onClick = onClickFunctionSpy;
+                    timeline.loadContent(input);
                     const point = fetchElementByClass(styles.point);
                     triggerEvent(point, "click", () => {
-                        expect(
-                            onClickFunctionSpy.mock.calls.length === 1
-                        ).toBeTruthy();
+                        expect(onClickFunctionSpy.calledOnce).toBeTruthy();
                         done();
                     });
                 });
@@ -1290,7 +1296,10 @@ describe("Timeline", () => {
                 });
             });
             it("On click hides data points", (done) => {
-                const rafSpy = jest.spyOn(window, "requestAnimationFrame");
+                const rafSpy = spyOn(
+                    window,
+                    "requestAnimationFrame"
+                ).and.callThrough();
                 timeline.loadContent(getData(valuesJSON, false, false));
                 triggerEvent(
                     fetchElementByClass(styles.legendItem),
@@ -1311,7 +1320,7 @@ describe("Timeline", () => {
                                     styles.dataPointSelection
                                 ).getAttribute("aria-hidden")
                             ).toBe("true");
-                            rafSpy.mockRestore();
+                            rafSpy.calls.reset();
                             done();
                         }, TRANSITION_DELAY);
                     }
@@ -1375,7 +1384,10 @@ describe("Timeline", () => {
                 );
             });
             it("On clicking twice toggles points back to visible", (done) => {
-                const rafSpy = jest.spyOn(window, "requestAnimationFrame");
+                const rafSpy = spyOn(
+                    window,
+                    "requestAnimationFrame"
+                ).and.callThrough();
                 timeline.loadContent(getData(valuesJSON, false, false));
                 const legendItem = fetchElementByClass(styles.legendItem);
                 triggerEvent(legendItem, "click", () => {
@@ -1396,7 +1408,7 @@ describe("Timeline", () => {
                                     styles.dataPointSelection
                                 ).getAttribute("aria-hidden")
                             ).toBe("true");
-                            rafSpy.mockRestore();
+                            rafSpy.calls.reset();
                             done();
                         }, TRANSITION_DELAY);
                     });
@@ -1481,7 +1493,7 @@ describe("Timeline", () => {
             timeline.loadContent(getData(valuesJSON));
         });
         it("Sets the canvas width correctly", (done) => {
-            const rafSpy = jest.spyOn(window, "requestAnimationFrame");
+            const rafSpy = spyOn(window, "requestAnimationFrame");
             const currentWidth = timeline.config.canvasWidth;
             expect(currentWidth).toBe(1024);
             TimelineGraphContainer.setAttribute(
@@ -1492,7 +1504,7 @@ describe("Timeline", () => {
                 timeline.resize();
                 delay(() => {
                     expect(timeline.config.canvasWidth).toBe(800);
-                    rafSpy.mockRestore();
+                    rafSpy.calls.reset();
                     done();
                 }, TRANSITION_DELAY);
             });
@@ -1540,9 +1552,7 @@ describe("Timeline", () => {
             );
         });
         it("Throttles based on delay", (done) => {
-            const rafSpy = jest
-                .spyOn(window, "requestAnimationFrame")
-                .mockImplementation(() => {});
+            const rafSpy = spyOn(window, "requestAnimationFrame");
             const throttledInput = getAxes(axisJSON);
             throttledInput.throttle = undefined;
             timeline.destroy();
@@ -1556,16 +1566,14 @@ describe("Timeline", () => {
                 "resize",
                 () => {
                     expect(window.requestAnimationFrame).toHaveBeenCalled();
-                    rafSpy.mockRestore();
+                    rafSpy.calls.reset();
                     done();
                 },
                 constants.RESIZE_THROTTLE
             );
         });
         it("Throttles based on delay provided in the input", (done) => {
-            const rafSpy = jest
-                .spyOn(window, "requestAnimationFrame")
-                .mockImplementation(() => {});
+            const rafSpy = spyOn(window, "requestAnimationFrame");
             const throttledInput = getAxes(axisJSON);
             throttledInput.throttle = 500;
             timeline.destroy();
@@ -1579,7 +1587,7 @@ describe("Timeline", () => {
                 "resize",
                 () => {
                     expect(window.requestAnimationFrame).toHaveBeenCalled();
-                    rafSpy.mockRestore();
+                    rafSpy.calls.reset();
                     done();
                 },
                 throttledInput.throttle

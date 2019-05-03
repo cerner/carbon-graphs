@@ -156,7 +156,7 @@ describe("Pie", () => {
             loadedPieInstance = null;
             input = inputDefault(graphContainer.id);
             pieInstance = new Pie(input);
-            jest.spyOn(pieInstance.c3Context, "load");
+            spyOn(pieInstance.c3Context, "load").and.callThrough();
         });
         describe("Throws error", () => {
             it("When no content is loaded", () => {
@@ -246,7 +246,7 @@ describe("Pie", () => {
             unloadedPieInstance = null;
             input = inputDefault(graphContainer.id);
             pieInstance = new Pie(input);
-            jest.spyOn(pieInstance.c3Context, "unload");
+            spyOn(pieInstance.c3Context, "unload").and.callThrough();
         });
         it("Throws error if key is invalid", () => {
             expect(() => {
@@ -342,7 +342,7 @@ describe("Pie", () => {
         beforeEach(() => {
             input = inputDefault(graphContainer.id);
             pieInstance = new Pie(input);
-            jest.spyOn(pieInstance.c3Context, "destroy");
+            spyOn(pieInstance.c3Context, "destroy").and.callThrough();
         });
         it("Calls destroy correctly", () => {
             const _ctx = pieInstance.c3Context;

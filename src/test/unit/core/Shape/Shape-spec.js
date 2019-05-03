@@ -1,4 +1,5 @@
 "use strict";
+import sinon from "sinon";
 import { Shape } from "../../../../main/js/core";
 import { getDefaultSVGProps } from "../../../../main/js/core/Shape";
 import constants, { SHAPES } from "../../../../main/js/helpers/constants";
@@ -140,7 +141,7 @@ describe("Shape", () => {
         expect(shapeSVG.getAttribute("viewBox")).toBe(constants.VIEW_BOX_SIZE);
     });
     it("applies transform attributes to all SVG paths", () => {
-        const transformHandlerSpy = jest.fn();
+        const transformHandlerSpy = sinon.spy();
         const customShape = {
             path: [
                 {
@@ -156,10 +157,10 @@ describe("Shape", () => {
             getDefaultSVGProps({ transformFn: transformHandlerSpy })
         );
         expect(shapeSVG.nodeName === "svg").toBeTruthy();
-        expect(transformHandlerSpy.mock.calls.length === 2).toBeTruthy();
+        expect(transformHandlerSpy.calledTwice).toBeTruthy();
     });
     it("applies transform attributes to all SVG paths", () => {
-        const transformHandlerSpy = jest.fn();
+        const transformHandlerSpy = sinon.spy();
         const customShape = {
             path: [
                 {
@@ -175,7 +176,7 @@ describe("Shape", () => {
             getDefaultSVGProps({ transformFn: transformHandlerSpy })
         );
         expect(shapeSVG.nodeName === "svg").toBeTruthy();
-        expect(transformHandlerSpy.mock.calls.length === 2).toBeTruthy();
+        expect(transformHandlerSpy.calledTwice).toBeTruthy();
     });
     describe("Moveto path", () => {
         it("tear drop", () => {

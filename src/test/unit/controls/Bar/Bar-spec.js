@@ -9,7 +9,11 @@ import constants, {
 import errors from "../../../../main/js/helpers/errors";
 import styles from "../../../../main/js/helpers/styles";
 import utils from "../../../../main/js/helpers/utils";
-import { toNumber, triggerEvent } from "../helpers/commonHelpers";
+import {
+    loadCustomJasmineMatcher,
+    toNumber,
+    triggerEvent
+} from "../helpers/commonHelpers";
 import {
     axisDefault,
     axisInfoRowDefault,
@@ -26,6 +30,9 @@ import {
 describe("Bar", () => {
     let graphDefault = null;
     let barGraphContainer;
+    beforeAll(() => {
+        loadCustomJasmineMatcher();
+    });
     beforeEach(() => {
         barGraphContainer = document.createElement("div");
         barGraphContainer.id = "testBar_carbon";
@@ -1120,7 +1127,10 @@ describe("Bar", () => {
                 });
             });
             it("on click hides the bars", (done) => {
-                const rafSpy = jest.spyOn(window, "requestAnimationFrame");
+                const rafSpy = spyOn(
+                    window,
+                    "requestAnimationFrame"
+                ).and.callThrough();
                 const input = getInput(valuesDefault, false, false);
                 const bar = new Bar(input);
                 const graph = graphDefault.loadContent(bar);
@@ -1138,7 +1148,7 @@ describe("Bar", () => {
                                 styles.bar
                             ).firstChild.getAttribute("aria-hidden")
                         ).toBe("true");
-                        rafSpy.mockRestore();
+                        rafSpy.calls.reset();
                         done();
                     }
                 );
@@ -1190,7 +1200,10 @@ describe("Bar", () => {
                 );
             });
             it("on clicking twice toggles the bars back to visible", (done) => {
-                const rafSpy = jest.spyOn(window, "requestAnimationFrame");
+                const rafSpy = spyOn(
+                    window,
+                    "requestAnimationFrame"
+                ).and.callThrough();
                 const input = getInput(valuesDefault, false, false);
                 const bar = new Bar(input);
                 const graph = graphDefault.loadContent(bar);
@@ -1209,7 +1222,7 @@ describe("Bar", () => {
                             fetchElementByClass(barGraphContainer, styles.bar)
                                 .firstChild.style.display
                         ).toBe("");
-                        rafSpy.mockRestore();
+                        rafSpy.calls.reset();
                         done();
                     });
                 });

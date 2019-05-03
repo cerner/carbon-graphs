@@ -1,10 +1,11 @@
+import sinon from "sinon";
 import constants, {
     COLORS,
     SHAPES
 } from "../../../../main/js/helpers/constants";
 import utils from "../../../../main/js/helpers/utils";
 
-export const onClickFunctionSpy = jest.fn();
+const onClickFunctionSpy = sinon.spy();
 export const BASE_CANVAS_HEIGHT_PADDING =
     (constants.PADDING.bottom * 2 + constants.PADDING.top) * 2;
 export const DEFAULT_HEIGHT =

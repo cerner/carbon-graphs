@@ -16,7 +16,11 @@ import styles from "../../../../main/js/helpers/styles";
 import { getSVGAnimatedTransformList } from "../../../../main/js/helpers/transformUtils";
 import utils from "../../../../main/js/helpers/utils";
 import LOCALE from "../../../../main/js/locale/index";
-import { toNumber, triggerEvent } from "../helpers/commonHelpers";
+import {
+    loadCustomJasmineMatcher,
+    toNumber,
+    triggerEvent
+} from "../helpers/commonHelpers";
 import {
     axisDefault,
     axisTimeSeries,
@@ -31,6 +35,9 @@ import {
 describe("Graph", () => {
     let graph = null;
     let graphContainer;
+    beforeAll(() => {
+        loadCustomJasmineMatcher();
+    });
     beforeEach(() => {
         graphContainer = document.createElement("div");
         graphContainer.id = "testGraph_carbon";
@@ -300,21 +307,21 @@ describe("Graph", () => {
             expect(graph.config.axisInfoRowLabelHeight).toEqual(0);
         });
         it("processes the input when y axis padDomain is set to false", () => {
-            axisDefault.y.padDomain = false;
-            const input = getAxes(axisDefault);
-            graph = new Graph(input);
+            const _axisDefault = utils.deepClone(axisDefault);
+            _axisDefault.y.padDomain = false;
+            graph = new Graph(getAxes(_axisDefault));
             expect(graph.config.axisPadding.y).toEqual(false);
         });
         it("processes the input when y axis padDomain is set to true", () => {
-            axisDefault.y.padDomain = true;
-            const input = getAxes(axisDefault);
-            graph = new Graph(input);
+            const _axisDefault = utils.deepClone(axisDefault);
+            _axisDefault.y.padDomain = true;
+            graph = new Graph(getAxes(_axisDefault));
             expect(graph.config.axisPadding.y).toEqual(true);
         });
         it("processes the input when y axis padDomain is set to undefined", () => {
-            axisDefault.y.padDomain = undefined;
-            const input = getAxes(axisDefault);
-            graph = new Graph(input);
+            const _axisDefault = utils.deepClone(axisDefault);
+            _axisDefault.y.padDomain = undefined;
+            graph = new Graph(getAxes(_axisDefault));
             expect(graph.config.axisPadding.y).toEqual(true);
         });
         it("processes the input when y2 axis padDomain is set to true", () => {
@@ -1211,8 +1218,10 @@ describe("Graph", () => {
                 ).toBe("true");
             });
             describe("for timeseries type", () => {
-                it("creates x axis with ticks in default locale", () => {
+                beforeEach(() => {
                     graph.destroy();
+                });
+                it("creates x axis with ticks in default locale", () => {
                     const localeAxisObj = utils.deepClone(axisTimeSeries);
                     localeAxisObj.x.ticks = {
                         format: "%b %Y"
@@ -1226,7 +1235,6 @@ describe("Graph", () => {
                     expect(tick.textContent).toBe("Jan 2016");
                 });
                 it("creates x axis with ticks in provided locale - DE", () => {
-                    graph.destroy();
                     const localeAxisObj = utils.deepClone(axisTimeSeries);
                     localeAxisObj.x.ticks = {
                         format: "%b %Y"
@@ -1245,7 +1253,6 @@ describe("Graph", () => {
                     expect(tick.textContent).toBe("Jan 2016");
                 });
                 it("creates x axis with ticks in provided locale - FR", () => {
-                    graph.destroy();
                     const localeAxisObj = utils.deepClone(axisTimeSeries);
                     localeAxisObj.x.ticks = {
                         format: "%b %Y"
@@ -1264,7 +1271,6 @@ describe("Graph", () => {
                     expect(tick.textContent).toBe("janv. 2016");
                 });
                 it("creates x axis with ticks in provided locale - ES", () => {
-                    graph.destroy();
                     const localeAxisObj = utils.deepClone(axisTimeSeries);
                     localeAxisObj.x.ticks = {
                         format: "%b %Y"
@@ -1283,7 +1289,6 @@ describe("Graph", () => {
                     expect(tick.textContent).toBe("ene 2016");
                 });
                 it("creates x axis with ticks in provided locale - PT_BR", () => {
-                    graph.destroy();
                     const localeAxisObj = utils.deepClone(axisTimeSeries);
                     localeAxisObj.x.ticks = {
                         format: "%b %Y"
@@ -1302,7 +1307,6 @@ describe("Graph", () => {
                     expect(tick.textContent).toBe("Jan 2016");
                 });
                 it("creates x axis with LowerTickValues", () => {
-                    graph.destroy();
                     const localeAxisObj = utils.deepClone(axisTimeSeries);
                     localeAxisObj.x = {
                         type: "timeseries",
@@ -1342,7 +1346,6 @@ describe("Graph", () => {
                     ).toBe(3);
                 });
                 it("creates x axis with UpperTickValues", () => {
-                    graph.destroy();
                     const localeAxisObj = utils.deepClone(axisTimeSeries);
                     localeAxisObj.x = {
                         type: "timeseries",
@@ -1378,7 +1381,6 @@ describe("Graph", () => {
                     ).toBe(2);
                 });
                 it("creates x axis with LowerTickValues, UpperTickValues and values in default locale", () => {
-                    graph.destroy();
                     const localeAxisObj = utils.deepClone(axisTimeSeries);
                     localeAxisObj.x = {
                         type: "timeseries",
@@ -2077,9 +2079,7 @@ describe("Graph", () => {
             );
         });
         it("throttles based on delay", (done) => {
-            const rafSpy = jest
-                .spyOn(window, "requestAnimationFrame")
-                .mockImplementation(() => {});
+            spyOn(window, "requestAnimationFrame");
             const throttledInput = getAxes(axisDefault);
             throttledInput.throttle = undefined;
             graph.destroy();
@@ -2090,16 +2090,13 @@ describe("Graph", () => {
                 "resize",
                 () => {
                     expect(window.requestAnimationFrame).toHaveBeenCalled();
-                    rafSpy.mockRestore();
                     done();
                 },
                 constants.RESIZE_THROTTLE
             );
         });
         it("throttles based on delay provided in the input", (done) => {
-            const rafSpy = jest
-                .spyOn(window, "requestAnimationFrame")
-                .mockImplementation(() => {});
+            spyOn(window, "requestAnimationFrame");
             const throttledInput = getAxes(axisDefault);
             throttledInput.throttle = 500;
             graph.destroy();
@@ -2110,7 +2107,6 @@ describe("Graph", () => {
                 "resize",
                 () => {
                     expect(window.requestAnimationFrame).toHaveBeenCalled();
-                    rafSpy.mockRestore();
                     done();
                 },
                 throttledInput.throttle
@@ -2346,9 +2342,13 @@ describe("Graph", () => {
         });
     });
     describe("When unload is called", () => {
-        const primaryContent = new Line(getData(valuesDefault));
-        const secondaryContent = new Line(getData(valuesDefault));
-        it("throws error when unloading a content which isnt loaded", () => {
+        let primaryContent;
+        let secondaryContent;
+        beforeEach(() => {
+            primaryContent = new Line(getData(valuesDefault));
+            secondaryContent = new Line(getData(valuesDefault));
+        });
+        it("throws error when unloading a content which is not loaded", () => {
             graph = new Graph(getAxes(axisDefault));
             graph.loadContent(primaryContent);
             expect(() => {
@@ -2495,7 +2495,6 @@ describe("Graph", () => {
             expect(graph.config.axisPadding.y).toEqual(true);
         });
         it("creates label x axis when text is present", () => {
-            graph.destroy();
             const xAxisTopOrientation = utils.deepClone(axisDefault);
             xAxisTopOrientation.x.orientation = AXES_ORIENTATION.X.TOP;
             const input = getAxes(xAxisTopOrientation);
@@ -2507,7 +2506,6 @@ describe("Graph", () => {
             );
         });
         it("sets x axis position correctly", () => {
-            graph.destroy();
             const xAxisTopOrientation = utils.deepClone(axisDefault);
             xAxisTopOrientation.x.orientation = AXES_ORIENTATION.X.TOP;
             const input = getAxes(xAxisTopOrientation);
@@ -2520,7 +2518,6 @@ describe("Graph", () => {
             expect(toNumber(translate[1], 10)).toBeCloserTo(45);
         });
         it("sets x axis position correctly when x axis is hidden", () => {
-            graph.destroy();
             const hiddenAxisObj = utils.deepClone(axisDefault);
             hiddenAxisObj.x.show = false;
             hiddenAxisObj.x.orientation = AXES_ORIENTATION.X.TOP;
@@ -2533,7 +2530,6 @@ describe("Graph", () => {
             expect(toNumber(translate[1], 10)).toBeCloserTo(45);
         });
         it("sets x axis position correctly when labels are hidden", () => {
-            graph.destroy();
             const hiddenLabelObj = utils.deepClone(axisDefault);
             hiddenLabelObj.x.orientation = AXES_ORIENTATION.X.TOP;
             graph = new Graph(
@@ -2552,7 +2548,6 @@ describe("Graph", () => {
             expect(toNumber(translate[1], 10)).toBeCloserTo(10);
         });
         it("sets x axis position correctly when x axis label is hidden", () => {
-            graph.destroy();
             const hiddenXLabelObj = utils.deepClone(axisDefault);
             hiddenXLabelObj.x.orientation = AXES_ORIENTATION.X.TOP;
             hiddenXLabelObj.x.label = "";

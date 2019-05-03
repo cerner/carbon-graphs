@@ -1,5 +1,6 @@
 "use strict";
 import d3 from "d3";
+import sinon from "sinon";
 import Gantt from "../../../../main/js/controls/Gantt";
 import { COLORS, SHAPES } from "../../../../main/js/helpers/constants";
 import errors from "../../../../main/js/helpers/errors";
@@ -25,14 +26,14 @@ describe("Gantt -> Track -> Event", () => {
                 events: [
                     {
                         key: "uid_event_1",
-                        onClick: jest.fn(),
+                        onClick: sinon.spy(),
                         shape: SHAPES.CIRCLE,
                         color: COLORS.BLUE,
                         values: [xVal]
                     },
                     {
                         key: "uid_event_2",
-                        onClick: jest.fn(),
+                        onClick: sinon.spy(),
                         shape: SHAPES.DIAMOND,
                         color: COLORS.BLUE,
                         values: [xVal]
@@ -52,7 +53,7 @@ describe("Gantt -> Track -> Event", () => {
         );
         ganttChartContainer.setAttribute("class", "carbon-test-class");
         document.body.appendChild(ganttChartContainer);
-        onClickFunctionSpy = jest.fn();
+        onClickFunctionSpy = sinon.spy();
         events = [
             {
                 key: "uid_event_1",
@@ -208,7 +209,7 @@ describe("Gantt -> Track -> Event", () => {
                     events: [
                         {
                             key: "uid_event_1",
-                            onClick: jest.fn(),
+                            onClick: sinon.spy(),
                             shape: SHAPES.CIRCLE,
                             color: COLORS.BLUE,
                             values: [new Date(2018, 4, 1).toISOString()]
@@ -222,7 +223,7 @@ describe("Gantt -> Track -> Event", () => {
                     events: [
                         {
                             key: "uid_event_2",
-                            onClick: jest.fn(),
+                            onClick: sinon.spy(),
                             shape: SHAPES.CIRCLE,
                             color: COLORS.BLUE,
                             values: [new Date(2018, 4, 1).toISOString()]
@@ -364,9 +365,7 @@ describe("Gantt -> Track -> Event", () => {
                     })
                 );
                 triggerEvent(fetchElementByClass(styles.point), "click", () => {
-                    expect(onClickFunctionSpy.mock.calls.length === 1).toBe(
-                        true
-                    );
+                    expect(onClickFunctionSpy.calledOnce).toBe(true);
                     done();
                 });
             });
@@ -412,7 +411,7 @@ describe("Gantt -> Track -> Event", () => {
                 );
             });
             it("Highlights the data point", (done) => {
-                const onClickFunctionSpy = jest.fn();
+                const onClickFunctionSpy = sinon.spy();
                 gantt.loadContent(
                     Object.assign(getData(), {
                         events: [
@@ -481,9 +480,7 @@ describe("Gantt -> Track -> Event", () => {
                     fetchElementByClass(styles.dataPointSelection),
                     "click",
                     () => {
-                        expect(
-                            onClickFunctionSpy.mock.calls.length === 1
-                        ).toBeTruthy();
+                        expect(onClickFunctionSpy.calledOnce).toBeTruthy();
                         done();
                     }
                 );
@@ -568,9 +565,7 @@ describe("Gantt -> Track -> Event", () => {
                     styles.dataPointSelection
                 );
                 triggerEvent(selectedPointElement, "click", () => {
-                    expect(onClickFunctionSpy.mock.calls.length === 1).toBe(
-                        true
-                    );
+                    expect(onClickFunctionSpy.calledOnce).toBe(true);
                     expect(
                         selectedPointElement.getAttribute("aria-disabled")
                     ).toBe("false");

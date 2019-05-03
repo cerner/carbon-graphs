@@ -1,5 +1,6 @@
 "use strict";
 import d3 from "d3";
+import sinon from "sinon";
 import Gantt from "../../../../main/js/controls/Gantt";
 import { getActivityStyle } from "../../../../main/js/controls/Gantt/helpers/durationHelpers";
 import constants, { COLORS } from "../../../../main/js/helpers/constants";
@@ -318,7 +319,7 @@ describe("Gantt -> Track -> Activity", () => {
             const tasks = [
                 {
                     key: "Task",
-                    onClick: jest.fn(),
+                    onClick: sinon.spy(),
                     label: {
                         display: "Story Dino"
                     },
@@ -463,7 +464,7 @@ describe("Gantt -> Track -> Activity", () => {
             const tasks = [
                 {
                     key: "task",
-                    onClick: jest.fn(),
+                    onClick: sinon.spy(),
                     label: {
                         display: "Story Dino foreground"
                     },
@@ -509,7 +510,7 @@ describe("Gantt -> Track -> Activity", () => {
          * CH07252018.04    Verify the foreground bar displays centered within the background bar
          */
         it("Calls onClick function for foreground bar when foreground and background overlap and foreground is selectable", (done) => {
-            const onClickSpy = jest.fn();
+            const onClickSpy = sinon.spy();
             gantt.loadContent(
                 Object.assign(getData(), {
                     trackLabel: {
@@ -551,7 +552,7 @@ describe("Gantt -> Track -> Activity", () => {
             ).toBe("23");
 
             triggerEvent(fetchElementByClass(styles.taskBar), "click", () => {
-                expect(onClickSpy.mock.calls.length === 1).toBeTruthy();
+                expect(onClickSpy.calledOnce).toBeTruthy();
                 expect(
                     fetchElementByClass(styles.task).getAttribute(
                         "aria-disabled"

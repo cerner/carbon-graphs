@@ -1,5 +1,6 @@
 "use strict";
 import d3 from "d3";
+import sinon from "sinon";
 import Gantt from "../../../../main/js/controls/Gantt";
 import {
     calculatePercentage,
@@ -738,7 +739,7 @@ describe("Gantt -> Track -> Task", () => {
                 );
             });
             it("Calls onClick callback for a normal bar", (done) => {
-                const onClickFunctionSpy = jest.fn();
+                const onClickFunctionSpy = sinon.spy();
                 gantt.loadContent(
                     Object.assign(getData(), {
                         trackLabel: {
@@ -761,9 +762,7 @@ describe("Gantt -> Track -> Task", () => {
                     fetchElementByClass(styles.taskBar),
                     "click",
                     () => {
-                        expect(
-                            onClickFunctionSpy.mock.calls.length === 1
-                        ).toBeTruthy();
+                        expect(onClickFunctionSpy.calledOnce).toBeTruthy();
                         expect(
                             fetchElementByClass(styles.task).getAttribute(
                                 "aria-selected"
@@ -835,7 +834,7 @@ describe("Gantt -> Track -> Task", () => {
                 );
             });
             it("Calls onClick callback for a chunk", (done) => {
-                const onClickFunctionSpy = jest.fn();
+                const onClickFunctionSpy = sinon.spy();
                 gantt.loadContent(
                     Object.assign(getData(), {
                         trackLabel: {
@@ -858,9 +857,7 @@ describe("Gantt -> Track -> Task", () => {
                     fetchElementByClass(styles.taskBar),
                     "click",
                     () => {
-                        expect(
-                            onClickFunctionSpy.mock.calls.length === 1
-                        ).toBeTruthy();
+                        expect(onClickFunctionSpy.calledOnce).toBeTruthy();
                         expect(
                             fetchElementByClass(styles.task).getAttribute(
                                 "aria-selected"
@@ -932,7 +929,7 @@ describe("Gantt -> Track -> Task", () => {
                 );
             });
             it("Calls onClick callback for a percentage bar", (done) => {
-                const onClickFunctionSpy = jest.fn();
+                const onClickFunctionSpy = sinon.spy();
                 gantt.loadContent(
                     Object.assign(getData(), {
                         trackLabel: {
@@ -956,9 +953,7 @@ describe("Gantt -> Track -> Task", () => {
                     fetchElementByClass(styles.taskBar),
                     "click",
                     () => {
-                        expect(
-                            onClickFunctionSpy.mock.calls.length === 1
-                        ).toBeTruthy();
+                        expect(onClickFunctionSpy.calledOnce).toBeTruthy();
                         expect(
                             fetchElementByClass(styles.task).getAttribute(
                                 "aria-selected"
@@ -979,6 +974,7 @@ describe("Gantt -> Track -> Task", () => {
                 );
             });
             it("Calls onClick callback for hashed bar", (done) => {
+                const onClickFunctionSpy = sinon.spy();
                 gantt.loadContent(
                     Object.assign(getData(), {
                         trackLabel: {
@@ -1004,9 +1000,7 @@ describe("Gantt -> Track -> Task", () => {
                     fetchElementByClass(styles.taskBar),
                     "click",
                     () => {
-                        expect(
-                            onClickFunctionSpy.mock.calls.length === 1
-                        ).toBeTruthy();
+                        expect(onClickFunctionSpy.calledOnce).toBeTruthy();
                         expect(
                             fetchElementByClass(styles.task).getAttribute(
                                 "aria-selected"
@@ -1079,7 +1073,7 @@ describe("Gantt -> Track -> Task", () => {
                 );
             });
             it("Calls onClick callback for a percentage bar when clicked on completion bar", (done) => {
-                const onClickFunctionSpy = jest.fn();
+                const onClickFunctionSpy = sinon.spy();
                 gantt.loadContent(
                     Object.assign(getData(), {
                         trackLabel: {
@@ -1103,9 +1097,7 @@ describe("Gantt -> Track -> Task", () => {
                     fetchElementByClass(styles.taskBarCompletion),
                     "click",
                     () => {
-                        expect(
-                            onClickFunctionSpy.mock.calls.length === 1
-                        ).toBeTruthy();
+                        expect(onClickFunctionSpy.calledOnce).toBeTruthy();
                         expect(
                             fetchElementByClass(styles.task).getAttribute(
                                 "aria-selected"
@@ -1185,7 +1177,7 @@ describe("Gantt -> Track -> Task", () => {
              * CH05012018.31    Verify the hashed foreground bar is selectable
              */
             it("Calls onClick callback for a hashed task bar when clicked on completion bar", (done) => {
-                const onClickFunctionSpy = jest.fn();
+                const onClickFunctionSpy = sinon.spy();
                 gantt.loadContent(
                     Object.assign(getData(), {
                         trackLabel: {
@@ -1212,9 +1204,7 @@ describe("Gantt -> Track -> Task", () => {
                     fetchElementByClass(styles.taskBarCompletion),
                     "click",
                     () => {
-                        expect(
-                            onClickFunctionSpy.mock.calls.length === 1
-                        ).toBeTruthy();
+                        expect(onClickFunctionSpy.calledOnce).toBeTruthy();
                         expect(
                             fetchElementByClass(styles.task).getAttribute(
                                 "aria-selected"
@@ -1235,7 +1225,7 @@ describe("Gantt -> Track -> Task", () => {
                 );
             });
             it("Removes selection when task bar is clicked again", (done) => {
-                const onClickFunctionSpy = jest.fn();
+                const onClickFunctionSpy = sinon.spy();
                 gantt.loadContent(
                     Object.assign(getData(), {
                         trackLabel: {
@@ -1613,7 +1603,7 @@ describe("Gantt -> Track -> Task", () => {
             const tasks = [
                 {
                     key: "task",
-                    onClick: jest.fn(),
+                    onClick: sinon.spy(),
                     label: {
                         display: "Story Dino"
                     },
@@ -1661,7 +1651,7 @@ describe("Gantt -> Track -> Task", () => {
             const tasks = [
                 {
                     key: "task",
-                    onClick: jest.fn(),
+                    onClick: sinon.spy(),
                     label: {
                         display: "Story Dino"
                     },

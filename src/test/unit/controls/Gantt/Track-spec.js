@@ -1,5 +1,6 @@
 "use strict";
 import d3 from "d3";
+import sinon from "sinon";
 import Gantt from "../../../../main/js/controls/Gantt";
 import { getXAxisWidth } from "../../../../main/js/controls/Gantt/helpers/creationHelpers";
 import constants from "../../../../main/js/helpers/constants";
@@ -136,8 +137,8 @@ describe("Gantt -> Track", () => {
         const smallLabel = "Project A";
         const largeLabel =
             "Project long display value which is only for testing";
-        const onClickPrimaryFunctionSpy = jest.fn();
-        const onClickSecondaryFunctionSpy = jest.fn();
+        const onClickPrimaryFunctionSpy = sinon.spy();
+        const onClickSecondaryFunctionSpy = sinon.spy();
         beforeEach(() => {
             gantt.loadContent({
                 key: "track 1",
@@ -165,10 +166,8 @@ describe("Gantt -> Track", () => {
                     expect(labelPath.getAttribute("aria-disabled")).toBe(
                         "false"
                     );
-                    expect(
-                        onClickPrimaryFunctionSpy.mock.calls.length === 1
-                    ).toBeTruthy();
-                    expect(onClickPrimaryFunctionSpy.mock.calls[0][0]).toBe(
+                    expect(onClickPrimaryFunctionSpy.calledOnce).toBeTruthy();
+                    expect(onClickPrimaryFunctionSpy.getCall(0).args[0]).toBe(
                         smallLabel
                     );
                     done();
@@ -182,10 +181,8 @@ describe("Gantt -> Track", () => {
                 )[1],
                 "click",
                 () => {
-                    expect(
-                        onClickSecondaryFunctionSpy.mock.calls.length === 1
-                    ).toBeTruthy();
-                    expect(onClickSecondaryFunctionSpy.mock.calls[0][0]).toBe(
+                    expect(onClickSecondaryFunctionSpy.calledOnce).toBeTruthy();
+                    expect(onClickSecondaryFunctionSpy.getCall(0).args[0]).toBe(
                         largeLabel
                     );
                     done();
@@ -359,9 +356,7 @@ describe("Gantt -> Track", () => {
                                 `${styles.ganttTrackBarSelection}`
                             ).getAttribute("aria-selected")
                         ).toBe("true");
-                        expect(onClickFunctionSpy.mock.calls.length).not.toBe(
-                            0
-                        );
+                        expect(onClickFunctionSpy.called).toBe(true);
                         done();
                     }
                 );
@@ -420,9 +415,7 @@ describe("Gantt -> Track", () => {
                     "style",
                     "width: 800px; height: 400px;"
                 );
-                const rafSpy = jest
-                    .spyOn(window, "requestAnimationFrame")
-                    .mockImplementation(() => {});
+                const rafSpy = spyOn(window, "requestAnimationFrame");
                 gantt.resize();
                 triggerEvent(
                     window,
@@ -442,7 +435,7 @@ describe("Gantt -> Track", () => {
                                 .trackHeight -
                                 constants.DEFAULT_GANTT_TRACK_SELECTION.height
                         );
-                        rafSpy.mockRestore();
+                        rafSpy.calls.reset();
                         done();
                     },
                     TRANSITION_DELAY
@@ -515,9 +508,7 @@ describe("Gantt -> Track", () => {
                 );
             });
             it("Translates selection bars", (done) => {
-                const rafSpy = jest
-                    .spyOn(window, "requestAnimationFrame")
-                    .mockImplementation(() => {});
+                const rafSpy = spyOn(window, "requestAnimationFrame");
                 ganttChartContainer.setAttribute(
                     "style",
                     "width: 800px; height: 400px;"
@@ -541,7 +532,7 @@ describe("Gantt -> Track", () => {
                                 .trackHeight -
                                 constants.DEFAULT_GANTT_TRACK_SELECTION.height
                         );
-                        rafSpy.mockRestore();
+                        rafSpy.calls.reset();
                         done();
                     },
                     TRANSITION_DELAY

@@ -1,5 +1,6 @@
 "use strict";
 import d3 from "d3";
+import sinon from "sinon";
 import Gantt from "../../../../main/js/controls/Gantt";
 import { COLORS, SHAPES } from "../../../../main/js/helpers/constants";
 import errors from "../../../../main/js/helpers/errors";
@@ -31,12 +32,12 @@ describe("Gantt -> Track -> Action", () => {
                 actions: [
                     {
                         key: "uid_action_1",
-                        onClick: jest.fn(),
+                        onClick: sinon.spy(),
                         values: [xVal]
                     },
                     {
                         key: "uid_action_2",
-                        onClick: jest.fn(),
+                        onClick: sinon.spy(),
                         values: [xVal]
                     }
                 ]
@@ -187,12 +188,12 @@ describe("Gantt -> Track -> Action", () => {
                     actions: [
                         {
                             key: "uid_action_1",
-                            onClick: jest.fn(),
+                            onClick: sinon.spy(),
                             values: [new Date(2018, 4, 1).toISOString()]
                         },
                         {
                             key: "uid_action_2",
-                            onClick: jest.fn(),
+                            onClick: sinon.spy(),
                             values: [new Date(2018, 4, 10).toISOString()]
                         }
                     ]
@@ -230,7 +231,7 @@ describe("Gantt -> Track -> Action", () => {
                     actions: [
                         {
                             key: "uid_action_1",
-                            onClick: jest.fn(),
+                            onClick: sinon.spy(),
                             values: [new Date(2018, 4, 1).toISOString()]
                         }
                     ]
@@ -242,7 +243,7 @@ describe("Gantt -> Track -> Action", () => {
                     actions: [
                         {
                             key: "uid_action_2",
-                            onClick: jest.fn(),
+                            onClick: sinon.spy(),
                             values: [new Date(2018, 4, 1).toISOString()]
                         }
                     ]
@@ -361,7 +362,7 @@ describe("Gantt -> Track -> Action", () => {
                 });
             });
             it("Removes highlight when data point is clicked again", (done) => {
-                const onClickFunctionSpy = jest.fn();
+                const onClickFunctionSpy = sinon.spy();
                 gantt.loadContent(
                     Object.assign(getData(), {
                         actions: [
@@ -425,7 +426,7 @@ describe("Gantt -> Track -> Action", () => {
                 );
             });
             it("Calls onClick callback", (done) => {
-                const onClickFunctionSpy = jest.fn();
+                const onClickFunctionSpy = sinon.spy();
                 gantt.loadContent(
                     Object.assign(getData(), {
                         actions: [
@@ -438,9 +439,7 @@ describe("Gantt -> Track -> Action", () => {
                     })
                 );
                 triggerEvent(fetchElementByClass(styles.point), "click", () => {
-                    expect(
-                        onClickFunctionSpy.mock.calls.length === 1
-                    ).toBeTruthy();
+                    expect(onClickFunctionSpy.calledOnce).toBeTruthy();
                     expect(
                         fetchElementByClass(styles.point).getAttribute(
                             "aria-disabled"
@@ -486,7 +485,7 @@ describe("Gantt -> Track -> Action", () => {
                 );
             });
             it("Highlights the data point", (done) => {
-                const onClickFunctionSpy = jest.fn();
+                const onClickFunctionSpy = sinon.spy();
                 gantt.loadContent(
                     Object.assign(getData(), {
                         actions: [
@@ -568,7 +567,7 @@ describe("Gantt -> Track -> Action", () => {
                 );
             });
             it("Calls onClick callback", (done) => {
-                const onClickFunctionSpy = jest.fn();
+                const onClickFunctionSpy = sinon.spy();
                 gantt.loadContent(
                     Object.assign(getData(), {
                         actions: [
@@ -584,9 +583,7 @@ describe("Gantt -> Track -> Action", () => {
                     fetchElementByClass(styles.dataPointSelection),
                     "click",
                     () => {
-                        expect(
-                            onClickFunctionSpy.mock.calls.length === 1
-                        ).toBeTruthy();
+                        expect(onClickFunctionSpy.calledOnce).toBeTruthy();
                         expect(
                             fetchElementByClass(
                                 styles.dataPointSelection
@@ -597,7 +594,7 @@ describe("Gantt -> Track -> Action", () => {
                 );
             });
             it("Highlights the data point", (done) => {
-                const onClickFunctionSpy = jest.fn();
+                const onClickFunctionSpy = sinon.spy();
                 gantt.loadContent(
                     Object.assign(getData(), {
                         actions: [
@@ -855,7 +852,7 @@ describe("Gantt -> Track -> Action", () => {
     });
     describe("On Legend action", () => {
         beforeEach(() => {
-            jest.spyOn(window, "requestAnimationFrame");
+            spyOn(window, "requestAnimationFrame");
             loadData(gantt);
         });
         it("On click hides the points", (done) => {

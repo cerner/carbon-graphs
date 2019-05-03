@@ -1,3 +1,4 @@
+import sinon from "sinon";
 import {
     AXIS_TYPE,
     COLORS,
@@ -5,7 +6,7 @@ import {
 } from "../../../../main/js/helpers/constants";
 import utils from "../../../../main/js/helpers/utils";
 
-export const dataPointClickHandlerSpy = jest.fn();
+export const dataPointClickHandlerSpy = sinon.spy();
 /**
  * Creates and returns an example input with data point values
  * @param {Array} values - x and y co-ordinate values

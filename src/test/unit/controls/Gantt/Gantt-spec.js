@@ -1,5 +1,6 @@
 "use strict";
 import d3 from "d3";
+import sinon from "sinon";
 import Gantt from "../../../../main/js/controls/Gantt";
 import { getXAxisWidth } from "../../../../main/js/controls/Gantt/helpers/creationHelpers";
 import Track from "../../../../main/js/controls/Gantt/Track";
@@ -1456,7 +1457,7 @@ describe("Gantt", () => {
                     });
                 });
                 it("Calls onClick callback", (done) => {
-                    const onClickFunctionSpy = jest.fn();
+                    const onClickFunctionSpy = sinon.spy();
                     axisObj.dateline = utils.deepClone(datelineJSON);
                     axisObj.dateline[0].onClick = onClickFunctionSpy;
                     gantt = new Gantt(axisObj);
@@ -1464,9 +1465,7 @@ describe("Gantt", () => {
                         styles.ganttDatelinePoint
                     );
                     triggerEvent(datelinePointElement, "click", () => {
-                        expect(
-                            onClickFunctionSpy.mock.calls.length === 1
-                        ).toBeTruthy();
+                        expect(onClickFunctionSpy.calledOnce).toBeTruthy();
                         expect(
                             fetchElementByClass(
                                 styles.ganttDatelineGroup
@@ -1479,7 +1478,7 @@ describe("Gantt", () => {
                     });
                 });
                 it("Removes selection when dateline is clicked again", (done) => {
-                    const onClickFunctionSpy = jest.fn();
+                    const onClickFunctionSpy = sinon.spy();
                     axisObj.dateline = utils.deepClone(datelineJSON);
                     axisObj.dateline[0].onClick = onClickFunctionSpy;
                     gantt = new Gantt(axisObj);
@@ -1627,7 +1626,7 @@ describe("Gantt", () => {
             it("Resizes the graph", () => {
                 gantt.destroy();
                 gantt = new Gantt(getAxes(axisJSON));
-                jest.spyOn(gantt, "resize").mockImplementation(() => {});
+                spyOn(gantt, "resize");
                 gantt.loadContent(primaryContent);
                 expect(gantt.resize).toHaveBeenCalled();
             });
@@ -2103,9 +2102,7 @@ describe("Gantt", () => {
             );
         });
         it("Sets the content container width and height correctly", (done) => {
-            const rafSpy = jest
-                .spyOn(window, "requestAnimationFrame")
-                .mockImplementation(() => {});
+            const rafSpy = spyOn(window, "requestAnimationFrame");
             ganttChartContainer.setAttribute(
                 "style",
                 "width: 800px; height: 200px"
@@ -2124,7 +2121,7 @@ describe("Gantt", () => {
                     expect(+contentContainer.attr("width")).toBe(
                         getXAxisWidth(gantt.config)
                     );
-                    rafSpy.mockRestore();
+                    rafSpy.calls.reset();
                     done();
                 },
                 TRANSITION_DELAY
@@ -2148,9 +2145,7 @@ describe("Gantt", () => {
             );
         });
         it("Throttles based on delay", (done) => {
-            const rafSpy = jest
-                .spyOn(window, "requestAnimationFrame")
-                .mockImplementation(() => {});
+            const rafSpy = spyOn(window, "requestAnimationFrame");
             const throttledInput = getAxes(axisJSON);
             throttledInput.throttle = undefined;
             gantt.destroy();
@@ -2165,16 +2160,14 @@ describe("Gantt", () => {
                 "resize",
                 () => {
                     expect(window.requestAnimationFrame).toHaveBeenCalled();
-                    rafSpy.mockRestore();
+                    rafSpy.calls.reset();
                     done();
                 },
                 constants.RESIZE_THROTTLE
             );
         });
         it("Throttles based on delay provided in the input", (done) => {
-            const rafSpy = jest
-                .spyOn(window, "requestAnimationFrame")
-                .mockImplementation(() => {});
+            const rafSpy = spyOn(window, "requestAnimationFrame");
             const throttledInput = getAxes(axisJSON);
             throttledInput.throttle = 500;
             gantt.destroy();
@@ -2189,7 +2182,7 @@ describe("Gantt", () => {
                 "resize",
                 () => {
                     expect(window.requestAnimationFrame).toHaveBeenCalled();
-                    rafSpy.mockRestore();
+                    rafSpy.calls.reset();
                     done();
                 },
                 throttledInput.throttle

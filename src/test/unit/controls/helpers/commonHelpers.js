@@ -1,7 +1,7 @@
 /**
  * @type {number} Delay duration
  */
-export const TRANSITION_DELAY = 400;
+export const TRANSITION_DELAY = 450;
 /**
  * Triggers an event on provided element
  * @private
@@ -45,3 +45,32 @@ export const delay = (fn, time = TRANSITION_DELAY) => setTimeout(fn, time);
  * @return {number} a number
  */
 export const toNumber = (s, radix) => (!radix ? Number(s) : parseInt(s, radix));
+/**
+ * Loads custom matcher for Jasmine unit tests
+ * @returns {undefined} returns nothing
+ */
+export const loadCustomJasmineMatcher = () => {
+    jasmine.addMatchers({
+        toBeCloserTo() {
+            return {
+                compare(actualValue, expectedResult) {
+                    const base = +(expectedResult[0] || expectedResult);
+                    const offset = +(expectedResult[1] || 2);
+                    const lower = base - offset;
+                    const upper = base + offset;
+                    const result = {
+                        pass: true,
+                        message: () => ""
+                    };
+                    result.pass =
+                        +actualValue >= lower && +actualValue <= upper;
+                    if (!result.pass) {
+                        result.message = () =>
+                            `Expected ${actualValue} to be between ${lower} and ${upper} (inclusive)`;
+                    }
+                    return result;
+                }
+            };
+        }
+    });
+};

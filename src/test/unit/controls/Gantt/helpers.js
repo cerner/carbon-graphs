@@ -1,8 +1,9 @@
+import sinon from "sinon";
 import Carbon from "../../../../main/js/carbon";
 import constants from "../../../../main/js/helpers/constants";
 import utils from "../../../../main/js/helpers/utils";
 
-export const onClickFunctionSpy = jest.fn();
+export const onClickFunctionSpy = sinon.spy();
 export const taskStartDate = new Date(2018, 2, 1).toISOString();
 export const taskEndDate = new Date(2018, 5, 10).toISOString();
 export const BASE_CANVAS_HEIGHT_PADDING =
@@ -35,7 +36,7 @@ export const axisJSON = {
 export const taskValuesJSON = [
     {
         key: "taskNormal",
-        onClick: jest.fn(),
+        onClick: sinon.spy(),
         label: {
             display: "Story Apex Task Something"
         },
@@ -44,7 +45,7 @@ export const taskValuesJSON = [
     },
     {
         key: "taskChunk",
-        onClick: jest.fn(),
+        onClick: sinon.spy(),
         label: {
             display: "Story Broccoli"
         },
@@ -53,7 +54,7 @@ export const taskValuesJSON = [
     },
     {
         key: "taskPercentage",
-        onClick: jest.fn(),
+        onClick: sinon.spy(),
         label: {
             display: "Story Charming"
         },
@@ -63,7 +64,7 @@ export const taskValuesJSON = [
     },
     {
         key: "taskHash",
-        onClick: jest.fn(),
+        onClick: sinon.spy(),
         label: {
             display: "Story Charming"
         },

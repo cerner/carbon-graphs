@@ -1,4 +1,5 @@
 "use strict";
+import sinon from "sinon";
 import Graph from "../../../../main/js/controls/Graph/Graph";
 import { getShapeForTarget } from "../../../../main/js/controls/Graph/helpers/helpers";
 import PairedResult from "../../../../main/js/controls/PairedResult";
@@ -974,7 +975,7 @@ describe("PairedResult", () => {
                     );
                 });
                 it("calls onClick callback", (done) => {
-                    const dataPointClickHandlerSpy = jest.fn();
+                    const dataPointClickHandlerSpy = sinon.spy();
                     graphDefault.destroy();
                     graphDefault = new Graph(getAxes(axisDefault));
                     input = getInput(valuesDefault, false, false);
@@ -989,7 +990,7 @@ describe("PairedResult", () => {
                         "click",
                         () => {
                             expect(
-                                dataPointClickHandlerSpy.mock.calls.length === 1
+                                dataPointClickHandlerSpy.calledOnce
                             ).toBeTruthy();
                             done();
                         }
@@ -1385,7 +1386,10 @@ describe("PairedResult", () => {
             });
             describe("on click", () => {
                 it("hides the points", (done) => {
-                    const rafSpy = jest.spyOn(window, "requestAnimationFrame");
+                    const rafSpy = spyOn(
+                        window,
+                        "requestAnimationFrame"
+                    ).and.callThrough();
                     const input = getInput(valuesDefault, false, false);
                     const prContent = new PairedResult(input);
                     const graph = graphDefault.loadContent(prContent);
@@ -1412,7 +1416,7 @@ describe("PairedResult", () => {
                             expect(high.style.display).toBe("none");
                             expect(mid.style.display).toBe("");
                             expect(low.style.display).toBe("");
-                            rafSpy.mockRestore();
+                            rafSpy.calls.reset();
                             done();
                         }
                     );
@@ -1528,7 +1532,10 @@ describe("PairedResult", () => {
                     );
                 });
                 it("on clicking twice toggles the points back to visible", (done) => {
-                    const rafSpy = jest.spyOn(window, "requestAnimationFrame");
+                    const rafSpy = spyOn(
+                        window,
+                        "requestAnimationFrame"
+                    ).and.callThrough();
                     const input = getInput(valuesDefault, false, false);
                     const prContent = new PairedResult(input);
                     const graph = graphDefault.loadContent(prContent);
@@ -1552,7 +1559,7 @@ describe("PairedResult", () => {
                                         styles.pairedPoint
                                     ).style.display
                                 ).toBe("");
-                                rafSpy.mockRestore();
+                                rafSpy.calls.reset();
                                 done();
                             },
                             200
@@ -3538,7 +3545,7 @@ describe("PairedResult", () => {
                 );
             });
             it("selects data point when clicked on outer indicator", (done) => {
-                const criticalOuterPointSpy = jest.fn();
+                const criticalOuterPointSpy = sinon.spy();
                 const valuesMutated = utils.deepClone(valuesDefault);
                 valuesMutated[0].high.isCritical = true;
                 valuesMutated[0].mid.isCritical = true;
@@ -3552,9 +3559,7 @@ describe("PairedResult", () => {
                     styles.criticalityOuterPoint
                 );
                 triggerEvent(point, "click", () => {
-                    expect(
-                        criticalOuterPointSpy.mock.calls.length === 1
-                    ).toBeTruthy();
+                    expect(criticalOuterPointSpy.calledOnce).toBeTruthy();
                     done();
                 });
             });
@@ -3610,7 +3615,7 @@ describe("PairedResult", () => {
                 );
             });
             it("selects data point when clicked on inner indicator", (done) => {
-                const criticalInnerPointSpy = jest.fn();
+                const criticalInnerPointSpy = sinon.spy();
                 const valuesMutated = utils.deepClone(valuesDefault);
                 valuesMutated[0].high.isCritical = true;
                 valuesMutated[0].mid.isCritical = true;
@@ -3624,9 +3629,7 @@ describe("PairedResult", () => {
                     styles.criticalityInnerPoint
                 );
                 triggerEvent(point, "click", () => {
-                    expect(
-                        criticalInnerPointSpy.mock.calls.length === 1
-                    ).toBeTruthy();
+                    expect(criticalInnerPointSpy.calledOnce).toBeTruthy();
                     done();
                 });
             });
