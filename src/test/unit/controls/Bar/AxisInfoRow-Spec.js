@@ -5,8 +5,14 @@ import Bar from "../../../../main/js/controls/Bar/Bar";
 import Graph from "../../../../main/js/controls/Graph/Graph";
 import { AXES_ORIENTATION } from "../../../../main/js/helpers/constants";
 import styles from "../../../../main/js/helpers/styles";
+import { getSVGAnimatedTransformList } from "../../../../main/js/helpers/transformUtils";
 import utils from "../../../../main/js/helpers/utils";
-import { TRANSITION_DELAY, triggerEvent } from "../helpers/commonHelpers";
+import {
+    loadCustomJasmineMatcher,
+    toNumber,
+    TRANSITION_DELAY,
+    triggerEvent
+} from "../helpers/commonHelpers";
 import {
     axisDefault,
     axisInfoRowDefault,
@@ -23,6 +29,9 @@ import {
 describe("Bar", () => {
     let graphDefault = null;
     let barGraphContainer;
+    beforeAll(() => {
+        loadCustomJasmineMatcher();
+    });
     beforeEach(() => {
         barGraphContainer = document.createElement("div");
         barGraphContainer.id = "testBar_carbon";
@@ -588,9 +597,11 @@ describe("Bar", () => {
                     styles.axisInfoRowItem
                 );
                 expect(axisInfoRowElement.nodeName).toBe("g");
-                expect(axisInfoRowElement.getAttribute("transform")).toContain(
-                    "translate(142, -10)"
-                );
+                const translate = getSVGAnimatedTransformList(
+                    axisInfoRowElement.getAttribute("transform")
+                ).translate;
+                expect(toNumber(translate[0], 10)).toBeCloserTo(142);
+                expect(toNumber(translate[1], 10)).toBeCloserTo(-10);
             });
         });
     });
