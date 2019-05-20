@@ -55,7 +55,7 @@ export const loadCustomJasmineMatcher = () => {
             return {
                 compare(actualValue, expectedResult) {
                     const base = +(expectedResult[0] || expectedResult);
-                    const offset = +(expectedResult[1] || 2);
+                    const offset = +(expectedResult[1] || 5);
                     const lower = base - offset;
                     const upper = base + offset;
                     const result = {
