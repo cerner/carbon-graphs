@@ -1,0 +1,98 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true,
+        "node": true
+    },
+    "globals": {
+        "ENV": true
+    },
+    "extends": "eslint:recommended",
+    "plugins": [
+        "ideal"
+    ],
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module"
+    },
+    "rules": {
+        "valid-jsdoc": 2,
+        "linebreak-style": 0,
+        "constructor-super": 2,
+        "no-var": 1,
+        "no-this-before-super": 2,
+        "prefer-const": 1,
+        "prefer-template": 1,
+        "mp-camelcase": 0,
+        "no-class-assign": 2,
+        "no-const-assign": 2,
+        "require-yield": 2,
+        "no-dupe-class-members": 2,
+        "no-useless-constructor": 0,
+        "prefer-arrow-callback": 1,
+        "prefer-rest-params": 1,
+        "no-unused-vars": [
+            2,
+            {
+                "vars": "all",
+                "args": "none"
+            }
+        ],
+        "array-callback-return": 2,
+        "no-nested-ternary": 1,
+        "no-unneeded-ternary": 1,
+        "arrow-parens": [
+            1,
+            "always"
+        ],
+        "arrow-spacing": [
+            2,
+            {
+                "before": true,
+                "after": true
+            }
+        ],
+        "complexity": 0,
+        "rest-spread-spacing": [
+            2,
+            "never"
+        ],
+        "prefer-spread": 1,
+        "object-shorthand": [
+            2,
+            "always"
+        ],
+        "arrow-body-style": 2,
+        "object-curly-spacing": [
+            2,
+            "always"
+        ],
+        "space-before-blocks": 2,
+        "max-depth": [
+            2,
+            3
+        ],
+        "max-nested-callbacks": [
+            2,
+            3
+        ],
+        "max-statements-per-line": [
+            2,
+            {
+                "max": 1
+            }
+        ],
+        "max-len": [
+            2,
+            150,
+            {
+                "ignoreTrailingComments": true
+            }
+        ],
+        "no-extra-bind": 2,
+        "no-duplicate-imports": 2,
+        "no-useless-rename": 2,
+        "no-useless-computed-key": 2,
+        "no-useless-return": 2
+    }
+}

@@ -1,0 +1,35 @@
+@import "../variables.less";
+@import "../colors.less";
+
+/*
+We are forcing display of the hidden item for data points,
+this is only applicable when legend toggle is applied
+and one of the data point is selected.
+*/
+.carbon-data-pair--selected {
+    .opacity-show() !important;
+}
+
+.carbon-paired-point {
+    &[aria-disabled="false"] {
+        cursor: pointer;
+    }
+
+    &[aria-hidden="true"] {
+        .opacity-hide();
+    }
+}
+
+.carbon-paired-line {
+    fill: none;
+    stroke-width: 1px;
+    stroke: @dark;
+
+    &[aria-disabled="false"] {
+        cursor: pointer;
+    }
+
+    &[aria-hidden="true"] {
+        .opacity-hide();
+    }
+}

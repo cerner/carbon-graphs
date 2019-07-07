@@ -1,0 +1,11 @@
+.DS_Store
+node_modules
+dist
+lib
+.site
+.coverage
+.idea
+npm-debug.log
+debug.log
+*.stackdump
+.vscode

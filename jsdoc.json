@@ -1,0 +1,57 @@
+{
+    "tags": {
+        "allowUnknownTags": false,
+        "dictionaries": [
+            "jsdoc"
+        ]
+    },
+    "source": {
+        "include": [
+            "README.md",
+            "src/main"
+        ],
+        "includePattern": ".js$",
+        "excludePattern": "(node_modules/|docs)"
+    },
+    "plugins": [
+        "plugins/markdown"
+    ],
+    "opts": {
+        "template": "./node_modules/docdash",
+        "encoding": "utf8",
+        "destination": ".site/docs",
+        "recurse": true,
+        "verbose": false
+    },
+    "templates": {
+        "cleverLinks": true,
+        "monospaceLinks": true,
+        "useLongnameInNav": false,
+        "showInheritedInNav": true,
+        "default": {
+            "outputSourceFiles": true,
+            "includeDate": false
+        }
+    },
+    "docdash": {
+        "static": true,
+        "sort": true,
+        "meta": {
+            "title": "Carbon",
+            "description": "A graphing library built using d3 based on Cerner design standards",
+            "keyword": "carbon"
+        },
+        "private": [
+            false
+        ],
+        "search": [
+            true
+        ],
+        "collapse": [
+            true
+        ],
+        "typedefs": [
+            true
+        ]
+    }
+}

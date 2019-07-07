@@ -1,0 +1,52 @@
+@import "../colors.less";
+@import "../variables.less";
+
+.carbon-y-axis-track-label {
+    .tick > text {
+        &[aria-disabled="false"] {
+            cursor: pointer;
+        }
+    }
+}
+
+.carbon-data-task {
+    cursor: pointer;
+
+    &[aria-disabled="true"] {
+        cursor: default;
+    }
+}
+
+.carbon-data-track-group {
+    .carbon-selected-data-point {
+        .selected-indicator-styles();
+
+        &[aria-hidden="true"] {
+            .opacity-hide();
+        }
+    }
+}
+
+.carbon-data-selected-bar {
+    display: block;
+    .selected-indicator-styles();
+    .carbon-shape-rendering();
+
+    &[aria-hidden="true"] {
+        .opacity-hide();
+    }
+}
+
+.carbon-track-selected-bar {
+    display: block;
+    fill-opacity: 0;
+
+    &[aria-disabled="false"] {
+        cursor: pointer;
+    }
+
+    &[aria-selected="true"] {
+        .selected-indicator-styles();
+        .carbon-shape-rendering();
+    }
+}

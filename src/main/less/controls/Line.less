@@ -1,0 +1,27 @@
+@import "../variables.less";
+
+@line-transition-duration: 0.3s;
+
+.carbon-line path {
+    fill: none;
+    stroke-width: 1px;
+    /* To counteract the opacity change when blur is used on a line */
+    .basic-transition(
+        opacity,
+        @line-transition-duration,
+        @default-transition-timing
+    );
+
+    &.carbon-highlight {
+        stroke-width: 2px;
+        .transform-transition(
+            stroke,
+            @default-transition-duration,
+            @default-transition-timing
+        );
+    }
+
+    &[aria-hidden="true"] {
+        .opacity-hide();
+    }
+}
