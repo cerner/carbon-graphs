@@ -1,0 +1,67 @@
+{
+  "prepare": [
+    "@semantic-release/npm",
+    {
+      "path": "@semantic-release/git",
+      "assets": [
+        "package.json",
+        "package-lock.json"
+      ],
+      "message": "Chore: ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+    }
+  ],
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "eslint",
+        "releaseRules": [
+          {
+            "tag": "Breaking",
+            "release": "major"
+          },
+          {
+            "tag": "Fix",
+            "release": "patch"
+          },
+          {
+            "tag": "New",
+            "release": "minor"
+          },
+          {
+            "tag": "Update",
+            "release": "minor"
+          },
+          {
+            "tag": "Docs",
+            "release": "patch"
+          },
+          {
+            "tag": "Build",
+            "release": "patch"
+          },
+          {
+            "tag": "Upgrade",
+            "release": "patch"
+          },
+          {
+            "tag": "Chore",
+            "release": "patch"
+          },
+          {
+            "tag": "Revert",
+            "release": "patch"
+          }
+        ]
+      }
+    ],
+    [
+      "@semantic-release/release-notes-generator",
+      {
+        "preset": "eslint"
+      }
+    ],
+    "@semantic-release/npm",
+    "@semantic-release/github"
+  ]
+}
