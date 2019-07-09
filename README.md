@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="https://pages.github.com/cerner/carbon-graphs/">
+  <a href="https://engineering.cerner.com/carbon-graphs/">
     <img width="200" height="200" alt="Click for demo" src="https://github.com/cerner/carbon-graphs/raw/master/build/assets/icons/Carbon_256.png">
   </a>
 </div>
@@ -17,17 +17,17 @@
 Carbon is a graphing library built using d3 visualization library. It provides an API for generating native graphs such as Line and Paired Result graphs based on design standards.
 Carbon provides an abstraction for c3 and d3.
 
--   [Carbon (carbon-graphs)](#carbon-carbon-graphs)
-    -   [Dependencies](#dependencies)
-    -   [Features](#features)
-        -   [Graph types](#graph-types)
-        -   [Graph Settings/Toggles](#graph-settingstoggles)
-        -   [Other highlights](#other-highlights)
-    -   [Potential features](#potential-features)
-    -   [Resources](#resources)
-    -   [Usage](#usage)
-    -   [Install](#install)
-    -   [Browser support](#browser-support)
+-   [Dependencies](#Dependencies)
+-   [Features](#Features)
+    -   [Graph types](#Graph-types)
+    -   [Graph Settings/Toggles](#Graph-SettingsToggles)
+    -   [Other highlights](#Other-highlights)
+-   [Potential features](#Potential-features)
+-   [Resources](#Resources)
+-   [Usage](#Usage)
+-   [Install](#Install)
+-   [Browser support](#Browser-support)
+-   [LICENSE](#LICENSE)
 
 ## Dependencies
 
@@ -86,7 +86,7 @@ Carbon provides an abstraction for c3 and d3.
 
 ## Resources
 
--   [Demo](https://pages.github.com/cerner/carbon-graphs/)
+-   [Demo](https://engineering.cerner.com/carbon-graphs/)
 -   [Contributing to Carbon](docs/contributing/README.md)
 -   [API Reference](docs/README.md)
 -   [Release Notes](https://github.com/cerner/carbon-graphs/releases)
