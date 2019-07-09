@@ -251,11 +251,11 @@ An activity can be styled as follows:
 
 #### Required
 
-| Property Name | Expected | Description                                                           |
-| ------------- | -------- | --------------------------------------------------------------------- |
-| key           | string   | Unique id which represents the actions within the tracks              |
-| values        | array    | List of string(ISO8601) where a data point `event` needs to be placed |
-| shape         | object   | svg represented as json, which got transpiled from `svg-to-carbon`    |
+| Property Name | Expected | Description                                                                |
+| ------------- | -------- | -------------------------------------------------------------------------- |
+| key           | string   | Unique id which represents the actions within the tracks                   |
+| values        | array    | List of string(ISO8601) where a data point `event` needs to be placed      |
+| shape         | object   | svg represented as json, which got transpiled from `@cerner/svg-to-carbon` |
 
 #### Optional
 

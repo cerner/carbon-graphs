@@ -169,7 +169,7 @@ Note:
 | color          | string   | ![#1c1f21](https://placehold.it/15/1c1f21/000000?text=+) `#1c1f21` | Default color of the display (For Primary label only)                                                              |
 | onClick        | Function | null                                                               | Any action that can be performed when clicking on the data point                                                   |
 | label          | object   | {}                                                                 | `display` property needs to be provided for label <br/> `secondaryDisplay` property can also be provided for label |
-| shape          | object   | {}                                                                 | svg represented as json, which got transpiled from `svg-to-carbon`. Refer [Shapes](../README.md#Shapes)            |
+| shape          | object   | {}                                                                 | svg represented as json, which got transpiled from `@cerner/svg-to-carbon`. Refer [Shapes](../README.md#Shapes)    |
 
 ### Constraints
 
