@@ -43,5 +43,5 @@ stages:
     - build
     - name: release
       if: type != pull_request
-    - name: "Deploy site to gh-pages"
+    - name: deploy
       if: type != pull_request
