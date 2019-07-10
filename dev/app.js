@@ -1,5 +1,5 @@
 import "@babel/polyfill";
-import renderSiteApp from "carbon-site-helpers";
+import renderSiteApp from "@cerner/carbon-site-helpers";
 import "../src/main/less/carbon.less";
 import "./app.less";
 import {

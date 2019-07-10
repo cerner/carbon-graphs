@@ -1,6 +1,6 @@
 # Consumer documentation
 
-For documentation on code: [**JSDocs**](https://pages.github.com/cerner/carbon-graphs/docs/)
+For documentation on code: [**JSDocs**](https://engineering.cerner.com/carbon-graphs/docs/)
 
 -   [Consumer documentation](#consumer-documentation)
     -   [Guides](#guides)
