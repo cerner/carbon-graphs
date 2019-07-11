@@ -72,3 +72,10 @@ export const getData = (values, isDefaultColor = true, isDefaultShape = true) =>
  * @returns {HTMLElement} - DOM element
  */
 export const fetchElementByClass = (cls) => document.querySelector(`.${cls}`);
+/**
+ * Returns all DOM elements queried by Class
+ * @param {string} cls - Class attribute name
+ * @returns {NodeList} - list of DOM elements
+ */
+export const fetchAllElementsByClass = (cls) =>
+    document.querySelectorAll(`.${cls}`);

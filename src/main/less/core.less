@@ -196,6 +196,17 @@ svg:not(:root) {
     stroke-width: 8px;
 }
 
+.carbon-criticality-outer,
+.carbon-criticality-inner {
+    &[aria-hidden="true"] {
+        .opacity-hide();
+    }
+
+    &.carbon-highlight {
+        .opacity-show();
+    }
+}
+
 .carbon-region {
     fill: @grey5;
 

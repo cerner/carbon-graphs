@@ -77,6 +77,8 @@ export default {
      */
     criticalityOuterPoint: "carbon-criticality-outer",
     criticalityInnerPoint: "carbon-criticality-inner",
+    criticalityTimelineOuterPoint: "carbon-timeline-criticality-outer",
+    criticalityTimelineInnerPoint: "carbon-timeline-criticality-inner",
     /**
      * Gantt
      */

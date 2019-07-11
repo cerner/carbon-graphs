@@ -35,7 +35,8 @@ const getXDataValues = (x) => {
 };
 /**
  * Processes the input JSON and adds the shapes, colors, labels etc. to each data points so that we
- * can use them when rendering the data point.
+ * can use them when rendering the data point. Applies isCritical to the point if point is
+ * marked critical.
  * @private
  * @param {Object} graphConfig - config object of Graph API
  * @param {Object} dataTarget - Data points object
@@ -45,6 +46,7 @@ const processDataPoints = (graphConfig, dataTarget) => {
     graphConfig.shownTargets.push(dataTarget.key);
     dataTarget.internalValuesSubset = dataTarget.values.map((value) => ({
         onClick: dataTarget.onClick,
+        isCritical: value.isCritical || false,
         x: getXDataValues(value.x),
         content: value.content,
         color: dataTarget.color || constants.DEFAULT_COLOR,

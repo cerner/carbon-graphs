@@ -109,7 +109,9 @@ Timeline is marked only on `X Axis`, there is no other axis supplied. Axis is se
 
 #### Optional
 
-`N/A`
+| Property Name | Expected | Default | Description                                           |
+| ------------- | -------- | ------- | ----------------------------------------------------- |
+| isCritical    | boolean  | false   | Shows an indicator surrounding the point when enabled |
 
 ### Structure
 
@@ -139,7 +141,8 @@ var data = {
     values: [
         {
             x: new Date(2016, 0, 1, 1, 5).toISOString(),
-            content: someContentFunction()
+            content: someContentFunction(),
+            isCritical: true
         },
         {
             x: new Date(2016, 0, 1, 2, 15).toISOString(),

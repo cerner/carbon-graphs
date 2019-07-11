@@ -104,3 +104,15 @@ export const renderCriticalityMultiPairedResult = (id) => {
     pairedTime.loadContent(Carbon.api.pairedResult(dataAlt));
     return pairedTime;
 };
+export const renderCriticalityTimeline = (id) => {
+    const timelineDefault = Carbon.api.timeline(
+        getDemoData(`#${id}`, "TIMELINE")
+    );
+    const timelineData = utils.deepClone(getDemoData(`#${id}`, "TIMELINE"));
+    timelineData.data[0].values[1].isCritical = true;
+    timelineData.data[0].values[2].isCritical = true;
+    timelineData.data[1].values[1].isCritical = true;
+    timelineDefault.loadContent(timelineData.data[0]);
+    timelineDefault.loadContent(timelineData.data[1]);
+    return timelineDefault;
+};

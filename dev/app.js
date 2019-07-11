@@ -26,7 +26,8 @@ import {
     renderCriticalityLineSimple,
     renderCriticalityMultiLine,
     renderCriticalityMultiPairedResult,
-    renderCriticalityPairedResultSimple
+    renderCriticalityPairedResultSimple,
+    renderCriticalityTimeline
 } from "./examples/controls/criticality";
 import {
     renderGantt,
@@ -601,6 +602,11 @@ renderSiteApp(
                     pathname: "/criticality/multi-paired-result",
                     content: renderCriticalityMultiPairedResult,
                     title: "Multiple Paired Result"
+                },
+                {
+                    pathname: "/criticality/timeline",
+                    content: renderCriticalityTimeline,
+                    title: "Timeline"
                 }
             ]
         },

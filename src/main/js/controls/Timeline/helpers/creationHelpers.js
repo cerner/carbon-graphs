@@ -303,6 +303,50 @@ const dataPointActionHandler = (value, index, target) => {
     );
 };
 /**
+ * Draws the points with options opted in the input JSON by the consumer.
+ *  Render the point with appropriate color, shape, x and y co-ordinates, label etc.
+ *
+ * @private
+ * @param {Object} pathProperties - holds SVG path element, data point object, data point index
+ * @param {Object} dataPointProperties - holds object scale, config for aria-hidden attribute,
+ *    fill style, shape style, SVG class name
+ * @param {Object} graphProperties - holds d3 scale for Graph, Graph config derived from input
+ *    JSON, and class attribute name
+ * @returns {undefined} - returns nothing
+ */
+const renderPointPath = (
+    pathProperties,
+    dataPointProperties,
+    graphProperties
+) => {
+    const { path, value, index } = pathProperties;
+    const {
+        objectScale,
+        hiddenConfig,
+        fillStyle,
+        shapeStyle,
+        pointStyle
+    } = dataPointProperties;
+    const { scale, config, cls } = graphProperties;
+    path.append(() =>
+        new Shape(getSVGObject(shapeStyle, objectScale)).getShapeElement(
+            getDefaultSVGProps({
+                svgClassNames: `${pointStyle} ${cls}`,
+                svgStyles: `fill: ${fillStyle};`,
+                transformFn: transformPoint(scale, config)(value),
+                onClickFn() {
+                    dataPointActionHandler(value, index, this);
+                },
+                a11yAttributes: {
+                    "aria-describedby": value.key,
+                    "aria-hidden": hiddenConfig,
+                    "aria-disabled": !utils.isFunction(value.onClick)
+                }
+            })
+        )
+    );
+};
+/**
  * Draws the points with options opted in the input JSON by the consumer for each data set.
  *  Render the point with appropriate color, shape, x and y co-ordinates, label etc.
  *  On click content callback function is called.
@@ -313,61 +357,96 @@ const dataPointActionHandler = (value, index, target) => {
  * @returns {undefined} - returns nothing
  */
 const createPoints = (scale, config, canvasSVG) => {
-    const renderDataPointPath = (path, value, index) =>
-        path.append(() =>
-            new Shape(
-                getSVGObject(
-                    getShapeForTarget(value),
-                    constants.DEFAULT_TIMELINE_SCALE
-                )
-            ).getShapeElement(
-                getDefaultSVGProps({
-                    svgClassNames: styles.point,
-                    svgStyles: `fill: ${getColorForTarget(value)};`,
-                    transformFn: transformPoint(scale, config)(value),
-                    onClickFn() {
-                        dataPointActionHandler(value, index, this);
-                    },
-                    a11yAttributes: {
-                        "aria-describedby": value.key,
-                        "aria-hidden":
-                            config.shownTargets.indexOf(value.key) < 0,
-                        "aria-disabled": !utils.isFunction(value.onClick)
-                    }
-                })
-            )
-        );
-    const renderSelectionPath = (path, value, index) =>
-        path.append(() =>
-            new Shape(
-                getSVGObject(
-                    SHAPES.CIRCLE,
-                    constants.DEFAULT_TIMELINE_PLOT_SELECTION_SCALE
-                )
-            ).getShapeElement(
-                getDefaultSVGProps({
-                    svgClassNames: styles.dataPointSelection,
-                    transformFn: transformPoint(scale, config)(value),
-                    onClickFn() {
-                        dataPointActionHandler(value, index, this);
-                    },
-                    a11yAttributes: {
-                        "aria-hidden": true,
-                        "aria-describedby": value.key,
-                        "aria-disabled": !utils.isFunction(value.onClick)
-                    }
-                })
-            )
-        );
+    const renderDataPointPath = (path, value, index) => {
+        let cls;
+        const objectScale = constants.DEFAULT_TIMELINE_SCALE;
+        const hiddenConfig = shouldHideDataPoints(config.shownTargets, value);
+        const fillStyle = getColorForTarget(value);
+        const shapeStyle = getShapeForTarget(value);
+        const pointStyle = styles.point;
+
+        const pathProperties = { path, value, index };
+        const dataPointProperties = {
+            objectScale,
+            hiddenConfig,
+            fillStyle,
+            shapeStyle,
+            pointStyle
+        };
+        const graphProperties = { scale, config, cls };
+        renderPointPath(pathProperties, dataPointProperties, graphProperties);
+    };
+    const renderSelectionPath = (path, value, index) => {
+        let fillStyle, pointStyle;
+        const objectScale = constants.DEFAULT_TIMELINE_PLOT_SELECTION_SCALE;
+        const hiddenConfig = true;
+        const shapeStyle = SHAPES.CIRCLE;
+        const cls = styles.dataPointSelection;
+
+        const pathProperties = { path, value, index };
+        const dataPointProperties = {
+            objectScale,
+            hiddenConfig,
+            fillStyle,
+            shapeStyle,
+            pointStyle
+        };
+        const graphProperties = { scale, config, cls };
+        renderPointPath(pathProperties, dataPointProperties, graphProperties);
+    };
+    const renderCriticalityPath = (path, value, index, cls, config) => {
+        let fillStyle;
+        const objectScale = constants.DEFAULT_TIMELINE_SCALE;
+        const hiddenConfig = shouldHideDataPoints(config.shownTargets, value);
+        const shapeStyle = getShapeForTarget(value);
+        const pointStyle = styles.point;
+
+        const pathProperties = { path, value, index };
+        const dataPointProperties = {
+            objectScale,
+            hiddenConfig,
+            fillStyle,
+            shapeStyle,
+            pointStyle
+        };
+        const graphProperties = { scale, config, cls };
+        renderPointPath(pathProperties, dataPointProperties, graphProperties);
+    };
     canvasSVG
         .append("g")
         .classed(styles.pointGroup, true)
         .each(function(d, i) {
             const dataPointSVG = d3.select(this);
             renderSelectionPath(dataPointSVG, d, i);
+            if (d.isCritical) {
+                renderCriticalityPath(
+                    dataPointSVG,
+                    d,
+                    i,
+                    styles.criticalityTimelineOuterPoint,
+                    config
+                );
+                renderCriticalityPath(
+                    dataPointSVG,
+                    d,
+                    i,
+                    styles.criticalityTimelineInnerPoint,
+                    config
+                );
+            }
             renderDataPointPath(dataPointSVG, d, i);
         });
 };
+/**
+ * Checks the data-set is currently shown in the graph and if the y data-point value is null
+ * If they are then true, false otherwise
+ * @private
+ * @param {Object} shownTargets - graph targets config object
+ * @param {Object} value - data point value object
+ * @returns {boolean} true if data point needs to be hidden, false otherwise
+ */
+const shouldHideDataPoints = (shownTargets, value) =>
+    shownTargets.indexOf(value.key) < 0 || value.y === null;
 /**
  * A callback that will be sent to Graph class so that when graph is
  * created the Graph API will execute this callback function and the legend
