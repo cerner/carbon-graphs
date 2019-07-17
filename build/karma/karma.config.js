@@ -29,13 +29,17 @@ module.exports = function(config) {
             "../../node_modules/@babel/polyfill/dist/polyfill.js",
             "../webpack/tests.webpack.js"
         ],
-        frameworks: ["jasmine"],
+        frameworks: ["parallel", "jasmine"],
         preprocessors: {
             "../webpack/tests.webpack.js": ["webpack", "sourcemap"]
         },
         reporters: ["progress", "coverage"],
         webpackMiddleware: {
             stats: "errors-only"
+        },
+        parallelOptions: {
+            executors: 4,
+            shardStrategy: "round-robin"
         },
         webpack: {
             mode: "development",
