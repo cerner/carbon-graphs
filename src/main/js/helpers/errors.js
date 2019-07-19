@@ -171,5 +171,12 @@ export default {
     THROW_MSG_AXIS_INFO_ROW_VALUE_NOT_PROVIDED:
         "Invalid X Axis Info Row input format, value property must be provided.",
     THROW_MSG_AXIS_INFO_ROW_LABEL_DISPLAY_NOT_PROVIDED:
-        "Invalid X Axis Info Row input format, display must be provided for label property."
+        "Invalid X Axis Info Row input format, display must be provided for label property.",
+    /**
+     * @description Legend
+     */
+    THROW_MSG_LEGEND_LABEL_NOT_PROVIDED:
+        "Invalid property, a valid label object with a valid string must be provided.",
+    THROW_MSG_LEGEND_LABEL_FORMAT_NOT_PROVIDED:
+        "Invalid property, a valid label.format callback function property must be provided."
 };

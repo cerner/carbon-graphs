@@ -69,7 +69,7 @@ Refer [GraphAPI](../core/GraphAPI.md) `Root` for more details.
 | yAxis         | string   | "y"          | Setting for using different Y based axis. For now: its either Y or Y2          |
 | regions       | array    | []           | Refer [Regions](#regions)                                                      |
 | color         | string   | COLORS.BLACK | Color for the data point and line                                              |
-| onClick       | Function | null         | Any action that can be performed when clicking on the data point               |
+| onClick       | Function | undefined    | Any action that can be performed when clicking on the data point               |
 | style         | object   | {}           | Any style that can be applied. Refer [Styles](#style)                          |
 | group         | string   | key          | Used for stacking bar content under another bar content. Refer [Group](#group) |
 | axisInfoRow   | array    | []           | Refer [Axis Info Row](#Axis-Info-Row)                                          |
@@ -167,7 +167,7 @@ Note:
 | -------------- | -------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
 | characterCount | number   | No Default Value                                                   | Maximum character length before truncation                                                                         |
 | color          | string   | ![#1c1f21](https://placehold.it/15/1c1f21/000000?text=+) `#1c1f21` | Default color of the display (For Primary label only)                                                              |
-| onClick        | Function | null                                                               | Any action that can be performed when clicking on the data point                                                   |
+| onClick        | Function | undefined                                                          | Any action that can be performed when clicking on the data point                                                   |
 | label          | object   | {}                                                                 | `display` property needs to be provided for label <br/> `secondaryDisplay` property can also be provided for label |
 | shape          | object   | {}                                                                 | svg represented as json, which got transpiled from `@cerner/svg-to-carbon`. Refer [Shapes](../README.md#Shapes)    |
 
@@ -175,9 +175,9 @@ Note:
 
 -   If data-set `label` display is not provided then the legend item will not be shown as well
 
-### Structure
+## Structure
 
-#### Simple Bar
+### Simple Bar
 
 ```javascript
 var root = {
@@ -288,7 +288,7 @@ var data = {
 };
 ```
 
-#### Negative Bar
+### Negative Bar
 
 ```javascript
 var data = {

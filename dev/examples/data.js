@@ -1,9 +1,9 @@
 "use strict";
-import d3 from "d3";
 import Carbon from "../../src/main/js/carbon";
 import {
     loadBarPopup,
     loadDatelinePopup,
+    loadPiePopup,
     loadPopup,
     loadTimelinePopup
 } from "./popup";
@@ -998,20 +998,34 @@ const DATA = [
                 {
                     key: "uid_1",
                     label: {
-                        display: "Banana"
+                        display: "Blue",
+                        format: (display, val) =>
+                            `${display}: ${val.toFixed()}%`
                     },
-                    color: Carbon.helpers.COLORS.LIGHT_YELLOW,
-                    onClick: (d, i) => {
-                        // Load a popup
+                    color: Carbon.helpers.COLORS.BLUE,
+                    onClick: loadPiePopup,
+                    value: 60
+                },
+                {
+                    key: "uid_2",
+                    label: {
+                        display: "Green"
                     },
-                    values: [100, 100]
+                    color: Carbon.helpers.COLORS.GREEN,
+                    onClick: loadPiePopup,
+                    value: 10
+                },
+                {
+                    key: "uid_3",
+                    label: {
+                        display: "Light Purple"
+                    },
+                    color: Carbon.helpers.COLORS.LIGHT_PURPLE,
+                    onClick: loadPiePopup,
+                    value: 30
                 }
             ],
-            pie: {
-                label: {
-                    format: (value, ratio, id) => d3.format("$")(value)
-                }
-            }
+            showLegend: true
         })
     },
     {

@@ -37,6 +37,7 @@ Consumers can generate one of the following graphs:
     -   [Bar](controls/Bar.md)
 -   [Gantt](controls/Gantt.md)
 -   [Timeline](controls/Timeline.md)
+-   [Pie](controls/Pie.md)
 
 ## Important information
 

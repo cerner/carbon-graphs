@@ -54,7 +54,7 @@ Refer [GraphAPI](../core/GraphAPI.md) `Root` for more details.
 | label         | object   | {}            | Display value for the data-set which the data points belong to        |
 | color         | string   | COLORS.BLACK  | Color for the data point                                              |
 | shape         | string   | SHAPES.CIRCLE | Shape for representing the data points                                |
-| onClick       | Function | null          | Any action that can be performed when clicking on the data point      |
+| onClick       | Function | undefined     | Any action that can be performed when clicking on the data point      |
 
 ### Values
 
@@ -107,7 +107,7 @@ Draws a Horizontal area along the X-Axis
 
 -   If data-set `label` display is not provided for `high`, `low` and `mid`, the legend item will not be shown as well
 
-### Structure
+## Structure
 
 ```javascript
 var root = {

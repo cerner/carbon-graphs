@@ -1,9 +1,10 @@
 import Bar from "./Bar";
-import Gantt from "./Gantt/Gantt";
+import Gantt from "./Gantt";
 import Graph from "./Graph";
 import Line from "./Line";
 import PairedResult from "./PairedResult";
-import Timeline from "./Timeline/Timeline";
+import Pie from "./Pie";
+import Timeline from "./Timeline";
 
 /**
  * @module api
@@ -21,5 +22,6 @@ export default {
     line: (input) => new Line(input),
     pairedResult: (input) => new PairedResult(input),
     timeline: (input) => new Timeline(input),
+    pie: (input) => new Pie(input),
     bar: (input) => new Bar(input)
 };

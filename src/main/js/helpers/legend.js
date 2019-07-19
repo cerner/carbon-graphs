@@ -13,9 +13,33 @@ import {
 import { Shape } from "../core";
 import { getDefaultSVGProps } from "../core/Shape";
 import constants from "../helpers/constants";
+import errors from "../helpers/errors";
 import styles from "../helpers/styles";
 import utils from "../helpers/utils";
 
+/**
+ * Validates legend label
+ * @private
+ * @throws {module:errors.THROW_MSG_LEGEND_LABEL_NOT_PROVIDED}
+ * @throws {module:errors.THROW_MSG_LEGEND_LABEL_FORMAT_NOT_PROVIDED}
+ * @param {object} label - label object
+ * @returns {undefined} returns nothing
+ */
+const validateLegendLabel = (label) => {
+    if (!label) {
+        throw new Error(errors.THROW_MSG_LEGEND_LABEL_NOT_PROVIDED);
+    }
+    if (utils.isDefined(label.format) && !utils.isFunction(label.format)) {
+        throw new Error(errors.THROW_MSG_LEGEND_LABEL_FORMAT_NOT_PROVIDED);
+    }
+};
+/**
+ * Returns the sanitized legend item display string
+ * @private
+ * @param {string} text - legend display string
+ * @return {string} Sanitized text
+ */
+const getText = (text) => utils.sanitize(text);
 /**
  * Loads the legend items. The values are taken from the Labels property of the input JSON
  * The click and the hover events are only registered when there are datapoints matching the
@@ -40,10 +64,8 @@ const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
             "Invalid Argument: eventHandlers needs a hoverHandler callback function."
         );
     }
-    if (!t.label) {
-        throw new Error("Invalid Argument: label needs to be a valid string.");
-    }
-    const text = utils.sanitize(t.label.display);
+    validateLegendLabel(t.label);
+    const text = getText(t.label.display);
     const index = shownTargets.indexOf(t.key);
     const itemPath = legendSVG
         .append("li")
@@ -190,6 +212,65 @@ const legendHoverHandler = (
             }
         });
 };
+/**
+ * Constructs a legend text based on the display string, value.
+ * If formatter function is provided by the consumer then that function will be called.
+ * @private
+ * @param {string} display - legend item display string
+ * @param {number} value - pie slice value
+ * @param {Function} format - formatter callback function provided by the consumer
+ * @returns {string} - A string that will be used in the legend item
+ */
+const getPieLegendText = (display, value, format) => {
+    if (format) {
+        return format(display, value);
+    }
+    return `${getText(display)}: ${value}`;
+};
+/**
+ * Pie chart legend items are non-clickable and they react only to hover or click
+ * performed on any of a slice in pie chart itself or hovered over a legend item.
+ * @private
+ * @param {Object} legendSVG - d3 element path of the legend from the parent control
+ * @param {Object} dataTarget - input item object processed from the input JSON
+ * @param {Function} hoverHandler - Callback function to be called when hovered over the legend item
+ * @returns {undefined} returns nothing
+ */
+const loadPieLegendItem = (legendSVG, dataTarget, { hoverHandler }) => {
+    validateLegendLabel(dataTarget.label);
+    const text = getPieLegendText(
+        dataTarget.label.display,
+        dataTarget.value,
+        dataTarget.label.format
+    );
+    const itemPath = legendSVG
+        .append("li")
+        .classed(styles.pieLegendItem, true)
+        .attr("role", "listitem")
+        .attr("tabindex", 0)
+        .attr("aria-labelledby", text)
+        .attr("aria-describedby", dataTarget.key);
+    itemPath.append(() =>
+        new Shape(getShapeForTarget(dataTarget)).getShapeElement(
+            getDefaultSVGProps({
+                svgClassNames: styles.pieLegendItemIcon,
+                svgStyles: `fill: ${getColorForTarget(dataTarget)};`
+            }),
+            true
+        )
+    );
+    itemPath
+        .append("label")
+        .classed(styles.legendItemText, true)
+        .text(text);
+    itemPath
+        .on("mouseenter", () =>
+            hoverHandler(dataTarget, constants.HOVER_EVENT.MOUSE_ENTER)
+        )
+        .on("mouseleave", () =>
+            hoverHandler(dataTarget, constants.HOVER_EVENT.MOUSE_EXIT)
+        );
+};
 
 /**
  * @enum {Function}
@@ -197,6 +278,7 @@ const legendHoverHandler = (
 export {
     createLegend,
     loadLegendItem,
+    loadPieLegendItem,
     removeLegendItem,
     legendClickHandler,
     legendHoverHandler

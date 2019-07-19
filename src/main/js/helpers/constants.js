@@ -134,6 +134,7 @@ export default {
         bottom: 20
     },
     TIMELINE_HEIGHT: 40,
+    PIE_CHART_DEFAULT_HEIGHT: 250,
     DEFAULT_HEIGHT: 250,
     DEFAULT_PLOT_SCALE: 0.275,
     DEFAULT_PLOT_SELECTION_SCALE: { posX: 1.95, posY: 1.95, scale: 2 },
@@ -189,6 +190,8 @@ export default {
     },
     VIEW_BOX_SIZE: "0 0 48 48",
     DEFAULT_COLOR: COLORS.BLACK,
+    DEFAULT_PIE_COLOR: COLORS.BLUE,
+    DEFAULT_PIE_LEGEND_SHAPE: SHAPES.SQUARE,
     X_AXIS: "x",
     Y_AXIS: "y",
     Y2_AXIS: "y2",

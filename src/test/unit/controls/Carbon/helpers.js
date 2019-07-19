@@ -6,7 +6,8 @@ export const LIBRARY_LIST = [
     "line",
     "pairedResult",
     "timeline",
-    "bar"
+    "bar",
+    "pie"
 ];
 export const TOOLS_LIST = ["shape", "defaultSVGProps"];
 export const nativeInput = {
@@ -34,7 +35,7 @@ export const pieInput = {
             },
             color: Carbon.helpers.COLORS.BLUE,
             onClick: (d, i) => {},
-            values: [100, 100]
+            values: 100
         },
         {
             key: "uid_2",
@@ -42,7 +43,7 @@ export const pieInput = {
                 display: "Orange"
             },
             color: Carbon.helpers.COLORS.GREEN,
-            values: [50, 25]
+            values: 50
         }
     ]
 };

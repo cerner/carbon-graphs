@@ -43,11 +43,11 @@ timelineDefault.loadContent(/* Data array D */);
 
 #### Required
 
-| Property Name | Expected | Description                   |
-| ------------- | -------- | ----------------------------- |
-| bindTo        | string   | DOM id to bind the graph into |
-| axis          | object   | Refer [Axis](#axis)           |
-| data          | array    | Refer [Data](#data)           |
+| Property Name | Expected | Description                                                                                                          |
+| ------------- | -------- | -------------------------------------------------------------------------------------------------------------------- |
+| bindTo        | string   | DOM id to bind the graph into                                                                                        |
+| axis          | object   | Refer [Axis](#axis)                                                                                                  |
+| data          | array    | Refer [Data](#data). This is _not_ an actual object property rather this is provided as a parameter to `loadContent` |
 
 #### Optional
 
@@ -96,7 +96,7 @@ Timeline is marked only on `X Axis`, there is no other axis supplied. Axis is se
 | ------------- | -------- | ------------- | ---------------------------------------------------------------- |
 | color         | string   | COLORS.BLACK  | Color for the data point and line                                |
 | shape         | string   | SHAPES.CIRCLE | Shape for representing the data points                           |
-| onClick       | Function | null          | Any action that can be performed when clicking on the data point |
+| onClick       | Function | undefined     | Any action that can be performed when clicking on the data point |
 
 ### Values
 
@@ -113,7 +113,7 @@ Timeline is marked only on `X Axis`, there is no other axis supplied. Axis is se
 | ------------- | -------- | ------- | ----------------------------------------------------- |
 | isCritical    | boolean  | false   | Shows an indicator surrounding the point when enabled |
 
-### Structure
+## Structure
 
 ```javascript
 var input = {

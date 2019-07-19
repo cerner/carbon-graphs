@@ -1,0 +1,31 @@
+@import "../colors.less";
+
+.carbon-pie-chart-canvas {
+    display: block;
+    margin: 0 auto;
+}
+
+.carbon-data-pie-group {
+    &[aria-disabled="false"] {
+        cursor: pointer;
+    }
+}
+
+.carbon-legend {
+    & .carbon-pie-legend-item {
+        display: flex;
+        align-items: center;
+        margin: 0.5rem;
+        padding: 0.5rem;
+        outline: 0;
+        user-select: none;
+
+        &.carbon-pie-legend-item-slice-hover {
+            background-color: @blue10;
+        }
+
+        & .carbon-pie-legend-item-icon {
+            margin-right: 0.5rem;
+        }
+    }
+}

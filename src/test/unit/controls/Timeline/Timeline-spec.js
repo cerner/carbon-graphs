@@ -688,9 +688,7 @@ describe("Timeline", () => {
                             hoverHandler: Function
                         }
                     );
-                }).toThrowError(
-                    "Invalid Argument: label needs to be a valid string."
-                );
+                }).toThrowError(errors.THROW_MSG_LEGEND_LABEL_NOT_PROVIDED);
             });
             it("Loads legend in separate container when bindLegendTo used", () => {
                 timeline.destroy();

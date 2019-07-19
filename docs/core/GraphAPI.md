@@ -23,11 +23,11 @@ GraphAPI is a set of graphs that share a common set of base visualization struct
 
 ### Required
 
-| Property Name | Expected | Description                                    |
-| ------------- | -------- | ---------------------------------------------- |
-| bindTo        | string   | DOM id to bind the graph into                  |
-| axis          | object   | Refer [Axis](../helpers/Axes.md)               |
-| data          | array    | Refer respective graph content `data` property |
+| Property Name | Expected | Description                                                                                                                                    |
+| ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| bindTo        | string   | DOM id to bind the graph into                                                                                                                  |
+| axis          | object   | Refer [Axis](../helpers/Axes.md)                                                                                                               |
+| data          | array    | Refer respective graph content `data` section. This is _not_ an actual object property rather this is provided as a parameter to `loadContent` |
 
 ### Optional
 

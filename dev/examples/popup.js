@@ -245,3 +245,9 @@ export const loadTimelinePopup = (onCloseCB, key, index, value) => {
     );
     createItem(pair, `${value.label.display}`, value.content);
 };
+export const loadPiePopup = (onCloseCB, key, index, val) => {
+    removeOldPopup();
+    const path = renderPopup(onCloseCB);
+    const pair = path.append("g");
+    createItem(pair, val.label.display, val.value);
+};

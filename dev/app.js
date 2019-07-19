@@ -90,6 +90,7 @@ import {
     renderPairedResultY2Axis,
     renderPairedResultYHidden
 } from "./examples/controls/pairedResult";
+import { renderPieLegendTo, renderPieSimple } from "./examples/controls/pie";
 import {
     renderCriticalityShapes,
     renderFillTypes,
@@ -336,6 +337,24 @@ renderSiteApp(
                     pathname: "/timeline/simple",
                     content: renderTimeline,
                     title: "Simple"
+                }
+            ]
+        },
+        {
+            pathname: "/pie",
+            children: [
+                {
+                    pathname: "/pie/simple",
+                    content: renderPieSimple,
+                    title: "Simple"
+                },
+                {
+                    pathname: "/pie/legend-render-to",
+                    content: (id) => {
+                        createElementLegendBindTo(id);
+                        renderPieLegendTo(id);
+                    },
+                    title: "Legend BindTo"
                 }
             ]
         },

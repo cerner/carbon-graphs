@@ -65,11 +65,11 @@ ganttInstance.loadContent(/* Data Object D */);
 
 #### Required
 
-| Property Name | Expected | Description                   |
-| ------------- | -------- | ----------------------------- |
-| bindTo        | string   | DOM id to bind the graph into |
-| axis          | object   | Refer [Axis](#axis)           |
-| tracks        | array    | Refer [Data](#tracks)         |
+| Property Name | Expected | Description                                                                                                            |
+| ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------- |
+| bindTo        | string   | DOM id to bind the graph into                                                                                          |
+| axis          | object   | Refer [Axis](#axis)                                                                                                    |
+| tracks        | array    | Refer [Data](#tracks). This is _not_ an actual object property rather this is provided as a parameter to `loadContent` |
 
 #### Optional
 
@@ -138,14 +138,14 @@ clickPassThrough = {
 
 #### Optional
 
-| Property Name | Expected | Default | Description                                             |
-| ------------- | -------- | ------- | ------------------------------------------------------- |
-| loadAtIndex   | number   | null    | Index where the track needs to be loaded.               |
-| onClick       | Function | null    | Any action that can be performed when clicking on track |
-| dimension     | object   | {}      | Refer [Dimension](#dimension)                           |
-| tasks         | array    | []      | Refer [Tasks](#tasks)                                   |
-| activities    | array    | []      | Refer [Activities](#activities)                         |
-| actions       | array    | []      | Refer [Actions](#actions)                               |
+| Property Name | Expected | Default   | Description                                             |
+| ------------- | -------- | --------- | ------------------------------------------------------- |
+| loadAtIndex   | number   | null      | Index where the track needs to be loaded.               |
+| onClick       | Function | undefined | Any action that can be performed when clicking on track |
+| dimension     | object   | {}        | Refer [Dimension](#dimension)                           |
+| tasks         | array    | []        | Refer [Tasks](#tasks)                                   |
+| activities    | array    | []        | Refer [Activities](#activities)                         |
+| actions       | array    | []        | Refer [Actions](#actions)                               |
 
 ### Dimension
 
@@ -169,9 +169,9 @@ clickPassThrough = {
 
 #### Optional
 
-| Property Name | Expected | Default | Description                                                       |
-| ------------- | -------- | ------- | ----------------------------------------------------------------- |
-| onClick       | Function | null    | Any action that can be performed when clicking on the track label |
+| Property Name | Expected | Default   | Description                                                       |
+| ------------- | -------- | --------- | ----------------------------------------------------------------- |
+| onClick       | Function | undefined | Any action that can be performed when clicking on the track label |
 
 ### Tasks
 
@@ -201,7 +201,7 @@ A task can be styled as follows:
 
 | Property Name | Expected | Default                                            | Description                                                                                    |
 | ------------- | -------- | -------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| duration      | Function | null                                               | Function that returns a number that is relative to start or end date                           |
+| duration      | Function | undefined                                          | Function that returns a number that is relative to start or end date                           |
 | color         | string   | COLORS.BLUE                                        | Color for the bar                                                                              |
 | label         | object   | {}                                                 | `display` property needs to be provided for label                                              |
 | percentage    | number   | null                                               | Transforms `bar` into Percentage bar and fill the bar with color opted for in `color` property |
@@ -211,9 +211,9 @@ A task can be styled as follows:
 
 If clickPassThrough.tasks is provided, onClick parameter would be required for any non-pass through operations.
 
-| Property Name | Expected | Default | Description                                                |
-| ------------- | -------- | ------- | ---------------------------------------------------------- |
-| onClick       | Function | null    | Any action that can be performed when clicking on the task |
+| Property Name | Expected | Default   | Description                                                |
+| ------------- | -------- | --------- | ---------------------------------------------------------- |
+| onClick       | Function | undefined | Any action that can be performed when clicking on the task |
 
 ### Activities
 
@@ -242,7 +242,7 @@ An activity can be styled as follows:
 
 | Property Name | Expected | Default            | Description                                                          |
 | ------------- | -------- | ------------------ | -------------------------------------------------------------------- |
-| duration      | Function | null               | Function that returns a number that is relative to start or end date |
+| duration      | Function | undefined          | Function that returns a number that is relative to start or end date |
 | color         | string   | COLORS.BLUE        | Color for the bar                                                    |
 | label         | object   | {}                 | `display` property needs to be provided for label                    |
 | style         | object   | `{isHashed: true}` | Styling for `bar`                                                    |
@@ -268,9 +268,9 @@ An activity can be styled as follows:
 
 If clickPassThrough.events is provided, onClick parameter would be required for any non-pass through operations.
 
-| Property Name | Expected | Default | Description                                                     |
-| ------------- | -------- | ------- | --------------------------------------------------------------- |
-| onClick       | Function | null    | Any event that can be performed when clicking on the data point |
+| Property Name | Expected | Default   | Description                                                     |
+| ------------- | -------- | --------- | --------------------------------------------------------------- |
+| onClick       | Function | undefined | Any event that can be performed when clicking on the data point |
 
 ### Actions
 
@@ -285,9 +285,9 @@ If clickPassThrough.events is provided, onClick parameter would be required for 
 
 If clickPassThrough.actions is provided, onClick parameter would be required for any non-pass through operations.
 
-| Property Name | Expected | Default | Description                                                      |
-| ------------- | -------- | ------- | ---------------------------------------------------------------- |
-| onClick       | Function | null    | Any action that can be performed when clicking on the data point |
+| Property Name | Expected | Default   | Description                                                      |
+| ------------- | -------- | --------- | ---------------------------------------------------------------- |
+| onClick       | Function | undefined | Any action that can be performed when clicking on the data point |
 
 ### Action Legend
 
@@ -325,7 +325,7 @@ Here is a list of how layering will be followed inside `Gantt`. Layering here fo
 -   If ganttContent's `loadAtIndex` is equal to trackLength or exceeds trackLength, we insert at the end.
 -   If ganttContent's `loadAtIndex` is in between 0 and trackLength, we insert in between.
 
-### Structure
+## Structure
 
 ```javascript
 var input = {

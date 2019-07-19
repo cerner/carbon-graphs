@@ -4,6 +4,7 @@ import Gantt from "../../../../main/js/controls/Gantt";
 import Graph from "../../../../main/js/controls/Graph";
 import Line from "../../../../main/js/controls/Line";
 import PairedResult from "../../../../main/js/controls/PairedResult";
+import Pie from "../../../../main/js/controls/Pie";
 import Timeline from "../../../../main/js/controls/Timeline";
 import Shape from "../../../../main/js/core/Shape/Shape";
 import { SHAPES } from "../../../../main/js/helpers/constants";
@@ -11,6 +12,7 @@ import {
     ganttInput,
     LIBRARY_LIST,
     nativeInput,
+    pieInput,
     timelineInput,
     TOOLS_LIST
 } from "./helpers";
@@ -117,5 +119,10 @@ describe("Carbon", () => {
         const bar = Carbon.api.bar(data);
         expect(Carbon.api.bar).toEqual(jasmine.any(Function));
         expect(bar instanceof Bar).toBeTruthy();
+    });
+    it("registers Pie", () => {
+        const pie = Carbon.api.pie(pieInput);
+        expect(Carbon.api.line).toEqual(jasmine.any(Function));
+        expect(pie instanceof Pie).toBeTruthy();
     });
 });

@@ -57,7 +57,7 @@ clickPassThrough = {
 };
 ```
 
-### Structure
+## Structure
 
 ```json
 

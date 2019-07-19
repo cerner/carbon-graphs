@@ -5,7 +5,7 @@ export const createElementLegendBindTo = (id) => {
     // Prepare legend container
     const legendContainer = document.createElement("div");
     const graphContainer = document.createElement("div");
-    legendContainer.setAttribute("id", "lineLegendContainer");
+    legendContainer.setAttribute("id", "legendContainer");
     legendContainer.setAttribute("class", "legend-bindto-container");
     //Prepare graph container
     graphContainer.setAttribute("id", "graphContainer");

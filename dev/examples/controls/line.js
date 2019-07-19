@@ -349,7 +349,7 @@ export const renderLineLegendTo = (id) => {
     const data = utils.deepClone(
         getDemoData(`#graphContainer`, "LINE_TIMESERIES")
     );
-    data.bindLegendTo = "#lineLegendContainer";
+    data.bindLegendTo = "#legendContainer";
     const lineTime = Carbon.api.graph(data);
     lineTime.loadContent(
         Carbon.api.line(getDemoData(`#${id}`, "LINE_TIMESERIES").data[0])

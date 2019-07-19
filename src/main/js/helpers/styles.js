@@ -115,5 +115,15 @@ export default {
     axisInfoRowItem: "carbon-axis-info-row-item",
     axisInfoRowIcon: "carbon-axis-info-row-icon",
     axisInfoRowDisplay: "carbon-axis-info-row-item-display",
-    axisInfoRowSecondaryDisplay: "carbon-axis-info-row-item-sec-display"
+    axisInfoRowSecondaryDisplay: "carbon-axis-info-row-item-sec-display",
+    /**
+     * Pie
+     */
+    pieChartCanvas: "carbon-pie-chart-canvas",
+    pieChartContent: "carbon-pie-chart-content",
+    pieContentGroup: "carbon-data-pie-group",
+    pieContentSlice: "carbon-data-pie-slice",
+    pieLegendItem: "carbon-pie-legend-item",
+    pieLegendItemIcon: "carbon-pie-legend-item-icon",
+    pieLegendItemSliceHover: "carbon-pie-legend-item-slice-hover"
 };
