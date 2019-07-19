@@ -157,7 +157,7 @@
     "clean": "rimraf dist lib",
     "dev": "node ./build/webpack/dev-server.js",
     "docs": "node_modules/.bin/jsdoc -c jsdoc.json",
-    "lint": "npm run lint:source && npm run lint:styles",
+    "lint": "npm run lint:source && npm run lint:styles && npm run docs",
     "lint:fix": "eslint src --color --fix",
     "lint:source": "eslint src dev --color --max-warnings 0",
     "lint:styles": "stylelint src/main/less/**/*.less",

@@ -11,6 +11,7 @@ import { default as br } from "./pt-BR";
 
 /**
  * Tick format is null for default d3 tick formatting
+ *
  * @private
  * @type {null}
  */
@@ -18,23 +19,25 @@ export const DEFAULT_TICK_FORMAT = null;
 /**
  * `en_US` default locale.
  * Axes revert to this locale if none is provided
+ *
  * @private
- * @type {Object}
+ * @type {object}
  */
 export const DEFAULT_LOCALE = us;
 /**
  * Locale objects serving as a default set. Consumer can provide a set of properties that
  * axes ticks will honor when the locale is set.
+ *
  * @public
- * @property {Object} de_DE Carbon locale DE
- * @property {Object} en_AU Carbon locale AU
- * @property {Object} en_CA Carbon locale CA
- * @property {Object} en_GB Carbon locale GB
- * @property {Object} en_US Carbon locale default
- * @property {Object} es_ES Carbon locale ES
- * @property {Object} fr_FR Carbon locale FR
- * @property {Object} pt_BR Carbon locale BR
- * @property {Object} ja_JP Carbon locale JP
+ * @property {object} de_DE Carbon locale DE
+ * @property {object} en_AU Carbon locale AU
+ * @property {object} en_CA Carbon locale CA
+ * @property {object} en_GB Carbon locale GB
+ * @property {object} en_US Carbon locale default
+ * @property {object} es_ES Carbon locale ES
+ * @property {object} fr_FR Carbon locale FR
+ * @property {object} pt_BR Carbon locale BR
+ * @property {object} ja_JP Carbon locale JP
  * @type {{de_DE: *, en_AU: *, en_CA: *, en_GB: *, en_US: *, es_ES: *, fr_FR: *, pt_BR: *, ja_JP: *}}
  */
 const LOCALE = {

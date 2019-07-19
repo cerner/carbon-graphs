@@ -4,6 +4,7 @@
 export const TRANSITION_DELAY = 500;
 /**
  * Triggers an event on provided element
+ *
  * @private
  * @param {HTMLElement|Node|Window} element - DOM element
  * @param {string} eventName - event name
@@ -31,22 +32,25 @@ export const triggerEvent = (
 };
 /**
  * Wraps the provided function inside a setTimeout
+ *
  * @private
  * @param {Function} fn - function to call
- * @param {int} [time] - Timeout milliseconds
- * @returns {int} Timeout identifier
+ * @param {number} [time] - Timeout milliseconds
+ * @returns {number} Timeout identifier
  */
 export const delay = (fn, time = TRANSITION_DELAY) => setTimeout(fn, time);
 /**
  * Converts string number from HTML attributes to a number
+ *
  * @private
  * @param {string} s A string to convert into a number.
  * @param {number} [radix] A value between 2 and 36 that specifies the base of the number in numString.
- * @return {number} a number
+ * @returns {number} a number
  */
 export const toNumber = (s, radix) => (!radix ? Number(s) : parseInt(s, radix));
 /**
  * Loads custom matcher for Jasmine unit tests
+ *
  * @returns {undefined} returns nothing
  */
 export const loadCustomJasmineMatcher = () => {

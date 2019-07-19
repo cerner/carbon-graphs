@@ -34,16 +34,17 @@ import {
 } from "./helpers/helpers";
 
 /**
- * @typedef {Object} Graph
- * @typedef {Object} GraphConfig
+ * @typedef {object} Graph
+ * @typedef {object} GraphConfig
  */
 
 const BASE_CANVAS_WIDTH_PADDING = constants.BASE_CANVAS_WIDTH_PADDING;
 /**
  * Sets the canvas width
+ *
  * @private
  * @param {HTMLElement} container - d3 HTML element object which forms the chart container
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {undefined} - returns nothing
  */
 const setCanvasWidth = (container, config) => {
@@ -53,8 +54,9 @@ const setCanvasWidth = (container, config) => {
 /**
  * Sets the canvas width. Canvas rests within a container.
  * On resize, the canvas is subjected to resizing but its sibling: Legend isnt.
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {undefined} - returns nothing
  */
 const setCanvasHeight = (config) => {
@@ -67,8 +69,9 @@ const setCanvasHeight = (config) => {
 };
 /**
  * Checks if the min max range of the values have changed or otherwise
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {string} yAxis - y or y2
  * @returns {boolean} true if min-max range changed
  */
@@ -77,10 +80,11 @@ const isRangeModified = (config, yAxis = constants.Y_AXIS) =>
 /**
  * Data point sets can be loaded using this function.
  * Load function validates, clones and stores the input onto a config object.
+ *
  * @private
  * @throws {module:errors.THROW_MSG_NO_AXES_DATA_LOADED}
- * @param {Object} inputJSON - Input JSON provided by the consumer
- * @returns {Object} config object containing consumer data
+ * @param {object} inputJSON - Input JSON provided by the consumer
+ * @returns {object} config object containing consumer data
  */
 const loadInput = (inputJSON) =>
     new GraphConfig()
@@ -93,6 +97,7 @@ const loadInput = (inputJSON) =>
  *  Binds the chart id provided in the input JSON to graph container.
  *  Calculates the axes data ranges.
  *  Updates the axes domains.
+ *
  * @private
  * @param {Graph} control - Graph instance
  * @returns {Graph} Graph instance
@@ -106,6 +111,7 @@ const beforeInit = (control) => {
 
 /**
  * Initializes the necessary Graph constructor objects
+ *
  * @private
  * @param {Graph} control - Graph instance
  * @returns {Graph} Graph instance
@@ -144,6 +150,7 @@ const initConfig = (control) => {
  *  Calculates Axes width and height
  *  Calculates Axes label width and height, positioning
  *  Creates and sets the d3 scale for the Graph
+ *
  * @private
  * @param {Graph} control - Graph instance
  * @returns {Graph} Graph instance
@@ -173,12 +180,13 @@ const init = (control) => {
  *  * Init
  *  * Render
  *  * AfterInit
+ *
  * @module Graph
  * @class Graph
  */
 class Graph extends Construct {
     /**
-     * @constructor
+     * @class
      * @param {GraphConfig} input - Input JSON instance created using GraphConfig
      */
     constructor(input) {
@@ -190,6 +198,7 @@ class Graph extends Construct {
     /**
      * Draw function that is called by the parent control. This draws the Axes, grid, legend and
      * labels for the chart construct.
+     *
      * @description Since we dont have the concept of z-index in visualization,
      * the order of rendering should be following:
      *  * SVG container
@@ -201,7 +210,7 @@ class Graph extends Construct {
      *  * Legend
      *  * Reference line when Y Axis shows/pads negative values
      *  * Data [In our case we have load and unload]
-     * @param {Object} input - Input JSON
+     * @param {object} input - Input JSON
      * @returns {d3.selection} d3 selection node of svg.
      */
     generate(input) {
@@ -261,6 +270,7 @@ class Graph extends Construct {
      *  Axes
      *  Grid
      *  Labels
+     *
      *  @returns {Graph} - Graph instance
      */
     resize() {
@@ -275,7 +285,8 @@ class Graph extends Construct {
      * Loads the content onto the graph.
      * The content serves as a 1to1 relationship. For rendering
      * multiple data sets respective number of content needs to be provided.
-     * @param {Object} content - Graph content
+     *
+     * @param {object} content - Graph content
      * @returns {Graph} - Graph instance
      */
     loadContent(content) {
@@ -307,7 +318,8 @@ class Graph extends Construct {
      * Unloads the content from the graph.
      * The content serves as a 1to1 relationship. For rendering
      * multiple data sets respective number of content needs to be provided.
-     * @param {Object} content - Graph content to be removed
+     *
+     * @param {object} content - Graph content to be removed
      * @returns {Graph} - Graph instance
      */
     unloadContent(content) {
@@ -324,6 +336,7 @@ class Graph extends Construct {
 
     /**
      * Destroys the graph: Container and canvas.
+     *
      * @returns {Graph} - Graph instance
      */
     destroy() {

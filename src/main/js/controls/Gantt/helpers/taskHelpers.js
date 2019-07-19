@@ -25,8 +25,9 @@ import {
 
 /**
  * Toggles the selection of a task, executes on click of a data point.
+ *
  * @private
- * @param {Object} target - DOM element of the task clicked
+ * @param {object} target - DOM element of the task clicked
  * @returns {Array} d3 html element of the task
  */
 const toggleTaskSelection = (target) => {
@@ -50,10 +51,11 @@ const toggleTaskSelection = (target) => {
  *      value [x and y data point values]
  *      Selected data point target [d3 target]
  *  On close of popup, call -> the provided callback
+ *
  * @private
- * @param {Object} value - data point object
+ * @param {object} value - data point object
  * @param {number} index - data point index for the set
- * @param {Object} target - DOM object of the clicked point
+ * @param {object} target - DOM object of the clicked point
  * @returns {undefined} - returns nothing
  */
 const taskClickActionHandler = (value, index, target) => {
@@ -84,11 +86,12 @@ const taskClickActionHandler = (value, index, target) => {
  * Processes the input for a task and converts to an object needed to render a bar
  * Duration is a function that is needed to compute Start or end. If both start and end
  * are present then the duration will be ignored.
+ *
  * @private
- * @param {Object} graphConfig - config object of Graph API
- * @param {Object} trackLabel -Track label
- * @param {Object} dataTarget - Data points object
- * @returns {Object} dataTarget - Updated data target object
+ * @param {object} graphConfig - config object of Graph API
+ * @param {object} trackLabel -Track label
+ * @param {object} dataTarget - Data points object
+ * @returns {object} dataTarget - Updated data target object
  */
 const processTask = (graphConfig, trackLabel, dataTarget) => {
     const _duration = dataTarget.duration
@@ -121,11 +124,12 @@ const processTask = (graphConfig, trackLabel, dataTarget) => {
 };
 /**
  * Generates arguments for creating task rectangles
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} taskData - Current task data
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} taskData - Current task data
  * @param {Selection} taskPath - d3 task bar selection element
- * @returns {Object} List of arguments - target element, x, y, width, height
+ * @returns {object} List of arguments - target element, x, y, width, height
  */
 const generatorArgs = (scale, taskData, taskPath) => ({
     path: d3.select(taskPath),
@@ -139,9 +143,10 @@ const generatorArgs = (scale, taskData, taskPath) => ({
 /**
  * Renders the selection indicator for a task bar. Its hidden by default, displays when
  * a task is clicked
+ *
  * @private
- * @param {Object} indicatorArgs - arguments needed for generating rect for selection indicator
- * @returns {Selection} d3 selection element with selection indicator rect
+ * @param {object} indicatorArgs - arguments needed for generating rect for selection indicator
+ * @returns {undefined} - returns nothing
  */
 const renderSelectionIndicator = (indicatorArgs) => {
     getRect(
@@ -160,9 +165,10 @@ const renderSelectionIndicator = (indicatorArgs) => {
  * Renders the percentage bar group for the task. This consists of
  * * Percentage bar
  * * Selection indicator for the percentage Bar
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} taskData - Current task data
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} taskData - Current task data
  * @param {number} index - Current task data index
  * @param {Selection} taskPath - d3 task bar selection element
  * @returns {undefined} - returns nothing
@@ -197,9 +203,10 @@ const renderPercentageBarGroup = (scale, taskData, index, taskPath) => {
  * Based on startDate and endDate, we either render a chunk or a normal bar.
  * If the startDate and endDate is same, render a Chunk with 5px width
  * else render a normal bar with width based on start and end parameters provided.
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} taskData - Current task data
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} taskData - Current task data
  * @param {number} index - Current task data index
  * @param {Selection} taskPath - d3 task bar selection element
  * @returns {undefined} - returns nothing
@@ -226,10 +233,11 @@ const renderTaskGroup = (scale, taskData, index, taskPath) => {
 
 /**
  * Based on startDate and endDate, we render a hashed bar.
+ *
  * @private
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} data - Current activity data
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} data - Current activity data
  * @param {number} index - Current task data index
  * @param {Selection} path - d3 activity bar selection element
  * @returns {undefined} - returns nothing
@@ -258,12 +266,13 @@ const renderHashedTaskGroup = (canvasSVG, scale, data, index, path) => {
 /**
  * Renders the tasks for a track. Each task is created based on start and end datetime.
  * Values needs to be in ISO8601 datetime format, along with the unique key for each task.
+ *
  * @private
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - Graph config object derived from input JSON
- * @param {Object} trackLabel - Track label
- * @param {Object} taskGroupPath - Container for all the tasks
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {object} trackLabel - Track label
+ * @param {object} taskGroupPath - Container for all the tasks
  * @param {Array} tasks - Tasks list
  * @returns {undefined} - returns nothing
  */
@@ -306,10 +315,11 @@ const drawTasks = (
 
 /**
  * Creates an element container with data points from the input JSON property: tasks
+ *
  * @private
- * @param {Object} graphContext - Gantt instance
- * @param {Object} trackPathSVG - Track container element
- * @param {Object} trackLabel - Track label
+ * @param {object} graphContext - Gantt instance
+ * @param {object} trackPathSVG - Track container element
+ * @param {object} trackLabel - Track label
  * @param {Array} tasks - input JSON for creating tasks
  * @returns {undefined} - returns nothing
  */
@@ -337,9 +347,10 @@ const loadTasks = (graphContext, trackPathSVG, trackLabel, tasks) => {
 };
 /**
  * Selects the task group from the track and removes them
+ *
  * @private
- * @param {Object} graphContext - Gantt instance
- * @param {Object} trackPathSVG - Track container element
+ * @param {object} graphContext - Gantt instance
+ * @param {object} trackPathSVG - Track container element
  * @returns {Selection} - track container element
  */
 const unloadTasks = (graphContext, trackPathSVG) =>

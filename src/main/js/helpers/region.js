@@ -20,8 +20,9 @@ import utils from "./utils";
 /**
  * Validates the input object provided for the rendering
  * regions in graph
+ *
  * @private
- * @param {Object} region - Region to be shown within graph
+ * @param {object} region - Region to be shown within graph
  * @param {string} targetAxis - Axis for which region needs to be shown
  * @returns {undefined} - returns nothing
  */
@@ -55,10 +56,11 @@ const validateRegion = (region, targetAxis) => {
 };
 /**
  * Removes region from region group SVG in the graph
+ *
  * @private
- * @param {Object} regionGroupSVG - d3 svg object
- * @param {Object} dataTarget - Data points object
- * @returns {Object} - d3 svg object
+ * @param {object} regionGroupSVG - d3 svg object
+ * @param {object} dataTarget - Data points object
+ * @returns {object} - d3 svg object
  */
 const removeRegion = (regionGroupSVG, dataTarget) =>
     d3RemoveElement(
@@ -74,10 +76,11 @@ const removeRegion = (regionGroupSVG, dataTarget) =>
  * the grids. Hence we are going to render a group when graph is rendered and then
  * when the content is ready to be rendered, we will side-load the regions along with
  * their respective unique ids
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {Object} d3 svg path
+ * @returns {object} d3 svg path
  */
 const createRegionContainer = (config, canvasSVG) =>
     canvasSVG.append("g").classed(styles.regionGroup, true);
@@ -89,14 +92,15 @@ const createRegionContainer = (config, canvasSVG) =>
  * * If start is not provided - 0 to end
  * * If end is not provided - start to INFINITY (end of the graph)
  * Color can be provided to identify the range.
+ *
  * @private
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
- * @param {Object} regionGroupSVG - d3 object of region group svg
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
+ * @param {object} regionGroupSVG - d3 object of region group svg
  * @param {Array} regionList - List of regions to be shown within graph
  * @param {string} uniqueKey - unique id of the content loaded in graph
  * @param {string} targetAxis - Axis for which region needs to be shown
- * @returns {Object} d3 svg path
+ * @returns {undefined} - returns nothing
  */
 const createRegion = (
     scale,
@@ -130,16 +134,18 @@ const createRegion = (
 
 /**
  * Returns the region axis or "y" as default
+ *
  * @private
- * @param {Object} region - Region to be shown within graph
+ * @param {object} region - Region to be shown within graph
  * @returns {string} Region axis or "y" as default
  */
 const getRegionAxis = (region) => region.axis || constants.Y_AXIS;
 /**
  * Returns the function which returns Y Axis Vertical position for Range
+ *
  * @private
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
  * @returns {function(*=): number} Function which returns Y Axis Vertical position for Range
  */
 const getYAxisRangePosition = (scale, config) => (bounds) =>
@@ -151,11 +157,12 @@ const getYAxisRangePosition = (scale, config) => (bounds) =>
  * Returns the height for range based on Y Axes, start and end bounds
  * If start and end bounds arent provided then a "goal line" number is returned with
  * height worth of padding top
+ *
  * @private
- * @param {Object} regionPath - d3 object of region svg
- * @param {Object} bounds - Start and end values for region
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
+ * @param {object} regionPath - d3 object of region svg
+ * @param {object} bounds - Start and end values for region
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
  * @returns {number} Height of the region for Y axes
  */
 const getRegionHeight = (regionPath, bounds, scale, config) => {
@@ -175,11 +182,12 @@ const getRegionHeight = (regionPath, bounds, scale, config) => {
 /**
  * Translates region. Moves the "rect" according the new scale generated on-resize.
  * Width and height are also flexed accordingly.
+ *
  * @private
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
- * @param {Object} regionGroupSVG - d3 object of region group svg
- * @returns {Object} d3 svg path
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
+ * @param {object} regionGroupSVG - d3 object of region group svg
+ * @returns {object} d3 svg path
  */
 const translateRegion = (scale, config, regionGroupSVG) =>
     regionGroupSVG
@@ -194,6 +202,7 @@ const translateRegion = (scale, config, regionGroupSVG) =>
         });
 /**
  * Decides if regions needs to be hidden based on count of displayed targets in graph
+ *
  * @private
  * @param {Array} regionList - List of regions to be shown within graph
  * @param {Array} graphTargets - List of all the items in the Graph
@@ -203,6 +212,7 @@ const shouldHideAllRegions = (regionList, graphTargets) =>
     utils.notEmpty(regionList) && graphTargets.length > 1;
 /**
  * Checks if only 1 content item is present in the graph
+ *
  * @private
  * @param {Array} graphTargets - List of all the items in the Graph
  * @returns {boolean} true if displayed targets is equal to 1, false otherwise
@@ -210,19 +220,21 @@ const shouldHideAllRegions = (regionList, graphTargets) =>
 const isSingleTargetDisplayed = (graphTargets) => graphTargets.length === 1;
 /**
  * Hides all the regions within a graph
+ *
  * @private
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {Object} d3 svg path
+ * @returns {object} d3 svg path
  */
 const hideAllRegions = (canvasSVG) =>
     canvasSVG.selectAll(`.${styles.region}`).attr("aria-hidden", true);
 /**
  * Hides/shows the region given the region path and unique identifier of the region
+ *
  * @private
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {string} key - Data points set unique key
  * @param {boolean} shouldShow - true if enabled
- * @returns {Object} d3 svg path
+ * @returns {object} d3 svg path
  */
 const showHideRegion = (canvasSVG, key, shouldShow) =>
     canvasSVG
@@ -230,10 +242,11 @@ const showHideRegion = (canvasSVG, key, shouldShow) =>
         .attr("aria-hidden", !shouldShow);
 /**
  * Toggles region based on current display status for that region.
+ *
  * @private
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {string} key - Data points set unique key
- * @returns {Object} d3 svg path
+ * @returns {object} d3 svg path
  */
 const toggleRegion = (canvasSVG, key) =>
     canvasSVG
@@ -245,10 +258,11 @@ const toggleRegion = (canvasSVG, key) =>
  * Show/hide regions based on the following criteria:
  * * If more than 1 target is displayed -> Hide regions
  * * If only 1 target is displayed -> show the region using unique data set key
+ *
  * @private
  * @param {Array} shownTargets - Targets/data sets that are currently displayed in graph
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {Object} d3 svg path
+ * @returns {object} d3 svg path
  */
 const processRegions = (shownTargets, canvasSVG) =>
     isSingleTargetDisplayed(shownTargets)
@@ -256,6 +270,7 @@ const processRegions = (shownTargets, canvasSVG) =>
         : hideAllRegions(canvasSVG);
 /**
  * Handler for show/hide region(s) when hovered over a legend item
+ *
  * @private
  * @param {Array} shownTargets - Targets/data sets that are currently displayed in graph
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg

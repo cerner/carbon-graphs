@@ -15,11 +15,12 @@ import { getXAxisXPosition, getYAxisHeight, getYAxisYPosition } from "./axis";
  * When a new content is loaded, the height of the graph changes
  * since the height is consumer provided value. We would need to
  * translate the straight line based on the new height.
+ *
  * @private
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
  * @param {Array} canvasSVG - d3 object of canvas svg
- * @param {function} yAxisPositionHandler - call back to get y-axis position.Functions differ based on Constructs used
+ * @param {Function} yAxisPositionHandler - call back to get y-axis position.Functions differ based on Constructs used
  * @returns {undefined} - returns nothing
  */
 const translateDateline = (scale, config, canvasSVG, yAxisPositionHandler) => {
@@ -53,8 +54,9 @@ const translateDateline = (scale, config, canvasSVG, yAxisPositionHandler) => {
 };
 /**
  * Toggles the selection of a dateline indicator, executes on click of a data point.
+ *
  * @private
- * @param {Object} target - DOM element of the data point clicked
+ * @param {object} target - DOM element of the data point clicked
  * @returns {Array} d3 html element of the selected point
  */
 const toggleDataPointSelection = (target) => {
@@ -68,9 +70,10 @@ const toggleDataPointSelection = (target) => {
 /**
  * Handler for the dateline point on click. If the click property is present for the point
  * then the callback is executed other wise it is NOP.
+ *
  * @private
- * @param {Object} value - data point object
- * @param {Object} target - DOM object of the clicked point
+ * @param {object} value - data point object
+ * @param {object} target - DOM object of the clicked point
  * @returns {undefined} - returns nothing
  */
 const datelineClickHandler = (value, target) => {
@@ -91,12 +94,13 @@ const datelineClickHandler = (value, target) => {
  * Creates a dateline for graph. We are not adding
  * x1, x2, y1, y2 co-ordinates for the straight line since they will be adjusted when
  * content is loaded.
+ *
  * @description Dateline point is shown only when showDatelineIndicator is enabled
  * @private
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
  * @param {Array} canvasSVG - d3 object of canvas svg
- * @returns {Object} d3 svg path
+ * @returns {undefined} - returns nothing
  */
 const createDateline = (scale, config, canvasSVG) => {
     const datelineContent = canvasSVG
@@ -145,12 +149,13 @@ const createDateline = (scale, config, canvasSVG) => {
 /**
  * redraw a dateline for graph. To add the dateline content on top of the content
  * when content is loaded.
+ *
  * @description Redrawing the dateline to keep it on top of the content.
  * @private
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
  * @param {Array} canvasSVG - d3 object of canvas svg
- * @returns {Object} d3 svg path
+ * @returns {undefined} - returns nothing
  */
 const redrawDatelineContent = (scale, config, canvasSVG) => {
     if (!canvasSVG.select(`.${styles.datelineContent}`).empty()) {
@@ -164,13 +169,14 @@ const redrawDatelineContent = (scale, config, canvasSVG) => {
  *      color
  *      shape
  *      dateline
+ *
  * @private
- * @param {Object} dateline - JSON object with color, shape and date value.
+ * @param {object} dateline - JSON object with color, shape and date value.
  * @throws {module:errors.THROW_MSG_DATELINE_OBJECT_NOT_PROVIDED}
  * @throws {module:errors.THROW_MSG_DATELINE_COLOR_NOT_PROVIDED}
  * @throws {module:errors.THROW_MSG_DATELINE_NOT_PROVIDED}
  * @throws {module:errors.THROW_MSG_DATELINE_TYPE_NOT_VALID}
- * @returns {Config} instance object
+ * @returns {undefined} - returns nothing
  */
 const validateDateline = (dateline) => {
     if (utils.isEmpty(dateline)) {
@@ -189,6 +195,7 @@ const validateDateline = (dateline) => {
         throw new Error(errors.THROW_MSG_DATELINE_SHAPE_NOT_PROVIDED);
     }
 };
+
 export {
     validateDateline,
     createDateline,

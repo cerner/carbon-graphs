@@ -13,11 +13,12 @@ import { transformPoint } from "./translateHelpers";
  * Renders the action items for a track. The data points provided are of ISO8601 datetime format
  * They are dependent on a unique key which needs to match the legend id's provided when initializing
  * the gantt chart.
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - Graph config object derived from input JSON
- * @param {Object} ganttContentContainerPath - Container for gantt chart's contents (Tracks)
- * @param {Object} dataTarget - Data point values and their properties for each action item
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {object} ganttContentContainerPath - Container for gantt chart's contents (Tracks)
+ * @param {object} dataTarget - Data point values and their properties for each action item
  * @param {Function} drawDataPointsHandler - call back function to draw points with options.
  * @returns {undefined} - returns nothing
  */
@@ -51,13 +52,14 @@ export const drawDataPoints = (
 /**
  * Renders the circle svg element which shows up when clicked on the data point.
  * It is hidden by default and toggled visible onClick.
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - Graph config object derived from input JSON
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - Graph config object derived from input JSON
  * @param {SVGElement} path - svg circle element
- * @param {Object} dataPoint - data point properties such as shape, color and onClick callback function
+ * @param {object} dataPoint - data point properties such as shape, color and onClick callback function
  * @param {number} index - data point index
- * @returns {Object} - d3 selection object
+ * @returns {object} - d3 selection object
  */
 export const renderSelectionPath = (scale, config, path, dataPoint, index) =>
     path.append(() =>
@@ -90,10 +92,11 @@ export const renderSelectionPath = (scale, config, path, dataPoint, index) =>
  *      value [x and y data point values]
  *      Selected data point target [d3 target]
  *  On close of popup, call -> the provided callback
+ *
  * @private
- * @param {Object} value - data point object
+ * @param {object} value - data point object
  * @param {number} index - data point index for the set
- * @param {Object} target - DOM object of the clicked point
+ * @param {object} target - DOM object of the clicked point
  * @returns {undefined} - returns nothing
  */
 export const dataPointActionHandler = (value, index, target) => {
@@ -113,8 +116,9 @@ export const dataPointActionHandler = (value, index, target) => {
 
 /**
  * Toggles the selection of a data point, executes on click of a data point.
+ *
  * @private
- * @param {Object} target - DOM element of the data point clicked
+ * @param {object} target - DOM element of the data point clicked
  * @returns {Array} d3 html element of the selected point
  */
 const toggleDataPointSelection = (target) => {

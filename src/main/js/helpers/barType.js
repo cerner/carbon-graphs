@@ -3,12 +3,22 @@ import styles from "./styles";
 import utils from "./utils";
 
 /**
+ * @module barType
+ * @alias module:barType
+ */
+
+/**
+ * @typedef d3
+ */
+
+/**
  * Returns the appropriate bar based on the bar style settings.
  * For Bar, we apply the settings below in the
  * `rect` element style attribute.
+ *
  * @private
- * @param {Object} style - data associated to the task
- * @param {Object} dataTarget - input data object
+ * @param {object} style - data associated to the task
+ * @param {object} dataTarget - input data object
  * @returns {string} A style constant
  */
 const getBarStyle = (style = {}, dataTarget) => {
@@ -33,6 +43,7 @@ const getBarStyle = (style = {}, dataTarget) => {
 
 /**
  * Creates a SVG rect and appends to the d3 element provided
+ *
  * @private
  * @param {Selection} path - d3 selection path for the SVG group element
  * @param {number} x - Scaled x co-ordinate
@@ -50,6 +61,7 @@ const getRect = (path, x, y, width, height) =>
         .attr("height", height);
 /**
  * Creates a rect and appends it to the d3 selection element provided in the argument
+ *
  * @private
  * @param {Selection} path - d3 selection path for the SVG group element
  * @param {number} x - Scaled x co-ordinate
@@ -69,6 +81,7 @@ const getBar = (path, x, y, width, height, style) => {
 /**
  * Creates a rect and appends it to the d3 selection element provided in the argument.
  * A chunk is a bar with fixed width. Uses: DEFAULT_GANTT_TASK_CHUNK_WIDTH
+ *
  * @private
  * @param {Selection} path - d3 selection path for the SVG group element
  * @param {number} x - Scaled x co-ordinate
@@ -88,6 +101,7 @@ const getChunk = (path, x, y, width, height, style) => {
  * * Completion bar with width as much as the percentage provided
  * We render the Completion bar on top of the Full width bar to give an illusion of
  * a percentage bar. If percentage is 100 then the Completion bar will overlap the Full width bar
+ *
  * @private
  * @param {Selection} path - d3 selection path for the SVG group element
  * @param {number} x - Scaled x co-ordinate
@@ -112,6 +126,7 @@ const getPercentageBar = (path, x, y, width, height, percent, color) => {
 };
 /**
  * Creates a patterned bar with forward backslashes
+ *
  * @private
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Selection} defs - d3 selection path for defs element in the graph

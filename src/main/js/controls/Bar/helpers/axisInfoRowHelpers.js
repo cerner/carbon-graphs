@@ -19,15 +19,16 @@ import { barAttributesHelper } from "./creationHelpers";
 
 /**
  * Creates text labels based on input object provided. Text label can be one or many.
+ *
  * @private
- * @param {Object} ordinalScale - ordinal scale object
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
- * @param {Object} canvasSVG - d3 object of canvas group svg
+ * @param {object} ordinalScale - ordinal scale object
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
+ * @param {object} canvasSVG - d3 object of canvas group svg
  * @param {Array} textLabelList - List of text labels
  * @param {string} uniqueKey - unique id of the content loaded in graph
  * @param {number} index - data point index
- * @returns {Object} d3 svg path
+ * @returns {undefined} - returns nothing
  */
 const createAxisInfoRowLabel = (
     ordinalScale,
@@ -93,8 +94,9 @@ const createAxisInfoRowLabel = (
  * Handler for the text label on click.
  * If the callback is present, the selected text label is toggled and the element is passed as an argument to the
  * consumer in the callback, to execute once the popup is closed.
+ *
  * @private
- * @param {Object} value - data point object
+ * @param {object} value - data point object
  * @param {number} index - data point index for the set
  * @param {Array} canvasSVG - d3 object of canvas svg
  * @param {string} type - x-axis type
@@ -121,8 +123,9 @@ const axisInfoRowActionHandler = (value, index, canvasSVG, type, uniqueKey) => {
 
 /**
  * Toggles the selection of a text label, executes on click of a text label.
+ *
  * @private
- * @param {Object} value - data point object
+ * @param {object} value - data point object
  * @param {Array} canvasSVG - d3 object of canvas svg
  * @param {string} type - x-axis type
  * @param {string} uniqueKey - unique id of the content loaded in graph
@@ -140,8 +143,9 @@ const toggleDataPointSelection = (value, canvasSVG, type, uniqueKey, index) => {
 };
 /**
  * sets selection axis info row label's aria-selected attribute
+ *
  * @private
- * @param {Object} selectionPath - selection axis info row label svg path
+ * @param {object} selectionPath - selection axis info row label svg path
  * @param {boolean} isSelected - true if selected, false if not
  * @returns {undefined} - returns nothing
  */
@@ -150,9 +154,10 @@ const setOnSelectionAttributes = (selectionPath, isSelected) => {
 };
 /**
  * Adds the label strings to axis info row after truncation(if required).
+ *
  * @private
- * @param {Object} axisInfoRow - d3 object of axis info row group svg
- * @param {Object} config - config object derived from input JSON
+ * @param {object} axisInfoRow - d3 object of axis info row group svg
+ * @param {object} config - config object derived from input JSON
  * @param {Array} textLabelList - list of text labels
  * @param {string} uniqueKey - unique id of the content loaded in graph
  * @returns {undefined} - returns nothing
@@ -189,6 +194,7 @@ const addTextLabelString = (axisInfoRow, config, textLabelList, uniqueKey) => {
 
 /**
  * Truncates the label string to the character count provided, by default the label will not be truncated
+ *
  * @private
  * @param {string} label - axis info row label
  * @param {number} characterCount - Maximum character length before truncation
@@ -201,7 +207,8 @@ const getTextLabel = (label, characterCount) =>
 
 /**
  * X position for the text label
- * @param {Object} attributeHelper - contains methods for calculating x, y, height, width.
+ *
+ * @param {object} attributeHelper - contains methods for calculating x, y, height, width.
  * @param {Array} textLabelList - list of text labels
  * @param {number} index - data point index
  * @returns {number} X position for the text label
@@ -213,8 +220,9 @@ const getTextLabelsXPosition = (attributeHelper, textLabelList, index) =>
 
 /**
  * Y position for the text label
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {number} Y position for the text label
  */
 const getTextLabelsYPosition = (config) =>
@@ -224,9 +232,10 @@ const getTextLabelsYPosition = (config) =>
 
 /**
  * Adds svg element for each text label.
+ *
  * @private
- * @param {Object} axisInfoRow - d3 select object containing the text label
- * @param {Object} config - Graph config object derived from input JSON
+ * @param {object} axisInfoRow - d3 select object containing the text label
+ * @param {object} config - Graph config object derived from input JSON
  * @param {Array} textLabelList - list of text labels
  * @param {string} uniqueKey - unique id of the content loaded in graph
  * @returns {undefined} - returns nothing
@@ -250,10 +259,11 @@ const addTextLabelIcon = (axisInfoRow, config, textLabelList, uniqueKey) =>
 
 /**
  * CLear the axis info row labels currently rendered
+ *
  * @private
  * @param {d3.selection} axisInfoRowSVG - d3 selection node of axis info row svg
  * @param {string} key - identifier
- * @returns {Object} - d3 select object
+ * @returns {object} - d3 select object
  */
 const removeAxisInfoRowLabels = (axisInfoRowSVG, key) =>
     d3RemoveElement(

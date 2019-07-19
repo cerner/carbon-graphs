@@ -1,3 +1,5 @@
+"use strict";
+
 import constants from "../../../helpers/constants";
 import styles from "../../../helpers/styles";
 import {
@@ -8,14 +10,19 @@ import { barAttributesHelper } from "./creationHelpers";
 import { translateSelectBars } from "./selectionHelpers";
 
 /**
+ * @typedef d3
+ */
+
+/**
  * Transforms bars for a data point set in the Bar graph on resize
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} ordinalScale - bar x-axis ordinal scale
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} ordinalScale - bar x-axis ordinal scale
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @param {Object} dataTarget - Data points object
- * @param {Object} config - graph config object
- * @returns {Object} d3 select object
+ * @param {object} dataTarget - Data points object
+ * @param {object} config - graph config object
+ * @returns {object} d3 select object
  */
 const translateBarGraph = (
     scale,
@@ -38,14 +45,15 @@ const translateBarGraph = (
 
 /**
  * Translates text label in axis info row
+ *
  * @private
- * @param {Object} ordinalScale - bar x-axis ordinal scale
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - graph config object
+ * @param {object} ordinalScale - bar x-axis ordinal scale
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - graph config object
  * @param {Array} canvasSVG -d3 object of canvas svg
  * @param {Array} textLabelList - input axis info row JSON
- * @param {Object} dataTarget - Data points object
- * @returns {Object} d3 select object
+ * @param {object} dataTarget - Data points object
+ * @returns {object} d3 select object
  */
 const translateTextLabel = (
     ordinalScale,

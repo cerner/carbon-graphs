@@ -40,10 +40,11 @@ const DEFAULT_HEIGHT = constants.DEFAULT_HEIGHT;
 
 /**
  * Updates the height and width of the canvas on resize
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {Object} d3 svg path
+ * @returns {object} d3 svg path
  */
 const translateCanvas = (config, canvasSVG) =>
     canvasSVG
@@ -56,8 +57,9 @@ const translateCanvas = (config, canvasSVG) =>
         );
 /**
  * Checks if axis info row labels are present and updates the canvas height
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {number} - axis info row label height
  */
 const getAxisInfoRowLabelHeight = (config) =>
@@ -69,10 +71,11 @@ const getAxisInfoRowLabelHeight = (config) =>
  * Updates clipPath rectangle width and height on resize.
  * `clipPath` updates are necessary since the clip-path URL needs to get
  * the necessary parameters on resize so that data points are not cut off
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {Object} d3 svg path
+ * @returns {object} d3 svg path
  */
 const translateDefs = (config, canvasSVG) =>
     canvasSVG
@@ -89,10 +92,11 @@ const translateDefs = (config, canvasSVG) =>
  * X and Y Axis.
  * We decide using the ticks that are present in the Y Axis and have the grid lines for every tick except the bounds.
  * When we resize, the ticks change based on the container real estate and we add/remove the grids respectively.
+ *
  * @private
- * @param {Object} axis - Axis scaled according to input parameters
- * @param {Object} config - config object derived from input JSON
- * @returns {Object} d3 svg path
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {object} config - config object derived from input JSON
+ * @returns {object} d3 svg path
  */
 const translateHorizontalGrid = (axis, config) => {
     let yAxisGrid;
@@ -114,10 +118,11 @@ const translateHorizontalGrid = (axis, config) => {
  * X and Y Axis.
  * We decide using the ticks that are present in the X Axis and have the grid lines for every tick except the bounds.
  * When we resize, the ticks change based on the container real estate and we add/remove the grids respectively.
+ *
  * @private
- * @param {Object} axis - Axis scaled according to input parameters
- * @param {Object} config - config object derived from input JSON
- * @returns {Object} d3 svg path
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {object} config - config object derived from input JSON
+ * @returns {object} d3 svg path
  */
 const translateVerticalGrid = (axis, config) => {
     let xAxisGrid;
@@ -141,10 +146,11 @@ const translateVerticalGrid = (axis, config) => {
 };
 /**
  * Updates the horizontal and vertical grid sizes/positions on resize
+ *
  * @private
- * @param {Object} axis - Axis scaled according to input parameters
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
@@ -173,11 +179,12 @@ const translateGrid = (axis, scale, config, canvasSVG) => {
 
 /**
  * Function to translate the vertical-grid with a specific style and config.
+ *
  * @private
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @param {Object} axis - Axis scaled according to input parameters
+ * @param {object} axis - Axis scaled according to input parameters
  * @param {string} style - Style with which, grid needs to be created.
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {undefined} - returns nothing.
  */
 const translateVGridHandler = (canvasSVG, axis, style, config) => {
@@ -189,10 +196,11 @@ const translateVGridHandler = (canvasSVG, axis, style, config) => {
 };
 /**
  * Translates the rectangle which forms the container for graph content
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {Object} d3 svg path
+ * @returns {object} d3 svg path
  */
 const translateContentContainer = (config, canvasSVG) =>
     canvasSVG
@@ -207,8 +215,9 @@ const translateContentContainer = (config, canvasSVG) =>
         );
 /**
  * Updates the x, y, y2 axes label positions on resize
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
@@ -265,10 +274,11 @@ const translateLabel = (config, canvasSVG) => {
  * For X Axis no such processing is provided. This decision was made due to the resize happening
  * horizontally rather than vertical resize. To alleviate processing cost we depend on x axis's end points directly.
  * If the consumer needs to pad the X Axis then they can provide the range with sufficient padding.
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
- * @param {Object} [input] - array of target objects
- * @returns {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
+ * @param {object} [input] - array of target objects
+ * @returns {object} config - config object derived from input JSON
  */
 const updateAxesDomain = (config, input = {}) => {
     config.outlierStretchFactor = determineOutlierStretchFactor(config);
@@ -299,10 +309,11 @@ const updateAxesDomain = (config, input = {}) => {
 };
 /**
  * Added defs element for the canvas. This currently holds the clip paths for the entire chart.
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {Object} d3 svg path
+ * @returns {object} d3 svg path
  */
 const createDefs = (config, canvasSVG) =>
     canvasSVG
@@ -317,10 +328,11 @@ const createDefs = (config, canvasSVG) =>
 /**
  * Create the d3 grid - horizontal and vertical and append into the canvas.
  * Only performed if the flags for showHGrid and showVGrid are enabled
+ *
  * @private
- * @param {Object} axis - Axis scaled according to input parameters
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
@@ -348,11 +360,12 @@ const createGrid = (axis, scale, config, canvasSVG) => {
 
 /**
  * Function to create the vertical-grid with a specific style and config.
+ *
  * @private
- * @param {Object} gridSVG - d3 object of the grid
- * @param {Object} axis - Axis scaled according to input parameters
+ * @param {object} gridSVG - d3 object of the grid
+ * @param {object} axis - Axis scaled according to input parameters
  * @param {string} style - Style with which, grid needs to be created.
- * @param {Object} config - config required for translating vertical grid.
+ * @param {object} config - config required for translating vertical grid.
  * @returns {undefined} - Doesn't return anything.
  */
 const createVGridHandler = (gridSVG, axis, style, config) => {
@@ -365,11 +378,12 @@ const createVGridHandler = (gridSVG, axis, style, config) => {
  * Create the d3 Labels - X, Y and Y2 and append into the canvas.
  * Only if showLabel is enabled. X Axis is 0 deg rotated, Y Axis is rotated 90 deg
  * Y2 Axis is rotated -90 deg along its horizontal axis.
+ *
  * @private
  * @todo Label overflow formatting, adding ellipsis?
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @param {Object} control - Graph instance
+ * @param {object} control - Graph instance
  * @returns {undefined} - returns nothing
  */
 const createLabel = (config, canvasSVG, control) => {
@@ -433,10 +447,11 @@ const createLabel = (config, canvasSVG, control) => {
 };
 /**
  * Creates a container for graph content (evident when there are no boundary ticks)
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {Object} d3 svg path
+ * @returns {object} d3 svg path
  */
 const createContentContainer = (config, canvasSVG) =>
     canvasSVG
@@ -458,9 +473,10 @@ const createContentContainer = (config, canvasSVG) =>
  * i.e. Before, If you have domain 0 to 20 (input lower and upper bounds) and range 0 to 100 (Width in px).
  * When input 20 is provided then the scale returns the px positioning as 200, which would put the point outside the graph.
  * Instead we clamp it within the graph as an upper bound using clamp. Now, it will return 100px.
+ *
  * @private
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
  * @returns {undefined} - returns nothing
  */
 const scaleGraph = (scale, config) => {
@@ -503,8 +519,9 @@ const scaleGraph = (scale, config) => {
  *  The axes x and y co-ordinates
  *  The grid x and y co-ordinates
  *  The labels x and y co-ordinates
+ *
  *  @private
- *  @param {Object} control - Graph instance
+ *  @param {object} control - Graph instance
  *  @returns {undefined} - returns nothing
  */
 const translateGraph = (control) => {
@@ -531,10 +548,11 @@ const translateGraph = (control) => {
 /**
  * Pads the domain with some buffer that gets calculated based on input values.
  * Pad percentage is 5%
+ *
  * @private
- * @param {Object} domain - Lower and upper bounds for the axes. Currently only being performed for Y and Y2 axes
+ * @param {object} domain - Lower and upper bounds for the axes. Currently only being performed for Y and Y2 axes
  * @param {boolean} isPaddingNeeded - represents if axis needs padding
- * @returns {Object} - Bound adjusted (Padded) lower and upper bounds for the axes
+ * @returns {object} - Bound adjusted (Padded) lower and upper bounds for the axes
  */
 const padDomain = (domain, isPaddingNeeded = true) => {
     const lowerBound = domain.lowerLimit;
@@ -553,8 +571,9 @@ const padDomain = (domain, isPaddingNeeded = true) => {
  * outside the range of y and y2 axes upper and lower bounds. This is called an outlier stretch factor.
  * When default height is used then this stretch factor is applied and they wont be applicable when
  * an input of dimension.height is provided
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {number} dimension - number in pixels for height
  * @returns {number} Height for the axes
  */
@@ -572,16 +591,18 @@ const determineHeight = (config, dimension) => {
 /**
  * Returns the shape property from the data point.
  * If the shape is not provided then the default shape is Circle.
+ *
  * @private
- * @param {Object} dataPoint - Data point containing x, y co-ordinate points, color and shape.
+ * @param {object} dataPoint - Data point containing x, y co-ordinate points, color and shape.
  * @returns {string} provided shape or a circle.
  */
 const getShapeForTarget = (dataPoint) => dataPoint.shape || SHAPES.CIRCLE;
 /**
  * Returns the color property from the data point.
  * If the shape is not provided then the default color is #1C1F21 {black}.
+ *
  * @private
- * @param {Object} dataPoint - Data point containing x, y co-ordinate points, color and shape.
+ * @param {object} dataPoint - Data point containing x, y co-ordinate points, color and shape.
  * @returns {string} provided shape or a circle.
  */
 const getColorForTarget = (dataPoint) =>
@@ -591,8 +612,9 @@ const getColorForTarget = (dataPoint) =>
  * requestAnimationFrame will be used if consumer doesn't need
  * to throttle the graph resize. Which will result in a smoother animation
  * If the throttle is needed then use `throttle` property in the input JSON
+ *
  * @private
- * @param {Object} control - Graph instance
+ * @param {object} control - Graph instance
  * @returns {undefined} - returns nothing
  */
 const attachEventHandlers = (control) => {
@@ -610,8 +632,9 @@ const attachEventHandlers = (control) => {
 };
 /**
  * Detach event handlers currently set for Line graph
+ *
  * @private
- * @param {Object} control - Graph instance
+ * @param {object} control - Graph instance
  * @returns {undefined} - returns nothing
  */
 const detachEventHandlers = (control) => {
@@ -619,8 +642,9 @@ const detachEventHandlers = (control) => {
 };
 /**
  * Removes the element with provided selector using d3
+ *
  * @private
- * @param {Selection|Object} el - d3 selection element
+ * @param {Selection|object} el - d3 selection element
  * @param {string} selector - attribute to query the element, typically a class or id
  * @param {boolean} [isBatchSelect] - enables `selectAll` rather than default `select`
  * @returns {undefined} - returns nothing
@@ -639,9 +663,10 @@ const d3RemoveElement = (el, selector, isBatchSelect = false) => {
  * This toggles padding for y and y2 axis based on loaded content.
  * Checks if axisPadding is set to true or false inside input config.
  * If set to false, padding is turned off for that yAxis
+ *
  * @private
- * @param {Object} axisPadding - object representing padding values for y and y2
- * @param {Object} config - input content's config object
+ * @param {object} axisPadding - object representing padding values for y and y2
+ * @param {object} config - input content's config object
  * @returns {undefined} - returns nothing
  */
 const setAxisPadding = (axisPadding, { config }) => {

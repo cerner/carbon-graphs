@@ -1,5 +1,5 @@
 /**
- * @fileOverview
+ * @file
  * Error constants dictionary.
  * @module errors
  * @alias module:errors

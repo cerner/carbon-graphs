@@ -22,13 +22,18 @@ import {
 import { transformPoint } from "./translateHelpers";
 
 /**
+ * @typedef Gantt
+ */
+
+/**
  * Processes the input JSON and adds the shapes, colors, labels etc. to each data points so that we
  * can use them when rendering the data point.
+ *
  * @private
- * @param {Object} graphConfig - config object of Graph API
- * @param {Object} trackLabel -Track label
- * @param {Object} dataTarget - Data points object
- * @returns {Object} dataTarget - Updated data target object
+ * @param {object} graphConfig - config object of Graph API
+ * @param {object} trackLabel -Track label
+ * @param {object} dataTarget - Data points object
+ * @returns {object} dataTarget - Updated data target object
  */
 export const processActionItems = (graphConfig, trackLabel, dataTarget) => {
     const checkX = (x) => {
@@ -64,9 +69,10 @@ export const processActionItems = (graphConfig, trackLabel, dataTarget) => {
 /**
  * Updates the array parameter, with the key. If the key is present then
  * it removed, else added to the array.
+ *
  * @private
  * @param {Array} shownTargets - List of targets shown in the graph
- * @param {Object} key - unique data set key
+ * @param {object} key - unique data set key
  * @returns {Array} modified shownTarget array
  */
 const updateShownTarget = (shownTargets, key) => {
@@ -80,11 +86,12 @@ const updateShownTarget = (shownTargets, key) => {
 };
 /**
  * Click handler for legend item. Removes the action items from graph when clicked and calls redraw
+ *
  * @private
- * @param {Object} graphContext - Graph instance
- * @param {Object} config - Graph config object derived from input JSON
+ * @param {object} graphContext - Graph instance
+ * @param {object} config - Graph config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {function} - returns callback function that handles click action on legend item
+ * @returns {Function} - returns callback function that handles click action on legend item
  */
 export const clickHandler = (graphContext, config, canvasSVG) => (
     element,
@@ -101,10 +108,11 @@ export const clickHandler = (graphContext, config, canvasSVG) => (
 /**
  * Hover handler for legend item. Blurs the rest of the targets in Graph
  * if present.
+ *
  * @private
  * @param {Array} graphTargets - List of all the items in the Graph
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {function} - returns callback function that handles hover action on legend item
+ * @returns {Function} - returns callback function that handles hover action on legend item
  */
 export const hoverHandler = (graphTargets, canvasSVG) => (item, state) => {
     const additionalHoverHandler = (
@@ -123,9 +131,10 @@ export const hoverHandler = (graphTargets, canvasSVG) => (item, state) => {
 };
 /**
  * Prepares click and hover handlers for action legend items.
+ *
  * @private
  * @param {Gantt} control - gantt chart instance
- * @param {Object} config - Graph config object derived from input JSON
+ * @param {object} config - Graph config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 html element of the canvas
  * @param {Array} shownTargets - graph targets config object
  * @returns {{clickHandler: Function, hoverHandler: Function}} - event handlers for legend items
@@ -143,11 +152,12 @@ export const prepareLegendEventHandlers = (
  * A callback that will be sent to Graph class so that when graph is
  * created the Graph API will execute this callback function and the legend
  * items are loaded.
+ *
  * @private
- * @param {Object} config - Graph config object derived from input JSON
- * @param {Object} eventHandlers - Object containing click and hover event handlers for legend item
- * @param {Object} dataTarget - Data points object
- * @param {Object} legendSVG - d3 element that will be need to render the legend
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {object} eventHandlers - Object containing click and hover event handlers for legend item
+ * @param {object} dataTarget - Data points object
+ * @param {object} legendSVG - d3 element that will be need to render the legend
  * items into.
  * @returns {undefined} - returns nothing
  */
@@ -168,11 +178,12 @@ export const renderLegendItems = (
 };
 /**
  * Validates the newly added content into the graph before rendering
+ *
  * @private
  * @throws {module:errors.THROW_MSG_NO_DATA_LOADED}
  * @throws {module:errors.THROW_MSG_UNIQUE_KEY_NOT_PROVIDED}
  * @throws {module:errors.THROW_MSG_NO_DATA_POINTS}
- * @param {Object} content - Newly added graph content
+ * @param {object} content - Newly added graph content
  * @returns {undefined} - returns nothing
  */
 const validateActionContent = (content) => {
@@ -189,9 +200,10 @@ const validateActionContent = (content) => {
 /**
  * Data point sets can be loaded using this function.
  * Load function validates, clones and stores the input onto a config object.
+ *
  * @private
- * @param {Object} inputJSON - Input JSON provided by the consumer
- * @returns {Object} config object containing consumer data
+ * @param {object} inputJSON - Input JSON provided by the consumer
+ * @returns {object} config object containing consumer data
  */
 const loadActionInput = (inputJSON) => {
     validateActionContent(inputJSON);
@@ -200,9 +212,10 @@ const loadActionInput = (inputJSON) => {
 /**
  * Checks if the data-set is currently shown in the graph or if the y data-point value is null
  * If they are, then true. False, otherwise
+ *
  * @private
- * @param {Object} shownTargets - graph targets config object
- * @param {Object} value - data point value object
+ * @param {object} shownTargets - graph targets config object
+ * @param {object} value - data point value object
  * @returns {boolean} true if data point needs to be hidden, false otherwise
  */
 const shouldHideDataPoints = (shownTargets, value) =>
@@ -211,13 +224,14 @@ const shouldHideDataPoints = (shownTargets, value) =>
  * Renders the data point in the provided path element.
  * It uses the consumer opted Shape, color of the data point.
  * Behavior when clicked on the data point etc.
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - Graph config object derived from input JSON
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - Graph config object derived from input JSON
  * @param {SVGElement} path - svg Path element
- * @param {Object} dataPoint - data point properties such as shape, color and onClick callback function
+ * @param {object} dataPoint - data point properties such as shape, color and onClick callback function
  * @param {number} index - data point index
- * @returns {Object} - d3 selection object
+ * @returns {object} - d3 selection object
  */
 const renderDataPointPath = (scale, config, path, dataPoint, index) =>
     path.append(() =>
@@ -249,11 +263,12 @@ const renderDataPointPath = (scale, config, path, dataPoint, index) =>
  * Draws the points with options opted in the input JSON by the consumer for each data set.
  *  Render the point with appropriate color, shape, x and y co-ordinates, label etc.
  *  On click content callback function is called.
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - Graph config object derived from input JSON
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - Graph config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 html element of the canvas
- * @returns {Object} - d3 append object
+ * @returns {object} - d3 append object
  */
 const drawActionDataPoints = (scale, config, canvasSVG) =>
     canvasSVG
@@ -266,11 +281,12 @@ const drawActionDataPoints = (scale, config, canvasSVG) =>
         });
 /**
  * Creates an element container with data points from the input JSON property: action
+ *
  * @private
- * @param {Object} graphContext - Gantt instance
- * @param {Object} trackPathSVG - Track container element
- * @param {Object} trackLabel - Track label
- * @param {Object} actions - input JSON for creating an action
+ * @param {object} graphContext - Gantt instance
+ * @param {object} trackPathSVG - Track container element
+ * @param {object} trackLabel - Track label
+ * @param {object} actions - input JSON for creating an action
  * @returns {undefined} - returns nothing
  */
 export const loadActions = (graphContext, trackPathSVG, trackLabel, actions) =>
@@ -289,9 +305,10 @@ export const loadActions = (graphContext, trackPathSVG, trackLabel, actions) =>
     });
 /**
  * Selects all the data point groups from the track and removes them
+ *
  * @private
- * @param {Object} graphContext - Gantt instance
- * @param {Object} trackPathSVG - Track container element
+ * @param {object} graphContext - Gantt instance
+ * @param {object} trackPathSVG - Track container element
  * @returns {Selection} - track container element
  */
 export const unloadActions = (graphContext, trackPathSVG) =>

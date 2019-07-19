@@ -29,10 +29,15 @@ import {
 } from "../../Graph/helpers/helpers";
 import { transformPoint } from "./translateHelpers";
 
+/**
+ * @typedef TimelineContent
+ */
+
 const DEFAULT_HEIGHT = constants.TIMELINE_HEIGHT;
 
 /**
  * Calculates the height for graph
+ *
  * @private
  * @param {object} config - config object derived from input JSON
  * @returns {number} Height for the axes
@@ -42,8 +47,9 @@ const determineHeight = (config) =>
 /**
  * Calculates axes label sizes, specifically:
  *  X Axis Label: Height
+ *
  *  @private
- *  @param {Object} config - config object derived from input JSON
+ *  @param {object} config - config object derived from input JSON
  *  @returns {undefined} - returns nothing
  */
 const calculateAxesLabelSize = (config) => {
@@ -60,8 +66,9 @@ const calculateAxesLabelSize = (config) => {
  *  X Axis: Height
  *  Padding is provided enough to accommodate around 15 characters.
  *  Beyond which we would need to apply truncation (ellipsis)
+ *
  *  @private
- *  @param {Object} config - config object derived from input JSON
+ *  @param {object} config - config object derived from input JSON
  *  @returns {undefined} - returns nothing
  */
 const calculateAxesSize = (config) => {
@@ -70,6 +77,7 @@ const calculateAxesSize = (config) => {
 };
 /**
  * X Axis's starting position within the canvas
+ *
  * @private
  * @param {object} config - config object derived from input JSON
  * @returns {number} Position for the axis
@@ -77,6 +85,7 @@ const calculateAxesSize = (config) => {
 const getXAxisXPosition = (config) => config.padding.left;
 /**
  * X Axis's position vertically relative to the canvas
+ *
  * @private
  * @param {object} config - config object derived from input JSON
  * @returns {number} Position for the axis
@@ -86,24 +95,27 @@ const getXAxisYPosition = (config) =>
 
 /**
  * X Axis's width that will hold equally spaced ticks
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {number} X Axis width
  */
 const getXAxisWidth = (config) =>
     config.canvasWidth - config.padding.left - getXAxisYPosition(config);
 /**
  * X Axis label's starting position below the graph
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {number} Position for the label
  */
 const getXAxisLabelXPosition = (config) =>
     getXAxisXPosition(config) + getXAxisWidth(config) / 2;
 /**
  * X Axis label's position vertically below the graph
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {number} Position for the label
  */
 const getXAxisLabelYPosition = (config) =>
@@ -112,11 +124,12 @@ const getXAxisLabelYPosition = (config) =>
     config.padding.bottom * 4;
 /**
  * Prepares X,Y and Y2 Axes according to their scale and available container width and height
+ *
  * @private
- * @param {Object} axis - Axis scaled according to input parameters
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
- * @returns {Object} - Scaled axes object
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
+ * @returns {object} - Scaled axes object
  */
 const getAxesScale = (axis, scale, config) => {
     axis.x = prepareXAxis(
@@ -144,9 +157,10 @@ const getAxesScale = (axis, scale, config) => {
  * i.e. Before, If you have domain 0 to 20 (input lower and upper bounds) and range 0 to 100 (Width in px).
  * When input 20 is provided then the scale returns the px positioning as 200, which would put the point outside the graph.
  * Instead we clamp it within the graph as an upper bound using clamp. Now, it will return 100px.
+ *
  * @private
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
  * @returns {undefined} - returns nothing
  */
 const scaleGraph = (scale, config) => {
@@ -161,10 +175,11 @@ const scaleGraph = (scale, config) => {
 };
 /**
  * Added defs element for the canvas. This currently holds the clip paths for the entire chart.
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {d3.Selection} canvasSVG - d3 selection node of canvas svg
- * @returns {Object} d3 svg path
+ * @returns {object} d3 svg path
  */
 const createDefs = (config, canvasSVG) =>
     canvasSVG
@@ -178,10 +193,11 @@ const createDefs = (config, canvasSVG) =>
         .attr("height", getYAxisHeight(config));
 /**
  * Create the d3 Axis - X and append into the canvas.
+ *
  * @private
- * @param {Object} axis - Axis scaled according to input parameters
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
@@ -203,9 +219,10 @@ const createAxes = (axis, scale, config, canvasSVG) => {
 /**
  * Create the d3 Labels - X and append into the canvas.
  * Only if showLabel is enabled. X Axis is 0 deg rotated
+ *
  * @private
  * @todo Label overflow formatting, adding ellipsis?
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
@@ -229,10 +246,11 @@ const createLabel = (config, canvasSVG) => {
 };
 /**
  * Creates a container for timeline graph
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {Object} d3 svg path
+ * @returns {object} d3 svg path
  */
 const createTimelineContent = (config, canvasSVG) =>
     canvasSVG
@@ -241,11 +259,12 @@ const createTimelineContent = (config, canvasSVG) =>
         .attr("clip-path", `url(#${config.clipPathId})`);
 /**
  * Creates a group for each timeline content loaded
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @param {Object} contentConfig - content config object
- * @returns {Object} d3 svg path
+ * @param {object} contentConfig - content config object
+ * @returns {object} d3 svg path
  */
 const createTimelineContentGroup = (config, canvasSVG, contentConfig) =>
     canvasSVG
@@ -256,8 +275,9 @@ const createTimelineContentGroup = (config, canvasSVG, contentConfig) =>
         .attr("aria-describedby", contentConfig.key);
 /**
  * Toggles the selection of a dateline indicator, executes on click of a data point.
+ *
  * @private
- * @param {Object} target - DOM element of the data point clicked
+ * @param {object} target - DOM element of the data point clicked
  * @returns {Array} d3 html element of the selected point
  */
 const toggleDataPointSelection = (target) => {
@@ -280,10 +300,11 @@ const toggleDataPointSelection = (target) => {
  *      value [x and y data point values]
  *      Selected data point target [d3 target]
  *  On close of popup, call -> the provided callback
+ *
  * @private
- * @param {Object} value - data point object
+ * @param {object} value - data point object
  * @param {number} index - data point index for the set
- * @param {Object} target - DOM object of the clicked point
+ * @param {object} target - DOM object of the clicked point
  * @returns {undefined} - returns nothing
  */
 const dataPointActionHandler = (value, index, target) => {
@@ -307,10 +328,10 @@ const dataPointActionHandler = (value, index, target) => {
  *  Render the point with appropriate color, shape, x and y co-ordinates, label etc.
  *
  * @private
- * @param {Object} pathProperties - holds SVG path element, data point object, data point index
- * @param {Object} dataPointProperties - holds object scale, config for aria-hidden attribute,
+ * @param {object} pathProperties - holds SVG path element, data point object, data point index
+ * @param {object} dataPointProperties - holds object scale, config for aria-hidden attribute,
  *    fill style, shape style, SVG class name
- * @param {Object} graphProperties - holds d3 scale for Graph, Graph config derived from input
+ * @param {object} graphProperties - holds d3 scale for Graph, Graph config derived from input
  *    JSON, and class attribute name
  * @returns {undefined} - returns nothing
  */
@@ -350,9 +371,10 @@ const renderPointPath = (
  * Draws the points with options opted in the input JSON by the consumer for each data set.
  *  Render the point with appropriate color, shape, x and y co-ordinates, label etc.
  *  On click content callback function is called.
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - Graph config object derived from input JSON
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - Graph config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 html element of the canvas
  * @returns {undefined} - returns nothing
  */
@@ -440,9 +462,10 @@ const createPoints = (scale, config, canvasSVG) => {
 /**
  * Checks the data-set is currently shown in the graph and if the y data-point value is null
  * If they are then true, false otherwise
+ *
  * @private
- * @param {Object} shownTargets - graph targets config object
- * @param {Object} value - data point value object
+ * @param {object} shownTargets - graph targets config object
+ * @param {object} value - data point value object
  * @returns {boolean} true if data point needs to be hidden, false otherwise
  */
 const shouldHideDataPoints = (shownTargets, value) =>
@@ -451,11 +474,12 @@ const shouldHideDataPoints = (shownTargets, value) =>
  * A callback that will be sent to Graph class so that when graph is
  * created the Graph API will execute this callback function and the legend
  * items are loaded.
+ *
  * @private
- * @param {Object} config - Graph config object derived from input JSON
- * @param {Object} eventHandlers - Object containing click and hover event handlers for legend item
- * @param {Object} dataTarget - Data points object
- * @param {Object} legendSVG - d3 element that will be need to render the legend
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {object} eventHandlers - Object containing click and hover event handlers for legend item
+ * @param {object} dataTarget - Data points object
+ * @param {object} legendSVG - d3 element that will be need to render the legend
  * items into.
  * @returns {undefined} - returns nothing
  */
@@ -474,8 +498,9 @@ const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
  *  * Order of execution
  *      * Redraws the content
  *      * Shows/hides the regions
+ *
  * @private
- * @param {Object} graphContext - Graph instance
+ * @param {object} graphContext - Graph instance
  * @param {TimelineContent} control - TimelineContent instance
  * @returns {function()} callback function handler for RAF
  */
@@ -484,12 +509,13 @@ const onAnimationHandler = (graphContext, control) => () => {
 };
 /**
  * Click handler for legend item. Removes the line from graph when clicked and calls redraw
+ *
  * @private
- * @param {Object} graphContext - Graph instance
+ * @param {object} graphContext - Graph instance
  * @param {TimelineContent} control - TimelineContent instance
- * @param {Object} config - Graph config object derived from input JSON
+ * @param {object} config - Graph config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {function} - returns callback function that handles click action on legend item
+ * @returns {Function} - returns callback function that handles click action on legend item
  */
 const clickHandler = (graphContext, control, config, canvasSVG) => (
     element,
@@ -513,10 +539,11 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
 /**
  * Hover handler for legend item. Highlights current line and blurs the rest of the targets in Graph
  * if present.
+ *
  * @private
  * @param {Array} graphTargets - List of all the items in the Graph
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {function} - returns callback function that handles hover action on legend item
+ * @returns {Function} - returns callback function that handles hover action on legend item
  */
 const hoverHandler = (graphTargets, canvasSVG) => (item, state) => {
     const additionalHoverHandler = (
@@ -536,10 +563,11 @@ const hoverHandler = (graphTargets, canvasSVG) => (item, state) => {
 };
 /**
  * CLear the graph data points and lines currently rendered
+ *
  * @private
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @param {Object} dataTarget - Data points object
- * @returns {Object} - d3 select object
+ * @param {object} dataTarget - Data points object
+ * @returns {object} - d3 select object
  */
 const clear = (canvasSVG, dataTarget) =>
     d3RemoveElement(canvasSVG, `g[aria-describedby="${dataTarget.key}"]`);

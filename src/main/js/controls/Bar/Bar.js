@@ -32,10 +32,11 @@ import {
 
 /**
  * Calculates the min and max values for Y Axis or Y2 Axis
+ *
  * @private
  * @param {Array} values - Datapoint values
  * @param {string} axis - y or y2
- * @returns {Object} - Contains min and max values for the data points
+ * @returns {object} - Contains min and max values for the data points
  */
 const calculateValuesRange = (values, axis = constants.Y_AXIS) => {
     const min = Math.min(...values.map((i) => i.y));
@@ -51,9 +52,10 @@ const calculateValuesRange = (values, axis = constants.Y_AXIS) => {
 /**
  * Data point sets can be loaded using this function.
  * Load function validates, clones and stores the input onto a config object.
+ *
  * @private
- * @param {Object} inputJSON - Input JSON provided by the consumer
- * @returns {Object} BarConfig config object containing consumer data
+ * @param {object} inputJSON - Input JSON provided by the consumer
+ * @returns {object} BarConfig config object containing consumer data
  */
 const loadInput = (inputJSON) =>
     new BarConfig()
@@ -63,6 +65,7 @@ const loadInput = (inputJSON) =>
         .getConfig();
 /**
  * Initializes the necessary Bar constructor objects
+ *
  * @private
  * @param {Bar} control - Bar instance
  * @returns {Bar} Bar instance
@@ -87,12 +90,13 @@ const initConfig = (control) => {
  *  * Generate
  *  * Unload
  *  * Destroy
+ *
  * @module Bar
  * @class Bar
  */
 class Bar extends GraphContent {
     /**
-     * @constructor
+     * @class
      * @param {BarConfig} input - Input JSON instance created using GraphConfig
      */
     constructor(input) {
@@ -111,7 +115,7 @@ class Bar extends GraphContent {
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     load(graph) {
         setGroupName(this.config, graph.content);
@@ -152,7 +156,7 @@ class Bar extends GraphContent {
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     unload(graph) {
         clear(graph.svg, this.dataTarget.key);
@@ -171,7 +175,7 @@ class Bar extends GraphContent {
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     resize(graph) {
         scaleOrdinalAxis(this.ordinalScale, graph.config, graph.content);
@@ -219,7 +223,7 @@ class Bar extends GraphContent {
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     redraw(graph) {
         clear(graph.svg, this.dataTarget.key);

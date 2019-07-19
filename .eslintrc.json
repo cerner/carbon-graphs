@@ -8,7 +8,10 @@
         "ENV": true
     },
     "extends": ["eslint:recommended", "plugin:jsdoc/recommended"],
-    "plugins": ["ideal"],
+    "plugins": [
+        "ideal",
+        "jsdoc"
+    ],
     "parserOptions": {
         "ecmaVersion": 6,
         "sourceType": "module"
@@ -39,7 +42,10 @@
         "array-callback-return": 2,
         "no-nested-ternary": 1,
         "no-unneeded-ternary": 1,
-        "arrow-parens": [1, "always"],
+        "arrow-parens": [
+            1,
+            "always"
+        ],
         "arrow-spacing": [
             2,
             {
@@ -48,14 +54,29 @@
             }
         ],
         "complexity": 0,
-        "rest-spread-spacing": [2, "never"],
+        "rest-spread-spacing": [
+            2,
+            "never"
+        ],
         "prefer-spread": 1,
-        "object-shorthand": [2, "always"],
+        "object-shorthand": [
+            2,
+            "always"
+        ],
         "arrow-body-style": 2,
-        "object-curly-spacing": [2, "always"],
+        "object-curly-spacing": [
+            2,
+            "always"
+        ],
         "space-before-blocks": 2,
-        "max-depth": [2, 3],
-        "max-nested-callbacks": [2, 3],
+        "max-depth": [
+            2,
+            3
+        ],
+        "max-nested-callbacks": [
+            2,
+            3
+        ],
         "max-statements-per-line": [
             2,
             {
@@ -73,32 +94,6 @@
         "no-duplicate-imports": 2,
         "no-useless-rename": 2,
         "no-useless-computed-key": 2,
-        "no-useless-return": 2,
-        "jsdoc/check-alignment": 1,
-        "jsdoc/check-examples": 1,
-        "jsdoc/check-indentation": 1,
-        "jsdoc/check-param-names": 1,
-        "jsdoc/check-syntax": 1,
-        "jsdoc/check-tag-names": 1,
-        "jsdoc/check-types": 1,
-        "jsdoc/implements-on-classes": 1,
-        "jsdoc/match-description": 1,
-        "jsdoc/newline-after-description": 1,
-        "jsdoc/no-types": 1,
-        "jsdoc/no-undefined-types": 1,
-        "jsdoc/require-description": 1,
-        "jsdoc/require-description-complete-sentence": 1,
-        "jsdoc/require-example": 1,
-        "jsdoc/require-hyphen-before-param-description": 1,
-        "jsdoc/require-jsdoc": 1,
-        "jsdoc/require-param": 1,
-        "jsdoc/require-param-description": 1,
-        "jsdoc/require-param-name": 1,
-        "jsdoc/require-param-type": 1,
-        "jsdoc/require-returns": 1,
-        "jsdoc/require-returns-check": 1,
-        "jsdoc/require-returns-description": 1,
-        "jsdoc/require-returns-type": 1,
-        "jsdoc/valid-types": 1
+        "no-useless-return": 2
     }
 }

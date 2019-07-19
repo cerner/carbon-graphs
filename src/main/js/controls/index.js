@@ -8,13 +8,13 @@ import Timeline from "./Timeline";
 
 /**
  * @module api
- * @property {Object} gantt Gantt based on Construct
- * @property {Object} graph Graph based on Construct
- * @property {Object} line Line graph based on Graph
- * @property {Object} bar Bar graph based on Graph
- * @property {Object} pairedResult Paired Result graph based on Graph
- * @property {Object} timeline Timeline graph based on Construct
- * @enum {Object}
+ * @property {object} gantt Gantt based on Construct
+ * @property {object} graph Graph based on Construct
+ * @property {object} line Line graph based on Graph
+ * @property {object} bar Bar graph based on Graph
+ * @property {object} pairedResult Paired Result graph based on Graph
+ * @property {object} timeline Timeline graph based on Construct
+ * @enum {object}
  */
 export default {
     gantt: (input) => new Gantt(input),

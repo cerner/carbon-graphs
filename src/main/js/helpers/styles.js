@@ -1,5 +1,5 @@
 /**
- * @fileOverview
+ * @file
  * CSS Styles constant dictionary.
  * @module styles
  * @alias module:styles

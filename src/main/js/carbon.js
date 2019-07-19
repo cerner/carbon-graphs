@@ -13,6 +13,7 @@ import LOCALE from "./locale";
 
 /**
  * Carbon tools for generating reusable items like different shapes
+ *
  * @enum {{Object: Function}}
  */
 const tools = {
@@ -21,12 +22,13 @@ const tools = {
 };
 /**
  * Carbon helper constants
+ *
  * @public
- * @property {Object} AXIS_TYPE Carbon API axis types constants
- * @property {Object} COLORS Carbon API color constants
- * @property {Object} LINE_TYPE Carbon API line type constants
- * @property {Object} LOCALE Carbon API locale objects
- * @property {Object} SHAPES Carbon API shape constants
+ * @property {object} AXIS_TYPE Carbon API axis types constants
+ * @property {object} COLORS Carbon API color constants
+ * @property {object} LINE_TYPE Carbon API line type constants
+ * @property {object} LOCALE Carbon API locale objects
+ * @property {object} SHAPES Carbon API shape constants
  */
 const helpers = {
     AXIS_TYPE,
@@ -38,13 +40,14 @@ const helpers = {
 };
 /**
  * Carbon
+ *
  * @public
  * @module Carbon
- * @property {Object} api Carbon API controls
- * @property {Object} tools Tools such as Shapes
- * @property {Object} helpers Helper constants such as colors and shapes
- * @property {Object} version Current version
- * @enum {Object}
+ * @property {object} api Carbon API controls
+ * @property {object} tools Tools such as Shapes
+ * @property {object} helpers Helper constants such as colors and shapes
+ * @property {object} version Current version
+ * @enum {object}
  */
 const Carbon = {
     api,

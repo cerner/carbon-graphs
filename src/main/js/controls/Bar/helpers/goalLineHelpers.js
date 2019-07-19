@@ -11,10 +11,11 @@ import utils from "../../../helpers/utils";
 
 /**
  * Calculates x-axis range for given region
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} ordinalScale - bar x-axis ordinal scale
- * @param {Object} region - region input
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} ordinalScale - bar x-axis ordinal scale
+ * @param {object} region - region input
  * @returns {number} - xRange of region
  */
 const getXRange = (scale, ordinalScale, region) => {
@@ -31,8 +32,9 @@ const getXRange = (scale, ordinalScale, region) => {
 };
 /**
  * Validates the input object provided for the region
+ *
  * @private
- * @param {Object} region - Region to be shown within graph
+ * @param {object} region - Region to be shown within graph
  * @param {string} targetAxis - Axis for which region needs to be shown
  * @param {Array} ticks - x axis ticks array
  * @param {string} xAxisType - Graph x axis type
@@ -53,11 +55,12 @@ const validateBarRegion = (region, targetAxis, ticks, xAxisType) => {
 /**
  * Process goal regions. Sets x-axis range and width of each region.
  * These values are used in createRegion method to create rect for each region
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} ordinalScale - bar x-axis ordinal scale
- * @param {Object} config - Graph config object derived from input JSON
- * @param {Object} dataTarget - Data input object
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} ordinalScale - bar x-axis ordinal scale
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {object} dataTarget - Data input object
  * @param {string} targetAxis - Axis for which region needs to be shown
  * @returns {undefined} - returns nothing
  */
@@ -94,13 +97,14 @@ const processGoalLines = (
  * If xRange is provided - starts from xRange point
  * If width is provided - applies that width to region
  * Color can be provided to identify the range.
+ *
  * @private
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
- * @param {Object} regionGroupSVG - d3 object of region group svg
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
+ * @param {object} regionGroupSVG - d3 object of region group svg
  * @param {Array} regionList - List of regions to be shown within graph
  * @param {string} uniqueKey - unique id of the content loaded in graph
- * @returns {Object} d3 svg path
+ * @returns {undefined} - returns nothing
  */
 const createRegion = (scale, config, regionGroupSVG, regionList, uniqueKey) => {
     const regionPath = regionGroupSVG.selectAll("g").data(regionList);
@@ -130,11 +134,12 @@ const createRegion = (scale, config, regionGroupSVG, regionList, uniqueKey) => {
 /**
  * Translates region. Moves the "rect" according the new scale generated on-resize.
  * Width and height are also flexed accordingly.
+ *
  * @private
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
- * @param {Object} regionGroupSVG - d3 object of region group svg
- * @returns {Object} d3 svg path
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
+ * @param {object} regionGroupSVG - d3 object of region group svg
+ * @returns {undefined} - returns nothing
  */
 const translateRegion = (scale, config, regionGroupSVG) => {
     regionGroupSVG
@@ -149,15 +154,17 @@ const translateRegion = (scale, config, regionGroupSVG) => {
 };
 /**
  * Returns the region axis or "y" as default
+ *
  * @private
- * @param {Object} region - Region to be shown within graph
+ * @param {object} region - Region to be shown within graph
  * @returns {string} Region axis or "y" as default
  */
 const getRegionAxis = (region) => region.axis || constants.Y_AXIS;
 /**
  * Returns the function which returns Y Axis Vertical position for Range
+ *
  * @private
- * @param {Object} scale - d3 scale taking into account the input parameters
+ * @param {object} scale - d3 scale taking into account the input parameters
  * @returns {function(*=): number} Function which returns Y Axis Vertical position for Range
  */
 const getYAxisRangePosition = (scale) => (bounds) =>
@@ -166,10 +173,11 @@ const getYAxisRangePosition = (scale) => (bounds) =>
  * Returns the height for range based on Y Axes, start and end bounds
  * If start and end bounds arent provided then a "goal line" number is returned with
  * height worth of padding top
+ *
  * @private
- * @param {Object} regionPath - d3 object of region svg
- * @param {Object} bounds - Start and end values for region
- * @param {Object} scale - d3 scale taking into account the input parameters
+ * @param {object} regionPath - d3 object of region svg
+ * @param {object} bounds - Start and end values for region
+ * @param {object} scale - d3 scale taking into account the input parameters
  * @param {object} config - config object derived from input JSON.
  * @returns {number} Height of the region for Y axes
  */

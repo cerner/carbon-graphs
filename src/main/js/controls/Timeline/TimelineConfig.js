@@ -10,10 +10,11 @@ import { DEFAULT_LOCALE } from "../../locale/index";
 /**
  * Processes the input from the JSON and updates the config object.
  * d3 domain and ranges are stored based on the upper and lower x limits.
+ *
  * @private
- * @param {Object} input - Input JSON provided by the consumer
- * @param {Object} config - config object used by the graph
- * @returns {Object} - returns configuration object constructed using Input JSON
+ * @param {object} input - Input JSON provided by the consumer
+ * @param {object} config - config object used by the graph
+ * @returns {object} - returns configuration object constructed using Input JSON
  */
 export const processInput = (input, config) => {
     const _axis = utils.deepClone(input.axis);
@@ -49,11 +50,12 @@ export const processInput = (input, config) => {
 
 /**
  * API to parse consumer input for Graph
+ *
  * @class TimelineConfig
  */
 class TimelineConfig extends BaseConfig {
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     constructor() {
         super();
@@ -62,14 +64,14 @@ class TimelineConfig extends BaseConfig {
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     getConfig() {
         return this.config;
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     setInput(inputJSON) {
         this.input = inputJSON;
@@ -82,6 +84,7 @@ class TimelineConfig extends BaseConfig {
      *      bindTo
      *      axis
      *      axis.x
+     *
      * @throws {module:errors.THROW_MSG_NO_BIND}
      * @throws {module:errors.THROW_MSG_NO_AXES_DATA_LOADED}
      * @throws {module:errors.THROW_MSG_NO_AXIS_INFO}
@@ -119,6 +122,7 @@ class TimelineConfig extends BaseConfig {
 
     /**
      * Clones the input JSON into the config object
+     *
      * @returns {TimelineConfig} instance object
      */
     clone() {

@@ -7,10 +7,11 @@ import styles from "../../../helpers/styles";
  * Updates clipPath rectangle width and height on resize.
  * `clipPath` updates are necessary since the clip-path URL needs to get
  * the necessary parameters on resize so that data points are not cut off
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {Object} d3 svg path
+ * @returns {object} d3 svg path
  */
 const translateDefs = (config, canvasSVG) =>
     canvasSVG
@@ -20,6 +21,7 @@ const translateDefs = (config, canvasSVG) =>
         .attr("width", config.canvasWidth);
 /**
  * Returns d3 data object for all the slices within pie chart content group
+ *
  * @private
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {Array} Array of objects containing data within each slice
@@ -29,6 +31,7 @@ const getAllPieContentData = (canvasSVG) =>
 /**
  * Clearing the slices that are already created from other contents,
  * Rewriting slices with updated percentages.
+ *
  * @private
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} returns nothing
@@ -42,6 +45,7 @@ const clearAllSliceContent = (canvasSVG) => {
 /**
  * A slice is created relative to the other slice, so query the DOM for other slices
  * Add data to the layout transformer within the pie
+ *
  * @private
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Function} layout - Pie layout transformer function
@@ -53,6 +57,7 @@ const updateAllSliceLayout = (canvasSVG, layout) =>
         .data(layout(getAllPieContentData(canvasSVG)));
 /**
  * Returns a percentage value given the start angle and end angle of a slice arc.
+ *
  * @private
  * @param {number} startAngle - Start angle of d3 arc
  * @param {number} endAngle - End angle of d3 arc
@@ -63,6 +68,7 @@ const getSlicePercentage = (startAngle, endAngle) =>
 
 /**
  * Translates all slices when a new content is added.
+ *
  * @private
  * @param {object} config - config object derived from input JSON
  * @param {d3.selection} contentSVG - d3 selection node of content group
@@ -90,8 +96,9 @@ const translateSlices = (config, contentSVG, layout, arc) => {
  * Translates graph based on the current positioning on resize. We
  * don't need to resize the entire graph, in our case we just need to transform:
  *  The defs height and width
+ *
  *  @private
- *  @param {Object} control - Graph instance
+ *  @param {object} control - Graph instance
  *  @returns {undefined} - returns nothing
  */
 const translatePieGraph = (control) => {

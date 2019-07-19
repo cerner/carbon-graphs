@@ -41,8 +41,9 @@ export const secondaryValuesJSON = [
 ];
 /**
  * Creates and returns an example input with custom axis values
- * @param {Object} axis - X axis data
- * @returns {Object} input JSON
+ *
+ * @param {object} axis - X axis data
+ * @returns {object} input JSON
  */
 export const getAxes = (axis = {}) => ({
     bindTo: "#testCarbonTimeline",
@@ -50,10 +51,11 @@ export const getAxes = (axis = {}) => ({
 });
 /**
  * Creates and returns an example input with data point values
+ *
  * @param {Array} values - x and y co-ordinate values
  * @param {boolean} isDefaultColor - if true, doesnt load the COLOR
  * @param {boolean} isDefaultShape - if true, doesnt load the SHAPE
- * @returns {Object} input JSON
+ * @returns {object} input JSON
  */
 export const getData = (values, isDefaultColor = true, isDefaultShape = true) =>
     utils.deepClone({
@@ -68,12 +70,14 @@ export const getData = (values, isDefaultColor = true, isDefaultShape = true) =>
     });
 /**
  * Returns the DOM element queried by Class
+ *
  * @param {string} cls - Class attribute name
  * @returns {HTMLElement} - DOM element
  */
 export const fetchElementByClass = (cls) => document.querySelector(`.${cls}`);
 /**
  * Returns all DOM elements queried by Class
+ *
  * @param {string} cls - Class attribute name
  * @returns {NodeList} - list of DOM elements
  */

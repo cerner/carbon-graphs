@@ -11,12 +11,13 @@ import {
 
 /**
  * Generates arguments for creating track rectangles
+ *
  * @private
- * @param {Object} config - config object derived from input JSON.
- * @param {Object} scale - d3 scale for Graph
+ * @param {object} config - config object derived from input JSON.
+ * @param {object} scale - d3 scale for Graph
  * @param {Selection} ganttSelectorGroupPath - d3 track bar selection element
- * @param {Object} trackConfig - config for the track
- * @returns {Object} List of arguments - target element, x, y, width, height
+ * @param {object} trackConfig - config for the track
+ * @returns {object} List of arguments - target element, x, y, width, height
  */
 export const generatorArgs = (
     config,
@@ -38,10 +39,11 @@ export const generatorArgs = (
 
 /**
  * Renders the selection indicator for a track bar.
+ *
  * @private
- * @param {Object} indicatorArgs - arguments needed for generating rect for selection indicator
- * @param {Object} trackConfig - config dervied from input track JSON.
- * @returns {void} - returns nothing.
+ * @param {object} indicatorArgs - arguments needed for generating rect for selection indicator
+ * @param {object} trackConfig - config dervied from input track JSON.
+ * @returns {undefined} - returns nothing
  */
 const renderSelectionIndicator = (indicatorArgs, trackConfig) => {
     getRect(
@@ -62,9 +64,10 @@ const renderSelectionIndicator = (indicatorArgs, trackConfig) => {
 
 /**
  * Toggles the selection of a track, executes on click of a track.
+ *
  * @private
- * @param {Object} target - DOM element of the track clicked
- * @param {String} key - track key
+ * @param {object} target - DOM element of the track clicked
+ * @param {string} key - track key
  * @returns {Array} d3 html element of the track.
  */
 const toggleTrackSelection = (target, key) => {
@@ -83,10 +86,11 @@ const toggleTrackSelection = (target, key) => {
  *      value [x and y data point values]
  *      Selected data point target [d3 target]
  *  On close of popup, call -> the provided callback
+ *
  * @private
- * @param {Object} path - DOM object of the  clicked track.
- * @param {Object} trackConfig - Config of the track derived from
- * @returns {void} - returns nothing.
+ * @param {object} path - DOM object of the  clicked track.
+ * @param {object} trackConfig - Config of the track derived from
+ * @returns {undefined} - returns nothing
  */
 const trackClickActionHandler = (path, trackConfig) => {
     if (utils.isEmpty(trackConfig.onClick)) {
@@ -107,11 +111,12 @@ const trackClickActionHandler = (path, trackConfig) => {
 };
 /**
  * Creates a container for gantt chart content
+ *
  * @private
- * @param {Object} graphContext - Gantt instance
- * @param {Object} trackPath - Track container element
- * @param {Object} trackConfig - track's config object
- * @returns {Object} d3 svg path
+ * @param {object} graphContext - Gantt instance
+ * @param {object} trackPath - Track container element
+ * @param {object} trackConfig - track's config object
+ * @returns {undefined} - returns nothing
  */
 export const loadGanttTrackSelector = (
     graphContext,
@@ -140,9 +145,10 @@ export const loadGanttTrackSelector = (
 
 /**
  * Selects the trackSelector group and removes them
+ *
  * @private
- * @param {Object} graphContext - Gantt instance
- * @param {Object} trackPath - Track container element
+ * @param {object} graphContext - Gantt instance
+ * @param {object} trackPath - Track container element
  * @returns {Selection} - track container element
  */
 export const unloadGanttTrackSelector = (graphContext, trackPath) =>

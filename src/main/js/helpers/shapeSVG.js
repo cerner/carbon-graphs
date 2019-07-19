@@ -2,10 +2,11 @@ import utils from "./utils";
 
 /**
  * Returns an object to create a svg circle for data point
+ *
  * @private
- * @param {Object} shape - SHAPE object
+ * @param {object} shape - SHAPE object
  * @param {number} scaleFactor - Scale factor for datapoint
- * @returns {Object} SVG Object
+ * @returns {object} SVG Object
  */
 export const getSVGObject = (shape, { posX, posY, scale }) => {
     const d3Shape = utils.deepClone(shape);

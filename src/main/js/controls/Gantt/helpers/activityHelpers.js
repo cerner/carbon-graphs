@@ -20,11 +20,12 @@ import {
  * Processes the input for a activity and converts to an object needed to render a bar
  * Duration is a function that is needed to compute Start or end. If both start and end
  * are present then the duration will be ignored.
+ *
  * @private
- * @param {Object} graphConfig - config object of Graph API
- * @param {Object} trackLabel -Track label
- * @param {Object} dataTarget - Data points object
- * @returns {Object} dataTarget - Updated data target object
+ * @param {object} graphConfig - config object of Graph API
+ * @param {object} trackLabel -Track label
+ * @param {object} dataTarget - Data points object
+ * @returns {object} dataTarget - Updated data target object
  */
 const processActivities = (graphConfig, trackLabel, dataTarget) => {
     const _duration = dataTarget.duration
@@ -56,11 +57,12 @@ const processActivities = (graphConfig, trackLabel, dataTarget) => {
 
 /**
  * Generates arguments for creating activity rectangles
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} data - Current activity data
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} data - Current activity data
  * @param {Selection} path - d3 activity bar selection element
- * @returns {Object} List of arguments - target element, x, y, width, height.
+ * @returns {object} List of arguments - target element, x, y, width, height.
  */
 const generatorArgs = (scale, data, path) => ({
     path: d3.select(path),
@@ -76,9 +78,10 @@ const generatorArgs = (scale, data, path) => ({
  * Based on startDate and endDate, we either render a chunk or a normal bar.
  * If the startDate and endDate is same, render a Chunk with 5px width
  * else render a normal bar with width based on start and end parameters provided.
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} data - Current activity data
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} data - Current activity data
  * @param {Selection} path - d3 activity bar selection element
  * @returns {undefined} - returns nothing
  */
@@ -98,10 +101,11 @@ const renderActivityGroup = (scale, data, path) => {
 
 /**
  * Based on startDate and endDate, we render a hashed bar.
+ *
  * @private
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} data - Current activity data
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} data - Current activity data
  * @param {Selection} path - d3 activity bar selection element
  * @returns {undefined} - returns nothing
  */
@@ -122,12 +126,13 @@ const renderHashedActivityGroup = (canvasSVG, scale, data, path) => {
 /**
  * Renders the activities for a track. Each activity is created based on start and end datetime.
  * Values needs to be in ISO8601 datetime format, along with the unique key for each activity.
+ *
  * @private
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - Graph config object derived from input JSON
- * @param {Object} trackLabel - Track label
- * @param {Object} activityGroupPath - Container for all the activities.
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {object} trackLabel - Track label
+ * @param {object} activityGroupPath - Container for all the activities.
  * @param {Array} activities - Activities list
  * @returns {undefined} - returns nothing
  */
@@ -166,10 +171,11 @@ const drawActivities = (
 
 /**
  * Creates an element container with data points from the input JSON property: tasks
+ *
  * @private
- * @param {Object} graphContext - Gantt instance
- * @param {Object} trackPathSVG - Track container element
- * @param {Object} trackLabel - Track label
+ * @param {object} graphContext - Gantt instance
+ * @param {object} trackPathSVG - Track container element
+ * @param {object} trackLabel - Track label
  * @param {Array} activities - input JSON for creating activities
  * @returns {undefined} - returns nothing
  */
@@ -198,6 +204,7 @@ const loadActivities = (graphContext, trackPathSVG, trackLabel, activities) => {
 
 /**
  * Creates a patterned bar with forward backslashes
+ *
  * @private
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Selection} defs - d3 selection path for defs element in the graph
@@ -252,6 +259,7 @@ const getActivityHashedBar = (
 
 /**
  * Creates a rect and appends it to the d3 selection element provided in the argument
+ *
  * @private
  * @param {Selection} path - d3 selection path for the SVG group element
  * @param {number} x - Scaled x co-ordinate
@@ -271,13 +279,14 @@ const getActivityBar = (path, x, y, width, height, style) => {
 /**
  * Creates a rect and appends it to the d3 selection element provided in the argument.
  * A chunk is a bar with fixed width. Uses: DEFAULT_GANTT_TASK_CHUNK_WIDTH
+ *
  * @private
  * @param {Selection} path - d3 selection path for the SVG group element
  * @param {number} x - Scaled x co-ordinate
  * @param {number} y - Scaled y co-ordinate
  * @param {number} width - width in scaled pixels
  * @param {number} height - fixed pixel height as a number
- * @param {Object} style - inline styling for the bar
+ * @param {object} style - inline styling for the bar
  * @returns {Selection} d3 selection path
  */
 const getActivityChunk = (path, x, y, width, height, style) => {
@@ -294,9 +303,10 @@ const getActivityChunk = (path, x, y, width, height, style) => {
 
 /**
  * Selects the activity group from the track and removes them
+ *
  * @private
- * @param {Object} graphContext - Gantt instance
- * @param {Object} trackPathSVG - Track container element
+ * @param {object} graphContext - Gantt instance
+ * @param {object} trackPathSVG - Track container element
  * @returns {Selection} - track container element
  */
 const unloadActivities = (graphContext, trackPathSVG) =>

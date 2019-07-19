@@ -27,8 +27,9 @@ import { translateDateline } from "../../../helpers/dateline";
 const TRACK_LABEL_TEXT_CLASS = `.${styles.axisYTrackLabel} .tick text`;
 /**
  * Returns the track label position in D3 scale's domain
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
+ * @param {object} scale - d3 scale for Graph
  * @param {string} yVal - Current track label
  * @returns {number} Track label index
  */
@@ -40,9 +41,10 @@ const getLabelIndexFromDomain = (scale, yVal) => scale.y.domain().indexOf(yVal);
  * When TrackLabel is not present in the domain
  * When TrackList is empty i.e. No content is loaded yet
  * When domain has more items than trackList. i.e. This is a result of using transition
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - config object derived from input JSON
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - config object derived from input JSON
  * @param {string} yVal - Current track label
  * @param {number} index - label index in domain
  * @returns {boolean} true if y co-ordinate transform translate is not needed, false otherwise
@@ -55,10 +57,11 @@ const isTrackLabelOutsideDomain = (scale, config, yVal, index) =>
  * Returns the Y co-ordinate translate value for Y axis transform based on its domain. Since the
  * Y Axis for gantt is a text and not conventional number system. We need to
  * Calculate the pixel region for that label and get the current d3 range value.
+ *
  * @private
  * @description Use this to move the contents to the center of the track
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - config object derived from input JSON
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - config object derived from input JSON
  * @param {string} yVal - Current track label
  * @returns {number} y co-ordinate transform translate
  */
@@ -74,17 +77,19 @@ const getTransformYCoordinate = (scale, config, yVal) => {
 };
 /**
  * Returns the X co-ordinate translate value for Y axis transform based on its scale
+ *
  * @private
- * @param {Object} [scale] - d3 scale for Graph
+ * @param {object} [scale] - d3 scale for Graph
  * @param {string} [xVal] - current x Axis date value
  * @returns {number} x co-ordinate transform translate
  */
 const getTransformXCoordinate = (scale, xVal) => (!scale ? 0 : scale.x(xVal));
 /**
  * Uses the scale to move track content to the correct track position and center it relative to the track
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - config object derived from input JSON
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - config object derived from input JSON
  * @param {string} yVal - Current track label
  * @returns {number} y co-ordinate transform translate
  */
@@ -96,9 +101,10 @@ const getTransformYCoordinateWithScale = (scale, config, yVal) => {
 /**
  * Returns the Transform string for a given d3 domain. This can be used to translate the
  * graph/track elements
+ *
  * @private
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
  * @returns {function(*=): string} Transform property of translate
  */
 const getTrackLabelTransformProperty = (scale, config) => (trackName) =>
@@ -111,10 +117,11 @@ const getTrackLabelTransformProperty = (scale, config) => (trackName) =>
  * Updates clipPath rectangle width and height on resize.
  * `clipPath` updates are necessary since the clip-path URL needs to get
  * the necessary parameters on resize so that data points are not cut off
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {Object} d3 svg path
+ * @returns {object} d3 svg path
  */
 const translateDefs = (config, canvasSVG) =>
     canvasSVG
@@ -124,10 +131,11 @@ const translateDefs = (config, canvasSVG) =>
         .attr("width", getXAxisWidth(config));
 /**
  * Updates the x, y and y2 (if enabled) positions on resize
+ *
  * @private
- * @param {Object} axis - Axis scaled according to input parameters
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
@@ -169,10 +177,11 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
  * X and Y Axis.
  * We decide using the ticks that are present in the X Axis and have the grid lines for every tick except the bounds.
  * When we resize, the ticks change based on the container real estate and we add/remove the grids respectively.
+ *
  * @private
- * @param {Object} axis - Axis scaled according to input parameters
- * @param {Object} config - config object derived from input JSON
- * @returns {Object} d3 svg path
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {object} config - config object derived from input JSON
+ * @returns {object} d3 svg path
  */
 const translateVerticalGrid = (axis, config) => {
     let xAxisGrid;
@@ -196,19 +205,21 @@ const translateVerticalGrid = (axis, config) => {
  * X and Y Axis.
  * We decide using the ticks that are present in the Y Axis and have the grid lines for every tick except the bounds.
  * When we resize, the ticks change based on the container real estate and we add/remove the grids respectively.
+ *
  * @private
- * @param {Object} axis - Axis scaled according to input parameters
- * @param {Object} config - config object derived from input JSON
- * @returns {Object} d3 svg path
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {object} config - config object derived from input JSON
+ * @returns {object} d3 svg path
  */
 const translateHorizontalGrid = (axis, config) =>
     axis.y.tickSize(getXAxisWidth(config) * -1, 0, 0).tickFormat("");
 /**
  * Updates the horizontal and vertical grid sizes/positions on resize
+ *
  * @private
- * @param {Object} axis - Axis scaled according to input parameters
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
@@ -232,11 +243,12 @@ const translateGrid = (axis, scale, config, canvasSVG) => {
 
 /**
  * Function to create the vertical-grid with a specific style and config.
+ *
  * @private
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @param {Object} axis - Axis scaled according to input parameters
+ * @param {object} axis - Axis scaled according to input parameters
  * @param {string} style - Style with which, grid needs to be created.
- * @param {Object} config - config required for translating vertical grid.
+ * @param {object} config - config required for translating vertical grid.
  * @returns {undefined} - Doesn't return anything.
  */
 const translateVGridHandler = (canvasSVG, axis, style, config) => {
@@ -248,10 +260,11 @@ const translateVGridHandler = (canvasSVG, axis, style, config) => {
 };
 /**
  * Translates the rectangle which forms the container for graph content
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {Object} d3 svg path
+ * @returns {object} d3 svg path
  */
 const translateContentContainer = (config, canvasSVG) =>
     canvasSVG
@@ -267,9 +280,10 @@ const translateContentContainer = (config, canvasSVG) =>
  * the range value to get the pixel position of the tick.
  * With the current position and previous tick position, we can find out the middle area for
  * repositioning the text.
+ *
  * @private
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
@@ -279,6 +293,7 @@ const translateLabelText = (scale, config, canvasSVG) =>
         .attr("transform", getTrackLabelTransformProperty(scale, config));
 /**
  * Checks if the track label needs to be truncated and returns the truncated value
+ *
  * @private
  * @param {string} label - Track label display property
  * @returns {string} if more than constants.DEFAULT_LABEL_CHARACTER_LIMIT then truncates,
@@ -288,6 +303,7 @@ const getTrackLabel = (label) =>
     shouldTruncateLabel(label) ? truncateLabel(label) : label;
 /**
  * Truncates Track label text using d3
+ *
  * @private
  * @returns {undefined} - returns nothing
  */
@@ -296,9 +312,10 @@ const truncateTrackLabelText = () =>
 
 /**
  * Transforms the point in the gantt graph on resize
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - config object derived from input JSON
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - config object derived from input JSON
  * @returns {Function} - translate string for d3 transform function
  */
 const transformPoint = (scale, config) => (value) => (scaleFactor) =>
@@ -312,12 +329,13 @@ const transformPoint = (scale, config) => (value) => (scaleFactor) =>
     )}) scale(${scaleFactor})`;
 /**
  * Transforms points for a data point set in the gantt graph on resize
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - config object derived from input JSON
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - config object derived from input JSON
  * @param {Array} trackPath - d3 object of track element
  * @param {string} style - CSS style representing the data points
- * @returns {Object} d3 select object
+ * @returns {object} d3 select object
  */
 const translatePoints = (scale, config, trackPath, style) =>
     trackPath.selectAll(style).each(function(d) {
@@ -340,8 +358,9 @@ const translatePoints = (scale, config, trackPath, style) =>
  *  The axes x and y co-ordinates
  *  The grid x and y co-ordinates
  *  The labels x and y co-ordinates
+ *
  *  @private
- *  @param {Object} control - Graph instance
+ *  @param {object} control - Graph instance
  *  @returns {undefined} - returns nothing
  */
 const translateGraph = (control) => {
@@ -362,9 +381,10 @@ const translateGraph = (control) => {
  * This includes:
  *  Points
  *  Selected point indicators
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - config object derived from input JSON
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - config object derived from input JSON
  * @param {Array} trackPath - d3 object of track
  * @returns {undefined} - returns nothing
  */
@@ -374,6 +394,7 @@ const translateDataPoints = (scale, config, trackPath) => {
 };
 /**
  * Translates task bars when resized.
+ *
  * @description When translating the width of a bar:
  * If its a percentage bar then we would need to translate multiple bars
  * Since we have 2 rectangles in a percentage bar, one which shows how much percentage
@@ -382,7 +403,7 @@ const translateDataPoints = (scale, config, trackPath) => {
  * The Completion Bar will need to be translated based on the percentage provided,
  * however the other bar will be subjected to normal translation.
  * @private
- * @param {Object} scale - d3 scale for Graph
+ * @param {object} scale - d3 scale for Graph
  * @param {Selection} path - d3 object of track
  * @returns {undefined} - returns nothing
  */
@@ -414,10 +435,11 @@ const translateTaskBar = (scale, path) =>
         });
 /**
  * Translates activity bars when resized.
+ *
  * @description When translating the width of a bar:
  * Bar will be subjected to normal translation.
  * @private
- * @param {Object} scale - d3 scale for Graph
+ * @param {object} scale - d3 scale for Graph
  * @param {Selection} path - d3 object of track
  * @returns {undefined} - returns nothing
  */
@@ -444,8 +466,9 @@ const translateActivityBar = (scale, path) =>
  * If the current task is from Unit 3 to Unit 7 then we position the selection
  * indicator from 3 to 7 and add some padding to the indicator so that it provides
  * an illusion of enclosing the task
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
+ * @param {object} scale - d3 scale for Graph
  * @param {Selection} path - d3 object of track
  * @returns {undefined} - returns nothing
  */
@@ -476,9 +499,10 @@ const translateTaskIndicator = (scale, path) => {
 };
 /**
  * Translates tasks based on container width.
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - config object derived from input JSON
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - config object derived from input JSON
  * @param {Selection} trackPath - d3 object of track
  * @returns {Selection} - d3 Track selection
  */
@@ -494,11 +518,12 @@ const translateTasks = (scale, config, trackPath) =>
         });
 /**
  * Translates track selector based on container width.
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - base config derived from input JSON.
- * @param {Object} trackPathSVG - Track container element
- * @param {Object} trackConfig - config derived from input track JSON.
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - base config derived from input JSON.
+ * @param {object} trackPathSVG - Track container element
+ * @param {object} trackConfig - config derived from input track JSON.
  * @returns {undefined} - returns nothing.
  */
 const translateTrackSelector = (scale, config, trackPathSVG, trackConfig) => {
@@ -517,9 +542,10 @@ const translateTrackSelector = (scale, config, trackPathSVG, trackConfig) => {
 };
 /**
  * Translates activities based on container width.
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - config object derived from input JSON
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - config object derived from input JSON
  * @param {Selection} trackPath - d3 object of track
  * @returns {Selection} - d3 Track selection
  */

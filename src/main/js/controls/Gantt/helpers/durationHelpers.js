@@ -9,8 +9,9 @@ import utils from "../../../helpers/utils";
  * bar, we dont want to apply settings based on style property.
  * For Normal Bar and chunk, we apply the settings below in the
  * `rect` element style attribute.
+ *
  * @private
- * @param {Object} data - data associated to the task
+ * @param {object} data - data associated to the task
  * @returns {string} A style constant
  */
 const getTaskStyle = (data = {}) =>
@@ -20,8 +21,9 @@ const getTaskStyle = (data = {}) =>
  * Returns the appropriate bar based on the activity style settings.
  * For Normal Bar we apply the settings below in the
  * `rect` element style attribute.
+ *
  * @private
- * @param {Object} data - data associated to the task
+ * @param {object} data - data associated to the task
  * @returns {string} A style constant
  */
 const getActivityStyle = (data = {}) => {
@@ -40,6 +42,7 @@ const getActivityStyle = (data = {}) => {
 /**
  * Executes the function sent by consumer to get the duration.
  * This duration is used to compute start or end if one of them is not provided
+ *
  * @private
  * @throws {module:errors.THROW_MSG_TASKS_DURATION_NOT_FUNCTION}
  * @throws {module:errors.THROW_MSG_TASKS_DURATION_NOT_VALID}
@@ -60,6 +63,7 @@ const getDuration = (duration) => {
 /**
  * Executes the function sent by consumer to get the duration.
  * This duration is used to compute start or end if one of them is not provided
+ *
  * @private
  * @throws {module:errors.THROW_MSG_TASKS_DURATION_NOT_FUNCTION}
  * @throws {module:errors.THROW_MSG_TASKS_DURATION_NOT_VALID}
@@ -78,6 +82,7 @@ const getActivityDuration = (duration) => {
 };
 /**
  * Calculates the start date using the duration provided and end datetime
+ *
  * @private
  * @param {number} duration - duration date as a number
  * @param {string} start - start date string
@@ -90,6 +95,7 @@ const getStartDuration = (duration = 0, start, end) =>
         : utils.parseDateTime(start);
 /**
  * Calculates the end date using the duration provided and start datetime
+ *
  * @private
  * @param {number} duration - duration date as a number
  * @param {string} start - start date string
@@ -104,6 +110,7 @@ const getEndDuration = (duration = 0, start, end) =>
  *
  * Checks if the bar is a chunk (Fixed width bar) or otherwise.
  * It is a chunk if the startDate and endDate is the same.
+ *
  * @private
  * @param {string} start - start date string
  * @param {string} end - end date string
@@ -113,6 +120,7 @@ const isAChunk = (start, end) =>
     utils.getTime(end) - utils.getTime(start) === 0;
 /**
  * Calculates the percentage of pixels based on start and end scales.
+ *
  * @private
  * @param {number} start - Start date scaled in pixels
  * @param {number} end - End date scaled in pixels
