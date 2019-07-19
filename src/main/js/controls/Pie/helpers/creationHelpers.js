@@ -131,7 +131,7 @@ const createSlice = (config, contentSVG) =>
  * Gets all the slices given a reference slice within the pie chart
  * @private
  * @param {HTMLElement} target - DOM element of the data point clicked
- * @returns {[d3.selection]} List of slice group in a pie chart
+ * @returns {Array} List of slice group in a pie chart
  */
 const getAllSliceNodes = (target) =>
     d3.select(target.parentNode).selectAll(`.${styles.pieContentGroup}`);

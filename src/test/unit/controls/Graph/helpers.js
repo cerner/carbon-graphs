@@ -109,12 +109,12 @@ export const valuesDefault = [
         y: 35
     }
 ];
-export const axisDefaultwithDateline = {
+export const axisDefaultWithDateline = {
     bindTo: "#testGraph_carbon",
     axis: axisDefault,
     dateline: datelineJSON
 };
-export const axisTimeserieswithDateline = {
+export const axisTimeseriesWithDateline = {
     bindTo: "#testGraph_carbon",
     axis: axisTimeSeries,
     dateline: datelineJSON
