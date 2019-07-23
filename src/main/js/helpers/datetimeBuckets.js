@@ -1,7 +1,16 @@
 import styles from "./styles";
 import utils from "./utils";
 
-/** Different types of Buckets. */
+/**
+ * @typedef d3
+ */
+
+/**
+ * Different types of Buckets.
+ *
+ * @private
+ * @type {{UPPER_STEP_TICK_VALUES: string, LOWER_STEP_TICK_VALUES: string, MIDPOINT_TICK_VALUES: string}}
+ */
 const BUCKET_TYPES = {
     LOWER_STEP_TICK_VALUES: "lowerStepTickValues",
     MIDPOINT_TICK_VALUES: "midpointTickValues",
@@ -9,10 +18,11 @@ const BUCKET_TYPES = {
 };
 /**
  * Helper to create the d3 Axis ticks (X-Axis ticks) of different types and append into the canvas.
+ *
  * @private
- * @param {Object} gridSVG - d3 object of the grid
- * @param {Object} axis - Axis scaled according to input parameters
- * @param {Object} config - config object derived from input JSON
+ * @param {object} gridSVG - d3 object of the grid
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {object} config - config object derived from input JSON
  * @param {Function} createVGridHandler - Call back function to create grid.
  * @returns {undefined} - returns nothing.
  */
@@ -69,10 +79,11 @@ const createDatetimeBuckets = (gridSVG, axis, config, createVGridHandler) => {
 
 /**
  * Helper to translate d3 Axis ticks (X-Axis ticks) of different types and append into the canvas.
+ *
  * @private
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @param {Object} axis - Axis scaled according to input parameters
- * @param {Object} config - config object derived from input JSON
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {object} config - config object derived from input JSON
  * @param {Function} translateVGridHandler - Call back function to translate grid.
  * @returns {undefined} - returns nothing.
  */
@@ -134,10 +145,11 @@ const translateDatetimeBuckets = (
 
 /**
  * Helper to create the d3 Axis ticks (X-Axis ticks) of different types based on if its gantt or not.
+ *
  * @private
- * @param {Object} gridSVG - d3 object of the grid
- * @param {Object} axis - Axis scaled according to input parameters
- * @param {array} values - List of all tick values.
+ * @param {object} gridSVG - d3 object of the grid
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {Array} values - List of all tick values.
  * @param {string} orientation - X axis orientation.
  * @param {string} height - height of the grid, based on input config.
  * @param {string} type - type of tick. Either lowerStepTick or midpointTick or upperStepTick.
@@ -160,10 +172,11 @@ const createVGridForDatetimeBuckets = (
 
 /**
  * Helper to translate the d3 Axis ticks (X-Axis ticks) of different types based on if its gantt or not.
+ *
  * @private
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @param {Object} axis - Axis scaled according to input parameters
- * @param {array} values - List of all tick values.
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {Array} values - List of all tick values.
  * @param {string} orientation - X axis orientation.
  * @param {string} height - height of the grid, based on input config.
  * @param {string} type - type of tick. Either lowerStepTick or midpointTick or upperStepTick.
@@ -186,11 +199,12 @@ const translateVGridDatetimeBuckets = (
 
 /**
  * Helper to create the config for dateTimeBuckets for creating and translating grids and axis.
+ *
  * @private
- * @param {array} values - list of all tick values.
+ * @param {Array} values - list of all tick values.
  * @param {string} height - Y axis height.
  * @param {string} orientation - X axis orientation.
- * @returns {Object} - config with tick values and height.
+ * @returns {object} - config with tick values and height.
  */
 const createDatetimeBucketConfig = (values, height, orientation) => ({
     axis: {
@@ -206,6 +220,7 @@ const createDatetimeBucketConfig = (values, height, orientation) => ({
 
 /**
  * Helper function to determine the type.
+ *
  * @private
  * @param {string} type - different types of tick.
  * @returns {string} styling of the type.
@@ -227,8 +242,9 @@ const determineBucketStyle = (type) => {
  * Helper function to create config for axes when dateTimeBuckets are used.
  * We only display lowerStepTickValues/values and upperStepTickValues in the axis, since,
  * midpointTickValues can be inferred.
+ *
  * @private
- * @param {Object} dateTimeBuckets - all tick values.
+ * @param {object} dateTimeBuckets - all tick values.
  * @returns {Array} newStepvalues - tick values based on bucket input.
  */
 const constructDatetimeBucketValues = (dateTimeBuckets) => {
@@ -247,8 +263,9 @@ const constructDatetimeBucketValues = (dateTimeBuckets) => {
 
 /**
  * Helper function to determine if the graph config is not a DatetimeBucket
+ *
  * @private
- * @param {Object} ticks - ticks object derived from input JSON.
+ * @param {object} ticks - ticks object derived from input JSON.
  * @returns {boolean} - True, if DatetimeBucket. False, if it is not a DatetimeBucket.
  */
 const hasDatetimeBuckets = (ticks) => {
@@ -264,10 +281,11 @@ const hasDatetimeBuckets = (ticks) => {
 
 /**
  * Helper function to create Vertical grid
+ *
  * @private
- * @param {Object} gridSVG - d3 object of the grid
- * @param {Object} axis - Axis scaled according to input parameters
- * @param {Object} config - config object derived from input JSON * @param gridSVG
+ * @param {object} gridSVG - d3 object of the grid
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {object} config - config object derived from input JSON * @param gridSVG
  * @param {Function} createVGridHandler - Call back function to create grid.
  * @returns {undefined} - returns nothing
  */
@@ -281,10 +299,11 @@ const createVGrid = (gridSVG, axis, config, createVGridHandler) => {
 
 /**
  * Helper function to update horizontal axes, if graph has datetime buckets
+ *
  * @private
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} axis - Axis scaled according to input parameters
- * @param {Object} config - config object derived from input JSON * @param gridSVG
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {object} config - config object derived from input JSON * @param gridSVG
  * @param {Function} prepareXAxisHandler - Callback function to prepare the axis with new tick values
  * @param {string} [orientation] - Axis orientation
  * @returns {undefined} - returns nothing
@@ -315,10 +334,11 @@ const prepareHAxis = (
 
 /**
  * Helper function to translate Vertical grid
+ *
  * @private
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @param {Object} axis - Axis scaled according to input parameters
- * @param {Object} config - config object derived from input JSON * @param gridSVG
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {object} config - config object derived from input JSON * @param gridSVG
  * @param {Function} translateVGridHandler - Call back function to translate grid.
  * @returns {undefined} - returns nothing * @param axis
  */

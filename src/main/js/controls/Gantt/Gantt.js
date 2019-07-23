@@ -32,16 +32,17 @@ import {
 import { translateGraph, translateLabelText } from "./helpers/translateHelpers";
 
 /**
- * @typedef {Object} Gantt
- * @typedef {Object} GanttConfig
+ * @typedef {object} Gantt
+ * @typedef {object} GanttConfig
  */
 
 const BASE_CANVAS_WIDTH_PADDING = constants.BASE_CANVAS_WIDTH_PADDING;
 /**
  * Sets the canvas width
+ *
  * @private
  * @param {HTMLElement} container - d3 HTML element object which forms the chart container
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {undefined} - returns nothing
  */
 const setCanvasWidth = (container, config) => {
@@ -50,8 +51,9 @@ const setCanvasWidth = (container, config) => {
 /**
  * Sets the canvas width. Canvas rests within a container.
  * On resize, the canvas is subjected to resizing but its sibling: Legend isnt.
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {undefined} - returns nothing
  */
 const setCanvasHeight = (config) =>
@@ -61,10 +63,11 @@ const setCanvasHeight = (config) =>
 /**
  * Data point sets can be loaded using this function.
  * Load function validates, clones and stores the input onto a config object.
+ *
  * @private
  * @throws {module:errors.THROW_MSG_NO_AXES_DATA_LOADED}
- * @param {Object} inputJSON - Input JSON provided by the consumer
- * @returns {Object} config object containing consumer data
+ * @param {object} inputJSON - Input JSON provided by the consumer
+ * @returns {object} config object containing consumer data
  */
 const loadInput = (inputJSON) =>
     new GanttConfig()
@@ -75,6 +78,7 @@ const loadInput = (inputJSON) =>
 /**
  * Executes the before init process checklist, needs to be called by parent control.
  *  Binds the chart id provided in the input JSON to graph container.
+ *
  * @private
  * @param {Gantt} control - Gantt instance
  * @returns {Gantt} Gantt instance
@@ -87,6 +91,7 @@ const beforeInit = (control) => {
 };
 /**
  * Initializes the necessary Gantt constructor objects
+ *
  * @private
  * @param {Gantt} control - Gantt instance
  * @returns {Gantt} Gantt instance
@@ -119,6 +124,7 @@ const initConfig = (control) => {
  *  Calculates Axes width and height
  *  Calculates Axes label width and height, positioning
  *  Creates and sets the d3 scale for the Graph
+ *
  * @private
  * @param {Gantt} control - Gantt instance
  * @returns {Gantt} Gantt instance
@@ -143,12 +149,13 @@ const init = (control) => {
  *  * Init
  *  * Render
  *  * AfterInit
+ *
  * @module Gantt
  * @class Gantt
  */
 class Gantt extends Construct {
     /**
-     * @constructor
+     * @class
      * @param {GanttConfig} input - Input JSON instance created using GanttConfig
      */
     constructor(input) {
@@ -160,6 +167,7 @@ class Gantt extends Construct {
     /**
      * Draw function that is called by the parent control. This draws the x-axis, grid, legend and
      * trackLabels for the chart construct.
+     *
      * @description Since we dont have the concept of z-index in visualization,
      * the order of rendering should be following:
      *  * SVG container
@@ -169,7 +177,7 @@ class Gantt extends Construct {
      *  * Track Labels
      *  * Legend
      *  * Data [In our case we have load and unload]
-     * @param {Object} input - Input JSON
+     * @param {object} input - Input JSON
      * @returns {HTMLElement} d3 selection node of svg.
      */
     generate(input) {
@@ -233,6 +241,7 @@ class Gantt extends Construct {
      *  X-Axis
      *  Grid
      *  Track Labels
+     *
      *  @returns {Gantt} - Gantt instance
      */
     resize() {
@@ -250,7 +259,8 @@ class Gantt extends Construct {
      * Loads the content onto the graph.
      * The content serves as a 1to1 relationship. For rendering
      * multiple data sets respective number of content needs to be provided.
-     * @param {Object} content - Gantt content
+     *
+     * @param {object} content - Gantt content
      * @returns {Gantt} - Gantt instance
      */
     loadContent(content) {
@@ -276,7 +286,8 @@ class Gantt extends Construct {
      * Unloads the content from the graph.
      * The content serves as a 1to1 relationship. For rendering
      * multiple data sets respective number of content needs to be provided.
-     * @param {Object} content - Gantt content to be removed
+     *
+     * @param {object} content - Gantt content to be removed
      * @returns {Gantt} - Gantt instance
      */
     unloadContent(content) {
@@ -296,6 +307,7 @@ class Gantt extends Construct {
 
     /**
      * Destroys the graph: Container and canvas.
+     *
      * @returns {Gantt} - Gantt instance
      */
     destroy() {

@@ -699,6 +699,7 @@ export const renderGanttTrackSelection = (id) => {
 };
 /**
  * Helper function to load tracks.
+ *
  * @private
  * @param {object} gantt - gantt object where its components needs to be loaded.
  * @param {Array} tasks - gantt tasks that needs to be loaded

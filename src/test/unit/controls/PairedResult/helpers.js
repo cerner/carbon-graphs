@@ -9,11 +9,12 @@ import utils from "../../../../main/js/helpers/utils";
 export const dataPointClickHandlerSpy = sinon.spy();
 /**
  * Creates and returns an example input with data point values
+ *
  * @param {Array} values - x and y co-ordinate values
  * @param {boolean} isDefaultColor - if true, doesnt load the COLOR
  * @param {boolean} isDefaultShape - if true, doesnt load the SHAPE
  * @param {boolean} isY2Axis - if true, then "y2"
- * @returns {Object} input JSON
+ * @returns {object} input JSON
  */
 export const getInput = (
     values = [],
@@ -49,8 +50,9 @@ export const getInput = (
 });
 /**
  * Creates and returns an example input with custom axis
- * @param {Object} axis - X and Y axis data
- * @returns {Object} axes JSON
+ *
+ * @param {object} axis - X and Y axis data
+ * @returns {object} axes JSON
  */
 export const getAxes = (axis = {}) => ({
     bindTo: "#testPairedResult_carbon",
@@ -218,6 +220,7 @@ export const inputSecondary = {
 };
 /**
  * Returns the DOM element queried by Class
+ *
  * @param {HTMLElement} id - Id attribute name
  * @param {string} cls - Class attribute name
  * @returns {HTMLElement} - DOM element

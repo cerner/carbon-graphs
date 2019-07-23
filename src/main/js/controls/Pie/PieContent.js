@@ -1,8 +1,9 @@
 "use strict";
 /**
- * @typedef {Object} PieContent
- * @typedef {Object} GraphContent
- * @typedef {Object} PieConfig
+ * @typedef {object} PieContent
+ * @typedef {object} GraphContent
+ * @typedef {object} PieConfig
+ * @typedef {object} d3
  */
 import { GraphContent } from "../../core";
 import constants from "../../helpers/constants";
@@ -22,10 +23,11 @@ import { translateSlices } from "./helpers/translateHelpers";
 /**
  * Processes the input JSON and adds the shapes, colors, labels etc. to each data points so that we
  * can use them when rendering the data point.
+ *
  * @private
- * @param {Object} graphConfig - config object of Pie instance Construct
- * @param {Object} dataTarget - Data points object
- * @returns {Object} dataTarget - Updated data target object
+ * @param {object} graphConfig - config object of Pie instance Construct
+ * @param {object} dataTarget - Data points object
+ * @returns {object} dataTarget - Updated data target object
  */
 const processDataPoints = (graphConfig, dataTarget) =>
     Object.assign({}, dataTarget, {
@@ -37,8 +39,9 @@ const processDataPoints = (graphConfig, dataTarget) =>
     });
 /**
  * Validates the newly added pie content into the graph before rendering
+ *
  * @private
- * @param {Object} input - Newly added graph tasks
+ * @param {object} input - Newly added graph tasks
  * @throws {module:errors.THROW_MSG_NO_DATA_LOADED}
  * @throws {module:errors.THROW_MSG_NO_DATA_POINTS}
  * @throws {module:errors.THROW_MSG_UNIQUE_KEY_NOT_PROVIDED}
@@ -63,12 +66,13 @@ export const validateContent = (input) => {
 };
 /**
  * Draws an arc based on the value provided within the larger Pie
+ *
  * @private
  * @param {PieContent} control - PieContent instance
- * @param {Object} graph - Graph instance
+ * @param {object} graph - Graph instance
  * @param {d3.selection} pieChartContentSVG - d3 selection node of canvas svg
  * @param {d3.selection} legendPath - d3 selection node of legend `ul` path
- * @param {Object} dataTarget - Pie data object
+ * @param {object} dataTarget - Pie data object
  * @returns {undefined} - returns nothing
  */
 const draw = (control, graph, pieChartContentSVG, legendPath, dataTarget) => {
@@ -88,9 +92,10 @@ const draw = (control, graph, pieChartContentSVG, legendPath, dataTarget) => {
 /**
  * Data point sets can be loaded using this function.
  * Load function validates, clones and stores the input onto a config object.
+ *
  * @private
- * @param {Object} inputJSON - Input JSON provided by the consumer
- * @returns {Object} config object containing consumer data
+ * @param {object} inputJSON - Input JSON provided by the consumer
+ * @returns {object} config object containing consumer data
  */
 const loadInput = (inputJSON) => {
     validateContent(inputJSON);
@@ -99,13 +104,14 @@ const loadInput = (inputJSON) => {
 
 /**
  * PieContent is part of a Pie graph
+ *
  * @module PieContent
  * @class PieContent
  */
 class PieContent extends GraphContent {
     /**
-     * @constructor
-     * @param {Object} input - Input JSON
+     * @class
+     * @param {object} input - Input JSON
      */
     constructor(input) {
         super();
@@ -114,7 +120,7 @@ class PieContent extends GraphContent {
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     load(graph) {
         if (!isUniqueKey(graph.contentConfig, this.config.key)) {
@@ -133,7 +139,7 @@ class PieContent extends GraphContent {
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     unload(graph) {
         clear(graph.svg, this.dataTarget);
@@ -144,7 +150,7 @@ class PieContent extends GraphContent {
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     resize(graph) {
         translateSlices(
@@ -157,7 +163,7 @@ class PieContent extends GraphContent {
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     redraw(graph) {
         /*

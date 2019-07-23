@@ -34,8 +34,8 @@ import {
     getData,
     valuesDefault,
     valuesTimeSeries,
-    axisDefaultwithDateline,
-    axisTimeserieswithDateline,
+    axisDefaultWithDateline,
+    axisTimeseriesWithDateline,
     datelineJSON,
     axisTimeSeriesWithAxisTop
 } from "./helpers";
@@ -414,13 +414,13 @@ describe("Graph", () => {
         describe("Validates input props", () => {
             it("Process the default input with dateline throw error", () => {
                 expect(() => {
-                    graph = new Graph(axisDefaultwithDateline);
+                    graph = new Graph(axisDefaultWithDateline);
                     graph.loadContent(new Line(getData(valuesDefault)));
                 }).toThrowError(errors.THROW_MSG_INVALID_TYPE);
             });
             it("Process the timeseries input with dateline without any error", () => {
                 expect(() => {
-                    graph = new Graph(axisTimeserieswithDateline);
+                    graph = new Graph(axisTimeseriesWithDateline);
                     graph.loadContent(new Line(getData(valuesTimeSeries)));
                 }).not.toThrow();
             });

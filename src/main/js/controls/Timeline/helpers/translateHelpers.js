@@ -18,10 +18,11 @@ import {
  * Updates clipPath rectangle width and height on resize.
  * `clipPath` updates are necessary since the clip-path URL needs to get
  * the necessary parameters on resize so that data points are not cut off
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {Object} d3 svg path
+ * @returns {object} d3 svg path
  */
 const translateDefs = (config, canvasSVG) =>
     canvasSVG
@@ -31,10 +32,11 @@ const translateDefs = (config, canvasSVG) =>
         .attr("width", getXAxisWidth(config));
 /**
  * Updates the x position on resize
+ *
  * @private
- * @param {Object} axis - Axis scaled according to input parameters
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
@@ -54,8 +56,9 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
 };
 /**
  * Updates the x, y, y2 axes label positions on resize
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
@@ -77,8 +80,9 @@ const translateLabel = (config, canvasSVG) => {
 };
 /**
  * Transforms the point in the timeline graph on resize
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
+ * @param {object} scale - d3 scale for Graph
  * @param {object} config - config object derived from input JSON.
  * @returns {Function} - function that returns translate string for d3 transform
  */
@@ -90,13 +94,14 @@ const transformPoint = (scale, config) => (value) => (scaleFactor) => {
 };
 /**
  * Transforms points for a data point set in the timeline graph on resize
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
+ * @param {object} scale - d3 scale for Graph
  * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {string} key - d3 object of points group key
  * @param {string} style - CSS style representing the data points
- * @returns {Object} d3 select object
+ * @returns {object} d3 select object
  */
 const translatePoints = (scale, config, canvasSVG, key, style) =>
     canvasSVG
@@ -121,8 +126,9 @@ const translatePoints = (scale, config, canvasSVG, key, style) =>
  *  The canvas height and width
  *  The x axis x and y co-ordinates
  *  The label x and y co-ordinates
+ *
  *  @private
- *  @param {Object} control - Graph instance
+ *  @param {object} control - Graph instance
  *  @returns {undefined} - returns nothing
  */
 const translateTimelineGraph = (control) => {

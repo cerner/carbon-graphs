@@ -8,8 +8,9 @@ import utils from "../../../../main/js/helpers/utils";
 
 /**
  * Creates and returns an example input with custom axis values
- * @param {Object} axis - X and Y axis data
- * @returns {Object} input JSON
+ *
+ * @param {object} axis - X and Y axis data
+ * @returns {object} input JSON
  */
 export const getAxes = (axis = {}) => ({
     bindTo: "#testGraph_carbon",
@@ -17,8 +18,9 @@ export const getAxes = (axis = {}) => ({
 });
 /**
  * Creates and returns an example input with data point values
+ *
  * @param {Array} values - x and y co-ordinate values
- * @returns {Object} input JSON
+ * @returns {object} input JSON
  */
 export const getData = (values = []) =>
     utils.deepClone({
@@ -109,18 +111,19 @@ export const valuesDefault = [
         y: 35
     }
 ];
-export const axisDefaultwithDateline = {
+export const axisDefaultWithDateline = {
     bindTo: "#testGraph_carbon",
     axis: axisDefault,
     dateline: datelineJSON
 };
-export const axisTimeserieswithDateline = {
+export const axisTimeseriesWithDateline = {
     bindTo: "#testGraph_carbon",
     axis: axisTimeSeries,
     dateline: datelineJSON
 };
 /**
  * Returns the DOM element queried by Class
+ *
  * @param {string} cls - Class attribute name
  * @returns {HTMLElement} - DOM element
  */

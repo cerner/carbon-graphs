@@ -4,11 +4,12 @@ import utils from "../../helpers/utils";
 
 /**
  * API to parse consumer input for PairedResult graph
+ *
  * @class PairedResultConfig
  */
 class PairedResultConfig extends BaseConfig {
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     constructor() {
         super();
@@ -18,7 +19,8 @@ class PairedResultConfig extends BaseConfig {
 
     /**
      * Returns the config object
-     * @returns {Object} config object
+     *
+     * @returns {object} config object
      */
     getConfig() {
         return this.config;
@@ -26,7 +28,8 @@ class PairedResultConfig extends BaseConfig {
 
     /**
      * Sets the input object
-     * @param {Object} inputJSON - Input JSON
+     *
+     * @param {object} inputJSON - Input JSON
      * @returns {PairedResultConfig} instance object
      */
     setInput(inputJSON) {
@@ -36,6 +39,7 @@ class PairedResultConfig extends BaseConfig {
 
     /**
      * Validates and verifies the input JSON object
+     *
      * @returns {PairedResultConfig} instance object
      */
     validateInput() {
@@ -45,6 +49,7 @@ class PairedResultConfig extends BaseConfig {
 
     /**
      * Clones the input JSON into the config object
+     *
      * @returns {PairedResultConfig} instance object
      */
     clone() {

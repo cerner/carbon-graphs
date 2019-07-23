@@ -38,6 +38,7 @@ export const dataTertiary = {
 };
 /**
  * Returns the DOM element queried by Class
+ *
  * @param {string} cls - Class attribute name
  * @returns {HTMLElement} - DOM element
  */

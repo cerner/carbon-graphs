@@ -39,27 +39,34 @@ import {
 } from "./selectionIndicatorHelpers";
 
 /**
+ * @typedef PairedResult
+ */
+
+/**
  * Returns the value based on the type of data point - High, mid or low
+ *
  * @private
- * @param {Object} val - A value
+ * @param {object} val - A value
  * @param {string} type - High, mid or low
  * @private
- * @returns {Object} value of the type
+ * @returns {object} value of the type
  */
 const getValue = (val, type) => (val ? val[type] : "");
 /**
  * Iterates each type of a pair. High, low and mid.
+ *
  * @private
- * @param {function} fn - A function
- * @returns {void} - returns nothing
+ * @param {Function} fn - A function
+ * @returns {undefined} - returns nothing
  */
 const iterateOnPairType = (fn) => constants.PAIR_ITEM_TYPES.forEach(fn);
 /**
  * Creates a new d3 Paired Result using given x1, x2 and y1,y2 coordinates.
  * Interpolation is default linear
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} d - High and low x,y coordinates
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} d - High and low x,y coordinates
  * @returns {undefined} - returns nothing
  */
 const createLine = (scale, d) => {
@@ -81,8 +88,9 @@ const createLine = (scale, d) => {
 };
 /**
  * Transforms the point in the Paired Result graph on resize
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
+ * @param {object} scale - d3 scale for Graph
  * @param {string} type - high, mid or low
  * @returns {Function} - translate function for d3 transform
  */
@@ -93,11 +101,12 @@ const transformPoint = (scale, type) => (value) => (scaleFactor) => {
 };
 /**
  * Transforms lines for a data point set in the Paired Result graph on resize
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - config object derived from input JSON
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {Object} - d3 select object
+ * @returns {object} - d3 select object
  */
 const translateLines = (scale, config, canvasSVG) =>
     canvasSVG
@@ -107,10 +116,11 @@ const translateLines = (scale, config, canvasSVG) =>
         .attr("d", (d) => (d.high && d.low ? createLine(scale, d) : ""));
 /**
  * Transforms points for a data point set (high, low and mid) in the Paired Result graph on resize
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
+ * @param {object} scale - d3 scale for Graph
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {Object} - d3 select object
+ * @returns {object} - d3 select object
  */
 const translatePoints = (scale, canvasSVG) =>
     iterateOnPairType((type) => {
@@ -139,9 +149,10 @@ const translatePoints = (scale, canvasSVG) =>
  * Draws the PairedResult graph on the canvas element.
  * Once these items are rendered, we will parse through the data points and render the line and points
  * We draw paired box groups. Each box comprises of a Line and 2 points (high and low) possibly mid, if provided
+ *
  * @private
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {Array} dataTarget - Data points
  * @returns {undefined} - returns nothing
@@ -181,10 +192,11 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
 /**
  * Processes the input JSON and adds the shapes, colors, labels etc. to each data points so that we
  * can use them when rendering the data point.
+ *
  * @private
- * @param {Object} graphConfig - config object of Graph API
- * @param {Object} dataTarget - Data points object
- * @returns {Object} dataTarget - Updated data target object
+ * @param {object} graphConfig - config object of Graph API
+ * @param {object} dataTarget - Data points object
+ * @returns {object} dataTarget - Updated data target object
  */
 const processDataPoints = (graphConfig, dataTarget) => {
     const type = graphConfig.axis.x.type;
@@ -231,8 +243,9 @@ const processDataPoints = (graphConfig, dataTarget) => {
  * Returns the internal values subset which is the array that was created from the input JSON.
  * This array has information for each data point w.r.t shape, colors and on click callback along with
  * x and y co-ordinates.
+ *
  * @private
- * @param {Object} target - Object containing the subsets
+ * @param {object} target - Object containing the subsets
  * @returns {Array} List of data point subsets
  */
 const getDataPointValues = (target) => target.internalValuesSubset;
@@ -240,11 +253,12 @@ const getDataPointValues = (target) => target.internalValuesSubset;
  * Draws line between the 2 data points high and low. If either one of them is missing
  * then the line is not drawn.
  * Lines are created using d3 svg line with linear interpolation.
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - Graph config object derived from input JSON
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - Graph config object derived from input JSON
  * @param {Array} boxPath - d3 html element of the paired box
- * @returns {Object} - d3 append object
+ * @returns {object} - d3 append object
  */
 const drawLine = (scale, config, boxPath) =>
     boxPath.each(function(value, index) {
@@ -269,9 +283,10 @@ const drawLine = (scale, config, boxPath) =>
  * Draws the points with options opted in the input JSON by the consumer for each data set.
  *  Render the point with appropriate color, shape, x and y co-ordinates, label etc.
  *  On click content callback function is called.
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - Graph config object derived from input JSON
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - Graph config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 html element of the canvas
  * @returns {undefined} - returns nothing
  */
@@ -334,12 +349,13 @@ const drawPoints = (scale, config, canvasSVG) => {
 /**
  * Draws the criticality points with options opted in the input JSON by the consumer for each data set.
  *  On click content callback function is called.
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - Graph config object derived from input JSON
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - Graph config object derived from input JSON
  * @param {Array} pointGroup - d3 html element of the point group (high, mid or low)
  * @param {string} type - High, mid or low
- * @param {Object} value - A value
+ * @param {object} value - A value
  * @param {number} index - Value index
  * @returns {undefined} - returns nothing
  */
@@ -400,9 +416,10 @@ const drawCriticalityPoints = (
  * This includes:
  *  Lines
  *  Points
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - config object derived from input JSON
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
@@ -416,9 +433,10 @@ const translatePairedResultGraph = (scale, config, canvasSVG) => {
  * Show/hide regions based on the following criteria:
  * * If more than 1 target is displayed -> Hide regions
  * * If only 1 target is displayed -> show the region using unique data set key
+ *
  * @private
- * @param {Object} graphContext - Graph instance
- * @param {Object} config - Graph config object derived from input JSON
+ * @param {object} graphContext - Graph instance
+ * @param {object} config - Graph config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {string} key - Pair type - high, low or mid pair object containing the key
  * @returns {undefined} - returns nothing
@@ -439,10 +457,11 @@ const processRegions = (graphContext, config, canvasSVG, { key }) => {
  *  * Order of execution
  *      * Redraws the content
  *      * Shows/hides the regions
+ *
  * @private
- * @param {Object} graphContext - Graph instance
- * @param {Line} control - Paired Result instance
- * @param {Object} config - Graph config object derived from input JSON
+ * @param {object} graphContext - Graph instance
+ * @param {PairedResult} control - Paired Result instance
+ * @param {object} config - Graph config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {string} item - paired result type unique key
  * @returns {function()} callback function handler for RAF
@@ -459,10 +478,11 @@ const onAnimationHandler = (
 };
 /**
  * Click handler for legend item. Removes the line from graph when clicked and calls redraw
+ *
  * @private
- * @param {Object} graphContext - Graph instance
+ * @param {object} graphContext - Graph instance
  * @param {PairedResult} control - Paired Result instance
- * @param {Object} config - Graph config object derived from input JSON
+ * @param {object} config - Graph config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
@@ -493,6 +513,7 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
 /**
  * Hover handler for legend item. Highlights current line and blurs the rest of the targets in Graph
  * if present.
+ *
  * @private
  * @param {Array} config - Graph config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
@@ -531,11 +552,12 @@ const hoverHandler = (config, canvasSVG) => (item, state) => {
  * A callback that will be sent to Graph class so that when graph is
  * created the Graph API will execute this callback function and the legend
  * items are loaded.
+ *
  * @private
- * @param {Object} config - Graph config object derived from input JSON
- * @param {Object} eventHandlers - Object containing click and hover event handlers for legend item
- * @param {Object} dataTarget - Data points object
- * @param {Object} legendSVG - d3 element that will be need to render the legend
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {object} eventHandlers - Object containing click and hover event handlers for legend item
+ * @param {object} dataTarget - Data points object
+ * @param {object} legendSVG - d3 element that will be need to render the legend
  * items into.
  * @returns {undefined} - returns nothing
  */
@@ -576,11 +598,12 @@ const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
  *  Region should only be hidden if:
  *      Toggled using legend
  *      If more than 1 data set/content is available
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - config object derived from input JSON
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @param {Object} dataTarget - Data points object
+ * @param {object} dataTarget - Data points object
  * @returns {undefined} - returns nothing
  */
 const renderRegion = (scale, config, canvasSVG, dataTarget) => {
@@ -615,10 +638,11 @@ const renderRegion = (scale, config, canvasSVG, dataTarget) => {
  * Clears the paired boxes before redrawing.
  * We are selecting all the box pairs along
  * with all the data sets before clearing them.
+ *
  * @private
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @param {Object} dataTarget - Data points object
- * @returns {Object} - d3 select object
+ * @param {object} dataTarget - Data points object
+ * @returns {object} - d3 select object
  */
 const clear = (canvasSVG, dataTarget) =>
     d3RemoveElement(canvasSVG, `g[aria-describedby="${dataTarget.key}"]`);

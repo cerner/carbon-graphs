@@ -7,14 +7,15 @@ import utils from "../../helpers/utils";
 
 /**
  * Creates a skeleton for SVG props used to generate nested SVG
+ *
  * @public
- * @param {Object} [SVGProps] - SVG default props
+ * @param {object} [SVGProps] - SVG default props
  * @property {string} svgClassNames - SVG class name
  * @property {string} svgStyles - SVG styles
  * @property {Function} transformFn - Function callback for translating SVG
  * @property {Function} onClickFn - Function callback for onclick event
- * @property {Object} a11yAttributes - a11y attributes for SVG
- * @returns {Object} Object containing custom named SVG properties
+ * @property {object} a11yAttributes - a11y attributes for SVG
+ * @returns {object} Object containing custom named SVG properties
  */
 export const getDefaultSVGProps = ({
     svgClassNames = "",
@@ -33,6 +34,7 @@ export const getDefaultSVGProps = ({
 });
 /**
  * Creates an element with SVG specs. SVG or path
+ *
  * @private
  * @param {string} tag - svg or path
  * @returns {HTMLElement} an SVG or path element
@@ -41,6 +43,7 @@ const createElementNS = (tag) =>
     document.createElementNS(d3.ns.prefix.svg, tag);
 /**
  * Validates a shape for basic structure
+ *
  * @private
  * @throws {module:errors.THROW_MSG_SHAPE_PATH_EMPTY}
  * @throws {module:errors.THROW_MSG_SHAPE_OPTIONS_EMPTY}
@@ -65,9 +68,10 @@ const validateShape = (shape) => {
 };
 /**
  * Returns svg path element with path description ('d' attr)
+ *
  * @private
  * @param {Selection} d3Elem - d3 SVG element
- * @param {string|array} shapePath - Path object of the shape
+ * @param {string|Array} shapePath - Path object of the shape
  * @param {Function} transformFn - Function to transform individual paths within SVG
  * @param {number} scale - transform scale for the path
  * @returns {Selection} A svg path element
@@ -93,6 +97,7 @@ const setPathProperty = (
 };
 /**
  * Sets aria properties to the d3 element
+ *
  * @private
  * @param {string} props - ARIA properties for SVG
  * @returns {Function} d3Elem - d3 SVG element
@@ -105,6 +110,7 @@ const setA11yProperties = (...props) => (d3Elem, a11yAttributes) =>
     );
 /**
  * Sets viewBox to the element
+ *
  * @private
  * @param {Selection} d3Elem - d3 SVG element
  * @returns {Selection} d3Elem - d3 SVG element
@@ -115,9 +121,10 @@ const setViewBoxProperty = (d3Elem) =>
  * Returns the SVG element container within which a path element is stored.
  * viewBox sizing is "0 0 48 48"
  * Default icon width and height is 1rem
+ *
  * @private
  * @param {string} shape -  Path object of the shape
- * @param {Object} svgElementProps -  SVG element props
+ * @param {object} svgElementProps -  SVG element props
  * @param {boolean} [includeViewBox] -  Include viewBox in the SVG element or otherwise. False by default
  * @returns {HTMLElement} Returns the SVG element with the "icon" path
  */
@@ -165,6 +172,7 @@ const createSVG = (
 /**
  * A Shape is a data point representation in a graph.
  * This is also used as a point in the legend
+ *
  * @class Shape
  */
 class Shape {
@@ -177,8 +185,9 @@ class Shape {
      * Returns the shape element. Shape element is an svg element containing a path element.
      * The consumer can customize the classNames and styles for the svg and path elements accordingly
      * using the function parameters.
+     *
      * @public
-     * @param {Object} svgProps - SVG element attributes loaded by the consumer. This is required parameter for creating a non-generic svg
+     * @param {object} svgProps - SVG element attributes loaded by the consumer. This is required parameter for creating a non-generic svg
      * @param {boolean} [includeViewBox] -  Include viewBox in the SVG element or otherwise. False by default
      * @returns {HTMLElement} an svg element
      */

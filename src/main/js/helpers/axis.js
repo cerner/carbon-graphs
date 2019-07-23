@@ -1,9 +1,5 @@
-/**
- * @module axis
- * @alias module:axis
- */
-
 "use strict";
+
 import d3 from "d3";
 import Bar from "../controls/Bar/Bar";
 import { getScale, getType } from "../core/BaseConfig";
@@ -14,9 +10,15 @@ import { DEFAULT_TICK_FORMAT } from "../locale";
 import { prepareHAxis } from "./datetimeBuckets";
 
 /**
+ * @module axis
+ * @alias module:axis
+ */
+
+/**
  * Checks if Y or Y2 axis starts from Origin
+ *
  * @private
- * @param {Object} scale - d3 scale taking into account the input parameters
+ * @param {object} scale - d3 scale taking into account the input parameters
  * @param {string} yAxis - Y, Y2 etc
  * @returns {boolean} True if axis does not start from origin, false otherwise
  */
@@ -24,19 +26,20 @@ const hasNegativeLowerBound = (scale, yAxis = constants.Y_AXIS) =>
     d3.min(scale[yAxis].domain()) < 0 && d3.max(scale[yAxis].domain()) > 0;
 /**
  * Parses the Y Axis lower and upper limits and returns it as an array for Y Axis reference line
+ *
  * @private
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @returns {Array}{x: number, y: number} x and y co-ordinate data for drawing a reference line
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @returns {Array} x and y co-ordinate data for drawing a reference line
  */
 const getReferenceLineData = (scale) => [
     { x: scale.x.domain()[0], y: 0 },
     { x: scale.x.domain()[1], y: 0 }
 ];
-
 /**
  * Creates a simple reference line with x and y attributes
+ *
  * @private
- * @param {Object} scale - d3 scale taking into account the input parameters
+ * @param {object} scale - d3 scale taking into account the input parameters
  * @param {string} yAxis - Y, Y2 etc
  * @returns {d3.Line} A d3 line
  */
@@ -49,10 +52,11 @@ const createReferenceLine = (scale, yAxis) =>
  * Create the d3 Axes - X, Y and Y2 and append into the canvas.
  * If axis.x.show, axis.y.show or axis.y2.show is set to false:
  * then the axis will be hidden
+ *
  * @private
- * @param {Object} axis - Axis scaled according to input parameters
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
@@ -100,10 +104,11 @@ const createAxes = (axis, scale, config, canvasSVG) => {
 
 /**
  * Create the axis for text labels
+ *
  * @private
- * @param {Object} axis - Axis scaled according to input parameters
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
  * @param {Array} canvasSVG - d3 object of canvas svg
  * @returns {undefined} - returns nothing
  */
@@ -125,10 +130,11 @@ const createXAxisInfoRow = (axis, scale, config, canvasSVG) => {
 
 /**
  * Creates a horizontal reference line at 0, when Y Axis does not start at 0.
+ *
  * @private
- * @param {Object} axis - Axis scaled according to input parameters
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
@@ -156,11 +162,12 @@ const createAxisReferenceLine = (axis, scale, config, canvasSVG) => {
 };
 /**
  * Prepares X,Y,Y2 and an optional axis info row (label row for Bar graphs) Axes according to their scale and available container width and height
+ *
  * @private
- * @param {Object} axis - Axis scaled according to input parameters
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
- * @returns {Object} - Scaled axes object
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
+ * @returns {object} - Scaled axes object
  */
 const getAxesScale = (axis, scale, config) => {
     axis.x = prepareXAxis(
@@ -198,13 +205,14 @@ const getAxesScale = (axis, scale, config) => {
  * Ticks can be formatted by passing the format string via input JSON.
  * * For formatting numbers (x,y,y2 axes ticks) use Python specifiers.
  * * Ticks can also be formatted for date time inputs.
+ *
  * @private
  * @see https://docs.python.org/2/library/string.html#format-specification-mini-language
  * @see https://github.com/d3/d3-time-format/blob/master/README.md#locales
- * @param {Object} locale - d3 Locale object
+ * @param {object} locale - d3 Locale object
  * @param {string} format - tick format string
  * @param {string} type - default or timeseries chart type
- * @returns {Object} d3 locale object formatter
+ * @returns {object} d3 locale object formatter
  */
 const getAxisTickFormat = (locale, format, type = AXIS_TYPE.DEFAULT) => {
     if (utils.isEmpty(format)) {
@@ -221,6 +229,7 @@ const getAxisTickFormat = (locale, format, type = AXIS_TYPE.DEFAULT) => {
  * * If there are no tick values provided then null is returned
  * * If the ticks values are in a ISO8601 format then a date object is returned
  * * No processing is done, otherwise
+ *
  * @private
  * @param {Array} ticks - Array of values that represent the tick values
  * @returns {(Array|null)} returns processed ticks, null otherwise
@@ -235,6 +244,7 @@ const processTickValues = (ticks) => {
  * Based on x axis orientation, sets the axis info row orientation.
  * * If x axis orientation is top, axis info row orientation is bottom.
  * * If x axis orientation is bottom, axis info row orientation is top.
+ *
  * @private
  * @param {string} xAxisOrientation - x axis orientation
  * @returns {string} returns orientation for axis info row.
@@ -246,14 +256,15 @@ const getAxisInfoOrientation = (xAxisOrientation) =>
 /**
  * Creates the axis using the scale provided for X Axis using d3 svg axis.
  * If tickValues are provided then they are reserved precedence over ticks/tick counts.
+ *
  * @private
- * @param {Object} scale - d3 scale calculated using domain and range
+ * @param {object} scale - d3 scale calculated using domain and range
  * @param {Array} tickValues - Array of values that represent the tick values
  * @param {number} width - Width of the canvas which will be used to tell d3 how many ticks to
  * keep in the X axis
- * @param {Object} format - d3 locale object formatted to represent the tick.
+ * @param {object} format - d3 locale object formatted to represent the tick.
  * @param {string} [orientation] - Axis orientation
- * @returns {Object} d3 object which forms the x-axis scale
+ * @returns {object} d3 object which forms the x-axis scale
  */
 const prepareXAxis = (
     scale,
@@ -274,10 +285,11 @@ const prepareXAxis = (
 
 /**
  * Creates the axis using the scale provided for X Axis using d3 svg axis.
+ *
  * @private
- * @param {Object} scale - d3 scale calculated using domain and range
+ * @param {object} scale - d3 scale calculated using domain and range
  * @param {string} [orientation] - Axis orientation
- * @returns {Object} d3 object which forms the text label axis scale
+ * @returns {object} d3 object which forms the text label axis scale
  */
 const prepareXAxisInfoRow = (scale, orientation = AXES_ORIENTATION.X.BOTTOM) =>
     d3.svg
@@ -288,11 +300,12 @@ const prepareXAxisInfoRow = (scale, orientation = AXES_ORIENTATION.X.BOTTOM) =>
 
 /**
  * Helper function to Create the axis using the scale provided for X Axis using d3 svg axis.
- * @param {Object} scale - d3 scale calculated using domain and range
+ *
+ * @param {object} scale - d3 scale calculated using domain and range
  * @param {Array} tickValues - Array of values that represent the tick values
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {string} [orientation] - Axis orientation
- * @return {Object} - d3 Object which forms the axis scale
+ * @returns {object} - d3 Object which forms the axis scale
  */
 const prepareHorizontalAxis = (scale, tickValues, config, orientation) =>
     prepareXAxis(
@@ -308,12 +321,13 @@ const prepareHorizontalAxis = (scale, tickValues, config, orientation) =>
     );
 /**
  * Creates the axis using the scale provided for Y Axis using d3 svg axis
+ *
  * @private
- * @param {Object} scale - d3 scale calculated using domain and range
+ * @param {object} scale - d3 scale calculated using domain and range
  * @param {Array} tickValues - Array of values that represent the tick values
  * @param {number} height - Height of the Y Axis to calculate the number of Y Axis ticks
- * @param {Object} format - d3 locale object formatted to represent the tick.
- * @returns {Object} d3 object which forms the y-axis scale
+ * @param {object} format - d3 locale object formatted to represent the tick.
+ * @returns {object} d3 object which forms the y-axis scale
  */
 const prepareYAxis = (scale, tickValues, height, format) =>
     d3.svg
@@ -325,12 +339,13 @@ const prepareYAxis = (scale, tickValues, height, format) =>
         .tickFormat(format);
 /**
  * Creates the axis using the scale provided for Y2 Axis using d3 svg axis
+ *
  * @private
- * @param {Object} scale - d3 scale calculated using domain and range
+ * @param {object} scale - d3 scale calculated using domain and range
  * @param {Array} tickValues - Array of values that represent the tick values
  * @param {number} height - Height of the Y2 Axis to calculate the number of Y2 Axis ticks
- * @param {Object} format - d3 locale object formatted to represent the tick.
- * @returns {Object} d3 object which forms the y2-axis scale
+ * @param {object} format - d3 locale object formatted to represent the tick.
+ * @returns {object} d3 object which forms the y2-axis scale
  */
 const prepareY2Axis = (scale, tickValues, height, format) =>
     d3.svg
@@ -342,6 +357,7 @@ const prepareY2Axis = (scale, tickValues, height, format) =>
         .tickFormat(format);
 /**
  * Returns the number of degrees the rotation of axis needs to be performed based on axis
+ *
  * @private
  * @param {string} axis - X, Y or Y2 axis
  * @returns {number} amount of degrees the rotation needs to be performed
@@ -358,16 +374,18 @@ const getRotationForAxis = (axis) => {
 };
 /**
  * X Axis label's starting position below the graph
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {number} Position for the label
  */
 const getXAxisLabelXPosition = (config) =>
     getXAxisXPosition(config) + getXAxisWidth(config) / 2;
 /**
  * X Axis label's position vertically below the graph
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {number} Position for the label
  */
 const getXAxisLabelYPosition = (config) =>
@@ -378,16 +396,18 @@ const getXAxisLabelYPosition = (config) =>
           (config.padding.bottom - config.axisInfoRowLabelHeight) * 2;
 /**
  * Y Axis label's starting position vertically beside the graph
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {number} Position for the label
  */
 const getYAxisLabelXPosition = (config) =>
     config.padding.left - config.axisLabelWidths.y;
 /**
  * Y Axis label's position distance away from the graph
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {number} Position for the label
  */
 const getYAxisLabelYPosition = (config) =>
@@ -395,8 +415,9 @@ const getYAxisLabelYPosition = (config) =>
     (getYAxisHeight(config) - config.padding.left / 2) / 2;
 /**
  * Y Axis label shape starting position vertically beside the graph
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {number} Position for the label shape
  */
 const getYAxisLabelShapeXPosition = (config) =>
@@ -405,8 +426,9 @@ const getYAxisLabelShapeXPosition = (config) =>
  * Y Axis label shape position distance away from the graph.
  * We are taking the Container height and adding it with
  * half of the width for label shape container so that it centers to the graph.
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {Selection} labelShapeContainer - d3 element for label shape container
  * @returns {number} Position for the label
  */
@@ -418,8 +440,9 @@ const getYAxisLabelShapeYPosition = (config, labelShapeContainer) =>
  * We are taking the Container height and subtracting it with
  * Label shape container width to center it with respect to the
  * container in reverse order.
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {Selection} labelShapeContainer - d3 element for label shape container
  * @returns {number} Position for the label
  */
@@ -428,8 +451,9 @@ const getY2AxisLabelShapeYPosition = (config, labelShapeContainer) =>
     labelShapeContainer.node().getBoundingClientRect().height / 2;
 /**
  * Y2 Axis label's starting position vertically beside the graph
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {number} Position for the label
  */
 const getY2AxisLabelXPosition = (config) =>
@@ -438,16 +462,18 @@ const getY2AxisLabelXPosition = (config) =>
     config.axisLabelWidths.y2;
 /**
  * Y2 Axis label shape starting position vertically beside the graph
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {number} Position for the label shape
  */
 const getY2AxisLabelShapeXPosition = (config) =>
     getY2AxisLabelXPosition(config) - constants.BASE_LABEL_ICON_HEIGHT_PADDING;
 /**
  * Calculates Vertical Padding according to X Axis orientation
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {number} Vertical Padding for X Axis
  */
 const calculateVerticalPadding = (config) => {
@@ -460,16 +486,18 @@ const calculateVerticalPadding = (config) => {
 };
 /**
  * X Axis's starting position within the canvas
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {number} Position for the axis
  */
 const getXAxisXPosition = (config) =>
     config.axisSizes.y + config.axisLabelWidths.y;
 /**
  * X Axis's position vertically relative to the canvas
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {number} Position for the axis
  */
 const getAxisInfoRowYPosition = (config) =>
@@ -478,8 +506,9 @@ const getAxisInfoRowYPosition = (config) =>
         : calculateVerticalPadding(config);
 /**
  * Axis Info Row's position vertically relative to the canvas
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {number} Position for the axis
  */
 const getXAxisYPosition = (config) =>
@@ -488,37 +517,42 @@ const getXAxisYPosition = (config) =>
         : getYAxisHeight(config) + calculateVerticalPadding(config);
 /**
  * Y Axis's starting position relative to the canvas
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {number} Position for the axis
  */
 const getYAxisXPosition = (config) => getXAxisXPosition(config);
 /**
  * Y Axis's position vertically relative to the canvas
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {number} Position for the axis
  */
 const getYAxisYPosition = (config) => calculateVerticalPadding(config);
 /**
  * Y2 Axis's starting position relative to the canvas
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {number} Position for the axis
  */
 const getY2AxisXPosition = (config) =>
     getYAxisXPosition(config) + getXAxisWidth(config);
 /**
  * Y2 Axis's position vertically relative to the canvas
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {number} Position for the axis
  */
 const getY2AxisYPosition = (config) => calculateVerticalPadding(config);
 /**
  * X Axis's width that will hold equally spaced ticks
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {number} X Axis width
  */
 const getXAxisWidth = (config) =>
@@ -529,15 +563,17 @@ const getXAxisWidth = (config) =>
     config.axisLabelWidths.y2;
 /**
  * Y Axis height for the axis and canvas region to clip the chart within
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {number} Height of the canvas
  */
 const getYAxisHeight = (config) => config.height;
 /**
  * X Axis height for the axis and labels to display within
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {number} Height of the X Axis ticks, labels and numbers/datetimes
  */
 const getXAxisHeight = (config) => {
@@ -560,20 +596,23 @@ const getXAxisHeight = (config) => {
 };
 /**
  * X Axis range used to instruct d3 when creating a scale
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {Array} lower and upper bound forming the range
  */
 const getXAxisRange = (config) => [0, getXAxisWidth(config)];
 /**
  * Y Axis range used to instruct d3 when creating a scale
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {Array} lower and upper bound forming the range
  */
 const getYAxisRange = (config) => [getYAxisHeight(config), 0];
 /**
  * Dynamically generate the label width for axes
+ *
  * @private
  * @param {string} label - Label text
  * @param {string} axis - x, y or y2
@@ -592,6 +631,7 @@ const getAxisLabelWidth = (label, axis) => {
 };
 /**
  * Dynamically generate the label height for axes
+ *
  * @private
  * @param {string} label - Label text
  * @returns {number} label height
@@ -607,9 +647,10 @@ const getAxisLabelHeight = (label) => {
 };
 /**
  * Dynamically generate the label width for y axes
+ *
  * @private
  * @param {string} id - y or y2
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {number} label width
  */
 const getYAxisWidth = (id, config) => {
@@ -637,6 +678,7 @@ const getYAxisWidth = (id, config) => {
 
 /**
  * Generate the label width for y2 axes.
+ *
  * @private
  * @param {object} config - config object derived from input JSON.
  * @returns {number} label width
@@ -653,6 +695,7 @@ const getY2AxisWidth = (config) => {
 };
 /**
  * Checks if X Axis orientation is set to top
+ *
  * @private
  * @param {string} xAxisOrientation - X Axis orientation
  * @returns {boolean} - true if X Axis orientation is set to top, false if it is bottom(default)
@@ -664,8 +707,9 @@ const isXAxisOrientationTop = (xAxisOrientation) =>
  *  X Axis: Height
  *  Y Axis: Width
  *  Y2 Axis: Width
+ *
  *  @private
- *  @param {Object} config - config object derived from input JSON
+ *  @param {object} config - config object derived from input JSON
  *  @returns {undefined} - returns nothing
  */
 const calculateAxesSize = (config) => {
@@ -681,8 +725,9 @@ const calculateAxesSize = (config) => {
  *  X Axis Label: Height
  *  Y Axis Label: Width
  *  Y2 Axis Label: Width
+ *
  *  @private
- *  @param {Object} config - config object derived from input JSON
+ *  @param {object} config - config object derived from input JSON
  *  @returns {undefined} - returns nothing
  */
 const calculateAxesLabelSize = (config) => {
@@ -711,8 +756,9 @@ const calculateAxesLabelSize = (config) => {
 };
 /**
  * Returns the mid value of the axis domain relative to the lower bound
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {string} yAxis - Y, Y2 etc
  * @returns {number} returns a number representing the mid value of y axes domain
  */
@@ -727,8 +773,9 @@ const getMidPoint = (config, yAxis) => {
  * Calculates the lower part of the outlier based on data points.
  * If the content has any data points that are outside the lower and upper bounds set
  * in the vertical axis then we adjust the axis bounds to support that outlier value.
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {Array} List of lower bound values for each of the vertical axis
  */
 const getLowerOutlierStretchFactorList = (config) => {
@@ -758,8 +805,9 @@ const getLowerOutlierStretchFactorList = (config) => {
  * Calculates the upper part of the outlier based on data points.
  * If the content has any data points that are outside the lower and upper bounds set
  * in the vertical axis then we adjust the axis bounds to support that outlier value.
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {Array} List of upper bound values for each of the vertical axis
  */
 const getUpperOutlierStretchFactorList = (config) => {
@@ -789,9 +837,10 @@ const getUpperOutlierStretchFactorList = (config) => {
  * Determines if the values provided exceed the lower and upper bounds provided in the Y or Y2 axes
  * If the values exceed the bounds then the range and domain are adjusted accordingly.
  * There is no outlier check for X axis, for now, due to the possibility that X axis can be a timeseries.
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
- * @returns {Object} stretch factor determines the new upper and lower limit.
+ * @param {object} config - config object derived from input JSON
+ * @returns {object} stretch factor determines the new upper and lower limit.
  */
 const determineOutlierStretchFactor = (config) => {
     const sortOutlier = (firstValue, secondValue) => secondValue - firstValue;
@@ -806,6 +855,7 @@ const determineOutlierStretchFactor = (config) => {
 };
 /**
  * Returns the d3 html element after appending axis label text
+ *
  * @private
  * @param {Array} group - d3 html element
  * @param {string} label - Label text
@@ -819,17 +869,19 @@ const buildAxisLabel = (group, label) =>
         .text(label);
 /**
  * Decides true if the input JSON y2.show is enabled and if y2 axis points are provided
+ *
  * @private
- * @param {Object} axis - x, y and y2 axes values
+ * @param {object} axis - x, y and y2 axes values
  * @returns {boolean} True if enabled
  */
 const hasY2Axis = (axis) => utils.isDefined(axis.y2) && axis.y2.show;
 /**
  * Updates the x, y, y2 (if enabled) and axis info row(if enabled) positions on resize
+ *
  * @private
- * @param {Object} axis - Axis scaled according to input parameters
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
@@ -886,10 +938,11 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
 /**
  * Updates the Y axis reference line when resized. This is also called
  * when a content is loaded.
+ *
  * @private
- * @param {Object} axis - Axis scaled according to input parameters
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
@@ -927,11 +980,12 @@ const translateAxisReferenceLine = (axis, scale, config, canvasSVG) => {
  * Calculates current min and max value ranges.
  * if the input is bar content and is being cascaded on top of other bars,
  * then we need to calculate top and bottom domain values by summing cascaded bars value ranges
+ *
  * @private
- * @param {Object} input - Object containing min and max data point values
+ * @param {object} input - Object containing min and max data point values
  * @param {Array} content - array of target objects
  * @param {string} axis - y or y2
- * @returns {Object} - Object with min and max value ranges
+ * @returns {object} - Object with min and max value ranges
  */
 const getCurMinMaxValueRange = (input, content, axis) => {
     if (input instanceof Bar) {
@@ -963,10 +1017,11 @@ const getCurMinMaxValueRange = (input, content, axis) => {
  * Data point sets [n]
  *  Data points [n]
  *      x, y, y2 [1]
+ *
  * @private
- * @param {Object} input - input content object
+ * @param {object} input - input content object
  * @param {string} axis - y or y2
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {Array} content - array of target objects
  * @returns {undefined} - returns nothing
  */
@@ -1001,6 +1056,7 @@ const getAxesDataRange = (
 };
 /**
  * Checks if provided input has valid axis type
+ *
  * @param {string} x - input x value
  * @param {string} xAxisType - x axis type
  * @returns {boolean} - returns true if valid, false if invalid

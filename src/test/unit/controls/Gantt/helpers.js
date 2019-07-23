@@ -121,8 +121,9 @@ export const datelineAlt = {
 };
 /**
  * Creates and returns an example input with custom axis values
- * @param {Object} axis - X and Y axis data
- * @returns {Object} input JSON
+ *
+ * @param {object} axis - X and Y axis data
+ * @returns {object} input JSON
  */
 export const getAxes = (axis = {}) => ({
     bindTo: "#testCarbonGantt",
@@ -130,11 +131,12 @@ export const getAxes = (axis = {}) => ({
 });
 /**
  * Creates and returns an example input with data point values
- * @param {Object} tasks - task values
- * @param {Object} activities - activities values
- * @param {Object} events - events values
- * @param {Object} actions - actions values
- * @returns {Object} input JSON
+ *
+ * @param {object} tasks - task values
+ * @param {object} activities - activities values
+ * @param {object} events - events values
+ * @param {object} actions - actions values
+ * @returns {object} input JSON
  */
 export const getData = (
     tasks = [],
@@ -159,6 +161,7 @@ export const getData = (
     });
 /**
  * Returns the DOM element queried by Class
+ *
  * @param {string} cls - Class attribute name
  * @returns {HTMLElement} - DOM element
  */
@@ -166,6 +169,7 @@ export const fetchElementByClass = (cls) => document.querySelector(`.${cls}`);
 
 /**
  * Returns the DOM element queried by Class
+ *
  * @param {HTMLElement} id - Id attribute name
  * @param {string} cls - Class attribute name
  * @returns {HTMLElement} - DOM element

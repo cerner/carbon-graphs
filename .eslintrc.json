@@ -7,9 +7,10 @@
     "globals": {
         "ENV": true
     },
-    "extends": "eslint:recommended",
+    "extends": ["eslint:recommended", "plugin:jsdoc/recommended"],
     "plugins": [
-        "ideal"
+        "ideal",
+        "jsdoc"
     ],
     "parserOptions": {
         "ecmaVersion": 6,

@@ -23,6 +23,7 @@ import { drawSelectionBars, getSelectedData } from "./selectionHelpers";
 
 /**
  * Checks if ticks are provided for every input
+ *
  * @private
  * @param {Array} xTicks - graph x axis tick values
  * @param {Array} inputValues - input values
@@ -33,6 +34,7 @@ const hasInvalidTicks = (xTicks, inputValues) =>
 
 /**
  * Checks if x-axis type matches for every input
+ *
  * @private
  * @param {string} type - x-axis type
  * @param {Array} inputValues - input values
@@ -44,13 +46,14 @@ const hasInvalidTypes = (type, inputValues) =>
  * Processes the input JSON and adds the colors, labels etc. to each data points so that we
  * can use them when rendering the data point.
  * We add key to shownTargets if bar content is newly added to graph
+ *
  * @private
- * @param {Object} graphConfig - config object of Graph API
- * @param {Object} dataTarget - Data points object
+ * @param {object} graphConfig - config object of Graph API
+ * @param {object} dataTarget - Data points object
  * @throws module:errors.THROW_MSG_EMPTY_X_AXIS_TICK_VALUES
  * @throws module:errors.THROW_MSG_INVALID_FORMAT_TYPE
  * @throws module:errors.THROW_MSG_INVALID_X_AXIS_TICK_VALUES
- * @returns {Object} dataTarget - Updated data target object
+ * @returns {object} dataTarget - Updated data target object
  */
 const processDataPoints = (graphConfig, dataTarget) => {
     if (
@@ -92,8 +95,9 @@ const processDataPoints = (graphConfig, dataTarget) => {
 
 /**
  * Checks if each axis info row input has value
+ *
  * @private
- * @param {Object} inputAxisInfoRow - input axis info row values
+ * @param {object} inputAxisInfoRow - input axis info row values
  * @returns {boolean} - true if each axis info row input has value, false otherwise
  */
 const hasMissingAxisInfoRowValue = (inputAxisInfoRow) =>
@@ -102,8 +106,9 @@ const hasMissingAxisInfoRowValue = (inputAxisInfoRow) =>
     );
 /**
  * Checks if each axis info row input value label has display
+ *
  * @private
- * @param {Object} inputAxisInfoRow - input axis info row values
+ * @param {object} inputAxisInfoRow - input axis info row values
  * @returns {boolean} - true if each axis info row input value label has display , false otherwise
  */
 const hasMissingAxisInfoRowLabelDisplay = (inputAxisInfoRow) =>
@@ -116,10 +121,11 @@ const hasMissingAxisInfoRowLabelDisplay = (inputAxisInfoRow) =>
 /**
  * Processes the input JSON and adds the colors, labels etc. to each data points so that we
  * can use them when rendering the data point.
+ *
  * @private
- * @param {Object} graphConfig - config object of Graph API
- * @param {Object} dataTarget - Data points object
- * @returns {Object} dataTarget - Updated data target object
+ * @param {object} graphConfig - config object of Graph API
+ * @param {object} dataTarget - Data points object
+ * @returns {object} dataTarget - Updated data target object
  */
 const setDataPoints = (graphConfig, dataTarget) => {
     const type = graphConfig.axis.x.type;
@@ -167,8 +173,9 @@ const setDataPoints = (graphConfig, dataTarget) => {
 };
 /**
  * Checks for the presence of secondary display inside axisInfoRow
+ *
  * @private
- * @param {Object} dataTarget - Data points object
+ * @param {object} dataTarget - Data points object
  * @returns {boolean} - true if secondary display is present, false otherwise
  */
 const hasSecondaryDisplay = (dataTarget) =>
@@ -178,8 +185,9 @@ const hasSecondaryDisplay = (dataTarget) =>
 
 /**
  * X Axis's starting position within the canvas
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {number} Position for the axis
  */
 const getXAxisXPosition = (config) =>
@@ -192,12 +200,13 @@ const getXAxisXPosition = (config) =>
  *  Legend
  *  Labels
  * Once these items are rendered, we will parse through the data points and render the lines and points
+ *
  * @private
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} ordinalScale - bar x-axis ordinal scale
- * @param {Object} config - config object derived from input JSON
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} ordinalScale - bar x-axis ordinal scale
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @param {Object} dataTarget - Data points
+ * @param {object} dataTarget - Data points
  * @returns {undefined} - returns nothing
  */
 const draw = (scale, ordinalScale, config, canvasSVG, dataTarget) => {
@@ -239,10 +248,11 @@ const draw = (scale, ordinalScale, config, canvasSVG, dataTarget) => {
  * x is calculated using ordinal scale. Padding between each bar should be half of its width.
  * width of bar should be 2/3 of range band. Remaining 1/3 of range band is for padding between bars.
  * height of bar should be
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} ordinalScale - bar x-axis ordinal scale
- * @returns {Object} Object that contains methods for calculating x, y, height, width.
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} ordinalScale - bar x-axis ordinal scale
+ * @returns {object} Object that contains methods for calculating x, y, height, width.
  */
 const barAttributesHelper = (scale, ordinalScale) => {
     const leftShiftOffset =
@@ -271,15 +281,16 @@ const barAttributesHelper = (scale, ordinalScale) => {
 
 /**
  * Creates a d3 svg bar
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} ordinalScale - bar x-axis ordinal scale
- * @param {Object} config - config object derived from input JSON
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} ordinalScale - bar x-axis ordinal scale
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @param {Object} barGroupSVG - d3 object for bar group svg
+ * @param {object} barGroupSVG - d3 object for bar group svg
  * @param {Array} regionList - List of regions to be shown within graph
  * @param {Array} axisInfoRowList - List of text labels to be shown
- * @returns {Object} d3 bar object
+ * @returns {object} d3 bar object
  */
 const drawDataBars = (
     scale,
@@ -367,8 +378,9 @@ const drawDataBars = (
 
 /**
  * Sets key as group name if group name is empty
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {Array} content - Array of targets
  * @returns {undefined} - returns nothing
  */
@@ -384,10 +396,11 @@ const setGroupName = (config, content) => {
 
 /**
  * CLear the graph data points and bars currently rendered
+ *
  * @private
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {string} key - identifier
- * @returns {Object} - d3 select object
+ * @returns {object} - d3 select object
  */
 const clear = (canvasSVG, key) =>
     d3RemoveElement(canvasSVG, `g[aria-describedby="${key}"]`);
@@ -396,11 +409,12 @@ const clear = (canvasSVG, key) =>
  * A callback that will be sent to Graph class so that when graph is
  * created the Graph API will execute this callback function and the legend
  * items are loaded.
+ *
  * @private
- * @param {Object} config - Graph config object derived from input JSON
- * @param {Object} eventHandlers - Object containing click and hover event handlers for legend item
- * @param {Object} dataTarget - Data points object
- * @param {Object} legendSVG - d3 element that will be need to render the legend
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {object} eventHandlers - Object containing click and hover event handlers for legend item
+ * @param {object} dataTarget - Data points object
+ * @param {object} legendSVG - d3 element that will be need to render the legend
  * items into.
  * @returns {undefined} - returns nothing
  */
@@ -416,8 +430,9 @@ const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
 };
 /**
  * Toggles the selection of a bar, executes on click of a bar.
+ *
  * @private
- * @param {Object} value - data point object
+ * @param {object} value - data point object
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {string} type - x-axis type
  * @param {Array} tickValues - X axis ticks array
@@ -445,8 +460,9 @@ const toggleDataPointSelection = (value, canvasSVG, type, tickValues) => {
  *      value [x and y data point values]
  *      Selected bar target [d3 target]
  *  On close of popup, call -> the provided callback
+ *
  * @private
- * @param {Object} value - data point object
+ * @param {object} value - data point object
  * @param {number} index - data point index for the set
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {string} type - x-axis type
@@ -473,8 +489,9 @@ const barActionHandler = (value, index, canvasSVG, type, tickValues, datum) => {
 };
 /**
  * sets selection bar's aria-hidden and aria-selected attributes
+ *
  * @private
- * @param {Object} selectionPath - selection bar svg path
+ * @param {object} selectionPath - selection bar svg path
  * @param {boolean} isSelected - true if selected, false if not
  * @returns {undefined} - returns nothing
  */

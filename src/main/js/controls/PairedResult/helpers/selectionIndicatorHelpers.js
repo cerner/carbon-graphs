@@ -9,10 +9,11 @@ import { getSVGObject } from "./helpers";
 /**
  * Returns the pair value that's present, to be used when
  * one of the pair item is known to be absent
+ *
  * @private
- * @param {Object} pair - Object containing high, low and mid pair values along with
+ * @param {object} pair - Object containing high, low and mid pair values along with
  * their x and y co-ordinates.
- * @returns {Object} Available pair object value
+ * @returns {object} Available pair object value
  */
 const getIncompletePairObject = (pair) => {
     if (pair.high) {
@@ -25,10 +26,11 @@ const getIncompletePairObject = (pair) => {
 /**
  * Checks if any pairs values are present and if they are currently hidden in the graph.
  * The operation of hiding is usually achieved using legend toggle.
+ *
  * @summary A pair is incomplete if either high or low value is missing.
  * @private
- * @param {Object} config - Graph config object derived from input JSON
- * @param {Object} value - data point object
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {object} value - data point object
  * @returns {boolean} If data point high, low or mid is hidden or otherwise
  */
 const isIncompletePairHidden = (config, value) =>
@@ -36,11 +38,12 @@ const isIncompletePairHidden = (config, value) =>
 /**
  * Although we are displaying the indicator even when the legend item
  * is toggled, we should hide all but the ones we are going to click on.
+ *
  * @summary A pair is partial if the both high and low data are present but they are
  * hidden.
  * @private
- * @param {Object} config - Graph config object derived from input JSON
- * @param {Object} value - data point object
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {object} value - data point object
  * @returns {boolean} True if high or low are hidden from graph or otherwise
  */
 const isPairPartiallyHidden = (config, value) =>
@@ -54,10 +57,11 @@ const isPairPartiallyHidden = (config, value) =>
  * This will not be triggered when the data point is:
  *  * Incomplete pair to begin with
  *  * Already has both high and low pairs displayed
+ *
  * @private
- * @param {Object} config - Graph config object derived from input JSON
- * @param {Object} value - data point object
- * @param {Object} target - DOM element of the data point clicked
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {object} value - data point object
+ * @param {object} target - DOM element of the data point clicked
  * @returns {undefined} - returns nothing
  */
 const showHideSiblingDataPoint = (config, value, target) => {
@@ -84,9 +88,10 @@ const showHideSiblingDataPoint = (config, value, target) => {
  *  * If the pair in question doesnt have both high and low data point values
  *  * If one or more are hidden using the legend toggle
  *  * If ones of the data point values are missing i.e. either high or low.
+ *
  * @private
- * @param {Object} config - Graph config object derived from input JSON
- * @param {Object} value - data point object
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {object} value - data point object
  * @returns {*|boolean} True if a legend item is toggled, false otherwise
  */
 const isDataPointLegendToggled = (config, value) => {
@@ -99,10 +104,11 @@ const isDataPointLegendToggled = (config, value) => {
  * Shows the highlight for the selected data point.
  * If ones of the data points are hidden using legend, then they are also shown for
  * the pair that was selected.
+ *
  * @private
- * @param {Object} config - Graph config object derived from input JSON
- * @param {Object} value - data point object
- * @param {Object} target - DOM element of the data point clicked
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {object} value - data point object
+ * @param {object} target - DOM element of the data point clicked
  * @returns {Array} d3 html element of the selected point
  */
 const toggleDataPointSelection = (config, value, target) => {
@@ -131,11 +137,12 @@ const toggleDataPointSelection = (config, value, target) => {
  *      value [x and y data point values]
  *      Selected data point target [d3 target]
  *  On close of popup, call -> the provided callback
+ *
  * @private
- * @param {Object} config - Graph config object derived from input JSON
- * @param {Object} value - data point object
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {object} value - data point object
  * @param {number} index - data point index for the set
- * @param {Object} target - DOM object of the clicked point
+ * @param {object} target - DOM object of the clicked point
  * @returns {undefined} - returns nothing
  */
 export const dataPointActionHandler = (config, value, index, target) => {
@@ -164,11 +171,12 @@ export const dataPointActionHandler = (config, value, index, target) => {
  * Result. When a pair is clicked the rectangle shall be toggled visible.
  * The attributes width and height are calculated using x,y and x1,y1 co-ordinates from
  * high and low pair values. They are converted to appropriate "scale" using the parameter.
+ *
  * @private
- * @param {Object} d3PairElement - d3 appended object
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} value - data point object
- * @returns {Object} - d3 append object with correct attributes for creation and translation
+ * @param {object} d3PairElement - d3 appended object
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} value - data point object
+ * @returns {object} - d3 append object with correct attributes for creation and translation
  */
 const updateSelectionIndicatorAttributes = (d3PairElement, scale, value) =>
     d3PairElement
@@ -199,8 +207,9 @@ const updateSelectionIndicatorAttributes = (d3PairElement, scale, value) =>
         );
 /**
  * Transforms the partial point in the Paired Result graph on resize
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
+ * @param {object} scale - d3 scale for Graph
  * @returns {Function} - translate function for d3 transform
  */
 const transformPartialPoint = (scale) => (value) => (scaleFactor) => {
@@ -212,10 +221,11 @@ const transformPartialPoint = (scale) => (value) => (scaleFactor) => {
  * Transforms selection indicator RECTANGLE for a data point set in the Paired Result graph on resize, with
  * both high and low data points.
  * Needs to have both high and low data points for translation of a "box" to occur.
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
+ * @param {object} scale - d3 scale for Graph
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {Object} - d3 select object
+ * @returns {object} - d3 select object
  */
 export const translateSelectionBox = (scale, canvasSVG) =>
     canvasSVG
@@ -238,10 +248,11 @@ export const translateSelectionBox = (scale, canvasSVG) =>
  * Transforms selection indicator CIRCLE for a data point set in the Paired Result graph on resize, with
  * an incomplete pair i.e. only high or low is present.
  * If both high and low are not present then we load a circle as a selection indicator.
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
+ * @param {object} scale - d3 scale for Graph
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {Object} - d3 select object
+ * @returns {object} - d3 select object
  */
 export const translateSelectionItem = (scale, canvasSVG) =>
     canvasSVG
@@ -260,12 +271,13 @@ export const translateSelectionItem = (scale, canvasSVG) =>
         });
 /**
  * Adds a RECT svg element for each data point pair high AND low.
+ *
  * @private
- * @param {Object} d3PairElement - d3 select object containing the pair box
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - Graph config object derived from input JSON
- * @param {Object} value - data point object
- * @returns {Object} - d3 append object
+ * @param {object} d3PairElement - d3 select object containing the pair box
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {object} value - data point object
+ * @returns {object} - d3 append object
  */
 const addRect = (d3PairElement, scale, config, value) =>
     updateSelectionIndicatorAttributes(
@@ -282,11 +294,12 @@ const addRect = (d3PairElement, scale, config, value) =>
 
 /**
  * Adds a CIRCLE svg element for each data point pair high OR low OR mid.
+ *
  * @private
- * @param {Object} d3PairElement - d3 select object containing the pair box
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - Graph config object derived from input JSON
- * @param {Object} value - data point object
+ * @param {object} d3PairElement - d3 select object containing the pair box
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {object} value - data point object
  * @returns {undefined} - returns nothing
  */
 const addCircle = (d3PairElement, scale, config, value) =>
@@ -308,11 +321,12 @@ const addCircle = (d3PairElement, scale, config, value) =>
  * Draws a rectangle around the 2 data points high and low. If either one of them is missing
  * then the rectangle is not drawn. A circle is allocated for any incomplete pair.
  * They are hidden by default, will be shown when a pair is clicked
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - Graph config object derived from input JSON
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - Graph config object derived from input JSON
  * @param {Array} boxPath - d3 html element of the paired box
- * @returns {Object} - d3 append object
+ * @returns {object} - d3 append object
  */
 export const drawSelectionIndicator = (scale, config, boxPath) =>
     boxPath.each(function(value) {

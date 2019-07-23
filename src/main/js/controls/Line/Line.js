@@ -28,19 +28,20 @@ import {
 import LineConfig from "./LineConfig";
 
 /**
- * @typedef {Object} Line
- * @typedef {Object} GraphContent
- * @typedef {Object} LineConfig
+ * @typedef {object} Line
+ * @typedef {object} GraphContent
+ * @typedef {object} LineConfig
  */
 /**
  * Calculates the min and max values for Y Axis or Y2 Axis.
  * First we filter out values that are `null`, this is a result of
  * datapoint being part of being in a non-contiguous series and then we
  * get the min and max values for the Y or Y2 axis domain.
+ *
  * @private
  * @param {Array} values - Datapoint values
  * @param {string} axis - y or y2
- * @returns {Object} - Contains min and max values for the data points for Y and Y2 axis
+ * @returns {object} - Contains min and max values for the data points for Y and Y2 axis
  */
 const calculateValuesRange = (values, axis = constants.Y_AXIS) => {
     const yAxisValuesList = values.filter((i) => i.y !== null).map((i) => i.y);
@@ -55,9 +56,10 @@ const calculateValuesRange = (values, axis = constants.Y_AXIS) => {
 /**
  * Data point sets can be loaded using this function.
  * Load function validates, clones and stores the input onto a config object.
+ *
  * @private
- * @param {Object} inputJSON - Input JSON provided by the consumer
- * @returns {Object} LineConfig config object containing consumer data
+ * @param {object} inputJSON - Input JSON provided by the consumer
+ * @returns {object} LineConfig config object containing consumer data
  */
 const loadInput = (inputJSON) =>
     new LineConfig()
@@ -75,12 +77,13 @@ const loadInput = (inputJSON) =>
  *  * Generate
  *  * Unload
  *  * Destroy
+ *
  * @module Line
  * @class Line
  */
 class Line extends GraphContent {
     /**
-     * @constructor
+     * @class
      * @param {LineConfig} input - Input JSON instance created using GraphConfig
      */
     constructor(input) {
@@ -98,7 +101,7 @@ class Line extends GraphContent {
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     load(graph) {
         this.dataTarget = processDataPoints(graph.config, this.config);
@@ -136,7 +139,7 @@ class Line extends GraphContent {
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     unload(graph) {
         clear(graph.svg, this.dataTarget);
@@ -155,7 +158,7 @@ class Line extends GraphContent {
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     resize(graph) {
         if (
@@ -176,7 +179,7 @@ class Line extends GraphContent {
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     redraw(graph) {
         clear(graph.svg, this.dataTarget);

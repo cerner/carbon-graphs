@@ -7,10 +7,11 @@ import utils from "../../helpers/utils";
 /**
  * Processes the input from the JSON and updates the config object.
  * d3 domain and ranges are stored based on the upper and lower x limits.
+ *
  * @private
- * @param {Object} input - Input JSON provided by the consumer
- * @param {Object} config - config object used by the graph
- * @returns {Object} - returns configuration object constructed using Input JSON
+ * @param {object} input - Input JSON provided by the consumer
+ * @param {object} config - config object used by the graph
+ * @returns {object} - returns configuration object constructed using Input JSON
  */
 export const processInput = (input, config) => {
     config.clipPathId = generateClipPathId();
@@ -23,11 +24,12 @@ export const processInput = (input, config) => {
 
 /**
  * API to parse consumer input for Graph
+ *
  * @class PieConfig
  */
 class PieConfig extends BaseConfig {
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     constructor() {
         super();
@@ -36,14 +38,14 @@ class PieConfig extends BaseConfig {
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     getConfig() {
         return this.config;
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     setInput(inputJSON) {
         this.input = inputJSON;
@@ -54,6 +56,7 @@ class PieConfig extends BaseConfig {
      * Validates and verifies the input JSON object
      * Checks if the following properties are present:
      *      bindTo
+     *
      * @throws {module:errors.THROW_MSG_NO_BIND}
      * @throws {module:errors.THROW_MSG_INVALID_INPUT}
      * @returns {PieConfig} instance object
@@ -70,6 +73,7 @@ class PieConfig extends BaseConfig {
 
     /**
      * Clones the input JSON into the config object
+     *
      * @returns {PieConfig} instance object
      */
     clone() {

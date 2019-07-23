@@ -30,8 +30,9 @@ import {
 /**
  * Calculates the height for Y and Y2 axes.
  * If dimensions are provided in the input, then they are given priority.
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {number} Height for the axes
  */
 const determineHeight = (config) =>
@@ -40,8 +41,9 @@ const determineHeight = (config) =>
         : parseInt(getYAxisRange(config.axis.y.trackList).pop(), 10);
 /**
  * Updates the track count based on load or unload of content into gantt chart
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {boolean} [isLoad=false] True if load workflow, false if unload
  * @returns {number} current track count within the graph
  */
@@ -51,11 +53,12 @@ const updateTrackCount = (config, isLoad = false) =>
 /**
  * Updates the trackList object to include new track info, by converting trackListObject
  * to array, insert new trackObject and convert it back to object.
+ *
  * @private
- * @param {Object} content - track Content
- * @param {Number} trackIndex - index at which track needs to be loaded
- * @param {Object} trackListObject - Object which holds list of Tracks
- * @returns {Object} Updated object which now holds the new track.
+ * @param {object} content - track Content
+ * @param {number} trackIndex - index at which track needs to be loaded
+ * @param {object} trackListObject - Object which holds list of Tracks
+ * @returns {object} Updated object which now holds the new track.
  */
 const updateTrackList = (content, trackIndex, trackListObject) => {
     // convert trackListObject to an actual array (its an object)
@@ -88,9 +91,10 @@ const updateTrackList = (content, trackIndex, trackListObject) => {
  *
  *  Optional:
  *  * Height - by default: constants.DEFAULT_GANTT_TRACK_HEIGHT
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
- * @param {Object} content - input JSON provided by consumer
+ * @param {object} config - config object derived from input JSON
+ * @param {object} content - input JSON provided by consumer
  * @param {boolean} [isLoad=false] True if load workflow, false if unload
  * @returns {undefined} - returns nothing
  */
@@ -102,9 +106,10 @@ const updateTrackProps = (config, content, isLoad = false) => {
 };
 /**
  * Determines the domain for x and y axes.
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
- * @returns {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
+ * @returns {object} config - config object derived from input JSON
  */
 const updateAxesDomain = (config) => {
     config.axis.y.domain = {
@@ -115,10 +120,11 @@ const updateAxesDomain = (config) => {
 };
 /**
  * Creates the axis using the scale provided for Y Axis using d3 svg axis
+ *
  * @private
- * @param {Object} scale - d3 scale calculated using domain and range
+ * @param {object} scale - d3 scale calculated using domain and range
  * @param {number} height - Height of the Y Axis to calculate the number of Y Axis ticks
- * @returns {Object} d3 object which forms the y-axis scale
+ * @returns {object} d3 object which forms the y-axis scale
  */
 const prepareYAxis = (scale, height) =>
     d3.svg
@@ -133,8 +139,9 @@ const prepareYAxis = (scale, height) =>
  *  Y Axis: Width
  *  Padding is provided enough to accommodate around 15 characters.
  *  Beyond which we would need to apply truncation (ellipsis)
+ *
  *  @private
- *  @param {Object} config - config object derived from input JSON
+ *  @param {object} config - config object derived from input JSON
  *  @returns {undefined} - returns nothing
  */
 const calculateAxesSize = (config) => {
@@ -145,8 +152,9 @@ const calculateAxesSize = (config) => {
 /**
  *  Calculates the label size needed for each axes.
  *  Y Axis: Width
+ *
  *  @private
- *  @param {Object} config - config object derived from input JSON
+ *  @param {object} config - config object derived from input JSON
  *  @returns {undefined} - returns nothing
  */
 const calculateAxesLabelSize = (config) => {
@@ -155,9 +163,10 @@ const calculateAxesLabelSize = (config) => {
 };
 /**
  * Dynamically generate the label width for y axes
+ *
  * @private
  * @param {string} id - y or y2
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {number} label width
  */
 const getYAxisWidth = (id, config) => {
@@ -181,8 +190,9 @@ const getYAxisWidth = (id, config) => {
 };
 /**
  * X Axis's width that will hold equally spaced ticks
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {number} X Axis width
  */
 const getXAxisWidth = (config) =>
@@ -192,6 +202,7 @@ const getXAxisWidth = (config) =>
     getXAxisYPosition(config);
 /**
  * X Axis's position vertically relative to the canvas
+ *
  * @private
  * @param {object} config - config object derived from input JSON
  * @returns {number} Position for the axis
@@ -200,6 +211,7 @@ const getXAxisYPosition = (config) =>
     (config.padding.top + config.padding.bottom) * 2;
 /**
  * Y Axis's position vertically relative to the canvas
+ *
  * @private
  * @param {object} config - derived config from input json.
  * @returns {number} Position for the axis
@@ -207,11 +219,12 @@ const getXAxisYPosition = (config) =>
 const getYAxisYPosition = (config) => getXAxisYPosition(config);
 /**
  * Prepares X,Y and Y2 Axes according to their scale and available container width and height
+ *
  * @private
- * @param {Object} axis - Axis scaled according to input parameters
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
- * @returns {Object} - Scaled axes object
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
+ * @returns {object} - Scaled axes object
  */
 const getAxesScale = (axis, scale, config) => {
     axis.x = prepareXAxis(
@@ -234,8 +247,9 @@ const getAxesScale = (axis, scale, config) => {
  * but if the data is provided then the domain will be 'null' as the first item
  * followed by the content labels. We add the null to ensure that the first track does not
  * coincide with the X Axis.
+ *
  * @private
- * @param {Object} trackList - Y Axis trackList config object
+ * @param {object} trackList - Y Axis trackList config object
  * @returns {Array} array containing the current domain for Y Axis
  */
 const getYAxisDomain = (trackList) =>
@@ -246,8 +260,9 @@ const getYAxisDomain = (trackList) =>
  * Computes the Y Axis range by adding the track heights provided by consumer for each track
  * If the track height for 3 tracks are [80, null, 50]
  * then they will be [80, 80+<DEFAULT_TRACK_HEIGHT>, 80+<DEFAULT_TRACK_HEIGHT>+50]
+ *
  * @private
- * @param {Object} trackList - Y Axis trackList config object
+ * @param {object} trackList - Y Axis trackList config object
  * @returns {Array} array containing the current range for Y Axis
  */
 const getYAxisRange = (trackList) =>
@@ -269,9 +284,10 @@ const getYAxisRange = (trackList) =>
  * i.e. Before, If you have domain 0 to 20 (input lower and upper bounds) and range 0 to 100 (Width in px).
  * When input 20 is provided then the scale returns the px positioning as 200, which would put the point outside the graph.
  * Instead we clamp it within the graph as an upper bound using clamp. Now, it will return 100px.
+ *
  * @private
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
  * @returns {undefined} - returns nothing
  */
 const scaleGraph = (scale, config) => {
@@ -290,10 +306,11 @@ const scaleGraph = (scale, config) => {
 };
 /**
  * Added defs element for the canvas. This currently holds the clip paths for the entire chart.
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {Object} d3 svg path
+ * @returns {object} d3 svg path
  */
 const createDefs = (config, canvasSVG) =>
     canvasSVG
@@ -308,10 +325,11 @@ const createDefs = (config, canvasSVG) =>
 /**
  * Create the d3 grid - horizontal and vertical and append into the canvas.
  * Only performed if the flags for showHGrid and showVGrid are enabled
+ *
  * @private
- * @param {Object} axis - Axis scaled according to input parameters
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
@@ -335,11 +353,12 @@ const createGrid = (axis, scale, config, canvasSVG) => {
 
 /**
  * Function to create the vertical-grid with a specific style and config.
+ *
  * @private
- * @param {Object} gridSVG - d3 object of the grid
- * @param {Object} axis - Axis scaled according to input parameters
+ * @param {object} gridSVG - d3 object of the grid
+ * @param {object} axis - Axis scaled according to input parameters
  * @param {string} style - Style with which, grid needs to be created.
- * @param {Object} config - config required for translating vertical grid.
+ * @param {object} config - config required for translating vertical grid.
  * @returns {undefined} - Doesn't return anything.
  */
 const createVGridHandler = (gridSVG, axis, style, config) => {
@@ -352,10 +371,11 @@ const createVGridHandler = (gridSVG, axis, style, config) => {
  * Create the d3 Axes - X, Y and Y2 and append into the canvas.
  * If axis.x.show, axis.y.show or axis.y2.show is set to false:
  * then the axis will be hidden
+ *
  * @private
- * @param {Object} axis - Axis scaled according to input parameters
- * @param {Object} scale - d3 scale taking into account the input parameters
- * @param {Object} config - config object derived from input JSON
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
@@ -397,10 +417,11 @@ const createAxes = (axis, scale, config, canvasSVG) => {
 
 /**
  * Creates a container for graph content (evident when there are no boundary ticks)
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {Object} d3 svg path
+ * @returns {object} d3 svg path
  */
 const createContentContainer = (config, canvasSVG) =>
     canvasSVG
@@ -413,19 +434,21 @@ const createContentContainer = (config, canvasSVG) =>
 
 /**
  * Creates a container for gantt chart track content
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {Object} d3 svg path
+ * @returns {object} d3 svg path
  */
 const createTrackSelectionContainer = (config, canvasSVG) =>
     canvasSVG.append("g").classed(styles.ganttTrackSelectorGroup, true);
 /**
  * Creates a container for gantt chart content
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {Object} d3 svg path
+ * @returns {object} d3 svg path
  */
 const createGanttContent = (config, canvasSVG) =>
     canvasSVG
@@ -437,13 +460,14 @@ const createGanttContent = (config, canvasSVG) =>
  * If no index is provided, we return the size of the trackList to insert at the end.
  * If the index is too large than the current track length, we insert it at end. If not, we insert at the index provided.
  * If the loading index is below 0, we throw an error.
+ *
  * @private
- * @param {Object} scale - d3 scale
- * @param {Object} config - config object derived from input JSON
- * @param {Object} content - track content which needs to be laoded
- * @param {Number} length - length of all tracks
+ * @param {object} scale - d3 scale
+ * @param {object} config - config object derived from input JSON
+ * @param {object} content - track content which needs to be laoded
+ * @param {number} length - length of all tracks
  * @throws module:errors.THROW_MSG_INVALID_LOAD_CONTENT_AT_INDEX
- * @returns {Number} - index where we would insert the new track content
+ * @returns {number} - index where we would insert the new track content
  */
 const prepareLoadAtIndex = (scale, config, content, length) => {
     validateContent(content);
@@ -469,17 +493,19 @@ const prepareLoadAtIndex = (scale, config, content, length) => {
 };
 /**
  * Creates a new Track instance
+ *
  * @private
- * @param {Object} content - input JSON for creating a track
+ * @param {object} content - input JSON for creating a track
  * @returns {Track} track instance
  */
 const createTrack = (content) => new Track(content);
 /**
  * Creates a container for track contents
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @param {Object} trackConfig - track's config object
+ * @param {object} trackConfig - track's config object
  * @returns {Selection} d3 svg path
  */
 const createTrackContainer = (config, canvasSVG, trackConfig) =>
@@ -491,6 +517,7 @@ const createTrackContainer = (config, canvasSVG, trackConfig) =>
         .attr("aria-describedby", trackConfig.key);
 /**
  * Removes the container for track contents
+ *
  * @private
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {string} key - Unique identifier of the track.
@@ -501,8 +528,9 @@ const removeTrackContainer = (canvasSVG, key) =>
 
 /**
  * Checks if hashing style is available.
+ *
  * @private
- * @param {Object} style - all stlyings which can be applied.
+ * @param {object} style - all stlyings which can be applied.
  * @returns {boolean} - indicating if hashed styling can be applied.
  */
 const isHashed = (style) => !(utils.isEmpty(style) || !style.isHashed);

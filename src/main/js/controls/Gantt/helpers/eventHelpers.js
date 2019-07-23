@@ -22,13 +22,14 @@ import { transformPoint } from "./translateHelpers";
  * Renders the data point in the provided path element.
  * It uses the consumer opted Shape, color of the data point.
  * Behavior when clicked on the data point etc.
+ *
  * @private
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - Graph config object derived from input JSON
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - Graph config object derived from input JSON
  * @param {SVGElement} path - svg Path element
- * @param {Object} dataPoint - data point properties such as shape, color and onClick callback function
+ * @param {object} dataPoint - data point properties such as shape, color and onClick callback function
  * @param {number} index - data point index
- * @returns {Object} - d3 selection object
+ * @returns {object} - d3 selection object
  */
 const renderDataPointPath = (scale, config, path, dataPoint, index) =>
     path.append(() =>
@@ -58,12 +59,13 @@ const renderDataPointPath = (scale, config, path, dataPoint, index) =>
  * Draws the points with options opted in the input JSON by the consumer for each data set.
  *  Render the point with appropriate color, shape, x and y co-ordinates, label etc.
  *  On click content callback function is called.
+ *
  * @private
  * @callback drawEventDataPoints
- * @param {Object} scale - d3 scale for Graph
- * @param {Object} config - Graph config object derived from input JSON
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - Graph config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 html element of the canvas
- * @returns {Object} - d3 append object
+ * @returns {undefined} - returns nothing
  */
 const drawEventDataPoints = (scale, config, canvasSVG) => {
     canvasSVG
@@ -87,11 +89,12 @@ const drawEventDataPoints = (scale, config, canvasSVG) => {
 /**
  * Processes the input JSON and adds the shapes, colors, labels etc. to each data points so that we can
  * use them when rendering the data points of events.
+ *
  * @private
- * @param {Object} config - Gantt config derived from input JSON.
- * @param {Object} trackLabel - Track label
- * @param {Object} dataTarget  - Data points object
- * @returns {Object} dataTarget - Updated data target object
+ * @param {object} config - Gantt config derived from input JSON.
+ * @param {object} trackLabel - Track label
+ * @param {object} dataTarget  - Data points object
+ * @returns {object} dataTarget - Updated data target object
  */
 const processEvents = (config, trackLabel, dataTarget) => {
     const checkX = (x) => {
@@ -116,6 +119,7 @@ const processEvents = (config, trackLabel, dataTarget) => {
 
 /**
  * Load function validates, clones and stores the input onto a config object.
+ *
  * @private
  * @param {object} inputJSON - input json for event.
  * @returns {object} config object containing consumer data.
@@ -127,10 +131,11 @@ const loadEventInput = (inputJSON) => {
 
 /**
  * Creates an element container with data points from the input JSON property: events
+ *
  * @private
- * @param {Object} graphContext - Gantt instance
- * @param {Object} trackPathSVG - Track container element
- * @param {Object} trackLabel - Track label
+ * @param {object} graphContext - Gantt instance
+ * @param {object} trackPathSVG - Track container element
+ * @param {object} trackLabel - Track label
  * @param {Array} events - input JSON for creating events
  * @returns {undefined} - returns nothing
  */
@@ -152,9 +157,10 @@ const loadEvents = (graphContext, trackPathSVG, trackLabel, events) => {
 
 /**
  * Selects all the event groups from the track and removes them
+ *
  * @private
- * @param {Object} graphContext - Gantt instance
- * @param {Object} trackPathSVG - Track container element
+ * @param {object} graphContext - Gantt instance
+ * @param {object} trackPathSVG - Track container element
  * @returns {Selection} - track container element
  */
 const unloadEvents = (graphContext, trackPathSVG) =>

@@ -10,8 +10,9 @@ import { validateDateline } from "../../helpers/dateline";
 
 /**
  * Validates the newly added task into the graph before rendering
+ *
  * @private
- * @param {Object} input - Newly added graph tasks
+ * @param {object} input - Newly added graph tasks
  * @throws {module:errors.THROW_MSG_NO_DATA_LOADED}
  * @throws {module:errors.THROW_MSG_TASKS_UNIQUE_KEY_NOT_PROVIDED}
  * @throws {module:errors.THROW_MSG_TASKS_START_AND_END_NOT_PROVIDED}
@@ -49,8 +50,9 @@ const validateData = (input) => {
 
 /**
  * Validates the newly added activity into the graph before rendering
+ *
  * @private
- * @param {Object} input - Newly added graph tasks
+ * @param {object} input - Newly added graph tasks
  * @throws {module:errors.THROW_MSG_NO_DATA_LOADED}
  * @throws {module:errors.THROW_MSG_ACTIVITIES_UNIQUE_KEY_NOT_PROVIDED}
  * @throws {module:errors.THROW_MSG_ACTIVITIES_START_AND_END_NOT_PROVIDED}
@@ -90,11 +92,12 @@ const validateActivityData = (input) => {
 
 /**
  * Validates the newly added Event into the graph before rendering
+ *
  * @private
  * @throws {module:errors.THROW_MSG_NO_DATA_LOADED}
  * @throws {module:errors.THROW_MSG_UNIQUE_KEY_NOT_PROVIDED}
  * @throws {module:errors.THROW_MSG_NO_DATA_POINTS}
- * @param {Object} content - Newly added graph content
+ * @param {object} content - Newly added graph content
  * @returns {undefined} - returns nothing
  */
 const validateEventData = (content) => {
@@ -110,10 +113,11 @@ const validateEventData = (content) => {
 };
 /**
  * Helper function to set the right padding values based on input JSON.
+ *
  * @private
- * @param {Object} config - config which needs to be updated
- * @param {Object} inputPadding - input padding provided via input JSON.
- * @returns {Object} - padding for Gantt
+ * @param {object} config - config which needs to be updated
+ * @param {object} inputPadding - input padding provided via input JSON.
+ * @returns {object} - padding for Gantt
  */
 const getPadding = (config, inputPadding) => {
     if (utils.isDefined(config.padding)) {
@@ -143,10 +147,11 @@ const getPadding = (config, inputPadding) => {
 /**
  * Processes the input from the JSON and updates the config object.
  * d3 domain and ranges are stored based on the upper and lower x limits.
+ *
  * @private
- * @param {Object} input - Input JSON provided by the consumer
- * @param {Object} config - config object used by the graph
- * @returns {Object} - returns configuration object constructed using Input JSON
+ * @param {object} input - Input JSON provided by the consumer
+ * @param {object} config - config object used by the graph
+ * @returns {object} - returns configuration object constructed using Input JSON
  */
 export const processInput = (input, config) => {
     const _axis = utils.deepClone(input.axis);
@@ -194,6 +199,7 @@ export const processInput = (input, config) => {
 
 /**
  * Checks if the keys for data points sets are unique
+ *
  * @private
  * @param {Array} dictionary - Collections of graph content
  * @param {string} key - unique key for the newly added content
@@ -203,11 +209,12 @@ export const isUniqueKey = (dictionary, key) => dictionary.indexOf(key) < 0;
 
 /**
  * API to parse consumer input for Gantt
+ *
  * @class GanttConfig
  */
 class GanttConfig extends BaseConfig {
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     constructor() {
         super();
@@ -216,14 +223,14 @@ class GanttConfig extends BaseConfig {
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     getConfig() {
         return this.config;
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     setInput(inputJSON) {
         this.input = inputJSON;
@@ -236,6 +243,7 @@ class GanttConfig extends BaseConfig {
      *      bindTo
      *      axis
      *      axis.x
+     *
      * @throws {module:errors.THROW_MSG_NO_BIND}
      * @throws {module:errors.THROW_MSG_NO_AXES_DATA_LOADED}
      * @throws {module:errors.THROW_MSG_NO_AXIS_INFO}
@@ -279,6 +287,7 @@ class GanttConfig extends BaseConfig {
 
     /**
      * Clones the input JSON into the config object
+     *
      * @returns {GanttConfig} instance object
      */
     clone() {

@@ -9,7 +9,7 @@ import utils from "../../helpers/utils";
  */
 class BarConfig extends BaseConfig {
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     constructor() {
         super();
@@ -19,7 +19,8 @@ class BarConfig extends BaseConfig {
 
     /**
      * Returns the config object
-     * @returns {Object} config object
+     *
+     * @returns {object} config object
      */
     getConfig() {
         return this.config;
@@ -27,7 +28,8 @@ class BarConfig extends BaseConfig {
 
     /**
      * Sets the input object
-     * @param {Object} inputJSON - Input JSON
+     *
+     * @param {object} inputJSON - Input JSON
      * @returns {BarConfig} instance object
      */
     setInput(inputJSON) {
@@ -37,6 +39,7 @@ class BarConfig extends BaseConfig {
 
     /**
      * Validates and verifies the input JSON object.
+     *
      * @returns {BarConfig} instance object
      */
     validateInput() {
@@ -46,6 +49,7 @@ class BarConfig extends BaseConfig {
 
     /**
      * Clones the input JSON into the config object
+     *
      * @returns {BarConfig} instance object
      */
     clone() {

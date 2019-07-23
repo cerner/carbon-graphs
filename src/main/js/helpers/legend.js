@@ -19,6 +19,7 @@ import utils from "../helpers/utils";
 
 /**
  * Validates legend label
+ *
  * @private
  * @throws {module:errors.THROW_MSG_LEGEND_LABEL_NOT_PROVIDED}
  * @throws {module:errors.THROW_MSG_LEGEND_LABEL_FORMAT_NOT_PROVIDED}
@@ -35,23 +36,25 @@ const validateLegendLabel = (label) => {
 };
 /**
  * Returns the sanitized legend item display string
+ *
  * @private
  * @param {string} text - legend display string
- * @return {string} Sanitized text
+ * @returns {string} Sanitized text
  */
 const getText = (text) => utils.sanitize(text);
 /**
  * Loads the legend items. The values are taken from the Labels property of the input JSON
  * The click and the hover events are only registered when there are datapoints matching the
  * unique ids or have the isDisabled flag turned off.
+ *
  * @private
- * @param {Object} legendSVG - d3 element path of the legend from the parent control
- * @param {Object} t - input item object processed from the input JSON
- * @param {Object} shownTargets - Currently shown targets in the graph, once the legend item is
+ * @param {object} legendSVG - d3 element path of the legend from the parent control
+ * @param {object} t - input item object processed from the input JSON
+ * @param {object} shownTargets - Currently shown targets in the graph, once the legend item is
  * clicked the item corresponding to the legend in the graph will be removed.
- * @param {Object} eventHandlers - Callback function object executed when legend item is clicked or hovered.
+ * @param {object} eventHandlers - Callback function object executed when legend item is clicked or hovered.
  * Contains click and hover handlers as object property
- * @returns {Object} returns the d3 element path for the legend
+ * @returns {object} returns the d3 element path for the legend
  */
 const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
     if (!utils.isFunction(eventHandlers.clickHandler)) {
@@ -109,10 +112,11 @@ const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
 };
 /**
  * Removes the legend item from legend SVG in the graph
+ *
  * @private
- * @param {Object} legendSVG - d3 svg object
- * @param {Object} dataTarget - Data points object
- * @returns {Object} - d3 svg object
+ * @param {object} legendSVG - d3 svg object
+ * @param {object} dataTarget - Data points object
+ * @returns {object} - d3 svg object
  */
 const removeLegendItem = (legendSVG, dataTarget) =>
     d3RemoveElement(legendSVG, `li[aria-describedby="${dataTarget.key}"]`);
@@ -121,9 +125,10 @@ const removeLegendItem = (legendSVG, dataTarget) =>
  * the canvas which houses the graph itself, and the legend <ul> which contains the list of data points labels and
  * their respective shapes.
  * Only if showLegend is enabled.
+ *
  * @private
- * @param {Object} container - d3 Container svg
- * @returns {Object} - d3 svg object
+ * @param {object} container - d3 Container svg
+ * @returns {object} - d3 svg object
  */
 const createLegend = (container) =>
     container
@@ -134,9 +139,10 @@ const createLegend = (container) =>
  * Handler that will need to be called when a legend item is clicked along
  * with any other operations that will be need to taken care of by the parent
  * control.
+ *
  * @private
  * @param {HTMLElement} element - d3 element of the legend item clicked
- * @returns {Object} - d3 svg object
+ * @returns {object} - d3 svg object
  */
 const legendClickHandler = (element) => {
     const target = d3.select(element);
@@ -145,6 +151,7 @@ const legendClickHandler = (element) => {
 };
 /**
  * Hover handler for legend items.
+ *
  * @private
  * @param {Array} shownTargets - Targets/data sets that are currently displayed in graph
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
@@ -215,6 +222,7 @@ const legendHoverHandler = (
 /**
  * Constructs a legend text based on the display string, value.
  * If formatter function is provided by the consumer then that function will be called.
+ *
  * @private
  * @param {string} display - legend item display string
  * @param {number} value - pie slice value
@@ -230,9 +238,10 @@ const getPieLegendText = (display, value, format) => {
 /**
  * Pie chart legend items are non-clickable and they react only to hover or click
  * performed on any of a slice in pie chart itself or hovered over a legend item.
+ *
  * @private
- * @param {Object} legendSVG - d3 element path of the legend from the parent control
- * @param {Object} dataTarget - input item object processed from the input JSON
+ * @param {object} legendSVG - d3 element path of the legend from the parent control
+ * @param {object} dataTarget - input item object processed from the input JSON
  * @param {Function} hoverHandler - Callback function to be called when hovered over the legend item
  * @returns {undefined} returns nothing
  */

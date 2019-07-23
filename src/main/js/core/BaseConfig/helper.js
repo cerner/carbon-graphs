@@ -19,7 +19,7 @@ import utils from "../../helpers/utils";
  * @throws module:errors.THROW_MSG_NO_DATA_POINTS
  * @throws module:errors.THROW_MSG_UNIQUE_KEY_NOT_PROVIDED
  * @throws module:errors.THROW_MSG_NO_CONTENT_DATA_LOADED
- * @param {Object} input - input JSON object
+ * @param {object} input - input JSON object
  * @returns {undefined} returns nothing
  */
 export const validateBaseInput = (input) => {
@@ -35,22 +35,25 @@ export const validateBaseInput = (input) => {
 };
 /**
  * Checks if the value is undefined and sets the default value if it is.
+ *
  * @private
- * @param {Object} value - A value
- * @param {Object} defaultVal - A default value
- * @returns {Object} A defined value
+ * @param {object} value - A value
+ * @param {object} defaultVal - A default value
+ * @returns {object} A defined value
  */
 export const getDefaultValue = (value, defaultVal) =>
     utils.isUndefined(value) ? defaultVal : value;
 /**
  * Type can be default (Number based) or timeseries
+ *
  * @private
  * @param {string} type - consumer passed input type
- * @returns {Object} Type property from input or "default"
+ * @returns {object} Type property from input or "default"
  */
 export const getType = (type) => getDefaultValue(type, AXIS_TYPE.DEFAULT);
 /**
  * Generates a clip path ID based on current date
+ *
  * @private
  * @returns {string} Clip path ID
  */
@@ -59,9 +62,10 @@ export const generateClipPathId = () => `carbon-${+new Date()}-clip`;
  * Interpolation type can be:
  * * Linear (default)
  * * Spline
+ *
  * @private
  * @param {string} type - consumer passed interpolation type
- * @returns {Object} Interpolation type property from line type or "linear"
+ * @returns {object} Interpolation type property from line type or "linear"
  */
 export const getInterpolationType = (type) =>
     getDefaultValue(type, LINE_TYPE.LINEAR);
@@ -69,9 +73,10 @@ export const getInterpolationType = (type) =>
  * Gets the scale for X Axis. If the data points are linear then
  * linear scale is provided but if the data points are datetime then
  * time scale is returned
+ *
  * @private
  * @param {string} type - consumer passed input type
- * @returns {Object} d3 scale object
+ * @returns {object} d3 scale object
  */
 export const getScale = (type) =>
     getType(type) === AXIS_TYPE.TIME_SERIES
@@ -81,6 +86,7 @@ export const getScale = (type) =>
  * Returns the domain for the axes. If the range is a number then the domain is treated
  * as a number or if its a datetime then they are converted to a date object and returned as
  * an array. It is returned as an array since d3 domain takes input range as an array.
+ *
  * @private
  * @param {string} type - input type
  * @param {string} lowerLimit - lower limit of the axes
@@ -93,9 +99,10 @@ export const getDomain = (type, lowerLimit, upperLimit) =>
         : [utils.getNumber(lowerLimit), utils.getNumber(upperLimit)];
 /**
  * Parses input value to either date or number based on xAxisType
+ *
  * @private
- * @param {Object} x - input x value
- * @param {Object} xAxisType - Graph x axis type
+ * @param {object} x - input x value
+ * @param {object} xAxisType - Graph x axis type
  * @returns {any} - if xAxisType is time series then returns date, else returns number
  */
 export const parseTypedValue = (x, xAxisType) =>

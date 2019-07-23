@@ -7,6 +7,7 @@ import constants from "./constants";
 
 /**
  * Wraps a function in logical negation
+ *
  * @private
  * @param {Function} [fn=x=>x] - A value-returning function - defaults to the identity function
  * @returns {Function} that forwards arguments to `fn` and takes the logical negation of the result
@@ -14,20 +15,23 @@ import constants from "./constants";
 const not = (fn = (x) => x) => (...args) => !fn(...args);
 /**
  * Checks if parameter is a Function
+ *
  * @private
- * @param {Object} o - source object
+ * @param {object} o - source object
  * @returns {boolean} true if Function
  */
 const isFunction = (o) => typeof o === "function";
 /**
  * Checks if parameter is an Array
+ *
  * @private
- * @param {Object} o - source object
+ * @param {object} o - source object
  * @returns {boolean} true if Array
  */
 const isArray = (o) => Array.isArray(o);
 /**
  * Checks if parameter is a String
+ *
  * @private
  * @param {string} o - source object
  * @returns {boolean} true if string
@@ -35,15 +39,17 @@ const isArray = (o) => Array.isArray(o);
 const isString = (o) => typeof o === "string";
 /**
  * Checks if parameter is of type undefined
+ *
  * @private
- * @param {Object} v - source object
+ * @param {object} v - source object
  * @returns {boolean} true if undefined
  */
 const isUndefined = (v) => typeof v === "undefined";
 /**
  * Checks if parameter is not of type undefined
+ *
  * @private
- * @param {Object} v - source object
+ * @param {object} v - source object
  * @returns {boolean} true if defined
  */
 const isDefined = not(isUndefined);
@@ -53,8 +59,9 @@ const isDefined = not(isUndefined);
  *  not null,
  *  if string => length is not 0
  *  if object => keys are not non-existent
+ *
  * @private
- * @param {Object} o - source object
+ * @param {object} o - source object
  * @returns {boolean} true if empty
  */
 const isEmpty = (o) =>
@@ -64,13 +71,15 @@ const isEmpty = (o) =>
     (typeof o === "object" && Object.keys(o).length === 0);
 /**
  * Checks if parameter is not empty
+ *
  * @private
- * @param {Object} o - source object
+ * @param {object} o - source object
  * @returns {boolean} True if not empty
  */
 const notEmpty = not(isEmpty);
 /**
  * Checks if value exists within the given dictionary
+ *
  * @private
  * @param {Array} dict - target array to be searched
  * @param {*} value -  value to be searched
@@ -80,6 +89,7 @@ const hasValue = (dict, value) =>
     Object.keys(dict).some((o) => dict[o] === value);
 /**
  * Sanitizes the string of < and >
+ *
  * @private
  * @param {string} str - input string
  * @returns {string} sanitized string
@@ -90,9 +100,10 @@ const sanitize = (str) =>
         : str;
 /**
  * Deep clones the provided object
+ *
  * @private
- * @param {Object} o - Source object
- * @returns {Object|Array} Returns a cloned object
+ * @param {object} o - Source object
+ * @returns {object|Array} Returns a cloned object
  */
 const deepClone = (o) => {
     if (isArray(o)) {
@@ -110,6 +121,7 @@ const deepClone = (o) => {
 };
 /**
  * Checks to see if the date provided is of ISO8601 datetime format.
+ *
  * @private
  * @param {string} str - Datetime string in ISO8601 format: yyyy-MM-ddTHH:mm:ssZ
  * @returns {string} true if in correct format
@@ -117,13 +129,15 @@ const deepClone = (o) => {
 const isDate = (str) => constants.ISO8601_DATE_TIME_MILLI.test(str);
 /**
  * Checks to see if the object provided is an instance of date
+ *
  * @private
- * @param {Object} obj - Object instance of date
+ * @param {object} obj - Object instance of date
  * @returns {boolean} true if instance of date
  */
 const isDateInstance = (obj) => obj instanceof Date;
 /**
  * Converts ISO8601 datetime string to Date
+ *
  * @private
  * @param {number|string} value - ISO8601 datetime string
  * @todo Handle DST
@@ -133,6 +147,7 @@ const isDateInstance = (obj) => obj instanceof Date;
 const parseDateTime = (value) => new Date(value);
 /**
  * Converts ISO8601 date string to a number
+ *
  * @private
  * @param {string} value - ISO8601 datetime string
  * @returns {number} Date as a number
@@ -140,6 +155,7 @@ const parseDateTime = (value) => new Date(value);
 const getTime = (value) => parseDateTime(value).getTime();
 /**
  * Case converts to number
+ *
  * @private
  * @param {string} n - source string
  * @returns {number} if not undefined or null return Number, 0 otherwise
@@ -147,6 +163,7 @@ const getTime = (value) => parseDateTime(value).getTime();
 const getNumber = (n) => (n ? Number(n) : 0);
 /**
  * Checks if input is a number or not
+ *
  * @private
  * @param {*} n - input to be determined a number
  * @returns {boolean} if not undefined or null return Number, 0 otherwise
@@ -154,6 +171,7 @@ const getNumber = (n) => (n ? Number(n) : 0);
 const isNumber = (n) => typeof n === "number" && !isNaN(n);
 /**
  * Checks if provided dates are equal
+ *
  * @private
  * @param {Date} a - date to compare
  * @param {Date} b - date to compare
@@ -162,10 +180,11 @@ const isNumber = (n) => typeof n === "number" && !isNaN(n);
 const isDateEqual = (a, b) => a.getTime() === b.getTime();
 /**
  * Compares 2 values and return true if equals. False if not.
+ *
  * @private
- * @param {Object} a - value to compare
- * @param {Object} b - value to compare
- * @returns {Boolean} - returns true or false
+ * @param {object} a - value to compare
+ * @param {object} b - value to compare
+ * @returns {boolean} - returns true or false
  */
 const isEqual = (a, b) =>
     isDate(a) || isDateInstance(a)

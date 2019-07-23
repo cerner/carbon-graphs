@@ -4,9 +4,14 @@ import { AXIS_TYPE, COLORS } from "../../../../main/js/helpers/constants";
 import utils from "../../../../main/js/helpers/utils";
 
 /**
+ * @typedef BarConfig
+ */
+
+/**
  * Creates and returns an example input with custom axis
- * @param {Object} axis - X and Y axis data
- * @returns {Object} axes JSON
+ *
+ * @param {object} axis - X and Y axis data
+ * @returns {object} axes JSON
  */
 export const getAxes = (axis = {}) => ({
     bindTo: "#testBar_carbon",
@@ -58,6 +63,7 @@ export const axisTimeSeries = {
 
 /**
  * Creates and returns an example input with data point values
+ *
  * @param {Array} values - x and y co-ordinate values
  * @param {boolean} isDefaultColor - if true, doesnt load the COLOR
  * @param {boolean} isDefaultShape - if true, doesnt load the SHAPE
@@ -260,6 +266,7 @@ export const axisInfoRowTimeSeries = [
 ];
 /**
  * Returns the DOM element queried by Class
+ *
  * @param {HTMLElement} id - Id attribute name
  * @param {string} cls - Class attribute name
  * @returns {HTMLElement} - DOM element
@@ -268,6 +275,7 @@ export const fetchElementByClass = (id, cls) => id.querySelector(`.${cls}`);
 
 /**
  * Returns the DOM element queried by Class
+ *
  * @param {HTMLElement} id - Id attribute name
  * @param {string} cls - Class attribute name
  * @returns {HTMLElement} - DOM element

@@ -20,14 +20,15 @@ import PieConfig, { processInput } from "./PieConfig";
 import PieContent from "./PieContent";
 
 /**
- * @typedef {Object} Pie
- * @typedef {Object} PieConfig
+ * @typedef {object} Pie
+ * @typedef {object} PieConfig
  */
 /**
  * Sets the canvas width
+ *
  * @private
  * @param {HTMLElement} container - d3 HTML element object which forms the chart container
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {undefined} - returns nothing
  */
 const setCanvasWidth = (container, config) => {
@@ -35,8 +36,9 @@ const setCanvasWidth = (container, config) => {
 };
 /**
  * Sets the canvas width. Canvas rests within a container.
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {undefined} - returns nothing
  */
 const setCanvasHeight = (config) => {
@@ -44,8 +46,9 @@ const setCanvasHeight = (config) => {
 };
 /**
  * Sets the canvas radius for pie chart.
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {undefined} - returns nothing
  */
 const setCanvasRadius = (config) => {
@@ -54,10 +57,11 @@ const setCanvasRadius = (config) => {
 /**
  * Data point sets can be loaded using this function.
  * Load function validates, clones and stores the input onto a config object.
+ *
  * @private
  * @throws {module:errors.THROW_MSG_NO_AXES_DATA_LOADED}
- * @param {Object} inputJSON - Input JSON provided by the consumer
- * @returns {Object} config object containing consumer data
+ * @param {object} inputJSON - Input JSON provided by the consumer
+ * @returns {object} config object containing consumer data
  */
 const loadInput = (inputJSON) =>
     new PieConfig()
@@ -68,6 +72,7 @@ const loadInput = (inputJSON) =>
 /**
  * Executes the before init process checklist, needs to be called by parent control.
  *  Binds the chart id provided in the input JSON to graph container.
+ *
  * @private
  * @param {Pie} control - Pie instance
  * @returns {Pie} Pie instance
@@ -86,6 +91,7 @@ const beforeInit = (control) => {
 };
 /**
  * Initializes the necessary Pie constructor objects
+ *
  * @private
  * @param {Pie} control - Pie instance
  * @returns {Pie} Pie instance
@@ -109,6 +115,7 @@ const initConfig = (control) => {
  *  Determines the height for canvas
  *  Calculates Axes width and height
  *  Calculates Axes label width and height, positioning
+ *
  * @private
  * @param {Pie} control - Pie instance
  * @returns {Pie} Pie instance
@@ -131,12 +138,13 @@ const init = (control) => {
  *  * Init
  *  * Render
  *  * AfterInit
+ *
  * @module Pie
  * @class Pie
  */
 class Pie extends Construct {
     /**
-     * @constructor
+     * @class
      * @param {PieConfig} input - Input JSON instance created using PieConfig
      */
     constructor(input) {
@@ -147,12 +155,13 @@ class Pie extends Construct {
 
     /**
      * Draw function that is called by the parent control. This draws the legend and the content for the chart construct.
+     *
      * @description Since we dont have the concept of z-index in visualization,
      * the order of rendering should be following:
      *  * SVG container
      *  * Legend
      *  * Data [In our case we have load and unload]
-     * @param {Object} input - Input JSON
+     * @param {object} input - Input JSON
      * @returns {HTMLElement} d3 selection node of svg.
      */
     generate(input) {
@@ -185,6 +194,7 @@ class Pie extends Construct {
 
     /**
      * Resizes the graph canvas. Uses the clipPath def.
+     *
      *  @returns {Pie} - Pie instance
      */
     resize() {
@@ -196,7 +206,8 @@ class Pie extends Construct {
      * Loads the content onto the graph.
      * The content serves as a 1to1 relationship. For rendering
      * multiple data sets respective number of content needs to be provided.
-     * @param {Object|Array} input - Pie content
+     *
+     * @param {object|Array} input - Pie content
      * @returns {Pie} - Pie instance
      */
     loadContent(input) {
@@ -214,7 +225,8 @@ class Pie extends Construct {
      * Unloads the content from the graph.
      * The content serves as a 1to1 relationship. For rendering
      * multiple data sets respective number of content needs to be provided.
-     * @param {Object} input - Pie content to be removed
+     *
+     * @param {object} input - Pie content to be removed
      * @returns {Pie} - Pie instance
      */
     unloadContent(input) {
@@ -231,6 +243,7 @@ class Pie extends Construct {
 
     /**
      * Destroys the graph: Container and canvas.
+     *
      * @returns {Pie} - Pie instance
      */
     destroy() {

@@ -2,15 +2,17 @@ import d3 from "d3";
 
 /**
  * Returns the current d3 transform attribute object from context object
+ *
  * @private
- * @param {Object} context - d3 element
- * @returns {Object} returns the current d3 transform attribute object
+ * @param {object} context - d3 element
+ * @returns {object} returns the current d3 transform attribute object
  */
 const getCurrentTransform = (context) => d3.select(context).attr("transform");
 /**
  * Rounds to 2 decimals places. Use scaling technique
  * to bring two figures across the decimal point turning the figure into a whole number by
  * adding 0.00001 and then rounding it to 2 decimal places.
+ *
  * @private
  * @param {number} v - A long decimal
  * @returns {number} decimal rounded to 2 decimal places
@@ -33,10 +35,11 @@ const combine = (a, b, k) => {
 
 /**
  * Returns transform list with translate and scale properties given a transform string
+ *
  * @private
  * @param {string} transform - Transform attribute as a string
  * @example "translate(23.100000381469727,184.64285278320312),scale(0.20000000298023224,0.20000000298023224)"
- * @return {{scale: number[], translate: number[]}} Object containing scale and translate
+ * @returns {{scale: number[], translate: number[]}} Object containing scale and translate
  */
 const getSVGAnimatedTransformList = (transform) => {
     const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
@@ -72,8 +75,9 @@ const getSVGAnimatedTransformList = (transform) => {
  * Returns the scale from current d3 transform attribute object within context object
  * d3 transform for a scale returns decimal number like: 1.9000000953674316 for 1.9 or
  * 1.100000023841858 for 1.1. We are going to round this to 2 decimal places.
+ *
  * @private
- * @param {Object} context - d3 element
+ * @param {object} context - d3 element
  * @returns {Array<number>} returns the scale from d3 element
  */
 const getTransformScale = (context) =>

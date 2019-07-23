@@ -24,15 +24,16 @@ import TimelineConfig, { processInput } from "./TimelineConfig";
 import TimelineContent from "./TimelineContent";
 
 /**
- * @typedef {Object} Timeline
- * @typedef {Object} TimelineConfig
+ * @typedef {object} Timeline
+ * @typedef {object} TimelineConfig
  */
 const BASE_CANVAS_WIDTH_PADDING = constants.BASE_CANVAS_WIDTH_PADDING;
 /**
  * Sets the canvas width
+ *
  * @private
  * @param {HTMLElement} container - d3 HTML element object which forms the chart container
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {undefined} - returns nothing
  */
 const setCanvasWidth = (container, config) => {
@@ -40,8 +41,9 @@ const setCanvasWidth = (container, config) => {
 };
 /**
  * Sets the canvas width. Canvas rests within a container.
+ *
  * @private
- * @param {Object} config - config object derived from input JSON
+ * @param {object} config - config object derived from input JSON
  * @returns {undefined} - returns nothing
  */
 const setCanvasHeight = (config) => {
@@ -52,10 +54,11 @@ const setCanvasHeight = (config) => {
 /**
  * Data point sets can be loaded using this function.
  * Load function validates, clones and stores the input onto a config object.
+ *
  * @private
  * @throws {module:errors.THROW_MSG_NO_AXES_DATA_LOADED}
- * @param {Object} inputJSON - Input JSON provided by the consumer
- * @returns {Object} config object containing consumer data
+ * @param {object} inputJSON - Input JSON provided by the consumer
+ * @returns {object} config object containing consumer data
  */
 const loadInput = (inputJSON) =>
     new TimelineConfig()
@@ -66,6 +69,7 @@ const loadInput = (inputJSON) =>
 /**
  * Executes the before init process checklist, needs to be called by parent control.
  *  Binds the chart id provided in the input JSON to graph container.
+ *
  * @private
  * @param {Timeline} control - Timeline instance
  * @returns {Timeline} Timeline instance
@@ -77,6 +81,7 @@ const beforeInit = (control) => {
 };
 /**
  * Initializes the necessary Timeline constructor objects
+ *
  * @private
  * @param {Timeline} control - Timeline instance
  * @returns {Timeline} Timeline instance
@@ -106,6 +111,7 @@ const initConfig = (control) => {
  *  Calculates Axes width and height
  *  Calculates Axes label width and height, positioning
  *  Creates and sets the d3 scale for the Graph
+ *
  * @private
  * @param {Timeline} control - Timeline instance
  * @returns {Timeline} Timeline instance
@@ -136,12 +142,13 @@ const init = (control) => {
  *  * Init
  *  * Render
  *  * AfterInit
+ *
  * @module Timeline
  * @class Timeline
  */
 class Timeline extends Construct {
     /**
-     * @constructor
+     * @class
      * @param {TimelineConfig} input - Input JSON instance created using TimelineConfig
      */
     constructor(input) {
@@ -153,6 +160,7 @@ class Timeline extends Construct {
     /**
      * Draw function that is called by the parent control. This draws the x-axis, legend and
      * X Axis label for the chart construct.
+     *
      * @description Since we dont have the concept of z-index in visualization,
      * the order of rendering should be following:
      *  * SVG container
@@ -160,7 +168,7 @@ class Timeline extends Construct {
      *  * X Axis Label
      *  * Legend
      *  * Data [In our case we have load and unload]
-     * @param {Object} input - Input JSON
+     * @param {object} input - Input JSON
      * @returns {HTMLElement} d3 selection node of svg.
      */
     generate(input) {
@@ -203,6 +211,7 @@ class Timeline extends Construct {
      * It scales the graph on resize, and translates the graph elements:
      *  X-Axis
      *  Label
+     *
      *  @returns {Timeline} - Timeline instance
      */
     resize() {
@@ -217,7 +226,8 @@ class Timeline extends Construct {
      * Loads the content onto the graph.
      * The content serves as a 1to1 relationship. For rendering
      * multiple data sets respective number of content needs to be provided.
-     * @param {Object} input - Timeline content
+     *
+     * @param {object} input - Timeline content
      * @returns {Timeline} - Timeline instance
      */
     loadContent(input) {
@@ -233,7 +243,8 @@ class Timeline extends Construct {
      * Unloads the content from the graph.
      * The content serves as a 1to1 relationship. For rendering
      * multiple data sets respective number of content needs to be provided.
-     * @param {Object} input - Timeline content to be removed
+     *
+     * @param {object} input - Timeline content to be removed
      * @returns {Timeline} - Timeline instance
      */
     unloadContent(input) {
@@ -250,6 +261,7 @@ class Timeline extends Construct {
 
     /**
      * Destroys the graph: Container and canvas.
+     *
      * @returns {Timeline} - Timeline instance
      */
     destroy() {
