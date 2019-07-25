@@ -7,6 +7,10 @@ import errors from "../../helpers/errors";
 import { createLegend } from "../../helpers/legend";
 import styles from "../../helpers/styles";
 import utils from "../../helpers/utils";
+import {
+    contentLoadHandler,
+    contentUnloadHandler
+} from "../../helpers/constructUtils";
 import GanttConfig, { processInput } from "./GanttConfig";
 import {
     prepareLegendEventHandlers,
@@ -260,20 +264,22 @@ class Gantt extends Construct {
      * The content serves as a 1to1 relationship. For rendering
      * multiple data sets respective number of content needs to be provided.
      *
-     * @param {object} content - Gantt content
+     * @param {object|Array} content - Gantt content to be loaded
      * @returns {Gantt} - Gantt instance
      */
     loadContent(content) {
-        const index = prepareLoadAtIndex(
-            this.scale,
-            this.config,
-            content,
-            this.tracks.length
-        );
-        const track = createTrack(content);
-        this.trackConfig.splice(index, 0, track);
-        track.load(this);
-        this.tracks.splice(index, 0, content.key);
+        contentLoadHandler(content, (i) => {
+            const index = prepareLoadAtIndex(
+                this.scale,
+                this.config,
+                i,
+                this.tracks.length
+            );
+            const track = createTrack(i);
+            this.trackConfig.splice(index, 0, track);
+            track.load(this);
+            this.tracks.splice(index, 0, i.key);
+        });
         updateAxesDomain(this.config);
         this.config.height = determineHeight(this.config);
         setCanvasHeight(this.config);
@@ -287,20 +293,22 @@ class Gantt extends Construct {
      * The content serves as a 1to1 relationship. For rendering
      * multiple data sets respective number of content needs to be provided.
      *
-     * @param {object} content - Gantt content to be removed
+     * @param {object|Array} content - Gantt content to be removed
      * @returns {Gantt} - Gantt instance
      */
     unloadContent(content) {
-        const index = this.tracks.indexOf(content.key);
-        if (index < 0) {
-            throw new Error(errors.THROW_MSG_INVALID_OBJECT_PROVIDED);
-        }
-        this.trackConfig[index].unload(this);
+        contentUnloadHandler(content, (i) => {
+            const index = this.tracks.indexOf(i.key);
+            if (index < 0) {
+                throw new Error(errors.THROW_MSG_INVALID_OBJECT_PROVIDED);
+            }
+            this.trackConfig[index].unload(this);
+            this.tracks.splice(index, 1);
+            this.trackConfig.splice(index, 1);
+        });
         updateAxesDomain(this.config);
         this.config.height = determineHeight(this.config);
         setCanvasHeight(this.config);
-        this.tracks.splice(index, 1);
-        this.trackConfig.splice(index, 1);
         this.resize();
         return this;
     }

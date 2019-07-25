@@ -3,7 +3,7 @@ import d3 from "d3";
 import Construct from "../../core/Construct";
 import errors from "../../helpers/errors";
 import { createLegend } from "../../helpers/legend";
-import { contentLoadHandler } from "../../helpers/loadUtil";
+import { contentLoadHandler } from "../../helpers/constructUtils";
 import styles from "../../helpers/styles";
 import { d3RemoveElement } from "../Graph/helpers/helpers";
 import {

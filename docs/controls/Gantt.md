@@ -53,10 +53,7 @@ For loading multiple data-sets, you can load as additional content:
 
 ```javascript
 var ganttInstance = Carbon.api.gantt(/* Add "input" JSON, shown below for example */);
-ganttInstance.loadContent(/* Data Object A */);
-ganttInstance.loadContent(/* Data Object B */);
-ganttInstance.loadContent(/* Data Object C */);
-ganttInstance.loadContent(/* Data Object D */);
+ganttInstance.loadContent(/* Add "dataArray" JSON, shown below for example */);
 ```
 
 ## JSON Properties
@@ -69,7 +66,7 @@ ganttInstance.loadContent(/* Data Object D */);
 | ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------- |
 | bindTo        | string   | DOM id to bind the graph into                                                                                          |
 | axis          | object   | Refer [Axis](#axis)                                                                                                    |
-| tracks        | array    | Refer [Data](#tracks). This is _not_ an actual object property rather this is provided as a parameter to `loadContent` |
+| tracks        | []object | Refer [Data](#tracks). This is _not_ an actual object property rather this is provided as a parameter to `loadContent` |
 
 #### Optional
 
@@ -377,7 +374,12 @@ var input = {
     ],
     showActionLegend: true
 };
+var ganttInstance = Carbon.api.gantt(input);
+```
 
+Data can be provided one at a time within loadContent or as an array
+
+```javascript
 var caretUp = {
     path: {
         id: "caretUp",
@@ -431,7 +433,29 @@ var data = {
         }
     ]
 };
-
-var ganttInstance = Carbon.api.gantt(input);
 ganttInstance.loadContent(data);
+
+var dataArray = [
+    {
+        key: "track 1",
+        trackLabel: {
+            display: "Project A",
+            onClick: (label) => {}
+        },
+        tasks: [],
+        actions: [],
+        events: []
+    },
+    {
+        key: "track 2",
+        trackLabel: {
+            display: "Project B",
+            onClick: (label) => {}
+        },
+        tasks: [],
+        actions: [],
+        events: []
+    }
+];
+ganttInstance.loadContent(dataArray);
 ```

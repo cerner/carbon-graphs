@@ -1691,6 +1691,26 @@ describe("Gantt", () => {
                     82 + BASE_CANVAS_HEIGHT_PADDING
                 );
             });
+            it("Loads multiple contents correctly", () => {
+                const multipleContents = [primaryContent, secondaryContent];
+                gantt = new Gantt(getAxes(axisJSON));
+                gantt.loadContent(multipleContents);
+                const mockPrimaryTrack = new Track(primaryContent);
+                expect(gantt.trackConfig[0].tasks).toEqual(mockPrimaryTrack.tasks);
+                expect(gantt.trackConfig[0].key).toEqual(mockPrimaryTrack.key);
+                expect(gantt.trackConfig[0].trackLabel).toEqual(
+                    mockPrimaryTrack.trackLabel
+                );
+                const mockSecondaryTrack = new Track(secondaryContent);
+                expect(gantt.trackConfig[1].tasks).toEqual(mockSecondaryTrack.tasks);
+                expect(gantt.trackConfig[1].key).toEqual(mockSecondaryTrack.key);
+                expect(gantt.trackConfig[1].trackLabel).toEqual(
+                    mockSecondaryTrack.trackLabel
+                );
+                expect(gantt.tracks.length).toBe(2);
+                expect(gantt.tracks).toEqual([primaryContent.key, secondaryContent.key]);
+                expect(gantt.trackConfig.length).toBe(2);
+            });
             it("Loads content correctly with different heights - 2", () => {
                 const primaryContent = getData();
                 const secondaryContent = utils.deepClone(getData());
@@ -2270,6 +2290,27 @@ describe("Gantt", () => {
         });
         it("Removes the content successfully", (done) => {
             gantt.unloadContent(primaryContent);
+            delay(() => {
+                expect(gantt.tracks).toEqual([]);
+                expect(gantt.trackConfig).toEqual([]);
+                expect(gantt.tracks.length).toBe(0);
+                expect(gantt.trackConfig.length).toBe(0);
+                expect(gantt.config.height).toBe(0);
+                expect(gantt.config.axis.y.domain.lowerLimit).toBe(0);
+                expect(gantt.config.axis.y.domain.upperLimit).toBe(1);
+                expect(gantt.config.canvasHeight).toBe(
+                    BASE_CANVAS_HEIGHT_PADDING
+                );
+                done();
+            }, TRANSITION_DELAY);
+        });
+        it("Removes multiple content successfully", (done) => {
+            gantt.destroy();
+            gantt = new Gantt(getAxes(axisJSON));
+            const multipleContents = [primaryContent, secondaryContent];
+            gantt.loadContent(multipleContents);
+            expect(gantt.tracks.length).toBe(2);
+            gantt.unloadContent(multipleContents);
             delay(() => {
                 expect(gantt.tracks).toEqual([]);
                 expect(gantt.trackConfig).toEqual([]);
