@@ -136,6 +136,7 @@ const buildYAxisLabelShapeContainer = (config, canvasPath) => {
     const path = canvasPath
         .append("g")
         .classed(styles.axisLabelYShapeContainer, true);
+    translateYAxisLabelShapeContainer(config, path);
     return path;
 };
 /**
@@ -150,6 +151,7 @@ const buildY2AxisLabelShapeContainer = (config, canvasPath) => {
     const path = canvasPath
         .append("g")
         .classed(styles.axisLabelY2ShapeContainer, true);
+    translateY2AxisLabelShapeContainer(config, path);
     return path;
 };
 
