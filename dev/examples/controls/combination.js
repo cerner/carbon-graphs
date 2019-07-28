@@ -46,8 +46,8 @@ export const renderCombinationRegion = (id) => {
     const combGraph = Carbon.api.graph(
         getDemoData(`#${id}`, "LINE_PAIR_COMB_DEFAULT")
     );
-    combGraph.loadContent(Carbon.api.line(lineData));
     combGraph.loadContent(Carbon.api.pairedResult(pairedData));
+    combGraph.loadContent(Carbon.api.line(lineData));
     return combGraph;
 };
 export const renderCombinationBar = (id) => {
