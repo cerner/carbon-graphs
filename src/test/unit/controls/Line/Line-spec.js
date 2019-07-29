@@ -421,6 +421,18 @@ describe("Line", () => {
                 );
                 expect(legendItem.getAttribute("aria-disabled")).toBe("true");
             });
+            it("disabled legend item is not tab-able", () => {
+                graphDefault.destroy();
+                const graph = new Graph(getAxes(axisDefault));
+                const data = utils.deepClone(valuesDefault);
+                input = getInput(data);
+                input.label.isDisabled = true;
+                graph.loadContent(new Line(input));
+                const legendItem = document.body.querySelector(
+                    `.${styles.legendItemBtn}`
+                );
+                expect(legendItem.getAttribute("tabindex")).toBe("-1");
+            });
             it("add line group for line", () => {
                 const lineContentContainer = fetchElementByClass(
                     lineGraphContainer,

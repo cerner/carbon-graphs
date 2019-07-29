@@ -73,7 +73,7 @@ const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
     const itemPath = legendSVG
         .append("li")
         .classed(styles.legendItem, true)
-        .attr("aria-selected", !t.label.isDisabled && index > -1)
+        .attr("aria-selected", index > -1)
         .attr("aria-disabled", !!t.label.isDisabled)
         .attr("role", "listitem")
         .attr("aria-labelledby", text)
@@ -93,7 +93,7 @@ const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
     itemPath
         .append("button")
         .classed(styles.legendItemBtn, true)
-        .attr("tabindex", 0)
+        .attr("tabindex", t.label.isDisabled ? -1 : 0)
         .append(() =>
             new Shape(getShapeForTarget(t)).getShapeElement(
                 getDefaultSVGProps({
