@@ -110,26 +110,22 @@ const createRegion = (
     uniqueKey,
     targetAxis = constants.Y_AXIS
 ) => {
-    const regionPath = regionGroupSVG.selectAll("g").data(regionList);
-    regionPath
-        .enter()
-        .append("rect")
-        .each((d) => validateRegion(d, targetAxis))
-        .classed(styles.region, true)
-        .attr("aria-hidden", false)
-        .attr("aria-describedby", uniqueKey)
-        .attr("style", (d) => (d.color ? `fill: ${d.color};` : ""))
-        .attr(constants.X_AXIS, getXAxisXPosition(config))
-        .attr(constants.Y_AXIS, getYAxisRangePosition(scale, config))
-        .attr("width", getXAxisWidth(config))
-        .attr("height", function(d) {
-            return getRegionHeight(d3.select(this), d, scale, config);
-        });
-    regionPath
-        .exit()
-        .transition()
-        .call(constants.d3Transition)
-        .remove();
+    regionList.forEach((item) => {
+        validateRegion(item, targetAxis);
+        regionGroupSVG
+            .append("rect")
+            .datum(item)
+            .classed(styles.region, true)
+            .attr("aria-hidden", false)
+            .attr("aria-describedby", uniqueKey)
+            .attr("style", item.color ? `fill: ${item.color};` : "")
+            .attr(constants.X_AXIS, getXAxisXPosition(config))
+            .attr(constants.Y_AXIS, getYAxisRangePosition(scale, config)(item))
+            .attr("width", getXAxisWidth(config))
+            .attr("height", function(d) {
+                return getRegionHeight(d3.select(this), item, scale, config);
+            });
+    });
 };
 
 /**

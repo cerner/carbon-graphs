@@ -1696,19 +1696,28 @@ describe("Gantt", () => {
                 gantt = new Gantt(getAxes(axisJSON));
                 gantt.loadContent(multipleContents);
                 const mockPrimaryTrack = new Track(primaryContent);
-                expect(gantt.trackConfig[0].tasks).toEqual(mockPrimaryTrack.tasks);
+                expect(gantt.trackConfig[0].tasks).toEqual(
+                    mockPrimaryTrack.tasks
+                );
                 expect(gantt.trackConfig[0].key).toEqual(mockPrimaryTrack.key);
                 expect(gantt.trackConfig[0].trackLabel).toEqual(
                     mockPrimaryTrack.trackLabel
                 );
                 const mockSecondaryTrack = new Track(secondaryContent);
-                expect(gantt.trackConfig[1].tasks).toEqual(mockSecondaryTrack.tasks);
-                expect(gantt.trackConfig[1].key).toEqual(mockSecondaryTrack.key);
+                expect(gantt.trackConfig[1].tasks).toEqual(
+                    mockSecondaryTrack.tasks
+                );
+                expect(gantt.trackConfig[1].key).toEqual(
+                    mockSecondaryTrack.key
+                );
                 expect(gantt.trackConfig[1].trackLabel).toEqual(
                     mockSecondaryTrack.trackLabel
                 );
                 expect(gantt.tracks.length).toBe(2);
-                expect(gantt.tracks).toEqual([primaryContent.key, secondaryContent.key]);
+                expect(gantt.tracks).toEqual([
+                    primaryContent.key,
+                    secondaryContent.key
+                ]);
                 expect(gantt.trackConfig.length).toBe(2);
             });
             it("Loads content correctly with different heights - 2", () => {
