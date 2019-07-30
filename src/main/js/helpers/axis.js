@@ -429,12 +429,12 @@ const getYAxisLabelShapeXPosition = (config) =>
  *
  * @private
  * @param {object} config - config object derived from input JSON
- * @param {Selection} labelShapeContainer - d3 element for label shape container
+ * @param {number} shapeCount - Number of shapes within shape container
  * @returns {number} Position for the label
  */
-const getYAxisLabelShapeYPosition = (config, labelShapeContainer) =>
+const getYAxisLabelShapeYPosition = (config, shapeCount) =>
     getYAxisLabelYPosition(config) +
-    labelShapeContainer.node().getBoundingClientRect().height / 2;
+    (shapeCount * constants.BASE_LABEL_ICON_HEIGHT_PADDING) / 1.5;
 /**
  * Y2 Axis label shape position distance away from the graph.
  * We are taking the Container height and subtracting it with
@@ -443,12 +443,12 @@ const getYAxisLabelShapeYPosition = (config, labelShapeContainer) =>
  *
  * @private
  * @param {object} config - config object derived from input JSON
- * @param {Selection} labelShapeContainer - d3 element for label shape container
+ * @param {number} shapeCount - Number of shapes within shape container
  * @returns {number} Position for the label
  */
-const getY2AxisLabelShapeYPosition = (config, labelShapeContainer) =>
+const getY2AxisLabelShapeYPosition = (config, shapeCount) =>
     getYAxisLabelYPosition(config) -
-    labelShapeContainer.node().getBoundingClientRect().height / 2;
+    (shapeCount * constants.BASE_LABEL_ICON_HEIGHT_PADDING) / 1.5;
 /**
  * Y2 Axis label's starting position vertically beside the graph
  *

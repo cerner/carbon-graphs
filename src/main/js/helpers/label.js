@@ -71,6 +71,15 @@ const loadLabelShape = (shapeContainerPath, dataTarget) =>
         )
     );
 /**
+ * Returns the amount of shapes within a shape container
+ *
+ * @private
+ * @param {Selection} shapeContainerPath - d3 path for label shape container
+ * @returns {number} Amount of svg's in the shape container
+ */
+const getShapeContainerSize = (shapeContainerPath) =>
+    shapeContainerPath.selectAll("svg").size();
+/**
  * Translates Y Axis label shape container to correct position. Typically this is
  * to the middle of the axis.
  *
@@ -89,7 +98,7 @@ const translateYAxisLabelShapeContainer = (config, shapeContainerPath) =>
                 config
             )}, ${getYAxisLabelShapeYPosition(
                 config,
-                shapeContainerPath
+                getShapeContainerSize(shapeContainerPath)
             )}) rotate(${getRotationForAxis(constants.Y_AXIS)})`
         );
 /**
@@ -112,7 +121,7 @@ const translateY2AxisLabelShapeContainer = (config, shapeContainerPath) =>
                 config
             )}, ${getY2AxisLabelShapeYPosition(
                 config,
-                shapeContainerPath
+                getShapeContainerSize(shapeContainerPath)
             )}) rotate(${getRotationForAxis(constants.Y2_AXIS)})`
         );
 /**
@@ -120,33 +129,32 @@ const translateY2AxisLabelShapeContainer = (config, shapeContainerPath) =>
  *
  * @private
  * @param {object} config - config object derived from input JSON
- * @param {Selection} shapeContainerPath - d3 html element
+ * @param {Selection} canvasPath - d3 html element
  * @returns {Selection} d3 html element
  */
-const buildYAxisLabelShapeContainer = (config, shapeContainerPath) =>
-    shapeContainerPath
+const buildYAxisLabelShapeContainer = (config, canvasPath) => {
+    const path = canvasPath
         .append("g")
-        .classed(styles.axisLabelYShapeContainer, true)
-        .attr(
-            "transform",
-            `translate(0,0) rotate(${getRotationForAxis(constants.Y_AXIS)})`
-        );
+        .classed(styles.axisLabelYShapeContainer, true);
+    translateYAxisLabelShapeContainer(config, path);
+    return path;
+};
 /**
  * Returns the d3 html element after appending axis label shape group for Y2 axis
  *
  * @private
  * @param {object} config - config object derived from input JSON
- * @param {Selection} shapeContainerPath - d3 html element
+ * @param {Selection} canvasPath - d3 html element
  * @returns {Selection} d3 html element
  */
-const buildY2AxisLabelShapeContainer = (config, shapeContainerPath) =>
-    shapeContainerPath
+const buildY2AxisLabelShapeContainer = (config, canvasPath) => {
+    const path = canvasPath
         .append("g")
-        .classed(styles.axisLabelY2ShapeContainer, true)
-        .attr(
-            "transform",
-            `translate(0,0) rotate(${getRotationForAxis(constants.Y2_AXIS)})`
-        );
+        .classed(styles.axisLabelY2ShapeContainer, true);
+    translateY2AxisLabelShapeContainer(config, path);
+    return path;
+};
+
 /**
  * Translates all the shapes within the container to space correct beside each other
  * The amount of spacing is determined by constants.BASE_LABEL_ICON_SPACING
