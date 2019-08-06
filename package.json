@@ -92,7 +92,7 @@
     "puppeteer": "^1.19.0",
     "rimraf": "^2.6.3",
     "semantic-release": "^15.13.19",
-    "sinon": "^7.2.3",
+    "sinon": "^7.4.1",
     "style-loader": "^0.23.1",
     "stylelint": "^10.1.0",
     "url-loader": "^1.1.2",
