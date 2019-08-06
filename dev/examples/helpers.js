@@ -23,6 +23,7 @@ export const vector = {
         elem.id = id;
         elem.setAttribute("style", style);
         vb ? elem.setAttribute("viewBox", vb) : "";
+        vb ? elem.setAttribute("preserveAspectRatio", "xMidYMid meet") : "";
         return elem;
     }
 };

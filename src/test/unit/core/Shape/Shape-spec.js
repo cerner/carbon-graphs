@@ -11,7 +11,8 @@ describe("Shape", () => {
     it("returns path for Carbon Native shapes", () => {
         Object.keys(SHAPES).forEach((i) => {
             const shapeSVG = new Shape(SHAPES[i]).getShapeElement();
-            const shapePath = shapeSVG.childNodes[0];
+            const groupSVG = shapeSVG.firstChild;
+            const shapePath = groupSVG.firstChild;
             expect(shapeSVG.nodeName === "svg").toBeTruthy();
             expect(
                 toNumber(shapeSVG.getAttribute("x")) === SHAPES[i].options.x
@@ -35,7 +36,8 @@ describe("Shape", () => {
             options: { x: -15, y: -15, scale: 0.28 }
         };
         const shapeSVG = new Shape(customShape).getShapeElement();
-        const shapePath = shapeSVG.childNodes[0];
+        const groupSVG = shapeSVG.firstChild;
+        const shapePath = groupSVG.firstChild;
         expect(shapeSVG.nodeName === "svg").toBeTruthy();
         expect(
             toNumber(shapeSVG.getAttribute("x")) === customShape.options.x
@@ -58,7 +60,8 @@ describe("Shape", () => {
             options: { x: -15, y: -15, scale: 0.28 }
         };
         const shapeSVG = new Shape(customShape).getShapeElement();
-        const shapePath = shapeSVG.childNodes[0];
+        const groupSVG = shapeSVG.firstChild;
+        const shapePath = groupSVG.firstChild;
         expect(shapePath.nodeName === "path").toBeTruthy();
         expect(shapePath.getAttribute("d") === customShape.path.d).toBeTruthy();
         expect(
@@ -81,8 +84,9 @@ describe("Shape", () => {
             options: { x: -15, y: -15, scale: 0.28 }
         };
         const shapeSVG = new Shape(customShape).getShapeElement();
-        const shapePathObj1 = shapeSVG.childNodes[0];
-        const shapePathObj2 = shapeSVG.childNodes[1];
+        const groupSVG = shapeSVG.firstChild;
+        const shapePathObj1 = groupSVG.childNodes[0];
+        const shapePathObj2 = groupSVG.childNodes[1];
         expect(shapeSVG.nodeName === "svg").toBeTruthy();
         expect(
             toNumber(shapeSVG.getAttribute("x")) === customShape.options.x
@@ -140,7 +144,7 @@ describe("Shape", () => {
         expect(shapeSVG.nodeName === "svg").toBeTruthy();
         expect(shapeSVG.getAttribute("viewBox")).toBe(constants.VIEW_BOX_SIZE);
     });
-    it("applies transform attributes to all SVG paths", () => {
+    it("applies transform attributes to SVG group", () => {
         const transformHandlerSpy = sinon.spy();
         const customShape = {
             path: [
@@ -157,71 +161,61 @@ describe("Shape", () => {
             getDefaultSVGProps({ transformFn: transformHandlerSpy })
         );
         expect(shapeSVG.nodeName === "svg").toBeTruthy();
-        expect(transformHandlerSpy.calledTwice).toBeTruthy();
-    });
-    it("applies transform attributes to all SVG paths", () => {
-        const transformHandlerSpy = sinon.spy();
-        const customShape = {
-            path: [
-                {
-                    d: "SOME_CUSTOM_PATH"
-                },
-                {
-                    d: "SOME_CUSTOM_PATH 2"
-                }
-            ],
-            options: { x: -15, y: -15, scale: 0.28 }
-        };
-        const shapeSVG = new Shape(customShape).getShapeElement(
-            getDefaultSVGProps({ transformFn: transformHandlerSpy })
-        );
-        expect(shapeSVG.nodeName === "svg").toBeTruthy();
-        expect(transformHandlerSpy.calledTwice).toBeTruthy();
+        expect(shapeSVG.firstChild.getAttribute("transform")).toBeDefined();
+        expect(transformHandlerSpy.calledOnce).toBeTruthy();
     });
     describe("Moveto path", () => {
         it("tear drop", () => {
             const shapeSVG = new Shape(SHAPES.TEAR_DROP).getShapeElement();
-            expect(shapeSVG.firstChild.getAttribute("d")).toBe(
+            const groupSVG = shapeSVG.firstChild;
+            expect(groupSVG.firstChild.getAttribute("d")).toBe(
                 SHAPES.TEAR_DROP.path.d
             );
         });
         it("tear drop alternate", () => {
             const shapeSVG = new Shape(SHAPES.TEAR_ALT).getShapeElement();
-            expect(shapeSVG.firstChild.getAttribute("d")).toBe(
+            const groupSVG = shapeSVG.firstChild;
+            expect(groupSVG.firstChild.getAttribute("d")).toBe(
                 SHAPES.TEAR_ALT.path.d
             );
         });
         it("triangle alternate", () => {
             const shapeSVG = new Shape(SHAPES.TRIANGLE_DOWN).getShapeElement();
-            expect(shapeSVG.firstChild.getAttribute("d")).toBe(
+            const groupSVG = shapeSVG.firstChild;
+            expect(groupSVG.firstChild.getAttribute("d")).toBe(
                 SHAPES.TRIANGLE_DOWN.path.d
             );
         });
         it("triangle", () => {
             const shapeSVG = new Shape(SHAPES.TRIANGLE).getShapeElement();
-            expect(shapeSVG.firstChild.getAttribute("d")).toBe(
+            const groupSVG = shapeSVG.firstChild;
+            expect(groupSVG.firstChild.getAttribute("d")).toBe(
                 SHAPES.TRIANGLE.path.d
             );
         });
         it("x shape", () => {
             const shapeSVG = new Shape(SHAPES.X).getShapeElement();
-            expect(shapeSVG.firstChild.getAttribute("d")).toBe(SHAPES.X.path.d);
+            const groupSVG = shapeSVG.firstChild;
+            expect(groupSVG.firstChild.getAttribute("d")).toBe(SHAPES.X.path.d);
         });
         it("rhombus shape", () => {
             const shapeSVG = new Shape(SHAPES.RHOMBUS).getShapeElement();
-            expect(shapeSVG.firstChild.getAttribute("d")).toBe(
+            const groupSVG = shapeSVG.firstChild;
+            expect(groupSVG.firstChild.getAttribute("d")).toBe(
                 SHAPES.RHOMBUS.path.d
             );
         });
         it("vertical bar shape", () => {
             const shapeSVG = new Shape(SHAPES.VERTICAL_BAR).getShapeElement();
-            expect(shapeSVG.firstChild.getAttribute("d")).toBe(
+            const groupSVG = shapeSVG.firstChild;
+            expect(groupSVG.firstChild.getAttribute("d")).toBe(
                 SHAPES.VERTICAL_BAR.path.d
             );
         });
         it("square shape", () => {
             const shapeSVG = new Shape(SHAPES.SQUARE).getShapeElement();
-            expect(shapeSVG.firstChild.getAttribute("d")).toBe(
+            const groupSVG = shapeSVG.firstChild;
+            expect(groupSVG.firstChild.getAttribute("d")).toBe(
                 SHAPES.SQUARE.path.d
             );
         });

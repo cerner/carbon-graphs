@@ -110,7 +110,7 @@ const translatePoints = (scale, config, canvasSVG, key, style) =>
         .each(function(d) {
             const pointGroupSVG = d3.select(this);
             pointGroupSVG
-                .selectAll("path")
+                .select("g")
                 .transition()
                 .call(constants.d3Transition)
                 .attr("transform", function() {

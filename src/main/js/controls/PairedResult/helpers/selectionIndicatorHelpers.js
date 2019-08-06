@@ -260,7 +260,7 @@ export const translateSelectionItem = (scale, canvasSVG) =>
         .each(function(value) {
             return d3
                 .select(this)
-                .selectAll("path")
+                .select("g")
                 .transition()
                 .call(constants.d3Transition)
                 .attr("transform", function() {

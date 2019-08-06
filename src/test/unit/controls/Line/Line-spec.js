@@ -552,7 +552,8 @@ describe("Line", () => {
                 );
                 const points = fetchElementByClass(pointsGroup, styles.point);
                 expect(
-                    points.firstChild.attributes.getNamedItem("d").value
+                    points.firstChild.firstChild.attributes.getNamedItem("d")
+                        .value
                 ).toBe(SHAPES.RHOMBUS.path.d);
             });
             it("points have correct unique key assigned", () => {
@@ -586,9 +587,9 @@ describe("Line", () => {
                     styles.dataPointSelection
                 );
                 expect(selectedPoints.tagName).toBe("svg");
-                expect(selectedPoints.children[0].getAttribute("id")).toBe(
-                    "circle"
-                );
+                expect(
+                    selectedPoints.firstChild.firstChild.getAttribute("d")
+                ).toBe(SHAPES.CIRCLE.path.d);
             });
             it("selected data point has correct unique key assigned", () => {
                 const selectedPoints = fetchElementByClass(
@@ -2426,12 +2427,12 @@ describe("Line", () => {
                 expect(criticalInnerElement.nodeName).toBe(
                     currentShape.nodeName
                 );
-                expect(criticalOuterElement.firstChild.getAttribute("d")).toBe(
-                    currentShape.firstChild.getAttribute("d")
-                );
-                expect(criticalInnerElement.firstChild.getAttribute("d")).toBe(
-                    currentShape.firstChild.getAttribute("d")
-                );
+                expect(
+                    criticalOuterElement.firstChild.firstChild.getAttribute("d")
+                ).toBe(currentShape.firstChild.firstChild.getAttribute("d"));
+                expect(
+                    criticalInnerElement.firstChild.firstChild.getAttribute("d")
+                ).toBe(currentShape.firstChild.firstChild.getAttribute("d"));
             });
             it("Translates properly", () => {
                 const valuesMutated = utils.deepClone(valuesDefault);

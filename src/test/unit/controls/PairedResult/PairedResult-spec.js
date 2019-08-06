@@ -777,7 +777,9 @@ describe("PairedResult", () => {
                         `.${styles.pairedPoint}.${styles.high}`
                     );
                     expect(
-                        points.firstChild.attributes.getNamedItem("d").value
+                        points.firstChild.firstChild.attributes.getNamedItem(
+                            "d"
+                        ).value
                     ).toBe(SHAPES.TEAR_ALT.path.d);
                 });
                 it("mid", () => {
@@ -789,7 +791,9 @@ describe("PairedResult", () => {
                         `.${styles.pairedPoint}.${styles.mid}`
                     );
                     expect(
-                        points.firstChild.attributes.getNamedItem("d").value
+                        points.firstChild.firstChild.attributes.getNamedItem(
+                            "d"
+                        ).value
                     ).toBe(SHAPES.RHOMBUS.path.d);
                 });
                 it("low", () => {
@@ -801,7 +805,9 @@ describe("PairedResult", () => {
                         `.${styles.pairedPoint}.${styles.low}`
                     );
                     expect(
-                        points.firstChild.attributes.getNamedItem("d").value
+                        points.firstChild.firstChild.attributes.getNamedItem(
+                            "d"
+                        ).value
                     ).toBe(SHAPES.TEAR_DROP.path.d);
                 });
             });
@@ -846,11 +852,14 @@ describe("PairedResult", () => {
                         pairedResultGraphContainer,
                         styles.dataPointSelection
                     );
+                    const selectionElementGroup = selectionElement.firstChild;
                     expect(selectionElement.tagName).toBe("svg");
-                    expect(selectionElement.firstChild.nodeName).toBe("path");
-                    expect(selectionElement.firstChild.getAttribute("id")).toBe(
-                        "circle"
+                    expect(selectionElementGroup.firstChild.nodeName).toBe(
+                        "path"
                     );
+                    expect(
+                        selectionElementGroup.firstChild.getAttribute("d")
+                    ).toBe(SHAPES.CIRCLE.path.d);
                     expect(selectionElement.classList).toContain(
                         styles.dataPointSelection
                     );
@@ -884,11 +893,14 @@ describe("PairedResult", () => {
                         pairedResultGraphContainer,
                         styles.dataPointSelection
                     );
+                    const selectionElementGroup = selectionElement.firstChild;
                     expect(selectionElement.tagName).toBe("svg");
-                    expect(selectionElement.firstChild.nodeName).toBe("path");
-                    expect(selectionElement.firstChild.getAttribute("id")).toBe(
-                        "circle"
+                    expect(selectionElementGroup.firstChild.nodeName).toBe(
+                        "path"
                     );
+                    expect(
+                        selectionElementGroup.firstChild.getAttribute("d")
+                    ).toBe(SHAPES.CIRCLE.path.d);
                     expect(selectionElement.classList).toContain(
                         styles.dataPointSelection
                     );
@@ -922,11 +934,14 @@ describe("PairedResult", () => {
                         pairedResultGraphContainer,
                         styles.dataPointSelection
                     );
+                    const selectionElementGroup = selectionElement.firstChild;
                     expect(selectionElement.tagName).toBe("svg");
-                    expect(selectionElement.firstChild.nodeName).toBe("path");
-                    expect(selectionElement.firstChild.getAttribute("id")).toBe(
-                        "circle"
+                    expect(selectionElementGroup.firstChild.nodeName).toBe(
+                        "path"
                     );
+                    expect(
+                        selectionElementGroup.firstChild.getAttribute("d")
+                    ).toBe(SHAPES.CIRCLE.path.d);
                     expect(selectionElement.classList).toContain(
                         styles.dataPointSelection
                     );
@@ -3336,11 +3351,11 @@ describe("PairedResult", () => {
                 const criticalOuterElementPath = fetchElementByClass(
                     pairedResultGraphContainer,
                     styles.criticalityOuterPoint
-                ).firstChild;
+                ).firstChild.firstChild;
                 const criticalInnerElementPath = fetchElementByClass(
                     pairedResultGraphContainer,
                     styles.criticalityInnerPoint
-                ).firstChild;
+                ).firstChild.firstChild;
                 expect(criticalOuterElementPath.getAttribute("d")).toBe(
                     SHAPES.TEAR_ALT.path.d
                 );

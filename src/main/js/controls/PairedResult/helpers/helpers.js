@@ -134,7 +134,7 @@ const translatePoints = (scale, canvasSVG) =>
             .each(function(d) {
                 const pairedPointSVG = d3.select(this);
                 pairedPointSVG
-                    .selectAll("path")
+                    .select("g")
                     .transition()
                     .call(constants.d3Transition)
                     .attr("transform", function() {

@@ -341,7 +341,7 @@ const translatePoints = (scale, config, trackPath, style) =>
     trackPath.selectAll(style).each(function(d) {
         const pointSVG = d3.select(this);
         pointSVG
-            .selectAll("path")
+            .select("g")
             .transition()
             .call(constants.d3Transition)
             .attr("transform", function() {

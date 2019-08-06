@@ -161,6 +161,7 @@ describe("Gantt -> Track -> Event", () => {
         it("Renders data points correctly", () => {
             loadData(gantt);
             const pointElement = fetchElementByClass(styles.point);
+            const groupElement = pointElement.firstChild;
             expect(pointElement.nodeName).toBe("svg");
             expect(pointElement.classList).toContain(styles.svgIcon);
             expect(pointElement.classList).toContain(styles.point);
@@ -170,8 +171,8 @@ describe("Gantt -> Track -> Event", () => {
             );
             expect(pointElement.getAttribute("pointer-events")).toBe("auto");
             expect(pointElement.getAttribute("aria-hidden")).toBe("false");
-            expect(pointElement.firstChild.getAttribute("d")).not.toBeNull();
-            expect(pointElement.firstChild.getAttribute("d")).toBe(
+            expect(groupElement.firstChild.getAttribute("d")).not.toBeNull();
+            expect(groupElement.firstChild.getAttribute("d")).toBe(
                 SHAPES.CIRCLE.path.d
             );
         });
@@ -260,15 +261,16 @@ describe("Gantt -> Track -> Event", () => {
             const selectionPointElement = fetchElementByClass(
                 styles.dataPointSelection
             );
+            const groupElement = selectionPointElement.firstChild;
             expect(selectionPointElement.tagName).toBe("svg");
             expect(selectionPointElement.getAttribute("pointer-events")).toBe(
                 "auto"
             );
-            expect(selectionPointElement.firstChild.nodeName).toBe("path");
-            expect(selectionPointElement.firstChild.getAttribute("id")).toBe(
-                "circle"
+            expect(groupElement.firstChild.nodeName).toBe("path");
+            expect(groupElement.firstChild.getAttribute("d")).toBe(
+                SHAPES.CIRCLE.path.d
             );
-            expect(selectionPointElement.firstChild.getAttribute("d")).toBe(
+            expect(groupElement.firstChild.getAttribute("d")).toBe(
                 SHAPES.CIRCLE.path.d
             );
             expect(selectionPointElement.classList).toContain(
