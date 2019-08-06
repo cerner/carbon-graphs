@@ -20,13 +20,16 @@ const defaultPositionOptions = {
     y: -6,
     scale: 0.25
 };
+const iconParserLogger = (msg) =>
+    console.log(`----- Carbon SVG JSON parser: ${msg} -----`);
 /**
  * Converts svg icons to JSON and returns only objects needed by Carbon
+ *
  * @returns {Promise} A promise that is resolved once the icon update process
  * has been completed.
  */
 const convertSVGToJSON = () => {
-    console.log("Start building icons...");
+    iconParserLogger("Start building icons...");
     return svgFolderToJSON({
         dirPath: iconPath,
         options: defaultPositionOptions
@@ -39,7 +42,7 @@ const writeDefinitionsIntoFile = (text) =>
     fs.writeFileSync(
         outputPath,
         prettier.format(text, {
-            parser: "babylon"
+            parser: "babel"
         }),
         (err) => {
             if (err) {
@@ -67,8 +70,9 @@ const buildFunction = (shapes) =>
 
 convertSVGToJSON().then((processedShapes) => {
     writeDefinitionsIntoFile(buildFunction(processedShapes));
-    console.log("Completed!");
-    console.log(
-        "Ensure initial positioning of icons by loading the demo page..."
+    iconParserLogger("Conversion completed!");
+    iconParserLogger(
+        "Ensure initial positioning of icons by loading the demo page."
     );
+    iconParserLogger("Run 'npm run dev' in your console.");
 });

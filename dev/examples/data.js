@@ -244,7 +244,7 @@ const DATA = [
                     label: {
                         display: "Data Label 2"
                     },
-                    shape: Carbon.helpers.SHAPES_LIGHT.TEAR_DROP,
+                    shape: Carbon.helpers.SHAPES.RHOMBUS,
                     color: Carbon.helpers.COLORS.BLUE,
                     onClick: loadPopup,
                     values: [

@@ -82,7 +82,7 @@ const createAxisInfoRowLabel = (
                             textLabelList.value.characterCount
                         )
                     ) / 2
-                ) - constants.TEXT_LABEL_ICON_WIDTH_PADDING}, 
+                ) - constants.TEXT_LABEL_ICON_WIDTH_PADDING},
                 ${-constants.TEXT_LABEL_ICON_HEIGHT_PADDING})`
             );
         addTextLabelIcon(axisInfoRow, config, textLabelList, uniqueKey);
@@ -208,6 +208,7 @@ const getTextLabel = (label, characterCount) =>
 /**
  * X position for the text label
  *
+ * @private
  * @param {object} attributeHelper - contains methods for calculating x, y, height, width.
  * @param {Array} textLabelList - list of text labels
  * @param {number} index - data point index
