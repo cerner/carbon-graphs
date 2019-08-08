@@ -1,8 +1,9 @@
-/* eslint-disable */
+/* eslint-disable max-len */
 "use strict";
 
 /**
  * The S_0001_circle.svg SVG file as an object.
+ *
  * @private
  * @type {{path: {d: string}, options: {x: number, y: number, scale: number}}}
  */
@@ -15,6 +16,7 @@ export const CIRCLE = {
 };
 /**
  * The S_0002_diamond.svg SVG file as an object.
+ *
  * @private
  * @type {{path: {d: string}, options: {x: number, y: number, scale: number}}}
  */
@@ -24,6 +26,7 @@ export const RHOMBUS = {
 };
 /**
  * The S_0003_plus.svg SVG file as an object.
+ *
  * @private
  * @type {{path: {d: string}, options: {x: number, y: number, scale: number}}}
  */
@@ -33,6 +36,7 @@ export const CROSS = {
 };
 /**
  * The S_0004_rectangle.svg SVG file as an object.
+ *
  * @private
  * @type {{path: {d: string}, options: {x: number, y: number, scale: number}}}
  */
@@ -42,6 +46,7 @@ export const VERTICAL_BAR = {
 };
 /**
  * The S_0005_square.svg SVG file as an object.
+ *
  * @private
  * @type {{path: {d: string}, options: {x: number, y: number, scale: number}}}
  */
@@ -51,6 +56,7 @@ export const SQUARE = {
 };
 /**
  * The S_0006_teardrop.svg SVG file as an object.
+ *
  * @private
  * @type {{path: {d: string}, options: {x: number, y: number, scale: number}}}
  */
@@ -63,6 +69,7 @@ export const TEAR_DROP = {
 };
 /**
  * The S_0007_teardropUp.svg SVG file as an object.
+ *
  * @private
  * @type {{path: {d: string}, options: {x: number, y: number, scale: number}}}
  */
@@ -75,6 +82,7 @@ export const TEAR_ALT = {
 };
 /**
  * The S_0008_thinDiamond.svg SVG file as an object.
+ *
  * @private
  * @type {{path: {d: string}, options: {x: number, y: number, scale: number}}}
  */
@@ -84,6 +92,7 @@ export const DIAMOND = {
 };
 /**
  * The S_0009_triangle.svg SVG file as an object.
+ *
  * @private
  * @type {{path: {d: string}, options: {x: number, y: number, scale: number}}}
  */
@@ -93,6 +102,7 @@ export const TRIANGLE = {
 };
 /**
  * The S_0010_triangleDown.svg SVG file as an object.
+ *
  * @private
  * @type {{path: {d: string}, options: {x: number, y: number, scale: number}}}
  */
@@ -102,6 +112,7 @@ export const TRIANGLE_DOWN = {
 };
 /**
  * The S_0011_x.svg SVG file as an object.
+ *
  * @private
  * @type {{path: {d: string}, options: {x: number, y: number, scale: number}}}
  */
@@ -112,3 +123,4 @@ export const X = {
     },
     options: { x: -6, y: -6, scale: 0.25 }
 };
+/* eslint-enable max-len */

@@ -1,7 +1,7 @@
 /**
  * @type {number} Delay duration
  */
-export const TRANSITION_DELAY = 500;
+export const TRANSITION_DELAY = 600;
 /**
  * Triggers an event on provided element
  *

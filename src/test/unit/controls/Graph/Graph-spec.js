@@ -516,7 +516,8 @@ describe("Graph", () => {
             expect(datelines.length).toBe(1);
             expect(datelines[0].getAttribute("pointer-events")).toBe("auto");
             const datelinePoint = fetchElementByClass(styles.datelinePoint);
-            const datelinePointPath = datelinePoint.firstChild;
+            const datelinePointGroupElement = datelinePoint.firstChild;
+            const datelinePointPath = datelinePointGroupElement.firstChild;
             expect(datelinePoint).not.toBeNull();
             expect(datelinePoint.getAttribute("aria-hidden")).toBe("false");
             expect(datelinePoint.getAttribute("pointer-events")).toBe("auto");
@@ -558,7 +559,8 @@ describe("Graph", () => {
             input.dateline = utils.deepClone(datelineJSON);
             graph = new Graph(input);
             const datelinePoint = fetchElementByClass(styles.datelinePoint);
-            const datelinePointPath = datelinePoint.firstChild;
+            const datelinePointGroupElement = datelinePoint.firstChild;
+            const datelinePointPath = datelinePointGroupElement.firstChild;
             expect(datelinePoint).not.toBeNull();
             expect(datelinePoint.getAttribute("aria-hidden")).toBe("false");
             expect(datelinePoint.getAttribute("pointer-events")).toBe("auto");

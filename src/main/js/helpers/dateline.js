@@ -39,7 +39,7 @@ const translateDateline = (scale, config, canvasSVG, yAxisPositionHandler) => {
         );
     datelineGroup
         .selectAll(`.${styles.datelinePoint}`)
-        .select("path")
+        .select("g")
         .attr("transform", function(d) {
             return `translate(${scale.x(
                 utils.parseDateTime(d.value)

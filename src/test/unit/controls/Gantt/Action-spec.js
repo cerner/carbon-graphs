@@ -168,6 +168,7 @@ describe("Gantt -> Track -> Action", () => {
         it("Renders data points correctly", () => {
             loadData(gantt);
             const pointElement = fetchElementByClass(styles.point);
+            const groupElement = pointElement.firstChild;
             expect(pointElement.nodeName).toBe("svg");
             expect(pointElement.classList).toContain(styles.svgIcon);
             expect(pointElement.classList).toContain(styles.point);
@@ -177,8 +178,8 @@ describe("Gantt -> Track -> Action", () => {
             );
             expect(pointElement.getAttribute("pointer-events")).toBe("auto");
             expect(pointElement.getAttribute("aria-hidden")).toBe("false");
-            expect(pointElement.firstChild.getAttribute("d")).not.toBeNull();
-            expect(pointElement.firstChild.getAttribute("d")).toBe(
+            expect(groupElement.firstChild.getAttribute("d")).not.toBeNull();
+            expect(groupElement.firstChild.getAttribute("d")).toBe(
                 SHAPES.CIRCLE.path.d
             );
         });
@@ -278,15 +279,14 @@ describe("Gantt -> Track -> Action", () => {
             const selectionPointElement = fetchElementByClass(
                 styles.dataPointSelection
             );
+            const groupElement = selectionPointElement.firstChild;
             expect(selectionPointElement.tagName).toBe("svg");
             expect(selectionPointElement.getAttribute("pointer-events")).toBe(
                 "auto"
             );
-            expect(selectionPointElement.firstChild.nodeName).toBe("path");
-            expect(selectionPointElement.firstChild.getAttribute("id")).toBe(
-                "circle"
-            );
-            expect(selectionPointElement.firstChild.getAttribute("d")).toBe(
+            expect(groupElement.nodeName).toBe("g");
+            expect(groupElement.firstChild.nodeName).toBe("path");
+            expect(groupElement.firstChild.getAttribute("d")).toBe(
                 SHAPES.CIRCLE.path.d
             );
             expect(selectionPointElement.classList).toContain(
@@ -322,13 +322,15 @@ describe("Gantt -> Track -> Action", () => {
             const pointElements = document.querySelectorAll(`.${styles.point}`);
             const firstPointElement = pointElements[0];
             const secondPointElement = pointElements[1];
+            const firstPointGroupElement = firstPointElement.firstChild;
+            const secondPointGroupElement = secondPointElement.firstChild;
             expect(firstPointElement.nodeName).toBe("svg");
             expect(firstPointElement.classList).toContain(styles.svgIcon);
             expect(firstPointElement.classList).toContain(styles.point);
             expect(firstPointElement.getAttribute("style")).toContain(
                 COLORS.BLACK
             );
-            expect(firstPointElement.firstChild.getAttribute("d")).toBe(
+            expect(firstPointGroupElement.firstChild.getAttribute("d")).toBe(
                 SHAPES.CIRCLE.path.d
             );
             expect(secondPointElement.nodeName).toBe("svg");
@@ -337,7 +339,7 @@ describe("Gantt -> Track -> Action", () => {
             expect(secondPointElement.getAttribute("style")).toContain(
                 COLORS.BLACK
             );
-            expect(secondPointElement.firstChild.getAttribute("d")).toBe(
+            expect(secondPointGroupElement.firstChild.getAttribute("d")).toBe(
                 SHAPES.CIRCLE.path.d
             );
         });

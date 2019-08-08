@@ -1073,6 +1073,8 @@ describe("Bar", () => {
                     barGraphContainer,
                     styles.legendItemBtn
                 );
+                const iconSVG = legendItemBtn.children[0];
+                const iconGroup = legendItemBtn.children[0].firstChild;
                 expect(legendItem).not.toBeNull();
                 expect(legendItem.getAttribute("aria-selected")).toBe("true");
                 expect(legendItem.getAttribute("aria-disabled")).toBe("false");
@@ -1088,13 +1090,11 @@ describe("Bar", () => {
                     styles.legendItemBtn
                 );
                 expect(legendItemBtn.children[0].tagName).toBe("svg");
+                expect(iconGroup.firstChild.getAttribute("d")).toBe(
+                    SHAPES.SQUARE.path.d
+                );
                 expect(
-                    legendItemBtn.children[0].firstChild.getAttribute("d")
-                ).toBe(SHAPES.SQUARE.path.d);
-                expect(
-                    legendItemBtn.children[0].classList.contains(
-                        styles.legendItemIcon
-                    )
+                    iconSVG.classList.contains(styles.legendItemIcon)
                 ).toBeTruthy();
             });
             it("loads the correct color", () => {

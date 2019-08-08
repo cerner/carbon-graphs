@@ -1418,7 +1418,8 @@ describe("Gantt", () => {
                 axisObj.dateline = utils.deepClone(datelineJSON);
                 gantt = new Gantt(axisObj);
                 const datelinePoint = fetchElementByClass(styles.datelinePoint);
-                const datelinePointPath = datelinePoint.firstChild;
+                const datelinePointGroupElement = datelinePoint.firstChild;
+                const datelinePointPath = datelinePointGroupElement.firstChild;
                 expect(datelinePoint).not.toBeNull();
                 expect(datelinePoint.getAttribute("aria-hidden")).toBe("false");
                 expect(datelinePoint.getAttribute("pointer-events")).toBe(
@@ -1429,9 +1430,9 @@ describe("Gantt", () => {
                     datelineJSON[0].shape.path.d
                 );
                 delay(() => {
-                    const datelinePointPath = datelinePoint.firstChild;
+                    const datelinePointGroupElement = datelinePoint.firstChild;
                     const translate = getSVGAnimatedTransformList(
-                        datelinePointPath.getAttribute("transform")
+                        datelinePointGroupElement.getAttribute("transform")
                     ).translate;
                     expect(toNumber(translate[0], 10)).toBeCloseTo(338);
                     expect(toNumber(translate[1], 10)).toBeCloseTo(0);

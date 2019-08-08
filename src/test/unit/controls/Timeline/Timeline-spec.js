@@ -1020,7 +1020,8 @@ describe("Timeline", () => {
             it("Points have correct shape", () => {
                 const points = fetchElementByClass(styles.point);
                 expect(
-                    points.firstChild.attributes.getNamedItem("d").value
+                    points.firstChild.firstChild.attributes.getNamedItem("d")
+                        .value
                 ).toBe(SHAPES.RHOMBUS.path.d);
             });
             it("Points have correct unique key assigned", () => {
@@ -1047,10 +1048,13 @@ describe("Timeline", () => {
                     styles.dataPointSelection
                 );
                 expect(selectedPoints.tagName).toBe("svg");
-                expect(selectedPoints.firstChild.nodeName).toBe("path");
-                expect(selectedPoints.firstChild.getAttribute("id")).toBe(
-                    "circle"
+                expect(selectedPoints.firstChild.nodeName).toBe("g");
+                expect(selectedPoints.firstChild.firstChild.nodeName).toBe(
+                    "path"
                 );
+                expect(
+                    selectedPoints.firstChild.firstChild.getAttribute("d")
+                ).toBe(SHAPES.CIRCLE.path.d);
             });
             it("Selected data point has correct unique key assigned", () => {
                 const selectedPoints = fetchElementByClass(
@@ -1834,21 +1838,26 @@ describe("Timeline", () => {
                 const criticalInnerElement = fetchElementByClass(
                     styles.criticalityTimelineInnerPoint
                 );
+                const criticalOuterGroupElement =
+                    criticalOuterElement.firstChild;
+                const criticalInnerGroupElement =
+                    criticalInnerElement.firstChild;
                 const currentShape = new Shape(
                     getShapeForTarget(inputPrimary)
                 ).getShapeElement();
+                const currentShapeGroupElement = currentShape.firstChild;
                 expect(criticalOuterElement.nodeName).toBe(
                     currentShape.nodeName
                 );
                 expect(criticalInnerElement.nodeName).toBe(
                     currentShape.nodeName
                 );
-                expect(criticalOuterElement.firstChild.getAttribute("d")).toBe(
-                    currentShape.firstChild.getAttribute("d")
-                );
-                expect(criticalInnerElement.firstChild.getAttribute("d")).toBe(
-                    currentShape.firstChild.getAttribute("d")
-                );
+                expect(
+                    criticalOuterGroupElement.firstChild.getAttribute("d")
+                ).toBe(currentShapeGroupElement.firstChild.getAttribute("d"));
+                expect(
+                    criticalInnerGroupElement.firstChild.getAttribute("d")
+                ).toBe(currentShapeGroupElement.firstChild.getAttribute("d"));
             });
             it("Resizes properly", () => {
                 const valuesMutated = utils.deepClone(valuesJSON);
