@@ -7,7 +7,7 @@ import PairedResult from "../../../../main/js/controls/PairedResult";
 import Pie from "../../../../main/js/controls/Pie";
 import Timeline from "../../../../main/js/controls/Timeline";
 import Shape from "../../../../main/js/core/Shape/Shape";
-import { SHAPES } from "../../../../main/js/helpers/constants";
+import { SHAPES, SHAPES_LIGHT } from "../../../../main/js/helpers/constants";
 import {
     ganttInput,
     LIBRARY_LIST,
@@ -78,8 +78,13 @@ describe("Carbon", () => {
         expect(Carbon.api.pairedResult).toEqual(jasmine.any(Function));
         expect(paired instanceof PairedResult).toBeTruthy();
     });
-    it("registers Shape", () => {
+    it("registers Shape - Dark", () => {
         const shape = Carbon.tools.shape(SHAPES.RHOMBUS);
+        expect(Carbon.tools.shape).toEqual(jasmine.any(Function));
+        expect(shape instanceof Shape).toBeTruthy();
+    });
+    it("registers Shape - Light", () => {
+        const shape = Carbon.tools.shape(SHAPES_LIGHT.RHOMBUS);
         expect(Carbon.tools.shape).toEqual(jasmine.any(Function));
         expect(shape instanceof Shape).toBeTruthy();
     });
