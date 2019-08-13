@@ -1671,4 +1671,3 @@ export const getDemoData = (id, type) => {
     const res = DATA.find((t) => t[type]);
     return res ? res[type](id) : null;
 };
-export const getShapes = () => Object.keys(Carbon.helpers.SHAPES);

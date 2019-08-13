@@ -71,6 +71,36 @@ export const SHAPES = {
     X: DEFAULT_SHAPES.X
 };
 /**
+ * Consumers can pick a light shape from this list
+ *
+ * @public
+ * @property {string} CIRCLE "CIRCLE"
+ * @property {string} TRIANGLE "TRIANGLE"
+ * @property {string} SQUARE "SQUARE"
+ * @property {string} X "X"
+ * @property {string} DIAMOND "DIAMOND"
+ * @property {string} CROSS "CROSS"
+ * @property {string} VERTICAL_BAR "VERTICAL_BAR"
+ * @property {string} RHOMBUS "RHOMBUS"
+ * @property {string} TEAR_DROP "TEAR_DROP"
+ * @property {string} TEAR_ALT "TEAR_ALT"
+ * @property {string} TRIANGLE_DOWN "TRIANGLE_DOWN"
+ * @enum {{Object: string}}
+ */
+export const SHAPES_LIGHT = {
+    CIRCLE: DEFAULT_SHAPES.CIRCLE_LIGHT,
+    CROSS: DEFAULT_SHAPES.CROSS_LIGHT,
+    DIAMOND: DEFAULT_SHAPES.DIAMOND_LIGHT,
+    RHOMBUS: DEFAULT_SHAPES.RHOMBUS_LIGHT,
+    SQUARE: DEFAULT_SHAPES.SQUARE_LIGHT,
+    TEAR_ALT: DEFAULT_SHAPES.TEAR_ALT_LIGHT,
+    TEAR_DROP: DEFAULT_SHAPES.TEAR_DROP_LIGHT,
+    TRIANGLE: DEFAULT_SHAPES.TRIANGLE_LIGHT,
+    TRIANGLE_DOWN: DEFAULT_SHAPES.TRIANGLE_DOWN_LIGHT,
+    VERTICAL_BAR: DEFAULT_SHAPES.VERTICAL_BAR_LIGHT,
+    X: DEFAULT_SHAPES.X_LIGHT
+};
+/**
  * Consumers can pick axes tick type from default list
  * DEFAULT is enabled by default. This represents number based axes
  * TIMESERIES is time based axes. For now it only reflects on x-Axis
