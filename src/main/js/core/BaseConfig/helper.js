@@ -29,7 +29,7 @@ export const validateBaseInput = (input) => {
     if (utils.isEmpty(input.key)) {
         throw new Error(errors.THROW_MSG_UNIQUE_KEY_NOT_PROVIDED);
     }
-    if (utils.isEmpty(input.values)) {
+    if (!utils.isArray(input.values)) {
         throw new Error(errors.THROW_MSG_NO_DATA_POINTS);
     }
 };

@@ -569,7 +569,8 @@ const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
                 shape: getValue(d.shape, type),
                 color: getValue(d.color, type),
                 label: getValue(d.label, type),
-                key: `${d.key}_${type}`
+                key: `${d.key}_${type}`,
+                values: dataTarget.values
             }
         );
     if (dataTarget.label && legendSVG) {

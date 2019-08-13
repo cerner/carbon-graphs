@@ -70,10 +70,33 @@ describe("Bar", () => {
         });
         it("throws error when no values are provided", () => {
             const input = utils.deepClone(getInput(valuesDefault));
-            input.values = [];
+            input.values = undefined;
             expect(() => {
                 graphDefault.loadContent(new Bar(input));
             }).toThrowError(errors.THROW_MSG_NO_DATA_POINTS);
+        });
+        it("does not throw error when empty array is provided", () => {
+            const input = utils.deepClone(getInput(valuesDefault));
+            input.values = [];
+            expect(() => {
+                graphDefault.loadContent(new Bar(input));
+            }).not.toThrow();
+        });
+        it("display the legend when empty array is provided as input", () => {
+            graphDefault.loadContent(new Bar(getInput([])));
+            const legendContainer = fetchElementByClass(
+                barGraphContainer,
+                styles.legend
+            );
+            const legendItems = legendContainer.children;
+            expect(legendContainer).not.toBeNull();
+            expect(legendContainer.tagName).toBe("UL");
+            expect(legendItems.length).toBe(1);
+            const legendItem = document.body.querySelector(
+                `.${styles.legendItem}`
+            );
+            expect(legendItem.getAttribute("aria-disabled")).toBe("true");
+            expect(legendItem.getAttribute("aria-selected")).toBe("true");
         });
         it("throws error when no ticks are provided for x-axis", () => {
             const axisData = utils.deepClone(getAxes(axisDefault));

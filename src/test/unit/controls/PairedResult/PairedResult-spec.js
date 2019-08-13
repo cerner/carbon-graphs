@@ -75,9 +75,34 @@ describe("PairedResult", () => {
         it("throws error when no values are provided", () => {
             expect(() => {
                 graphDefault.loadContent(
-                    new PairedResult(getInput([], false, false))
+                    new PairedResult(getInput(undefined, false, false))
                 );
             }).toThrowError(errors.THROW_MSG_NO_DATA_POINTS);
+        });
+        it("does not throw error when empty array is provided", () => {
+            const input = utils.deepClone(getInput(valuesDefault));
+            input.values = [];
+            expect(() => {
+                graphDefault.loadContent(new PairedResult(input));
+            }).not.toThrow();
+        });
+        it("display the legend when empty array is provided as input", () => {
+            const input = utils.deepClone(getInput(valuesDefault));
+            input.values = [];
+            graphDefault.loadContent(new PairedResult(input));
+            const legendContainer = fetchElementByClass(
+                pairedResultGraphContainer,
+                styles.legend
+            );
+            const legendItems = legendContainer.children;
+            expect(legendContainer).not.toBeNull();
+            expect(legendContainer.tagName).toBe("UL");
+            expect(legendItems.length).toBe(3);
+            const legendItem = document.body.querySelector(
+                `.${styles.legendItem}`
+            );
+            expect(legendItem.getAttribute("aria-disabled")).toBe("true");
+            expect(legendItem.getAttribute("aria-selected")).toBe("true");
         });
         it("does not throw error when datetime values have milliseconds", () => {
             expect(() => {

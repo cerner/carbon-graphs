@@ -17,7 +17,7 @@ export const dataPointClickHandlerSpy = sinon.spy();
  * @returns {object} input JSON
  */
 export const getInput = (
-    values = [],
+    values,
     isDefaultColor = true,
     isDefaultShape = true,
     isY2Axis = false

@@ -30,6 +30,14 @@ const isFunction = (o) => typeof o === "function";
  */
 const isArray = (o) => Array.isArray(o);
 /**
+ * Checks if parameter is an Array and it is having zero elements
+ *
+ * @private
+ * @param {object} o - source object
+ * @returns {boolean} true if it is an Array and length is zero
+ */
+const isEmptyArray = (o) => Array.isArray(o) && o.length === 0;
+/**
  * Checks if parameter is a String
  *
  * @private
@@ -197,6 +205,7 @@ export default {
     deepClone,
     isFunction,
     isArray,
+    isEmptyArray,
     isDefined,
     isUndefined,
     isEmpty,
