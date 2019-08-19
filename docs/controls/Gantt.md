@@ -40,7 +40,7 @@ A native gantt chart using d3 based on standard design patterns.
             -   [Optional](#optional-8)
         -   [Layering](#layering)
         -   [Constraints](#constraints)
-        -   [Structure](#structure)
+    -   [Structure](#structure)
 
 ## Usage
 
@@ -98,12 +98,17 @@ X (Timeseries) axis should have the following properties:
 | ------------- | -------- | ------- | ---------------------------------- |
 | show          | boolean  | true    | Toggle for showing the axis        |
 | ticks         | object   | null    | Refer [Ticks](../helpers/Ticks.md) |
+| rangeRounding | boolean  | true    | Toggle for range rounding          |
 
 Y Axis should have the following properties:
 
 | Property Name | Expected | Default | Description                 |
 | ------------- | -------- | ------- | --------------------------- |
 | show          | boolean  | true    | Toggle for showing the axis |
+
+**Note:**
+
+-   `rangeRounding` property extends the domain so that it starts and ends on nice round values. This method typically modifies the scale’s domain, and may only extend the bounds to the nearest round value
 
 ### Pass Through
 
