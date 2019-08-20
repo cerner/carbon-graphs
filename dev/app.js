@@ -660,14 +660,14 @@ renderSiteApp(
                             title: "Standard"
                         },
                         {
-                            pathname: "/styles/shapes/standard-light",
-                            content: renderShapesSimpleLight,
-                            title: "Standard - Light"
-                        },
-                        {
                             pathname: "/styles/shapes/critical",
                             content: renderCriticalityShapes,
                             title: "Criticality"
+                        },
+                        {
+                            pathname: "/styles/shapes/standard-light",
+                            content: renderShapesSimpleLight,
+                            title: "Standard - Light"
                         },
                         {
                             pathname: "/styles/shapes/critical-light",
