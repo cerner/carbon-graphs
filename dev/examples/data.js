@@ -980,6 +980,62 @@ const DATA = [
                             }
                         }
                     ]
+                },
+                {
+                    key: "uid_2",
+                    label: {
+                        high: {
+                            display: "High"
+                        },
+                        mid: {
+                            display: "Median"
+                        },
+                        low: {
+                            display: "Low"
+                        }
+                    },
+                    yAxis: "y",
+                    shape: {
+                        high: Carbon.helpers.SHAPES.TEAR_ALT,
+                        mid: Carbon.helpers.SHAPES.RHOMBUS,
+                        low: Carbon.helpers.SHAPES.TEAR_DROP
+                    },
+                    color: {
+                        high: Carbon.helpers.COLORS.BLACK,
+                        mid: Carbon.helpers.COLORS.BLACK,
+                        low: Carbon.helpers.COLORS.BLACK
+                    },
+                    onClick: loadPopup,
+                    values: [
+                        {
+                            high: {
+                                x: 45,
+                                y: 200
+                            },
+                            mid: {
+                                x: 45,
+                                y: 146
+                            },
+                            low: {
+                                x: 45,
+                                y: 75
+                            }
+                        },
+                        {
+                            high: {
+                                x: 160,
+                                y: 110
+                            },
+                            mid: {
+                                x: 160,
+                                y: 70
+                            },
+                            low: {
+                                x: 160,
+                                y: 30
+                            }
+                        }
+                    ]
                 }
             ],
             showLabel: true,

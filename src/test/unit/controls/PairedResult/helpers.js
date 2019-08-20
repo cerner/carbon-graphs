@@ -203,6 +203,75 @@ export const multiRegion = {
         }
     ]
 };
+export const multiRegionNotSame = {
+    high: [
+        {
+            axis: "y",
+            start: 140,
+            end: 220,
+            color: "#c8cacb"
+        },
+        {
+            axis: "y",
+            start: 180,
+            end: 230,
+            color: "#d6d8d9"
+        }
+    ],
+    low: [
+        {
+            axis: "y",
+            start: 20,
+            end: 70
+        }
+    ],
+    mid: [
+        {
+            axis: "y",
+            start: 20,
+            end: 90
+        }
+    ]
+};
+export const multiRegionSameData = {
+    high: [
+        {
+            axis: "y",
+            start: 140,
+            end: 220
+        }
+    ],
+    low: [
+        {
+            axis: "y",
+            start: 140,
+            end: 220
+        }
+    ],
+    mid: [
+        {
+            axis: "y",
+            start: 140,
+            end: 220
+        }
+    ]
+};
+export const regionMissing = {
+    high: [
+        {
+            axis: "y",
+            start: 140,
+            end: 220
+        }
+    ],
+    low: [
+        {
+            axis: "y",
+            start: 140,
+            end: 220
+        }
+    ]
+};
 export const inputSecondary = {
     key: `uid_2`,
     label: {

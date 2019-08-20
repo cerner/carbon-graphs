@@ -68,3 +68,60 @@ export const renderCombinationBar = (id) => {
     );
     return barTest;
 };
+
+export const combinationRegionInput = (id) => ({
+    bindTo: id,
+    axis: {
+        x: {
+            show: true,
+            label: "Data",
+            lowerLimit: 0,
+            upperLimit: 300
+        },
+        y: {
+            show: true,
+            label: "Line Paired Combo",
+            lowerLimit: 0,
+            upperLimit: 20
+        }
+    }
+});
+
+export const renderCombinationIdenticalDatasetRegion = (id) => {
+    const lineData = getDemoData(`#${id}`, "LINE_PAIR_COMB_DEFAULT").data[0];
+    lineData.regions = [
+        {
+            axis: "y",
+            start: 6,
+            end: 100
+        }
+    ];
+    const pairedData = getDemoData(`#${id}`, "LINE_PAIR_COMB_DEFAULT").data[2];
+    pairedData.regions = {
+        high: [
+            {
+                axis: "y",
+                start: 6,
+                end: 100
+            }
+        ],
+        low: [
+            {
+                axis: "y",
+                start: 6,
+                end: 100
+            }
+        ],
+        mid: [
+            {
+                axis: "y",
+                start: 6,
+                end: 100
+            }
+        ]
+    };
+    const combGraph = Carbon.api.graph(combinationRegionInput(`#${id}`));
+    combGraph.loadContent(Carbon.api.line(lineData));
+    combGraph.loadContent(Carbon.api.pairedResult(pairedData));
+    return combGraph;
+};

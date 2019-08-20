@@ -202,7 +202,7 @@ export const renderBarTimeSeries = (id) => {
     );
     return barTime;
 };
-export const renderBarTimeSeriesWithDateline = (id) => () => {
+export const renderBarTimeSeriesWithDateline = (id) => {
     const axisData = utils.deepClone(getDemoData(`#${id}`, "BAR_TIMESERIES"));
     axisData.axis.x.ticks = {
         values: tickValues,

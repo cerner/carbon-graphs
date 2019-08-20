@@ -323,6 +323,28 @@ export const renderMultiLineRegion = (id) => {
     );
     return lineDefault;
 };
+export const renderMultiLineIdenticalDatasetRegion = (id) => {
+    const lineDefault = Carbon.api.graph(getDemoData(`#${id}`, "LINE_DEFAULT"));
+    const data = utils.deepClone(getDemoData(`#${id}`, "LINE_DEFAULT").data[0]);
+    const dataAlt = utils.deepClone(
+        getDemoData(`#${id}`, "LINE_DEFAULT").data[2]
+    );
+    data.regions = [
+        {
+            start: 2,
+            end: 14
+        }
+    ];
+    dataAlt.regions = [
+        {
+            start: 2,
+            end: 14
+        }
+    ];
+    lineDefault.loadContent(Carbon.api.line(data));
+    lineDefault.loadContent(Carbon.api.line(dataAlt));
+    return lineDefault;
+};
 export const renderGoalLine = (id) => {
     const lineDefault = Carbon.api.graph(getDemoData(`#${id}`, "LINE_DEFAULT"));
     const data = utils.deepClone(getDemoData(`#${id}`, "LINE_DEFAULT").data[5]);

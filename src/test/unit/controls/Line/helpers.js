@@ -108,6 +108,13 @@ export const inputSecondary = {
     },
     values: valuesDefault
 };
+export const inputTertiary = {
+    key: `uid_3`,
+    label: {
+        display: "Data Label C"
+    },
+    values: valuesDefault
+};
 /**
  * Returns the DOM element queried by Class
  *

@@ -32,7 +32,8 @@ import {
     getInput,
     inputSecondary,
     valuesDefault,
-    valuesTimeSeries
+    valuesTimeSeries,
+    inputTertiary
 } from "./helpers";
 
 describe("Line", () => {
@@ -2255,6 +2256,102 @@ describe("Line", () => {
                         });
                     });
                 });
+            });
+        });
+        describe("Check if region same for multiline with same dataset", () => {
+            let inputPrimary = null;
+            let linePrimary = null;
+            let lineSecondary = null;
+            let lineThird = null;
+            beforeEach(() => {
+                inputPrimary = getInput(valuesDefault, false, false);
+                inputPrimary.regions = [
+                    {
+                        start: 1,
+                        end: 5
+                    }
+                ];
+                inputSecondary.regions = [
+                    {
+                        start: 1,
+                        end: 5
+                    }
+                ];
+                linePrimary = new Line(inputPrimary);
+                lineSecondary = new Line(inputSecondary);
+                graphDefault.loadContent(linePrimary);
+                graphDefault.loadContent(lineSecondary);
+            });
+            it("Correctly renders", () => {
+                const regionGroupElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.regionGroup
+                );
+                const regionElement = fetchElementByClass(
+                    regionGroupElement,
+                    styles.region
+                );
+                expect(regionGroupElement.childNodes.length).toBe(2);
+                expect(regionElement.nodeName).toBe("rect");
+            });
+            it("Hides region if one or more is missing", () => {
+                inputTertiary.regions = null;
+                lineThird = new Line(inputTertiary);
+                graphDefault.loadContent(lineThird);
+                const regionsElement = document.querySelectorAll(
+                    `.${styles.region}`
+                );
+                expect(regionsElement.length).toBe(2);
+                regionsElement.forEach((element) => {
+                    expect(element.getAttribute("aria-hidden")).toBe("true");
+                });
+                expect(regionsElement[0].getAttribute("aria-describedby")).toBe(
+                    `region_${inputPrimary.key}`
+                );
+                expect(regionsElement[1].getAttribute("aria-describedby")).toBe(
+                    `region_${inputSecondary.key}`
+                );
+            });
+            it("Shows region if one or more are identical", () => {
+                const regionsElement = document.querySelectorAll(
+                    `.${styles.region}`
+                );
+                expect(regionsElement.length).toBe(2);
+                regionsElement.forEach((element) => {
+                    expect(element.getAttribute("aria-hidden")).toBe("false");
+                });
+                expect(regionsElement[0].getAttribute("aria-describedby")).toBe(
+                    `region_${inputPrimary.key}`
+                );
+                expect(regionsElement[1].getAttribute("aria-describedby")).toBe(
+                    `region_${inputSecondary.key}`
+                );
+            });
+            it("Hides region if one or more are not identical", () => {
+                inputTertiary.regions = [
+                    {
+                        start: 1,
+                        end: 10
+                    }
+                ];
+                lineThird = new Line(inputTertiary);
+                graphDefault.loadContent(lineThird);
+                const regionsElement = document.querySelectorAll(
+                    `.${styles.region}`
+                );
+                expect(regionsElement.length).toBe(3);
+                regionsElement.forEach((element) => {
+                    expect(element.getAttribute("aria-hidden")).toBe("true");
+                });
+                expect(regionsElement[0].getAttribute("aria-describedby")).toBe(
+                    `region_${inputPrimary.key}`
+                );
+                expect(regionsElement[1].getAttribute("aria-describedby")).toBe(
+                    `region_${inputSecondary.key}`
+                );
+                expect(regionsElement[2].getAttribute("aria-describedby")).toBe(
+                    `region_${inputTertiary.key}`
+                );
             });
         });
         describe("On legend item click", () => {

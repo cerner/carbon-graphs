@@ -431,7 +431,7 @@ const drawDataPoints = (scale, config, pointGroupPath) => {
  */
 const onAnimationHandler = (graphContext, control, config, canvasSVG) => () => {
     control.redraw(graphContext);
-    processRegions(config.shownTargets, canvasSVG);
+    processRegions(config, canvasSVG);
 };
 /**
  * Click handler for legend item. Removes the line from graph when clicked and calls redraw

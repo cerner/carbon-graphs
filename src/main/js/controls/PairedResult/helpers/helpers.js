@@ -20,7 +20,8 @@ import {
     hideAllRegions,
     isSingleTargetDisplayed,
     regionLegendHoverHandler,
-    showHideRegion
+    showHideRegion,
+    areRegionsIdentical
 } from "../../../helpers/region";
 import { getSVGObject } from "../../../helpers/shapeSVG";
 import styles from "../../../helpers/styles";
@@ -431,7 +432,7 @@ const translatePairedResultGraph = (scale, config, canvasSVG) => {
 };
 /**
  * Show/hide regions based on the following criteria:
- * * If more than 1 target is displayed -> Hide regions
+ * * Regions would be checked if they are identical before hiding them.
  * * If only 1 target is displayed -> show the region using unique data set key
  *
  * @private
@@ -448,10 +449,28 @@ const processRegions = (graphContext, config, canvasSVG, { key }) => {
             `region_${key}`,
             config.shownTargets.indexOf(key) > -1
         );
+    } else if (
+        !config.shouldHideAllRegion &&
+        config.shownTargets.length > 0 &&
+        areRegionsIdentical(canvasSVG)
+    ) {
+        canvasSVG.selectAll(`.${styles.region}`).attr("aria-hidden", false);
     } else {
         hideAllRegions(canvasSVG);
     }
 };
+/**
+ * Checks the region data of Paired Result so that if one of regions for Paired Result data pairs are not provided,
+ * i.e. if regions for "high" and "low" are provided and the values contain data for "high", "mid" and "low",
+ * all regions would be hidden(returns false) and if region for all "high", "mid" and "low" is there as well as value contains
+ * data for "high", "mid" and "low" then it returns true.
+ *
+ * @param {object} value - pairedResult values
+ * @param {object} regionList - List of all the regions provided
+ * @returns { boolean } returns true if regions are not missing for the value keys( high, mid or low) else false
+ */
+const isRegionMappedToAllValues = (value, regionList) =>
+    Object.keys(value).every((v) => regionList.hasOwnProperty(v));
 /**
  * Handler for Request animation frame, executes on resize.
  *  * Order of execution
@@ -666,5 +685,6 @@ export {
     translatePairedResultGraph,
     prepareLegendItems,
     renderRegion,
+    isRegionMappedToAllValues,
     clear
 };
