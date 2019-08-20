@@ -31,7 +31,7 @@ export const renderShapesSimple = (id) => {
     const sect = document.createElement("section");
     const svgElement = vector.render(sect, id, viewBoxSize);
     document.querySelector(`#${id}`).appendChild(sect);
-    getShapesSplit(Carbon.helpers.SHAPES).forEach((s, pos) => {
+    getShapesSplit(Carbon.helpers.SHAPES.DARK).forEach((s, pos) => {
         d3.select(svgElement)
             .append("g")
             .selectAll("path")
@@ -39,7 +39,9 @@ export const renderShapesSimple = (id) => {
             .enter()
             .append((d, i) =>
                 Carbon.tools
-                    .shape(constructSVGObject(Carbon.helpers.SHAPES[d], {}))
+                    .shape(
+                        constructSVGObject(Carbon.helpers.SHAPES.DARK[d], {})
+                    )
                     .getShapeElement(
                         Carbon.tools.defaultSVGProps({
                             svgClassNames: styles.point,
@@ -53,7 +55,7 @@ export const renderCriticalityShapes = (id) => {
     const sect = document.createElement("section");
     const svgElement = vector.render(sect, id, viewBoxSize);
     document.querySelector(`#${id}`).appendChild(sect);
-    getShapesSplit(Carbon.helpers.SHAPES).forEach((s, pos) => {
+    getShapesSplit(Carbon.helpers.SHAPES.DARK).forEach((s, pos) => {
         const groupSVG = d3
             .select(svgElement)
             .append("g")
@@ -63,7 +65,7 @@ export const renderCriticalityShapes = (id) => {
             .append("g");
         groupSVG.append((d, i) =>
             Carbon.tools
-                .shape(constructSVGObject(Carbon.helpers.SHAPES[d], {}))
+                .shape(constructSVGObject(Carbon.helpers.SHAPES.DARK[d], {}))
                 .getShapeElement(
                     Carbon.tools.defaultSVGProps({
                         svgClassNames: styles.criticalityOuterPoint,
@@ -73,7 +75,7 @@ export const renderCriticalityShapes = (id) => {
         );
         groupSVG.append((d, i) =>
             Carbon.tools
-                .shape(constructSVGObject(Carbon.helpers.SHAPES[d], {}))
+                .shape(constructSVGObject(Carbon.helpers.SHAPES.DARK[d], {}))
                 .getShapeElement(
                     Carbon.tools.defaultSVGProps({
                         svgClassNames: styles.criticalityInnerPoint,
@@ -83,7 +85,7 @@ export const renderCriticalityShapes = (id) => {
         );
         groupSVG.append((d, i) =>
             Carbon.tools
-                .shape(constructSVGObject(Carbon.helpers.SHAPES[d], {}))
+                .shape(constructSVGObject(Carbon.helpers.SHAPES.DARK[d], {}))
                 .getShapeElement(
                     Carbon.tools.defaultSVGProps({
                         svgClassNames: styles.point,
@@ -97,7 +99,7 @@ export const renderShapesSimpleLight = (id) => {
     const sect = document.createElement("section");
     const svgElement = vector.render(sect, id, viewBoxSize);
     document.querySelector(`#${id}`).appendChild(sect);
-    getShapesSplit(Carbon.helpers.SHAPES_LIGHT).forEach((s, pos) => {
+    getShapesSplit(Carbon.helpers.SHAPES.LIGHT).forEach((s, pos) => {
         d3.select(svgElement)
             .append("g")
             .selectAll("path")
@@ -106,7 +108,7 @@ export const renderShapesSimpleLight = (id) => {
             .append((d, i) =>
                 Carbon.tools
                     .shape(
-                        constructSVGObject(Carbon.helpers.SHAPES_LIGHT[d], {})
+                        constructSVGObject(Carbon.helpers.SHAPES.LIGHT[d], {})
                     )
                     .getShapeElement(
                         Carbon.tools.defaultSVGProps({
@@ -121,7 +123,7 @@ export const renderCriticalityShapesLight = (id) => {
     const sect = document.createElement("section");
     const svgElement = vector.render(sect, id, viewBoxSize);
     document.querySelector(`#${id}`).appendChild(sect);
-    getShapesSplit(Carbon.helpers.SHAPES_LIGHT).forEach((s, pos) => {
+    getShapesSplit(Carbon.helpers.SHAPES.LIGHT).forEach((s, pos) => {
         const groupSVG = d3
             .select(svgElement)
             .append("g")
@@ -131,7 +133,7 @@ export const renderCriticalityShapesLight = (id) => {
             .append("g");
         groupSVG.append((d, i) =>
             Carbon.tools
-                .shape(constructSVGObject(Carbon.helpers.SHAPES[d], {}))
+                .shape(constructSVGObject(Carbon.helpers.SHAPES.DARK[d], {}))
                 .getShapeElement(
                     Carbon.tools.defaultSVGProps({
                         svgClassNames: styles.criticalityOuterPoint,
@@ -141,7 +143,7 @@ export const renderCriticalityShapesLight = (id) => {
         );
         groupSVG.append((d, i) =>
             Carbon.tools
-                .shape(constructSVGObject(Carbon.helpers.SHAPES[d], {}))
+                .shape(constructSVGObject(Carbon.helpers.SHAPES.DARK[d], {}))
                 .getShapeElement(
                     Carbon.tools.defaultSVGProps({
                         svgClassNames: styles.criticalityInnerPoint,
@@ -151,7 +153,7 @@ export const renderCriticalityShapesLight = (id) => {
         );
         groupSVG.append((d, i) =>
             Carbon.tools
-                .shape(constructSVGObject(Carbon.helpers.SHAPES_LIGHT[d], {}))
+                .shape(constructSVGObject(Carbon.helpers.SHAPES.LIGHT[d], {}))
                 .getShapeElement(
                     Carbon.tools.defaultSVGProps({
                         svgClassNames: styles.point,

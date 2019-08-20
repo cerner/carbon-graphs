@@ -17,6 +17,8 @@ For documentation on code: [**JSDocs**](https://engineering.cerner.com/carbon-gr
             -   [Data-point values](#data-point-values)
     -   [Colors](#colors)
     -   [Shapes](#shapes)
+        -   [Dark](#dark)
+        -   [Light](#light)
     -   [Locale](#locale-1)
         -   [Format](#format)
 
@@ -106,6 +108,10 @@ Consumers can generate one of the following graphs:
 
 ## Shapes
 
+### Dark
+
+Used via `Carbon.helpers.SHAPES.DARK`
+
 | Constant      | Rendered as                                                                                                                                                   |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | CIRCLE        | <img width="16px" height="16px" src="https://raw.githubusercontent.com/cerner/one-cerner-style-icons/master/src/icons/S_0001_circle.svg?sanitize=true">       |
@@ -119,6 +125,24 @@ Consumers can generate one of the following graphs:
 | TRIANGLE_DOWN | <img width="16px" height="16px" src="https://raw.githubusercontent.com/cerner/one-cerner-style-icons/master/src/icons/S_0010_triangleDown.svg?sanitize=true"> |
 | VERTICAL_BAR  | <img width="16px" height="16px" src="https://raw.githubusercontent.com/cerner/one-cerner-style-icons/master/src/icons/S_0004_rectangle.svg?sanitize=true">    |
 | X             | <img width="16px" height="16px" src="https://raw.githubusercontent.com/cerner/one-cerner-style-icons/master/src/icons/S_0011_x.svg?sanitize=true">            |
+
+### Light
+
+Used via `Carbon.helpers.SHAPES.LIGHT`
+
+| Constant      | Rendered as                                                                                                                                                         |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CIRCLE        | <img width="16px" height="16px" src="https://raw.githubusercontent.com/cerner/one-cerner-style-icons/master/src/icons/S_0001_circle_light.svg?sanitize=true">       |
+| CROSS         | <img width="16px" height="16px" src="https://raw.githubusercontent.com/cerner/one-cerner-style-icons/master/src/icons/S_0003_plus_light.svg?sanitize=true">         |
+| DIAMOND       | <img width="16px" height="16px" src="https://raw.githubusercontent.com/cerner/one-cerner-style-icons/master/src/icons/S_0008_thinDiamond_light.svg?sanitize=true">  |
+| RHOMBUS       | <img width="16px" height="16px" src="https://raw.githubusercontent.com/cerner/one-cerner-style-icons/master/src/icons/S_0002_diamond_light.svg?sanitize=true">      |
+| SQUARE        | <img width="16px" height="16px" src="https://raw.githubusercontent.com/cerner/one-cerner-style-icons/master/src/icons/S_0005_square_light.svg?sanitize=true">       |
+| TEAR_DROP     | <img width="16px" height="16px" src="https://raw.githubusercontent.com/cerner/one-cerner-style-icons/master/src/icons/S_0006_teardrop_light.svg?sanitize=true">     |
+| TEAR_ALT      | <img width="16px" height="16px" src="https://raw.githubusercontent.com/cerner/one-cerner-style-icons/master/src/icons/S_0007_teardropUp_light.svg?sanitize=true">   |
+| TRIANGLE      | <img width="16px" height="16px" src="https://raw.githubusercontent.com/cerner/one-cerner-style-icons/master/src/icons/S_0009_triangle_light.svg?sanitize=true">     |
+| TRIANGLE_DOWN | <img width="16px" height="16px" src="https://raw.githubusercontent.com/cerner/one-cerner-style-icons/master/src/icons/S_0010_triangleDown_light.svg?sanitize=true"> |
+| VERTICAL_BAR  | <img width="16px" height="16px" src="https://raw.githubusercontent.com/cerner/one-cerner-style-icons/master/src/icons/S_0004_rectangle_light.svg?sanitize=true">    |
+| X             | <img width="16px" height="16px" src="https://raw.githubusercontent.com/cerner/one-cerner-style-icons/master/src/icons/S_0011_x_light.svg?sanitize=true">            |
 
 Carbon supports custom shapes as well! For more information on custom icon support, refer [Carbon Shape](core/Shape.md)
 

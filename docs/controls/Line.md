@@ -54,15 +54,15 @@ Refer [GraphAPI](../core/GraphAPI.md) `Root` for more details.
 
 #### Optional
 
-| Property Name | Expected | Default          | Description                                                           |
-| ------------- | -------- | ---------------- | --------------------------------------------------------------------- |
-| yAxis         | string   | "y"              | Setting for using different Y based axis. For now: its either Y or Y2 |
-| type          | string   | LINE_TYPE.LINEAR | Nature of line that needs to be drawn (Linear or Cardinal)            |
-| regions       | array    | []               | Refer [Regions](#regions)                                             |
-| label         | object   | {}               | Display value for the data-set which the data points belong to        |
-| color         | string   | COLORS.BLACK     | Color for the data point and line                                     |
-| shape         | string   | SHAPES.CIRCLE    | Shape for representing the data points                                |
-| onClick       | Function | undefined        | Any action that can be performed when clicking on the data point      |
+| Property Name | Expected | Default            | Description                                                           |
+| ------------- | -------- | ------------------ | --------------------------------------------------------------------- |
+| yAxis         | string   | "y"                | Setting for using different Y based axis. For now: its either Y or Y2 |
+| type          | string   | LINE_TYPE.LINEAR   | Nature of line that needs to be drawn (Linear or Cardinal)            |
+| regions       | array    | []                 | Refer [Regions](#regions)                                             |
+| label         | object   | {}                 | Display value for the data-set which the data points belong to        |
+| color         | string   | COLORS.BLACK       | Color for the data point and line                                     |
+| shape         | string   | SHAPES.DARK.CIRCLE | Shape for representing the data points                                |
+| onClick       | Function | undefined          | Any action that can be performed when clicking on the data point      |
 
 ### Values
 
@@ -132,7 +132,7 @@ var root = {
                 display: "Release A"
             },
             color: "#d3d4d5",
-            shape: Carbon.helpers.SHAPES.TRIANGLE,
+            shape: Carbon.helpers.SHAPES.DARK.TRIANGLE,
             onClick: (onCloseCB, payload) => {
                 // onCloseCB needs to called by the consumer after popup is closed;
                 // Payload is the dateline input object
@@ -162,7 +162,7 @@ var data = {
             color: "#f4f4f4"
         }
     ],
-    shape: Carbon.helpers.SHAPES.SQUARE,
+    shape: Carbon.helpers.SHAPES.DARK.SQUARE,
     color: Carbon.helpers.COLORS.BLUE,
     onClick: (onCloseCB, key, index, value) => {
         //onCloseCB needs to called by the consumer after popup is closed;

@@ -30,15 +30,16 @@ const tools = {
  * @property {object} LINE_TYPE Carbon API line type constants
  * @property {object} LOCALE Carbon API locale objects
  * @property {object} SHAPES Carbon API shape constants
- * @property {object} SHAPES_LIGHT Carbon API light shape constants
  */
 const helpers = {
     AXIS_TYPE,
     COLORS,
     LINE_TYPE,
     LOCALE,
-    SHAPES,
-    SHAPES_LIGHT,
+    SHAPES: Object.assign({}, SHAPES, {
+        DARK: SHAPES,
+        LIGHT: SHAPES_LIGHT
+    }),
     AXES_ORIENTATION
 };
 /**
