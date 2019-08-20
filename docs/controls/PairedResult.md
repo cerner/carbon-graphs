@@ -47,14 +47,14 @@ Refer [GraphAPI](../core/GraphAPI.md) `Root` for more details.
 
 #### Optional
 
-| Property Name | Expected | Default       | Description                                                           |
-| ------------- | -------- | ------------- | --------------------------------------------------------------------- |
-| yAxis         | string   | "y"           | Setting for using different Y based axis. For now: its either Y or Y2 |
-| regions       | object   | {}            | Refer [Regions](#regions)                                             |
-| label         | object   | {}            | Display value for the data-set which the data points belong to        |
-| color         | string   | COLORS.BLACK  | Color for the data point                                              |
-| shape         | string   | SHAPES.CIRCLE | Shape for representing the data points                                |
-| onClick       | Function | undefined     | Any action that can be performed when clicking on the data point      |
+| Property Name | Expected | Default            | Description                                                           |
+| ------------- | -------- | ------------------ | --------------------------------------------------------------------- |
+| yAxis         | string   | "y"                | Setting for using different Y based axis. For now: its either Y or Y2 |
+| regions       | object   | {}                 | Refer [Regions](#regions)                                             |
+| label         | object   | {}                 | Display value for the data-set which the data points belong to        |
+| color         | string   | COLORS.BLACK       | Color for the data point                                              |
+| shape         | string   | SHAPES.DARK.CIRCLE | Shape for representing the data points                                |
+| onClick       | Function | undefined          | Any action that can be performed when clicking on the data point      |
 
 ### Values
 

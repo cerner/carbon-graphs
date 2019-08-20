@@ -67,7 +67,7 @@ const DATA = [
                     label: {
                         display: "Data Label 2"
                     },
-                    shape: Carbon.helpers.SHAPES.TRIANGLE,
+                    shape: Carbon.helpers.SHAPES.DARK.TRIANGLE,
                     color: Carbon.helpers.COLORS.BLUE,
                     onClick: loadPopup,
                     values: new Array(18).fill("").map((_, i) => ({
@@ -80,7 +80,7 @@ const DATA = [
                     label: {
                         display: "Data Label 3"
                     },
-                    shape: Carbon.helpers.SHAPES.X,
+                    shape: Carbon.helpers.SHAPES.DARK.X,
                     color: Carbon.helpers.COLORS.GREEN,
                     onClick: loadPopup,
                     values: new Array(12).fill("").map((_, i) => ({
@@ -93,7 +93,7 @@ const DATA = [
                     label: {
                         display: "Data Label 4"
                     },
-                    shape: Carbon.helpers.SHAPES.CROSS,
+                    shape: Carbon.helpers.SHAPES.DARK.CROSS,
                     color: Carbon.helpers.COLORS.LIGHT_PURPLE,
                     onClick: loadPopup,
                     values: new Array(15).fill("").map((_, i) => ({
@@ -106,7 +106,7 @@ const DATA = [
                     label: {
                         display: "Data Label 5"
                     },
-                    shape: Carbon.helpers.SHAPES.SQUARE,
+                    shape: Carbon.helpers.SHAPES.DARK.SQUARE,
                     color: Carbon.helpers.COLORS.ORANGE,
                     onClick: loadPopup,
                     values: new Array(20).fill("").map((_, i) => ({
@@ -119,7 +119,7 @@ const DATA = [
                     label: {
                         display: "Data Label 6"
                     },
-                    shape: Carbon.helpers.SHAPES.CIRCLE,
+                    shape: Carbon.helpers.SHAPES.DARK.CIRCLE,
                     color: Carbon.helpers.COLORS.LIGHT_BLUE,
                     onClick: loadPopup,
                     values: new Array(14).fill("").map((_, i) => ({
@@ -132,7 +132,7 @@ const DATA = [
                     label: {
                         display: "Data Label 7"
                     },
-                    shape: Carbon.helpers.SHAPES.TRIANGLE_DOWN,
+                    shape: Carbon.helpers.SHAPES.DARK.TRIANGLE_DOWN,
                     color: Carbon.helpers.COLORS.GREY,
                     onClick: loadPopup,
                     values: new Array(18).fill("").map((_, i) => ({
@@ -176,7 +176,7 @@ const DATA = [
                     label: {
                         display: "Data Label 1"
                     },
-                    shape: Carbon.helpers.SHAPES.CIRCLE,
+                    shape: Carbon.helpers.SHAPES.DARK.CIRCLE,
                     onClick: loadPopup,
                     values: [
                         {
@@ -244,7 +244,7 @@ const DATA = [
                     label: {
                         display: "Data Label 2"
                     },
-                    shape: Carbon.helpers.SHAPES.RHOMBUS,
+                    shape: Carbon.helpers.SHAPES.DARK.RHOMBUS,
                     color: Carbon.helpers.COLORS.BLUE,
                     onClick: loadPopup,
                     values: [
@@ -296,7 +296,7 @@ const DATA = [
                     label: {
                         display: "Data Label 3"
                     },
-                    shape: Carbon.helpers.SHAPES.CIRCLE,
+                    shape: Carbon.helpers.SHAPES.DARK.CIRCLE,
                     color: Carbon.helpers.COLORS.BLUE,
                     onClick: loadPopup,
                     values: [
@@ -385,7 +385,7 @@ const DATA = [
                         display: "Current Date"
                     },
                     color: "#FFDF00",
-                    shape: Carbon.helpers.SHAPES.SQUARE,
+                    shape: Carbon.helpers.SHAPES.DARK.SQUARE,
                     onClick: loadDatelinePopup,
                     value: new Date(2016, 0, 1, 6).toISOString()
                 }
@@ -399,7 +399,7 @@ const DATA = [
                     label: {
                         display: "Data Label 1"
                     },
-                    shape: Carbon.helpers.SHAPES.CIRCLE,
+                    shape: Carbon.helpers.SHAPES.DARK.CIRCLE,
                     onClick: loadPopup,
                     values: [
                         {
@@ -500,9 +500,9 @@ const DATA = [
                         }
                     },
                     shape: {
-                        high: Carbon.helpers.SHAPES.TEAR_ALT,
-                        mid: Carbon.helpers.SHAPES.RHOMBUS,
-                        low: Carbon.helpers.SHAPES.TEAR_DROP
+                        high: Carbon.helpers.SHAPES.DARK.TEAR_ALT,
+                        mid: Carbon.helpers.SHAPES.DARK.RHOMBUS,
+                        low: Carbon.helpers.SHAPES.DARK.TEAR_DROP
                     },
                     color: {
                         high: Carbon.helpers.COLORS.BLACK,
@@ -625,9 +625,9 @@ const DATA = [
                         }
                     },
                     shape: {
-                        high: Carbon.helpers.SHAPES.TEAR_ALT,
-                        mid: Carbon.helpers.SHAPES.RHOMBUS,
-                        low: Carbon.helpers.SHAPES.TEAR_DROP
+                        high: Carbon.helpers.SHAPES.DARK.TEAR_ALT,
+                        mid: Carbon.helpers.SHAPES.DARK.RHOMBUS,
+                        low: Carbon.helpers.SHAPES.DARK.TEAR_DROP
                     },
                     color: {
                         high: Carbon.helpers.COLORS.BLACK,
@@ -714,9 +714,9 @@ const DATA = [
                         }
                     },
                     shape: {
-                        high: Carbon.helpers.SHAPES.TEAR_ALT,
-                        mid: Carbon.helpers.SHAPES.RHOMBUS,
-                        low: Carbon.helpers.SHAPES.TEAR_DROP
+                        high: Carbon.helpers.SHAPES.DARK.TEAR_ALT,
+                        mid: Carbon.helpers.SHAPES.DARK.RHOMBUS,
+                        low: Carbon.helpers.SHAPES.DARK.TEAR_DROP
                     },
                     color: {
                         high: Carbon.helpers.COLORS.BLACK,
@@ -811,9 +811,9 @@ const DATA = [
                         }
                     },
                     shape: {
-                        high: Carbon.helpers.SHAPES.TRIANGLE,
-                        mid: Carbon.helpers.SHAPES.SQUARE,
-                        low: Carbon.helpers.SHAPES.TRIANGLE_DOWN
+                        high: Carbon.helpers.SHAPES.DARK.TRIANGLE,
+                        mid: Carbon.helpers.SHAPES.DARK.SQUARE,
+                        low: Carbon.helpers.SHAPES.DARK.TRIANGLE_DOWN
                     },
                     color: {
                         high: Carbon.helpers.COLORS.BLACK,
@@ -903,7 +903,7 @@ const DATA = [
                     label: {
                         display: "Line"
                     },
-                    shape: Carbon.helpers.SHAPES.RHOMBUS,
+                    shape: Carbon.helpers.SHAPES.DARK.RHOMBUS,
                     color: Carbon.helpers.COLORS.BLUE,
                     onClick: loadPopup,
                     values: new Array(50).fill("").map((_, i) => ({
@@ -926,9 +926,9 @@ const DATA = [
                     },
                     yAxis: "y2",
                     shape: {
-                        high: Carbon.helpers.SHAPES.TEAR_ALT,
-                        mid: Carbon.helpers.SHAPES.RHOMBUS,
-                        low: Carbon.helpers.SHAPES.TEAR_DROP
+                        high: Carbon.helpers.SHAPES.DARK.TEAR_ALT,
+                        mid: Carbon.helpers.SHAPES.DARK.RHOMBUS,
+                        low: Carbon.helpers.SHAPES.DARK.TEAR_DROP
                     },
                     color: {
                         high: Carbon.helpers.COLORS.BLACK,
@@ -1203,7 +1203,7 @@ const DATA = [
                     label: {
                         display: "Action B"
                     },
-                    shape: Carbon.helpers.SHAPES.TRIANGLE,
+                    shape: Carbon.helpers.SHAPES.DARK.TRIANGLE,
                     color: Carbon.helpers.COLORS.GREEN
                 }
             ],
@@ -1214,7 +1214,7 @@ const DATA = [
                         display: "DST Start"
                     },
                     color: "#D3D4D5",
-                    shape: Carbon.helpers.SHAPES.TRIANGLE,
+                    shape: Carbon.helpers.SHAPES.DARK.TRIANGLE,
                     onClick: loadDatelinePopup,
                     value: new Date(2018, 2, 10).toISOString()
                 },
@@ -1224,7 +1224,7 @@ const DATA = [
                         display: "Current Date"
                     },
                     color: "#FFDF00",
-                    shape: Carbon.helpers.SHAPES.SQUARE,
+                    shape: Carbon.helpers.SHAPES.DARK.SQUARE,
                     onClick: loadDatelinePopup,
                     value: new Date(2018, 8, 5).toISOString()
                 },
@@ -1234,7 +1234,7 @@ const DATA = [
                         display: "DST End"
                     },
                     color: "#D3D4D5",
-                    shape: Carbon.helpers.SHAPES.TRIANGLE,
+                    shape: Carbon.helpers.SHAPES.DARK.TRIANGLE,
                     onClick: loadDatelinePopup,
                     value: new Date(2018, 10, 3).toISOString()
                 }
@@ -1293,7 +1293,7 @@ const DATA = [
                     label: {
                         display: "Timeline B"
                     },
-                    shape: Carbon.helpers.SHAPES.RHOMBUS,
+                    shape: Carbon.helpers.SHAPES.DARK.RHOMBUS,
                     color: Carbon.helpers.COLORS.GREEN,
                     onClick: loadTimelinePopup,
                     values: [
@@ -1671,4 +1671,3 @@ export const getDemoData = (id, type) => {
     const res = DATA.find((t) => t[type]);
     return res ? res[type](id) : null;
 };
-export const getShapes = () => Object.keys(Carbon.helpers.SHAPES);

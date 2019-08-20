@@ -12,7 +12,7 @@ When using dateline with graph then `x axis type` must be **timeseries** it is m
     -   [JSON Properties](#json-properties-1)
         -   [Optional](#optional-1)
         -   [Click Pass Throughs](#click-pass-throughs)
-        -   [Structure](#structure)
+    -   [Structure](#structure)
 
 ## JSON Properties
 
@@ -59,8 +59,7 @@ clickPassThrough = {
 
 ## Structure
 
-```json
-
+```javascript
 "dateline": [
         {
             showDatelineIndicator: true,
@@ -68,7 +67,7 @@ clickPassThrough = {
                 display: "Release A"
             },
             color: "#d3d4d5",
-            shape: Carbon.helpers.SHAPES.TRIANGLE,
+            shape: Carbon.helpers.SHAPES.DARK.TRIANGLE,
             onClick: (onCloseCB, payload) => {
                 // onCloseCB needs to called by the consumer after popup is closed;
                 // Payload is the dateline input object

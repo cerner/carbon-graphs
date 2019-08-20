@@ -29,16 +29,17 @@ Any graph that inherits from `Graph` API will inherit the following `Axis` and `
 
 Each axis - X, Y and Y2 should have the following properties:
 
-| Property Name | Expected | Default           | Description                       |
-| ------------- | -------- | ----------------- | --------------------------------- |
-| type          | string   | AXIS_TYPE.DEFAULT | Normal number value or time-based |
-| show          | boolean  | true              | Toggle for showing the axis       |
-| ticks         | object   | null              | Refer [Ticks](Ticks.md)           |
-| rangeRounding | boolean  | true              | Toggle for range rounding         |
-| padDomain     | boolean  | true              | Toggle for disabling the padding  |
+| Property Name | Expected | Default           | Description                                               |
+| ------------- | -------- | ----------------- | --------------------------------------------------------- |
+| type          | string   | AXIS_TYPE.DEFAULT | Normal number value or time-based                         |
+| show          | boolean  | true              | Toggle for showing the axis                               |
+| ticks         | object   | null              | Refer [Ticks](Ticks.md)                                   |
+| rangeRounding | boolean  | true              | Toggle for range rounding                                 |
+| padDomain     | boolean  | true              | Toggle for disabling the padding (only for Y and Y2 axes) |
 
 **Note:**
 
+-   `rangeRounding` property extends the domain so that it starts and ends on nice round values. This method typically modifies the scale’s domain, and may only extend the bounds to the nearest round value
 -   `padDomain` property is only for Y and Y2 axes.
 
 #### Constraints

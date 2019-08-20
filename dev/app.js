@@ -96,7 +96,9 @@ import { renderPieLegendTo, renderPieSimple } from "./examples/controls/pie";
 import {
     renderCriticalityShapes,
     renderFillTypes,
-    renderShapesSimple
+    renderShapesSimple,
+    renderShapesSimpleLight,
+    renderCriticalityShapesLight
 } from "./examples/controls/shapes";
 import { renderSplineLine } from "./examples/controls/spline";
 import { renderTimeline } from "./examples/controls/timeline";
@@ -661,6 +663,16 @@ renderSiteApp(
                             pathname: "/styles/shapes/critical",
                             content: renderCriticalityShapes,
                             title: "Criticality"
+                        },
+                        {
+                            pathname: "/styles/shapes/standard-light",
+                            content: renderShapesSimpleLight,
+                            title: "Standard - Light"
+                        },
+                        {
+                            pathname: "/styles/shapes/critical-light",
+                            content: renderCriticalityShapesLight,
+                            title: "Criticality - Light"
                         },
                         {
                             pathname: "/styles/shapes/fills",

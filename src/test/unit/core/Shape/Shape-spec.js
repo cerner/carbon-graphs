@@ -2,7 +2,10 @@
 import sinon from "sinon";
 import { Shape } from "../../../../main/js/core";
 import { getDefaultSVGProps } from "../../../../main/js/core/Shape";
-import constants, { SHAPES } from "../../../../main/js/helpers/constants";
+import constants, {
+    SHAPES,
+    SHAPES_LIGHT
+} from "../../../../main/js/helpers/constants";
 import errors from "../../../../main/js/helpers/errors";
 import styles from "../../../../main/js/helpers/styles";
 import { toNumber } from "../../controls/helpers/commonHelpers";
@@ -26,6 +29,28 @@ describe("Shape", () => {
             expect(
                 shapePath.getAttribute("d") === SHAPES[i].path.d
             ).toBeTruthy();
+        });
+    });
+    it("returns path for Carbon Native shapes - Light", () => {
+        Object.keys(SHAPES_LIGHT).forEach((i) => {
+            const shapeSVG = new Shape(SHAPES_LIGHT[i]).getShapeElement();
+            const groupSVG = shapeSVG.firstChild;
+            const shapePath = groupSVG.firstChild;
+            expect(shapeSVG.nodeName === "svg").toBeTruthy();
+            expect(
+                toNumber(shapeSVG.getAttribute("x")) ===
+                    SHAPES_LIGHT[i].options.x
+            ).toBeTruthy();
+            expect(
+                toNumber(shapeSVG.getAttribute("y")) ===
+                    SHAPES_LIGHT[i].options.y
+            ).toBeTruthy();
+            expect(shapeSVG.classList.contains(styles.svgIcon)).toBeTruthy();
+            expect(shapeSVG.getAttribute("role") === "img").toBeTruthy();
+            expect(shapePath.nodeName).toBeDefined();
+            expect(shapeSVG.querySelector("[fill]").getAttribute("fill")).toBe(
+                "#FFFFFF"
+            );
         });
     });
     it("returns path for custom shape", () => {
