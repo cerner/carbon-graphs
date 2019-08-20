@@ -59,8 +59,7 @@ clickPassThrough = {
 
 ## Structure
 
-```json
-
+```javascript
 "dateline": [
         {
             showDatelineIndicator: true,
