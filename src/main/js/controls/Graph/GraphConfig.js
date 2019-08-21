@@ -85,7 +85,9 @@ export const processInput = (input, config, type) => {
     config.axis = _axis;
     config.dateline = getDefaultValue(utils.deepClone(input.dateline), []);
     config.padding = getPadding(config, input.padding);
-    config.locale = d3.locale(getDefaultValue(input.locale, DEFAULT_LOCALE));
+    config.locale = getDefaultValue(input.locale, DEFAULT_LOCALE);
+    config.showNoDataText = getDefaultValue(input.showNoDataText, true);
+    config.d3Locale = d3.locale(getDefaultValue(input.locale, DEFAULT_LOCALE));
     config.throttle = getDefaultValue(
         input.throttle,
         constants.RESIZE_THROTTLE

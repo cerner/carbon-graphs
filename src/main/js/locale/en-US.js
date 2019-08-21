@@ -45,5 +45,6 @@ export default {
         "Oct",
         "Nov",
         "Dec"
-    ]
+    ],
+    noData: "No Data"
 };

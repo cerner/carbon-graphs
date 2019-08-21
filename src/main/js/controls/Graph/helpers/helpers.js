@@ -675,6 +675,43 @@ const setAxisPadding = (axisPadding, { config }) => {
         axisPadding[yAxis] = config.axisPadding;
     }
 };
+/**
+ * Removes the No Data View from the node
+ *
+ * @param {d3.selection} svg - d3 selection node of svg.
+ * @returns {undefined} - returns nothing
+ */
+const removeNoDataView = (svg) => {
+    svg.select(".no-data-view").remove();
+};
+/**
+ * Append No Data View to the graph node.
+ *
+ * @param {object} config - config object derived from input JSON
+ * @param {d3.selection} svg - d3 selection node of svg.
+ * @returns {d3.selection} d3 selection node of svg.
+ */
+const drawNoDataView = (config, svg) => {
+    const yAxisPadding = config.height / 4;
+
+    const noDataViewContainer = svg.append("g").attr("class", "no-data-view");
+
+    noDataViewContainer
+        .append("rect")
+        .attr("class", styles.noDataLayout)
+        .attr(constants.X_AXIS, getXAxisXPosition(config))
+        .attr(constants.Y_AXIS, calculateVerticalPadding(config) + yAxisPadding)
+        .attr("height", config.height - yAxisPadding * 2)
+        .attr("width", getXAxisWidth(config));
+    noDataViewContainer
+        .append("text")
+        .attr("class", styles.noDataText)
+        .text(config.locale.noData)
+        .attr("x", getXAxisLabelXPosition(config))
+        .attr("y", getYAxisLabelYPosition(config) + 15);
+
+    return svg;
+};
 
 export {
     translateAxes,
@@ -699,5 +736,7 @@ export {
     detachEventHandlers,
     d3RemoveElement,
     setAxisPadding,
-    getAxisInfoRowLabelHeight
+    getAxisInfoRowLabelHeight,
+    removeNoDataView,
+    drawNoDataView
 };

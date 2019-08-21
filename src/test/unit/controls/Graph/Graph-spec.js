@@ -233,6 +233,10 @@ describe("Graph", () => {
                     );
                 }).toThrowError(errors.THROW_MSG_NO_AXIS_LABEL_INFO);
             });
+            it("If showNoDataText is not present, default value of showNoDataText is set to true", () => {
+                const graph = new Graph(getAxes(axisDefault));
+                expect(graph.config.showNoDataText).toEqual(true);
+            });
         });
         it("Throws error on empty input", () => {
             expect(() => {
@@ -294,9 +298,11 @@ describe("Graph", () => {
             expect(graph.config.bindTo).toEqual(input.bindTo);
             expect(graph.config.axis).not.toBeNull();
             expect(graph.config.locale).not.toBeNull();
+            expect(graph.config.d3Locale).not.toBeNull();
             expect(graph.config.throttle).toEqual(constants.RESIZE_THROTTLE);
             expect(graph.config.showLabel).toEqual(true);
             expect(graph.config.showLegend).toEqual(true);
+            expect(graph.config.showNoDataText).toEqual(true);
             expect(graph.config.showShapes).toEqual(true);
             expect(graph.config.showHGrid).toEqual(true);
             expect(graph.config.showVGrid).toEqual(true);
@@ -383,9 +389,11 @@ describe("Graph", () => {
             expect(graph.config.bindTo).toEqual(input.bindTo);
             expect(graph.config.axis).not.toBeNull();
             expect(graph.config.locale).not.toBeNull();
+            expect(graph.config.d3Locale).not.toBeNull();
             expect(graph.config.throttle).toEqual(constants.RESIZE_THROTTLE);
             expect(graph.config.showLabel).toEqual(true);
             expect(graph.config.showLegend).toEqual(true);
+            expect(graph.config.showNoDataText).toEqual(true);
             expect(graph.config.showShapes).toEqual(true);
             expect(graph.config.showHGrid).toEqual(true);
             expect(graph.config.showVGrid).toEqual(true);
@@ -2842,9 +2850,11 @@ describe("Graph", () => {
             expect(graph.config.bindTo).toEqual(input.bindTo);
             expect(graph.config.axis).not.toBeNull();
             expect(graph.config.locale).not.toBeNull();
+            expect(graph.config.d3Locale).not.toBeNull();
             expect(graph.config.throttle).toEqual(constants.RESIZE_THROTTLE);
             expect(graph.config.showLabel).toEqual(true);
             expect(graph.config.showLegend).toEqual(true);
+            expect(graph.config.showNoDataText).toEqual(true);
             expect(graph.config.showShapes).toEqual(true);
             expect(graph.config.showHGrid).toEqual(true);
             expect(graph.config.showVGrid).toEqual(true);
@@ -2924,6 +2934,29 @@ describe("Graph", () => {
             ).translate;
             expect(toNumber(translate[0], 10)).toBeCloserTo(72);
             expect(toNumber(translate[1], 10)).toBeCloserTo(10);
+        });
+    });
+    describe("When the value of the data is not present", () => {
+        it("displays No Data, if showNoDataText is set to true or undefined", () => {
+            const primaryContent = new Line(getData());
+            graph = new Graph(getAxes(axisDefault));
+            graph.loadContent(primaryContent);
+            const noDataTextElemtn = fetchElementByClass(styles.noDataText);
+            expect(noDataTextElemtn).not.toBeNull();
+        });
+        it("doesn't displays No Data, if showNoDataText is set to false", () => {
+            const primaryContent = new Line(getData());
+            graph = new Graph(
+                Object.assign(
+                    {
+                        showNoDataText: false
+                    },
+                    getAxes(axisDefault)
+                )
+            );
+            graph.loadContent(primaryContent);
+            const noDataTextElemtn = fetchElementByClass(styles.noDataText);
+            expect(noDataTextElemtn).toBeNull();
         });
     });
 });

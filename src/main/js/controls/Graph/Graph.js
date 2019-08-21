@@ -30,7 +30,9 @@ import {
     scaleGraph,
     setAxisPadding,
     translateGraph,
-    updateAxesDomain
+    updateAxesDomain,
+    removeNoDataView,
+    drawNoDataView
 } from "./helpers/helpers";
 
 /**
@@ -274,10 +276,20 @@ class Graph extends Construct {
      *  @returns {Graph} - Graph instance
      */
     resize() {
+        let graphHasData = false;
         setCanvasWidth(this.graphContainer, this.config);
         scaleGraph(this.scale, this.config);
         translateGraph(this);
-        this.content.forEach((control) => control.resize(this));
+        removeNoDataView(this.svg);
+        this.content.forEach((control) => {
+            graphHasData =
+                graphHasData ||
+                (control.config.values && !!control.config.values.length);
+            control.resize(this);
+        });
+        if (!graphHasData && this.config.showNoDataText) {
+            drawNoDataView(this.config, this.svg);
+        }
         return this;
     }
 
