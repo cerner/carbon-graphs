@@ -2941,8 +2941,8 @@ describe("Graph", () => {
             const primaryContent = new Line(getData());
             graph = new Graph(getAxes(axisDefault));
             graph.loadContent(primaryContent);
-            const noDataTextElemtn = fetchElementByClass(styles.noDataText);
-            expect(noDataTextElemtn).not.toBeNull();
+            const noDataTextElement = fetchElementByClass(styles.noDataText);
+            expect(noDataTextElement).not.toBeNull();
         });
         it("doesn't displays No Data, if showNoDataText is set to false", () => {
             const primaryContent = new Line(getData());
@@ -2955,8 +2955,8 @@ describe("Graph", () => {
                 )
             );
             graph.loadContent(primaryContent);
-            const noDataTextElemtn = fetchElementByClass(styles.noDataText);
-            expect(noDataTextElemtn).toBeNull();
+            const noDataTextElement = fetchElementByClass(styles.noDataText);
+            expect(noDataTextElement).toBeNull();
         });
     });
 });

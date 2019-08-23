@@ -45,6 +45,7 @@ export default {
     dateline: "carbon-dateline",
     noDataLayout: "no-data-layout",
     noDataText: "no-data-text",
+    noDataView: "no-data-view",
 
     /**
      * Line

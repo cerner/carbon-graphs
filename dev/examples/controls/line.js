@@ -419,3 +419,11 @@ export const renderLineXOrientationTop = (id) => {
     );
     return lineDefault;
 };
+export const renderNoDataView = (id) => {
+    const axisData = utils.deepClone(getDemoData(`#${id}`, "NO_DATA_VIEW"));
+    const lineDefault = Carbon.api.graph(axisData);
+    lineDefault.loadContent(
+        Carbon.api.line(getDemoData(`#${id}`, "NO_DATA_VIEW").data[0])
+    );
+    return lineDefault;
+};
