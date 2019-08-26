@@ -5,7 +5,9 @@ import Graph from "../../../../main/js/controls/Graph/index";
 import Line from "../../../../main/js/controls/Line/Line";
 import {
     getXAxisWidth,
-    getYAxisHeight
+    getYAxisHeight,
+    getXAxisLabelXPosition,
+    getYAxisLabelYPosition
 } from "../../../../main/js/helpers/axis";
 import constants, {
     AXES_ORIENTATION,
@@ -2523,6 +2525,30 @@ describe("Graph", () => {
                 done();
             });
         });
+        it("No data view aligns correctly", (done) => {
+            graphContainer.setAttribute("style", "width: 800px; height: 200px");
+            graph.resize();
+            triggerEvent(window, "resize", () => {
+                const noDataContainer = fetchElementByClass(
+                    styles.noDataRegion
+                );
+                expect(toNumber(noDataContainer.getAttribute("height"))).toBe(
+                    getYAxisHeight(graph.config) / 3
+                );
+                expect(toNumber(noDataContainer.getAttribute("width"))).toBe(
+                    getXAxisWidth(graph.config)
+                );
+
+                const noDataLabel = fetchElementByClass(styles.noDataLabel);
+                expect(toNumber(noDataLabel.getAttribute("x"))).toBe(
+                    getXAxisLabelXPosition(graph.config)
+                );
+                expect(toNumber(noDataLabel.getAttribute("y"))).toBe(
+                    getYAxisLabelYPosition(graph.config) + 15
+                );
+                done();
+            });
+        });
         /**
          * BF12182018.01 - Verify the consumer has the option to provide custom padding for the graph-container.
          */
@@ -2941,7 +2967,9 @@ describe("Graph", () => {
             const primaryContent = new Line(getData());
             graph = new Graph(getAxes(axisDefault));
             graph.loadContent(primaryContent);
-            const noDataTextElement = fetchElementByClass(styles.noDataText);
+            const noDataTextElement = fetchElementByClass(
+                styles.noDataContainer
+            );
             expect(noDataTextElement).not.toBeNull();
         });
         it("doesn't displays No Data, if showNoDataText is set to false", () => {
@@ -2955,7 +2983,9 @@ describe("Graph", () => {
                 )
             );
             graph.loadContent(primaryContent);
-            const noDataTextElement = fetchElementByClass(styles.noDataText);
+            const noDataTextElement = fetchElementByClass(
+                styles.noDataContainer
+            );
             expect(noDataTextElement).toBeNull();
         });
     });

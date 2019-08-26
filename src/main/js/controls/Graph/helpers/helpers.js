@@ -544,6 +544,7 @@ const translateGraph = (control) => {
         control.svg,
         getYAxisYPosition
     );
+    translateNoDataView(control.config, control.svg);
 };
 /**
  * Pads the domain with some buffer that gets calculated based on input values.
@@ -683,7 +684,7 @@ const setAxisPadding = (axisPadding, { config }) => {
  * @returns {undefined} - returns nothing
  */
 const removeNoDataView = (svg) => {
-    svg.select(".no-data-view").remove();
+    svg.select(`.${styles.noDataContainer}`).remove();
 };
 /**
  * Append No Data View to the graph node.
@@ -694,27 +695,45 @@ const removeNoDataView = (svg) => {
  * @returns {d3.selection} d3 selection node of svg.
  */
 const drawNoDataView = (config, svg) => {
-    const yAxisPadding = config.height / 3;
+    const noDataViewHeight = getYAxisHeight(config) / 3;
 
     const noDataViewContainer = svg
         .append("g")
-        .classed(styles.noDataView, true);
+        .classed(styles.noDataContainer, true);
 
     noDataViewContainer
         .append("rect")
-        .classed(styles.noDataLayout, true)
+        .classed(styles.noDataRegion, true)
         .attr(constants.X_AXIS, getXAxisXPosition(config))
-        .attr(constants.Y_AXIS, calculateVerticalPadding(config) + yAxisPadding)
-        .attr("height", config.height - yAxisPadding * 2)
+        .attr(
+            constants.Y_AXIS,
+            calculateVerticalPadding(config) + noDataViewHeight
+        )
+        .attr("height", noDataViewHeight)
         .attr("width", getXAxisWidth(config));
     noDataViewContainer
         .append("text")
-        .classed(styles.noDataText, true)
-        .text(config.locale.noData)
+        .classed(styles.noDataLabel, true)
         .attr("x", getXAxisLabelXPosition(config))
-        .attr("y", getYAxisLabelYPosition(config) + 15);
+        .attr("y", getYAxisLabelYPosition(config) + 15)
+        .append("tspan")
+        .text(config.locale.noData);
 
     return svg;
+};
+
+const translateNoDataView = (config, svg) => {
+    const noDataViewHeight = getYAxisHeight(config) / 3;
+    svg.select(`.${styles.noDataRegion}`)
+        .transition()
+        .call(constants.d3Transition)
+        .attr("height", noDataViewHeight)
+        .attr("width", getXAxisWidth(config));
+    svg.select(`.${styles.noDataLabel}`)
+        .transition()
+        .call(constants.d3Transition)
+        .attr("x", getXAxisLabelXPosition(config))
+        .attr("y", getYAxisLabelYPosition(config) + 15);
 };
 
 export {

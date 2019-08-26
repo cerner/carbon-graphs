@@ -262,6 +262,9 @@ class Graph extends Construct {
                     : containerSVG
             );
         }
+        if (this.config.showNoDataText) {
+            drawNoDataView(this.config, this.svg);
+        }
         attachEventHandlers(this);
         return this.svg;
     }
@@ -276,20 +279,10 @@ class Graph extends Construct {
      *  @returns {Graph} - Graph instance
      */
     resize() {
-        let graphHasData = false;
         setCanvasWidth(this.graphContainer, this.config);
         scaleGraph(this.scale, this.config);
         translateGraph(this);
-        removeNoDataView(this.svg);
-        this.content.forEach((control) => {
-            graphHasData =
-                graphHasData ||
-                (control.config.values && !!control.config.values.length);
-            control.resize(this);
-        });
-        if (!graphHasData && this.config.showNoDataText) {
-            drawNoDataView(this.config, this.svg);
-        }
+        this.content.forEach((control) => control.resize(this));
         return this;
     }
 
@@ -321,6 +314,9 @@ class Graph extends Construct {
             this.config.axis.x.type === AXIS_TYPE.TIME_SERIES
         ) {
             redrawDatelineContent(this.scale, this.config, this.svg);
+        }
+        if (content.config.values.length > 0) {
+            removeNoDataView(this.svg);
         }
         this.resize();
         return this;

@@ -43,9 +43,9 @@ export default {
     datelineGroup: "carbon-dateline-group",
     datelinePoint: "carbon-dateline-point",
     dateline: "carbon-dateline",
-    noDataLayout: "no-data-layout",
-    noDataText: "no-data-text",
-    noDataView: "no-data-view",
+    noDataContainer: "carbon-no-data-container",
+    noDataLabel: "carbon-no-data-label",
+    noDataRegion: "carbon-no-data-region",
 
     /**
      * Line
