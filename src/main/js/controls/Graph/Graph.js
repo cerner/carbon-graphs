@@ -338,6 +338,15 @@ class Graph extends Construct {
         this.content.splice(index, 1);
         this.contentTargets.splice(index, 1);
         content.unload(this);
+        if (
+            this.config.showNoDataText &&
+            !this.content.find(
+                (content) =>
+                    content.config.values && !!content.config.values.length
+            )
+        ) {
+            drawNoDataView(this.config, this.svg);
+        }
         this.resize();
         return this;
     }

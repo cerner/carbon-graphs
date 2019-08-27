@@ -2962,31 +2962,63 @@ describe("Graph", () => {
             expect(toNumber(translate[1], 10)).toBeCloserTo(10);
         });
     });
-    describe("When the value of the data is not present", () => {
-        it("displays No Data, if showNoDataText is set to true or undefined", () => {
-            const primaryContent = new Line(getData());
-            graph = new Graph(getAxes(axisDefault));
-            graph.loadContent(primaryContent);
-            const noDataTextElement = fetchElementByClass(
-                styles.noDataContainer
-            );
-            expect(noDataTextElement).not.toBeNull();
+    describe("No Data", () => {
+        describe("Will be displayed", () => {
+            it("If showNoDataText is set to true or undefined", () => {
+                graph = new Graph(getAxes(axisDefault));
+                const noDataTextElement = fetchElementByClass(
+                    styles.noDataContainer
+                );
+                expect(noDataTextElement).not.toBeNull();
+            });
+            it("If showNoDataText is set to true or undefined and the value of the data is not present", () => {
+                const primaryContent = new Line(getData());
+                graph = new Graph(getAxes(axisDefault));
+                graph.loadContent(primaryContent);
+                const noDataTextElement = fetchElementByClass(
+                    styles.noDataContainer
+                );
+                expect(noDataTextElement).not.toBeNull();
+            });
+            it("if data is unloaded and no more data present on the screen to display", () => {
+                const primaryContent = new Line(getData(valuesDefault));
+                graph = new Graph(getAxes(axisDefault));
+                graph.loadContent(primaryContent);
+                const noNoDataTextElement = fetchElementByClass(
+                    styles.noDataContainer
+                );
+                expect(noNoDataTextElement).toBeNull();
+                graph.unloadContent(primaryContent);
+                const noDataTextElement = fetchElementByClass(
+                    styles.noDataContainer
+                );
+                expect(noDataTextElement).not.toBeNull();
+            });
         });
-        it("doesn't displays No Data, if showNoDataText is set to false", () => {
-            const primaryContent = new Line(getData());
-            graph = new Graph(
-                Object.assign(
-                    {
-                        showNoDataText: false
-                    },
-                    getAxes(axisDefault)
-                )
-            );
-            graph.loadContent(primaryContent);
-            const noDataTextElement = fetchElementByClass(
-                styles.noDataContainer
-            );
-            expect(noDataTextElement).toBeNull();
+        describe("Will not be displayed", () => {
+            it("if showNoDataText is set to false", () => {
+                graph = new Graph(
+                    Object.assign(
+                        {
+                            showNoDataText: false
+                        },
+                        getAxes(axisDefault)
+                    )
+                );
+                const noDataTextElement = fetchElementByClass(
+                    styles.noDataContainer
+                );
+                expect(noDataTextElement).toBeNull();
+            });
+            it("if loaded data contains value", () => {
+                const primaryContent = new Line(getData(valuesDefault));
+                graph = new Graph(getAxes(axisDefault));
+                graph.loadContent(primaryContent);
+                const noDataTextElement = fetchElementByClass(
+                    styles.noDataContainer
+                );
+                expect(noDataTextElement).toBeNull();
+            });
         });
     });
 });
