@@ -704,7 +704,7 @@ const drawNoDataView = (config, svg) => {
 
     noDataViewContainer
         .append("rect")
-        .classed(styles.noDataRegion, true)
+        .classed(styles.noDataOverlay, true)
         .attr(constants.X_AXIS, getXAxisXPosition(config))
         .attr(
             constants.Y_AXIS,
@@ -736,7 +736,7 @@ const drawNoDataView = (config, svg) => {
  *  @returns {undefined} - returns nothing
  */
 const translateNoDataView = (config, svg) => {
-    svg.select(`.${styles.noDataRegion}`)
+    svg.select(`.${styles.noDataOverlay}`)
         .transition()
         .call(constants.d3Transition)
         .attr(

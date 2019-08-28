@@ -31,19 +31,20 @@ GraphAPI is a set of graphs that share a common set of base visualization struct
 
 ### Optional
 
-| Property Name | Expected | Default                                       | Description                                                                          |
-| ------------- | -------- | --------------------------------------------- | ------------------------------------------------------------------------------------ |
-| bindLegendTo  | string   | null                                          | If DOM id provided, binds legend into that container (Example: `"#legendContainer"`) |
-| locale        | object   | LOCALE.en_US                                  | Locale object for X-Axis tick values                                                 |
-| dimension     | object   | {}                                            | Refer [Dimension](#dimension)                                                        |
-| throttle      | number   | (1000/60) => time in ms                       | Delay between resize of a browser window                                             |
-| showLabel     | boolean  | true                                          | Toggle to show axes labels                                                           |
-| showLegend    | boolean  | true                                          | Toggle to show graph legend                                                          |
-| showShapes    | boolean  | true                                          | Toggle to show shapes in the line graph                                              |
-| showVGrid     | boolean  | true                                          | Toggle to show vertical grid                                                         |
-| showHGrid     | boolean  | true                                          | Toggle to show horizontal grid                                                       |
-| dateline      | array    | []                                            | Refer [Dateline](../helpers/Dateline.md)                                             |
-| padding       | object   | `{ top: 10, bottom: 5, left: 30, right: 50 }` | Refer [Padding](../controls/Padding.md)                                              |
+| Property Name  | Expected | Default                                       | Description                                                                          |
+| -------------- | -------- | --------------------------------------------- | ------------------------------------------------------------------------------------ |
+| bindLegendTo   | string   | null                                          | If DOM id provided, binds legend into that container (Example: `"#legendContainer"`) |
+| locale         | object   | LOCALE.en_US                                  | Locale object for X-Axis tick values                                                 |
+| dimension      | object   | {}                                            | Refer [Dimension](#dimension)                                                        |
+| throttle       | number   | (1000/60) => time in ms                       | Delay between resize of a browser window                                             |
+| showLabel      | boolean  | true                                          | Toggle to show axes labels                                                           |
+| showLegend     | boolean  | true                                          | Toggle to show graph legend                                                          |
+| showShapes     | boolean  | true                                          | Toggle to show shapes in the line graph                                              |
+| showVGrid      | boolean  | true                                          | Toggle to show vertical grid                                                         |
+| showHGrid      | boolean  | true                                          | Toggle to show horizontal grid                                                       |
+| dateline       | array    | []                                            | Refer [Dateline](../helpers/Dateline.md)                                             |
+| padding        | object   | `{ top: 10, bottom: 5, left: 30, right: 50 }` | Refer [Padding](../controls/Padding.md)                                              |
+| showNoDataText | boolean  | true                                          | Toggle to show no data text                                                          |
 
 ## Dimension
 

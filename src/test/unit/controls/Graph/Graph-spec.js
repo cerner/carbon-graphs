@@ -2530,7 +2530,7 @@ describe("Graph", () => {
             graph.resize();
             triggerEvent(window, "resize", () => {
                 const noDataContainer = fetchElementByClass(
-                    styles.noDataRegion
+                    styles.noDataOverlay
                 );
                 expect(toNumber(noDataContainer.getAttribute("height"))).toBe(
                     getYAxisHeight(graph.config) / 3
