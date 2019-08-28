@@ -315,7 +315,7 @@ class Graph extends Construct {
         ) {
             redrawDatelineContent(this.scale, this.config, this.svg);
         }
-        if (content.config.values.length > 0) {
+        if (utils.notEmpty(content.config.values)) {
             removeNoDataView(this.svg);
         }
         this.resize();
@@ -340,9 +340,8 @@ class Graph extends Construct {
         content.unload(this);
         if (
             this.config.showNoDataText &&
-            !this.content.find(
-                (content) =>
-                    content.config.values && !!content.config.values.length
+            this.content.every((content) =>
+                utils.isEmpty(content.config.values)
             )
         ) {
             drawNoDataView(this.config, this.svg);

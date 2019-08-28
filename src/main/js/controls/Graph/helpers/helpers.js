@@ -684,7 +684,7 @@ const setAxisPadding = (axisPadding, { config }) => {
  * @returns {undefined} - returns nothing
  */
 const removeNoDataView = (svg) => {
-    svg.select(`.${styles.noDataContainer}`).remove();
+    d3RemoveElement(svg, `.${styles.noDataContainer}`);
 };
 /**
  * Append No Data View to the graph node.
@@ -695,7 +695,8 @@ const removeNoDataView = (svg) => {
  * @returns {d3.selection} d3 selection node of svg.
  */
 const drawNoDataView = (config, svg) => {
-    const noDataViewHeight = getYAxisHeight(config) / 3;
+    const noDataViewHeight =
+        getYAxisHeight(config) / constants.NO_DATA_VIEW_PROPORTION;
 
     const noDataViewContainer = svg
         .append("g")
@@ -715,25 +716,42 @@ const drawNoDataView = (config, svg) => {
         .append("text")
         .classed(styles.noDataLabel, true)
         .attr("x", getXAxisLabelXPosition(config))
-        .attr("y", getYAxisLabelYPosition(config) + 15)
+        .attr(
+            "y",
+            getYAxisLabelYPosition(config) + constants.NO_DATA_LABEL_PADDING
+        )
         .append("tspan")
         .text(config.locale.noData);
 
     return svg;
 };
 
+/**
+ * Translates no data view rectangle and the label
+ * based on the current positioning on resize.
+ *
+ * @private
+ * @param {object} config - config object derived from input JSON
+ * @param {d3.selection} svg - d3 selection node of svg.
+ *  @returns {undefined} - returns nothing
+ */
 const translateNoDataView = (config, svg) => {
-    const noDataViewHeight = getYAxisHeight(config) / 3;
     svg.select(`.${styles.noDataRegion}`)
         .transition()
         .call(constants.d3Transition)
-        .attr("height", noDataViewHeight)
+        .attr(
+            "height",
+            getYAxisHeight(config) / constants.NO_DATA_VIEW_PROPORTION
+        )
         .attr("width", getXAxisWidth(config));
     svg.select(`.${styles.noDataLabel}`)
         .transition()
         .call(constants.d3Transition)
         .attr("x", getXAxisLabelXPosition(config))
-        .attr("y", getYAxisLabelYPosition(config) + 15);
+        .attr(
+            "y",
+            getYAxisLabelYPosition(config) + constants.NO_DATA_LABEL_PADDING
+        );
 };
 
 export {
