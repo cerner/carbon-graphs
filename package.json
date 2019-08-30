@@ -54,7 +54,7 @@
     "@babel/polyfill": "^7.4.4",
     "@babel/preset-env": "^7.5.5",
     "@babel/runtime": "^7.5.5",
-    "@cerner/carbon-site-helpers": "^1.0.0",
+    "@cerner/carbon-site-helpers": "^1.1.0",
     "@cerner/svg-to-carbon": "^1.1.0",
     "@commitlint/cli": "^8.1.0",
     "@commitlint/config-conventional": "^8.1.0",
