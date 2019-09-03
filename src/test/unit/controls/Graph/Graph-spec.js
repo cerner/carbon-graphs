@@ -2533,7 +2533,8 @@ describe("Graph", () => {
                     styles.noDataOverlay
                 );
                 expect(toNumber(noDataContainer.getAttribute("height"))).toBe(
-                    getYAxisHeight(graph.config) / 3
+                    getYAxisHeight(graph.config) /
+                        constants.NO_DATA_VIEW_PROPORTION
                 );
                 expect(toNumber(noDataContainer.getAttribute("width"))).toBe(
                     getXAxisWidth(graph.config)
@@ -2544,7 +2545,8 @@ describe("Graph", () => {
                     getXAxisLabelXPosition(graph.config)
                 );
                 expect(toNumber(noDataLabel.getAttribute("y"))).toBe(
-                    getYAxisLabelYPosition(graph.config) + 15
+                    getYAxisLabelYPosition(graph.config) +
+                        constants.NO_DATA_LABEL_PADDING
                 );
                 done();
             });

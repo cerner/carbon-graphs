@@ -151,7 +151,8 @@
     "url": "https://github.com/cerner/carbon-graphs.git"
   },
   "scripts": {
-    "build": "webpack --config ./build/webpack/webpack.config.js --env.TYPE=LIB",
+    "build1": "webpack --config ./build/webpack/webpack.config.js --env.TYPE=LIB",
+    "build": "npm run build1 && npm run build:dist",
     "build:dist": "webpack --config ./build/webpack/webpack.config.js --env.TYPE=DIST",
     "build:site": "npm run docs && webpack --config ./build/webpack/site.webpack.js --env.TYPE=SITE",
     "clean": "rimraf dist lib",
