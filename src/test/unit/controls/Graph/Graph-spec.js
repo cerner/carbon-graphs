@@ -5,7 +5,9 @@ import Graph from "../../../../main/js/controls/Graph/index";
 import Line from "../../../../main/js/controls/Line/Line";
 import {
     getXAxisWidth,
-    getYAxisHeight
+    getYAxisHeight,
+    getXAxisLabelXPosition,
+    getYAxisLabelYPosition
 } from "../../../../main/js/helpers/axis";
 import constants, {
     AXES_ORIENTATION,
@@ -233,6 +235,10 @@ describe("Graph", () => {
                     );
                 }).toThrowError(errors.THROW_MSG_NO_AXIS_LABEL_INFO);
             });
+            it("If showNoDataText is not present, default value of showNoDataText is set to true", () => {
+                const graph = new Graph(getAxes(axisDefault));
+                expect(graph.config.showNoDataText).toEqual(true);
+            });
         });
         it("Throws error on empty input", () => {
             expect(() => {
@@ -294,9 +300,11 @@ describe("Graph", () => {
             expect(graph.config.bindTo).toEqual(input.bindTo);
             expect(graph.config.axis).not.toBeNull();
             expect(graph.config.locale).not.toBeNull();
+            expect(graph.config.d3Locale).not.toBeNull();
             expect(graph.config.throttle).toEqual(constants.RESIZE_THROTTLE);
             expect(graph.config.showLabel).toEqual(true);
             expect(graph.config.showLegend).toEqual(true);
+            expect(graph.config.showNoDataText).toEqual(true);
             expect(graph.config.showShapes).toEqual(true);
             expect(graph.config.showHGrid).toEqual(true);
             expect(graph.config.showVGrid).toEqual(true);
@@ -383,9 +391,11 @@ describe("Graph", () => {
             expect(graph.config.bindTo).toEqual(input.bindTo);
             expect(graph.config.axis).not.toBeNull();
             expect(graph.config.locale).not.toBeNull();
+            expect(graph.config.d3Locale).not.toBeNull();
             expect(graph.config.throttle).toEqual(constants.RESIZE_THROTTLE);
             expect(graph.config.showLabel).toEqual(true);
             expect(graph.config.showLegend).toEqual(true);
+            expect(graph.config.showNoDataText).toEqual(true);
             expect(graph.config.showShapes).toEqual(true);
             expect(graph.config.showHGrid).toEqual(true);
             expect(graph.config.showVGrid).toEqual(true);
@@ -2515,6 +2525,32 @@ describe("Graph", () => {
                 done();
             });
         });
+        it("No data view aligns correctly", (done) => {
+            graphContainer.setAttribute("style", "width: 800px; height: 200px");
+            graph.resize();
+            triggerEvent(window, "resize", () => {
+                const noDataContainer = fetchElementByClass(
+                    styles.noDataOverlay
+                );
+                expect(toNumber(noDataContainer.getAttribute("height"))).toBe(
+                    getYAxisHeight(graph.config) /
+                        constants.NO_DATA_VIEW_PROPORTION
+                );
+                expect(toNumber(noDataContainer.getAttribute("width"))).toBe(
+                    getXAxisWidth(graph.config)
+                );
+
+                const noDataLabel = fetchElementByClass(styles.noDataLabel);
+                expect(toNumber(noDataLabel.getAttribute("x"))).toBe(
+                    getXAxisLabelXPosition(graph.config)
+                );
+                expect(toNumber(noDataLabel.getAttribute("y"))).toBe(
+                    getYAxisLabelYPosition(graph.config) +
+                        constants.NO_DATA_LABEL_PADDING
+                );
+                done();
+            });
+        });
         /**
          * BF12182018.01 - Verify the consumer has the option to provide custom padding for the graph-container.
          */
@@ -2842,9 +2878,11 @@ describe("Graph", () => {
             expect(graph.config.bindTo).toEqual(input.bindTo);
             expect(graph.config.axis).not.toBeNull();
             expect(graph.config.locale).not.toBeNull();
+            expect(graph.config.d3Locale).not.toBeNull();
             expect(graph.config.throttle).toEqual(constants.RESIZE_THROTTLE);
             expect(graph.config.showLabel).toEqual(true);
             expect(graph.config.showLegend).toEqual(true);
+            expect(graph.config.showNoDataText).toEqual(true);
             expect(graph.config.showShapes).toEqual(true);
             expect(graph.config.showHGrid).toEqual(true);
             expect(graph.config.showVGrid).toEqual(true);
@@ -2924,6 +2962,65 @@ describe("Graph", () => {
             ).translate;
             expect(toNumber(translate[0], 10)).toBeCloserTo(72);
             expect(toNumber(translate[1], 10)).toBeCloserTo(10);
+        });
+    });
+    describe("No Data", () => {
+        describe("Will be displayed", () => {
+            it("If showNoDataText is set to true or undefined", () => {
+                graph = new Graph(getAxes(axisDefault));
+                const noDataTextElement = fetchElementByClass(
+                    styles.noDataContainer
+                );
+                expect(noDataTextElement).not.toBeNull();
+            });
+            it("If showNoDataText is set to true or undefined and the value of the data is not present", () => {
+                const primaryContent = new Line(getData());
+                graph = new Graph(getAxes(axisDefault));
+                graph.loadContent(primaryContent);
+                const noDataTextElement = fetchElementByClass(
+                    styles.noDataContainer
+                );
+                expect(noDataTextElement).not.toBeNull();
+            });
+            it("if data is unloaded and no more data present on the screen to display", () => {
+                const primaryContent = new Line(getData(valuesDefault));
+                graph = new Graph(getAxes(axisDefault));
+                graph.loadContent(primaryContent);
+                const noNoDataTextElement = fetchElementByClass(
+                    styles.noDataContainer
+                );
+                expect(noNoDataTextElement).toBeNull();
+                graph.unloadContent(primaryContent);
+                const noDataTextElement = fetchElementByClass(
+                    styles.noDataContainer
+                );
+                expect(noDataTextElement).not.toBeNull();
+            });
+        });
+        describe("Will not be displayed", () => {
+            it("if showNoDataText is set to false", () => {
+                graph = new Graph(
+                    Object.assign(
+                        {
+                            showNoDataText: false
+                        },
+                        getAxes(axisDefault)
+                    )
+                );
+                const noDataTextElement = fetchElementByClass(
+                    styles.noDataContainer
+                );
+                expect(noDataTextElement).toBeNull();
+            });
+            it("if loaded data contains value", () => {
+                const primaryContent = new Line(getData(valuesDefault));
+                graph = new Graph(getAxes(axisDefault));
+                graph.loadContent(primaryContent);
+                const noDataTextElement = fetchElementByClass(
+                    styles.noDataContainer
+                );
+                expect(noDataTextElement).toBeNull();
+            });
         });
     });
 });

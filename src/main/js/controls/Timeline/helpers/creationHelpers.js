@@ -137,7 +137,7 @@ const getAxesScale = (axis, scale, config) => {
         config.axis.x.ticks.values,
         getXAxisWidth(config),
         getAxisTickFormat(
-            config.locale,
+            config.d3Locale,
             config.axis.x.ticks.format,
             config.axis.x.type
         )

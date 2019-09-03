@@ -1665,6 +1665,64 @@ const DATA = [
             showVGrid: true,
             showHGrid: true
         })
+    },
+    {
+        NO_DATA_VIEW: (id) => ({
+            bindTo: id,
+            bindLegendTo: null,
+            axis: {
+                x: {
+                    show: true,
+                    label: "Data",
+                    lowerLimit: 80,
+                    upperLimit: 280,
+                    ticks: {
+                        show: true, // TODO Future implementation
+                        count: 10, // TODO Future implementation
+                        format: "",
+                        values: []
+                    }
+                },
+                y: {
+                    show: true,
+                    label: "Line Set A",
+                    lowerLimit: 0,
+                    upperLimit: 20
+                },
+                y2: {
+                    show: false,
+                    label: "Line Set B",
+                    lowerLimit: 0,
+                    upperLimit: 250
+                }
+            },
+            data: [
+                {
+                    key: "uid_1",
+                    label: {
+                        display: "Data Label 1"
+                    },
+                    color: Carbon.helpers.COLORS.BLACK,
+                    onClick: loadPopup,
+                    values: []
+                },
+                {
+                    key: "uid_2",
+                    label: {
+                        display: "Data Label 2"
+                    },
+                    shape: Carbon.helpers.SHAPES.TRIANGLE,
+                    color: Carbon.helpers.COLORS.BLUE,
+                    onClick: loadPopup,
+                    values: []
+                }
+            ],
+            showLabel: true,
+            showLegend: true,
+            showShapes: true,
+            showVGrid: true,
+            showHGrid: true
+        })
     }
 ];
 export const getDemoData = (id, type) => {

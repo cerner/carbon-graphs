@@ -210,7 +210,8 @@ const locale_custom = {
         "Okt",
         "Nov",
         "Dez"
-    ]
+    ],
+    noData: "No Data"
 };
 ```
 

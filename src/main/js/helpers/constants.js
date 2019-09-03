@@ -238,5 +238,7 @@ export default {
     TICK_ORIENTATION: {
         TOP: -1,
         BOTTOM: 1
-    }
+    },
+    NO_DATA_VIEW_PROPORTION: 3,
+    NO_DATA_LABEL_PADDING: 15
 };

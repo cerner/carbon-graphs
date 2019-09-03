@@ -30,7 +30,9 @@ import {
     scaleGraph,
     setAxisPadding,
     translateGraph,
-    updateAxesDomain
+    updateAxesDomain,
+    removeNoDataView,
+    drawNoDataView
 } from "./helpers/helpers";
 
 /**
@@ -260,6 +262,9 @@ class Graph extends Construct {
                     : containerSVG
             );
         }
+        if (this.config.showNoDataText) {
+            drawNoDataView(this.config, this.svg);
+        }
         attachEventHandlers(this);
         return this.svg;
     }
@@ -310,6 +315,9 @@ class Graph extends Construct {
         ) {
             redrawDatelineContent(this.scale, this.config, this.svg);
         }
+        if (utils.notEmpty(content.config.values)) {
+            removeNoDataView(this.svg);
+        }
         this.resize();
         return this;
     }
@@ -330,6 +338,14 @@ class Graph extends Construct {
         this.content.splice(index, 1);
         this.contentTargets.splice(index, 1);
         content.unload(this);
+        if (
+            this.config.showNoDataText &&
+            this.content.every((content) =>
+                utils.isEmpty(content.config.values)
+            )
+        ) {
+            drawNoDataView(this.config, this.svg);
+        }
         this.resize();
         return this;
     }

@@ -544,6 +544,7 @@ const translateGraph = (control) => {
         control.svg,
         getYAxisYPosition
     );
+    translateNoDataView(control.config, control.svg);
 };
 /**
  * Pads the domain with some buffer that gets calculated based on input values.
@@ -675,6 +676,83 @@ const setAxisPadding = (axisPadding, { config }) => {
         axisPadding[yAxis] = config.axisPadding;
     }
 };
+/**
+ * Removes the No Data View from the node
+ *
+ * @private
+ * @param {d3.selection} svg - d3 selection node of svg.
+ * @returns {undefined} - returns nothing
+ */
+const removeNoDataView = (svg) => {
+    d3RemoveElement(svg, `.${styles.noDataContainer}`);
+};
+/**
+ * Append No Data View to the graph node.
+ *
+ * @private
+ * @param {object} config - config object derived from input JSON
+ * @param {d3.selection} svg - d3 selection node of svg.
+ * @returns {d3.selection} d3 selection node of svg.
+ */
+const drawNoDataView = (config, svg) => {
+    const noDataViewHeight =
+        getYAxisHeight(config) / constants.NO_DATA_VIEW_PROPORTION;
+
+    const noDataViewContainer = svg
+        .append("g")
+        .classed(styles.noDataContainer, true);
+
+    noDataViewContainer
+        .append("rect")
+        .classed(styles.noDataOverlay, true)
+        .attr(constants.X_AXIS, getXAxisXPosition(config))
+        .attr(
+            constants.Y_AXIS,
+            calculateVerticalPadding(config) + noDataViewHeight
+        )
+        .attr("height", noDataViewHeight)
+        .attr("width", getXAxisWidth(config));
+    noDataViewContainer
+        .append("text")
+        .classed(styles.noDataLabel, true)
+        .attr("x", getXAxisLabelXPosition(config))
+        .attr(
+            "y",
+            getYAxisLabelYPosition(config) + constants.NO_DATA_LABEL_PADDING
+        )
+        .append("tspan")
+        .text(config.locale.noData);
+
+    return svg;
+};
+
+/**
+ * Translates no data view rectangle and the label
+ * based on the current positioning on resize.
+ *
+ * @private
+ * @param {object} config - config object derived from input JSON
+ * @param {d3.selection} svg - d3 selection node of svg.
+ *  @returns {undefined} - returns nothing
+ */
+const translateNoDataView = (config, svg) => {
+    svg.select(`.${styles.noDataOverlay}`)
+        .transition()
+        .call(constants.d3Transition)
+        .attr(
+            "height",
+            getYAxisHeight(config) / constants.NO_DATA_VIEW_PROPORTION
+        )
+        .attr("width", getXAxisWidth(config));
+    svg.select(`.${styles.noDataLabel}`)
+        .transition()
+        .call(constants.d3Transition)
+        .attr("x", getXAxisLabelXPosition(config))
+        .attr(
+            "y",
+            getYAxisLabelYPosition(config) + constants.NO_DATA_LABEL_PADDING
+        );
+};
 
 export {
     translateAxes,
@@ -699,5 +777,7 @@ export {
     detachEventHandlers,
     d3RemoveElement,
     setAxisPadding,
-    getAxisInfoRowLabelHeight
+    getAxisInfoRowLabelHeight,
+    removeNoDataView,
+    drawNoDataView
 };

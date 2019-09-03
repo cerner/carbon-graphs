@@ -43,6 +43,10 @@ export default {
     datelineGroup: "carbon-dateline-group",
     datelinePoint: "carbon-dateline-point",
     dateline: "carbon-dateline",
+    noDataContainer: "carbon-no-data-container",
+    noDataLabel: "carbon-no-data-label",
+    noDataOverlay: "carbon-no-data-overlay",
+
     /**
      * Line
      */

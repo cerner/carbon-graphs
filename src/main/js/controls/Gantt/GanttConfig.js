@@ -163,7 +163,7 @@ export const processInput = (input, config) => {
         x: {},
         y: {}
     };
-    config.locale = d3.locale(getDefaultValue(input.locale, DEFAULT_LOCALE));
+    config.d3Locale = d3.locale(getDefaultValue(input.locale, DEFAULT_LOCALE));
     config.throttle = getDefaultValue(
         input.throttle,
         constants.RESIZE_THROTTLE

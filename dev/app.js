@@ -70,7 +70,8 @@ import {
     renderLineYHidden,
     renderMultiLine,
     renderMultiLineRegion,
-    renderMultiLineIdenticalDatasetRegion
+    renderMultiLineIdenticalDatasetRegion,
+    renderNoDataView
 } from "./examples/controls/line";
 import {
     renderMultiPairedResultRegion,
@@ -156,6 +157,11 @@ renderSiteApp(
                     pathname: "/line/shapes-hidden",
                     content: renderLineShapesHidden,
                     title: "Shapes Hidden"
+                },
+                {
+                    pathname: "/line/no-data",
+                    content: renderNoDataView,
+                    title: "No Data"
                 }
             ]
         },

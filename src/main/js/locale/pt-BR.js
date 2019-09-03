@@ -45,5 +45,6 @@ export default {
         "Out",
         "Nov",
         "Dez"
-    ]
+    ],
+    noData: "Sem dados"
 };
