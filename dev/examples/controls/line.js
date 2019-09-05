@@ -427,3 +427,20 @@ export const renderNoDataView = (id) => {
     );
     return lineDefault;
 };
+export const renderLineCustomPadding = (id) => {
+    const data = utils.deepClone(getDemoData(`#${id}`, "LINE_DEFAULT"));
+    data.showLegend = false;
+    data.axis.x.show = false;
+    data.axis.y.show = false;
+    data.padding = {
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0
+    };
+    const lineDefault = Carbon.api.graph(data);
+    lineDefault.loadContent(
+        Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[0])
+    );
+    return lineDefault;
+};

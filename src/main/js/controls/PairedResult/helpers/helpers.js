@@ -470,7 +470,9 @@ const processRegions = (graphContext, config, canvasSVG, { key }) => {
  * @returns { boolean } returns true if regions are not missing for the value keys( high, mid or low) else false
  */
 const isRegionMappedToAllValues = (value, regionList) =>
-    Object.keys(value).every((v) => regionList.hasOwnProperty(v));
+    Object.keys(value).every((v) =>
+        Object.prototype.hasOwnProperty.call(regionList, v)
+    );
 /**
  * Handler for Request animation frame, executes on resize.
  *  * Order of execution
