@@ -71,7 +71,8 @@ import {
     renderMultiLine,
     renderMultiLineRegion,
     renderMultiLineIdenticalDatasetRegion,
-    renderNoDataView
+    renderNoDataView,
+    renderLineCustomPadding
 } from "./examples/controls/line";
 import {
     renderMultiPairedResultRegion,
@@ -102,7 +103,10 @@ import {
     renderCriticalityShapesLight
 } from "./examples/controls/shapes";
 import { renderSplineLine } from "./examples/controls/spline";
-import { renderTimeline } from "./examples/controls/timeline";
+import {
+    renderTimeline,
+    renderTimelineCustomPadding
+} from "./examples/controls/timeline";
 import { createElementLegendBindTo } from "./examples/helpers";
 
 renderSiteApp(
@@ -141,12 +145,12 @@ renderSiteApp(
                     title: "Legend Hidden"
                 },
                 {
-                    pathname: "/line/legend-render-to",
+                    pathname: "/line/custom-legend-placement",
                     content: (id) => {
                         createElementLegendBindTo(id);
                         renderLineLegendTo(id);
                     },
-                    title: "Legend BindTo"
+                    title: "Custom Legend Placement"
                 },
                 {
                     pathname: "/line/legend-item-disabled",
@@ -359,12 +363,12 @@ renderSiteApp(
                     title: "Simple"
                 },
                 {
-                    pathname: "/pie/legend-render-to",
+                    pathname: "/pie/custom-legend-placement",
                     content: (id) => {
                         createElementLegendBindTo(id);
                         renderPieLegendTo(id);
                     },
-                    title: "Legend BindTo"
+                    title: "Custom Legend Placement"
                 }
             ]
         },
@@ -498,11 +502,6 @@ renderSiteApp(
                             pathname: "/axes/gantt/datetime-buckets",
                             content: renderGanttDateTimeBuckets,
                             title: "Datetime Buckets"
-                        },
-                        {
-                            pathname: "/axes/gantt/custom-padding",
-                            content: renderGanttCustomPadding,
-                            title: "Custom Padding"
                         }
                     ]
                 },
@@ -651,6 +650,42 @@ renderSiteApp(
                     pathname: "/criticality/timeline",
                     content: renderCriticalityTimeline,
                     title: "Timeline"
+                }
+            ]
+        },
+        {
+            pathname: "/padding",
+            children: [
+                {
+                    pathname: "/padding/line",
+                    children: [
+                        {
+                            pathname: "/padding/line/custom-content-padding",
+                            content: renderLineCustomPadding,
+                            title: "Custom Content Padding"
+                        }
+                    ]
+                },
+                {
+                    pathname: "/padding/gantt",
+                    children: [
+                        {
+                            pathname: "/padding/gantt/custom-content-padding",
+                            content: renderGanttCustomPadding,
+                            title: "Custom Content Padding"
+                        }
+                    ]
+                },
+                {
+                    pathname: "/padding/timeline",
+                    children: [
+                        {
+                            pathname:
+                                "/padding/timeline/custom-content-padding",
+                            content: renderTimelineCustomPadding,
+                            title: "Custom Content Padding"
+                        }
+                    ]
                 }
             ]
         },
