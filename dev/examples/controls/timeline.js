@@ -20,7 +20,7 @@ export const renderTimelineCustomPadding = (id) => {
         top: 0,
         bottom: 0
     };
-    const lineDefault = Carbon.api.timeline(data);
-    lineDefault.loadContent(getDemoData(`#${id}`, "TIMELINE").data[0]);
-    return lineDefault;
+    const timelineDefault = Carbon.api.timeline(data);
+    timelineDefault.loadContent(getDemoData(`#${id}`, "TIMELINE").data[0]);
+    return timelineDefault;
 };
