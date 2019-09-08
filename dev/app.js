@@ -148,7 +148,7 @@ renderSiteApp(
                     pathname: "/line/custom-legend-placement",
                     content: (id) => {
                         createElementLegendBindTo(id);
-                        renderLineLegendTo(id);
+                        return renderLineLegendTo(id);
                     },
                     title: "Custom Legend Placement"
                 },
@@ -366,7 +366,7 @@ renderSiteApp(
                     pathname: "/pie/custom-legend-placement",
                     content: (id) => {
                         createElementLegendBindTo(id);
-                        renderPieLegendTo(id);
+                        return renderPieLegendTo(id);
                     },
                     title: "Custom Legend Placement"
                 }

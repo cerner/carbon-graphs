@@ -29,6 +29,7 @@ const constructSVGObject = (shape, { posX = 1, posY = 1, scale = 2 }) => {
 
 export const renderShapesSimple = (id) => {
     const sect = document.createElement("section");
+    sect.setAttribute("class", "shape-container");
     const svgElement = vector.render(sect, id, viewBoxSize);
     document.querySelector(`#${id}`).appendChild(sect);
     getShapesSplit(Carbon.helpers.SHAPES.DARK).forEach((s, pos) => {
@@ -53,6 +54,7 @@ export const renderShapesSimple = (id) => {
 };
 export const renderCriticalityShapes = (id) => {
     const sect = document.createElement("section");
+    sect.setAttribute("class", "shape-container");
     const svgElement = vector.render(sect, id, viewBoxSize);
     document.querySelector(`#${id}`).appendChild(sect);
     getShapesSplit(Carbon.helpers.SHAPES.DARK).forEach((s, pos) => {
@@ -97,6 +99,7 @@ export const renderCriticalityShapes = (id) => {
 };
 export const renderShapesSimpleLight = (id) => {
     const sect = document.createElement("section");
+    sect.setAttribute("class", "shape-container");
     const svgElement = vector.render(sect, id, viewBoxSize);
     document.querySelector(`#${id}`).appendChild(sect);
     getShapesSplit(Carbon.helpers.SHAPES.LIGHT).forEach((s, pos) => {
@@ -121,6 +124,7 @@ export const renderShapesSimpleLight = (id) => {
 };
 export const renderCriticalityShapesLight = (id) => {
     const sect = document.createElement("section");
+    sect.setAttribute("class", "shape-container");
     const svgElement = vector.render(sect, id, viewBoxSize);
     document.querySelector(`#${id}`).appendChild(sect);
     getShapesSplit(Carbon.helpers.SHAPES.LIGHT).forEach((s, pos) => {

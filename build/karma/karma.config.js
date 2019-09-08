@@ -38,7 +38,7 @@ module.exports = function(config) {
             stats: "errors-only"
         },
         parallelOptions: {
-            executors: 4,
+            executors: 3,
             shardStrategy: "round-robin"
         },
         webpack: {

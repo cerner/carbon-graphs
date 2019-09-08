@@ -4,6 +4,7 @@ import { vector } from "../helpers";
 
 export const renderColorsExample = (id) => {
     const sect = document.createElement("section");
+    sect.setAttribute("class", "shape-container");
     const svgElement = vector.render(sect, id, "0 0 1080 150");
     document.querySelector(`#${id}`).appendChild(sect);
     d3.select(svgElement)
