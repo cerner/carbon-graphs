@@ -494,8 +494,7 @@ describe("Timeline", () => {
         });
         it("Creates defs element with height and width", () => {
             const currentWidth =
-                constants.PADDING.left +
-                constants.PADDING.right +
+                constants.PADDING.left + constants.PADDING.right +
                 (constants.PADDING.top + constants.PADDING.bottom) * 2;
             const defsElement = fetchElementByClass(styles.canvas).firstChild;
             expect(defsElement.nodeName).toBe("defs");
