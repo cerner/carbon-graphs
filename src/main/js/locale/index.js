@@ -42,7 +42,7 @@ export const DEFAULT_LOCALE = us;
  * @property {object} ja_JP Carbon locale JP
  * @property {object} nl_NL Carbon locale NL
  * @property {object} sv_SE Carbon locale SE
- * @type {{de_DE: *, en_AU: *, en_CA: *, en_GB: *, en_US: *, es_ES: *, fr_FR: *, pt_BR: *, ja_JP: *}}
+ * @type {{de_DE: *, en_AU: *, en_CA: *, en_GB: *, en_US: *, es_ES: *, fr_FR: *, pt_BR: *, ja_JP: *, nl_NL: *, sv_SE: *}}
  */
 const LOCALE = {
     de_DE: de,
