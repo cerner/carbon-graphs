@@ -43,7 +43,7 @@ import {
     renderGanttTruncate
 } from "./examples/controls/gantt";
 import {
-    renderGoalLine,
+    renderRegionLine,
     renderLine,
     renderLineBlankDataPoint,
     renderLineDateTimeBuckets,
@@ -539,9 +539,9 @@ renderSiteApp(
                             title: "Multiple Regions"
                         },
                         {
-                            pathname: "/regions/line/goal-line",
-                            content: renderGoalLine,
-                            title: "Goal line"
+                            pathname: "/regions/line/region-line",
+                            content: renderRegionLine,
+                            title: "Region-line"
                         },
                         {
                             pathname: "/regions/line/with-y2-axis",

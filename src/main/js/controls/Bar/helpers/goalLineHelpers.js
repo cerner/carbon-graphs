@@ -185,14 +185,11 @@ const getRegionHeight = (regionPath, bounds, scale, config) => {
     const upperBound = utils.getNumber(regionPath.attr(constants.Y_AXIS));
     const lowerBound = bounds.start
         ? round2Decimals(scale[getRegionAxis(bounds)](bounds.start)) +
-          constants.DEFAULT_REGION_GOAL_LINE_STROKE_WIDTH
-        : config.height + constants.DEFAULT_REGION_GOAL_LINE_STROKE_WIDTH;
-    // If start and end are the same then `constants.DEFAULT_REGION_GOAL_LINE_STROKE_WIDTH`
+          constants.DEFAULT_GOAL_LINE_STROKE_WIDTH
+        : config.height + constants.DEFAULT_GOAL_LINE_STROKE_WIDTH;
+    // If start and end are the same then `constants.DEFAULT_GOAL_LINE_STROKE_WIDTH`
     // worth of height is applied to make it seem like a goal line
-    return (
-        lowerBound - upperBound ||
-        constants.DEFAULT_REGION_GOAL_LINE_STROKE_WIDTH
-    );
+    return lowerBound - upperBound || constants.DEFAULT_GOAL_LINE_STROKE_WIDTH;
 };
 
 export { processGoalLines, translateRegion, createRegion };

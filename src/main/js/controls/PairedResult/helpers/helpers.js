@@ -465,6 +465,7 @@ const processRegions = (graphContext, config, canvasSVG, { key }) => {
  * all regions would be hidden(returns false) and if region for all "high", "mid" and "low" is there as well as value contains
  * data for "high", "mid" and "low" then it returns true.
  *
+ * @private
  * @param {object} value - pairedResult values
  * @param {object} regionList - List of all the regions provided
  * @returns { boolean } returns true if regions are not missing for the value keys( high, mid or low) else false

@@ -345,7 +345,7 @@ export const renderMultiLineIdenticalDatasetRegion = (id) => {
     lineDefault.loadContent(Carbon.api.line(dataAlt));
     return lineDefault;
 };
-export const renderGoalLine = (id) => {
+export const renderRegionLine = (id) => {
     const lineDefault = Carbon.api.graph(getDemoData(`#${id}`, "LINE_DEFAULT"));
     const data = utils.deepClone(getDemoData(`#${id}`, "LINE_DEFAULT").data[5]);
     data.regions = [
