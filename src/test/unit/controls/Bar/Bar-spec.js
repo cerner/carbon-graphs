@@ -1915,7 +1915,7 @@ describe("Bar", () => {
                     styles.region
                 );
                 expect(toNumber(regionElement.getAttribute("height"))).toBe(
-                    constants.DEFAULT_REGION_GOAL_LINE_STROKE_WIDTH
+                    constants.DEFAULT_GOAL_LINE_STROKE_WIDTH
                 );
             });
             it("Creates region correctly when start is not provided", () => {

@@ -1981,7 +1981,7 @@ describe("Line", () => {
                     constants.PADDING.top
                 );
             });
-            it("Creates a goal line when start and end are same", () => {
+            it("Creates a region line when start and end are same", () => {
                 data = utils.deepClone(getInput(valuesDefault));
                 data.regions = [
                     {
@@ -1997,7 +1997,7 @@ describe("Line", () => {
                     styles.region
                 );
                 expect(+regionElement.getAttribute("height")).toBe(
-                    constants.DEFAULT_REGION_GOAL_LINE_STROKE_WIDTH
+                    constants.DEFAULT_REGION_LINE_STROKE_WIDTH
                 );
             });
             it("Creates region correctly when start is not provided", () => {

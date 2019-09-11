@@ -151,7 +151,7 @@ const getYAxisRangePosition = (scale, config) => (bounds) =>
         : calculateVerticalPadding(config);
 /**
  * Returns the height for range based on Y Axes, start and end bounds
- * If start and end bounds arent provided then a "goal line" number is returned with
+ * If start and end bounds arent provided then a "region line" number is returned with
  * height worth of padding top
  *
  * @private
@@ -169,10 +169,9 @@ const getRegionHeight = (regionPath, bounds, scale, config) => {
           calculateVerticalPadding(config)
         : graphHeight + calculateVerticalPadding(config);
     // If start and end are the same then `padding.top` worth of height is
-    // applied to make it seem like a goal line
+    // applied to make it seem like a region line
     return (
-        lowerBound - upperBound ||
-        constants.DEFAULT_REGION_GOAL_LINE_STROKE_WIDTH
+        lowerBound - upperBound || constants.DEFAULT_REGION_LINE_STROKE_WIDTH
     );
 };
 /**

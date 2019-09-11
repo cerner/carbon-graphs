@@ -23,9 +23,9 @@ A native bar graph using d3 based on standard design patterns.
             -   [Optional](#optional-4)
             -   [Axis Info Row Value](#axis-info-row-value)
         -   [Constraints](#constraints)
-        -   [Structure](#structure)
-            -   [Simple Bar](#simple-bar)
-            -   [Negative Bar](#negative-bar)
+    -   [Structure](#structure)
+        -   [Simple Bar](#simple-bar)
+        -   [Negative Bar](#negative-bar)
 
 ## Usage
 
@@ -90,6 +90,8 @@ Refer [GraphAPI](../core/GraphAPI.md) `Root` for more details.
 | style         | object   | {}      | Any style that can be applied. Refer [Styles](#style) |
 
 ### Regions
+
+`Regions` in Bar Graph are conceptually different than other graph types, since `goal lines` are **per bar** as opposed to `regions lines` which are **per data-set**.
 
 Each bar can have 1 or more regions. `start` and `end` is necessary for rendering a region.
 
