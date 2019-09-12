@@ -159,6 +159,8 @@ Carbon supports custom shapes as well! For more information on custom icon suppo
 | fr_FR    |
 | ja_JP    |
 | pt_BR    |
+| nl_NL    |
+| sv_SE    |
 
 ### Format
 

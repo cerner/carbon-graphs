@@ -10,3 +10,4 @@ Cerner Corporation
 [@dinesh94singh]: https://github.com/Dinesh94Singh
 [@veronimazur]: https://github.com/veronimazur
 [@swatikode]: https://github.com/swatikode
+[@SharathAlur]: https://github.com/SharathAlur

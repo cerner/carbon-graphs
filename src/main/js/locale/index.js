@@ -8,6 +8,8 @@ import { default as es } from "./es-ES";
 import { default as fr } from "./fr-FR";
 import { default as jp } from "./ja-JP";
 import { default as br } from "./pt-BR";
+import { default as nl } from "./nl-NL";
+import { default as sv } from "./sv-SE";
 
 /**
  * Tick format is null for default d3 tick formatting
@@ -38,7 +40,9 @@ export const DEFAULT_LOCALE = us;
  * @property {object} fr_FR Carbon locale FR
  * @property {object} pt_BR Carbon locale BR
  * @property {object} ja_JP Carbon locale JP
- * @type {{de_DE: *, en_AU: *, en_CA: *, en_GB: *, en_US: *, es_ES: *, fr_FR: *, pt_BR: *, ja_JP: *}}
+ * @property {object} nl_NL Carbon locale NL
+ * @property {object} sv_SE Carbon locale SE
+ * @type {{de_DE: *, en_AU: *, en_CA: *, en_GB: *, en_US: *, es_ES: *, fr_FR: *, pt_BR: *, ja_JP: *, nl_NL: *, sv_SE: *}}
  */
 const LOCALE = {
     de_DE: de,
@@ -49,6 +53,8 @@ const LOCALE = {
     es_ES: es,
     fr_FR: fr,
     pt_BR: br,
-    ja_JP: jp
+    ja_JP: jp,
+    nl_NL: nl,
+    sv_SE: sv
 };
 export default LOCALE;
