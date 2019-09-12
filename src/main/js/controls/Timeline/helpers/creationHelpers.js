@@ -101,7 +101,7 @@ const getXAxisYPosition = (config) =>
  * @returns {number} X Axis width
  */
 const getXAxisWidth = (config) =>
-    config.canvasWidth - config.padding.left - getXAxisYPosition(config);
+    config.canvasWidth - config.padding.left - config.padding.right - getXAxisYPosition(config);
 /**
  * X Axis label's starting position below the graph
  *

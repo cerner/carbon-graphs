@@ -15,8 +15,8 @@ export const renderTimelineCustomPadding = (id) => {
     data.showLegend = false;
     data.axis.x.show = false;
     data.padding = {
-        left: 0,
-        right: 0,
+        left: 150,
+        right: 300,
         top: 0,
         bottom: 0
     };
