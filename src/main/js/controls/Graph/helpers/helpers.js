@@ -231,9 +231,10 @@ const translateLabel = (config, canvasSVG) => {
                 "transform",
                 `translate(${getXAxisLabelXPosition(
                     config
-                )},${getXAxisLabelYPosition(
-                    config
-                )}) rotate(${getRotationForAxis(constants.X_AXIS)})`
+                )},${getXAxisLabelYPosition(config) +
+                    config.axisSizes.y}) rotate(${getRotationForAxis(
+                    constants.X_AXIS
+                )})`
             );
     }
 

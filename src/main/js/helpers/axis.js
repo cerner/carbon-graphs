@@ -888,17 +888,38 @@ const hasY2Axis = (axis) => utils.isDefined(axis.y2) && axis.y2.show;
 const translateAxes = (axis, scale, config, canvasSVG) => {
     getAxesScale(axis, scale, config);
     prepareHAxis(scale, axis, config, prepareHorizontalAxis);
-    canvasSVG
-        .select(`.${styles.axisX}`)
-        .transition()
-        .call(constants.d3Transition)
-        .attr(
-            "transform",
-            `translate(${getXAxisXPosition(config)},${getXAxisYPosition(
-                config
-            )})`
-        )
-        .call(axis.x);
+
+    if (config.type == "inclined") {
+        canvasSVG
+            .select(`.${styles.axisX}`)
+            .transition()
+            .call(constants.d3Transition)
+            .attr(
+                "transform",
+                `translate(${getXAxisXPosition(config)},${getXAxisYPosition(
+                    config
+                )})`
+            )
+            .call(axis.x)
+            .selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", ".15em")
+            .attr("transform", "rotate(-65)");
+    } else {
+        canvasSVG
+            .select(`.${styles.axisX}`)
+            .transition()
+            .call(constants.d3Transition)
+            .attr(
+                "transform",
+                `translate(${getXAxisXPosition(config)},${getXAxisYPosition(
+                    config
+                )})`
+            )
+            .call(axis.x);
+    }
+
     canvasSVG
         .select(`.${styles.axisY}`)
         .transition()
