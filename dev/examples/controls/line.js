@@ -33,6 +33,12 @@ export const renderLine = (id) => {
 export const renderLineY2Axis = (id) => {
     const axisData = utils.deepClone(getDemoData(`#${id}`, "LINE_TIMESERIES"));
     axisData.axis.y2.show = true;
+    axisData.padding = {
+        top: 70,
+        bottom: 10,
+        left: 30,
+        right: 70
+    };
     const lineTime = Carbon.api.graph(axisData);
     lineTime.loadContent(
         Carbon.api.line(getDemoData(`#${id}`, "LINE_TIMESERIES").data[0])

@@ -136,8 +136,7 @@ const createLegend = (container) =>
     container
         .append("ul")
         .classed(styles.legend, true)
-        .attr("role", "list")
-        .style("margin", "10px");
+        .attr("role", "list");
 /**
  * Handler that will need to be called when a legend item is clicked along
  * with any other operations that will be need to taken care of by the parent

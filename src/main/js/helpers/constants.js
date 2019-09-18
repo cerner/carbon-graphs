@@ -148,10 +148,10 @@ export const AXES_ORIENTATION = {
  */
 export default {
     PADDING: {
-        top: 10,
-        bottom: 5,
+        top: 60,
+        bottom: 25,
         left: 30,
-        right: 50,
+        right: 70,
         trackLabel: 100
     },
     PAIR_ITEM_TYPES: ["high", "mid", "low"],
