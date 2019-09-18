@@ -6,10 +6,7 @@ const postCssLoader = {
     loader: "postcss-loader",
     options: {
         ident: "postcss",
-        plugins: () => [
-            autoprefixer(),
-            cssnano()
-        ]
+        plugins: () => [autoprefixer(), cssnano()]
     }
 };
 
@@ -44,14 +41,6 @@ const jsOptions = (type) => {
             ]
         }
     };
-    if (type !== "DEV" && type !== "SITE") {
-        config.options.presets.push([
-            "minify",
-            {
-                builtIns: false
-            }
-        ]);
-    }
     return [config];
 };
 

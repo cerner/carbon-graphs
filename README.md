@@ -10,9 +10,12 @@
 
 [![Build Status](https://travis-ci.com/cerner/carbon-graphs.svg?branch=master)](https://travis-ci.com/cerner/carbon-graphs)
 [![npm latest version](https://img.shields.io/npm/v/@cerner/carbon-graphs/latest.svg)](https://github.com/cerner/carbon-graphs)
-[![Cerner OSS](https://badgen.net/badge/Cerner/OSS/blue)](http://engineering.cerner.com/2014/01/cerner-and-open-source/)
+[![Cerner OSS](https://badgen.net/badge/Cerner/OSS/blue)](https://engineering.cerner.com/open_source/)
 [![License](https://badgen.net/badge/license/Apache-2.0/blue)](https://github.com/cerner/carbon-graphs/blob/master/LICENSE)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+[![dependencies Status](https://david-dm.org/cerner/carbon-graphs/status.svg)](https://david-dm.org/cerner/carbon-graphs)
+[![devDependencies Status](https://david-dm.org/cerner/carbon-graphs/dev-status.svg)](https://david-dm.org/cerner/carbon-graphs?type=dev)
+[![Bugs](https://img.shields.io/github/issues/cerner/carbon-graphs/bug.svg)](https://github.com/cerner/carbon-graphs/issues?utf8=✓&q=is%3Aissue+is%3Aopen+label%3Abug)
 
 Carbon is a graphing library built using d3 visualization library. It provides an API for generating native graphs such as Line and Paired Result graphs based on design standards.
 
@@ -73,6 +76,7 @@ Carbon is a graphing library built using d3 visualization library. It provides a
 
 ## Potential features
 
+-   [ ] Upgrade to latest D3 version
 -   [ ] Separate graph types to plugin based
 -   [ ] a11y
 -   [ ] Support additional themes
