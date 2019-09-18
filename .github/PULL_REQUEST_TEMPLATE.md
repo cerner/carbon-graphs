@@ -2,13 +2,22 @@
 <!-- Explain the **motivation** for making this change. What existing problem does the pull request solve? -->
 <!-- Try to link to an open issue for more information. -->
 
-**What is the purpose of this pull request? (put an "X" next to item)**
+**What is the purpose of this pull request? (Check any that's applicable)**
 
-[] Documentation update
-[] Bug fix
-[] New functionality
-[] Changes an existing functionality
-[] Other, please explain:
+-   [ ] Feature
+-   [ ] Bug fix
+-   [ ] Dependency updates
+-   [ ] Documentation updates
+-   [ ] Build related changes
+-   [ ] Changes an existing functionality
+-   [ ] Other, please explain:
+
+## Does this introduce a breaking change?
+
+-   [ ] Yes
+-   [ ] No
+
+<!-- If this introduces a breaking change, please describe the impact and migration path for existing applications below. -->
 
 **What changes did you make? (Give an overview)**
 
