@@ -577,9 +577,6 @@ const getYAxisHeight = (config) => config.height;
  * @returns {number} Height of the X Axis ticks, labels and numbers/datetimes
  */
 const getXAxisHeight = (config) => {
-    if (config.padding.hasCustomPadding) {
-        return config.padding.bottom;
-    }
     const scale = getScale(config.axis.x.type)
         .domain(config.axis.x.domain)
         .range([0, config.canvasWidth]);
@@ -654,9 +651,6 @@ const getAxisLabelHeight = (label) => {
  * @returns {number} label width
  */
 const getYAxisWidth = (id, config) => {
-    if (config.padding.hasCustomPadding) {
-        return config.padding.left;
-    }
     const scale = d3.scale
         .linear()
         .domain([
@@ -683,16 +677,9 @@ const getYAxisWidth = (id, config) => {
  * @param {object} config - config object derived from input JSON.
  * @returns {number} label width
  */
-const getY2AxisWidth = (config) => {
-    if (config.padding.hasCustomPadding) {
-        return config.padding.right;
-    }
-    return (
-        (hasY2Axis(config.axis)
-            ? getYAxisWidth(constants.Y2_AXIS, config)
-            : 20) + config.padding.right
-    );
-};
+const getY2AxisWidth = (config) =>
+    (hasY2Axis(config.axis) ? getYAxisWidth(constants.Y2_AXIS, config) : 20) +
+    config.padding.right;
 /**
  * Checks if X Axis orientation is set to top
  *
@@ -715,7 +702,7 @@ const isXAxisOrientationTop = (xAxisOrientation) =>
 const calculateAxesSize = (config) => {
     config.axisSizes = {};
     config.axisSizes.y = config.padding.hasCustomPadding
-        ? getYAxisWidth(constants.Y_AXIS, config)
+        ? getYAxisWidth(constants.Y_AXIS, config) + config.padding.left
         : getYAxisWidth(constants.Y_AXIS, config) + config.padding.left;
     config.axisSizes.y2 = getY2AxisWidth(config);
     config.axisSizes.x = getXAxisHeight(config);
@@ -888,41 +875,102 @@ const hasY2Axis = (axis) => utils.isDefined(axis.y2) && axis.y2.show;
 const translateAxes = (axis, scale, config, canvasSVG) => {
     getAxesScale(axis, scale, config);
     prepareHAxis(scale, axis, config, prepareHorizontalAxis);
-    canvasSVG
-        .select(`.${styles.axisX}`)
-        .transition()
-        .call(constants.d3Transition)
-        .attr(
-            "transform",
-            `translate(${getXAxisXPosition(config)},${getXAxisYPosition(
-                config
-            )})`
-        )
-        .call(axis.x);
-    canvasSVG
-        .select(`.${styles.axisY}`)
-        .transition()
-        .call(constants.d3Transition)
-        .attr(
-            "transform",
-            `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition(
-                config
-            )})`
-        )
-        .call(axis.y);
-    if (hasY2Axis(config.axis)) {
+
+    if (config.axis.x.tickType === "inclined") {
         canvasSVG
-            .select(`.${styles.axisY2}`)
+            .select(`.${styles.axisX}`)
             .transition()
             .call(constants.d3Transition)
             .attr(
                 "transform",
-                `translate(${getY2AxisXPosition(config)}, ${getY2AxisYPosition(
+                `translate(${getXAxisXPosition(config)},${getXAxisYPosition(
                     config
                 )})`
             )
-            .call(axis.y2);
+            .call(axis.x)
+            .selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", ".15em")
+            .attr("transform", "rotate(-65)");
+    } else {
+        canvasSVG
+            .select(`.${styles.axisX}`)
+            .transition()
+            .call(constants.d3Transition)
+            .attr(
+                "transform",
+                `translate(${getXAxisXPosition(config)},${getXAxisYPosition(
+                    config
+                )})`
+            )
+            .call(axis.x);
     }
+
+    if (config.axis.y.tickType === "inclined") {
+        canvasSVG
+            .select(`.${styles.axisY}`)
+            .transition()
+            .call(constants.d3Transition)
+            .attr(
+                "transform",
+                `translate(${getYAxisXPosition(config)},${getYAxisYPosition(
+                    config
+                )})`
+            )
+            .call(axis.y)
+            .selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", ".15em")
+            .attr("dy", "1em")
+            .attr("transform", "rotate(30)");
+    } else {
+        canvasSVG
+            .select(`.${styles.axisY}`)
+            .transition()
+            .call(constants.d3Transition)
+            .attr(
+                "transform",
+                `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition(
+                    config
+                )})`
+            )
+            .call(axis.y);
+    }
+
+    if (hasY2Axis(config.axis)) {
+        if (config.axis.y2.tickType === "inclined") {
+            canvasSVG
+                .select(`.${styles.axisY2}`)
+                .transition()
+                .call(constants.d3Transition)
+                .attr(
+                    "transform",
+                    `translate(${getY2AxisXPosition(
+                        config
+                    )},${getY2AxisYPosition(config)})`
+                )
+                .call(axis.y2)
+                .selectAll("text")
+                .style("text-anchor", "start")
+                .attr("dx", "-.3em")
+                .attr("dy", "1em")
+                .attr("transform", "rotate(-30)");
+        } else {
+            canvasSVG
+                .select(`.${styles.axisY2}`)
+                .transition()
+                .call(constants.d3Transition)
+                .attr(
+                    "transform",
+                    `translate(${getY2AxisXPosition(
+                        config
+                    )}, ${getY2AxisYPosition(config)})`
+                )
+                .call(axis.y2);
+        }
+    }
+
     canvasSVG
         .select(`.${styles.axisInfoRow}`)
         .transition()

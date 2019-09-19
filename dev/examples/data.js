@@ -156,18 +156,21 @@ const DATA = [
                     type: Carbon.helpers.AXIS_TYPE.TIME_SERIES,
                     label: "Datetime",
                     lowerLimit: new Date(2016, 0, 1, 1, 0).toISOString(),
-                    upperLimit: new Date(2016, 0, 1, 23, 59).toISOString()
+                    upperLimit: new Date(2016, 0, 1, 23, 59).toISOString(),
+                    tickType: "inclined"
                 },
                 y: {
                     label: "Line Set A",
                     lowerLimit: 10,
-                    upperLimit: 30
+                    upperLimit: 30,
+                    tickType: "inclined"
                 },
                 y2: {
                     show: false,
                     label: "Line Set B",
                     lowerLimit: 0,
-                    upperLimit: 250
+                    upperLimit: 250,
+                    tickType: "inclined"
                 }
             },
             data: [
@@ -1320,6 +1323,7 @@ const DATA = [
         BAR_DEFAULT: (id) => ({
             bindTo: id,
             bindLegendTo: null,
+            type: "inclined",
             axis: {
                 x: {
                     show: true,
