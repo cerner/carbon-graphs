@@ -56,7 +56,7 @@ const graphConfiguration = {
 };
 ```
 
-Next, we’ll configure the dataset we want to plot.
+Next, we’ll configure the data-set we want to plot.
 
 ```js
 const dataset = {
@@ -83,7 +83,7 @@ const dataset = {
 };
 ```
 
-And to wrap it all up, we’ll call loadContent to draw the content.
+And to wrap it all up, we’ll call `loadContent` to draw the content.
 
 ```js
 const graph = Carbon.api.graph(graphConfiguration);

@@ -19,7 +19,7 @@ A native pie chart using D3 based on standard design patterns. A Pie chart is a 
 
 ## Structure
 
-You will **not** need all the properties in the below example.
+You will **not** need all the properties in the example below.
 Check out _optional_/_required_ properties explained in the [JSON Properties](#json-properties) section.
 
 ```javascript

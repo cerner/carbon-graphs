@@ -24,7 +24,7 @@ This is primarily used to denote an action at a given point of time. It also acc
 
 ### Structure
 
-You will **not** need all the properties in the below example.
+You will **not** need all the properties in the example below.
 Check out _optional_/_required_ properties explained in the [JSON Properties](#json-properties) section.
 
 ```javascript

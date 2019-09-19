@@ -25,7 +25,7 @@ the `pair` - High, low, mid are vertical data points connected by a vertical lin
 
 ### Structure
 
-You will **not** need all the properties in the below example.
+You will **not** need all the properties in the example below.
 Check out _optional_/_required_ properties explained in the [JSON Properties](#json-properties) section.
 
 ```javascript
