@@ -5,6 +5,12 @@ For documentation on code: [**JSDocs**](https://engineering.cerner.com/carbon-gr
 -   [Consumer documentation](#consumer-documentation)
     -   [Guides](#guides)
     -   [Chart types](#chart-types)
+    -   [Colors](#colors)
+    -   [Shapes](#shapes)
+        -   [Dark](#dark)
+        -   [Light](#light)
+    -   [Locale](#locale)
+        -   [Format](#format)
     -   [Important information](#important-information)
         -   [Errors](#errors)
             -   [Input](#input)
@@ -13,14 +19,8 @@ For documentation on code: [**JSDocs**](https://engineering.cerner.com/carbon-gr
             -   [Legend](#legend)
             -   [Axis](#axis)
             -   [Data-point OnClick](#data-point-onclick)
-            -   [Locale](#locale)
+            -   [Locale](#locale-1)
             -   [Data-point values](#data-point-values)
-    -   [Colors](#colors)
-    -   [Shapes](#shapes)
-        -   [Dark](#dark)
-        -   [Light](#light)
-    -   [Locale](#locale-1)
-        -   [Format](#format)
 
 ## Guides
 
@@ -40,53 +40,6 @@ Consumers can generate one of the following graphs:
 -   [Gantt](controls/Gantt.md)
 -   [Timeline](controls/Timeline.md)
 -   [Pie](controls/Pie.md)
-
-## Important information
-
-### Errors
-
-#### Input
-
--   No bind id is provided
--   No axes information is provided [x, y]
--   No lower and upper limits are provided for axes
--   No Y axis label is provided
--   No data is provided
--   No data key is provided
--   Data keys are not unique (If multiple data-sets are provided)
--   No data values are not provided
-
-#### Axis Type: Timeseries
-
--   Data points are type `timeseries` but the x-axis bounds are `default`
--   Data points are type `default` but the x-axis bounds are `timeseries`
--   Data point values provided should be in UTC
--   Data point values provided should be in [RFC 3339](http://www.faqs.org/rfcs/rfc3339.html) format
-
-### Constraints
-
-#### Legend
-
--   `Legend` only loads if the data-set label is provided
-    -   This is part of a functionality, any `content` using Graph API will have the ability to load data within graph and not show legend item
--   `Graph` and `Legend` can be loaded in a separate containers when `bindTo` and `bindLegendTo` element id's are provided respectively
-
-#### Axis
-
--   If `y2` axis is enabled, then the data-sets expect the `yAxis: "y2"` property
-
-#### Data-point OnClick
-
--   The `onClick` property needs to be a callback function
--   Callback function will be called on click of a data point, this function will determine the action performed
-
-#### Locale
-
--   If `locale` is provided, `ticks.format` is expected to be provided as well otherwise there is no effect on the graph itself.
-
-#### Data-point values
-
--   `values` will not be subjected to any kind of pre-processing before generating the graph. `values` co-ordinates are expected to be linear/sorted.
 
 ## Colors
 
@@ -221,3 +174,50 @@ Resources on locale based tick formatting:
 
 -   [Number formatting](https://github.com/d3/d3-time-format/blob/master/README.md#locale_format)
 -   [Datetime formatting](https://github.com/d3/d3-time-format/blob/master/README.md#timeFormatLocale)
+
+## Important information
+
+### Errors
+
+#### Input
+
+-   No bind id is provided
+-   No axes information is provided [x, y]
+-   No lower and upper limits are provided for axes
+-   No Y axis label is provided
+-   No data is provided
+-   No data key is provided
+-   Data keys are not unique (If multiple data-sets are provided)
+-   No data values are not provided
+
+#### Axis Type: Timeseries
+
+-   Data points are type `timeseries` but the x-axis bounds are `default`
+-   Data points are type `default` but the x-axis bounds are `timeseries`
+-   Data point values provided should be in UTC
+-   Data point values provided should be in [RFC 3339](http://www.faqs.org/rfcs/rfc3339.html) format
+
+### Constraints
+
+#### Legend
+
+-   `Legend` only loads if the data-set label is provided
+    -   This is part of a functionality, any `content` using Graph API will have the ability to load data within graph and not show legend item
+-   `Graph` and `Legend` can be loaded in a separate containers when `bindTo` and `bindLegendTo` element id's are provided respectively
+
+#### Axis
+
+-   If `y2` axis is enabled, then the data-sets expect the `yAxis: "y2"` property
+
+#### Data-point OnClick
+
+-   The `onClick` property needs to be a callback function
+-   Callback function will be called on click of a data point, this function will determine the action performed
+
+#### Locale
+
+-   If `locale` is provided, `ticks.format` is expected to be provided as well otherwise there is no effect on the graph itself.
+
+#### Data-point values
+
+-   `values` will not be subjected to any kind of pre-processing before generating the graph. `values` co-ordinates are expected to be linear/sorted.

@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://engineering.cerner.com/carbon-graphs/">
-    <img width="200" height="200" alt="Click for demo" src="https://github.com/cerner/carbon-graphs/raw/master/build/assets/icons/Carbon_256.png">
+    <img width="128" height="128" alt="Click for demo" src="https://github.com/cerner/carbon-graphs/raw/master/build/assets/icons/Carbon_256.png">
   </a>
 </div>
 
@@ -9,7 +9,7 @@
 </h1>
 
 [![Build Status](https://travis-ci.com/cerner/carbon-graphs.svg?branch=master)](https://travis-ci.com/cerner/carbon-graphs)
-[![npm latest version](https://img.shields.io/npm/v/@cerner/carbon-graphs/latest.svg)](https://github.com/cerner/carbon-graphs)
+[![npm latest version](https://img.shields.io/npm/v/@cerner/carbon-graphs/latest.svg)](https://www.npmjs.com/package/@cerner/carbon-graphs)
 [![Cerner OSS](https://badgen.net/badge/Cerner/OSS/blue)](https://engineering.cerner.com/open_source/)
 [![License](https://badgen.net/badge/license/Apache-2.0/blue)](https://github.com/cerner/carbon-graphs/blob/master/LICENSE)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
@@ -17,8 +17,10 @@
 [![devDependencies Status](https://david-dm.org/cerner/carbon-graphs/dev-status.svg)](https://david-dm.org/cerner/carbon-graphs?type=dev)
 [![Bugs](https://img.shields.io/github/issues/cerner/carbon-graphs/bug.svg)](https://github.com/cerner/carbon-graphs/issues?utf8=✓&q=is%3Aissue+is%3Aopen+label%3Abug)
 
-Carbon is a graphing library built using d3 visualization library. It provides an API for generating native graphs such as Line and Paired Result graphs based on design standards.
+Carbon is a graphing library built using D3 visualization library. It provides an API for generating native graphs such as Line and Paired Result graphs based on design standards.
 
+- [Install](#install)
+- [Getting Started](#getting-started)
 - [Dependencies](#dependencies)
 - [Features](#features)
   - [Graph types](#graph-types)
@@ -26,14 +28,24 @@ Carbon is a graphing library built using d3 visualization library. It provides a
   - [Other highlights](#other-highlights)
 - [Potential features](#potential-features)
 - [Resources](#resources)
-- [Usage](#usage)
-- [Install](#install)
 - [Browser support](#browser-support)
 - [LICENSE](#license)
 
+## Install
+
+You can install Carbon via `npm` or download the [latest release](https://github.com/cerner/carbon-graphs/releases/latest) from GitHub.
+
+```sh
+npm i @cerner/carbon-graphs --save-dev
+```
+
+## Getting Started
+
+Please follow this [getting started](./docs/getting-started/GettingStarted.md) guide.
+
 ## Dependencies
 
--   **d3** [_v3.5.17_]
+-   **D3** [_v3.5.17_]
 -   Polyfills:
     -   Object.assign
     -   Object.values
@@ -69,7 +81,7 @@ Carbon is a graphing library built using d3 visualization library. It provides a
 -   Supports different shapes for each data-set
 -   Supports custom SVG shapes for data-sets
 -   `Non-contiguous` data point line graph
--   `Sparkline` graph (with Shapes are hidden)
+-   `Sparkline` graph (with Shapes as hidden)
 -   Criticality indicators for data point
 -   Locale support for axes ticks
 -   Y and Y2 Axes label along with respective shapes
@@ -94,21 +106,6 @@ Carbon is a graphing library built using d3 visualization library. It provides a
 -   [Contributing to Carbon](docs/contributing/README.md)
 -   [API Reference](docs/README.md)
 -   [Release Notes](https://github.com/cerner/carbon-graphs/releases)
-
-## Usage
-
-For convenience, there are 2 sets of distributions provided.
-
--   `lib/js` - [default] Only `core`. Does not contain any dependencies, consumers need to provide the items listed in the `Dependencies` section before loading the graph.
--   `dist/js` - Contains core + `d3` + all the necessary polyfills needed to load the graphs.
-
-Add `dist/js/carbon-graphs.js` and `dist/css/carbon-graphs.css` in your page and call appropriate graph type declarations mentioned in below documentation.
-
-## Install
-
--   `npm install`
--   `npm run dev`
--   [http://localhost:9991/](http://localhost:9991/)
 
 ## Browser support
 
