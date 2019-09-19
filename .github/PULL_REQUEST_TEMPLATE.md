@@ -12,7 +12,7 @@
 -   [ ] Changes an existing functionality
 -   [ ] Other, please explain:
 
-## Does this introduce a breaking change?
+**Does this introduce a breaking change?**
 
 -   [ ] Yes
 -   [ ] No

@@ -1,9 +1,10 @@
 # Gantt
 
-A native gantt chart using d3 based on standard design patterns.
+A native gantt chart using D3 based on standard design patterns.
 
 -   [Gantt](#gantt)
     -   [Usage](#usage)
+        -   [Structure](#structure)
     -   [JSON Properties](#json-properties)
         -   [Root](#root)
             -   [Required](#required)
@@ -40,20 +41,151 @@ A native gantt chart using d3 based on standard design patterns.
             -   [Optional](#optional-8)
         -   [Layering](#layering)
         -   [Constraints](#constraints)
-    -   [Structure](#structure)
 
 ## Usage
 
+### Structure
+
+You will **not** need all the properties in the example below.
+Check out _optional_/_required_ properties explained in the [JSON Properties](#json-properties) section.
+
 ```javascript
-var ganttInstance = Carbon.api.gantt(/* Add "input" JSON, shown below for example */);
-ganttInstance.loadContent(/* Add "data" JSON, shown below for example */);
+var root = {
+    bindTo: "#root",
+    axis: {
+        x: {
+            show: true,
+            lowerLimit: new Date(2018, 1, 1, 12).toISOString(),
+            upperLimit: new Date(2019, 1, 1, 12).toISOString()
+        }
+    },
+    clickPassThrough: {
+        tasks: false,
+        activities: false,
+        events: false,
+        actions: false,
+        datelines: false
+    },
+    actionLegend: [
+        {
+            key: "uid_action_1",
+            label: {
+                display: "Action A"
+            }
+        },
+        {
+            key: "uid_action_2",
+            label: {
+                display: "Action B"
+            },
+            shape: Carbon.helpers.SHAPES.DARK.TRIANGLE,
+            color: Carbon.helpers.COLORS.GREEN
+        }
+    ],
+    dateline: [
+        {
+            showDatelineIndicator: true,
+            label: {
+                display: "Release A"
+            },
+            color: Carbon.helpers.COLORS.GREEN,
+            shape: Carbon.helpers.SHAPES.DARK.TRIANGLE,
+            onClick: (onCloseCB, payload) => {
+                // onCloseCB needs to called by the consumer after popup is closed;
+                // Payload is the dateline input object
+            },
+            value: new Date(2018, 5, 1).toISOString()
+        }
+    ],
+    showActionLegend: true
+};
+var ganttInstance = Carbon.api.gantt(root);
+```
+
+`Data` can be provided one at a time within loadContent or as an array
+
+```javascript
+var caretUp = {
+    path: {
+        id: "caretUp",
+        d: "M0,36l24-24l24,24H0z"
+    },
+    options: {
+        x: -7,
+        y: -7,
+        scale: 0.3
+    }
+};
+
+var data = {
+    key: "track 1",
+    trackLabel: {
+        display: "Project A",
+        onClick: (label) => {}
+    },
+    tasks: [
+        {
+            key: "task1",
+            label: {
+                display: "Story A"
+            },
+            onClick: (onCloseCB, key, index, value) => {},
+            startDate: new Date(2018, 2, 10).toISOString(),
+            endDate: new Date(2018, 7, 10).toISOString()
+        }
+    ],
+    actions: [
+        {
+            key: "uid_action_1",
+            onClick: (onCloseCB, key, index, value) => {},
+            values: [
+                new Date(2018, 2, 1, 6, 15).toISOString(),
+                new Date(2018, 3, 1, 6, 15).toISOString(),
+                new Date(2018, 4, 1, 6, 15).toISOString()
+            ]
+        }
+    ],
+    events: [
+        {
+            key: "uid_event_1",
+            label: {
+                display: "Defect A"
+            },
+            shape: caretUp,
+            color: Carbon.helpers.COLORS.GREEN,
+            values: [new Date(2018, 4, 30).toISOString()]
+        }
+    ]
+};
+ganttInstance.loadContent(data);
 ```
 
 For loading multiple data-sets, you can load as additional content:
 
 ```javascript
-var ganttInstance = Carbon.api.gantt(/* Add "input" JSON, shown below for example */);
-ganttInstance.loadContent(/* Add "dataArray" JSON, shown below for example */);
+var dataArray = [
+    {
+        key: "track 2",
+        trackLabel: {
+            display: "Project B",
+            onClick: (label) => {}
+        },
+        tasks: [],
+        actions: [],
+        events: []
+    },
+    {
+        key: "track 3",
+        trackLabel: {
+            display: "Project C",
+            onClick: (label) => {}
+        },
+        tasks: [],
+        actions: [],
+        events: []
+    }
+];
+ganttInstance.loadContent(dataArray);
 ```
 
 ## JSON Properties
@@ -326,141 +458,3 @@ Here is a list of how layering will be followed inside `Gantt`. Layering here fo
 -   If ganttContent's `loadAtIndex` is below 0, we throw an error.
 -   If ganttContent's `loadAtIndex` is equal to trackLength or exceeds trackLength, we insert at the end.
 -   If ganttContent's `loadAtIndex` is in between 0 and trackLength, we insert in between.
-
-## Structure
-
-```javascript
-var input = {
-    bindTo: id,
-    axis: {
-        x: {
-            show: true,
-            lowerLimit: new Date(2018, 1, 1, 12).toISOString(),
-            upperLimit: new Date(2019, 1, 1, 12).toISOString()
-        }
-    },
-    clickPassThrough: {
-        tasks: false,
-        activities: false,
-        events: false,
-        actions: false,
-        datelines: false
-    },
-    actionLegend: [
-        {
-            key: "uid_action_1",
-            label: {
-                display: "Action A"
-            }
-        },
-        {
-            key: "uid_action_2",
-            label: {
-                display: "Action B"
-            },
-            shape: Carbon.helpers.SHAPES.DARK.TRIANGLE,
-            color: Carbon.helpers.COLORS.GREEN
-        }
-    ],
-    dateline: [
-        {
-            showDatelineIndicator: true,
-            label: {
-                display: "Release A"
-            },
-            color: "#d3d4d5",
-            shape: Carbon.helpers.SHAPES.DARK.TRIANGLE,
-            onClick: (onCloseCB, payload) => {
-                // onCloseCB needs to called by the consumer after popup is closed;
-                // Payload is the dateline input object
-            },
-            value: new Date(2018, 5, 1).toISOString()
-        }
-    ],
-    showActionLegend: true
-};
-var ganttInstance = Carbon.api.gantt(input);
-```
-
-Data can be provided one at a time within loadContent or as an array
-
-```javascript
-var caretUp = {
-    path: {
-        id: "caretUp",
-        d: "M0,36l24-24l24,24H0z"
-    },
-    options: {
-        x: -7,
-        y: -7,
-        scale: 0.3
-    }
-};
-
-var data = {
-    key: "track 1",
-    trackLabel: {
-        display: "Project A",
-        onClick: (label) => {}
-    },
-    tasks: [
-        {
-            key: "task1",
-            label: {
-                display: "Story A"
-            },
-            onClick: (onCloseCB, key, index, value) => {},
-            startDate: new Date(2018, 1, 1).toISOString(),
-            endDate: new Date(2018, 1, 10).toISOString()
-        }
-    ],
-    actions: [
-        {
-            key: "uid_action_1",
-            onClick: (onCloseCB, key, index, value) => {},
-            values: [
-                new Date(2018, 2, 1, 6, 15).toISOString(),
-                new Date(2018, 3, 1, 6, 15).toISOString(),
-                new Date(2018, 4, 1, 6, 15).toISOString()
-            ]
-        }
-    ],
-    events: [
-        {
-            key: "uid_event_1",
-            label: {
-                display: "Defect A"
-            },
-            onClick: loadPopup,
-            shape: caretUp,
-            color: Carbon.helpers.COLORS.GREEN,
-            values: [new Date(2018, 4, 30).toISOString()]
-        }
-    ]
-};
-ganttInstance.loadContent(data);
-
-var dataArray = [
-    {
-        key: "track 1",
-        trackLabel: {
-            display: "Project A",
-            onClick: (label) => {}
-        },
-        tasks: [],
-        actions: [],
-        events: []
-    },
-    {
-        key: "track 2",
-        trackLabel: {
-            display: "Project B",
-            onClick: (label) => {}
-        },
-        tasks: [],
-        actions: [],
-        events: []
-    }
-];
-ganttInstance.loadContent(dataArray);
-```

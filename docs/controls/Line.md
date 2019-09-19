@@ -1,9 +1,12 @@
 # Line
 
-A native line graph using d3 based on standard design patterns.
+A native line graph using D3 based on standard design patterns.
 
 -   [Line](#line)
     -   [Usage](#usage)
+        -   [Structure](#structure)
+            -   [Multi Line](#multi-line)
+            -   [Spline Line](#spline-line)
     -   [JSON Properties](#json-properties)
         -   [Root](#root)
         -   [Data](#data)
@@ -16,25 +19,139 @@ A native line graph using d3 based on standard design patterns.
             -   [Required](#required-2)
             -   [Optional](#optional-2)
         -   [Constraints](#constraints)
-        -   [Structure](#structure)
 
 ## Usage
 
+### Structure
+
+You will **not** need all the properties in the example below.
+Check out _optional_/_required_ properties explained in the [JSON Properties](#json-properties) section.
+
 ```javascript
-var lineDefault = Carbon.api.graph(/* Add "input" JSON, shown below for example */);
-lineDefault.loadContent(
-    Carbon.api.line(/* Add "data" JSON, shown below for example */)
-);
+var root = {
+    bindTo: "#root",
+    axis: {
+        x: {
+            type: Carbon.helpers.AXIS_TYPE.TIME_SERIES,
+            label: "Some X Label",
+            lowerLimit: "2016-01-01T12:00:00Z",
+            upperLimit: "2017-01-01T12:00:00Z"
+        },
+        y: {
+            label: "Some Y Label",
+            lowerLimit: 0,
+            upperLimit: 20
+        },
+        y2: {
+            show: false,
+            label: "Some Y2 Label",
+            lowerLimit: 0,
+            upperLimit: 250
+        }
+    },
+    dateline: [
+        {
+            showDatelineIndicator: true,
+            label: {
+                display: "Release A"
+            },
+            color: Carbon.helpers.COLORS.GREEN,
+            shape: Carbon.helpers.SHAPES.DARK.TRIANGLE,
+            onClick: (onCloseCB, payload) => {
+                // onCloseCB needs to called by the consumer after popup is closed;
+                // Payload is the dateline input object
+            },
+            value: new Date(2016, 5, 1).toISOString()
+        }
+    ],
+    clickPassThrough: {
+        datelines: false
+    },
+    showLabel: true,
+    showLegend: true,
+    showShapes: true,
+    showVGrid: true,
+    showHGrid: true
+};
+
+var data = {
+    key: "uid_1",
+    label: {
+        display: "Data Label 1"
+    },
+    regions: [
+        {
+            axis: "y",
+            start: 2,
+            end: 10,
+            color: "#f4f4f4"
+        }
+    ],
+    shape: Carbon.helpers.SHAPES.DARK.CIRCLE,
+    color: Carbon.helpers.COLORS.BLUE,
+    onClick: (onCloseCB, key, index, value) => {
+        //onCloseCB needs to called by the consumer after popup is closed;
+        //This is so that graphing api can remove the selected indicator from data point
+    },
+    values: [
+        {
+            x: "2016-02-03T12:00:00Z",
+            y: 4
+        },
+        {
+            x: "2016-05-01T12:00:00Z",
+            y: 15,
+            isCritical: true
+        },
+        {
+            x: "2016-10-01T12:00:00Z",
+            y: 10
+        }
+    ]
+};
+var lineDefault = Carbon.api.graph(root);
+lineDefault.loadContent(Carbon.api.line(data));
 ```
+
+#### Multi Line
 
 For loading multiple data-sets, you can load as additional content:
 
 ```javascript
-var lineDefault = Carbon.api.graph(/* Add "input" JSON, shown below for example */);
+var lineDefault = Carbon.api.graph(/* Input JSON */);
 lineDefault.loadContent(Carbon.api.line(/* Data array A */));
 lineDefault.loadContent(Carbon.api.line(/* Data array B */));
 lineDefault.loadContent(Carbon.api.line(/* Data array C */));
 lineDefault.loadContent(Carbon.api.line(/* Data array D */));
+```
+
+#### Spline Line
+
+For a Spline Line Graph, load the following content:
+
+```javascript
+var splineData = {
+    key: "uid_2",
+    label: {
+        display: "Data Label 2"
+    },
+    type: Carbon.helpers.LINE_TYPE.SPLINE,
+    values: [
+        {
+            x: "2016-03-01T12:00:00Z",
+            y: 14
+        },
+        {
+            x: "2016-04-10T12:00:00Z",
+            y: 1
+        },
+        {
+            x: "2016-11-01T12:00:00Z",
+            y: 18
+        }
+    ]
+};
+lineDefault.loadContent(Carbon.api.line(splineData));
 ```
 
 ## JSON Properties
@@ -100,84 +217,3 @@ Each data-set can have 1 or more regions. `start` and `end` is necessary for ren
 ### Constraints
 
 -   If data-set `label` display is not provided then the legend item will not be shown as well
-
-## Structure
-
-```javascript
-var root = {
-    bindTo: id,
-    axis: {
-        x: {
-            type: Carbon.helpers.AXIS_TYPE.TIME_SERIES,
-            label: "Some X Label",
-            lowerLimit: "2016-01-01T12:00:00Z",
-            upperLimit: "2017-01-01T12:00:00Z"
-        },
-        y: {
-            label: "Some Y Label",
-            lowerLimit: 0,
-            upperLimit: 20
-        },
-        y2: {
-            show: false,
-            label: "Some Y2 Label",
-            lowerLimit: 0,
-            upperLimit: 250
-        }
-    },
-    dateline: [
-        {
-            showDatelineIndicator: true,
-            label: {
-                display: "Release A"
-            },
-            color: "#d3d4d5",
-            shape: Carbon.helpers.SHAPES.DARK.TRIANGLE,
-            onClick: (onCloseCB, payload) => {
-                // onCloseCB needs to called by the consumer after popup is closed;
-                // Payload is the dateline input object
-            },
-            value: new Date(2016, 5, 1).toISOString()
-        }
-    ],
-    clickPassThrough: {
-        datelines: false
-    },
-    showLabel: true,
-    showLegend: true,
-    showShapes: true,
-    showVGrid: true,
-    showHGrid: true
-};
-var data = {
-    key: "uid_1",
-    label: {
-        display: "Data Label 1"
-    },
-    regions: [
-        {
-            axis: "y",
-            start: 2,
-            end: 10,
-            color: "#f4f4f4"
-        }
-    ],
-    shape: Carbon.helpers.SHAPES.DARK.SQUARE,
-    color: Carbon.helpers.COLORS.BLUE,
-    onClick: (onCloseCB, key, index, value) => {
-        //onCloseCB needs to called by the consumer after popup is closed;
-        //This is so that graphing api can remove the selected indicator from data point
-    },
-    values: [
-        {
-            x: "2016-02-03T12:00:00Z",
-            y: "1"
-        },
-        {
-            x: "2016-05-01T12:00:00Z",
-            y: "15",
-            isCritical: true
-        }
-    ]
-};
-```

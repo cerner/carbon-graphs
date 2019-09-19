@@ -1,10 +1,11 @@
 # Timeline
 
-A native timeline graph using d3 based on standard design patterns. Timeline graph is a graph with no Y Axis.
+A native timeline graph using D3 based on standard design patterns. Timeline graph is a graph with no Y Axis.
 This is primarily used to denote an action at a given point of time. It also accepts/supplies a content property which can be used to display non-numeric values which typically cannot be represented using traditional graphs like Line or Paired Result.
 
 -   [Timeline](#timeline)
     -   [Usage](#usage)
+        -   [Structure](#structure)
     -   [JSON Properties](#json-properties)
         -   [Root](#root)
             -   [Required](#required)
@@ -18,19 +19,56 @@ This is primarily used to denote an action at a given point of time. It also acc
         -   [Values](#values)
             -   [Required](#required-3)
             -   [Optional](#optional-3)
-        -   [Structure](#structure)
 
 ## Usage
 
+### Structure
+
+You will **not** need all the properties in the example below.
+Check out _optional_/_required_ properties explained in the [JSON Properties](#json-properties) section.
+
 ```javascript
-var timelineDefault = Carbon.api.timeline(/* Add "input" JSON, shown below for example */);
-timelineDefault.loadContent(/* Add "data" JSON, shown below for example */);
+var root = {
+    bindTo: "#root",
+    axis: {
+        x: {
+            label: "Datetime",
+            lowerLimit: new Date(2016, 0, 1, 1, 0).toISOString(),
+            upperLimit: new Date(2016, 0, 1, 15, 59).toISOString()
+        }
+    },
+    showLabel: true,
+    showLegend: true
+};
+var data = {
+    key: "uid_1",
+    label: {
+        display: "Timeline A"
+    },
+    shape: Carbon.helpers.SHAPES.DARK.RHOMBUS,
+    color: Carbon.helpers.COLORS.BLUE,
+    onClick: (onCloseCB, key, index, value) => {
+        // onCloseCB needs to called by the consumer after popup is closed to deselect data point.
+    },
+    values: [
+        {
+            x: new Date(2016, 0, 1, 10, 5).toISOString(),
+            content: () => {},
+            isCritical: true
+        },
+        {
+            x: new Date(2016, 0, 1, 2, 15).toISOString()
+        }
+    ]
+};
+var timelineDefault = Carbon.api.timeline(root);
+timelineDefault.loadContent(data);
 ```
 
 For loading multiple data-sets, you can load as additional content:
 
 ```javascript
-var timelineDefault = Carbon.api.timeline(/* Add "input" JSON, shown below for example */);
+var timelineDefault = Carbon.api.timeline(/* Input JSON */);
 timelineDefault.loadContent(/* Data array A */);
 timelineDefault.loadContent(/* Data array B */);
 timelineDefault.loadContent(/* Data array C */);
@@ -112,42 +150,3 @@ Timeline is marked only on `X Axis`, there is no other axis supplied. Axis is se
 | Property Name | Expected | Default | Description                                           |
 | ------------- | -------- | ------- | ----------------------------------------------------- |
 | isCritical    | boolean  | false   | Shows an indicator surrounding the point when enabled |
-
-## Structure
-
-```javascript
-var input = {
-    bindTo: id,
-    axis: {
-        x: {
-            label: "Datetime",
-            lowerLimit: new Date(2016, 0, 1, 1, 0).toISOString(),
-            upperLimit: new Date(2016, 0, 1, 15, 59).toISOString()
-        }
-    },
-    showLabel: true,
-    showLegend: true
-};
-var data = {
-    key: "uid_1",
-    label: {
-        display: "Timeline A"
-    },
-    shape: Carbon.helpers.SHAPES.DARK.RHOMBUS,
-    color: Carbon.helpers.COLORS.BLUE,
-    onClick: (onCloseCB, key, index, value) => {
-        // onCloseCB needs to called by the consumer after popup is closed to deselect data point.
-    },
-    values: [
-        {
-            x: new Date(2016, 0, 1, 1, 5).toISOString(),
-            content: someContentFunction(),
-            isCritical: true
-        },
-        {
-            x: new Date(2016, 0, 1, 2, 15).toISOString(),
-            content: "Some text content"
-        }
-    ]
-};
-```

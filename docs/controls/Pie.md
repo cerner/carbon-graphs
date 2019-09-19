@@ -1,19 +1,82 @@
 # Pie
 
-A native pie chart using d3 based on standard design patterns. A Pie chart is a circular statistical graphic, which is divided into slices to illustrate numerical proportion.
+A native pie chart using D3 based on standard design patterns. A Pie chart is a circular statistical graphic, which is divided into slices to illustrate numerical proportion.
+
+-   [Pie](#pie)
+    -   [Usage](#usage)
+    -   [Structure](#structure)
+    -   [JSON Properties](#json-properties)
+        -   [Root](#root)
+            -   [Required](#required)
+            -   [Optional](#optional)
+        -   [Data](#data)
+            -   [Required](#required-1)
+            -   [Optional](#optional-1)
+        -   [Dimension](#dimension)
+            -   [Optional](#optional-2)
 
 ## Usage
 
+## Structure
+
+You will **not** need all the properties in the example below.
+Check out _optional_/_required_ properties explained in the [JSON Properties](#json-properties) section.
+
 ```javascript
-var pieDefault = Carbon.api.pie(/* Add "input" JSON, shown below for example */);
-pieDefault.loadContent(/* Add "data" JSON, shown below for example */);
+var root = {
+    bindTo: "#root",
+    showLegend: true
+};
+var pieDefault = Carbon.api.pie(root);
+```
+
+`Data` can be provided one at a time within loadContent or as an array
+
+```javascript
+var data = {
+    key: "uid_1",
+    label: {
+        display: "Blue"
+    },
+    color: Carbon.helpers.COLORS.BLUE,
+    onClick: (onCloseCB, key, index, value) => {
+        // onCloseCB needs to called by the consumer after popup is closed to deselect data point.
+    },
+    value: 50
+};
+pieDefault.loadContent(data);
 ```
 
 For loading multiple data-sets, you can load as additional content:
 
 ```javascript
-var pieDefault = Carbon.api.pie(/* Add "input" JSON, shown below for example */);
-pieDefault.loadContent(/* Add "dataArray" JSON, shown below for example */);
+var dataArray = [
+    {
+        key: "uid_2",
+        label: {
+            display: "ORANGE"
+        },
+        color: Carbon.helpers.COLORS.ORANGE,
+        value: 60
+    },
+    {
+        key: "uid_3",
+        label: {
+            display: "Green"
+        },
+        color: Carbon.helpers.COLORS.GREEN,
+        value: 10
+    },
+    {
+        key: "uid_4",
+        label: {
+            display: "Light Purple"
+        },
+        color: Carbon.helpers.COLORS.LIGHT_PURPLE,
+        value: 30
+    }
+];
+pieDefault.loadContent(dataArray);
 ```
 
 ## JSON Properties
@@ -52,62 +115,10 @@ pieDefault.loadContent(/* Add "dataArray" JSON, shown below for example */);
 | color         | string   | COLORS.BLUE | Color for slice. It is recommended to use values from `COLORS` sequentially except `BLACK` |
 | onClick       | Function | undefined   | Any action that can be performed when clicking on the data point                           |
 
-## Dimension
+### Dimension
 
-### Optional
+#### Optional
 
 | Property Name | Expected | Default | Description                |
 | ------------- | -------- | ------- | -------------------------- |
 | height        | number   | 250     | Sets the size of pie chart |
-
-## Structure
-
-```javascript
-var input = {
-    bindTo: id,
-    showLegend: true
-};
-```
-
-Data can be provided one at a time within loadContent or as an array
-
-```javascript
-var dataObject = {
-    key: "uid_1",
-    label: {
-        display: "Blue"
-    },
-    color: Carbon.helpers.COLORS.BLUE,
-    onClick: (onCloseCB, key, index, value) => {
-        // onCloseCB needs to called by the consumer after popup is closed to deselect data point.
-    },
-    value: 50
-};
-
-var dataArray = [
-    {
-        key: "uid_1",
-        label: {
-            display: "Blue"
-        },
-        color: Carbon.helpers.COLORS.BLUE,
-        value: 60
-    },
-    {
-        key: "uid_2",
-        label: {
-            display: "Green"
-        },
-        color: Carbon.helpers.COLORS.GREEN,
-        value: 10
-    },
-    {
-        key: "uid_3",
-        label: {
-            display: "Light Purple"
-        },
-        color: Carbon.helpers.COLORS.LIGHT_PURPLE,
-        value: 30
-    }
-];
-```

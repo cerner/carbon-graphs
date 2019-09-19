@@ -1,9 +1,12 @@
 # Bar
 
-A native bar graph using d3 based on standard design patterns.
+A native bar graph using D3 based on standard design patterns.
 
 -   [Bar](#bar)
     -   [Usage](#usage)
+        -   [Structure](#structure)
+            -   [Simple Bar](#simple-bar)
+            -   [Negative Bar](#negative-bar)
     -   [JSON Properties](#json-properties)
         -   [Root](#root)
         -   [Data](#data)
@@ -23,23 +26,163 @@ A native bar graph using d3 based on standard design patterns.
             -   [Optional](#optional-4)
             -   [Axis Info Row Value](#axis-info-row-value)
         -   [Constraints](#constraints)
-    -   [Structure](#structure)
-        -   [Simple Bar](#simple-bar)
-        -   [Negative Bar](#negative-bar)
 
 ## Usage
 
+### Structure
+
+You will **not** need all the properties in the example below.
+Check out _optional_/_required_ properties explained in the [JSON Properties](#json-properties) section.
+
+#### Simple Bar
+
 ```javascript
-var barDefault = Carbon.api.graph(/* Add "input" JSON, shown below for example */);
-barDefault.loadContent(
-    Carbon.api.bar(/* Add "data" JSON, shown below for example */)
-);
+var root = {
+    bindTo: "#root",
+    axis: {
+        x: {
+            label: "Some X Label",
+            lowerLimit: 0,
+            upperLimit: 5,
+            ticks: {
+                values: [1, 2, 3, 4],
+                format: ".0f"
+            }
+        },
+        y: {
+            label: "Some Y Label",
+            lowerLimit: 0,
+            upperLimit: 20
+        },
+        y2: {
+            show: false,
+            label: "Some Y2 Label",
+            lowerLimit: -20,
+            upperLimit: 0
+        }
+    },
+    showLabel: true,
+    showLegend: true,
+    showShapes: true,
+    showVGrid: true,
+    showHGrid: true
+};
+var data = {
+    key: "uid_bar_1",
+    label: {
+        display: "Data Label 1"
+    },
+    regions: [
+        {
+            axis: "y",
+            start: 10,
+            end: 10,
+            x: 2
+        }
+    ],
+    color: Carbon.helpers.COLORS.BLUE,
+    onClick: (onCloseCB, key, valuesArray) => {
+        //onCloseCB needs to called by the consumer after popup is closed;
+        //This is so that graphing api can remove the selected indicator from data point
+    },
+    axisInfoRow: [
+        {
+            axis: "x",
+            x: 1,
+            value: {
+                onClick: () => {},
+                characterCount: 4,
+                color: Carbon.helpers.COLORS.ORANGE,
+                shape: {
+                    path: {
+                        d: "M24,0l24,24L24,48L0,24L24,0z",
+                        fill: Carbon.helpers.COLORS.ORANGE
+                    },
+                    options: {
+                        x: -6,
+                        y: -6,
+                        scale: 0.25
+                    }
+                },
+                label: {
+                    display: "1234567",
+                    secondaryDisplay: "ICU"
+                }
+            }
+        },
+        {
+            axis: "x",
+            x: 2,
+            value: {
+                onClick: () => {},
+                color: Carbon.helpers.COLORS.BLACK,
+                shape: {},
+                label: {
+                    display: "65"
+                }
+            }
+        }
+    ],
+    values: [
+        {
+            x: 1,
+            y: 8
+        },
+        {
+            x: 2,
+            y: 15,
+            style: {
+                isHashed: true
+            }
+        },
+        {
+            x: 3,
+            y: 8
+        },
+        {
+            x: 4,
+            y: 10
+        }
+    ]
+};
+var barDefault = Carbon.api.graph(root);
+barDefault.loadContent(Carbon.api.bar(data));
+```
+
+#### Negative Bar
+
+```javascript
+var negativeData = {
+    key: "uid_bar_3",
+    label: {
+        display: "Data Label 3"
+    },
+
+    yAxis: "y2",
+    color: Carbon.helpers.COLORS.BLUE,
+    onClick: (onCloseCB, key, valuesArray) => {
+        //onCloseCB needs to called by the consumer after popup is closed;
+        //This is so that graphing api can remove the selected indicator from data point
+    },
+    values: [
+        {
+            x: 1,
+            y: -10
+        },
+        {
+            x: 2,
+            y: -5
+        }
+    ]
+};
+
+barDefault.loadContent(Carbon.api.bar(negativeData));
 ```
 
 For loading multiple data-sets, you can load as additional content:
 
 ```javascript
-var barDefault = Carbon.api.graph(/* Add "input" JSON, shown below for example */);
+var barDefault = Carbon.api.graph(/* Input JSON */);
 barDefault.loadContent(Carbon.api.bar(/* Data array A */));
 barDefault.loadContent(Carbon.api.bar(/* Data array B */));
 barDefault.loadContent(Carbon.api.bar(/* Data array C */));
@@ -176,151 +319,3 @@ Note:
 ### Constraints
 
 -   If data-set `label` display is not provided then the legend item will not be shown as well
-
-## Structure
-
-### Simple Bar
-
-```javascript
-var root = {
-    bindTo: id,
-    axis: {
-        x: {
-            label: "Some X Label",
-            lowerLimit: "0",
-            upperLimit: "8",
-            ticks: {
-                values: [1, 2, 3, 4, 5, 6, 7],
-                format: ".0f"
-            }
-        },
-        y: {
-            label: "Some Y Label",
-            lowerLimit: 0,
-            upperLimit: 20
-        },
-        y2: {
-            show: false,
-            label: "Some Y2 Label",
-            lowerLimit: -20,
-            upperLimit: 0
-        }
-    },
-    showLabel: true,
-    showLegend: true,
-    showShapes: true,
-    showVGrid: true,
-    showHGrid: true
-};
-var data = {
-    key: "uid_bar_1",
-    label: {
-        display: "Data Label 1"
-    },
-    regions: [
-        {
-            axis: "y",
-            start: 2,
-            end: 10,
-            x: 1
-        },
-        {
-            axis: "y",
-            start: 10,
-            end: 10,
-            x: 2
-        }
-    ],
-    color: Carbon.helpers.COLORS.BLUE,
-    onClick: (onCloseCB, key, valuesArray) => {
-        //onCloseCB needs to called by the consumer after popup is closed;
-        //This is so that graphing api can remove the selected indicator from data point
-    },
-    axisInfoRow: [
-        {
-            axis: "x",
-            x: 1,
-            value: {
-                onClick: () => {},
-                characterCount: 4,
-                color: Carbon.helpers.COLORS.ORANGE,
-                shape: {
-                    path: {
-                        d: "M24,0l24,24L24,48L0,24L24,0z",
-                        fill: Carbon.helpers.COLORS.ORANGE
-                    },
-                    options: {
-                        x: -6,
-                        y: -6,
-                        scale: 0.25
-                    }
-                },
-                label: {
-                    display: "1234567",
-                    secondaryDisplay: "ICU"
-                }
-            }
-        },
-        {
-            axis: "x",
-            x: 2,
-            value: {
-                onClick: () => {},
-                color: Carbon.helpers.COLORS.BLACK,
-                shape: {},
-                label: {
-                    display: "65"
-                }
-            }
-        }
-    ],
-    values: [
-        {
-            x: "1",
-            y: "8"
-        },
-        {
-            x: "2",
-            y: "15",
-            style: {
-                isHashed: true
-            }
-        }
-    ]
-};
-```
-
-### Negative Bar
-
-```javascript
-var data = {
-    key: "uid_bar_3",
-    label: {
-        display: "Data Label 3"
-    },
-    group: "uid_bar_1",
-    regions: [
-        {
-            axis: "y2",
-            start: -12,
-            end: -12,
-            x: 1
-        }
-    ],
-    color: Carbon.helpers.COLORS.BLUE,
-    onClick: (onCloseCB, key, valuesArray) => {
-        //onCloseCB needs to called by the consumer after popup is closed;
-        //This is so that graphing api can remove the selected indicator from data point
-    },
-    values: [
-        {
-            x: "1",
-            y: "-10"
-        },
-        {
-            x: "2",
-            y: "-5"
-        }
-    ]
-};
-```

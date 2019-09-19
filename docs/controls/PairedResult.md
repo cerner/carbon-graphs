@@ -6,6 +6,7 @@ the `pair` - High, low, mid are vertical data points connected by a vertical lin
 
 -   [Paired Result](#paired-result)
     -   [Usage](#usage)
+        -   [Structure](#structure)
     -   [JSON Properties](#json-properties)
         -   [Root](#root)
         -   [Data](#data)
@@ -19,15 +20,77 @@ the `pair` - High, low, mid are vertical data points connected by a vertical lin
             -   [Optional](#optional-2)
             -   [Optional type properties](#optional-type-properties)
         -   [Constraints](#constraints)
-        -   [Structure](#structure)
 
 ## Usage
 
+### Structure
+
+You will **not** need all the properties in the example below.
+Check out _optional_/_required_ properties explained in the [JSON Properties](#json-properties) section.
+
 ```javascript
-var pairedGraph = Carbon.api.graph(/* Add "input" JSON, shown below for example */);
-pairedGraph.loadContent(
-    Carbon.api.pairedResult(/* Add "data" JSON, shown below for example */)
-);
+var root = {
+    bindTo: "#root",
+    axis: {
+        x: {
+            label: "Some X Label",
+            lowerLimit: 0,
+            upperLimit: 1000
+        },
+        y: {
+            label: "Some Y Label",
+            lowerLimit: 0,
+            upperLimit: 200
+        }
+    },
+    showLabel: true,
+    showLegend: true,
+    showVGrid: true,
+    showHGrid: true
+};
+var data = {
+    key: "uid_1",
+    regions: {
+        high: [
+            {
+                axis: "y",
+                start: 120,
+                end: 170,
+                color: "#c8cacb"
+            }
+        ],
+        low: [
+            {
+                axis: "y",
+                start: 20,
+                end: 100
+            }
+        ]
+    },
+    onClick: (onCloseCB, key, index, value) => {
+        // onCloseCB needs to called by the consumer after popup is closed;
+        // This is so that graphing api can remove the selected indicator from data point
+    },
+    values: [
+        {
+            high: {
+                x: 200,
+                y: 150,
+                isCritical: true
+            },
+            low: {
+                x: 200,
+                y: 10
+            },
+            mid: {
+                x: 200,
+                y: 40
+            }
+        }
+    ]
+};
+var pairedGraph = Carbon.api.graph(root);
+pairedGraph.loadContent(Carbon.api.pairedResult(data));
 ```
 
 ## JSON Properties
@@ -106,68 +169,3 @@ Draws a Horizontal area along the X-Axis
 ### Constraints
 
 -   If data-set `label` display is not provided for `high`, `low` and `mid`, the legend item will not be shown as well
-
-## Structure
-
-```javascript
-var root = {
-    bindTo: id,
-    axis: {
-        x: {
-            label: "Some X Label",
-            lowerLimit: 0,
-            upperLimit: 1000
-        },
-        y: {
-            label: "Some Y Label",
-            lowerLimit: 0,
-            upperLimit: 200
-        }
-    },
-    showLabel: true,
-    showLegend: true,
-    showVGrid: true,
-    showHGrid: true
-};
-var data = {
-    key: "uid_1",
-    regions: {
-        high: [
-            {
-                axis: "y",
-                start: 120,
-                end: 170,
-                color: "#c8cacb"
-            }
-        ],
-        low: [
-            {
-                axis: "y",
-                start: 20,
-                end: 100
-            }
-        ]
-    },
-    onClick: (onCloseCB, key, index, value) => {
-        // onCloseCB needs to called by the consumer after popup is closed;
-        // This is so that graphing api can remove the selected indicator from data point
-    },
-    values: [
-        {
-            high: {
-                x: 20,
-                y: 150,
-                isCritical: true
-            },
-            low: {
-                x: 20,
-                y: 10
-            },
-            mid: {
-                x: 20,
-                y: 40
-            }
-        }
-    ]
-};
-```

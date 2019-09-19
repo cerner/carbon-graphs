@@ -62,7 +62,7 @@ GraphAPI is a set of graphs that share a common set of base visualization struct
 
 ```javascript
 var input = {
-    bindTo: id,
+    bindTo: "#root",
     axis: {
         x: {
             type: Carbon.helpers.AXIS_TYPE.TIME_SERIES,
