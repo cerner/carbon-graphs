@@ -5,6 +5,8 @@ A native line graph using D3 based on standard design patterns.
 -   [Line](#line)
     -   [Usage](#usage)
         -   [Structure](#structure)
+            -   [Multi Line](#multi-line)
+            -   [Spline Line](#spline-line)
     -   [JSON Properties](#json-properties)
         -   [Root](#root)
         -   [Data](#data)
@@ -111,6 +113,8 @@ var lineDefault = Carbon.api.graph(root);
 lineDefault.loadContent(Carbon.api.line(data));
 ```
 
+#### Multi Line
+
 For loading multiple data-sets, you can load as additional content:
 
 ```javascript
@@ -119,6 +123,35 @@ lineDefault.loadContent(Carbon.api.line(/* Data array A */));
 lineDefault.loadContent(Carbon.api.line(/* Data array B */));
 lineDefault.loadContent(Carbon.api.line(/* Data array C */));
 lineDefault.loadContent(Carbon.api.line(/* Data array D */));
+```
+
+#### Spline Line
+
+For a Spline Line Graph, load the following content:
+
+```javascript
+var splineData = {
+    key: "uid_2",
+    label: {
+        display: "Data Label 2"
+    },
+    type: Carbon.helpers.LINE_TYPE.SPLINE,
+    values: [
+        {
+            x: "2016-03-01T12:00:00Z",
+            y: 14
+        },
+        {
+            x: "2016-04-10T12:00:00Z",
+            y: 1
+        },
+        {
+            x: "2016-11-01T12:00:00Z",
+            y: 18
+        }
+    ]
+};
+lineDefault.loadContent(Carbon.api.line(splineData));
 ```
 
 ## JSON Properties

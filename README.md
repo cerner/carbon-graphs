@@ -26,9 +26,9 @@ Carbon is a graphing library built using D3 visualization library. It provides a
   - [Graph types](#graph-types)
   - [Graph Settings/Toggles](#graph-settingstoggles)
   - [Other highlights](#other-highlights)
-- [Potential features](#potential-features)
 - [Resources](#resources)
 - [Browser support](#browser-support)
+- [Potential features](#potential-features)
 - [LICENSE](#license)
 
 ## Install
@@ -59,14 +59,14 @@ Please follow this [getting started](./docs/getting-started/GettingStarted.md) g
 
 ### Graph types
 
--   Line
--   Multi-line
--   Paired Result
--   Spline line
--   Timeline
--   Pie
--   Bar
--   Gantt
+-   [Line](./docs/controls/Line.md#usage)
+-   [Multi Line](./docs/controls/Line.md#multi-line)
+-   [Spline Line](./docs/controls/Line.md#spline-line)
+-   [Paired Result](./docs/controls/PairedResult.md#usage)
+-   [Bar](./docs/controls/Bar.md#usage)
+-   [Timeline](./docs/controls/Timeline.md#usage)
+-   [Pie](./docs/controls/Pie.md#usage)
+-   [Gantt](./docs/controls/Gantt.md#usage)
 
 ### Graph Settings/Toggles
 
@@ -86,20 +86,6 @@ Please follow this [getting started](./docs/getting-started/GettingStarted.md) g
 -   Locale support for axes ticks
 -   Y and Y2 Axes label along with respective shapes
 
-## Potential features
-
--   [ ] Upgrade to latest D3 version
--   [ ] Separate graph types to plugin based
--   [ ] a11y
--   [ ] Support additional themes
--   [ ] Scatter-plot graph
--   [ ] Area graphs
--   [ ] Area spline graphs
--   [ ] DST
--   [ ] Tick counts
--   [ ] Show/hide ticks
--   [ ] Pan
-
 ## Resources
 
 -   [Demo](https://engineering.cerner.com/carbon-graphs/)
@@ -116,6 +102,20 @@ Please follow this [getting started](./docs/getting-started/GettingStarted.md) g
 -   iOS >= 7
 -   Opera >= 12
 -   Safari >= 7.1
+
+## Potential features
+
+-   [ ] Upgrade to latest D3 version
+-   [ ] Separate graph types to plugin based
+-   [ ] a11y
+-   [ ] Support additional themes
+-   [ ] Scatter-plot graph
+-   [ ] Area graphs
+-   [ ] Area spline graphs
+-   [ ] DST
+-   [ ] Tick counts
+-   [ ] Show/hide ticks
+-   [ ] Pan
 
 ## LICENSE
 

@@ -92,4 +92,4 @@ graph.loadContent(Carbon.api.line(dataset));
 
 That’s it!
 
-![Alt](./assets/carbon-getting-started.png "Getting Started")
+![Alt](../assets/carbon-getting-started.png "Getting Started")
