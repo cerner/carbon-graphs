@@ -72,8 +72,9 @@ describe("Graph", () => {
             expect(graph.scale).not.toBeNull();
             expect(graph.legendSVG).not.toBeNull();
             expect(graph.svg).not.toBeNull();
+            expect(graph.contentKeys).toEqual([]);
             expect(graph.content).toEqual([]);
-            expect(graph.contentTargets).toEqual([]);
+            expect(graph.contentConfig).toEqual([]);
             expect(graph.resizeHandler).toEqual(jasmine.any(Function));
         });
     });
@@ -269,9 +270,9 @@ describe("Graph", () => {
             graph = new Graph(getAxes(axisDefault));
             graph.loadContent(primaryContent);
             expect(graph.content).toEqual([primaryContent]);
-            expect(graph.contentTargets).toEqual([primaryContent.config]);
+            expect(graph.contentConfig).toEqual([primaryContent.config]);
             expect(graph.content.length).toBe(1);
-            expect(graph.contentTargets.length).toBe(1);
+            expect(graph.contentConfig.length).toBe(1);
         });
         it("Changes to new object has no impact on base object", () => {
             const data = getData(valuesDefault);
@@ -2750,6 +2751,9 @@ describe("Graph", () => {
             secondaryContent = new Line(getData(valuesDefault));
         });
         it("Throws error when unloading a content which is not loaded", () => {
+            const secondaryContentData = getData(valuesDefault);
+            secondaryContentData.key = "uid_2";
+            secondaryContent = new Line(secondaryContentData);
             graph = new Graph(getAxes(axisDefault));
             graph.loadContent(primaryContent);
             expect(() => {
@@ -2760,10 +2764,11 @@ describe("Graph", () => {
             graph = new Graph(getAxes(axisDefault));
             graph.loadContent(primaryContent);
             graph.unloadContent(primaryContent);
+            expect(graph.contentKeys).toEqual([]);
             expect(graph.content).toEqual([]);
-            expect(graph.contentTargets).toEqual([]);
+            expect(graph.contentConfig).toEqual([]);
             expect(graph.content.length).toBe(0);
-            expect(graph.contentTargets.length).toBe(0);
+            expect(graph.contentConfig.length).toBe(0);
         });
         describe("When custom padding is used", () => {
             beforeEach(() => {
@@ -2865,8 +2870,9 @@ describe("Graph", () => {
             expect(graph.scale).toEqual({});
             expect(graph.svg).toBeNull();
             expect(graph.resizeHandler).toBeNull();
+            expect(graph.contentKeys).toEqual([]);
             expect(graph.content).toEqual([]);
-            expect(graph.contentTargets).toEqual([]);
+            expect(graph.contentConfig).toEqual([]);
         });
     });
     describe("When x axis orientation is set to top", () => {
