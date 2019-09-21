@@ -336,7 +336,6 @@ class Graph extends Construct {
      * @returns {Graph} - Graph instance
      */
     unloadContent(input) {
-        console.log(input.key || input.config.key);
         const index = this.contentKeys.indexOf(input.key || input.config.key);
         if (index < 0) {
             throw new Error(errors.THROW_MSG_INVALID_OBJECT_PROVIDED);

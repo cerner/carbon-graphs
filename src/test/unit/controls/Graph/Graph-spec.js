@@ -2746,14 +2746,15 @@ describe("Graph", () => {
     describe("When unload is called", () => {
         let primaryContent;
         let secondaryContent;
+        const primaryInput = getData(valuesDefault);
+        const secondaryInput = getData(valuesDefault);
         beforeEach(() => {
-            primaryContent = new Line(getData(valuesDefault));
-            secondaryContent = new Line(getData(valuesDefault));
+            primaryContent = new Line(primaryInput);
+            secondaryContent = new Line(secondaryInput);
         });
         it("Throws error when unloading a content which is not loaded", () => {
-            const secondaryContentData = getData(valuesDefault);
-            secondaryContentData.key = "uid_2";
-            secondaryContent = new Line(secondaryContentData);
+            secondaryInput.key = "uid_2";
+            secondaryContent = new Line(secondaryInput);
             graph = new Graph(getAxes(axisDefault));
             graph.loadContent(primaryContent);
             expect(() => {
@@ -2764,6 +2765,19 @@ describe("Graph", () => {
             graph = new Graph(getAxes(axisDefault));
             graph.loadContent(primaryContent);
             graph.unloadContent(primaryContent);
+            expect(graph.contentKeys).toEqual([]);
+            expect(graph.content).toEqual([]);
+            expect(graph.contentConfig).toEqual([]);
+            expect(graph.content.length).toBe(0);
+            expect(graph.contentConfig.length).toBe(0);
+        });
+        it("Removes the content successfully when key and label are provided", () => {
+            graph = new Graph(getAxes(axisDefault));
+            graph.loadContent(primaryContent);
+            graph.unloadContent({
+                key: primaryInput.key,
+                label: primaryInput.label
+            });
             expect(graph.contentKeys).toEqual([]);
             expect(graph.content).toEqual([]);
             expect(graph.contentConfig).toEqual([]);

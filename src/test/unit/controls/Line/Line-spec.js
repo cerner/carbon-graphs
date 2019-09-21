@@ -948,7 +948,7 @@ describe("Line", () => {
                     `.${styles.legendItem}`
                 );
                 expect(legendItem.getAttribute("aria-disabled")).toBe("true");
-                expect(legendItem.getAttribute("aria-selected")).toBe("true");
+                expect(legendItem.getAttribute("aria-current")).toBe("true");
             });
             it("does not load if legend is opted to be hidden", () => {
                 graphDefault.destroy();
@@ -1027,7 +1027,7 @@ describe("Line", () => {
                     styles.legendItemBtn
                 );
                 expect(legendItem).not.toBeNull();
-                expect(legendItem.getAttribute("aria-selected")).toBe("true");
+                expect(legendItem.getAttribute("aria-current")).toBe("true");
                 expect(legendItem.getAttribute("aria-disabled")).toBe("false");
                 expect(legendItem.children[1].className).toBe(
                     styles.legendItemText
@@ -1087,7 +1087,7 @@ describe("Line", () => {
                     styles.legendItem
                 );
                 triggerEvent(legendItem, "click", () => {
-                    expect(legendItem.getAttribute("aria-selected")).toBe(
+                    expect(legendItem.getAttribute("aria-current")).toBe(
                         "false"
                     );
                     done();

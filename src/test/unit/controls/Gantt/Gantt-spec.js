@@ -1247,7 +1247,7 @@ describe("Gantt", () => {
                     `${styles.legendItem}`
                 );
                 expect(
-                    legendElement.children[0].getAttribute("aria-selected")
+                    legendElement.children[0].getAttribute("aria-current")
                 ).toBeTruthy();
                 expect(
                     legendElement.children[0].getAttribute("aria-disabled")
