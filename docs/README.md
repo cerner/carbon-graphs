@@ -4,7 +4,6 @@ For documentation on code: [**JSDocs**](https://engineering.cerner.com/carbon-gr
 
 -   [Consumer documentation](#consumer-documentation)
     -   [Guides](#guides)
-    -   [Chart types](#chart-types)
     -   [Colors](#colors)
     -   [Shapes](#shapes)
         -   [Dark](#dark)
@@ -28,18 +27,6 @@ For documentation on code: [**JSDocs**](https://engineering.cerner.com/carbon-gr
 -   [Dateline](helpers/Dateline.md)
 -   [Axes](helpers/Axes.md)
 -   [Shape](core/Shape.md)
-
-## Chart types
-
-Consumers can generate one of the following graphs:
-
--   [Graph](core/Graph.md)
-    -   [Line](controls/Line.md)
-    -   [Paired Result](controls/PairedResult.md)
-    -   [Bar](controls/Bar.md)
--   [Gantt](controls/Gantt.md)
--   [Timeline](controls/Timeline.md)
--   [Pie](controls/Pie.md)
 
 ## Colors
 
