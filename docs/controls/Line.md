@@ -158,7 +158,7 @@ lineDefault.loadContent(Carbon.api.line(splineData));
 
 ### Root
 
-Refer [GraphAPI](../core/GraphAPI.md) `Root` for more details.
+Refer [Graph](../core/Graph.md) `Root` for more details.
 
 ### Data
 

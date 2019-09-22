@@ -24,7 +24,7 @@ For documentation on code: [**JSDocs**](https://engineering.cerner.com/carbon-gr
 
 ## Guides
 
--   [Carbon Interface](core/Interface.md)
+-   [Carbon Lifecycle](core/Lifecycle.md)
 -   [Dateline](helpers/Dateline.md)
 -   [Axes](helpers/Axes.md)
 -   [Shape](core/Shape.md)
@@ -33,7 +33,7 @@ For documentation on code: [**JSDocs**](https://engineering.cerner.com/carbon-gr
 
 Consumers can generate one of the following graphs:
 
--   [GraphAPI](core/GraphAPI.md)
+-   [Graph](core/Graph.md)
     -   [Line](controls/Line.md)
     -   [Paired Result](controls/PairedResult.md)
     -   [Bar](controls/Bar.md)

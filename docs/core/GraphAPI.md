@@ -1,6 +1,6 @@
-# GraphAPI
+# Graph
 
-GraphAPI is a set of graphs that share a common set of base visualization structure. These include:
+Graph is a set of graphs that share a common set of base visualization structure. These include:
 
 -   X Axis
 -   Y Axis
@@ -10,7 +10,7 @@ GraphAPI is a set of graphs that share a common set of base visualization struct
 -   Y Axis labels
 -   Legend
 
--   [GraphAPI](#graphapi)
+-   [Graph](#Graph)
     -   [Root](#root)
         -   [Required](#required)
         -   [Optional](#optional)
