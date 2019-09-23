@@ -143,6 +143,21 @@ export const AXES_ORIENTATION = {
     }
 };
 
+export const TICKS_ORIENTATION = {
+    X: {
+        INCLINED: "inclined",
+        DEFAULT: "default"
+    },
+    Y: {
+        INCLINED: "inclined",
+        DEFAULT: "default"
+    },
+    Y2: {
+        INCLINED: "inclined",
+        DEFAULT: "default"
+    }
+};
+
 /**
  * @enum {object}
  */

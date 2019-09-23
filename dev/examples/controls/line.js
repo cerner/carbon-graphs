@@ -34,7 +34,7 @@ export const renderLineY2Axis = (id) => {
     const axisData = utils.deepClone(getDemoData(`#${id}`, "LINE_TIMESERIES"));
     axisData.axis.y2.show = true;
     axisData.padding = {
-        top: 10,
+        top: 20,
         bottom: 10,
         left: 40,
         right: 40

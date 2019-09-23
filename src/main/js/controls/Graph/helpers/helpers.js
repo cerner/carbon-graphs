@@ -24,7 +24,10 @@ import {
     translateAxes,
     translateAxisReferenceLine
 } from "../../../helpers/axis";
-import constants, { SHAPES } from "../../../helpers/constants";
+import constants, {
+    AXES_ORIENTATION,
+    SHAPES
+} from "../../../helpers/constants";
 import { createVGrid, translateVGrid } from "../../../helpers/datetimeBuckets";
 import {
     buildY2AxisLabelShapeContainer,
@@ -156,14 +159,29 @@ const translateVerticalGrid = (axis, config) => {
  */
 const translateGrid = (axis, scale, config, canvasSVG) => {
     getAxesScale(axis, scale, config);
-    canvasSVG
-        .select(`.${styles.grid}`)
-        .attr(
-            "transform",
-            `translate(${getXAxisXPosition(config)},${calculateVerticalPadding(
-                config
-            )})`
-        );
+    if (
+        config.axis.x.orientation === AXES_ORIENTATION.X.TOP &&
+        config.axis.x.ticks.orientation === "inclined"
+    ) {
+        canvasSVG
+            .select(`.${styles.grid}`)
+            .attr(
+                "transform",
+                `translate(${getXAxisXPosition(
+                    config
+                )},${calculateVerticalPadding(config) + config.padding.top})`
+            );
+    } else {
+        canvasSVG
+            .select(`.${styles.grid}`)
+            .attr(
+                "transform",
+                `translate(${getXAxisXPosition(
+                    config
+                )},${calculateVerticalPadding(config)})`
+            );
+    }
+
     if (config.showHGrid) {
         canvasSVG
             .select(`.${styles.gridH}`)
@@ -202,17 +220,35 @@ const translateVGridHandler = (canvasSVG, axis, style, config) => {
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {object} d3 svg path
  */
-const translateContentContainer = (config, canvasSVG) =>
-    canvasSVG
-        .select(`.${styles.contentContainer}`)
-        .transition()
-        .call(constants.d3Transition)
-        .attr("width", getXAxisWidth(config))
-        .attr("height", config.height)
-        .attr(
-            constants.Y_AXIS,
-            config.axis.x.orientation && calculateVerticalPadding(config)
-        );
+const translateContentContainer = (config, canvasSVG) => {
+    if (
+        config.axis.x.orientation === AXES_ORIENTATION.X.TOP &&
+        config.axis.x.ticks.orientation === "inclined"
+    ) {
+        canvasSVG
+            .select(`.${styles.contentContainer}`)
+            .transition()
+            .call(constants.d3Transition)
+            .attr("width", getXAxisWidth(config))
+            .attr("height", config.height)
+            .attr(
+                constants.Y_AXIS,
+                config.axis.x.orientation &&
+                    calculateVerticalPadding(config) + config.padding.top
+            );
+    } else {
+        canvasSVG
+            .select(`.${styles.contentContainer}`)
+            .transition()
+            .call(constants.d3Transition)
+            .attr("width", getXAxisWidth(config))
+            .attr("height", config.height)
+            .attr(
+                constants.Y_AXIS,
+                config.axis.x.orientation && calculateVerticalPadding(config)
+            );
+    }
+};
 /**
  * Updates the x, y, y2 axes label positions on resize
  *
@@ -338,15 +374,31 @@ const createDefs = (config, canvasSVG) =>
  */
 const createGrid = (axis, scale, config, canvasSVG) => {
     getAxesScale(axis, scale, config);
-    const gridSVG = canvasSVG
-        .append("g")
-        .classed(styles.grid, true)
-        .attr(
-            "transform",
-            `translate(${getXAxisXPosition(config)},${calculateVerticalPadding(
-                config
-            )})`
-        );
+    let gridSVG;
+    if (
+        config.axis.x.orientation === AXES_ORIENTATION.X.TOP &&
+        config.axis.x.ticks.orientation === "inclined"
+    ) {
+        gridSVG = canvasSVG
+            .append("g")
+            .classed(styles.grid, true)
+            .attr(
+                "transform",
+                `translate(${getXAxisXPosition(
+                    config
+                )},${calculateVerticalPadding(config) + config.padding.top})`
+            );
+    } else {
+        gridSVG = canvasSVG
+            .append("g")
+            .classed(styles.grid, true)
+            .attr(
+                "transform",
+                `translate(${getXAxisXPosition(
+                    config
+                )},${calculateVerticalPadding(config)})`
+            );
+    }
     if (config.showHGrid) {
         gridSVG
             .append("g")

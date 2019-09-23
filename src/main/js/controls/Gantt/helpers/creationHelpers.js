@@ -428,7 +428,7 @@ const createContentContainer = (config, canvasSVG) =>
         .append("rect")
         .classed(styles.contentContainer, true)
         .attr(constants.X_AXIS, getXAxisXPosition(config))
-        .attr(constants.Y_AXIS, getXAxisYPosition(config))
+        .attr(constants.Y_AXIS, getXAxisYPosition(config) + config.padding.top)
         .attr("width", getXAxisWidth(config))
         .attr("height", getYAxisHeight(config));
 
