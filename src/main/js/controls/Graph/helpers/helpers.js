@@ -225,7 +225,7 @@ const translateContentContainer = (config, canvasSVG) => {
         config.axis.x.orientation === AXES_ORIENTATION.X.TOP &&
         config.axis.x.ticks.orientation === "inclined"
     ) {
-        canvasSVG
+        return canvasSVG
             .select(`.${styles.contentContainer}`)
             .transition()
             .call(constants.d3Transition)
@@ -236,18 +236,18 @@ const translateContentContainer = (config, canvasSVG) => {
                 config.axis.x.orientation &&
                     calculateVerticalPadding(config) + config.padding.top
             );
-    } else {
-        canvasSVG
-            .select(`.${styles.contentContainer}`)
-            .transition()
-            .call(constants.d3Transition)
-            .attr("width", getXAxisWidth(config))
-            .attr("height", config.height)
-            .attr(
-                constants.Y_AXIS,
-                config.axis.x.orientation && calculateVerticalPadding(config)
-            );
     }
+
+    return canvasSVG
+        .select(`.${styles.contentContainer}`)
+        .transition()
+        .call(constants.d3Transition)
+        .attr("width", getXAxisWidth(config))
+        .attr("height", config.height)
+        .attr(
+            constants.Y_AXIS,
+            config.axis.x.orientation && calculateVerticalPadding(config)
+        );
 };
 /**
  * Updates the x, y, y2 axes label positions on resize

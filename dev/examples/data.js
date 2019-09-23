@@ -168,8 +168,7 @@ const DATA = [
                     upperLimit: 30,
                     ticks: {
                         orientation: "inclined"
-                    },
-                    orientation: "top"
+                    }
                 },
                 y2: {
                     show: false,
