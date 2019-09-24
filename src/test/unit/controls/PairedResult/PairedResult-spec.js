@@ -105,7 +105,7 @@ describe("PairedResult", () => {
                 `.${styles.legendItem}`
             );
             expect(legendItem.getAttribute("aria-disabled")).toBe("true");
-            expect(legendItem.getAttribute("aria-selected")).toBe("true");
+            expect(legendItem.getAttribute("aria-current")).toBe("true");
         });
         it("does not throw error when datetime values have milliseconds", () => {
             expect(() => {
@@ -1368,7 +1368,7 @@ describe("PairedResult", () => {
                     styles.legendItem
                 );
                 expect(legendItem).not.toBeNull();
-                expect(legendItem.getAttribute("aria-selected")).toBe("true");
+                expect(legendItem.getAttribute("aria-current")).toBe("true");
                 expect(legendItem.children[1].className).toBe(
                     styles.legendItemText
                 );
@@ -1418,7 +1418,7 @@ describe("PairedResult", () => {
                     styles.legendItem
                 );
                 triggerEvent(legendItem, "click", () => {
-                    expect(legendItem.getAttribute("aria-selected")).toBe(
+                    expect(legendItem.getAttribute("aria-current")).toBe(
                         "false"
                     );
                     expect(legendItem.getAttribute("aria-disabled")).toBe(

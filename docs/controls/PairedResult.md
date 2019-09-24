@@ -97,7 +97,7 @@ pairedGraph.loadContent(Carbon.api.pairedResult(data));
 
 ### Root
 
-Refer [GraphAPI](../core/GraphAPI.md) `Root` for more details.
+Refer [Graph](../core/Graph.md) `Root` for more details.
 
 ### Data
 

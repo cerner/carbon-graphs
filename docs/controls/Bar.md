@@ -193,7 +193,7 @@ barDefault.loadContent(Carbon.api.bar(/* Data array D */));
 
 ### Root
 
-Refer [GraphAPI](../core/GraphAPI.md) `Root` for more details.
+Refer [Graph](../core/Graph.md) `Root` for more details.
 
 ### Data
 

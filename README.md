@@ -41,7 +41,8 @@ npm i @cerner/carbon-graphs --save-dev
 
 ## Getting Started
 
-Please follow this [getting started](./docs/getting-started/GettingStarted.md) guide.
+-   [Getting Started](./docs/getting-started/GettingStarted.md)
+-   [API Reference](docs/README.md)
 
 ## Dependencies
 
@@ -90,7 +91,6 @@ Please follow this [getting started](./docs/getting-started/GettingStarted.md) g
 
 -   [Demo](https://engineering.cerner.com/carbon-graphs/)
 -   [Contributing to Carbon](docs/contributing/README.md)
--   [API Reference](docs/README.md)
 -   [Release Notes](https://github.com/cerner/carbon-graphs/releases)
 
 ## Browser support

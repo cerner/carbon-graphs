@@ -96,7 +96,7 @@ describe("Bar", () => {
                 `.${styles.legendItem}`
             );
             expect(legendItem.getAttribute("aria-disabled")).toBe("true");
-            expect(legendItem.getAttribute("aria-selected")).toBe("true");
+            expect(legendItem.getAttribute("aria-current")).toBe("true");
         });
         it("throws error when no ticks are provided for x-axis", () => {
             const axisData = utils.deepClone(getAxes(axisDefault));
@@ -1099,7 +1099,7 @@ describe("Bar", () => {
                 const iconSVG = legendItemBtn.children[0];
                 const iconGroup = legendItemBtn.children[0].firstChild;
                 expect(legendItem).not.toBeNull();
-                expect(legendItem.getAttribute("aria-selected")).toBe("true");
+                expect(legendItem.getAttribute("aria-current")).toBe("true");
                 expect(legendItem.getAttribute("aria-disabled")).toBe("false");
                 expect(legendItem.children[1].className).toBe(
                     styles.legendItemText
@@ -1143,7 +1143,7 @@ describe("Bar", () => {
                     styles.legendItem
                 );
                 triggerEvent(legendItem, "click", () => {
-                    expect(legendItem.getAttribute("aria-selected")).toBe(
+                    expect(legendItem.getAttribute("aria-current")).toBe(
                         "false"
                     );
                     done();

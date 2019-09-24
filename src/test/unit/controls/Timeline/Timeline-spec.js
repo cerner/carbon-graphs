@@ -765,7 +765,7 @@ describe("Timeline", () => {
                     `${styles.legendItem}`
                 );
                 expect(
-                    legendElement.children[0].getAttribute("aria-selected")
+                    legendElement.children[0].getAttribute("aria-current")
                 ).toBeTruthy();
                 expect(legendElement.children[0].getAttribute("role")).toBe(
                     "listitem"
@@ -1247,7 +1247,7 @@ describe("Timeline", () => {
                 const legendItem = fetchElementByClass(styles.legendItem);
                 const legendItemBtn = fetchElementByClass(styles.legendItemBtn);
                 expect(legendItem).not.toBeNull();
-                expect(legendItem.getAttribute("aria-selected")).toBe("true");
+                expect(legendItem.getAttribute("aria-current")).toBe("true");
                 expect(legendItem.getAttribute("aria-disabled")).toBe("false");
                 expect(legendItem.children[1].className).toBe(
                     styles.legendItemText
@@ -1299,7 +1299,7 @@ describe("Timeline", () => {
                 timeline.loadContent(input);
                 const legendItem = fetchElementByClass(styles.legendItem);
                 triggerEvent(legendItem, "click", () => {
-                    expect(legendItem.getAttribute("aria-selected")).toBe(
+                    expect(legendItem.getAttribute("aria-current")).toBe(
                         "false"
                     );
                     done();
