@@ -166,10 +166,7 @@ describe("Gantt -> Track", () => {
                     expect(labelPath.getAttribute("aria-disabled")).toBe(
                         "false"
                     );
-                    expect(onClickPrimaryFunctionSpy.calledOnce).toBeTruthy();
-                    expect(onClickPrimaryFunctionSpy.getCall(0).args[0]).toBe(
-                        smallLabel
-                    );
+                    expect(onClickPrimaryFunctionSpy.calledOnce).toBeFalsy();
                     done();
                 }
             );
