@@ -291,7 +291,8 @@ export const renderGanttPercentage = (id) => {
     ganttDefault.loadContent({
         key: "track 1",
         trackLabel: {
-            display: "Percentage"
+            display: "Percentage",
+            onClick: loadTrackLabelPopup
         },
         tasks: [
             {
@@ -358,7 +359,8 @@ export const renderGanttStyle = (id) => {
     ganttDefault.loadContent({
         key: "track 0",
         trackLabel: {
-            display: "Default"
+            display: "Default",
+            onClick: loadTrackLabelPopup
         },
         tasks: [
             {
@@ -375,7 +377,8 @@ export const renderGanttStyle = (id) => {
     ganttDefault.loadContent({
         key: "track 1",
         trackLabel: {
-            display: "Hollow only"
+            display: "Hollow only",
+            onClick: loadTrackLabelPopup
         },
         tasks: [
             {
@@ -417,7 +420,8 @@ export const renderGanttStyle = (id) => {
     ganttDefault.loadContent({
         key: "track 3",
         trackLabel: {
-            display: "Percentage"
+            display: "Percentage",
+            onClick: loadTrackLabelPopup
         },
         tasks: [
             {
@@ -435,7 +439,8 @@ export const renderGanttStyle = (id) => {
     ganttDefault.loadContent({
         key: "track 4",
         trackLabel: {
-            display: "Task Hashed"
+            display: "Task Hashed",
+            onClick: loadTrackLabelPopup
         },
         tasks: [
             {
@@ -455,7 +460,8 @@ export const renderGanttStyle = (id) => {
     ganttDefault.loadContent({
         key: "track 5",
         trackLabel: {
-            display: "Activity"
+            display: "Activity",
+            onClick: loadTrackLabelPopup
         },
         activities: [
             {
@@ -536,7 +542,8 @@ export const renderGanttDateTimeBuckets = (id) => {
     ganttDefault.loadContent({
         key: "track 1",
         trackLabel: {
-            display: "Project A"
+            display: "Project A",
+            onClick: loadTrackLabelPopup
         },
         tasks: [
             {
@@ -717,7 +724,8 @@ const loadTracks = (
             key: `track ${each}`,
             onClick: isTrackSelectable ? loadTrackPopup : undefined,
             trackLabel: {
-                display: `Project ${String.fromCharCode(65 + each)}`
+                display: `Project ${String.fromCharCode(65 + each)}`,
+                onClick: loadTrackLabelPopup
             },
             tasks: tasks[each] ? tasks[each] : {},
             activities: activities[each] ? activities[each] : {},

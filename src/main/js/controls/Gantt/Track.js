@@ -6,6 +6,7 @@
  */
 import d3 from "d3";
 import { GraphContent } from "../../core";
+import constants from "../../helpers/constants";
 import errors from "../../helpers/errors";
 import styles from "../../helpers/styles";
 import utils from "../../helpers/utils";
@@ -98,9 +99,14 @@ const addTrackLabelEventHandler = (canvasSVG, labelObj) =>
                     !utils.isFunction(labelObj.onClick)
                 );
             }
-            d3.select(this).on("click", () => {
-                labelObj.onClick(labelObj.display, d3.select(this));
-            });
+            if (
+                labelObj.display.length >
+                constants.DEFAULT_LABEL_CHARACTER_LIMIT
+            ) {
+                d3.select(this).on("click", () => {
+                    labelObj.onClick(labelObj.display, d3.select(this));
+                });
+            }
         });
 
 /**
