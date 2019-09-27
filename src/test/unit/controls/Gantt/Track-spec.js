@@ -163,9 +163,7 @@ describe("Gantt -> Track", () => {
                     const labelPath = fetchElementByClass(
                         `${styles.axisYTrackLabel} .tick text`
                     );
-                    expect(labelPath.getAttribute("aria-disabled")).toBe(
-                        "false"
-                    );
+                    expect(labelPath.getAttribute("aria-disabled")).toBeFalsy();
                     expect(onClickPrimaryFunctionSpy.calledOnce).toBeFalsy();
                     done();
                 }
