@@ -136,6 +136,10 @@ export const AXES_ORIENTATION = {
     X: {
         TOP: "top",
         BOTTOM: "bottom"
+    },
+    Y: {
+        LEFT: "left",
+        RIGHT: "right"
     }
 };
 

@@ -159,8 +159,8 @@ const DATA = [
                     upperLimit: new Date(2016, 0, 1, 23, 59).toISOString(),
                     ticks: {
                         orientation: "inclined"
-                    }
-                    // orientation: "top"
+                    },
+                    orientation: "top"
                 },
                 y: {
                     label: "Line Set A",
@@ -1324,7 +1324,6 @@ const DATA = [
         BAR_DEFAULT: (id) => ({
             bindTo: id,
             bindLegendTo: null,
-            type: "inclined",
             axis: {
                 x: {
                     show: true,
