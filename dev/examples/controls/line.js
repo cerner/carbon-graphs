@@ -36,8 +36,8 @@ export const renderLineY2Axis = (id) => {
     axisData.padding = {
         top: 20,
         bottom: 10,
-        left: 40,
-        right: 40
+        left: 30,
+        right: 50
     };
     const lineTime = Carbon.api.graph(axisData);
     lineTime.loadContent(

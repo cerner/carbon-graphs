@@ -26,6 +26,7 @@ import {
 } from "../../../helpers/axis";
 import constants, {
     AXES_ORIENTATION,
+    TICKS_ORIENTATION,
     SHAPES
 } from "../../../helpers/constants";
 import { createVGrid, translateVGrid } from "../../../helpers/datetimeBuckets";
@@ -161,7 +162,7 @@ const translateGrid = (axis, scale, config, canvasSVG) => {
     getAxesScale(axis, scale, config);
     if (
         config.axis.x.orientation === AXES_ORIENTATION.X.TOP &&
-        config.axis.x.ticks.orientation === "inclined"
+        config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED
     ) {
         canvasSVG
             .select(`.${styles.grid}`)
@@ -223,7 +224,7 @@ const translateVGridHandler = (canvasSVG, axis, style, config) => {
 const translateContentContainer = (config, canvasSVG) => {
     if (
         config.axis.x.orientation === AXES_ORIENTATION.X.TOP &&
-        config.axis.x.ticks.orientation === "inclined"
+        config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED
     ) {
         return canvasSVG
             .select(`.${styles.contentContainer}`)
@@ -274,33 +275,71 @@ const translateLabel = (config, canvasSVG) => {
     }
 
     if (config.axis.y.label) {
-        canvasSVG
-            .select(`.${styles.axisLabelY}`)
-            .transition()
-            .call(constants.d3Transition)
-            .attr(
-                "transform",
-                `translate(${getYAxisLabelXPosition(
-                    config
-                )}, ${getYAxisLabelYPosition(
-                    config
-                )}) rotate(${getRotationForAxis(constants.Y_AXIS)})`
-            );
+        if (
+            config.axis.x.orientation === AXES_ORIENTATION.X.TOP &&
+            config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED
+        ) {
+            canvasSVG
+                .select(`.${styles.axisLabelY}`)
+                .transition()
+                .call(constants.d3Transition)
+                .attr(
+                    "transform",
+                    `translate(${getYAxisLabelXPosition(
+                        config
+                    )}, ${getYAxisLabelYPosition(config) +
+                        config.padding.top}) rotate(${getRotationForAxis(
+                        constants.Y_AXIS
+                    )})`
+                );
+        } else {
+            canvasSVG
+                .select(`.${styles.axisLabelY}`)
+                .transition()
+                .call(constants.d3Transition)
+                .attr(
+                    "transform",
+                    `translate(${getYAxisLabelXPosition(
+                        config
+                    )}, ${getYAxisLabelYPosition(
+                        config
+                    )}) rotate(${getRotationForAxis(constants.Y_AXIS)})`
+                );
+        }
     }
 
     if (hasY2Axis(config.axis)) {
-        canvasSVG
-            .select(`.${styles.axisLabelY2}`)
-            .transition()
-            .call(constants.d3Transition)
-            .attr(
-                "transform",
-                `translate(${getY2AxisLabelXPosition(
-                    config
-                )}, ${getYAxisLabelYPosition(
-                    config
-                )}) rotate(${getRotationForAxis(constants.Y2_AXIS)})`
-            );
+        if (
+            config.axis.x.orientation === AXES_ORIENTATION.X.TOP &&
+            config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED
+        ) {
+            canvasSVG
+                .select(`.${styles.axisLabelY2}`)
+                .transition()
+                .call(constants.d3Transition)
+                .attr(
+                    "transform",
+                    `translate(${getY2AxisLabelXPosition(
+                        config
+                    )}, ${getYAxisLabelYPosition(config) +
+                        config.padding.top}) rotate(${getRotationForAxis(
+                        constants.Y2_AXIS
+                    )})`
+                );
+        } else {
+            canvasSVG
+                .select(`.${styles.axisLabelY2}`)
+                .transition()
+                .call(constants.d3Transition)
+                .attr(
+                    "transform",
+                    `translate(${getY2AxisLabelXPosition(
+                        config
+                    )}, ${getYAxisLabelYPosition(
+                        config
+                    )}) rotate(${getRotationForAxis(constants.Y2_AXIS)})`
+                );
+        }
     }
 };
 /**
@@ -377,7 +416,7 @@ const createGrid = (axis, scale, config, canvasSVG) => {
     let gridSVG;
     if (
         config.axis.x.orientation === AXES_ORIENTATION.X.TOP &&
-        config.axis.x.ticks.orientation === "inclined"
+        config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED
     ) {
         gridSVG = canvasSVG
             .append("g")

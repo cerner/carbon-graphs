@@ -159,25 +159,19 @@ const DATA = [
                     upperLimit: new Date(2016, 0, 1, 23, 59).toISOString(),
                     ticks: {
                         orientation: "inclined"
-                    },
-                    orientation: "top"
+                    }
+                    // orientation: "top"
                 },
                 y: {
                     label: "Line Set A",
                     lowerLimit: 10,
-                    upperLimit: 30,
-                    ticks: {
-                        orientation: "inclined"
-                    }
+                    upperLimit: 30
                 },
                 y2: {
                     show: false,
                     label: "Line Set B",
                     lowerLimit: 0,
-                    upperLimit: 250,
-                    ticks: {
-                        orientation: "inclined"
-                    }
+                    upperLimit: 250
                 }
             },
             data: [

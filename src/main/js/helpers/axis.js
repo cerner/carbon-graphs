@@ -7,7 +7,7 @@ import constants, {
     AXES_ORIENTATION,
     TICKS_ORIENTATION,
     AXIS_TYPE
-} from "../helpers/constants";
+} from "./constants";
 import styles from "../helpers/styles";
 import utils from "../helpers/utils";
 import { DEFAULT_TICK_FORMAT } from "../locale";
@@ -581,6 +581,9 @@ const getYAxisHeight = (config) => config.height;
  * @returns {number} Height of the X Axis ticks, labels and numbers/datetimes
  */
 const getXAxisHeight = (config) => {
+    if (config.padding.hasCustomPadding) {
+        return config.padding.bottom;
+    }
     const scale = getScale(config.axis.x.type)
         .domain(config.axis.x.domain)
         .range([0, config.canvasWidth]);
@@ -655,6 +658,9 @@ const getAxisLabelHeight = (label) => {
  * @returns {number} label width
  */
 const getYAxisWidth = (id, config) => {
+    if (config.padding.hasCustomPadding) {
+        return config.padding.left;
+    }
     const scale = d3.scale
         .linear()
         .domain([
@@ -681,9 +687,16 @@ const getYAxisWidth = (id, config) => {
  * @param {object} config - config object derived from input JSON.
  * @returns {number} label width
  */
-const getY2AxisWidth = (config) =>
-    (hasY2Axis(config.axis) ? getYAxisWidth(constants.Y2_AXIS, config) : 20) +
-    config.padding.right;
+const getY2AxisWidth = (config) => {
+    if (config.padding.hasCustomPadding) {
+        return config.padding.right;
+    }
+    return (
+        (hasY2Axis(config.axis)
+            ? getYAxisWidth(constants.Y2_AXIS, config)
+            : 20) + config.padding.right
+    );
+};
 /**
  * Checks if X Axis orientation is set to top
  *
@@ -705,10 +718,9 @@ const isXAxisOrientationTop = (xAxisOrientation) =>
  */
 const calculateAxesSize = (config) => {
     config.axisSizes = {};
-    config.axisSizes.y = config.padding.hasCustomPadding
-        ? getYAxisWidth(constants.Y_AXIS, config) + config.padding.left
-        : getYAxisWidth(constants.Y_AXIS, config) + config.padding.left;
-    config.axisSizes.y2 = getY2AxisWidth(config);
+    config.axisSizes.y =
+        getYAxisWidth(constants.Y_AXIS, config) + config.padding.left;
+    config.axisSizes.y2 = getY2AxisWidth(config) + config.padding.right;
     config.axisSizes.x = getXAxisHeight(config);
 };
 /**
@@ -898,7 +910,7 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
             .selectAll("text")
             .style("text-anchor", "start")
             .attr("dx", "8")
-            .attr("dy", "13")
+            .attr("dy", "10")
             .attr("transform", "rotate(-65)");
     } else if (
         config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED
@@ -935,27 +947,6 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
 
     if (
         config.axis.x.orientation === AXES_ORIENTATION.X.TOP &&
-        config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED &&
-        config.axis.y.ticks.orientation === TICKS_ORIENTATION.Y.INCLINED
-    ) {
-        canvasSVG
-            .select(`.${styles.axisY}`)
-            .transition()
-            .call(constants.d3Transition)
-            .attr(
-                "transform",
-                `translate(${getYAxisXPosition(config)},${getYAxisYPosition(
-                    config
-                ) + config.padding.top})`
-            )
-            .call(axis.y)
-            .selectAll("text")
-            .style("text-anchor", "end")
-            .attr("dx", "2")
-            .attr("dy", "13")
-            .attr("transform", "rotate(30)");
-    } else if (
-        config.axis.x.orientation === AXES_ORIENTATION.X.TOP &&
         config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED
     ) {
         canvasSVG
@@ -969,25 +960,6 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
                 ) + config.padding.top})`
             )
             .call(axis.y);
-    } else if (
-        config.axis.y.ticks.orientation === TICKS_ORIENTATION.Y.INCLINED
-    ) {
-        canvasSVG
-            .select(`.${styles.axisY}`)
-            .transition()
-            .call(constants.d3Transition)
-            .attr(
-                "transform",
-                `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition(
-                    config
-                )})`
-            )
-            .call(axis.y)
-            .selectAll("text")
-            .style("text-anchor", "end")
-            .attr("dx", "2")
-            .attr("dy", "13")
-            .attr("transform", "rotate(30)");
     } else {
         canvasSVG
             .select(`.${styles.axisY}`)
@@ -1005,46 +977,6 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
     if (hasY2Axis(config.axis)) {
         if (
             config.axis.x.orientation === AXES_ORIENTATION.X.TOP &&
-            config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED &&
-            config.axis.y2.ticks.orientation === TICKS_ORIENTATION.Y2.INCLINED
-        ) {
-            canvasSVG
-                .select(`.${styles.axisY2}`)
-                .transition()
-                .call(constants.d3Transition)
-                .attr(
-                    "transform",
-                    `translate(${getY2AxisXPosition(
-                        config
-                    )},${getY2AxisYPosition(config) + config.padding.top})`
-                )
-                .call(axis.y2)
-                .selectAll("text")
-                .style("text-anchor", "start")
-                .attr("dx", "-3.3")
-                .attr("dy", "13")
-                .attr("transform", "rotate(-30)");
-        } else if (
-            config.axis.y2.ticks.orientation === TICKS_ORIENTATION.Y2.INCLINED
-        ) {
-            canvasSVG
-                .select(`.${styles.axisY2}`)
-                .transition()
-                .call(constants.d3Transition)
-                .attr(
-                    "transform",
-                    `translate(${getY2AxisXPosition(
-                        config
-                    )},${getY2AxisYPosition(config)})`
-                )
-                .call(axis.y2)
-                .selectAll("text")
-                .style("text-anchor", "start")
-                .attr("dx", "-3.3")
-                .attr("dy", "13")
-                .attr("transform", "rotate(-30)");
-        } else if (
-            config.axis.x.orientation === AXES_ORIENTATION.X.TOP &&
             config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED
         ) {
             canvasSVG
@@ -1055,7 +987,7 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
                     "transform",
                     `translate(${getY2AxisXPosition(
                         config
-                    )}, ${getY2AxisYPosition(config) + config.padding.top})`
+                    )},${getY2AxisYPosition(config) + config.padding.top})`
                 )
                 .call(axis.y2);
         } else {

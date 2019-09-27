@@ -21,7 +21,11 @@ import {
     getYAxisLabelShapeYPosition,
     hasY2Axis
 } from "./axis";
-import constants, { SHAPES } from "./constants";
+import constants, {
+    AXES_ORIENTATION,
+    TICKS_ORIENTATION,
+    SHAPES
+} from "./constants";
 import styles from "./styles";
 import utils from "./utils";
 
@@ -88,8 +92,28 @@ const getShapeContainerSize = (shapeContainerPath) =>
  * @param {Selection} shapeContainerPath - d3 path for label shape container
  * @returns {Selection} d3 path for label shape container
  */
-const translateYAxisLabelShapeContainer = (config, shapeContainerPath) =>
-    shapeContainerPath
+const translateYAxisLabelShapeContainer = (config, shapeContainerPath) => {
+    if (
+        config.axis.x.orientation === AXES_ORIENTATION.X.TOP &&
+        config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED
+    ) {
+        return shapeContainerPath
+            .transition()
+            .call(constants.d3Transition)
+            .attr(
+                "transform",
+                `translate(${getYAxisLabelShapeXPosition(
+                    config
+                )}, ${getYAxisLabelShapeYPosition(
+                    config,
+                    getShapeContainerSize(shapeContainerPath)
+                ) + config.padding.top}) rotate(${getRotationForAxis(
+                    constants.Y_AXIS
+                )})`
+            );
+    }
+
+    return shapeContainerPath
         .transition()
         .call(constants.d3Transition)
         .attr(
@@ -101,6 +125,7 @@ const translateYAxisLabelShapeContainer = (config, shapeContainerPath) =>
                 getShapeContainerSize(shapeContainerPath)
             )}) rotate(${getRotationForAxis(constants.Y_AXIS)})`
         );
+};
 /**
  * Translates Y2 Axis label shape container to correct position. Typically this is
  * to the middle of the axis. The values are shown in reverse direction
@@ -111,8 +136,28 @@ const translateYAxisLabelShapeContainer = (config, shapeContainerPath) =>
  * @param {Selection} shapeContainerPath - d3 path for label shape container
  * @returns {Selection} d3 path for label shape container
  */
-const translateY2AxisLabelShapeContainer = (config, shapeContainerPath) =>
-    shapeContainerPath
+const translateY2AxisLabelShapeContainer = (config, shapeContainerPath) => {
+    if (
+        config.axis.x.orientation === AXES_ORIENTATION.X.TOP &&
+        config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED
+    ) {
+        return shapeContainerPath
+            .transition()
+            .call(constants.d3Transition)
+            .attr(
+                "transform",
+                `translate(${getY2AxisLabelShapeXPosition(
+                    config
+                )}, ${getY2AxisLabelShapeYPosition(
+                    config,
+                    getShapeContainerSize(shapeContainerPath)
+                ) + config.padding.top}) rotate(${getRotationForAxis(
+                    constants.Y2_AXIS
+                )})`
+            );
+    }
+
+    return shapeContainerPath
         .transition()
         .call(constants.d3Transition)
         .attr(
@@ -124,6 +169,7 @@ const translateY2AxisLabelShapeContainer = (config, shapeContainerPath) =>
                 getShapeContainerSize(shapeContainerPath)
             )}) rotate(${getRotationForAxis(constants.Y2_AXIS)})`
         );
+};
 /**
  * Returns the d3 html element after appending axis label shape group for Y Axis
  *

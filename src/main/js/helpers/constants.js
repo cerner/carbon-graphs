@@ -136,23 +136,11 @@ export const AXES_ORIENTATION = {
     X: {
         TOP: "top",
         BOTTOM: "bottom"
-    },
-    Y: {
-        LEFT: "left",
-        RIGHT: "right"
     }
 };
 
 export const TICKS_ORIENTATION = {
     X: {
-        INCLINED: "inclined",
-        DEFAULT: "default"
-    },
-    Y: {
-        INCLINED: "inclined",
-        DEFAULT: "default"
-    },
-    Y2: {
         INCLINED: "inclined",
         DEFAULT: "default"
     }
