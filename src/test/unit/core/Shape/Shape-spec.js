@@ -8,7 +8,7 @@ import constants, {
 } from "../../../../main/js/helpers/constants";
 import errors from "../../../../main/js/helpers/errors";
 import styles from "../../../../main/js/helpers/styles";
-import { toNumber } from "../../controls/helpers/commonHelpers";
+import { toNumber } from "../../helpers/commonHelpers";
 
 describe("Shape", () => {
     it("returns path for Carbon Native shapes", () => {

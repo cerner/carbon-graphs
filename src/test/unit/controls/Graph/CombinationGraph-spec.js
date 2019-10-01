@@ -1,7 +1,7 @@
 import Graph from "../../../../main/js/controls/Graph/index";
 import Line from "../../../../main/js/controls/Line/Line";
 import PairedResult from "../../../../main/js/controls/PairedResult";
-import { loadCustomJasmineMatcher } from "../helpers/commonHelpers";
+import { loadCustomJasmineMatcher } from "../../helpers/commonHelpers";
 import { getAxes, axisDefault, fetchElementByClass } from "./helpers";
 import constants from "../../../../main/js/helpers/constants";
 import styles from "../../../../main/js/helpers/styles";
