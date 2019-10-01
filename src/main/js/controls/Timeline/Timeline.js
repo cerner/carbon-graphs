@@ -92,7 +92,8 @@ const initConfig = (control) => {
         axis: {
             x: {}
         },
-        shownTargets: {}
+        shownTargets: {},
+        pan: {}
     };
     control.axis = {};
     control.scale = {};

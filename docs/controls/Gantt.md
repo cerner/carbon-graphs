@@ -212,6 +212,7 @@ ganttInstance.loadContent(dataArray);
 | showActionLegend | boolean  | true                                           | Toggle to show graph legend                                                          |
 | padding          | object   | `{ top: 10, bottom: 5, left: 100, right: 50 }` | Refer [Padding](Padding.md)                                                          |
 | clickPassThrough | object   | null                                           | Refer [Pass Through](#Pass-Through)                                                  |
+| pan              | object   | {}                                             | Refer [Panning](./Panning.md)                                                        |
 
 ### Axis
 

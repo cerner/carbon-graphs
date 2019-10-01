@@ -127,7 +127,8 @@ const initConfig = (control) => {
             y2: {}
         },
         shownTargets: {},
-        dateline: []
+        dateline: [],
+        pan: {}
     };
     control.axis = {
         axisInfoRow: {

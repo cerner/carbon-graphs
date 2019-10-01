@@ -128,7 +128,7 @@ const createRegion = (scale, config, regionGroupSVG, regionList, uniqueKey) => {
     regionPath
         .exit()
         .transition()
-        .call(constants.d3Transition)
+        .call(constants.d3Transition(config.settingsDictionary.transition))
         .remove();
 };
 /**
@@ -144,7 +144,7 @@ const createRegion = (scale, config, regionGroupSVG, regionList, uniqueKey) => {
 const translateRegion = (scale, config, regionGroupSVG) => {
     regionGroupSVG
         .transition()
-        .call(constants.d3Transition)
+        .call(constants.d3Transition(config.settingsDictionary.transition))
         .attr(constants.X_AXIS, (d) => d.xRange | 0)
         .attr(constants.Y_AXIS, getYAxisRangePosition(scale, config))
         .attr("width", (d) => d.width | 0)

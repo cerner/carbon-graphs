@@ -33,7 +33,10 @@ import {
 } from "../../../helpers/label";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
-import { translateDateline } from "../../../helpers/dateline";
+import {
+    translateDateline,
+    getDatelineIndicatorHeight
+} from "../../../helpers/dateline";
 
 const BASE_CANVAS_WIDTH_PADDING = constants.BASE_CANVAS_WIDTH_PADDING;
 const DEFAULT_HEIGHT = constants.DEFAULT_HEIGHT;
@@ -72,12 +75,16 @@ const getAxisInfoRowLabelHeight = (config) =>
  * `clipPath` updates are necessary since the clip-path URL needs to get
  * the necessary parameters on resize so that data points are not cut off
  *
+ * @description
+ * Calling getDatelineIndicatorHeight() will trigger a page reflow and resizing the page might cause Layout Thrashing.
+ * We understand this and deem it necessary to calculate the indicator height when a new dataset/set of contents are loaded during Panning.
+ * Furthermore, this function is called only when panning is enabled and there is a dateline defs element is present.
  * @private
  * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {object} d3 svg path
+ * @returns {undefined} - returns nothing
  */
-const translateDefs = (config, canvasSVG) =>
+const translateDefs = (config, canvasSVG) => {
     canvasSVG
         .select(`clipPath#${config.clipPathId}`)
         .selectAll("rect")
@@ -87,6 +94,26 @@ const translateDefs = (config, canvasSVG) =>
             constants.Y_AXIS,
             config.axis.x.orientation && calculateVerticalPadding(config)
         );
+
+    if (
+        config.settingsDictionary.shouldCreateDatelineDefs &&
+        config.dateline.length > 0
+    ) {
+        const datelineIndicatorHeight = Math.floor(
+            getDatelineIndicatorHeight() / 2
+        );
+        canvasSVG
+            .select(`clipPath#${config.datelineClipPathId}`)
+            .selectAll("rect")
+            .attr("height", config.height + datelineIndicatorHeight)
+            .attr("width", getXAxisWidth(config))
+            .attr(
+                constants.Y_AXIS,
+                config.axis.x.orientation &&
+                    calculateVerticalPadding(config) - datelineIndicatorHeight
+            );
+    }
+};
 /**
  * Translates the horizontal grid on the canvas, grids are only applicable to standard
  * X and Y Axis.
@@ -168,7 +195,7 @@ const translateGrid = (axis, scale, config, canvasSVG) => {
         canvasSVG
             .select(`.${styles.gridH}`)
             .transition()
-            .call(constants.d3Transition)
+            .call(constants.d3Transition(config.settingsDictionary.transition))
             .call(translateHorizontalGrid(axis, config));
     }
 
@@ -191,7 +218,7 @@ const translateVGridHandler = (canvasSVG, axis, style, config) => {
     canvasSVG
         .select(`.${style}`)
         .transition()
-        .call(constants.d3Transition)
+        .call(constants.d3Transition(config.settingsDictionary.transition))
         .call(translateVerticalGrid(axis, config));
 };
 /**
@@ -206,7 +233,7 @@ const translateContentContainer = (config, canvasSVG) =>
     canvasSVG
         .select(`.${styles.contentContainer}`)
         .transition()
-        .call(constants.d3Transition)
+        .call(constants.d3Transition(config.settingsDictionary.transition))
         .attr("width", getXAxisWidth(config))
         .attr("height", config.height)
         .attr(
@@ -226,7 +253,7 @@ const translateLabel = (config, canvasSVG) => {
         canvasSVG
             .select(`.${styles.axisLabelX}`)
             .transition()
-            .call(constants.d3Transition)
+            .call(constants.d3Transition(config.settingsDictionary.transition))
             .attr(
                 "transform",
                 `translate(${getXAxisLabelXPosition(
@@ -241,7 +268,7 @@ const translateLabel = (config, canvasSVG) => {
         canvasSVG
             .select(`.${styles.axisLabelY}`)
             .transition()
-            .call(constants.d3Transition)
+            .call(constants.d3Transition(config.settingsDictionary.transition))
             .attr(
                 "transform",
                 `translate(${getYAxisLabelXPosition(
@@ -256,7 +283,7 @@ const translateLabel = (config, canvasSVG) => {
         canvasSVG
             .select(`.${styles.axisLabelY2}`)
             .transition()
-            .call(constants.d3Transition)
+            .call(constants.d3Transition(config.settingsDictionary.transition))
             .attr(
                 "transform",
                 `translate(${getY2AxisLabelXPosition(
@@ -313,11 +340,12 @@ const updateAxesDomain = (config, input = {}) => {
  * @private
  * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {object} d3 svg path
+ * @returns {undefined} - returns nothing
  */
-const createDefs = (config, canvasSVG) =>
-    canvasSVG
-        .append("defs")
+const createDefs = (config, canvasSVG) => {
+    const defsElement = canvasSVG.append("defs");
+
+    defsElement
         .append("clipPath")
         .attr("id", config.clipPathId)
         .append("rect")
@@ -325,6 +353,22 @@ const createDefs = (config, canvasSVG) =>
         .attr(constants.Y_AXIS, calculateVerticalPadding(config))
         .attr("width", getXAxisWidth(config))
         .attr("height", config.height);
+
+    if (
+        config.settingsDictionary.shouldCreateDatelineDefs &&
+        config.dateline.length > 0
+    ) {
+        defsElement
+            .append("clipPath")
+            .attr("id", config.datelineClipPathId)
+            .append("rect")
+            .attr(constants.X_AXIS, getXAxisXPosition(config))
+            .attr(constants.Y_AXIS, 0)
+            .attr("width", getXAxisWidth(config))
+            .attr("height", 0);
+    }
+};
+
 /**
  * Create the d3 grid - horizontal and vertical and append into the canvas.
  * Only performed if the flags for showHGrid and showVGrid are enabled
@@ -483,7 +527,8 @@ const scaleGraph = (scale, config) => {
     scale.x = getScale(config.axis.x.type)
         .domain(config.axis.x.domain)
         .range(getXAxisRange(config))
-        .clamp(true);
+        .clamp(config.settingsDictionary.shouldClamp);
+
     scale.y = d3.scale
         .linear()
         .domain([
@@ -738,7 +783,7 @@ const drawNoDataView = (config, svg) => {
 const translateNoDataView = (config, svg) => {
     svg.select(`.${styles.noDataOverlay}`)
         .transition()
-        .call(constants.d3Transition)
+        .call(constants.d3Transition(config.settingsDictionary.transition))
         .attr(
             "height",
             getYAxisHeight(config) / constants.NO_DATA_VIEW_PROPORTION
@@ -746,7 +791,7 @@ const translateNoDataView = (config, svg) => {
         .attr("width", getXAxisWidth(config));
     svg.select(`.${styles.noDataLabel}`)
         .transition()
-        .call(constants.d3Transition)
+        .call(constants.d3Transition(config.settingsDictionary.transition))
         .attr("x", getXAxisLabelXPosition(config))
         .attr(
             "y",

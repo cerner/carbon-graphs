@@ -43,6 +43,7 @@ Graph is a set of graphs that share a common set of base visualization structure
 | showVGrid      | boolean  | true                                          | Toggle to show vertical grid                                                         |
 | showHGrid      | boolean  | true                                          | Toggle to show horizontal grid                                                       |
 | dateline       | array    | []                                            | Refer [Dateline](../helpers/Dateline.md)                                             |
+| pan            | object   | {}                                            | Refer [Panning](../controls/Panning.md)                                              |
 | padding        | object   | `{ top: 10, bottom: 5, left: 30, right: 50 }` | Refer [Padding](../controls/Padding.md)                                              |
 | showNoDataText | boolean  | true                                          | Toggle to show no data text                                                          |
 

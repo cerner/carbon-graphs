@@ -22,7 +22,10 @@ import {
 } from "./creationHelpers";
 import { calculatePercentage } from "./durationHelpers";
 import { generatorArgs } from "./trackHelpers";
-import { translateDateline } from "../../../helpers/dateline";
+import {
+    translateDateline,
+    getDatelineIndicatorHeight
+} from "../../../helpers/dateline";
 
 const TRACK_LABEL_TEXT_CLASS = `.${styles.axisYTrackLabel} .tick text`;
 /**
@@ -118,17 +121,39 @@ const getTrackLabelTransformProperty = (scale, config) => (trackName) =>
  * `clipPath` updates are necessary since the clip-path URL needs to get
  * the necessary parameters on resize so that data points are not cut off
  *
+ * @description
+ * Calling getDatelineIndicatorHeight() will trigger a page reflow and resizing the page might cause Layout Thrashing.
+ * We understand this and deem it necessary to calculate the indicator height when a new dataset/set of contents are loaded during Panning.
+ * Furthermore, this function is called only when panning is enabled and there is a dateline defs element is present.
  * @private
  * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {object} d3 svg path
+ * @returns {undefined} - returns nothing
  */
-const translateDefs = (config, canvasSVG) =>
+const translateDefs = (config, canvasSVG) => {
     canvasSVG
         .select(`clipPath#${config.clipPathId}`)
         .selectAll("rect")
         .attr("height", getYAxisHeight(config))
         .attr("width", getXAxisWidth(config));
+    if (
+        config.settingsDictionary.shouldCreateDatelineDefs &&
+        config.dateline.length > 0
+    ) {
+        const datelineIndicatorHeight = Math.floor(
+            getDatelineIndicatorHeight() / 2
+        );
+        canvasSVG
+            .select(`clipPath#${config.datelineClipPathId}`)
+            .selectAll("rect")
+            .attr("height", config.height + datelineIndicatorHeight)
+            .attr("width", getXAxisWidth(config))
+            .attr(
+                constants.Y_AXIS,
+                getYAxisYPosition(config) - datelineIndicatorHeight
+            );
+    }
+};
 /**
  * Updates the x, y and y2 (if enabled) positions on resize
  *
@@ -151,7 +176,7 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
     canvasSVG
         .select(`.${styles.axisX}`)
         .transition()
-        .call(constants.d3Transition)
+        .call(constants.d3Transition(config.settingsDictionary.transition))
         .attr(
             "transform",
             `translate(${getXAxisXPosition(config)},${getXAxisYPosition(
@@ -162,7 +187,7 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
     canvasSVG
         .select(`.${styles.axisY}`)
         .transition()
-        .call(constants.d3Transition)
+        .call(constants.d3Transition(config.settingsDictionary.transition))
         .attr(
             "transform",
             `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition(
@@ -236,7 +261,7 @@ const translateGrid = (axis, scale, config, canvasSVG) => {
     canvasSVG
         .select(`.${styles.gridH}`)
         .transition()
-        .call(constants.d3Transition)
+        .call(constants.d3Transition(config.settingsDictionary.transition))
         .call(translateHorizontalGrid(axis, config));
     translateVGrid(canvasSVG, axis, config, translateVGridHandler);
 };
@@ -255,7 +280,7 @@ const translateVGridHandler = (canvasSVG, axis, style, config) => {
     canvasSVG
         .select(`.${style}`)
         .transition()
-        .call(constants.d3Transition)
+        .call(constants.d3Transition(config.settingsDictionary.transition))
         .call(translateVerticalGrid(axis, config));
 };
 /**
@@ -270,7 +295,7 @@ const translateContentContainer = (config, canvasSVG) =>
     canvasSVG
         .select(`.${styles.contentContainer}`)
         .transition()
-        .call(constants.d3Transition)
+        .call(constants.d3Transition(config.settingsDictionary.transition))
         .attr("width", getXAxisWidth(config))
         .attr("height", getYAxisHeight(config));
 /**
@@ -343,7 +368,7 @@ const translatePoints = (scale, config, trackPath, style) =>
         pointSVG
             .select("g")
             .transition()
-            .call(constants.d3Transition)
+            .call(constants.d3Transition(config.settingsDictionary.transition))
             .attr("transform", function() {
                 return transformPoint(
                     scale,
@@ -405,12 +430,13 @@ const translateDataPoints = (scale, config, trackPath) => {
  * @private
  * @param {object} scale - d3 scale for Graph
  * @param {Selection} path - d3 object of track
+ * @param {object} config - graph config needed for panning feature
  * @returns {undefined} - returns nothing
  */
-const translateTaskBar = (scale, path) =>
+const translateTaskBar = (scale, path, config) =>
     path
         .transition()
-        .call(constants.d3Transition)
+        .call(constants.d3Transition(config.settingsDictionary.transition))
         .attr("x", (val) => scale.x(val.startDate))
         .attr(
             "y",
@@ -441,12 +467,13 @@ const translateTaskBar = (scale, path) =>
  * @private
  * @param {object} scale - d3 scale for Graph
  * @param {Selection} path - d3 object of track
+ * @param {object} config - graph config needed for panning feature
  * @returns {undefined} - returns nothing
  */
-const translateActivityBar = (scale, path) =>
+const translateActivityBar = (scale, path, config) =>
     path
         .transition()
-        .call(constants.d3Transition)
+        .call(constants.d3Transition(config.settingsDictionary.transition))
         .attr("x", (val) => scale.x(val.startDate))
         .attr(
             "y",
@@ -470,9 +497,10 @@ const translateActivityBar = (scale, path) =>
  * @private
  * @param {object} scale - d3 scale for Graph
  * @param {Selection} path - d3 object of track
+ * @param {object} config - graph config needed for panning feature
  * @returns {undefined} - returns nothing
  */
-const translateTaskIndicator = (scale, path) => {
+const translateTaskIndicator = (scale, path, config) => {
     const padding = Math.floor(
         constants.DEFAULT_GANTT_TASK_SELECTION_PADDING / 2
     );
@@ -480,7 +508,7 @@ const translateTaskIndicator = (scale, path) => {
         constants.DEFAULT_GANTT_TASK_SELECTION_PADDING / 4
     );
     path.transition()
-        .call(constants.d3Transition)
+        .call(constants.d3Transition(config.settingsDictionary.transition))
         .attr("x", (val) => scale.x(val.startDate) - positionAdjustment)
         .attr(
             "y",
@@ -513,8 +541,8 @@ const translateTasks = (scale, config, trackPath) =>
         .each(function() {
             const path = d3.select(this);
             path.classed(styles.taskBarSelection)
-                ? translateTaskIndicator(scale, path)
-                : translateTaskBar(scale, path);
+                ? translateTaskIndicator(scale, path, config)
+                : translateTaskBar(scale, path, config);
         });
 /**
  * Translates track selector based on container width.
@@ -534,7 +562,7 @@ const translateTrackSelector = (scale, config, trackPathSVG, trackConfig) => {
         const path = d3.select(this);
         const _args = generatorArgs(config, scale, path, trackConfig);
         path.transition()
-            .call(constants.d3Transition)
+            .call(constants.d3Transition(config.settingsDictionary.transition))
             .attr("y", _args.y)
             .attr("width", _args.width)
             .attr("height", _args.height);
@@ -554,7 +582,7 @@ const translateActivities = (scale, config, trackPath) =>
         .selectAll(`g.${styles.activity}`)
         .selectAll(`rect.${styles.activityBar}`)
         .each(function() {
-            translateActivityBar(scale, d3.select(this));
+            translateActivityBar(scale, d3.select(this), config);
         });
 export {
     translateGraph,

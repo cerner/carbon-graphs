@@ -171,7 +171,7 @@ const scaleGraph = (scale, config) => {
         .scale()
         .domain(config.axis.x.domain)
         .range([0, getXAxisWidth(config)])
-        .clamp(true);
+        .clamp(config.settingsDictionary.shouldClamp);
     if (config.axis.x.rangeRounding) {
         scale.x.nice();
     }

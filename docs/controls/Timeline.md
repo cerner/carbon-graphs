@@ -97,6 +97,7 @@ timelineDefault.loadContent(/* Data array D */);
 | showLabel     | boolean  | true                                          | Toggle to show X axis label                                                          |
 | showLegend    | boolean  | true                                          | Toggle to show graph legend                                                          |
 | padding       | object   | `{ top: 10, bottom: 5, left: 30, right: 50 }` | Refer [Padding](Padding.md)                                                          |
+| pan           | object   | {}                                            | Refer [Panning](./Panning.md)                                                        |
 
 ### Axis
 

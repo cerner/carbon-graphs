@@ -165,7 +165,7 @@ const drawActivities = (
     activityPath
         .exit()
         .transition()
-        .call(constants.d3Transition)
+        .call(constants.d3Transition(config.settingsDictionary.transition))
         .remove();
 };
 

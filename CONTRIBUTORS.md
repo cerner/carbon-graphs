@@ -6,6 +6,8 @@ Cerner Corporation
 -   Swati Kode [@swatikode]
 -   Sharath M H [@SharathAlur]
 -   Pranav Agarwal [@pranav300]
+-   Prashant Kamboj [@prashant-kamboj]
+
 
 [@abhijit945]: https://github.com/abhijit945
 [@dinesh94singh]: https://github.com/Dinesh94Singh
@@ -13,3 +15,5 @@ Cerner Corporation
 [@swatikode]: https://github.com/swatikode
 [@SharathAlur]: https://github.com/SharathAlur
 [@pranav300]: https://github.com/pranav300
+[@prashant-kamboj]: https://github.com/Prashant-Kamboj
+

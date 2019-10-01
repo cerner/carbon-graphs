@@ -9,6 +9,7 @@ import {
     loadTrackLabelPopup,
     loadTrackPopup
 } from "../popup";
+import { createPanningControls } from "./panHelpers";
 
 const daysToMilliseconds = (d) => 24 * 60 * 60 * 1000 * d;
 const caretUp = {
@@ -126,6 +127,29 @@ const tasks = [
             style: {
                 isHashed: true
             }
+        }
+    ]
+];
+
+const tasks2 = [
+    [
+        {
+            key: "task1",
+            onClick: loadTaskPopup,
+            label: {
+                display: "Story Apex"
+            },
+            startDate: new Date(2016, 0, 1, 8).toISOString(),
+            endDate: new Date(2016, 0, 1, 12).toISOString()
+        },
+        {
+            key: "task2",
+            onClick: loadTaskPopup,
+            label: {
+                display: "Story Broccoli"
+            },
+            startDate: new Date(2016, 0, 1, 15).toISOString(),
+            endDate: new Date(2016, 0, 1, 23).toISOString()
         }
     ]
 ];
@@ -321,6 +345,51 @@ export const renderGanttPercentage = (id) => {
     });
     return ganttDefault;
 };
+export const renderGanttPanning = (id) => {
+    let graph;
+    const axisData = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
+    axisData.showActionLegend = false;
+    axisData.axis.x.lowerLimit = new Date(2016, 0, 1, 0).toISOString();
+    axisData.axis.x.upperLimit = new Date(2016, 0, 2, 0).toISOString();
+    axisData.dateline = [
+        {
+            showDatelineIndicator: true,
+            label: {
+                display: "Release A"
+            },
+            color: Carbon.helpers.COLORS.GREEN,
+            shape: Carbon.helpers.SHAPES.SQUARE,
+            value: new Date(2016, 0, 1, 9).toISOString()
+        }
+    ];
+    axisData.pan = {
+        enabled: true
+    };
+    const graphData = {
+        key: "track 0",
+        trackLabel: {
+            display: "Default",
+            onClick: loadTrackLabelPopup
+        },
+        tasks: tasks2[0]
+    };
+    const createGraph = (axis, values) => {
+        if (graph) {
+            graph.destroy();
+        }
+        graph = Carbon.api.gantt(axis);
+        graph.loadContent(values);
+        return graph;
+    };
+    graph = createGraph(axisData, graphData);
+    createPanningControls(id, {
+        axisData,
+        graphData,
+        creationHandler: createGraph
+    });
+    return graph;
+};
+
 export const renderGanttAction = (id) => {
     const data = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
     data.dateline = [];

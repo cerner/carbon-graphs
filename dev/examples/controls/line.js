@@ -1,6 +1,7 @@
 import Carbon from "../../../src/main/js/carbon";
 import utils from "../../../src/main/js/helpers/utils";
 import { getDemoData } from "../data";
+import { createPanningControls } from "./panHelpers";
 
 const tickValues = [
     new Date(2016, 0, 1, 1, 0).toISOString(),
@@ -443,4 +444,32 @@ export const renderLineCustomPadding = (id) => {
         Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[0])
     );
     return lineDefault;
+};
+export const renderLineWithPanning = (id) => {
+    let graph;
+    const axisData = utils.deepClone(
+        getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE")
+    );
+    axisData.pan = {
+        enabled: true
+    };
+    const graphData = utils.deepClone(
+        getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE").data[0]
+    );
+    graphData.regions = [regions[0]];
+    const createGraph = (axis, values) => {
+        if (graph) {
+            graph.destroy();
+        }
+        graph = Carbon.api.graph(axis);
+        graph.loadContent(Carbon.api.line(values));
+        return graph;
+    };
+    graph = createGraph(axisData, graphData);
+    createPanningControls(id, {
+        axisData,
+        graphData,
+        creationHandler: createGraph
+    });
+    return graph;
 };

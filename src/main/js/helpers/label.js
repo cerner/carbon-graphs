@@ -91,7 +91,7 @@ const getShapeContainerSize = (shapeContainerPath) =>
 const translateYAxisLabelShapeContainer = (config, shapeContainerPath) =>
     shapeContainerPath
         .transition()
-        .call(constants.d3Transition)
+        .call(constants.d3Transition(config.settingsDictionary.transition))
         .attr(
             "transform",
             `translate(${getYAxisLabelShapeXPosition(
@@ -114,7 +114,7 @@ const translateYAxisLabelShapeContainer = (config, shapeContainerPath) =>
 const translateY2AxisLabelShapeContainer = (config, shapeContainerPath) =>
     shapeContainerPath
         .transition()
-        .call(constants.d3Transition)
+        .call(constants.d3Transition(config.settingsDictionary.transition))
         .attr(
             "transform",
             `translate(${getY2AxisLabelShapeXPosition(
@@ -162,13 +162,14 @@ const buildY2AxisLabelShapeContainer = (config, canvasPath) => {
  * @private
  * @param {Selection} shapeContainerPath - d3 html element
  * @returns {Selection} d3 html element containing the label shape container with
+ * @param {object} config - config object derived from input JSON
  * correctly placed shapes
  */
-const translateAllLabelShapeItem = (shapeContainerPath) =>
+const translateAllLabelShapeItem = (shapeContainerPath, config) =>
     shapeContainerPath
         .selectAll("svg")
         .transition()
-        .call(constants.d3Transition)
+        .call(constants.d3Transition(config.settingsDictionary.transition))
         .each(function(data, index) {
             d3.select(this).attr(
                 "x",
@@ -188,7 +189,7 @@ const translateAllLabelShapeItem = (shapeContainerPath) =>
 const prepareLabelShapeItem = (config, dataTarget, shapeContainerPath) => {
     if (dataTarget.label && dataTarget.label.display && shapeContainerPath) {
         loadLabelShape(shapeContainerPath, dataTarget);
-        translateAllLabelShapeItem(shapeContainerPath);
+        translateAllLabelShapeItem(shapeContainerPath, config);
     }
 };
 /**
@@ -197,15 +198,16 @@ const prepareLabelShapeItem = (config, dataTarget, shapeContainerPath) => {
  * @private
  * @param {Selection} shapeContainerPath - d3 svg object for label shape container
  * @param {object} dataTarget - Data points object
+ * @param {object} config - config object derived from input JSON
  * @returns {undefined} - returns nothing
  */
-const removeLabelShapeItem = (shapeContainerPath, dataTarget) => {
+const removeLabelShapeItem = (shapeContainerPath, dataTarget, config) => {
     if (utils.notEmpty(shapeContainerPath)) {
         d3RemoveElement(
             shapeContainerPath,
             `svg[aria-describedby="${dataTarget.key}"]`
         );
-        translateAllLabelShapeItem(shapeContainerPath);
+        translateAllLabelShapeItem(shapeContainerPath, config);
     }
 };
 /**

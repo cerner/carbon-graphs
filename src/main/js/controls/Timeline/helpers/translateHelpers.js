@@ -45,7 +45,7 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
     canvasSVG
         .select(`.${styles.axisX}`)
         .transition()
-        .call(constants.d3Transition)
+        .call(constants.d3Transition(config.settingsDictionary.transition))
         .attr(
             "transform",
             `translate(${getXAxisXPosition(config)},${getXAxisYPosition(
@@ -67,7 +67,7 @@ const translateLabel = (config, canvasSVG) => {
         canvasSVG
             .select(`.${styles.axisLabelX}`)
             .transition()
-            .call(constants.d3Transition)
+            .call(constants.d3Transition(config.settingsDictionary.transition))
             .attr(
                 "transform",
                 `translate(${getXAxisLabelXPosition(
@@ -112,7 +112,9 @@ const translatePoints = (scale, config, canvasSVG, key, style) =>
             pointGroupSVG
                 .select("g")
                 .transition()
-                .call(constants.d3Transition)
+                .call(
+                    constants.d3Transition(config.settingsDictionary.transition)
+                )
                 .attr("transform", function() {
                     return transformPoint(
                         scale,

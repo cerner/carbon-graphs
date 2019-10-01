@@ -190,7 +190,7 @@ const translateRegion = (scale, config, regionGroupSVG) =>
         .attr(constants.X_AXIS, getXAxisXPosition(config))
         .attr(constants.Y_AXIS, getYAxisRangePosition(scale, config))
         .transition()
-        .call(constants.d3Transition)
+        .call(constants.d3Transition(config.settingsDictionary.transition))
         .attr("width", getXAxisWidth(config))
         .attr("height", function(d) {
             return getRegionHeight(d3.select(this), d, scale, config);

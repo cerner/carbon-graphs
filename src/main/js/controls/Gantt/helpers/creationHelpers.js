@@ -295,7 +295,7 @@ const scaleGraph = (scale, config) => {
         .scale()
         .domain(config.axis.x.domain)
         .range([0, getXAxisWidth(config)])
-        .clamp(true);
+        .clamp(config.settingsDictionary.shouldClamp);
     scale.y = d3.scale
         .ordinal()
         .domain(getYAxisDomain(config.axis.y.trackList))
@@ -310,11 +310,12 @@ const scaleGraph = (scale, config) => {
  * @private
  * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {object} d3 svg path
+ * @returns {undefined} return nothing
  */
-const createDefs = (config, canvasSVG) =>
-    canvasSVG
-        .append("defs")
+const createDefs = (config, canvasSVG) => {
+    const defsElement = canvasSVG.append("defs");
+
+    defsElement
         .append("clipPath")
         .attr("id", config.clipPathId)
         .append("rect")
@@ -322,6 +323,21 @@ const createDefs = (config, canvasSVG) =>
         .attr(constants.Y_AXIS, getYAxisYPosition(config))
         .attr("width", getXAxisWidth(config))
         .attr("height", getYAxisHeight(config));
+
+    if (
+        config.settingsDictionary.shouldCreateDatelineDefs &&
+        config.dateline.length > 0
+    ) {
+        defsElement
+            .append("clipPath")
+            .attr("id", config.datelineClipPathId)
+            .append("rect")
+            .attr(constants.X_AXIS, getXAxisXPosition(config))
+            .attr(constants.Y_AXIS, getYAxisYPosition(config))
+            .attr("width", getXAxisWidth(config))
+            .attr("height", 0);
+    }
+};
 /**
  * Create the d3 grid - horizontal and vertical and append into the canvas.
  * Only performed if the flags for showHGrid and showVGrid are enabled
@@ -535,6 +551,26 @@ const removeTrackContainer = (canvasSVG, key) =>
  */
 const isHashed = (style) => !(utils.isEmpty(style) || !style.isHashed);
 
+/**
+ * Removes the element with provided selector using d3
+ *
+ * @private
+ * @param {Selection|object} el - d3 selection element
+ * @param {string} selector - attribute to query the element, typically a class or id
+ * @param {boolean} [isBatchSelect] - enables `selectAll` rather than default `select`
+ * @returns {undefined} - returns nothing
+ */
+const d3RemoveElement = (el, selector, isBatchSelect = false) => {
+    if (!el) {
+        return;
+    }
+    if (isBatchSelect) {
+        el.selectAll(selector).remove();
+    } else {
+        el.select(selector).remove();
+    }
+};
+
 export {
     getXAxisWidth,
     getXAxisXPosition,
@@ -562,5 +598,6 @@ export {
     updateAxesDomain,
     updateTrackProps,
     prepareLoadAtIndex,
-    isHashed
+    isHashed,
+    d3RemoveElement
 };

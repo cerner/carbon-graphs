@@ -1,7 +1,11 @@
 "use strict";
 import d3 from "d3";
 import BaseConfig, { getDefaultValue, getDomain } from "../../core/BaseConfig";
-import { generateClipPathId } from "../../core/BaseConfig/helper";
+import {
+    generateClipPathId,
+    generateDatelineClipPathId,
+    isPanningModeEnabled
+} from "../../core/BaseConfig/helper";
 import constants, { AXIS_TYPE } from "../../helpers/constants";
 import errors from "../../helpers/errors";
 import utils from "../../helpers/utils";
@@ -112,6 +116,25 @@ const validateEventData = (content) => {
     }
 };
 /**
+ * Used to set the clamp and transition when panning is enabled or not.
+ *
+ * @private
+ * @param {object} config - config object used by the graph.
+ * @returns {undefined} returns nothing
+ */
+export const settingsDictionary = (config) =>
+    isPanningModeEnabled(config)
+        ? {
+              shouldClamp: false,
+              transition: constants.D3_TRANSITION_PROPERTIES_DISABLED,
+              shouldCreateDatelineDefs: true
+          }
+        : {
+              shouldClamp: true,
+              transition: constants.D3_TRANSITION_PROPERTIES_ENABLED,
+              shouldCreateDatelineDefs: false
+          };
+/**
  * Helper function to set the right padding values based on input JSON.
  *
  * @private
@@ -156,6 +179,7 @@ const getPadding = (config, inputPadding) => {
 export const processInput = (input, config) => {
     const _axis = utils.deepClone(input.axis);
     config.clipPathId = generateClipPathId();
+    config.datelineClipPathId = generateDatelineClipPathId();
     config.bindTo = input.bindTo;
     config.bindLegendTo = input.bindLegendTo;
     config.padding = getPadding(config, input.padding);
@@ -173,6 +197,7 @@ export const processInput = (input, config) => {
         utils.deepClone(input.actionLegend),
         []
     );
+    config.settingsDictionary = settingsDictionary(input);
     config.showActionLegend = getDefaultValue(input.showActionLegend, false);
     config.axis.x = Object.assign(_axis.x, {
         type: AXIS_TYPE.TIME_SERIES,

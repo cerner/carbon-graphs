@@ -83,7 +83,9 @@ const translateSlices = (config, contentSVG, layout, arc) => {
         .append("path")
         .attr("fill", (d) => d.data.color)
         .transition()
-        .call(constants.d3Transition)
+        .call(
+            constants.d3Transition(constants.D3_TRANSITION_PROPERTIES_ENABLED)
+        )
         .attrTween("d", (d) => {
             const i = d3.interpolate(d.startAngle, d.endAngle);
             return (t) => {

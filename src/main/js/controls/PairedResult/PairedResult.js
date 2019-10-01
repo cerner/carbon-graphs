@@ -179,9 +179,13 @@ class PairedResult extends GraphContent {
             removeLegendItem(graph.legendSVG, {
                 key
             });
-            removeLabelShapeItem(graph.axesLabelShapeGroup[this.config.yAxis], {
-                key
-            });
+            removeLabelShapeItem(
+                graph.axesLabelShapeGroup[this.config.yAxis],
+                {
+                    key
+                },
+                graph.config
+            );
         });
         this.dataTarget = {};
         this.config = {};
@@ -225,7 +229,7 @@ class PairedResult extends GraphContent {
             graph.config.shouldHideAllRegion = true;
         }
 
-        translatePairedResultGraph(graph.scale, graph.config, graph.svg);
+        translatePairedResultGraph(graph.scale, graph.svg, graph.config);
         return this;
     }
 

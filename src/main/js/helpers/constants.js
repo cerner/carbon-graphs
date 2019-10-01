@@ -235,7 +235,16 @@ export default {
     DEFAULT_INTERPOLATION: "linear",
     SELECTION_INDICATOR_X_POSITION: 10,
     SELECTION_INDICATOR_Y_POSITION: 12.5,
-    d3Transition: (transition) => transition.duration(250).ease("linear"),
+    D3_TRANSITION_PROPERTIES_ENABLED: {
+        duration: 250,
+        ease: "linear"
+    },
+    D3_TRANSITION_PROPERTIES_DISABLED: {
+        duration: 0,
+        ease: ""
+    },
+    d3Transition: (d) => (transition) =>
+        transition.duration(d.duration).ease(d.ease),
     TICK_ORIENTATION: {
         TOP: -1,
         BOTTOM: 1
