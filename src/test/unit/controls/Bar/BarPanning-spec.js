@@ -7,7 +7,7 @@ import {
     loadCustomJasmineMatcher,
     toNumber,
     delay
-} from "../helpers/commonHelpers";
+} from "../../helpers/commonHelpers";
 import {
     axisDefault,
     getAxes,

@@ -10,7 +10,7 @@ import {
     getInput,
     valuesTimeSeries
 } from "./helpers";
-import { toNumber } from "../../helpers/commonHelpers";
+import { toNumber, delay } from "../../helpers/commonHelpers";
 import { COLORS, SHAPES } from "../../../../main/js/helpers/constants";
 import { getSVGAnimatedTransformList } from "../../../../main/js/helpers/transformUtils";
 

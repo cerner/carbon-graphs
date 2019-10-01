@@ -5,7 +5,7 @@ import Graph from "../../../../main/js/controls/Graph/Graph";
 import errors from "../../../../main/js/helpers/errors";
 import styles from "../../../../main/js/helpers/styles";
 import utils from "../../../../main/js/helpers/utils";
-import { loadCustomJasmineMatcher } from "../helpers/commonHelpers";
+import { loadCustomJasmineMatcher } from "../../helpers/commonHelpers";
 import {
     axisDefault,
     axisInfoRowDefault,

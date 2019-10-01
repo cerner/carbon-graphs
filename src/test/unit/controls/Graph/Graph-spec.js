@@ -714,7 +714,8 @@ describe("Graph", () => {
                     y2: Object({})
                 }),
                 shownTargets: Object({}),
-                dateline: []
+                dateline: [],
+                pan: {}
             });
             expect(graph.axis).toEqual({
                 axisInfoRow: Object({
