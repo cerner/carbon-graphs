@@ -6,6 +6,8 @@
  */
 import d3 from "d3";
 import { GraphContent } from "../../core";
+import constants from "../../helpers/constants";
+import { shouldTruncateLabel } from "../../helpers/label";
 import errors from "../../helpers/errors";
 import styles from "../../helpers/styles";
 import utils from "../../helpers/utils";
@@ -92,15 +94,22 @@ const addTrackLabelEventHandler = (canvasSVG, labelObj) =>
             ) {
                 return;
             }
-            if (utils.isEmpty(d3.select(this).attr("aria-disabled"))) {
-                d3.select(this).attr(
-                    "aria-disabled",
-                    !utils.isFunction(labelObj.onClick)
-                );
+            if (
+                shouldTruncateLabel(
+                    labelObj.display,
+                    constants.DEFAULT_LABEL_CHARACTER_LIMIT
+                )
+            ) {
+                if (utils.isEmpty(d3.select(this).attr("aria-disabled"))) {
+                    d3.select(this).attr(
+                        "aria-disabled",
+                        !utils.isFunction(labelObj.onClick)
+                    );
+                }
+                d3.select(this).on("click", () => {
+                    labelObj.onClick(labelObj.display, d3.select(this));
+                });
             }
-            d3.select(this).on("click", () => {
-                labelObj.onClick(labelObj.display, d3.select(this));
-            });
         });
 
 /**
