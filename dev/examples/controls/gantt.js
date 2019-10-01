@@ -857,10 +857,10 @@ const loadTracks = (
             actions: actions[each] ? actions[each] : {}
         });
     }
-    /*gantt.unloadContent({
+    /* gantt.unloadContent({
         key: "track 3",
         trackLabel: {
             display: "Project C"
         }
-    });*/
+    }); */
 };

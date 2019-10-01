@@ -92,7 +92,7 @@ export const renderPairedResultTimeseriesDateline = (id) => {
     const pairedTimeDateline = utils.deepClone(
         getDemoData(`#${id}`, "PAIRED_TIMESERIES")
     );
-    (pairedTimeDateline.dateline = [
+    pairedTimeDateline.dateline = [
         {
             showDatelineIndicator: true,
             label: {
@@ -103,10 +103,10 @@ export const renderPairedResultTimeseriesDateline = (id) => {
             onClick: loadDatelinePopup,
             value: new Date(2017, 10, 1).toISOString()
         }
-    ]),
-        (pairedTimeDateline.clickPassThrough = {
-            dateline: false
-        });
+    ];
+    pairedTimeDateline.clickPassThrough = {
+        dateline: false
+    };
     const pairedTime = Carbon.api.graph(pairedTimeDateline);
 
     pairedTime.loadContent(

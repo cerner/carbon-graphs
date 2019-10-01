@@ -159,10 +159,9 @@ const setOnSelectionAttributes = (selectionPath, isSelected) => {
  * @param {object} axisInfoRow - d3 object of axis info row group svg
  * @param {object} config - config object derived from input JSON
  * @param {Array} textLabelList - list of text labels
- * @param {string} uniqueKey - unique id of the content loaded in graph
  * @returns {undefined} - returns nothing
  */
-const addTextLabelString = (axisInfoRow, config, textLabelList, uniqueKey) => {
+const addTextLabelString = (axisInfoRow, config, textLabelList) => {
     axisInfoRow
         .append("text")
         .classed(styles.axisInfoRowDisplay, true)

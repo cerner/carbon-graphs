@@ -96,7 +96,7 @@ describe("Stacked Bar", () => {
             expect(toNumber(barsContainer[3].getAttribute("y"))).toBe(
                 yInput2 - heightInput1
             );
-            //x range of both inputs should be equal
+            // x range of both inputs should be equal
             expect(toNumber(barsContainer[0].getAttribute("x"))).toEqual(
                 toNumber(barsContainer[3].getAttribute("x"))
             );
@@ -179,7 +179,7 @@ describe("Stacked Bar", () => {
             expect(
                 Math.round(toNumber(barsContainer[3].getAttribute("y")))
             ).toBe(Math.round(yInput2 + heightInput1));
-            //x range of both inputs should be equal
+            // x range of both inputs should be equal
             expect(toNumber(barsContainer[0].getAttribute("x"))).toEqual(
                 toNumber(barsContainer[3].getAttribute("x"))
             );
@@ -263,7 +263,7 @@ describe("Stacked Bar", () => {
             expect(toNumber(barsContainer[3].getAttribute("y"))).toBe(
                 yInput2 + heightInput2
             );
-            //x range of both inputs should be equal
+            // x range of both inputs should be equal
             expect(toNumber(barsContainer[0].getAttribute("x"))).toEqual(
                 toNumber(barsContainer[3].getAttribute("x"))
             );
@@ -348,7 +348,7 @@ describe("Stacked Bar", () => {
             );
             // y Range of first input should be equal to yRange of second input (because both have same y values)
             expect(toNumber(barsContainer[3].getAttribute("y"))).toBe(yInput2);
-            //x range of both inputs should not be equal
+            // x range of both inputs should not be equal
             expect(toNumber(barsContainer[0].getAttribute("x"))).not.toEqual(
                 toNumber(barsContainer[3].getAttribute("x"))
             );

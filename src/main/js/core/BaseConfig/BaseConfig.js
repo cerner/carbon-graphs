@@ -29,6 +29,7 @@ export default class BaseConfig {
      * @param {object} inputJSON - Input JSON
      * @returns {object} - inherited class instance
      */
+    // eslint-disable-next-line no-unused-vars
     setInput(inputJSON) {
         throw new Error(errors.THROW_MSG_CONFIG_SET_INPUT_NOT_IMPLEMENTED);
     }

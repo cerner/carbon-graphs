@@ -1,4 +1,5 @@
 {
+    "extends": "stylelint-config-recommended",
     "rules": {
         "at-rule-semicolon-newline-after": "always",
         "at-rule-semicolon-space-before": "never",

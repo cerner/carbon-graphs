@@ -472,7 +472,7 @@ const DATA = [
     },
     {
         PAIRED_DEFAULT: (id) => ({
-            bindTo: id, //"#graph-data-5"
+            bindTo: id,
             axis: {
                 x: {
                     label: "Data",

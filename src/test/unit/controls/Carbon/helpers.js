@@ -34,7 +34,7 @@ export const pieInput = {
                 display: "Apple"
             },
             color: Carbon.helpers.COLORS.BLUE,
-            onClick: (d, i) => {},
+            onClick: () => {},
             values: 100
         },
         {

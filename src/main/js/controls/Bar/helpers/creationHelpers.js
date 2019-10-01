@@ -257,11 +257,11 @@ const draw = (scale, ordinalScale, config, canvasSVG, dataTarget) => {
 const barAttributesHelper = (scale, ordinalScale) => {
     const leftShiftOffset =
         ordinalScale.x0.rangeBand() *
-        constants.DEFAULT_BAR_GRAPH_PADDING_ATTRIBUTES.LEFT_SHIFT_OFFSET_RATIO; //this value is used to center bars by shifting left
+        constants.DEFAULT_BAR_GRAPH_PADDING_ATTRIBUTES.LEFT_SHIFT_OFFSET_RATIO; // this value is used to center bars by shifting left
     const leftShiftPadding =
         ordinalScale.x1.rangeBand() *
         constants.DEFAULT_BAR_GRAPH_PADDING_ATTRIBUTES
-            .LEFT_SHIFT_OFFSET_PADDING_RATIO; //padding to be added on left side of bar
+            .LEFT_SHIFT_OFFSET_PADDING_RATIO; // padding to be added on left side of bar
     const getXRange = (x, groupOffset) =>
         scale.x(x) + leftShiftPadding + groupOffset - leftShiftOffset;
 

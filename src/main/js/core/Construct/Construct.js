@@ -22,6 +22,7 @@ export default class Construct {
      * @param {object} input - Input JSON
      * @returns {object} - inherited class instance
      */
+    // eslint-disable-next-line no-unused-vars
     generate(input) {
         throw new Error(errors.THROW_MSG_CONSTRUCT_GENERATE_NOT_IMPLEMENTED);
     }
@@ -37,6 +38,7 @@ export default class Construct {
      * @param {object} graphContent - Graph content
      * @returns {object} - inherited class instance
      */
+    // eslint-disable-next-line no-unused-vars
     loadContent(graphContent) {
         throw new Error(errors.THROW_MSG_CONSTRUCT_LOAD_NOT_IMPLEMENTED);
     }
@@ -50,6 +52,7 @@ export default class Construct {
      * @param {object} graphContent - Graph content
      * @returns {object} - inherited class instance
      */
+    // eslint-disable-next-line no-unused-vars
     unloadContent(graphContent) {
         throw new Error(errors.THROW_MSG_CONSTRUCT_UNLOAD_NOT_IMPLEMENTED);
     }

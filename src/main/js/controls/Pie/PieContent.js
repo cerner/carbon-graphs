@@ -85,7 +85,7 @@ const draw = (control, graph, pieChartContentSVG, legendPath, dataTarget) => {
     );
     /* Set the data to the group as well as the slice within, since the slice data will be changed
      * to accommodate d3 arc object data as well during translate phase to combine all the pie slices
-     * together*/
+     * together */
     contentGroupPath.data([dataTarget]);
     createSlice(graph.config, contentGroupPath);
 };
@@ -165,7 +165,7 @@ class PieContent extends GraphContent {
     /**
      * @inheritdoc
      */
-    redraw(graph) {
+    redraw() {
         /*
          * Legends are not actionable within Pie chart, no redraw
          * is necessary due to this

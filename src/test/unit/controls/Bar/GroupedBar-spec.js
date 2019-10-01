@@ -90,7 +90,7 @@ describe("Grouped Bar", () => {
             );
             // y Range of first input should be equal to yRange of second input (because both have same y values)
             expect(toNumber(barsContainer[3].getAttribute("y"))).toBe(yInput2);
-            //x range of both inputs should not be equal
+            // x range of both inputs should not be equal
             expect(toNumber(barsContainer[0].getAttribute("x"))).not.toEqual(
                 toNumber(barsContainer[3].getAttribute("x"))
             );
@@ -178,7 +178,7 @@ describe("Grouped Bar", () => {
             );
             // y Range of first input should be equal to yRange of second input (because both have same y values)
             expect(toNumber(barsContainer[3].getAttribute("y"))).toBe(yInput2);
-            //x range of both inputs should not be equal
+            // x range of both inputs should not be equal
             expect(toNumber(barsContainer[0].getAttribute("x"))).not.toEqual(
                 toNumber(barsContainer[3].getAttribute("x"))
             );

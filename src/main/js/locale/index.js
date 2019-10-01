@@ -1,3 +1,4 @@
+/* eslint-disable import/no-named-default */
 "use strict";
 import { default as de } from "./de-DE";
 import { default as au } from "./en-AU";
