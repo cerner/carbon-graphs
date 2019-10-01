@@ -12,7 +12,7 @@ import {
     toNumber,
     TRANSITION_DELAY,
     triggerEvent
-} from "../helpers/commonHelpers";
+} from "../../helpers/commonHelpers";
 import {
     axisJSON,
     fetchElementByClass,

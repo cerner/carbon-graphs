@@ -8,7 +8,10 @@ import {
     round2Decimals
 } from "../../../../main/js/helpers/transformUtils";
 import utils from "../../../../main/js/helpers/utils";
-import { loadCustomJasmineMatcher, toNumber } from "../helpers/commonHelpers";
+import {
+    loadCustomJasmineMatcher,
+    toNumber
+} from "../../helpers/commonHelpers";
 import {
     axisDefault,
     axisInfoRowDefault,

@@ -6,7 +6,7 @@ import { COLORS, SHAPES } from "../../../../main/js/helpers/constants";
 import errors from "../../../../main/js/helpers/errors";
 import styles from "../../../../main/js/helpers/styles";
 import { getSVGAnimatedTransformList } from "../../../../main/js/helpers/transformUtils";
-import { TRANSITION_DELAY, triggerEvent } from "../helpers/commonHelpers";
+import { TRANSITION_DELAY, triggerEvent } from "../../helpers/commonHelpers";
 import { axisJSON, fetchElementByClass, getAxes, getData } from "./helpers";
 
 /**

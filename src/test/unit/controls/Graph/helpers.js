@@ -121,7 +121,7 @@ export const axisTimeseriesWithDateline = {
     axis: axisTimeSeries,
     dateline: datelineJSON
 };
-export const axisDefaultwithPanning = {
+export const axisDefaultWithPanning = {
     bindTo: "#testGraph_carbon",
     axis: axisTimeSeries,
     dateline: datelineJSON,
@@ -129,7 +129,7 @@ export const axisDefaultwithPanning = {
         enabled: true
     }
 };
-export const axisDefaultwithoutPanning = {
+export const axisDefaultWithoutPanning = {
     bindTo: "#testGraph_carbon",
     axis: axisTimeSeries,
     dateline: datelineJSON,
