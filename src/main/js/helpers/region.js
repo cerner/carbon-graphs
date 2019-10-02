@@ -122,7 +122,7 @@ const createRegion = (
             .attr(constants.X_AXIS, getXAxisXPosition(config))
             .attr(constants.Y_AXIS, getYAxisRangePosition(scale, config)(item))
             .attr("width", getXAxisWidth(config))
-            .attr("height", function(d) {
+            .attr("height", function() {
                 return getRegionHeight(d3.select(this), item, scale, config);
             });
     });

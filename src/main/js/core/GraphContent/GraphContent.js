@@ -17,6 +17,7 @@ export default class GraphContent {
      * @param {object} graph - Graph instance
      * @returns {object} - inherited class instance
      */
+    // eslint-disable-next-line no-unused-vars
     load(graph) {
         throw new Error(errors.THROW_MSG_CONTENT_LOAD_NOT_IMPLEMENTED);
     }
@@ -30,6 +31,7 @@ export default class GraphContent {
      * @param {object} graph - Graph instance
      * @returns {object} - inherited class instance
      */
+    // eslint-disable-next-line no-unused-vars
     unload(graph) {
         throw new Error(errors.THROW_MSG_CONTENT_UNLOAD_NOT_IMPLEMENTED);
     }
@@ -43,6 +45,7 @@ export default class GraphContent {
      * @param {object} graph - Graph instance
      * @returns {object} - inherited class instance
      */
+    // eslint-disable-next-line no-unused-vars
     resize(graph) {
         throw new Error(errors.THROW_MSG_CONTENT_RESIZE_NOT_IMPLEMENTED);
     }
@@ -59,6 +62,7 @@ export default class GraphContent {
      * @param {object} graph - Graph instance
      * @returns {object} - inherited class instance
      */
+    // eslint-disable-next-line no-unused-vars
     redraw(graph) {
         throw new Error(errors.THROW_MSG_CONTENT_REDRAW_NOT_IMPLEMENTED);
     }

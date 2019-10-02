@@ -1,9 +1,10 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-sequences */
 import Carbon from "../../../src/main/js/carbon";
 import utils from "../../../src/main/js/helpers/utils";
 import { getDemoData } from "../data";
-import { loadDatelinePopup, loadTextLabelPopup } from "../popup";
+import { loadDatelinePopup, loadTextLabelPopup, loadBarPopup } from "../popup";
 import { createPanningControls } from "./panHelpers";
-import { loadBarPopup } from "../../examples/popup";
 
 const tickValues = [
     new Date(2018, 0, 1).toISOString(),

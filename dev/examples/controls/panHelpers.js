@@ -9,7 +9,7 @@ import {
  * Creats Panning container to hold the navigation buttons
  *
  * @param {Array} container - Contains array of the html elements
- * @returns { HTMLElement } return html emlement
+ * @returns { HTMLElement } return html element
  */
 const createPanningContainer = (container) =>
     container.insert("nav", ":first-child").classed("panning-container", true);
@@ -30,7 +30,7 @@ const createNavigationButton = (container, icon, action, className) =>
         .on("click", action)
         .attr("tabindex", 0)
         .append(() =>
-            new Carbon.tools.shape(icon).getShapeElement(
+            Carbon.tools.shape(icon).getShapeElement(
                 Carbon.tools.defaultSVGProps({
                     svgStyles: `fill: ${Carbon.helpers.COLORS.BLACK};`
                 }),

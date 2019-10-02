@@ -378,6 +378,61 @@ renderSiteApp(
             ]
         },
         {
+            pathname: "/panning",
+            children: [
+                {
+                    pathname: "/panning/line",
+                    children: [
+                        {
+                            pathname: "/panning/line/simple",
+                            content: renderLineWithPanning,
+                            title: "Simple"
+                        }
+                    ]
+                },
+                {
+                    pathname: "/panning/gantt",
+                    children: [
+                        {
+                            pathname: "/panning/gantt/simple",
+                            content: renderGanttPanning,
+                            title: "Simple"
+                        }
+                    ]
+                },
+                {
+                    pathname: "/panning/timeline",
+                    children: [
+                        {
+                            pathname: "/panning/timeline/simple",
+                            content: renderTimelinePanning,
+                            title: "Simple"
+                        }
+                    ]
+                },
+                {
+                    pathname: "/panning/bar",
+                    children: [
+                        {
+                            pathname: "/panning/bar/simple",
+                            content: renderBarWithPanning,
+                            title: "Simple"
+                        }
+                    ]
+                },
+                {
+                    pathname: "/panning/paired-result",
+                    children: [
+                        {
+                            pathname: "/panning/paired-result/simple",
+                            content: renderPairedResultWithPanning,
+                            title: "Simple"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             pathname: "/grid",
             children: [
                 {
@@ -623,61 +678,6 @@ renderSiteApp(
                             pathname: "/regions/combination/identical",
                             content: renderCombinationIdenticalDatasetRegion,
                             title: "Dataset Region Identical"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            pathname: "/panning",
-            children: [
-                {
-                    pathname: "/panning/line",
-                    children: [
-                        {
-                            pathname: "/panning/line/simple",
-                            content: renderLineWithPanning,
-                            title: "Simple"
-                        }
-                    ]
-                },
-                {
-                    pathname: "/panning/Gantt",
-                    children: [
-                        {
-                            pathname: "/panning/Gantt/simple",
-                            content: renderGanttPanning,
-                            title: "Simple"
-                        }
-                    ]
-                },
-                {
-                    pathname: "/panning/Timeline",
-                    children: [
-                        {
-                            pathname: "/panning/Timeline/simple",
-                            content: renderTimelinePanning,
-                            title: "Simple"
-                        }
-                    ]
-                },
-                {
-                    pathname: "/panning/Bar",
-                    children: [
-                        {
-                            pathname: "/panning/Bar/simple",
-                            content: renderBarWithPanning,
-                            title: "Simple"
-                        }
-                    ]
-                },
-                {
-                    pathname: "/panning/PairedResult",
-                    children: [
-                        {
-                            pathname: "/panning/PairedResult/simple",
-                            content: renderPairedResultWithPanning,
-                            title: "Simple"
                         }
                     ]
                 }
