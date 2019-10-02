@@ -165,7 +165,7 @@ describe("Graph - Generate", () => {
             };
             graph = new Graph(graphConfig);
             const contentContainer = d3.select(`.${styles.contentContainer}`);
-            expect(toNumber(contentContainer.attr("x"), 10)).toBeCloserTo(0);
+            expect(toNumber(contentContainer.attr("x"), 10)).toBeCloserTo(-16);
             expect(toNumber(contentContainer.attr("y"), 10)).toBeCloserTo(
                 graphConfig.padding.bottom
             );
@@ -174,7 +174,7 @@ describe("Graph - Generate", () => {
                     graph.config.axisSizes.y + graph.config.axisLabelWidths.y,
                     10
                 )
-            ).toBeCloserTo(0);
+            ).toBeCloserTo(-16);
             expect(getYAxisHeight(graph.config)).toBeCloserTo(267);
         });
         it("Resizes correctly after rendering", (done) => {
@@ -213,7 +213,7 @@ describe("Graph - Generate", () => {
             };
             graph = new Graph(graphConfig);
             const contentContainer = d3.select(`.${styles.contentContainer}`);
-            expect(toNumber(contentContainer.attr("x"), 10)).toBeCloserTo(0);
+            expect(toNumber(contentContainer.attr("x"), 10)).toBeCloserTo(-16);
             expect(toNumber(contentContainer.attr("y"), 10)).toBeCloserTo(
                 toNumber(
                     graph.config.axisLabelHeights.x * 2 +
@@ -235,7 +235,7 @@ describe("Graph - Generate", () => {
             };
             graph = new Graph(graphConfig);
             const contentContainer = d3.select(`.${styles.contentContainer}`);
-            expect(toNumber(contentContainer.attr("x"), 10)).toBeCloserTo(0);
+            expect(toNumber(contentContainer.attr("x"), 10)).toBeCloserTo(-16);
             expect(toNumber(contentContainer.attr("y"), 10)).toBeCloserTo(
                 graphConfig.padding.top
             );
