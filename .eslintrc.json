@@ -40,7 +40,6 @@
                 "after": true
             }
         ],
-        "complexity": 0,
         "no-new": 0,
         "rest-spread-spacing": [2, "never"],
         "prefer-spread": 1,
@@ -50,19 +49,6 @@
         "space-before-blocks": 2,
         "max-depth": [2, 3],
         "max-nested-callbacks": [2, 3],
-        "max-statements-per-line": [
-            2,
-            {
-                "max": 1
-            }
-        ],
-        "max-len": [
-            2,
-            150,
-            {
-                "ignoreTrailingComments": true
-            }
-        ],
         "no-extra-bind": 2,
         "no-duplicate-imports": 2,
         "no-useless-rename": 2,
