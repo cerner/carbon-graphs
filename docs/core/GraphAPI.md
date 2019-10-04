@@ -1,6 +1,6 @@
-# GraphAPI
+# Graph
 
-GraphAPI is a set of graphs that share a common set of base visualization structure. These include:
+Graph is a set of graphs that share a common set of base visualization structure. These include:
 
 -   X Axis
 -   Y Axis
@@ -10,7 +10,7 @@ GraphAPI is a set of graphs that share a common set of base visualization struct
 -   Y Axis labels
 -   Legend
 
--   [GraphAPI](#graphapi)
+-   [Graph](#Graph)
     -   [Root](#root)
         -   [Required](#required)
         -   [Optional](#optional)
@@ -43,6 +43,7 @@ GraphAPI is a set of graphs that share a common set of base visualization struct
 | showVGrid      | boolean  | true                                          | Toggle to show vertical grid                                                         |
 | showHGrid      | boolean  | true                                          | Toggle to show horizontal grid                                                       |
 | dateline       | array    | []                                            | Refer [Dateline](../helpers/Dateline.md)                                             |
+| pan            | object   | {}                                            | Refer [Panning](../controls/Panning.md)                                              |
 | padding        | object   | `{ top: 10, bottom: 5, left: 30, right: 50 }` | Refer [Padding](../controls/Padding.md)                                              |
 | showNoDataText | boolean  | true                                          | Toggle to show no data text                                                          |
 
@@ -62,7 +63,7 @@ GraphAPI is a set of graphs that share a common set of base visualization struct
 
 ```javascript
 var input = {
-    bindTo: id,
+    bindTo: "#root",
     axis: {
         x: {
             type: Carbon.helpers.AXIS_TYPE.TIME_SERIES,

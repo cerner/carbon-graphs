@@ -163,7 +163,8 @@ class Bar extends GraphContent {
         removeLegendItem(graph.legendSVG, this.dataTarget);
         removeLabelShapeItem(
             graph.axesLabelShapeGroup[this.config.yAxis],
-            this.dataTarget
+            this.dataTarget,
+            graph.config
         );
         removeAxisInfoRowLabels(
             graph.svg.select(`.${styles.axisInfoRow}`),
@@ -181,7 +182,7 @@ class Bar extends GraphContent {
         scaleOrdinalAxis(this.ordinalScale, graph.config, graph.content);
         setBarOffsets(
             graph.content,
-            graph.contentTargets,
+            graph.contentConfig,
             this,
             this.ordinalScale,
             graph.config

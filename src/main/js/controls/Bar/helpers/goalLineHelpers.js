@@ -21,12 +21,12 @@ import utils from "../../../helpers/utils";
 const getXRange = (scale, ordinalScale, region) => {
     const leftShiftOffset =
         ordinalScale.x0.rangeBand() *
-        constants.DEFAULT_BAR_GRAPH_PADDING_ATTRIBUTES.LEFT_SHIFT_OFFSET_RATIO; //this value is used to center bars by shifting left
+        constants.DEFAULT_BAR_GRAPH_PADDING_ATTRIBUTES.LEFT_SHIFT_OFFSET_RATIO; // this value is used to center bars by shifting left
     const groupOffset = ordinalScale.x1(region.group);
     const leftShiftPadding =
         ordinalScale.x1.rangeBand() *
         constants.DEFAULT_BAR_GRAPH_PADDING_ATTRIBUTES
-            .REGION_LEFT_SHIFT_OFFSET_PADDING_RATIO; //padding to be added on left side of bar
+            .REGION_LEFT_SHIFT_OFFSET_PADDING_RATIO; // padding to be added on left side of bar
 
     return scale.x(region.x) + groupOffset - leftShiftOffset + leftShiftPadding;
 };
@@ -128,7 +128,7 @@ const createRegion = (scale, config, regionGroupSVG, regionList, uniqueKey) => {
     regionPath
         .exit()
         .transition()
-        .call(constants.d3Transition)
+        .call(constants.d3Transition(config.settingsDictionary.transition))
         .remove();
 };
 /**
@@ -144,7 +144,7 @@ const createRegion = (scale, config, regionGroupSVG, regionList, uniqueKey) => {
 const translateRegion = (scale, config, regionGroupSVG) => {
     regionGroupSVG
         .transition()
-        .call(constants.d3Transition)
+        .call(constants.d3Transition(config.settingsDictionary.transition))
         .attr(constants.X_AXIS, (d) => d.xRange | 0)
         .attr(constants.Y_AXIS, getYAxisRangePosition(scale, config))
         .attr("width", (d) => d.width | 0)

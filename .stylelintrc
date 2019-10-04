@@ -1,5 +1,7 @@
 {
+    "extends": "stylelint-config-standard",
     "rules": {
+        "indentation": 4,
         "at-rule-semicolon-newline-after": "always",
         "at-rule-semicolon-space-before": "never",
         "block-no-empty": true,

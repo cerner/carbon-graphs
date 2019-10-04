@@ -23,7 +23,7 @@ import {
     toNumber,
     TRANSITION_DELAY,
     triggerEvent
-} from "../helpers/commonHelpers";
+} from "../../helpers/commonHelpers";
 import {
     axisJSON,
     fetchElementByClass,
@@ -454,7 +454,7 @@ describe("Gantt -> Track -> Task", () => {
             ).toBeLessThan(
                 toNumber(taskElement.childNodes[1].getAttribute("width"))
             );
-            //Check if the percentage is actually 50% of the entire bar
+            // Check if the percentage is actually 50% of the entire bar
             expect(
                 toNumber(taskElement.childNodes[2].getAttribute("width"))
             ).toEqual(

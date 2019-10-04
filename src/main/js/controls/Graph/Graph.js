@@ -127,7 +127,8 @@ const initConfig = (control) => {
             y2: {}
         },
         shownTargets: {},
-        dateline: []
+        dateline: [],
+        pan: {}
     };
     control.axis = {
         axisInfoRow: {
@@ -139,7 +140,8 @@ const initConfig = (control) => {
     control.legendSVG = null;
     control.axesLabelShapeGroup = {};
     control.content = [];
-    control.contentTargets = [];
+    control.contentConfig = [];
+    control.contentKeys = [];
     control.resizeHandler = null;
     return control;
 };
@@ -297,7 +299,8 @@ class Graph extends Construct {
     loadContent(content) {
         validateContent(this.content, content);
         this.content.push(content);
-        this.contentTargets.push(content.config);
+        this.contentConfig.push(content.config);
+        this.contentKeys.push(content.config.key);
         setAxisPadding(this.config.axisPadding, content);
         getAxesDataRange(
             content,
@@ -327,17 +330,21 @@ class Graph extends Construct {
      * The content serves as a 1to1 relationship. For rendering
      * multiple data sets respective number of content needs to be provided.
      *
-     * @param {object} content - Graph content to be removed
+     * Input can be either a GraphContent instance or
+     * just an object containing a `key` of the content to be removed
+     *
+     * @param {object} input - Graph content to be removed
      * @returns {Graph} - Graph instance
      */
-    unloadContent(content) {
-        const index = this.content.indexOf(content);
+    unloadContent(input) {
+        const index = this.contentKeys.indexOf(input.key || input.config.key);
         if (index < 0) {
             throw new Error(errors.THROW_MSG_INVALID_OBJECT_PROVIDED);
         }
+        this.content[index].unload(this);
         this.content.splice(index, 1);
-        this.contentTargets.splice(index, 1);
-        content.unload(this);
+        this.contentConfig.splice(index, 1);
+        this.contentKeys.splice(index, 1);
         if (
             this.config.showNoDataText &&
             this.content.every((content) =>

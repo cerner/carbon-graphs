@@ -157,7 +157,7 @@ const drawActivities = (
         .classed(styles.activity, true)
         .attr("aria-selected", false)
         .attr("aria-describedby", (d) => d.key)
-        .each(function(d, i) {
+        .each(function(d) {
             d.isHashed
                 ? renderHashedActivityGroup(canvasSVG, scale, d, this)
                 : renderActivityGroup(scale, d, this);
@@ -165,7 +165,7 @@ const drawActivities = (
     activityPath
         .exit()
         .transition()
-        .call(constants.d3Transition)
+        .call(constants.d3Transition(config.settingsDictionary.transition))
         .remove();
 };
 

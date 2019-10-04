@@ -1,7 +1,10 @@
 "use strict";
 import d3 from "d3";
 import BaseConfig, { getDefaultValue, getDomain } from "../../core/BaseConfig";
-import { generateClipPathId } from "../../core/BaseConfig/helper";
+import {
+    generateClipPathId,
+    isPanningModeEnabled
+} from "../../core/BaseConfig/helper";
 import constants, { AXIS_TYPE } from "../../helpers/constants";
 import errors from "../../helpers/errors";
 import utils from "../../helpers/utils";
@@ -31,6 +34,7 @@ export const processInput = (input, config) => {
         input.throttle,
         constants.RESIZE_THROTTLE
     );
+    config.settingsDictionary = settingsDictionary(input);
     config.showLabel = getDefaultValue(input.showLabel, true);
     config.showLegend = getDefaultValue(input.showLegend, true);
     config.axis.x = Object.assign(_axis.x, {
@@ -48,6 +52,23 @@ export const processInput = (input, config) => {
     return config;
 };
 
+/**
+ * Used to set the clamp and transition when panning is enabled or not.
+ *
+ * @private
+ * @param {object} config - config object used by the graph.
+ * @returns {undefined} returns nothing
+ */
+export const settingsDictionary = (config) =>
+    isPanningModeEnabled(config)
+        ? {
+              shouldClamp: false,
+              transition: constants.D3_TRANSITION_PROPERTIES_DISABLED
+          }
+        : {
+              shouldClamp: true,
+              transition: constants.D3_TRANSITION_PROPERTIES_ENABLED
+          };
 /**
  * API to parse consumer input for Graph
  *

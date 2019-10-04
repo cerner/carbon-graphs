@@ -98,6 +98,21 @@ svg:not(:root) {
         outline: 0;
         user-select: none;
 
+        & .carbon-legend-item-btn {
+            font-size: inherit;
+            align-self: flex-start;
+            align-content: center;
+            margin-right: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            border: 0.1rem solid @grey15;
+            background-color: @grey15;
+        }
+
+        & .carbon-legend-item-text {
+            word-wrap: break-word;
+        }
+
         &[aria-disabled="false"] {
             cursor: pointer;
             &:hover {
@@ -122,30 +137,15 @@ svg:not(:root) {
             }
         }
 
-        & .carbon-legend-item-btn {
-            font-size: inherit;
-            align-self: flex-start;
-            align-content: center;
-            margin-right: 0.5rem;
-            padding: 0.5rem;
-            border-radius: 0.25rem;
-            border: 0.1rem solid @grey15;
-            background-color: @grey15;
-        }
-
         & .carbon-legend-item-icon {
             display: block;
             vertical-align: middle;
             width: 0.75rem;
             height: 0.75rem;
         }
-
-        & .carbon-legend-item-text {
-            word-wrap: break-word;
-        }
     }
 
-    & .carbon-legend-item[aria-selected="false"] {
+    & .carbon-legend-item[aria-current="false"] {
         & .carbon-legend-item-btn {
             background-color: @white;
         }
@@ -195,6 +195,10 @@ svg:not(:root) {
     &[aria-hidden="true"] {
         .opacity-hide();
     }
+
+    &.carbon-highlight {
+        .opacity-show();
+    }
 }
 
 .carbon-criticality-outer {
@@ -207,17 +211,6 @@ svg:not(:root) {
     fill: @white;
     stroke: @white;
     stroke-width: 8px;
-}
-
-.carbon-criticality-outer,
-.carbon-criticality-inner {
-    &[aria-hidden="true"] {
-        .opacity-hide();
-    }
-
-    &.carbon-highlight {
-        .opacity-show();
-    }
 }
 
 .carbon-region {
@@ -242,6 +235,7 @@ svg:not(:root) {
 .carbon-data-bar {
     user-select: none;
     .carbon-shape-rendering();
+
     stroke-width: 0;
 
     &[aria-disabled="false"] {
@@ -267,6 +261,7 @@ svg:not(:root) {
     .carbon-dateline {
         stroke-width: 3px;
         .carbon-shape-rendering();
+
         opacity: 0.3;
     }
 

@@ -1,7 +1,22 @@
+import d3 from "d3";
 /**
  * @type {number} Delay duration
  */
-export const TRANSITION_DELAY = 600;
+export const TRANSITION_DELAY = 400;
+/**
+ * Flushes all D3 transitions before calling an event
+ *
+ * @private
+ * @returns {undefined} returns nothing
+ */
+const flushAllD3Transitions = () => {
+    const now = Date.now;
+    Date.now = function() {
+        return Infinity;
+    };
+    d3.timer.flush();
+    Date.now = now;
+};
 /**
  * Triggers an event on provided element
  *
@@ -23,6 +38,7 @@ export const triggerEvent = (
         event.initEvent(eventName, true, true);
         element.dispatchEvent(event);
         if (cb) {
+            flushAllD3Transitions();
             delay(cb, delayDuration);
         }
     } catch (e) {

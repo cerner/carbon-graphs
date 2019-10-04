@@ -75,7 +75,7 @@ const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
     const itemPath = legendSVG
         .append("li")
         .classed(styles.legendItem, true)
-        .attr("aria-selected", shouldForceDisableLegendItem || index > -1)
+        .attr("aria-current", shouldForceDisableLegendItem || index > -1)
         .attr("aria-disabled", shouldForceDisableLegendItem)
         .attr("role", "listitem")
         .attr("aria-labelledby", text)
@@ -95,6 +95,7 @@ const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
     itemPath
         .append("button")
         .classed(styles.legendItemBtn, true)
+        .attr("title", text)
         .attr("tabindex", shouldForceDisableLegendItem ? -1 : 0)
         .append(() =>
             new Shape(getShapeForTarget(t)).getShapeElement(
@@ -148,8 +149,8 @@ const createLegend = (container) =>
  */
 const legendClickHandler = (element) => {
     const target = d3.select(element);
-    const isSelected = target.attr("aria-selected");
-    return target.attr("aria-selected", isSelected !== "true");
+    const isSelected = target.attr("aria-current");
+    return target.attr("aria-current", isSelected !== "true");
 };
 /**
  * Hover handler for legend items.

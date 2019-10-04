@@ -12,7 +12,7 @@ import {
     toNumber,
     TRANSITION_DELAY,
     triggerEvent
-} from "../helpers/commonHelpers";
+} from "../../helpers/commonHelpers";
 import {
     axisJSON,
     fetchElementByClass,
@@ -163,13 +163,8 @@ describe("Gantt -> Track", () => {
                     const labelPath = fetchElementByClass(
                         `${styles.axisYTrackLabel} .tick text`
                     );
-                    expect(labelPath.getAttribute("aria-disabled")).toBe(
-                        "false"
-                    );
-                    expect(onClickPrimaryFunctionSpy.calledOnce).toBeTruthy();
-                    expect(onClickPrimaryFunctionSpy.getCall(0).args[0]).toBe(
-                        smallLabel
-                    );
+                    expect(labelPath.getAttribute("aria-disabled")).toBeFalsy();
+                    expect(onClickPrimaryFunctionSpy.calledOnce).toBeFalsy();
                     done();
                 }
             );

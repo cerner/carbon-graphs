@@ -36,7 +36,7 @@ const translateBarGraph = (
     return canvasSVG
         .selectAll(`rect[aria-describedby=${dataTarget.key}]`)
         .transition()
-        .call(constants.d3Transition)
+        .call(constants.d3Transition(config.settingsDictionary.transition))
         .attr("x", (d) => attributeHelper.x(d))
         .attr("y", (d) => attributeHelper.y(d))
         .attr("width", attributeHelper.width)
@@ -68,7 +68,7 @@ const translateTextLabel = (
     return axisInfoPath
         .selectAll(`g[aria-describedby="text_label_${dataTarget.key}"]`)
         .transition()
-        .call(constants.d3Transition)
+        .call(constants.d3Transition(config.settingsDictionary.transition))
         .attr(
             "transform",
             (d, index) =>

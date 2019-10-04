@@ -97,21 +97,15 @@ const setX0X1Scale = (bands, content, ordinalScale, config) => {
  *
  * @private
  * @param {Array} content - Array of targets
- * @param {Array} contentTargets - Array of targets config objects
+ * @param {Array} contentConfig - Array of targets config objects
  * @param {object} input - load input object
  * @param {object} ordinalScale - ordinal scale object
  * @param {object} config - config object derived from input JSON
  * @returns {undefined} - returns nothing
  */
-const setBarOffsets = (
-    content,
-    contentTargets,
-    input,
-    ordinalScale,
-    config
-) => {
+const setBarOffsets = (content, contentConfig, input, ordinalScale, config) => {
     const shownTargets = config.shownTargets;
-    const group = contentTargets.filter(
+    const group = contentConfig.filter(
         (d) =>
             d.key === input.config.key ||
             (d.group === input.config.group &&

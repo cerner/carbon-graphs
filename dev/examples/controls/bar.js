@@ -1,7 +1,10 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-sequences */
 import Carbon from "../../../src/main/js/carbon";
 import utils from "../../../src/main/js/helpers/utils";
 import { getDemoData } from "../data";
-import { loadDatelinePopup, loadTextLabelPopup } from "../popup";
+import { loadDatelinePopup, loadTextLabelPopup, loadBarPopup } from "../popup";
+import { createPanningControls } from "./panHelpers";
 
 const tickValues = [
     new Date(2018, 0, 1).toISOString(),
@@ -363,4 +366,68 @@ export const renderStackedBarAxisInfoTextLabels = (id) => {
     data3.label.isDisabled = true;
     barStackedAxisInfoRow.loadContent(Carbon.api.bar(data3));
     return barStackedAxisInfoRow;
+};
+export const renderBarWithPanning = (id) => {
+    let graph;
+    const axisData = utils.deepClone(getDemoData(`#${id}`, "BAR_TIMESERIES"));
+    axisData.axis.x.lowerLimit = new Date(2016, 0, 1, 0).toISOString();
+    axisData.axis.x.upperLimit = new Date(2016, 0, 2, 0).toISOString();
+    axisData.pan = {
+        enabled: true
+    };
+    axisData.axis.x.ticks = {
+        values: [
+            new Date(2016, 0, 1, 3).toISOString(),
+            new Date(2016, 0, 1, 6).toISOString(),
+            new Date(2016, 0, 1, 9).toISOString(),
+            new Date(2016, 0, 1, 12).toISOString(),
+            new Date(2016, 0, 1, 15).toISOString()
+        ],
+        format: "%H"
+    };
+    const graphData = {
+        key: "uid_bar_t1",
+        label: {
+            display: "Data Label"
+        },
+        color: Carbon.helpers.COLORS.BLUE,
+        onClick: loadBarPopup,
+        values: [
+            {
+                x: new Date(2016, 0, 1, 3).toISOString(),
+                y: 15
+            },
+            {
+                x: new Date(2016, 0, 1, 6).toISOString(),
+                y: 19
+            },
+            {
+                x: new Date(2016, 0, 1, 9).toISOString(),
+                y: 10
+            },
+            {
+                x: new Date(2016, 0, 1, 12).toISOString(),
+                y: 13
+            },
+            {
+                x: new Date(2016, 0, 1, 15).toISOString(),
+                y: 15
+            }
+        ]
+    };
+    const createGraph = (axis, values) => {
+        if (graph) {
+            graph.destroy();
+        }
+        graph = Carbon.api.graph(axis);
+        graph.loadContent(Carbon.api.bar(values));
+        return graph;
+    };
+    graph = createGraph(axisData, graphData);
+    createPanningControls(id, {
+        axisData,
+        graphData,
+        creationHandler: createGraph
+    });
+    return graph;
 };

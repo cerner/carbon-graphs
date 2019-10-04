@@ -2,6 +2,7 @@ import Carbon from "../../../src/main/js/carbon";
 import utils from "../../../src/main/js/helpers/utils";
 import { getDemoData } from "../data";
 import { loadDatelinePopup } from "../popup";
+import { createPanningControls } from "./panHelpers";
 
 const tickValues = [
     new Date(2016, 0, 1, 1, 0).toISOString(),
@@ -91,7 +92,7 @@ export const renderPairedResultTimeseriesDateline = (id) => {
     const pairedTimeDateline = utils.deepClone(
         getDemoData(`#${id}`, "PAIRED_TIMESERIES")
     );
-    (pairedTimeDateline.dateline = [
+    pairedTimeDateline.dateline = [
         {
             showDatelineIndicator: true,
             label: {
@@ -102,10 +103,10 @@ export const renderPairedResultTimeseriesDateline = (id) => {
             onClick: loadDatelinePopup,
             value: new Date(2017, 10, 1).toISOString()
         }
-    ]),
-        (pairedTimeDateline.clickPassThrough = {
-            dateline: false
-        });
+    ];
+    pairedTimeDateline.clickPassThrough = {
+        dateline: false
+    };
     const pairedTime = Carbon.api.graph(pairedTimeDateline);
 
     pairedTime.loadContent(
@@ -319,4 +320,85 @@ export const renderPairedResultXOrientationTop = (id) => {
         Carbon.api.pairedResult(getDemoData(`#${id}`, "PAIRED_DEFAULT").data[0])
     );
     return pairedDefault;
+};
+export const renderPairedResultWithPanning = (id) => {
+    let graph;
+    const axisData = utils.deepClone(
+        getDemoData(`#${id}`, "PAIRED_TIMESERIES")
+    );
+    axisData.axis.x.lowerLimit = new Date(2016, 0, 1, 0).toISOString();
+    axisData.axis.x.upperLimit = new Date(2016, 0, 2, 0).toISOString();
+    axisData.pan = {
+        enabled: true
+    };
+    axisData.axis.x.ticks = {};
+    const graphData = {
+        key: "uid_1",
+        label: {
+            high: {
+                display: "High"
+            },
+            mid: {
+                display: "Median"
+            },
+            low: {
+                display: "Low"
+            }
+        },
+        shape: {
+            high: Carbon.helpers.SHAPES.DARK.TEAR_ALT,
+            mid: Carbon.helpers.SHAPES.DARK.RHOMBUS,
+            low: Carbon.helpers.SHAPES.DARK.TEAR_DROP
+        },
+        color: {
+            high: Carbon.helpers.COLORS.BLACK,
+            mid: Carbon.helpers.COLORS.BLUE,
+            low: Carbon.helpers.COLORS.BLACK
+        },
+        values: [
+            {
+                high: {
+                    x: "2015-12-31T20:30:00.000Z",
+                    y: 150
+                },
+                mid: {
+                    x: "2015-12-31T20:30:00.000Z",
+                    y: 40
+                },
+                low: {
+                    x: "2015-12-31T20:30:00.000Z",
+                    y: 10
+                }
+            },
+            {
+                high: {
+                    x: "2015-12-31T22:30:00.000Z",
+                    y: 110
+                },
+                mid: {
+                    x: "2015-12-31T22:30:00.000Z",
+                    y: 70
+                },
+                low: {
+                    x: "2015-12-31T22:30:00.000Z",
+                    y: 30
+                }
+            }
+        ]
+    };
+    const createGraph = (axis, values) => {
+        if (graph) {
+            graph.destroy();
+        }
+        graph = Carbon.api.graph(axis);
+        graph.loadContent(Carbon.api.pairedResult(values));
+        return graph;
+    };
+    graph = createGraph(axisData, graphData);
+    createPanningControls(id, {
+        axisData,
+        graphData,
+        creationHandler: createGraph
+    });
+    return graph;
 };

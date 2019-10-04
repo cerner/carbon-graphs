@@ -1,7 +1,11 @@
 "use strict";
 import d3 from "d3";
 import BaseConfig, { getDefaultValue, getDomain } from "../../core/BaseConfig";
-import { generateClipPathId } from "../../core/BaseConfig/helper";
+import {
+    generateClipPathId,
+    generateDatelineClipPathId,
+    isPanningModeEnabled
+} from "../../core/BaseConfig/helper";
 import { hasY2Axis } from "../../helpers/axis";
 import constants, {
     AXES_ORIENTATION,
@@ -80,6 +84,7 @@ export const processInput = (input, config, type) => {
         return config;
     };
     config.clipPathId = generateClipPathId();
+    config.datelineClipPathId = generateDatelineClipPathId();
     config.bindTo = input.bindTo;
     config.bindLegendTo = input.bindLegendTo;
     config.axis = _axis;
@@ -92,6 +97,7 @@ export const processInput = (input, config, type) => {
         input.throttle,
         constants.RESIZE_THROTTLE
     );
+    config.settingsDictionary = settingsDictionary(input);
     config.showLabel = getDefaultValue(input.showLabel, true);
     config.showLegend = getDefaultValue(input.showLegend, true);
     config.showShapes = getDefaultValue(input.showShapes, true);
@@ -164,6 +170,25 @@ export const validateContent = (content, input) => {
         throw new Error(errors.THROW_MSG_NON_UNIQUE_PROPERTY);
     }
 };
+/**
+ * Used to set the clamp and transition when panning is enabled or not.
+ *
+ * @private
+ * @param {object} config - config object used by the graph.
+ * @returns {undefined} returns nothing
+ */
+export const settingsDictionary = (config) =>
+    isPanningModeEnabled(config)
+        ? {
+              shouldClamp: false,
+              transition: constants.D3_TRANSITION_PROPERTIES_DISABLED,
+              shouldCreateDatelineDefs: true
+          }
+        : {
+              shouldClamp: true,
+              transition: constants.D3_TRANSITION_PROPERTIES_ENABLED,
+              shouldCreateDatelineDefs: false
+          };
 
 /**
  * API to parse consumer input for Graph

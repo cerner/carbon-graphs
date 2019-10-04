@@ -30,7 +30,7 @@ const translateDateline = (scale, config, canvasSVG, yAxisPositionHandler) => {
     const datelineGroup = canvasSVG
         .selectAll(`.${styles.datelineGroup}`)
         .transition()
-        .call(constants.d3Transition)
+        .call(constants.d3Transition(config.settingsDictionary.transition))
         .attr(
             "transform",
             `translate(${getXAxisXPosition(config)},${yAxisPositionHandler(
@@ -91,6 +91,21 @@ const datelineClickHandler = (value, target) => {
     );
 };
 /**
+ * getting the height of the dateline indicator.
+ *
+ * @private
+ * @returns { number } returns height of the dateline indicator
+ */
+const getDatelineIndicatorHeight = () => {
+    const shapeHeightArr = [];
+    d3.selectAll(`.${styles.datelinePoint}`).each(function() {
+        const shapeHeight = this.getBBox().height;
+        shapeHeightArr.push(shapeHeight);
+    });
+    const datelineIndicatorHeight = Math.max(...shapeHeightArr);
+    return datelineIndicatorHeight;
+};
+/**
  * Creates a dateline for graph. We are not adding
  * x1, x2, y1, y2 co-ordinates for the straight line since they will be adjusted when
  * content is loaded.
@@ -103,9 +118,17 @@ const datelineClickHandler = (value, target) => {
  * @returns {undefined} - returns nothing
  */
 const createDateline = (scale, config, canvasSVG) => {
-    const datelineContent = canvasSVG
-        .append("g")
-        .classed(styles.datelineContent, true);
+    let datelineContent;
+    if (config.settingsDictionary.shouldCreateDatelineDefs) {
+        datelineContent = canvasSVG
+            .append("g")
+            .classed(styles.datelineContent, true)
+            .attr("clip-path", `url(#${config.datelineClipPathId})`);
+    } else {
+        datelineContent = canvasSVG
+            .append("g")
+            .classed(styles.datelineContent, true);
+    }
     config.dateline.forEach((dateline) => {
         const datelineGroup = datelineContent
             .append("g")
@@ -145,6 +168,23 @@ const createDateline = (scale, config, canvasSVG) => {
         );
     });
     translateDateline(scale, config, canvasSVG, getYAxisYPosition);
+
+    if (
+        config.settingsDictionary.shouldCreateDatelineDefs &&
+        config.dateline.length > 0
+    ) {
+        const datelineIndicatorHeight = Math.floor(
+            getDatelineIndicatorHeight() / 2
+        );
+        canvasSVG
+            .select(`clipPath#${config.datelineClipPathId}`)
+            .selectAll("rect")
+            .attr("height", getYAxisHeight(config) + datelineIndicatorHeight)
+            .attr(
+                constants.Y_AXIS,
+                getYAxisYPosition(config) - datelineIndicatorHeight
+            );
+    }
 };
 /**
  * redraw a dateline for graph. To add the dateline content on top of the content
@@ -200,5 +240,6 @@ export {
     validateDateline,
     createDateline,
     translateDateline,
-    redrawDatelineContent
+    redrawDatelineContent,
+    getDatelineIndicatorHeight
 };

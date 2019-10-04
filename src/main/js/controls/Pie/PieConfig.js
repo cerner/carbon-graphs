@@ -21,7 +21,6 @@ export const processInput = (input, config) => {
     config.showLegend = getDefaultValue(input.showLegend, true);
     return config;
 };
-
 /**
  * API to parse consumer input for Graph
  *

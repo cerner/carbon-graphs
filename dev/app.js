@@ -14,7 +14,8 @@ import {
     renderBarTimeSeriesWithDateline,
     renderBarTimeSeriesXOrientationTop,
     renderSimpleBarAxisInfoTextLabels,
-    renderStackedBarAxisInfoTextLabels
+    renderStackedBarAxisInfoTextLabels,
+    renderBarWithPanning
 } from "./examples/controls/bar";
 import { renderColorsExample } from "./examples/controls/colors";
 import {
@@ -40,7 +41,8 @@ import {
     renderGanttPercentage,
     renderGanttStyle,
     renderGanttTrackSelection,
-    renderGanttTruncate
+    renderGanttTruncate,
+    renderGanttPanning
 } from "./examples/controls/gantt";
 import {
     renderRegionLine,
@@ -72,7 +74,8 @@ import {
     renderMultiLineRegion,
     renderMultiLineIdenticalDatasetRegion,
     renderNoDataView,
-    renderLineCustomPadding
+    renderLineCustomPadding,
+    renderLineWithPanning
 } from "./examples/controls/line";
 import {
     renderMultiPairedResultRegion,
@@ -92,7 +95,8 @@ import {
     renderPairedResultXOrientationTop,
     renderPairedResultXStaticTicks,
     renderPairedResultY2Axis,
-    renderPairedResultYHidden
+    renderPairedResultYHidden,
+    renderPairedResultWithPanning
 } from "./examples/controls/pairedResult";
 import { renderPieLegendTo, renderPieSimple } from "./examples/controls/pie";
 import {
@@ -105,7 +109,8 @@ import {
 import { renderSplineLine } from "./examples/controls/spline";
 import {
     renderTimeline,
-    renderTimelineCustomPadding
+    renderTimelineCustomPadding,
+    renderTimelinePanning
 } from "./examples/controls/timeline";
 import { createElementLegendBindTo } from "./examples/helpers";
 
@@ -369,6 +374,61 @@ renderSiteApp(
                         return renderPieLegendTo(id);
                     },
                     title: "Custom Legend Placement"
+                }
+            ]
+        },
+        {
+            pathname: "/panning",
+            children: [
+                {
+                    pathname: "/panning/line",
+                    children: [
+                        {
+                            pathname: "/panning/line/simple",
+                            content: renderLineWithPanning,
+                            title: "Simple"
+                        }
+                    ]
+                },
+                {
+                    pathname: "/panning/gantt",
+                    children: [
+                        {
+                            pathname: "/panning/gantt/simple",
+                            content: renderGanttPanning,
+                            title: "Simple"
+                        }
+                    ]
+                },
+                {
+                    pathname: "/panning/timeline",
+                    children: [
+                        {
+                            pathname: "/panning/timeline/simple",
+                            content: renderTimelinePanning,
+                            title: "Simple"
+                        }
+                    ]
+                },
+                {
+                    pathname: "/panning/bar",
+                    children: [
+                        {
+                            pathname: "/panning/bar/simple",
+                            content: renderBarWithPanning,
+                            title: "Simple"
+                        }
+                    ]
+                },
+                {
+                    pathname: "/panning/paired-result",
+                    children: [
+                        {
+                            pathname: "/panning/paired-result/simple",
+                            content: renderPairedResultWithPanning,
+                            title: "Simple"
+                        }
+                    ]
                 }
             ]
         },

@@ -179,9 +179,13 @@ class PairedResult extends GraphContent {
             removeLegendItem(graph.legendSVG, {
                 key
             });
-            removeLabelShapeItem(graph.axesLabelShapeGroup[this.config.yAxis], {
-                key
-            });
+            removeLabelShapeItem(
+                graph.axesLabelShapeGroup[this.config.yAxis],
+                {
+                    key
+                },
+                graph.config
+            );
         });
         this.dataTarget = {};
         this.config = {};
@@ -196,7 +200,7 @@ class PairedResult extends GraphContent {
             const values = this.dataTarget.values;
             // If graph has more than 1 content, we compare the regions if they are identical show and hide if even atleast one of them is not.
             if (graph.content.length > 1) {
-                //check if paired Data is proper i.e - region for each key(high, mid and low) in value should be there
+                // check if paired Data is proper i.e - region for each key(high, mid and low) in value should be there
                 const isPairedDataProper = values.every((value) =>
                     isRegionMappedToAllValues(value, this.dataTarget.regions)
                 );
@@ -225,7 +229,7 @@ class PairedResult extends GraphContent {
             graph.config.shouldHideAllRegion = true;
         }
 
-        translatePairedResultGraph(graph.scale, graph.config, graph.svg);
+        translatePairedResultGraph(graph.scale, graph.svg, graph.config);
         return this;
     }
 

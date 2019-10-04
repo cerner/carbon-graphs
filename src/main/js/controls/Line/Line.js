@@ -150,7 +150,8 @@ class Line extends GraphContent {
         removeLegendItem(graph.legendSVG, this.dataTarget);
         removeLabelShapeItem(
             graph.axesLabelShapeGroup[this.config.yAxis],
-            this.dataTarget
+            this.dataTarget,
+            graph.config
         );
         this.dataTarget = {};
         this.config = {};
@@ -179,7 +180,7 @@ class Line extends GraphContent {
             graph.config,
             graph.svg.select(`.${styles.regionGroup}`)
         );
-        translateLineGraph(graph.scale, graph.svg);
+        translateLineGraph(graph.scale, graph.svg, graph.config);
         return this;
     }
 

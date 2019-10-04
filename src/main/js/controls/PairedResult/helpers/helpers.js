@@ -105,15 +105,15 @@ const transformPoint = (scale, type) => (value) => (scaleFactor) => {
  *
  * @private
  * @param {object} scale - d3 scale for Graph
- * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
+ * @param {object} config - Graph config object derived from input JSON
  * @returns {object} - d3 select object
  */
-const translateLines = (scale, config, canvasSVG) =>
+const translateLines = (scale, canvasSVG, config) =>
     canvasSVG
         .selectAll(`.${styles.pairedBoxGroup} .${styles.pairedLine}`)
         .transition()
-        .call(constants.d3Transition)
+        .call(constants.d3Transition(config.settingsDictionary.transition))
         .attr("d", (d) => (d.high && d.low ? createLine(scale, d) : ""));
 /**
  * Transforms points for a data point set (high, low and mid) in the Paired Result graph on resize
@@ -121,9 +121,10 @@ const translateLines = (scale, config, canvasSVG) =>
  * @private
  * @param {object} scale - d3 scale for Graph
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
+ * @param {object} config - Graph config object derived from input JSON
  * @returns {object} - d3 select object
  */
-const translatePoints = (scale, canvasSVG) =>
+const translatePoints = (scale, canvasSVG, config) =>
     iterateOnPairType((type) => {
         canvasSVG
             .selectAll(
@@ -137,7 +138,11 @@ const translatePoints = (scale, canvasSVG) =>
                 pairedPointSVG
                     .select("g")
                     .transition()
-                    .call(constants.d3Transition)
+                    .call(
+                        constants.d3Transition(
+                            config.settingsDictionary.transition
+                        )
+                    )
                     .attr("transform", function() {
                         return transformPoint(
                             scale,
@@ -187,7 +192,7 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
     pairedBoxPath
         .exit()
         .transition()
-        .call(constants.d3Transition)
+        .call(constants.d3Transition(config.settingsDictionary.transition))
         .remove();
 };
 /**
@@ -420,15 +425,15 @@ const drawCriticalityPoints = (
  *
  * @private
  * @param {object} scale - d3 scale for Graph
- * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
+ * @param {object} config - Graph config object derived from input JSON
  * @returns {undefined} - returns nothing
  */
-const translatePairedResultGraph = (scale, config, canvasSVG) => {
-    translateSelectionBox(scale, canvasSVG);
-    translateSelectionItem(scale, canvasSVG);
-    translateLines(scale, config, canvasSVG);
-    translatePoints(scale, canvasSVG);
+const translatePairedResultGraph = (scale, canvasSVG, config) => {
+    translateSelectionBox(scale, canvasSVG, config);
+    translateSelectionItem(scale, canvasSVG, config);
+    translateLines(scale, canvasSVG, config);
+    translatePoints(scale, canvasSVG, config);
 };
 /**
  * Show/hide regions based on the following criteria:

@@ -121,6 +121,22 @@ export const axisTimeseriesWithDateline = {
     axis: axisTimeSeries,
     dateline: datelineJSON
 };
+export const axisDefaultWithPanning = {
+    bindTo: "#testGraph_carbon",
+    axis: axisTimeSeries,
+    dateline: datelineJSON,
+    pan: {
+        enabled: true
+    }
+};
+export const axisDefaultWithoutPanning = {
+    bindTo: "#testGraph_carbon",
+    axis: axisTimeSeries,
+    dateline: datelineJSON,
+    pan: {
+        enabled: false
+    }
+};
 /**
  * Returns the DOM element queried by Class
  *

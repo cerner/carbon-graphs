@@ -66,7 +66,7 @@ clickPassThrough = {
             label: {
                 display: "Release A"
             },
-            color: "#d3d4d5",
+            color: Carbon.helpers.COLORS.GREEN,
             shape: Carbon.helpers.SHAPES.DARK.TRIANGLE,
             onClick: (onCloseCB, payload) => {
                 // onCloseCB needs to called by the consumer after popup is closed;

@@ -31,7 +31,8 @@ import {
     determineHeight,
     prepareLoadAtIndex,
     scaleGraph,
-    updateAxesDomain
+    updateAxesDomain,
+    d3RemoveElement
 } from "./helpers/creationHelpers";
 import { translateGraph, translateLabelText } from "./helpers/translateHelpers";
 
@@ -109,7 +110,8 @@ const initConfig = (control) => {
         },
         shownTargets: {},
         actionLegend: [],
-        dateline: []
+        dateline: [],
+        pan: {}
     };
     control.axis = {};
     control.scale = {};
@@ -320,8 +322,8 @@ class Gantt extends Construct {
      */
     destroy() {
         detachEventHandlers(this);
-        this.graphContainer.select(`.${styles.canvas}`).remove();
-        this.graphContainer.select(`.${styles.container}`).remove();
+        d3RemoveElement(this.graphContainer, `.${styles.canvas}`);
+        d3RemoveElement(this.graphContainer, `.${styles.container}`);
         initConfig(this);
         return this;
     }
