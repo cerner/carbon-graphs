@@ -58,17 +58,28 @@ const createAxisInfoRowLabel = (
             )}, ${getTextLabelsYPosition(config)})`
         )
         .attr("aria-describedby", `text_label_${uniqueKey}`)
-        .attr("aria-hidden", config.shownTargets.indexOf(uniqueKey) < 0)
-        .attr("aria-disabled", !utils.isFunction(textLabelList.value.onClick))
-        .on("click", (value) => {
-            axisInfoRowActionHandler(
-                value,
-                index,
-                canvasSVG,
-                config.axis.x.type,
-                uniqueKey
-            );
-        });
+        .attr("aria-hidden", config.shownTargets.indexOf(uniqueKey) < 0);
+    if (
+        shouldTruncateLabel(
+            textLabelList.value.label.display,
+            textLabelList.value.characterCount
+        )
+    ) {
+        axisInfoRow
+            .attr(
+                "aria-disabled",
+                !utils.isFunction(textLabelList.value.onClick)
+            )
+            .on("click", (value) => {
+                axisInfoRowActionHandler(
+                    value,
+                    index,
+                    canvasSVG,
+                    config.axis.x.type,
+                    uniqueKey
+                );
+            });
+    }
     if (utils.notEmpty(textLabelList.value.shape)) {
         axisInfoRow
             .append("g")

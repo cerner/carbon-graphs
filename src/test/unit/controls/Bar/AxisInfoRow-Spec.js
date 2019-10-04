@@ -341,9 +341,7 @@ describe("Bar - Axis Info Row", () => {
             expect(axisInfoRowElement.getAttribute("aria-hidden")).toBe(
                 "false"
             );
-            expect(axisInfoRowElement.getAttribute("aria-disabled")).toBe(
-                "false"
-            );
+            expect(axisInfoRowElement.getAttribute("aria-disabled")).toBe(null);
             expect(axisInfoRowElement.getAttribute("text-anchor")).toBe(
                 "middle"
             );
@@ -430,7 +428,7 @@ describe("Bar - Axis Info Row", () => {
                         characterCount: 9,
                         shape: {},
                         label: {
-                            display: "51"
+                            display: "0123456789"
                         }
                     }
                 }
@@ -479,7 +477,7 @@ describe("Bar - Axis Info Row", () => {
                         characterCount: 9,
                         shape: {},
                         label: {
-                            display: "51"
+                            display: "0123456789"
                         }
                     }
                 }
@@ -510,7 +508,7 @@ describe("Bar - Axis Info Row", () => {
                         characterCount: 9,
                         shape: {},
                         label: {
-                            display: "51"
+                            display: "0123456789"
                         }
                     }
                 }
