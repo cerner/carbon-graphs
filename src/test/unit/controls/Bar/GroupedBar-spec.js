@@ -298,7 +298,7 @@ describe("Grouped Bar", () => {
                             .translate[0],
                         10
                     )
-                ).toBeCloserTo(169);
+                ).toBeCloserTo(159);
                 expect(
                     round2Decimals(
                         d3.transform(getCurrentTransform(axisInfoRowElement[0]))
@@ -311,7 +311,7 @@ describe("Grouped Bar", () => {
                             .translate[0],
                         10
                     )
-                ).toBeCloserTo(311);
+                ).toBeCloserTo(292);
                 expect(
                     round2Decimals(
                         d3.transform(getCurrentTransform(axisInfoRowElement[1]))
@@ -324,28 +324,28 @@ describe("Grouped Bar", () => {
                             .translate[0],
                         10
                     )
-                ).toBeCloserTo(453);
+                ).toBeCloserTo(426);
                 expect(
                     toNumber(
                         d3.transform(getCurrentTransform(axisInfoRowElement[3]))
                             .translate[0],
                         10
                     )
-                ).toBeCloserTo(112);
+                ).toBeCloserTo(106);
                 expect(
                     toNumber(
                         d3.transform(getCurrentTransform(axisInfoRowElement[4]))
                             .translate[0],
                         10
                     )
-                ).toBeCloserTo(254);
+                ).toBeCloserTo(239);
                 expect(
                     toNumber(
                         d3.transform(getCurrentTransform(axisInfoRowElement[5]))
                             .translate[0],
                         10
                     )
-                ).toBeCloserTo(396);
+                ).toBeCloserTo(372);
             });
         });
     });

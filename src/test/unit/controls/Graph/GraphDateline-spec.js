@@ -362,7 +362,7 @@ describe("Graph - Dateline", () => {
                 const translate = getSVGAnimatedTransformList(
                     datelinePointPath.getAttribute("transform")
                 ).translate;
-                expect(toNumber(translate[0], 10)).toBeCloserTo(541);
+                expect(toNumber(translate[0], 10)).toBeCloserTo(510);
                 expect(toNumber(translate[1], 10)).toBeCloserTo(0);
                 done();
             });
@@ -372,13 +372,13 @@ describe("Graph - Dateline", () => {
                 const datelineElement = fetchElementByClass(styles.dateline);
                 expect(
                     toNumber(datelineElement.getAttribute("x1"), 10)
-                ).toBeCloserTo(541);
+                ).toBeCloserTo(510);
                 expect(
                     toNumber(datelineElement.getAttribute("y1"), 10)
                 ).toBeCloserTo(0);
                 expect(
                     toNumber(datelineElement.getAttribute("x2"), 10)
-                ).toBeCloserTo(541);
+                ).toBeCloserTo(510);
                 expect(
                     toNumber(datelineElement.getAttribute("y2"), 10)
                 ).toBeCloserTo(235);

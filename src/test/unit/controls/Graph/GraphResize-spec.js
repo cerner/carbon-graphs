@@ -231,7 +231,7 @@ describe("Graph - Resize", () => {
             );
             expect(
                 toNumber(contentContainer.getAttribute("x"), 10)
-            ).toBeCloserTo(0);
+            ).toBeCloserTo(-16);
             expect(
                 toNumber(contentContainer.getAttribute("y"), 10)
             ).toBeCloserTo(0);
@@ -295,7 +295,7 @@ describe("Graph - Resize", () => {
                 );
                 expect(
                     toNumber(contentContainer.attr("width"), 10)
-                ).toBeCloserTo(762);
+                ).toBeCloserTo(742);
                 expect(toNumber(contentContainer.attr("height"))).toBeCloserTo(
                     250
                 );

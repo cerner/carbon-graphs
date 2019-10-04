@@ -597,7 +597,7 @@ describe("Bar - Axis Info Row", () => {
             const translate = getSVGAnimatedTransformList(
                 axisInfoRowElement.getAttribute("transform")
             ).translate;
-            expect(toNumber(translate[0], 10)).toBeCloserTo(142);
+            expect(toNumber(translate[0], 10)).toBeCloserTo(133);
             expect(toNumber(translate[1], 10)).toBeCloserTo(-10);
         });
     });

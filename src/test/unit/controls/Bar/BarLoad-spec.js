@@ -331,7 +331,10 @@ describe("Bar - Load lifecycle", () => {
                     ).toEqual(toNumber(point.getAttribute("height")) + 10);
                     expect(
                         toNumber(selectionPoint.getAttribute("width"))
-                    ).toEqual(toNumber(point.getAttribute("width")) + 10);
+                    ).toBeCloseTo(
+                        toNumber(point.getAttribute("width")) + 10,
+                        10
+                    );
                     done();
                 });
             });

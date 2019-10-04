@@ -158,7 +158,8 @@ const DATA = [
                     lowerLimit: new Date(2016, 0, 1, 1, 0).toISOString(),
                     upperLimit: new Date(2016, 0, 1, 23, 59).toISOString(),
                     ticks: {
-                        orientation: "inclined"
+                        orientation: "inclined",
+                        format: "%B"
                     },
                     orientation: "top"
                 },

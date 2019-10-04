@@ -11,7 +11,11 @@ import {
     getXAxisXPosition,
     isValidAxisType
 } from "../../../helpers/axis";
-import constants, { SHAPES } from "../../../helpers/constants";
+import constants, {
+    AXES_ORIENTATION,
+    TICKS_ORIENTATION,
+    SHAPES
+} from "../../../helpers/constants";
 import errors from "../../../helpers/errors";
 import {
     legendClickHandler,
@@ -196,15 +200,28 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
         .attr("clip-path", `url(#${config.clipPathId})`)
         .attr("aria-hidden", config.shownTargets.indexOf(dataTarget.key) < 0)
         .attr("aria-describedby", dataTarget.key);
-    const lineGroupSVG = lineSVG
-        .append("g")
-        .classed(styles.currentLinesGroup, true)
-        .attr(
-            "transform",
-            `translate(${getXAxisXPosition(config)},${calculateVerticalPadding(
-                config
-            )})`
-        );
+    const lineGroupSVG =
+        config.axis.x.orientation === AXES_ORIENTATION.X.TOP &&
+        config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED
+            ? lineSVG
+                  .append("g")
+                  .classed(styles.currentLinesGroup, true)
+                  .attr(
+                      "transform",
+                      `translate(${getXAxisXPosition(
+                          config
+                      )},${calculateVerticalPadding(config) +
+                          config.padding.top})`
+                  )
+            : lineSVG
+                  .append("g")
+                  .classed(styles.currentLinesGroup, true)
+                  .attr(
+                      "transform",
+                      `translate(${getXAxisXPosition(
+                          config
+                      )},${calculateVerticalPadding(config)})`
+                  );
     const linePath = lineGroupSVG
         .selectAll(`.${styles.line}`)
         .data([dataTarget]);
@@ -219,16 +236,33 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
         const currentPointsPath = lineSVG
             .selectAll(`.${styles.currentPointsGroup}`)
             .data([dataTarget]);
-        currentPointsPath
-            .enter()
-            .append("g")
-            .classed(styles.currentPointsGroup, true)
-            .attr(
-                "transform",
-                `translate(${getXAxisXPosition(
-                    config
-                )},${calculateVerticalPadding(config)})`
-            );
+        if (
+            config.axis.x.orientation === AXES_ORIENTATION.X.TOP &&
+            config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED
+        ) {
+            currentPointsPath
+                .enter()
+                .append("g")
+                .classed(styles.currentPointsGroup, true)
+                .attr(
+                    "transform",
+                    `translate(${getXAxisXPosition(
+                        config
+                    )},${calculateVerticalPadding(config) +
+                        config.padding.top})`
+                );
+        } else {
+            currentPointsPath
+                .enter()
+                .append("g")
+                .classed(styles.currentPointsGroup, true)
+                .attr(
+                    "transform",
+                    `translate(${getXAxisXPosition(
+                        config
+                    )},${calculateVerticalPadding(config)})`
+                );
+        }
         currentPointsPath
             .exit()
             .transition()

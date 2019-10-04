@@ -87,14 +87,14 @@ describe("Graph - Unload", () => {
         });
         it("Renders correctly after content is removed", () => {
             const contentContainer = d3.select(`.${styles.contentContainer}`);
-            expect(toNumber(contentContainer.attr("x"), 10)).toBeCloserTo(0);
+            expect(toNumber(contentContainer.attr("x"), 10)).toBeCloserTo(-16);
             expect(toNumber(contentContainer.attr("y"), 10)).toBeCloserTo(0);
             expect(
                 toNumber(
                     graph.config.axisSizes.y + graph.config.axisLabelWidths.y,
                     10
                 )
-            ).toBeCloserTo(0);
+            ).toBeCloserTo(-16);
             expect(getYAxisHeight(graph.config)).toBeCloserTo(267);
         });
         it("Renders correctly on another resize", (done) => {

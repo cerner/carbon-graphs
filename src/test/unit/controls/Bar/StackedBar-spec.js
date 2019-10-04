@@ -494,7 +494,7 @@ describe("Stacked Bar", () => {
                             .translate[0],
                         10
                     )
-                ).toBeCloserTo(140);
+                ).toBeCloserTo(132);
                 expect(
                     round2Decimals(
                         d3.transform(getCurrentTransform(axisInfoRowElement[0]))
@@ -507,7 +507,7 @@ describe("Stacked Bar", () => {
                             .translate[0],
                         10
                     )
-                ).toBeCloserTo(282);
+                ).toBeCloserTo(265);
                 expect(
                     round2Decimals(
                         d3.transform(getCurrentTransform(axisInfoRowElement[1]))
@@ -520,7 +520,7 @@ describe("Stacked Bar", () => {
                             .translate[0],
                         10
                     )
-                ).toBeCloserTo(424);
+                ).toBeCloserTo(399);
             });
         });
     });
