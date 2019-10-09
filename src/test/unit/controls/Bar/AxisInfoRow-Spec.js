@@ -499,6 +499,44 @@ describe("Bar - Axis Info Row", () => {
                 done();
             });
         });
+        it("Onclick enabled when only secondaryDisplay is truncated but not primary display ", (done) => {
+            let args = {};
+            data.axisInfoRow = [
+                {
+                    axis: "x",
+                    x: 1,
+                    value: {
+                        onClick: (cb, value, index) => {
+                            args = {
+                                cb,
+                                value,
+                                index
+                            };
+                        },
+                        characterCount: 5,
+                        color: Carbon.helpers.COLORS.ORANGE,
+                        shape: {},
+                        label: {
+                            display: "123",
+                            secondaryDisplay: "Intensive Care Unit"
+                        }
+                    }
+                }
+            ];
+            bar = new Bar(data);
+            graphDefault.loadContent(bar);
+            const axisInfoRowElement = fetchAllElementsByClass(
+                barGraphContainer,
+                styles.axisInfoRowItem
+            );
+            triggerEvent(axisInfoRowElement[0], "click", () => {
+                expect(args).not.toBeNull();
+                expect(args.cb).toEqual(jasmine.any(Function));
+                expect(args.value).not.toBeNull();
+                expect(args.index).toBe(0);
+                done();
+            });
+        });
         it("Sets svg as disabled when onClick is not provided", () => {
             data.axisInfoRow = [
                 {

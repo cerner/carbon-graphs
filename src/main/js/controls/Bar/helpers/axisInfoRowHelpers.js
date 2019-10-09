@@ -63,7 +63,12 @@ const createAxisInfoRowLabel = (
         shouldTruncateLabel(
             textLabelList.value.label.display,
             textLabelList.value.characterCount
-        )
+        ) ||
+        (textLabelList.value.label.secondaryDisplay &&
+            shouldTruncateLabel(
+                textLabelList.value.label.secondaryDisplay,
+                textLabelList.value.characterCount
+            ))
     ) {
         axisInfoRow
             .attr(
