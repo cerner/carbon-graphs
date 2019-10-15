@@ -714,9 +714,8 @@ const isXAxisOrientationTop = (xAxisOrientation) =>
  */
 const calculateAxesSize = (config) => {
     config.axisSizes = {};
-    config.axisSizes.y = config.padding.hasCustomPadding
-        ? getYAxisWidth(constants.Y_AXIS, config)
-        : getYAxisWidth(constants.Y_AXIS, config) + config.padding.left;
+    config.axisSizes.y =
+        getYAxisWidth(constants.Y_AXIS, config) + config.padding.left;
     config.axisSizes.y2 = getY2AxisWidth(config);
     config.axisSizes.x = getXAxisHeight(config);
 };
