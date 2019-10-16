@@ -72,14 +72,14 @@ describe("Panning", () => {
             expect(datelineGroupElement.getAttribute("aria-selected")).toBe(
                 "false"
             );
-            setTimeout(() => {
+            delay(() => {
                 const translate = getSVGAnimatedTransformList(
                     datelineGroupElement.getAttribute("transform")
                 ).translate;
                 expect(toNumber(translate[0], 10)).toBeCloseTo(106);
                 expect(toNumber(translate[1], 10)).toBeCloseTo(5);
                 done();
-            }, 10);
+            });
         });
     });
     describe("When disabled", () => {

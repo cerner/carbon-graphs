@@ -63,14 +63,14 @@ describe("Graph - Panning", () => {
         });
         it("DatelineGroup translates properly when panning is enabled", (done) => {
             const datelineGroup = fetchElementByClass(styles.datelineGroup);
-            setTimeout(() => {
+            delay(() => {
                 const translate = getSVGAnimatedTransformList(
                     datelineGroup.getAttribute("transform")
                 ).translate;
                 expect(toNumber(translate[0], 10)).toBeCloserTo(73);
                 expect(toNumber(translate[1], 10)).toBeCloserTo(5);
                 done();
-            }, 10);
+            });
         });
     });
     describe("When disabled", () => {
