@@ -17,7 +17,6 @@ svg:not(:root) {
     color: @dark;
     padding-bottom: 0.8333rem;
     padding-top: 0.8333rem;
-    vertical-align: middle;
     width: 100%;
 }
 
@@ -105,7 +104,7 @@ svg:not(:root) {
             margin-right: 0.5rem;
             padding: 0.5rem;
             border-radius: 0.25rem;
-            border: 0.1rem solid @grey15;
+            border: 0;
             background-color: @grey15;
         }
 
@@ -139,9 +138,10 @@ svg:not(:root) {
 
         & .carbon-legend-item-icon {
             display: block;
-            vertical-align: middle;
-            width: 0.75rem;
-            height: 0.75rem;
+            width: 0.866rem;
+            height: 0.866rem;
+            stroke: @white;
+            stroke-width: 5px;
         }
     }
 
