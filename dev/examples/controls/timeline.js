@@ -1,7 +1,7 @@
 import Carbon from "../../../src/main/js/carbon";
 import { getDemoData } from "../data";
 import utils from "../../../src/main/js/helpers/utils";
-import { createPanningControls } from "./panHelpers";
+import { createPanningControls } from "../panHelpers";
 
 export const renderTimeline = (id) => {
     const timelineDefault = Carbon.api.timeline(

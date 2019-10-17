@@ -2,20 +2,20 @@
 
 Thanks for contributing to Carbon! :1st_place_medal: :1st_place_medal:
 
--   [Contributing to Carbon](#Contributing-to-Carbon)
-    -   [Code of Conduct](#Code-of-Conduct)
-    -   [Consumers](#Consumers)
-    -   [Developers](#Developers)
-        -   [Development](#Development)
-            -   [Pulling in dependencies](#Pulling-in-dependencies)
-            -   [Building the project](#Building-the-project)
-        -   [Code Review](#Code-Review)
-            -   [Pull Request checklist](#Pull-Request-checklist)
-            -   [Commit message format](#Commit-message-format)
-            -   [Pull Request](#Pull-Request)
-        -   [Release](#Release)
-        -   [Deploying the site to GitHub](#Deploying-the-site-to-GitHub)
-    -   [Breaking changes](#Breaking-changes)
+-   [Contributing to Carbon](#contributing-to-carbon)
+    -   [Code of Conduct](#code-of-conduct)
+    -   [Consumers](#consumers)
+    -   [Developers](#developers)
+        -   [Development](#development)
+            -   [Pulling in dependencies](#pulling-in-dependencies)
+            -   [Building the project](#building-the-project)
+        -   [Code Review](#code-review)
+            -   [Pull Request checklist](#pull-request-checklist)
+            -   [Commit message format](#commit-message-format)
+            -   [Pull Request](#pull-request)
+        -   [Release](#release)
+        -   [Deploying the site to GitHub](#deploying-the-site-to-github)
+    -   [Breaking changes](#breaking-changes)
 
 This project uses NPM for dependency management and provides NPM scripts to call on `Webpack` to run tasks on the project.
 To get started, you will need to checkout this project.
@@ -47,19 +47,19 @@ Before starting development on a Carbon project, please complete the following s
 
 After checking out the project, you will want to run the following command to pull in dependencies needed by the project:
 
-```
+```sh
 npm install
 ```
 
 When contributing to Carbon, you would need to run the below command and load the test page. The test page auto reloads whenever you make any changes to the .CSS, .JS files or if you make any changes to the sample .html file
 
-```
+```sh
 npm run dev
 ```
 
 Open in browser:
 
-```
+```sh
 http://localhost:9991/
 ```
 
@@ -67,7 +67,7 @@ http://localhost:9991/
 
 To build the project, run the build script:
 
-```
+```sh
 npm run build && npm run build:dist
 ```
 
