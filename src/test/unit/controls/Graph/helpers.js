@@ -4,6 +4,7 @@ import {
     SHAPES,
     AXES_ORIENTATION
 } from "../../../../main/js/helpers/constants";
+import Carbon from "../../../../main/js/carbon";
 import utils from "../../../../main/js/helpers/utils";
 
 /**
@@ -137,6 +138,62 @@ export const axisDefaultWithoutPanning = {
         enabled: false
     }
 };
+
+export const axisInclined = {
+    x: {
+        type: Carbon.helpers.AXIS_TYPE.TIME_SERIES,
+        label: "Datetime",
+        lowerLimit: new Date(2016, 0, 1, 1, 0).toISOString(),
+        upperLimit: new Date(2016, 0, 1, 23, 59).toISOString(),
+        ticks: {
+            orientation: "inclined"
+        }
+    },
+    y: {
+        label: "Line Set A",
+        lowerLimit: 10,
+        upperLimit: 30
+    },
+    y2: {
+        label: "Line Set B",
+        show: false,
+        lowerLimit: 0,
+        upperLimit: 250
+    }
+};
+
+export const axisDefaultWithInclined = {
+    bindTo: "#testGraph_carbon",
+    axis: axisInclined
+};
+
+export const axisInclinedData = (
+    values,
+    isDefaultColor = true,
+    isDefaultShape = true,
+    isY2Axis = false
+) =>
+    isY2Axis
+        ? {
+              key: `uid_1`,
+              color: !isDefaultColor ? COLORS[Object.keys(COLORS)[1]] : "",
+              shape: !isDefaultShape ? SHAPES.RHOMBUS : "",
+              yAxis: "y2",
+              label: {
+                  display: "Data Label B"
+              },
+              values
+          }
+        : {
+              key: `uid_2`,
+              color: !isDefaultColor ? COLORS[Object.keys(COLORS)[1]] : "",
+              shape: !isDefaultShape ? SHAPES.RHOMBUS : "",
+              yAxis: "y",
+              label: {
+                  display: "Data Label C"
+              },
+              values
+          };
 /**
  * Returns the DOM element queried by Class
  *

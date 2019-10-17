@@ -2,6 +2,7 @@
 import Graph from "../../../../main/js/controls/Graph/index";
 import Line from "../../../../main/js/controls/Line/Line";
 import constants, {
+    TICKS_ORIENTATION,
     AXES_ORIENTATION,
     AXIS_TYPE
 } from "../../../../main/js/helpers/constants";
@@ -21,7 +22,9 @@ import {
     getAxes,
     getData,
     valuesDefault,
-    valuesTimeSeries
+    valuesTimeSeries,
+    axisDefaultWithInclined,
+    axisInclinedData
 } from "./helpers";
 
 describe("Graph", () => {
@@ -40,6 +43,20 @@ describe("Graph", () => {
     afterEach(() => {
         document.body.innerHTML = "";
     });
+    const values = [
+        { x: new Date(2016, 0, 1, 1, 5).toISOString(), y: 5 },
+        { x: new Date(2016, 0, 1, 5, 15).toISOString(), y: 11 },
+        { x: new Date(2016, 0, 1, 9, 15).toISOString(), y: 12 },
+        { x: new Date(2016, 0, 1, 12, 15).toISOString(), y: 16 },
+        { x: new Date(2016, 0, 1, 14, 15).toISOString(), y: 17 }
+    ];
+    const valuesY2 = [
+        { x: new Date(2016, 0, 1, 1, 5).toISOString(), y: 0 },
+        { x: new Date(2016, 0, 1, 4, 15).toISOString(), y: 50 },
+        { x: new Date(2016, 0, 1, 8, 15).toISOString(), y: 60 },
+        { x: new Date(2016, 0, 1, 12, 15).toISOString(), y: 80 },
+        { x: new Date(2016, 0, 1, 16, 15).toISOString(), y: 120 }
+    ];
     describe("When constructed", () => {
         it("Throws error on undefined input", () => {
             expect(() => {
@@ -823,6 +840,56 @@ describe("Graph", () => {
             ).translate;
             expect(toNumber(translate[0], 10)).toBeCloserTo(72);
             expect(toNumber(translate[1], 10)).toBeCloserTo(10);
+        });
+        it("When the X axis ticks are inclined", () => {
+            const axisData = utils.deepClone(axisDefaultWithInclined);
+            axisData.axis.y2.show = true;
+            axisData.axis.x.orientation = AXES_ORIENTATION.X.TOP;
+            axisData.axis.x.ticks.orientation = TICKS_ORIENTATION.X.INCLINED;
+            axisData.padding = {
+                top: 20,
+                bottom: 10,
+                left: 30,
+                right: 50
+            };
+            const graph = new Graph(axisData);
+            const input = axisInclinedData(values, true, true, false);
+            graph.loadContent(new Line(input));
+            const inputY2 = axisInclinedData(valuesY2, true, true, true);
+            graph.loadContent(new Line(inputY2));
+            const xAxis = fetchElementByClass(styles.axisX);
+            const xAxisElement = xAxis.querySelectorAll("text");
+            expect(toNumber(xAxisElement.length, 10)).toBe(9);
+            console.log(xAxis);
+            const axisXLabel = fetchElementByClass(styles.axisLabelX);
+
+            const axisXLabelTranslate = getSVGAnimatedTransformList(
+                axisXLabel.getAttribute("transform")
+            ).translate;
+            expect(toNumber(axisXLabelTranslate[0], 10)).toBeCloserTo(492);
+            expect(toNumber(axisXLabelTranslate[1], 10)).toBeCloserTo(20);
+
+            const axisYLabel = fetchElementByClass(styles.axisLabelY);
+            const axisYLabelTranslate = getSVGAnimatedTransformList(
+                axisYLabel.getAttribute("transform")
+            ).translate;
+            expect(toNumber(axisYLabelTranslate[0], 10)).toBeCloserTo(13);
+            expect(toNumber(axisYLabelTranslate[1], 10)).toBeCloserTo(155);
+
+            const axisY2Label = fetchElementByClass(styles.axisLabelY2);
+            const axisY2LabelTranslate = getSVGAnimatedTransformList(
+                axisY2Label.getAttribute("transform")
+            ).translate;
+            expect(toNumber(axisY2LabelTranslate[0], 10)).toBeCloserTo(974);
+            expect(toNumber(axisY2LabelTranslate[1], 10)).toBeCloserTo(155);
+
+            const grid = fetchElementByClass(styles.grid);
+            const gridTranslate = getSVGAnimatedTransformList(
+                grid.getAttribute("transform")
+            ).translate;
+            expect(toNumber(gridTranslate[0], 10)).toBeCloserTo(76);
+            expect(toNumber(gridTranslate[1], 10)).toBeCloserTo(73);
+            console.log(axisData);
         });
     });
 });
