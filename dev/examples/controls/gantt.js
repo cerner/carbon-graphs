@@ -9,7 +9,7 @@ import {
     loadTrackLabelPopup,
     loadTrackPopup
 } from "../popup";
-import { createPanningControls } from "./panHelpers";
+import { createPanningControls } from "../panHelpers";
 
 const daysToMilliseconds = (d) => 24 * 60 * 60 * 1000 * d;
 const scheduled = {
