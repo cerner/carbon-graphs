@@ -2,7 +2,7 @@ import Carbon from "../../../src/main/js/carbon";
 import utils from "../../../src/main/js/helpers/utils";
 import { getDemoData } from "../data";
 import { loadDatelinePopup } from "../popup";
-import { createPanningControls } from "./panHelpers";
+import { createPanningControls } from "../panHelpers";
 
 const tickValues = [
     new Date(2016, 0, 1, 1, 0).toISOString(),

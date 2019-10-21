@@ -1,13 +1,14 @@
 import d3 from "d3";
-import Carbon from "../../../src/main/js/carbon";
+import Carbon from "../../src/main/js/carbon";
 import {
     LEFT_CHEVRON,
     RIGHT_CHEVRON
-} from "../../../src/main/js/core/Shape/shapeDefinitions";
+} from "../../src/main/js/core/Shape/shapeDefinitions";
 
 /**
- * Creats Panning container to hold the navigation buttons
+ * Creates Panning container to hold the navigation buttons
  *
+ * @private
  * @param {Array} container - Contains array of the html elements
  * @returns { HTMLElement } return html element
  */
@@ -17,6 +18,7 @@ const createPanningContainer = (container) =>
 /**
  * createNavigationButton to control the graph movement
  *
+ * @private
  * @param {Array} container - container we need to append the navigation button
  * @param {object} icon - icon to add inside the buttons
  * @param {Function} action - function to move to graph
@@ -39,8 +41,9 @@ const createNavigationButton = (container, icon, action, className) =>
         );
 
 /**
- *moveLeftHandler moves the graph to left on click of the button
+ * moveLeftHandler moves the graph to left on click of the button
  *
+ * @private
  * @param {object} graphOptions - graph object which we have to re-create
  * @param {object} shift - rate by which we have to shift
  * @returns {object} returns the update axis to re-create the graph
@@ -55,8 +58,9 @@ const moveLeftHandler = (graphOptions, shift) => () => {
 };
 
 /**
- *moveRightHandler moves the graph to left on click of the button
+ * moveRightHandler moves the graph to left on click of the button
  *
+ * @private
  * @param {object} graphOptions - graph object which we have to re-create
  * @param {object} shift - rate by which we have to shift
  * @returns {object} returns the update axis to re-create the graph
@@ -71,8 +75,9 @@ const moveRightHandler = (graphOptions, shift) => () => {
 };
 
 /**
- *createPanningControls to create the navigation button with the click handler
+ * createPanningControls to create the navigation button with the click handler
  *
+ * @private
  * @param {string} id - id of the div where we have to insert the navigation buttons
  * @param {object} graphOptions - graph data to perform operations on the graph
  * @returns {undefined} returns nothing
@@ -97,4 +102,5 @@ const createPanningControls = (id, graphOptions) => {
         "nav-right"
     );
 };
+
 export { createPanningControls, moveRightHandler, moveLeftHandler };
