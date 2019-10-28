@@ -479,12 +479,9 @@ const isSinglePairedResultTargetDisplayed = (config, graphContext) => {
     const displayedPairedResults = [];
 
     config.shownTargets.forEach((target) => {
-        graphContext.contentConfig.forEach((content) => {
-            if (
-                target.includes(content.key) &&
-                !displayedPairedResults.includes(content.key)
-            ) {
-                displayedPairedResults.push(content.key);
+        graphContext.contentKeys.forEach((key) => {
+            if (target.includes(key) && !displayedPairedResults.includes(key)) {
+                displayedPairedResults.push(key);
             }
         });
     });
