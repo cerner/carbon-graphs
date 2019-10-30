@@ -8,11 +8,7 @@ import {
     getXAxisXPosition,
     isValidAxisType
 } from "../../../helpers/axis";
-import constants, {
-    SHAPES,
-    AXES_ORIENTATION,
-    TICKS_ORIENTATION
-} from "../../../helpers/constants";
+import constants, { SHAPES } from "../../../helpers/constants";
 import errors from "../../../helpers/errors";
 import {
     legendClickHandler,
