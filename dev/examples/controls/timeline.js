@@ -4,16 +4,22 @@ import utils from "../../../src/main/js/helpers/utils";
 import { createPanningControls } from "../panHelpers";
 
 export const renderTimeline = (id) => {
-    const timelineDefault = Carbon.api.timeline(
-        getDemoData(`#${id}`, "TIMELINE")
-    );
+    const data = utils.deepClone(getDemoData(`#${id}`, "TIMELINE"));
+
+    data.padding = {
+        left: 30,
+        right: 50,
+        top: 30,
+        bottom: 0
+    };
+    const timelineDefault = Carbon.api.timeline(data);
     timelineDefault.loadContent(getDemoData(`#${id}`, "TIMELINE").data[0]);
     timelineDefault.loadContent(getDemoData(`#${id}`, "TIMELINE").data[1]);
     return timelineDefault;
 };
 export const renderTimelineCustomPadding = (id) => {
     const data = utils.deepClone(getDemoData(`#${id}`, "TIMELINE"));
-    data.showLegend = false;
+    // data.showLegend = false;
     data.axis.x.show = false;
     data.padding = {
         left: 150,

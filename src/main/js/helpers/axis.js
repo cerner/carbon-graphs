@@ -67,42 +67,135 @@ const createReferenceLine = (scale, yAxis) =>
 const createAxes = (axis, scale, config, canvasSVG) => {
     getAxesScale(axis, scale, config);
     prepareHAxis(scale, axis, config, prepareHorizontalAxis);
-    canvasSVG
-        .append("g")
-        .classed(styles.axis, true)
-        .classed(styles.axisX, true)
-        .attr("aria-hidden", !config.axis.x.show)
-        .attr(
-            "transform",
-            `translate(${getXAxisXPosition(config)}, ${getXAxisYPosition(
-                config
-            )})`
-        )
-        .call(axis.x);
-    canvasSVG
-        .append("g")
-        .classed(styles.axis, true)
-        .classed(styles.axisY, true)
-        .attr("aria-hidden", !config.axis.y.show)
-        .attr(
-            "transform",
-            `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition(
-                config
-            )})`
-        )
-        .call(axis.y);
-    if (hasY2Axis(config.axis)) {
+    if (
+        config.axis.x.orientation === AXES_ORIENTATION.X.TOP &&
+        config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED
+    ) {
         canvasSVG
             .append("g")
             .classed(styles.axis, true)
-            .classed(styles.axisY2, true)
+            .classed(styles.axisX, true)
+            .attr("aria-hidden", !config.axis.x.show)
             .attr(
                 "transform",
-                `translate(${getY2AxisXPosition(config)}, ${getY2AxisYPosition(
+                `translate(${getXAxisXPosition(config)}, ${getXAxisYPosition(
+                    config
+                ) + config.padding.top})`
+            )
+            .call(axis.x)
+            .selectAll("text")
+            .style("text-anchor", "start")
+            .attr("dx", "7")
+            .attr("dy", "8")
+            .attr("transform", "rotate(-65)");
+        canvasSVG
+            .append("g")
+            .classed(styles.axis, true)
+            .classed(styles.axisY, true)
+            .attr("aria-hidden", !config.axis.y.show)
+            .attr(
+                "transform",
+                `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition(
+                    config
+                ) + config.padding.top})`
+            )
+            .call(axis.y);
+        if (hasY2Axis(config.axis)) {
+            canvasSVG
+                .append("g")
+                .classed(styles.axis, true)
+                .classed(styles.axisY2, true)
+                .attr(
+                    "transform",
+                    `translate(${getY2AxisXPosition(
+                        config
+                    )}, ${getY2AxisYPosition(config) + config.padding.top})`
+                )
+                .call(axis.y2);
+        }
+    } else if (
+        config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED
+    ) {
+        canvasSVG
+            .append("g")
+            .classed(styles.axis, true)
+            .classed(styles.axisX, true)
+            .attr("aria-hidden", !config.axis.x.show)
+            .attr(
+                "transform",
+                `translate(${getXAxisXPosition(config)}, ${getXAxisYPosition(
                     config
                 )})`
             )
-            .call(axis.y2);
+            .call(axis.x)
+            .selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", "-7")
+            .attr("dy", "0")
+            .attr("transform", "rotate(-65)");
+        canvasSVG
+            .append("g")
+            .classed(styles.axis, true)
+            .classed(styles.axisY, true)
+            .attr("aria-hidden", !config.axis.y.show)
+            .attr(
+                "transform",
+                `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition(
+                    config
+                )})`
+            )
+            .call(axis.y);
+        if (hasY2Axis(config.axis)) {
+            canvasSVG
+                .append("g")
+                .classed(styles.axis, true)
+                .classed(styles.axisY2, true)
+                .attr(
+                    "transform",
+                    `translate(${getY2AxisXPosition(
+                        config
+                    )}, ${getY2AxisYPosition(config)})`
+                )
+                .call(axis.y2);
+        }
+    } else {
+        canvasSVG
+            .append("g")
+            .classed(styles.axis, true)
+            .classed(styles.axisX, true)
+            .attr("aria-hidden", !config.axis.x.show)
+            .attr(
+                "transform",
+                `translate(${getXAxisXPosition(config)}, ${getXAxisYPosition(
+                    config
+                )})`
+            )
+            .call(axis.x);
+        canvasSVG
+            .append("g")
+            .classed(styles.axis, true)
+            .classed(styles.axisY, true)
+            .attr("aria-hidden", !config.axis.y.show)
+            .attr(
+                "transform",
+                `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition(
+                    config
+                )})`
+            )
+            .call(axis.y);
+        if (hasY2Axis(config.axis)) {
+            canvasSVG
+                .append("g")
+                .classed(styles.axis, true)
+                .classed(styles.axisY2, true)
+                .attr(
+                    "transform",
+                    `translate(${getY2AxisXPosition(
+                        config
+                    )}, ${getY2AxisYPosition(config)})`
+                )
+                .call(axis.y2);
+        }
     }
 };
 
@@ -118,18 +211,36 @@ const createAxes = (axis, scale, config, canvasSVG) => {
  */
 const createXAxisInfoRow = (axis, scale, config, canvasSVG) => {
     getAxesScale(axis, scale, config);
-    canvasSVG
-        .append("g")
-        .classed(styles.axis, true)
-        .classed(styles.axisInfoRow, true)
-        .attr("aria-hidden", true)
-        .attr(
-            "transform",
-            `translate(${getXAxisXPosition(config)}, ${getAxisInfoRowYPosition(
-                config
-            )})`
-        )
-        .call(axis.axisInfoRow.x);
+    if (
+        config.axis.x.orientation === AXES_ORIENTATION.X.TOP &&
+        config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED
+    ) {
+        canvasSVG
+            .append("g")
+            .classed(styles.axis, true)
+            .classed(styles.axisInfoRow, true)
+            .attr("aria-hidden", true)
+            .attr(
+                "transform",
+                `translate(${getXAxisXPosition(
+                    config
+                )}, ${getAxisInfoRowYPosition(config) + config.padding.top})`
+            )
+            .call(axis.axisInfoRow.x);
+    } else {
+        canvasSVG
+            .append("g")
+            .classed(styles.axis, true)
+            .classed(styles.axisInfoRow, true)
+            .attr("aria-hidden", true)
+            .attr(
+                "transform",
+                `translate(${getXAxisXPosition(
+                    config
+                )}, ${getAxisInfoRowYPosition(config)})`
+            )
+            .call(axis.axisInfoRow.x);
+    }
 };
 
 /**
@@ -143,9 +254,15 @@ const createXAxisInfoRow = (axis, scale, config, canvasSVG) => {
  * @returns {undefined} - returns nothing
  */
 const createAxisReferenceLine = (axis, scale, config, canvasSVG) => {
-    const transformAttribute = `translate(${getYAxisXPosition(
-        config
-    )}, ${getYAxisYPosition(config)})`;
+    const transformAttribute =
+        config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED &&
+        config.axis.x.orientation === AXES_ORIENTATION.X.TOP
+            ? `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition(
+                  config
+              ) + config.padding.top})`
+            : `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition(
+                  config
+              )})`;
     const setReferenceLineAttributes = (path, style) =>
         path
             .classed(styles.axisReferenceLine, true)
@@ -720,7 +837,7 @@ const calculateAxesSize = (config) => {
     config.axisSizes = {};
     config.axisSizes.y =
         getYAxisWidth(constants.Y_AXIS, config) + config.padding.left;
-    config.axisSizes.y2 = getY2AxisWidth(config) + config.padding.right;
+    config.axisSizes.y2 = getY2AxisWidth(config);
     config.axisSizes.x = getXAxisHeight(config);
 };
 /**
@@ -909,9 +1026,44 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
             .call(axis.x)
             .selectAll("text")
             .style("text-anchor", "start")
-            .attr("dx", "8")
-            .attr("dy", "10")
+            .attr("dx", "7")
+            .attr("dy", "8")
             .attr("transform", "rotate(-65)");
+        canvasSVG
+            .select(`.${styles.axisY}`)
+            .transition()
+            .call(constants.d3Transition)
+            .attr(
+                "transform",
+                `translate(${getYAxisXPosition(config)},${getYAxisYPosition(
+                    config
+                ) + config.padding.top})`
+            )
+            .call(axis.y);
+        if (hasY2Axis(config.axis)) {
+            canvasSVG
+                .select(`.${styles.axisY2}`)
+                .transition()
+                .call(constants.d3Transition)
+                .attr(
+                    "transform",
+                    `translate(${getY2AxisXPosition(
+                        config
+                    )},${getY2AxisYPosition(config) + config.padding.top})`
+                )
+                .call(axis.y2);
+        }
+        canvasSVG
+            .select(`.${styles.axisInfoRow}`)
+            .transition()
+            .call(constants.d3Transition(config.settingsDictionary.transition))
+            .attr(
+                "transform",
+                `translate(${getXAxisXPosition(
+                    config
+                )}, ${getAxisInfoRowYPosition(config) + config.padding.top})`
+            )
+            .call(axis.axisInfoRow.x);
     } else if (
         config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED
     ) {
@@ -931,36 +1083,6 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
             .attr("dx", "-7")
             .attr("dy", "0")
             .attr("transform", "rotate(-65)");
-    } else {
-        canvasSVG
-            .select(`.${styles.axisX}`)
-            .transition()
-            .call(constants.d3Transition)
-            .attr(
-                "transform",
-                `translate(${getXAxisXPosition(config)},${getXAxisYPosition(
-                    config
-                )})`
-            )
-            .call(axis.x);
-    }
-
-    if (
-        config.axis.x.orientation === AXES_ORIENTATION.X.TOP &&
-        config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED
-    ) {
-        canvasSVG
-            .select(`.${styles.axisY}`)
-            .transition()
-            .call(constants.d3Transition)
-            .attr(
-                "transform",
-                `translate(${getYAxisXPosition(config)},${getYAxisYPosition(
-                    config
-                ) + config.padding.top})`
-            )
-            .call(axis.y);
-    } else {
         canvasSVG
             .select(`.${styles.axisY}`)
             .transition()
@@ -972,25 +1094,7 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
                 )})`
             )
             .call(axis.y);
-    }
-
-    if (hasY2Axis(config.axis)) {
-        if (
-            config.axis.x.orientation === AXES_ORIENTATION.X.TOP &&
-            config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED
-        ) {
-            canvasSVG
-                .select(`.${styles.axisY2}`)
-                .transition()
-                .call(constants.d3Transition)
-                .attr(
-                    "transform",
-                    `translate(${getY2AxisXPosition(
-                        config
-                    )},${getY2AxisYPosition(config) + config.padding.top})`
-                )
-                .call(axis.y2);
-        } else {
+        if (hasY2Axis(config.axis)) {
             canvasSVG
                 .select(`.${styles.axisY2}`)
                 .transition()
@@ -1003,19 +1107,67 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
                 )
                 .call(axis.y2);
         }
+        canvasSVG
+            .select(`.${styles.axisInfoRow}`)
+            .transition()
+            .call(constants.d3Transition(config.settingsDictionary.transition))
+            .attr(
+                "transform",
+                `translate(${getXAxisXPosition(
+                    config
+                )}, ${getAxisInfoRowYPosition(config)})`
+            )
+            .call(axis.axisInfoRow.x);
+    } else {
+        canvasSVG
+            .select(`.${styles.axisX}`)
+            .transition()
+            .call(constants.d3Transition(config.settingsDictionary.transition))
+            .attr(
+                "transform",
+                `translate(${getXAxisXPosition(config)},${getXAxisYPosition(
+                    config
+                )})`
+            )
+            .call(axis.x);
+        canvasSVG
+            .select(`.${styles.axisY}`)
+            .transition()
+            .call(constants.d3Transition(config.settingsDictionary.transition))
+            .attr(
+                "transform",
+                `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition(
+                    config
+                )})`
+            )
+            .call(axis.y);
+        if (hasY2Axis(config.axis)) {
+            canvasSVG
+                .select(`.${styles.axisY2}`)
+                .transition()
+                .call(
+                    constants.d3Transition(config.settingsDictionary.transition)
+                )
+                .attr(
+                    "transform",
+                    `translate(${getY2AxisXPosition(
+                        config
+                    )}, ${getY2AxisYPosition(config)})`
+                )
+                .call(axis.y2);
+        }
+        canvasSVG
+            .select(`.${styles.axisInfoRow}`)
+            .transition()
+            .call(constants.d3Transition(config.settingsDictionary.transition))
+            .attr(
+                "transform",
+                `translate(${getXAxisXPosition(
+                    config
+                )}, ${getAxisInfoRowYPosition(config)})`
+            )
+            .call(axis.axisInfoRow.x);
     }
-
-    canvasSVG
-        .select(`.${styles.axisInfoRow}`)
-        .transition()
-        .call(constants.d3Transition(config.settingsDictionary.transition))
-        .attr(
-            "transform",
-            `translate(${getXAxisXPosition(config)}, ${getAxisInfoRowYPosition(
-                config
-            )})`
-        )
-        .call(axis.axisInfoRow.x);
 };
 /**
  * Updates the Y axis reference line when resized. This is also called

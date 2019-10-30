@@ -6,7 +6,7 @@ import {
     getXAxisWidth,
     getXAxisXPosition
 } from "./axis";
-import constants from "./constants";
+import constants, { AXES_ORIENTATION, TICKS_ORIENTATION } from "./constants";
 import errors from "./errors";
 import styles from "./styles";
 import { round2Decimals } from "./transformUtils";
@@ -144,11 +144,23 @@ const getRegionAxis = (region) => region.axis || constants.Y_AXIS;
  * @param {object} config - config object derived from input JSON
  * @returns {function(*=): number} Function which returns Y Axis Vertical position for Range
  */
-const getYAxisRangePosition = (scale, config) => (bounds) =>
-    bounds.end
-        ? round2Decimals(scale[getRegionAxis(bounds)](bounds.end)) +
-          calculateVerticalPadding(config)
-        : calculateVerticalPadding(config);
+const getYAxisRangePosition = (scale, config) => (bounds) => {
+    if (
+        config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED &&
+        config.axis.x.orientation === AXES_ORIENTATION.X.TOP
+    ) {
+        return bounds.end
+            ? round2Decimals(scale[getRegionAxis(bounds)](bounds.end)) +
+                  calculateVerticalPadding(config) +
+                  config.padding.top
+            : calculateVerticalPadding(config);
+    } else {
+        return bounds.end
+            ? round2Decimals(scale[getRegionAxis(bounds)](bounds.end)) +
+                  calculateVerticalPadding(config)
+            : calculateVerticalPadding(config);
+    }
+};
 /**
  * Returns the height for range based on Y Axes, start and end bounds
  * If start and end bounds arent provided then a "region line" number is returned with
@@ -164,10 +176,22 @@ const getYAxisRangePosition = (scale, config) => (bounds) =>
 const getRegionHeight = (regionPath, bounds, scale, config) => {
     const graphHeight = config.height;
     const upperBound = utils.getNumber(regionPath.attr(constants.Y_AXIS));
-    const lowerBound = bounds.start
-        ? round2Decimals(scale[getRegionAxis(bounds)](bounds.start)) +
-          calculateVerticalPadding(config)
-        : graphHeight + calculateVerticalPadding(config);
+    let lowerBound;
+    if (
+        config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED &&
+        config.axis.x.orientation === AXES_ORIENTATION.X.TOP
+    ) {
+        lowerBound = bounds.start
+            ? round2Decimals(scale[getRegionAxis(bounds)](bounds.start)) +
+              calculateVerticalPadding(config) +
+              config.padding.top
+            : graphHeight + calculateVerticalPadding(config);
+    } else {
+        lowerBound = bounds.start
+            ? round2Decimals(scale[getRegionAxis(bounds)](bounds.start)) +
+              calculateVerticalPadding(config)
+            : graphHeight + calculateVerticalPadding(config);
+    }
     // If start and end are the same then `padding.top` worth of height is
     // applied to make it seem like a region line
     return (

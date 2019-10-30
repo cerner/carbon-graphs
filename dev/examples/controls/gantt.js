@@ -349,7 +349,13 @@ const upperStepTickValues = [
 
 export const renderGantt = (id) => {
     const data = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
-    data.showActionLegend = false;
+    // data.showActionLegend = false;
+    // data.padding = {
+    //     left: 50,
+    //     right: 50,
+    //     top: 50,
+    //     bottom: 40
+    // };
     const ganttDefault = Carbon.api.gantt(data);
     loadTracks(ganttDefault, tasks, [], [], [], 4);
     return ganttDefault;

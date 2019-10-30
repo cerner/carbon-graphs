@@ -11,6 +11,7 @@ import styles from "../../../../main/js/helpers/styles";
 import { getSVGAnimatedTransformList } from "../../../../main/js/helpers/transformUtils";
 import utils from "../../../../main/js/helpers/utils";
 import {
+    delay,
     loadCustomJasmineMatcher,
     toNumber
 } from "../../helpers/commonHelpers";
@@ -841,7 +842,7 @@ describe("Graph", () => {
             expect(toNumber(translate[0], 10)).toBeCloserTo(72);
             expect(toNumber(translate[1], 10)).toBeCloserTo(10);
         });
-        it("When the X axis ticks are inclined", () => {
+        it("When the X axis ticks are inclined", (done) => {
             const axisData = utils.deepClone(axisDefaultWithInclined);
             axisData.axis.y2.show = true;
             axisData.axis.x.orientation = AXES_ORIENTATION.X.TOP;
@@ -857,39 +858,63 @@ describe("Graph", () => {
             graph.loadContent(new Line(input));
             const inputY2 = axisInclinedData(valuesY2, true, true, true);
             graph.loadContent(new Line(inputY2));
-            const xAxis = fetchElementByClass(styles.axisX);
-            const xAxisElement = xAxis.querySelectorAll("text");
-            expect(toNumber(xAxisElement.length, 10)).toBe(9);
-            console.log(xAxis);
-            const axisXLabel = fetchElementByClass(styles.axisLabelX);
+            graph.resize();
+            delay(() => {
+                const xAxis = fetchElementByClass(styles.axisX);
+                const xAxisTranslate = getSVGAnimatedTransformList(
+                    xAxis.getAttribute("transform")
+                ).translate;
+                expect(toNumber(xAxisTranslate[0], 10)).toBeCloserTo(78);
+                expect(toNumber(xAxisTranslate[1], 10)).toBeCloserTo(76);
+                const xAxisElement = xAxis.querySelectorAll("text");
+                expect(toNumber(xAxisElement.length, 10)).toBe(9);
+                expect(xAxisElement[0].getAttribute("style")).toBe(
+                    "text-anchor: start;"
+                );
+                const axisLabelX = fetchElementByClass(styles.axisLabelX);
+                const axisLabelXTranslate = getSVGAnimatedTransformList(
+                    axisLabelX.getAttribute("transform")
+                ).translate;
+                expect(
+                    toNumber(xAxisTranslate[1] - axisLabelXTranslate[1], 10)
+                ).toBe(toNumber(graph.config.padding.top + 36, 10));
+                console.log(axisLabelX);
+                console.log(xAxis);
+                done();
+            });
+            // const xAxis = fetchElementByClass(styles.axisX);
+            // const xAxisElement = xAxis.querySelectorAll("text");
+            // expect(toNumber(xAxisElement.length, 10)).toBe(9);
+            // console.log(xAxis);
+            // const axisXLabel = fetchElementByClass(styles.axisLabelX);
 
-            const axisXLabelTranslate = getSVGAnimatedTransformList(
-                axisXLabel.getAttribute("transform")
-            ).translate;
-            expect(toNumber(axisXLabelTranslate[0], 10)).toBeCloserTo(492);
-            expect(toNumber(axisXLabelTranslate[1], 10)).toBeCloserTo(20);
+            // const axisXLabelTranslate = getSVGAnimatedTransformList(
+            //     axisXLabel.getAttribute("transform")
+            // ).translate;
+            // expect(toNumber(axisXLabelTranslate[0], 10)).toBeCloserTo(492);
+            // expect(toNumber(axisXLabelTranslate[1], 10)).toBeCloserTo(20);
 
-            const axisYLabel = fetchElementByClass(styles.axisLabelY);
-            const axisYLabelTranslate = getSVGAnimatedTransformList(
-                axisYLabel.getAttribute("transform")
-            ).translate;
-            expect(toNumber(axisYLabelTranslate[0], 10)).toBeCloserTo(13);
-            expect(toNumber(axisYLabelTranslate[1], 10)).toBeCloserTo(155);
+            // const axisYLabel = fetchElementByClass(styles.axisLabelY);
+            // const axisYLabelTranslate = getSVGAnimatedTransformList(
+            //     axisYLabel.getAttribute("transform")
+            // ).translate;
+            // expect(toNumber(axisYLabelTranslate[0], 10)).toBeCloserTo(13);
+            // expect(toNumber(axisYLabelTranslate[1], 10)).toBeCloserTo(155);
 
-            const axisY2Label = fetchElementByClass(styles.axisLabelY2);
-            const axisY2LabelTranslate = getSVGAnimatedTransformList(
-                axisY2Label.getAttribute("transform")
-            ).translate;
-            expect(toNumber(axisY2LabelTranslate[0], 10)).toBeCloserTo(974);
-            expect(toNumber(axisY2LabelTranslate[1], 10)).toBeCloserTo(155);
+            // const axisY2Label = fetchElementByClass(styles.axisLabelY2);
+            // const axisY2LabelTranslate = getSVGAnimatedTransformList(
+            //     axisY2Label.getAttribute("transform")
+            // ).translate;
+            // expect(toNumber(axisY2LabelTranslate[0], 10)).toBeCloserTo(974);
+            // expect(toNumber(axisY2LabelTranslate[1], 10)).toBeCloserTo(155);
 
-            const grid = fetchElementByClass(styles.grid);
-            const gridTranslate = getSVGAnimatedTransformList(
-                grid.getAttribute("transform")
-            ).translate;
-            expect(toNumber(gridTranslate[0], 10)).toBeCloserTo(76);
-            expect(toNumber(gridTranslate[1], 10)).toBeCloserTo(73);
-            console.log(axisData);
+            // const grid = fetchElementByClass(styles.grid);
+            // const gridTranslate = getSVGAnimatedTransformList(
+            //     grid.getAttribute("transform")
+            // ).translate;
+            // expect(toNumber(gridTranslate[0], 10)).toBeCloserTo(76);
+            // expect(toNumber(gridTranslate[1], 10)).toBeCloserTo(73);
+            // console.log(axisData);
         });
     });
 });

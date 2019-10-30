@@ -1,7 +1,7 @@
 "use strict";
 import d3 from "d3";
 import { getRotationForAxis, getYAxisHeight } from "../../../helpers/axis";
-import constants from "../../../helpers/constants";
+import constants, { TICKS_ORIENTATION } from "../../../helpers/constants";
 import styles from "../../../helpers/styles";
 import { getTransformScale } from "../../../helpers/transformUtils";
 import { translateCanvas } from "../../Graph/helpers/helpers";
@@ -42,17 +42,36 @@ const translateDefs = (config, canvasSVG) =>
  */
 const translateAxes = (axis, scale, config, canvasSVG) => {
     getAxesScale(axis, scale, config);
-    canvasSVG
-        .select(`.${styles.axisX}`)
-        .transition()
-        .call(constants.d3Transition(config.settingsDictionary.transition))
-        .attr(
-            "transform",
-            `translate(${getXAxisXPosition(config)},${getXAxisYPosition(
-                config
-            )})`
-        )
-        .call(axis.x);
+    if (config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED) {
+        canvasSVG
+            .select(`.${styles.axisX}`)
+            .transition()
+            .call(constants.d3Transition(config.settingsDictionary.transition))
+            .attr(
+                "transform",
+                `translate(${getXAxisXPosition(config)},${getXAxisYPosition(
+                    config
+                )})`
+            )
+            .call(axis.x)
+            .selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", "-12")
+            .attr("dy", "-2")
+            .attr("transform", "rotate(-65)");
+    } else {
+        canvasSVG
+            .select(`.${styles.axisX}`)
+            .transition()
+            .call(constants.d3Transition(config.settingsDictionary.transition))
+            .attr(
+                "transform",
+                `translate(${getXAxisXPosition(config)},${getXAxisYPosition(
+                    config
+                )})`
+            )
+            .call(axis.x);
+    }
 };
 /**
  * Updates the x, y, y2 axes label positions on resize
@@ -72,9 +91,10 @@ const translateLabel = (config, canvasSVG) => {
                 "transform",
                 `translate(${getXAxisLabelXPosition(
                     config
-                )},${getXAxisLabelYPosition(
-                    config
-                )}) rotate(${getRotationForAxis(constants.X_AXIS)})`
+                )},${getXAxisLabelYPosition(config) +
+                    config.padding.top}) rotate(${getRotationForAxis(
+                    constants.X_AXIS
+                )})`
             );
     }
 };

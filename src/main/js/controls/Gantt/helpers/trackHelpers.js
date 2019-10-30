@@ -130,7 +130,8 @@ export const loadGanttTrackSelector = (
             "transform",
             `translate(${getXAxisXPosition(
                 graphContext.config
-            )},${getXAxisYPosition(graphContext.config)})`
+            )},${getXAxisYPosition(graphContext.config) +
+                graphContext.config.padding.top})`
         );
     renderSelectionIndicator(
         generatorArgs(

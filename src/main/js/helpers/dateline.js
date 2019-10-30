@@ -7,7 +7,7 @@ import { Shape } from "../core";
 import { getDefaultSVGProps } from "../core/Shape";
 import { getShapeForTarget } from "../controls/Graph/helpers/helpers";
 import { getTransformScale } from "./transformUtils";
-import constants from "./constants";
+import constants, { TICKS_ORIENTATION } from "./constants";
 import { getXAxisXPosition, getYAxisHeight, getYAxisYPosition } from "./axis";
 
 /**
@@ -27,16 +27,30 @@ const translateDateline = (scale, config, canvasSVG, yAxisPositionHandler) => {
     if (utils.isEmpty(config.dateline)) {
         return;
     }
-    const datelineGroup = canvasSVG
-        .selectAll(`.${styles.datelineGroup}`)
-        .transition()
-        .call(constants.d3Transition(config.settingsDictionary.transition))
-        .attr(
-            "transform",
-            `translate(${getXAxisXPosition(config)},${yAxisPositionHandler(
-                config
-            )})`
-        );
+    const datelineGroup = canvasSVG;
+    if (config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED) {
+        datelineGroup
+            .selectAll(`.${styles.datelineGroup}`)
+            .transition()
+            .call(constants.d3Transition(config.settingsDictionary.transition))
+            .attr(
+                "transform",
+                `translate(${getXAxisXPosition(config)},${yAxisPositionHandler(
+                    config
+                ) + config.padding.top})`
+            );
+    } else {
+        datelineGroup
+            .selectAll(`.${styles.datelineGroup}`)
+            .transition()
+            .call(constants.d3Transition(config.settingsDictionary.transition))
+            .attr(
+                "transform",
+                `translate(${getXAxisXPosition(config)},${yAxisPositionHandler(
+                    config
+                )})`
+            );
+    }
     datelineGroup
         .selectAll(`.${styles.datelinePoint}`)
         .select("g")

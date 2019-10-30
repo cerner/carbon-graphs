@@ -33,8 +33,10 @@ const DATA = [
                         show: true, // TODO Future implementation
                         count: 10, // TODO Future implementation
                         format: "",
-                        values: []
-                    }
+                        values: [],
+                        orientation: "inclined"
+                    },
+                    orientation: "top"
                 },
                 y: {
                     show: true,
@@ -369,7 +371,10 @@ const DATA = [
                     label: "Datetime",
                     lowerLimit: new Date(2016, 0, 1, 1, 0).toISOString(),
                     upperLimit: new Date(2016, 0, 1, 23, 59).toISOString(),
-                    orientation: Carbon.helpers.AXES_ORIENTATION.X.BOTTOM
+                    orientation: Carbon.helpers.AXES_ORIENTATION.X.TOP,
+                    ticks: {
+                        orientation: "inclined"
+                    }
                 },
                 y: {
                     label: "Line Set A",
@@ -482,7 +487,11 @@ const DATA = [
                 x: {
                     label: "Data",
                     lowerLimit: 0,
-                    upperLimit: 1000
+                    upperLimit: 1000,
+                    ticks: {
+                        orientation: "inclined"
+                    },
+                    orientation: "top"
                 },
                 y: {
                     label: "Paired",
@@ -528,90 +537,6 @@ const DATA = [
                             low: {
                                 x: 20,
                                 y: 10
-                            }
-                        },
-                        {
-                            high: {
-                                x: 80,
-                                y: 100
-                            },
-                            mid: {
-                                x: 80,
-                                y: 75
-                            },
-                            low: {
-                                x: 80,
-                                y: 50
-                            }
-                        },
-                        {
-                            high: {
-                                x: 150,
-                                y: 110
-                            },
-                            mid: {
-                                x: 150,
-                                y: 70
-                            },
-                            low: {
-                                x: 150,
-                                y: 30
-                            }
-                        },
-                        {
-                            high: {
-                                x: 175,
-                                y: 160
-                            },
-                            mid: {
-                                x: 175,
-                                y: 120
-                            },
-                            low: {
-                                x: 175,
-                                y: 100
-                            }
-                        },
-                        {
-                            high: {
-                                x: 300,
-                                y: 190
-                            },
-                            mid: {
-                                x: 300,
-                                y: 90
-                            },
-                            low: {
-                                x: 300,
-                                y: 60
-                            }
-                        },
-                        {
-                            high: {
-                                x: 560,
-                                y: 150
-                            },
-                            mid: {
-                                x: 560,
-                                y: 40
-                            },
-                            low: {
-                                x: 560,
-                                y: 10
-                            }
-                        },
-                        {
-                            high: {
-                                x: 800,
-                                y: 180
-                            },
-                            mid: {
-                                x: 800,
-                                y: 100
-                            },
-                            low: {
-                                x: 800,
-                                y: 100
                             }
                         }
                     ]
@@ -689,8 +614,10 @@ const DATA = [
                     lowerLimit: "2016-03-02T12:00:00Z",
                     upperLimit: "2018-12-10T12:00:00Z",
                     ticks: {
-                        format: "%b %Y"
-                    }
+                        format: "%b %Y",
+                        orientation: "inclined"
+                    },
+                    orientation: "top"
                 },
                 y: {
                     label: "Paired Set A",
@@ -1097,6 +1024,11 @@ const DATA = [
                     show: true,
                     lowerLimit: new Date(2018, 1, 1, 12).toISOString(),
                     upperLimit: new Date(2019, 1, 1, 12).toISOString(),
+                    ticks: {
+                        // format: "%B%d%Y",
+                        orientation: "inclined"
+                    },
+                    // orientation: Carbon.helpers.AXES_ORIENTATION.X.TOP,
                     rangeRounding: true // If set to false, we don't extend the domain
                 }
             },
@@ -1258,7 +1190,8 @@ const DATA = [
                     upperLimit: new Date(2016, 0, 1, 15, 59).toISOString(),
                     ticks: {
                         format: "",
-                        values: []
+                        values: [],
+                        orientation: "inclined"
                     }
                 }
             },
@@ -1330,7 +1263,12 @@ const DATA = [
                     show: true,
                     label: "Data",
                     lowerLimit: 0,
-                    upperLimit: 8
+                    upperLimit: 8,
+                    ticks: {
+                        // format: "%B%d%Y",
+                        orientation: "inclined"
+                    },
+                    orientation: "top"
                 },
                 y: {
                     show: true,

@@ -6,7 +6,10 @@ import {
     prepareHorizontalAxis,
     processTickValues
 } from "../../../helpers/axis";
-import constants, { AXES_ORIENTATION } from "../../../helpers/constants";
+import constants, {
+    AXES_ORIENTATION,
+    TICKS_ORIENTATION
+} from "../../../helpers/constants";
 import { prepareHAxis, translateVGrid } from "../../../helpers/datetimeBuckets";
 import { shouldTruncateLabel, truncateLabel } from "../../../helpers/label";
 import styles from "../../../helpers/styles";
@@ -173,28 +176,58 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
         prepareHorizontalAxis,
         AXES_ORIENTATION.X.TOP
     );
-    canvasSVG
-        .select(`.${styles.axisX}`)
-        .transition()
-        .call(constants.d3Transition(config.settingsDictionary.transition))
-        .attr(
-            "transform",
-            `translate(${getXAxisXPosition(config)},${getXAxisYPosition(
-                config
-            )})`
-        )
-        .call(axis.x);
-    canvasSVG
-        .select(`.${styles.axisY}`)
-        .transition()
-        .call(constants.d3Transition(config.settingsDictionary.transition))
-        .attr(
-            "transform",
-            `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition(
-                config
-            )})`
-        )
-        .call(axis.y);
+    if (config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED) {
+        canvasSVG
+            .select(`.${styles.axisX}`)
+            .transition()
+            .call(constants.d3Transition(config.settingsDictionary.transition))
+            .attr(
+                "transform",
+                `translate(${getXAxisXPosition(config)},${getXAxisYPosition(
+                    config
+                ) + config.padding.top})`
+            )
+            .call(axis.x)
+            .selectAll("text")
+            .style("text-anchor", "start")
+            .attr("dx", "7")
+            .attr("dy", "8")
+            .attr("transform", "rotate(-65)");
+        canvasSVG
+            .select(`.${styles.axisY}`)
+            .transition()
+            .call(constants.d3Transition(config.settingsDictionary.transition))
+            .attr(
+                "transform",
+                `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition(
+                    config
+                ) + config.padding.top})`
+            )
+            .call(axis.y);
+    } else {
+        canvasSVG
+            .select(`.${styles.axisX}`)
+            .transition()
+            .call(constants.d3Transition(config.settingsDictionary.transition))
+            .attr(
+                "transform",
+                `translate(${getXAxisXPosition(config)},${getXAxisYPosition(
+                    config
+                )})`
+            )
+            .call(axis.x);
+        canvasSVG
+            .select(`.${styles.axisY}`)
+            .transition()
+            .call(constants.d3Transition(config.settingsDictionary.transition))
+            .attr(
+                "transform",
+                `translate(${getYAxisXPosition(config)}, ${getYAxisYPosition(
+                    config
+                )})`
+            )
+            .call(axis.y);
+    }
 };
 
 /**
@@ -256,7 +289,7 @@ const translateGrid = (axis, scale, config, canvasSVG) => {
             "transform",
             `translate(${getXAxisXPosition(config)},${getXAxisYPosition(
                 config
-            )})`
+            ) + config.padding.top})`
         );
     canvasSVG
         .select(`.${styles.gridH}`)

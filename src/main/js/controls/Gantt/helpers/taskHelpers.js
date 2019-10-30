@@ -331,7 +331,8 @@ const loadTasks = (graphContext, trackPathSVG, trackLabel, tasks) => {
             "transform",
             `translate(${getXAxisXPosition(
                 graphContext.config
-            )},${getXAxisYPosition(graphContext.config)})`
+            )},${getXAxisYPosition(graphContext.config) +
+                graphContext.config.padding.top})`
         );
     tasks.forEach((a) => {
         validateTask(a);

@@ -9,7 +9,10 @@ import {
     prepareHorizontalAxis,
     prepareXAxis
 } from "../../../helpers/axis";
-import constants, { AXES_ORIENTATION } from "../../../helpers/constants";
+import constants, {
+    AXES_ORIENTATION,
+    TICKS_ORIENTATION
+} from "../../../helpers/constants";
 import { createVGrid, prepareHAxis } from "../../../helpers/datetimeBuckets";
 import errors from "../../../helpers/errors";
 import styles from "../../../helpers/styles";
@@ -358,7 +361,7 @@ const createGrid = (axis, scale, config, canvasSVG) => {
             "transform",
             `translate(${getXAxisXPosition(config)},${getXAxisYPosition(
                 config
-            )})`
+            ) + config.padding.top})`
         );
     gridSVG
         .append("g")
@@ -404,31 +407,64 @@ const createAxes = (axis, scale, config, canvasSVG) => {
         prepareHorizontalAxis,
         AXES_ORIENTATION.X.TOP
     );
-    canvasSVG
-        .append("g")
-        .classed(styles.axis, true)
-        .classed(styles.axisX, true)
-        .attr("aria-hidden", !config.axis.x.show)
-        .attr(
-            "transform",
-            `translate(${getXAxisXPosition(config)}, ${getXAxisYPosition(
-                config
-            )})`
-        )
-        .call(axis.x);
-    canvasSVG
-        .append("g")
-        .classed(styles.axis, true)
-        .classed(styles.axisY, true)
-        .classed(styles.axisYTrackLabel, true)
-        .attr("aria-hidden", !config.axis.y.show)
-        .attr(
-            "transform",
-            `translate(${getYAxisXPosition(config)},${getXAxisYPosition(
-                config
-            )})`
-        )
-        .call(axis.y);
+    if (config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED) {
+        canvasSVG
+            .append("g")
+            .classed(styles.axis, true)
+            .classed(styles.axisX, true)
+            .attr("aria-hidden", !config.axis.x.show)
+            .attr(
+                "transform",
+                `translate(${getXAxisXPosition(config)}, ${getXAxisYPosition(
+                    config
+                ) + config.padding.top})`
+            )
+            .call(axis.x)
+            .selectAll("text")
+            .style("text-anchor", "start")
+            .attr("dx", "7")
+            .attr("dy", "8")
+            .attr("transform", "rotate(-65)");
+        canvasSVG
+            .append("g")
+            .classed(styles.axis, true)
+            .classed(styles.axisY, true)
+            .classed(styles.axisYTrackLabel, true)
+            .attr("aria-hidden", !config.axis.y.show)
+            .attr(
+                "transform",
+                `translate(${getYAxisXPosition(config)},${getXAxisYPosition(
+                    config
+                ) + config.padding.top})`
+            )
+            .call(axis.y);
+    } else {
+        canvasSVG
+            .append("g")
+            .classed(styles.axis, true)
+            .classed(styles.axisX, true)
+            .attr("aria-hidden", !config.axis.x.show)
+            .attr(
+                "transform",
+                `translate(${getXAxisXPosition(config)}, ${getXAxisYPosition(
+                    config
+                )})`
+            )
+            .call(axis.x);
+        canvasSVG
+            .append("g")
+            .classed(styles.axis, true)
+            .classed(styles.axisY, true)
+            .classed(styles.axisYTrackLabel, true)
+            .attr("aria-hidden", !config.axis.y.show)
+            .attr(
+                "transform",
+                `translate(${getYAxisXPosition(config)},${getXAxisYPosition(
+                    config
+                )})`
+            )
+            .call(axis.y);
+    }
 };
 
 /**
@@ -439,14 +475,27 @@ const createAxes = (axis, scale, config, canvasSVG) => {
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {object} d3 svg path
  */
-const createContentContainer = (config, canvasSVG) =>
-    canvasSVG
+const createContentContainer = (config, canvasSVG) => {
+    if (config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED) {
+        return canvasSVG
+            .append("rect")
+            .classed(styles.contentContainer, true)
+            .attr(constants.X_AXIS, getXAxisXPosition(config))
+            .attr(
+                constants.Y_AXIS,
+                getXAxisYPosition(config) + config.padding.top
+            )
+            .attr("width", getXAxisWidth(config))
+            .attr("height", getYAxisHeight(config));
+    }
+    return canvasSVG
         .append("rect")
         .classed(styles.contentContainer, true)
         .attr(constants.X_AXIS, getXAxisXPosition(config))
-        .attr(constants.Y_AXIS, getXAxisYPosition(config))
+        .attr(constants.Y_AXIS, getXAxisYPosition(config) + config.padding.top)
         .attr("width", getXAxisWidth(config))
         .attr("height", getYAxisHeight(config));
+};
 
 /**
  * Creates a container for gantt chart track content

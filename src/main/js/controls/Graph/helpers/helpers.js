@@ -537,46 +537,95 @@ const createLabel = (config, canvasSVG, control) => {
                 );
             buildAxisLabel(labelPath, utils.sanitize(config.axis.x.label));
         }
-        if (config.axis.y.label) {
-            const labelPath = canvasSVG
-                .append("g")
-                .classed(styles.axisLabelY, true)
-                .attr(
-                    "transform",
-                    `translate(${getYAxisLabelXPosition(
-                        config
-                    )}, ${getYAxisLabelYPosition(
-                        config
-                    )}) rotate(${getRotationForAxis(constants.Y_AXIS)})`
-                );
-            buildAxisLabel(labelPath, utils.sanitize(config.axis.y.label));
-        }
-        if (hasY2Axis(config.axis)) {
-            const labelPath = canvasSVG
-                .append("g")
-                .classed(styles.axisLabelY2, true)
-                .attr(
-                    "transform",
-                    `translate(${getY2AxisLabelXPosition(
-                        config
-                    )}, ${getYAxisLabelYPosition(
-                        config
-                    )}) rotate(${getRotationForAxis(constants.Y2_AXIS)})`
-                );
-            buildAxisLabel(labelPath, utils.sanitize(config.axis.y2.label));
-            /*
-             * Label shapes are only applicable when we have a Y2 Axis
-             * */
-            control.axesLabelShapeGroup = {
-                [constants.Y_AXIS]: buildYAxisLabelShapeContainer(
-                    config,
-                    canvasSVG
-                ),
-                [constants.Y2_AXIS]: buildY2AxisLabelShapeContainer(
-                    config,
-                    canvasSVG
-                )
-            };
+        if (
+            config.axis.x.orientation === AXES_ORIENTATION.X.TOP &&
+            config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED
+        ) {
+            if (config.axis.y.label) {
+                const labelPath = canvasSVG
+                    .append("g")
+                    .classed(styles.axisLabelY, true)
+                    .attr(
+                        "transform",
+                        `translate(${getYAxisLabelXPosition(
+                            config
+                        )}, ${getYAxisLabelYPosition(config) +
+                            config.padding.top}) rotate(${getRotationForAxis(
+                            constants.Y_AXIS
+                        )})`
+                    );
+                buildAxisLabel(labelPath, utils.sanitize(config.axis.y.label));
+            }
+            if (hasY2Axis(config.axis)) {
+                const labelPath = canvasSVG
+                    .append("g")
+                    .classed(styles.axisLabelY2, true)
+                    .attr(
+                        "transform",
+                        `translate(${getY2AxisLabelXPosition(
+                            config
+                        )}, ${getYAxisLabelYPosition(config) +
+                            config.padding.top}) rotate(${getRotationForAxis(
+                            constants.Y2_AXIS
+                        )})`
+                    );
+                buildAxisLabel(labelPath, utils.sanitize(config.axis.y2.label));
+                /*
+                 * Label shapes are only applicable when we have a Y2 Axis
+                 * */
+                control.axesLabelShapeGroup = {
+                    [constants.Y_AXIS]: buildYAxisLabelShapeContainer(
+                        config,
+                        canvasSVG
+                    ),
+                    [constants.Y2_AXIS]: buildY2AxisLabelShapeContainer(
+                        config,
+                        canvasSVG
+                    )
+                };
+            }
+        } else {
+            if (config.axis.y.label) {
+                const labelPath = canvasSVG
+                    .append("g")
+                    .classed(styles.axisLabelY, true)
+                    .attr(
+                        "transform",
+                        `translate(${getYAxisLabelXPosition(
+                            config
+                        )}, ${getYAxisLabelYPosition(
+                            config
+                        )}) rotate(${getRotationForAxis(constants.Y_AXIS)})`
+                    );
+                buildAxisLabel(labelPath, utils.sanitize(config.axis.y.label));
+            }
+            if (hasY2Axis(config.axis)) {
+                const labelPath = canvasSVG
+                    .append("g")
+                    .classed(styles.axisLabelY2, true)
+                    .attr(
+                        "transform",
+                        `translate(${getY2AxisLabelXPosition(
+                            config
+                        )}, ${getYAxisLabelYPosition(
+                            config
+                        )}) rotate(${getRotationForAxis(constants.Y2_AXIS)})`
+                    );
+                buildAxisLabel(labelPath, utils.sanitize(config.axis.y2.label));
+                /*
+                 * Label shapes are only applicable when we have a Y2 Axis
+                 * */
+                control.axesLabelShapeGroup = {
+                    [constants.Y_AXIS]: buildYAxisLabelShapeContainer(
+                        config,
+                        canvasSVG
+                    ),
+                    [constants.Y2_AXIS]: buildY2AxisLabelShapeContainer(
+                        config,
+                        canvasSVG
+                    )
+                };
+            }
         }
     }
 };
@@ -837,27 +886,56 @@ const drawNoDataView = (config, svg) => {
     const noDataViewContainer = svg
         .append("g")
         .classed(styles.noDataContainer, true);
-
-    noDataViewContainer
-        .append("rect")
-        .classed(styles.noDataOverlay, true)
-        .attr(constants.X_AXIS, getXAxisXPosition(config))
-        .attr(
-            constants.Y_AXIS,
-            calculateVerticalPadding(config) + noDataViewHeight
-        )
-        .attr("height", noDataViewHeight)
-        .attr("width", getXAxisWidth(config));
-    noDataViewContainer
-        .append("text")
-        .classed(styles.noDataLabel, true)
-        .attr("x", getXAxisLabelXPosition(config))
-        .attr(
-            "y",
-            getYAxisLabelYPosition(config) + constants.NO_DATA_LABEL_PADDING
-        )
-        .append("tspan")
-        .text(config.locale.noData);
+    if (
+        config.axis.x.orientation === AXES_ORIENTATION.X.TOP &&
+        config.axis.x.ticks.orientation === TICKS_ORIENTATION.X.INCLINED
+    ) {
+        noDataViewContainer
+            .append("rect")
+            .classed(styles.noDataOverlay, true)
+            .attr(constants.X_AXIS, getXAxisXPosition(config))
+            .attr(
+                constants.Y_AXIS,
+                calculateVerticalPadding(config) +
+                    noDataViewHeight +
+                    config.padding.top
+            )
+            .attr("height", noDataViewHeight)
+            .attr("width", getXAxisWidth(config));
+        noDataViewContainer
+            .append("text")
+            .classed(styles.noDataLabel, true)
+            .attr("x", getXAxisLabelXPosition(config))
+            .attr(
+                "y",
+                getYAxisLabelYPosition(config) +
+                    constants.NO_DATA_LABEL_PADDING +
+                    config.padding.top
+            )
+            .append("tspan")
+            .text(config.locale.noData);
+    } else {
+        noDataViewContainer
+            .append("rect")
+            .classed(styles.noDataOverlay, true)
+            .attr(constants.X_AXIS, getXAxisXPosition(config))
+            .attr(
+                constants.Y_AXIS,
+                calculateVerticalPadding(config) + noDataViewHeight
+            )
+            .attr("height", noDataViewHeight)
+            .attr("width", getXAxisWidth(config));
+        noDataViewContainer
+            .append("text")
+            .classed(styles.noDataLabel, true)
+            .attr("x", getXAxisLabelXPosition(config))
+            .attr(
+                "y",
+                getYAxisLabelYPosition(config) + constants.NO_DATA_LABEL_PADDING
+            )
+            .append("tspan")
+            .text(config.locale.noData);
+    }
 
     return svg;
 };

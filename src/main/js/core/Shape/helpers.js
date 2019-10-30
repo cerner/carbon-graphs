@@ -1,6 +1,9 @@
 "use strict";
 import d3 from "d3";
-import constants from "../../helpers/constants";
+import constants, {
+    TICKS_ORIENTATION,
+    AXES_ORIENTATION
+} from "../../helpers/constants";
 import errors from "../../helpers/errors";
 import styles from "../../helpers/styles";
 import utils from "../../helpers/utils";
@@ -145,32 +148,108 @@ const createSVG = (
     },
     includeViewBox = false
 ) => {
-    const d3SVGElement = d3
-        .select(createElementNS("svg"))
-        .attr("x", shape.options.x)
-        .attr("y", shape.options.y)
-        .attr("style", svgStyles)
-        .attr("class", `${styles.svgIcon} ${svgClassNames}`)
-        .attr("role", "img")
-        .attr(
-            "pointer-events",
-            additionalAttributes["pointer-events"] ? "none" : "auto"
-        )
-        .on("click", onClickFn);
+    if (additionalAttributes.config) {
+        if (
+            additionalAttributes.config.axis.x.ticks.orientation ===
+                TICKS_ORIENTATION.X.INCLINED &&
+            additionalAttributes.config.axis.x.orientation ===
+                AXES_ORIENTATION.X.TOP &&
+            additionalAttributes.config.padding.top
+        ) {
+            const d3SVGElement = d3
+                .select(createElementNS("svg"))
+                .attr("x", shape.options.x)
+                .attr(
+                    "y",
+                    shape.options.y + additionalAttributes.config.padding.top
+                )
+                .attr("style", svgStyles)
+                .attr("class", `${styles.svgIcon} ${svgClassNames}`)
+                .attr("role", "img")
+                .attr(
+                    "pointer-events",
+                    additionalAttributes["pointer-events"] ? "none" : "auto"
+                )
+                .on("click", onClickFn);
 
-    if (includeViewBox) {
-        setViewBoxProperty(d3SVGElement);
+            if (includeViewBox) {
+                setViewBoxProperty(d3SVGElement);
+            }
+            // Set a11y attributes to svg element
+            setA11yProperties(
+                "aria-describedby",
+                "aria-hidden",
+                "aria-selected",
+                "aria-disabled"
+            )(d3SVGElement, a11yAttributes);
+            const groupElement = d3SVGElement.append("g");
+            appendSVGChildren(
+                groupElement,
+                shape,
+                transformFn,
+                shape.options.scale
+            );
+            return d3SVGElement.node();
+        }
+    } else {
+        const d3SVGElement = d3
+            .select(createElementNS("svg"))
+            .attr("x", shape.options.x)
+            .attr("y", shape.options.y)
+            .attr("style", svgStyles)
+            .attr("class", `${styles.svgIcon} ${svgClassNames}`)
+            .attr("role", "img")
+            .attr(
+                "pointer-events",
+                additionalAttributes["pointer-events"] ? "none" : "auto"
+            )
+            .on("click", onClickFn);
+
+        if (includeViewBox) {
+            setViewBoxProperty(d3SVGElement);
+        }
+        // Set a11y attributes to svg element
+        setA11yProperties(
+            "aria-describedby",
+            "aria-hidden",
+            "aria-selected",
+            "aria-disabled"
+        )(d3SVGElement, a11yAttributes);
+        const groupElement = d3SVGElement.append("g");
+        appendSVGChildren(
+            groupElement,
+            shape,
+            transformFn,
+            shape.options.scale
+        );
+        return d3SVGElement.node();
     }
-    // Set a11y attributes to svg element
-    setA11yProperties(
-        "aria-describedby",
-        "aria-hidden",
-        "aria-selected",
-        "aria-disabled"
-    )(d3SVGElement, a11yAttributes);
-    const groupElement = d3SVGElement.append("g");
-    appendSVGChildren(groupElement, shape, transformFn, shape.options.scale);
-    return d3SVGElement.node();
+    // const d3SVGElement = d3
+    //     .select(createElementNS("svg"))
+    //     .attr("x", shape.options.x)
+    //     .attr("y", shape.options.y)
+    //     .attr("style", svgStyles)
+    //     .attr("class", `${styles.svgIcon} ${svgClassNames}`)
+    //     .attr("role", "img")
+    //     .attr(
+    //         "pointer-events",
+    //         additionalAttributes["pointer-events"] ? "none" : "auto"
+    //     )
+    //     .on("click", onClickFn);
+
+    // if (includeViewBox) {
+    //     setViewBoxProperty(d3SVGElement);
+    // }
+    // // Set a11y attributes to svg element
+    // setA11yProperties(
+    //     "aria-describedby",
+    //     "aria-hidden",
+    //     "aria-selected",
+    //     "aria-disabled"
+    // )(d3SVGElement, a11yAttributes);
+    // const groupElement = d3SVGElement.append("g");
+    // appendSVGChildren(groupElement, shape, transformFn, shape.options.scale);
+    // return d3SVGElement.node();
 };
 
 /**

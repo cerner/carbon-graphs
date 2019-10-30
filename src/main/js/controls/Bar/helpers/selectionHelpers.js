@@ -98,7 +98,7 @@ const drawSelectionBars = (scale, ordinalScale, config, canvasSVG) => {
             "transform",
             `translate(${getXAxisXPosition(config)},${calculateVerticalPadding(
                 config
-            )})`
+            ) + config.padding.top})`
         )
         .selectAll(`${styles.taskBarSelection}`)
         .data(tickValues);
