@@ -448,12 +448,15 @@ const translatePairedResultGraph = (scale, canvasSVG, config) => {
  * @returns {undefined} - returns nothing
  */
 const processRegions = (graphContext, config, canvasSVG, { key }) => {
-    if (isSingleTargetDisplayed(graphContext.content)) {
-        showHideRegion(
-            canvasSVG,
-            `region_${key}`,
-            config.shownTargets.indexOf(key) > -1
-        );
+    if (isSinglePairedResultTargetDisplayed(config, graphContext)) {
+        const showHideKeys = config.shownTargets.concat([key]);
+        showHideKeys.forEach((targetKey) => {
+            showHideRegion(
+                canvasSVG,
+                `region_${targetKey}`,
+                config.shownTargets.indexOf(targetKey) > -1
+            );
+        });
     } else if (
         !config.shouldHideAllRegion &&
         config.shownTargets.length > 0 &&
@@ -463,6 +466,27 @@ const processRegions = (graphContext, config, canvasSVG, { key }) => {
     } else {
         hideAllRegions(canvasSVG);
     }
+};
+/**
+ * Checks if only one paired result content item is present in the graph
+ *
+ * @private
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {object} graphContext - Graph instance
+ * @returns {boolean} true if displayed targets is equal to 1, false otherwise
+ */
+const isSinglePairedResultTargetDisplayed = (config, graphContext) => {
+    const displayedPairedResults = [];
+
+    config.shownTargets.forEach((target) => {
+        graphContext.contentKeys.forEach((key) => {
+            if (target.includes(key) && !displayedPairedResults.includes(key)) {
+                displayedPairedResults.push(key);
+            }
+        });
+    });
+
+    return isSingleTargetDisplayed(displayedPairedResults);
 };
 /**
  * Checks the region data of Paired Result so that if one of regions for Paired Result data pairs are not provided,
