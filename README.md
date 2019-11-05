@@ -113,8 +113,6 @@ npm i @cerner/carbon-graphs --save-dev
 -   [ ] Area spline graph
 -   [ ] Separate graph types to plugin based
 -   [ ] DST
--   [ ] Tick counts
--   [ ] Show/hide ticks
 
 ## LICENSE
 

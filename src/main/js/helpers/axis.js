@@ -203,6 +203,7 @@ const getAxesScale = (axis, scale, config) => {
 };
 /**
  * Ticks can be formatted by passing the format string via input JSON.
+ * * For Empty tick labels consumer would pass format as "" (blank)
  * * For formatting numbers (x,y,y2 axes ticks) use Python specifiers.
  * * Ticks can also be formatted for date time inputs.
  *
@@ -215,6 +216,9 @@ const getAxesScale = (axis, scale, config) => {
  * @returns {object} d3 locale object formatter
  */
 const getAxisTickFormat = (locale, format, type = AXIS_TYPE.DEFAULT) => {
+    if (format === "") {
+        return format;
+    }
     if (utils.isEmpty(format)) {
         return DEFAULT_TICK_FORMAT;
     }

@@ -358,6 +358,19 @@ describe("Graph - Axes", () => {
                 .querySelector("text");
             expect(tick.textContent).toBe("Jan 2016");
         });
+        it("Hides x axis tick labels when format is blank", () => {
+            graph.destroy();
+            const axisData = utils.deepClone(axisTimeSeries);
+            axisData.x.ticks = {
+                format: ""
+            };
+            graph = new Graph(getAxes(axisData));
+            const xAxisElement = fetchElementByClass(styles.axisX);
+            const xAxisTickTexts = xAxisElement.querySelectorAll("text");
+            xAxisTickTexts.forEach((textElement) => {
+                expect(textElement.innerHTML).toBe("");
+            });
+        });
         it("Creates x axis with LowerTickValues", () => {
             const localeAxisObj = utils.deepClone(axisTimeSeries);
             localeAxisObj.x = {
@@ -528,6 +541,19 @@ describe("Graph - Axes", () => {
             expect(
                 tick[tick.length - 1].querySelector("text").textContent
             ).toBe("20.000");
+        });
+        it("Hides x axis tick labels when format is blank", () => {
+            graph.destroy();
+            const axisData = utils.deepClone(axisDefault);
+            axisData.x.ticks = {
+                format: ""
+            };
+            graph = new Graph(getAxes(axisData));
+            const xAxisElement = fetchElementByClass(styles.axisX);
+            const xAxisTickTexts = xAxisElement.querySelectorAll("text");
+            xAxisTickTexts.forEach((textElement) => {
+                expect(textElement.innerHTML).toBe("");
+            });
         });
     });
 });

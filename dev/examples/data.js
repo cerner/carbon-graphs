@@ -28,13 +28,7 @@ const DATA = [
                     show: true,
                     label: "Data",
                     lowerLimit: 80,
-                    upperLimit: 280,
-                    ticks: {
-                        show: true, // TODO Future implementation
-                        count: 10, // TODO Future implementation
-                        format: "",
-                        values: []
-                    }
+                    upperLimit: 280
                 },
                 y: {
                     show: true,
@@ -1250,11 +1244,7 @@ const DATA = [
                 x: {
                     label: "Datetime",
                     lowerLimit: new Date(2016, 0, 1, 1, 0).toISOString(),
-                    upperLimit: new Date(2016, 0, 1, 15, 59).toISOString(),
-                    ticks: {
-                        format: "",
-                        values: []
-                    }
+                    upperLimit: new Date(2016, 0, 1, 15, 59).toISOString()
                 }
             },
             data: [
@@ -1675,13 +1665,7 @@ const DATA = [
                     show: true,
                     label: "Data",
                     lowerLimit: 80,
-                    upperLimit: 280,
-                    ticks: {
-                        show: true, // TODO Future implementation
-                        count: 10, // TODO Future implementation
-                        format: "",
-                        values: []
-                    }
+                    upperLimit: 280
                 },
                 y: {
                     show: true,

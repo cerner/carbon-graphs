@@ -3,6 +3,16 @@ import { getDemoData } from "../data";
 import utils from "../../../src/main/js/helpers/utils";
 import { createPanningControls } from "../panHelpers";
 
+const tickValues = [
+    new Date(2016, 0, 1, 2, 0).toISOString(),
+    new Date(2016, 0, 1, 4, 0).toISOString(),
+    new Date(2016, 0, 1, 6, 0).toISOString(),
+    new Date(2016, 0, 1, 8, 0).toISOString(),
+    new Date(2016, 0, 1, 10, 0).toISOString(),
+    new Date(2016, 0, 1, 12, 0).toISOString(),
+    new Date(2016, 0, 1, 14, 0).toISOString()
+];
+
 export const renderTimeline = (id) => {
     const timelineDefault = Carbon.api.timeline(
         getDemoData(`#${id}`, "TIMELINE")
@@ -14,7 +24,6 @@ export const renderTimeline = (id) => {
 export const renderTimelineCustomPadding = (id) => {
     const data = utils.deepClone(getDemoData(`#${id}`, "TIMELINE"));
     data.showLegend = false;
-    data.axis.x.show = false;
     data.padding = {
         left: 150,
         right: 300,
@@ -51,4 +60,14 @@ export const renderTimelinePanning = (id) => {
         creationHandler: createGraph
     });
     return graph;
+};
+export const renderTimelineNoXAxisTickLabel = (id) => {
+    const data = utils.deepClone(getDemoData(`#${id}`, "TIMELINE"));
+    data.axis.x.ticks = {
+        values: tickValues,
+        format: ""
+    };
+    const timelineDefault = Carbon.api.timeline(data);
+    timelineDefault.loadContent(getDemoData(`#${id}`, "TIMELINE").data[0]);
+    return timelineDefault;
 };
