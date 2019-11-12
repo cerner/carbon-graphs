@@ -128,10 +128,9 @@ const translatePoints = (scale, canvasSVG) =>
                     .transition()
                     .call(constants.d3Transition)
                     .attr("transform", function() {
-                        return transformPoint(
-                            scale,
-                            type
-                        )(d)(getTransformScale(this));
+                        return transformPoint(scale, type)(d)(
+                            getTransformScale(this)
+                        );
                     });
             });
     });
@@ -251,8 +250,8 @@ const drawLine = (scale, config, boxPath) =>
         const shouldCreateLine = (d) =>
             d.high &&
             d.low &&
-            (utils.hasValue(config.shownTargets, d.high.key) &&
-                utils.hasValue(config.shownTargets, d.low.key));
+            utils.hasValue(config.shownTargets, d.high.key) &&
+                utils.hasValue(config.shownTargets, d.low.key);
         return d3
             .select(this)
             .append("path")

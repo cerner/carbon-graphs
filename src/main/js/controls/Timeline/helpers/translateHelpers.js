@@ -109,10 +109,9 @@ const translatePoints = (scale, config, canvasSVG, key, style) =>
                 .transition()
                 .call(constants.d3Transition)
                 .attr("transform", function() {
-                    return transformPoint(
-                        scale,
-                        config
-                    )(d)(getTransformScale(this));
+                    return transformPoint(scale, config)(d)(
+                        getTransformScale(this)
+                    );
                 });
         });
 /**

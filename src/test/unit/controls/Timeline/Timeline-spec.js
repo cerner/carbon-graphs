@@ -1344,14 +1344,10 @@ describe("Timeline", () => {
                         timeline.resize();
                         delay(() => {
                             const primaryElement = document.querySelector(
-                                `.${
-                                    styles.timelineContentGroup
-                                }[aria-describedby="${inputPrimary.key}"]`
+                                `.${styles.timelineContentGroup}[aria-describedby="${inputPrimary.key}"]`
                             );
                             const secondaryElement = document.querySelector(
-                                `.${
-                                    styles.timelineContentGroup
-                                }[aria-describedby="${inputSecondary.key}"]`
+                                `.${styles.timelineContentGroup}[aria-describedby="${inputSecondary.key}"]`
                             );
                             expect(timeline.config.shownTargets.length).toBe(1);
                             expect(
@@ -1451,9 +1447,7 @@ describe("Timeline", () => {
                     expect(
                         document
                             .querySelector(
-                                `.${styles.point}[aria-describedby="${
-                                    inputSecondary.key
-                                }"]`
+                                `.${styles.point}[aria-describedby="${inputSecondary.key}"]`
                             )
                             .classList.contains(styles.blur)
                     ).toBeTruthy();
@@ -1476,9 +1470,7 @@ describe("Timeline", () => {
                     expect(
                         document
                             .querySelector(
-                                `.${styles.point}[aria-describedby="${
-                                    inputSecondary.key
-                                }"]`
+                                `.${styles.point}[aria-describedby="${inputSecondary.key}"]`
                             )
                             .classList.contains(styles.blur)
                     ).toBeFalsy();

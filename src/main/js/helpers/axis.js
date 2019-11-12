@@ -670,9 +670,8 @@ const isXAxisOrientationTop = (xAxisOrientation) =>
  */
 const calculateAxesSize = (config) => {
     config.axisSizes = {};
-    config.axisSizes.y = config.padding.hasCustomPadding
-        ? getYAxisWidth(constants.Y_AXIS, config)
-        : getYAxisWidth(constants.Y_AXIS, config) + config.padding.left;
+    config.axisSizes.y =
+        getYAxisWidth(constants.Y_AXIS, config) + config.padding.left;
     config.axisSizes.y2 = getY2AxisWidth(config);
     config.axisSizes.x = getXAxisHeight(config);
 };
@@ -905,9 +904,7 @@ const translateAxisReferenceLine = (axis, scale, config, canvasSVG) => {
     if (hasNegativeLowerBound(scale, constants.Y_AXIS)) {
         setTranslate(
             canvasSVG.select(
-                `path.${styles.axis}.${styles.axisY}.${
-                    styles.axisReferenceLine
-                }`
+                `path.${styles.axis}.${styles.axisY}.${styles.axisReferenceLine}`
             ),
             constants.Y_AXIS
         );
@@ -918,9 +915,7 @@ const translateAxisReferenceLine = (axis, scale, config, canvasSVG) => {
     ) {
         setTranslate(
             canvasSVG.select(
-                `path.${styles.axis}.${styles.axisY2}.${
-                    styles.axisReferenceLine
-                }`
+                `path.${styles.axis}.${styles.axisY2}.${styles.axisReferenceLine}`
             ),
             constants.Y2_AXIS
         );

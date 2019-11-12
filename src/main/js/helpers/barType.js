@@ -23,9 +23,7 @@ const getBarStyle = (style = {}, dataTarget) => {
         currentStyle = `${currentStyle}; stroke-width: 1; stroke-dasharray: 2, 2;`;
     }
     if (style.isHollow === true) {
-        currentStyle = `${currentStyle} fill: ${
-            COLORS.WHITE
-        }; stroke-width: 1;`;
+        currentStyle = `${currentStyle} fill: ${COLORS.WHITE}; stroke-width: 1;`;
     }
     if (style.isHashed === true) {
         currentStyle = `${currentStyle} stroke-width: 1;`;

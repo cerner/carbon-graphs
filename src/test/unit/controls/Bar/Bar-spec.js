@@ -1173,14 +1173,10 @@ describe("Bar", () => {
                         primaryBar.redraw(graph);
                         secondaryBar.redraw(graph);
                         const primaryBarElement = barGraphContainer.querySelector(
-                            `.${styles.barGraphContent}[aria-describedby="${
-                                inputPrimary.key
-                            }"]`
+                            `.${styles.barGraphContent}[aria-describedby="${inputPrimary.key}"]`
                         );
                         const secondaryBarElement = barGraphContainer.querySelector(
-                            `.${styles.barGraphContent}[aria-describedby="${
-                                inputSecondary.key
-                            }"]`
+                            `.${styles.barGraphContent}[aria-describedby="${inputSecondary.key}"]`
                         );
                         expect(graph.config.shownTargets.length).toBe(1);
                         expect(

@@ -1097,14 +1097,10 @@ describe("Line", () => {
                         primaryLine.redraw(graph);
                         secondaryLine.redraw(graph);
                         const primaryLineElement = lineGraphContainer.querySelector(
-                            `.${styles.lineGraphContent}[aria-describedby="${
-                                inputPrimary.key
-                            }"]`
+                            `.${styles.lineGraphContent}[aria-describedby="${inputPrimary.key}"]`
                         );
                         const secondaryLineElement = lineGraphContainer.querySelector(
-                            `.${styles.lineGraphContent}[aria-describedby="${
-                                inputSecondary.key
-                            }"]`
+                            `.${styles.lineGraphContent}[aria-describedby="${inputSecondary.key}"]`
                         );
                         expect(graph.config.shownTargets.length).toBe(1);
                         expect(
@@ -1237,9 +1233,7 @@ describe("Line", () => {
                     expect(
                         document
                             .querySelector(
-                                `.${styles.point}[aria-describedby="${
-                                    inputPrimary.key
-                                }"]`
+                                `.${styles.point}[aria-describedby="${inputPrimary.key}"]`
                             )
                             .classList.contains(styles.highlight)
                     ).toBeTruthy();
@@ -1253,9 +1247,7 @@ describe("Line", () => {
                     expect(
                         document
                             .querySelector(
-                                `.${styles.point}[aria-describedby="${
-                                    inputSecondary.key
-                                }"]`
+                                `.${styles.point}[aria-describedby="${inputSecondary.key}"]`
                             )
                             .classList.contains(styles.blur)
                     ).toBeTruthy();
@@ -1288,9 +1280,7 @@ describe("Line", () => {
                     expect(
                         document
                             .querySelector(
-                                `.${styles.point}[aria-describedby="${
-                                    inputPrimary.key
-                                }"]`
+                                `.${styles.point}[aria-describedby="${inputPrimary.key}"]`
                             )
                             .classList.contains(styles.highlight)
                     ).toBeFalsy();
@@ -1304,9 +1294,7 @@ describe("Line", () => {
                     expect(
                         document
                             .querySelector(
-                                `.${styles.point}[aria-describedby="${
-                                    inputSecondary.key
-                                }"]`
+                                `.${styles.point}[aria-describedby="${inputSecondary.key}"]`
                             )
                             .classList.contains(styles.blur)
                     ).toBeFalsy();
@@ -2109,9 +2097,7 @@ describe("Line", () => {
                         expect(
                             document
                                 .querySelector(
-                                    `rect[aria-describedby="region_${
-                                        inputPrimary.key
-                                    }"]`
+                                    `rect[aria-describedby="region_${inputPrimary.key}"]`
                                 )
                                 .classList.contains(styles.regionHighlight)
                         ).toBeTruthy();
@@ -2128,18 +2114,14 @@ describe("Line", () => {
                             expect(
                                 document
                                     .querySelector(
-                                        `rect[aria-describedby="region_${
-                                            inputPrimary.key
-                                        }"]`
+                                        `rect[aria-describedby="region_${inputPrimary.key}"]`
                                     )
                                     .classList.contains(styles.regionHighlight)
                             ).toBeFalsy();
                             expect(
                                 document
                                     .querySelector(
-                                        `rect[aria-describedby="region_${
-                                            inputPrimary.key
-                                        }"]`
+                                        `rect[aria-describedby="region_${inputPrimary.key}"]`
                                     )
                                     .getAttribute("aria-hidden")
                             ).toBeTruthy();
@@ -2176,9 +2158,7 @@ describe("Line", () => {
                     );
                     triggerEvent(legendItem, "mouseenter", () => {
                         const regionElements = document.querySelectorAll(
-                            `rect[aria-describedby="region_${
-                                inputPrimary.key
-                            }"]`
+                            `rect[aria-describedby="region_${inputPrimary.key}"]`
                         );
                         expect(
                             regionElements[0].classList.contains(
@@ -2201,9 +2181,7 @@ describe("Line", () => {
                     triggerEvent(legendItem, "mouseenter", () => {
                         triggerEvent(legendItem, "mouseleave", () => {
                             const regionElements = document.querySelectorAll(
-                                `rect[aria-describedby="region_${
-                                    inputPrimary.key
-                                }"]`
+                                `rect[aria-describedby="region_${inputPrimary.key}"]`
                             );
                             expect(
                                 regionElements[0].classList.contains(
@@ -2248,9 +2226,7 @@ describe("Line", () => {
                     );
                     triggerEvent(legendItem, "click", () => {
                         const regionElement = document.querySelector(
-                            `rect[aria-describedby="region_${
-                                inputPrimary.key
-                            }"]`
+                            `rect[aria-describedby="region_${inputPrimary.key}"]`
                         );
                         expect(regionElement.getAttribute("aria-hidden")).toBe(
                             "true"
@@ -2265,9 +2241,7 @@ describe("Line", () => {
                     );
                     triggerEvent(legendItem, "click", () => {
                         const regionElements = document.querySelectorAll(
-                            `rect[aria-describedby="region_${
-                                inputPrimary.key
-                            }"]`
+                            `rect[aria-describedby="region_${inputPrimary.key}"]`
                         );
                         expect(
                             regionElements[0].getAttribute("aria-hidden")
@@ -2289,9 +2263,7 @@ describe("Line", () => {
                             "click",
                             () => {
                                 const regionElements = document.querySelectorAll(
-                                    `rect[aria-describedby="region_${
-                                        inputPrimary.key
-                                    }"]`
+                                    `rect[aria-describedby="region_${inputPrimary.key}"]`
                                 );
                                 expect(
                                     regionElements[0].getAttribute(
@@ -2321,9 +2293,7 @@ describe("Line", () => {
                         expect(
                             document
                                 .querySelector(
-                                    `rect[aria-describedby="region_${
-                                        inputPrimary.key
-                                    }"]`
+                                    `rect[aria-describedby="region_${inputPrimary.key}"]`
                                 )
                                 .getAttribute("aria-hidden")
                         ).toBe("false");
@@ -2676,14 +2646,10 @@ describe("Line", () => {
                     );
                     triggerEvent(legendItem, "mouseenter", () => {
                         const criticalOuterElement = document.querySelector(
-                            `.${
-                                styles.criticalityOuterPoint
-                            }[aria-describedby="${inputPrimary.key}"]`
+                            `.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}"]`
                         );
                         const criticalInnerElement = document.querySelector(
-                            `.${
-                                styles.criticalityInnerPoint
-                            }[aria-describedby="${inputPrimary.key}"]`
+                            `.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`
                         );
                         expect(criticalOuterElement.getAttribute("style")).toBe(
                             ""
@@ -2708,14 +2674,10 @@ describe("Line", () => {
                     triggerEvent(legendItem, "mouseenter", () => {
                         triggerEvent(legendItem, "mouseleave", () => {
                             const criticalOuterElement = document.querySelector(
-                                `.${
-                                    styles.criticalityOuterPoint
-                                }[aria-describedby="${inputPrimary.key}"]`
+                                `.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}"]`
                             );
                             const criticalInnerElement = document.querySelector(
-                                `.${
-                                    styles.criticalityInnerPoint
-                                }[aria-describedby="${inputPrimary.key}"]`
+                                `.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`
                             );
                             expect(
                                 criticalOuterElement.getAttribute("style")
@@ -2760,14 +2722,10 @@ describe("Line", () => {
                     );
                     triggerEvent(legendItem, "mouseenter", () => {
                         const criticalOuterElement = document.querySelector(
-                            `.${
-                                styles.criticalityOuterPoint
-                            }[aria-describedby="${inputPrimary.key}"]`
+                            `.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}"]`
                         );
                         const criticalInnerElement = document.querySelector(
-                            `.${
-                                styles.criticalityInnerPoint
-                            }[aria-describedby="${inputPrimary.key}"]`
+                            `.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`
                         );
                         expect(criticalOuterElement.getAttribute("style")).toBe(
                             ""
@@ -2786,30 +2744,20 @@ describe("Line", () => {
                 });
                 it("Blurs other indicators", (done) => {
                     const legendItem = lineGraphContainer.querySelector(
-                        `.${styles.legendItem}[aria-describedby="${
-                            inputSecondary.key
-                        }"]`
+                        `.${styles.legendItem}[aria-describedby="${inputSecondary.key}"]`
                     );
                     triggerEvent(legendItem, "mouseenter", () => {
                         const criticalOuterElement = document.querySelector(
-                            `.${
-                                styles.criticalityOuterPoint
-                            }[aria-describedby="${inputPrimary.key}"]`
+                            `.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}"]`
                         );
                         const criticalInnerElement = document.querySelector(
-                            `.${
-                                styles.criticalityInnerPoint
-                            }[aria-describedby="${inputPrimary.key}"]`
+                            `.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`
                         );
                         const criticalOuterElementAlt = document.querySelector(
-                            `.${
-                                styles.criticalityOuterPoint
-                            }[aria-describedby="${inputSecondary.key}"]`
+                            `.${styles.criticalityOuterPoint}[aria-describedby="${inputSecondary.key}"]`
                         );
                         const criticalInnerElementAlt = document.querySelector(
-                            `.${
-                                styles.criticalityInnerPoint
-                            }[aria-describedby="${inputSecondary.key}"]`
+                            `.${styles.criticalityInnerPoint}[aria-describedby="${inputSecondary.key}"]`
                         );
                         expect(criticalOuterElement.classList).not.toContain(
                             styles.highlight
@@ -2828,21 +2776,15 @@ describe("Line", () => {
                 });
                 it("Removes highlights on mouse-leave", (done) => {
                     const legendItem = lineGraphContainer.querySelector(
-                        `.${styles.legendItem}[aria-describedby="${
-                            inputPrimary.key
-                        }"]`
+                        `.${styles.legendItem}[aria-describedby="${inputPrimary.key}"]`
                     );
                     triggerEvent(legendItem, "mouseenter", () => {
                         triggerEvent(legendItem, "mouseleave", () => {
                             const criticalOuterElement = document.querySelector(
-                                `.${
-                                    styles.criticalityOuterPoint
-                                }[aria-describedby="${inputPrimary.key}"]`
+                                `.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}"]`
                             );
                             const criticalInnerElement = document.querySelector(
-                                `.${
-                                    styles.criticalityInnerPoint
-                                }[aria-describedby="${inputPrimary.key}"]`
+                                `.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`
                             );
                             expect(
                                 criticalOuterElement.classList
@@ -2856,31 +2798,21 @@ describe("Line", () => {
                 });
                 it("Removes blur for other data points on mouse-leave", (done) => {
                     const legendItem = lineGraphContainer.querySelector(
-                        `.${styles.legendItem}[aria-describedby="${
-                            inputSecondary.key
-                        }"]`
+                        `.${styles.legendItem}[aria-describedby="${inputSecondary.key}"]`
                     );
                     triggerEvent(legendItem, "mouseenter", () => {
                         triggerEvent(legendItem, "mouseleave", () => {
                             const criticalOuterElement = document.querySelector(
-                                `.${
-                                    styles.criticalityOuterPoint
-                                }[aria-describedby="${inputPrimary.key}"]`
+                                `.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}"]`
                             );
                             const criticalInnerElement = document.querySelector(
-                                `.${
-                                    styles.criticalityInnerPoint
-                                }[aria-describedby="${inputPrimary.key}"]`
+                                `.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`
                             );
                             const criticalOuterElementAlt = document.querySelector(
-                                `.${
-                                    styles.criticalityOuterPoint
-                                }[aria-describedby="${inputSecondary.key}"]`
+                                `.${styles.criticalityOuterPoint}[aria-describedby="${inputSecondary.key}"]`
                             );
                             const criticalInnerElementAlt = document.querySelector(
-                                `.${
-                                    styles.criticalityInnerPoint
-                                }[aria-describedby="${inputSecondary.key}"]`
+                                `.${styles.criticalityInnerPoint}[aria-describedby="${inputSecondary.key}"]`
                             );
                             expect(
                                 criticalOuterElement.classList
@@ -2917,20 +2849,14 @@ describe("Line", () => {
             describe("On single data-set", () => {
                 it("Hides indicators on toggle", (done) => {
                     const legendItem = lineGraphContainer.querySelector(
-                        `.${styles.legendItem}[aria-describedby="${
-                            inputPrimary.key
-                        }"]`
+                        `.${styles.legendItem}[aria-describedby="${inputPrimary.key}"]`
                     );
                     triggerEvent(legendItem, "click", () => {
                         const criticalOuterElement = document.querySelector(
-                            `.${
-                                styles.criticalityOuterPoint
-                            }[aria-describedby="${inputPrimary.key}"]`
+                            `.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}"]`
                         );
                         const criticalInnerElement = document.querySelector(
-                            `.${
-                                styles.criticalityInnerPoint
-                            }[aria-describedby="${inputPrimary.key}"]`
+                            `.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`
                         );
                         expect(criticalOuterElement.getAttribute("style")).toBe(
                             "display: none;"
@@ -2943,9 +2869,7 @@ describe("Line", () => {
                 });
                 it("Shows indicators on re-toggle", (done) => {
                     const legendItem = lineGraphContainer.querySelector(
-                        `.${styles.legendItem}[aria-describedby="${
-                            inputPrimary.key
-                        }"]`
+                        `.${styles.legendItem}[aria-describedby="${inputPrimary.key}"]`
                     );
                     triggerEvent(legendItem, "click", () => {
                         triggerEvent(
@@ -2953,14 +2877,10 @@ describe("Line", () => {
                             "click",
                             () => {
                                 const criticalOuterElement = document.querySelector(
-                                    `.${
-                                        styles.criticalityOuterPoint
-                                    }[aria-describedby="${inputPrimary.key}"]`
+                                    `.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}"]`
                                 );
                                 const criticalInnerElement = document.querySelector(
-                                    `.${
-                                        styles.criticalityInnerPoint
-                                    }[aria-describedby="${inputPrimary.key}"]`
+                                    `.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`
                                 );
                                 expect(
                                     criticalOuterElement.getAttribute("style")
@@ -2983,30 +2903,20 @@ describe("Line", () => {
                     lineSecondary = new Line(inputSecondary);
                     graphDefault.loadContent(lineSecondary);
                     const legendItem = lineGraphContainer.querySelector(
-                        `.${styles.legendItem}[aria-describedby="${
-                            inputSecondary.key
-                        }"]`
+                        `.${styles.legendItem}[aria-describedby="${inputSecondary.key}"]`
                     );
                     triggerEvent(legendItem, "click", () => {
                         const criticalOuterElement = document.querySelector(
-                            `.${
-                                styles.criticalityOuterPoint
-                            }[aria-describedby="${inputPrimary.key}"]`
+                            `.${styles.criticalityOuterPoint}[aria-describedby="${inputPrimary.key}"]`
                         );
                         const criticalInnerElement = document.querySelector(
-                            `.${
-                                styles.criticalityInnerPoint
-                            }[aria-describedby="${inputPrimary.key}"]`
+                            `.${styles.criticalityInnerPoint}[aria-describedby="${inputPrimary.key}"]`
                         );
                         const criticalOuterElementAlt = document.querySelector(
-                            `.${
-                                styles.criticalityOuterPoint
-                            }[aria-describedby="${inputSecondary.key}"]`
+                            `.${styles.criticalityOuterPoint}[aria-describedby="${inputSecondary.key}"]`
                         );
                         const criticalInnerElementAlt = document.querySelector(
-                            `.${
-                                styles.criticalityInnerPoint
-                            }[aria-describedby="${inputSecondary.key}"]`
+                            `.${styles.criticalityInnerPoint}[aria-describedby="${inputSecondary.key}"]`
                         );
                         expect(criticalOuterElement.getAttribute("style")).toBe(
                             ""
