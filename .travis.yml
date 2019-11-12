@@ -1,0 +1,47 @@
+language: node_js
+node_js:
+    - "lts/*"
+notifications:
+    email: false
+cache: false
+sudo: required
+script: skip
+branches:
+    only:
+        - master
+jobs:
+    include:
+        - stage: lint
+          script: npm run lint
+        - stage: test
+          script: npm run test
+        - stage: build
+          script: npm run build
+        - script: npm run build:dist
+        - stage: release
+          node_js: lts/*
+          script: skip
+          deploy:
+              provider: script
+              skip_cleanup: true
+              script: npx semantic-release
+        - stage: deploy
+          name: "Deploy site to gh-pages"
+          script: skip
+          before_deploy:
+              - npm run build:site
+          deploy:
+              provider: pages
+              skip_cleanup: true
+              github_token: $GITHUB_TOKEN
+              local_dir: .site
+              on:
+                  branch: master
+stages:
+    - lint
+    - test
+    - build
+    - name: release
+      if: type != pull_request
+    - name: deploy
+      if: type != pull_request

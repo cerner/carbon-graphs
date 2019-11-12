@@ -2,7 +2,7 @@
 
 const path = require("path");
 const prettier = require("prettier");
-const svgFolderToJSON = require("svg-to-carbon").svgFolderToJSON;
+const svgFolderToJSON = require("@cerner/svg-to-carbon").svgFolderToJSON;
 const SHAPES = require("./shapesDictionary").CARBON_SHAPES;
 const parserOptions = require("./fileSkeleton").parserOptions;
 const fs = require("fs");

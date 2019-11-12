@@ -253,9 +253,9 @@ export const translateSelectionItem = (scale, canvasSVG) =>
                 .transition()
                 .call(constants.d3Transition)
                 .attr("transform", function() {
-                    return transformPartialPoint(scale)(value)(
-                        getTransformScale(this)
-                    );
+                    return transformPartialPoint(
+                        scale
+                    )(value)(getTransformScale(this));
                 });
         });
 /**

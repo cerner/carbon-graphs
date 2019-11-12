@@ -105,7 +105,10 @@ This will generate `dist` and `lib` folders with `core + packaged dependencies` 
 
 ### Commit message format
 
-```
+We follow `ESLint` [commit convention](https://eslint.org/docs/1.0.0/developer-guide/contributing#step-2-make-your-changes).
+Your commit message should look something like this:
+
+```text
 <Tag>: <Short description> (fixes #1234)
 ```
 
@@ -138,25 +141,13 @@ The issue number should be mentioned at the end.
 
 ## Release
 
-Follow [Semantic Versioning](https://semver.org/) when preparing for a release.
-
--   Ensure you have `write` privileges.
--   Ensure you have do not have any unstaged changes.
--   Check the commit log to figure out the version.
-    -   `Breaking` implementation would constitute as a `Major` release.
-    -   `Update` and `New` implementations would constitute as a `Minor` release.
-    -   `Fix` and multiple `Chore` implementations would constitute as a `Patch` release.
--   Run `npm run release:<patch, minor or major>`.
--   Once the release is complete, [deploy](#deploying-the-site-to-github) the site
+Release is automated, and will be performed when PR is merged to `master` branch.
 
 **Ensure released version is present in [cernerrepos](https://cernerrepos.net)**
 
 ## Deploying the site to GitHub
 
--   Ensure you have `write` privileges.
--   Ensure you have do not have any unstaged changes.
--   Get latest from repo `git pull`.
--   To deploy the site to the GitHub pages, run the deploy-site script `npm run deploy:site`.
+Deployment of site is automated, and will be performed when PR is merged to `master` branch.
 
 # Breaking changes
 

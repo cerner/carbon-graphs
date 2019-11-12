@@ -366,9 +366,10 @@ const translatePoints = (scale, config, trackPath, style) =>
             .transition()
             .call(constants.d3Transition)
             .attr("transform", function() {
-                return transformPoint(scale, config)(d)(
-                    getTransformScale(this)
-                );
+                return transformPoint(
+                    scale,
+                    config
+                )(d)(getTransformScale(this));
             });
     });
 /**
