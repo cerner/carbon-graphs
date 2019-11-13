@@ -984,4 +984,80 @@ describe("Paired Result - Region", () => {
             });
         });
     });
+    describe("Show regions when only one paired result is displayed", () => {
+        let inputPrimary = null;
+        let pairedResultPrimaryContent = null;
+        let pairedResultSecondaryContent = null;
+        beforeEach(() => {
+            inputPrimary = getInput(valuesDefault, false, false);
+            inputPrimary.regions = simpleRegion;
+            inputSecondary.regions = simpleRegion;
+            pairedResultPrimaryContent = new PairedResult(inputPrimary);
+            pairedResultSecondaryContent = new PairedResult(inputSecondary);
+            graphDefault.loadContent(pairedResultPrimaryContent);
+            graphDefault.loadContent(pairedResultSecondaryContent);
+        });
+        describe("Regions shown when only one paired result is displayed", () => {
+            it("All regions initially hidden", () => {
+                const regionsElement = document.querySelectorAll(
+                    `.${styles.region}`
+                );
+
+                regionsElement.forEach((element) => {
+                    expect(element.getAttribute("aria-hidden")).toBe("true");
+                });
+            });
+
+            it("Primary regions are displayed when it is the only pair result content displayed", (done) => {
+                const legendItemHigh = pairedResultGraphContainer.querySelector(
+                    `.${styles.legendItem}[aria-describedby="${inputSecondary.key}_high"]`
+                );
+
+                const legendItemMid = pairedResultGraphContainer.querySelector(
+                    `.${styles.legendItem}[aria-describedby="${inputSecondary.key}_mid"]`
+                );
+
+                const legendItemLow = pairedResultGraphContainer.querySelector(
+                    `.${styles.legendItem}[aria-describedby="${inputSecondary.key}_low"]`
+                );
+
+                triggerEvent(legendItemHigh, "click", () => {
+                    const regionsElement = document.querySelectorAll(
+                        `.${styles.region}`
+                    );
+
+                    regionsElement.forEach((element) => {
+                        expect(element.getAttribute("aria-hidden")).toBe(
+                            "true"
+                        );
+                    });
+
+                    triggerEvent(legendItemMid, "click", () => {
+                        const regionsElement = document.querySelectorAll(
+                            `.${styles.region}`
+                        );
+
+                        regionsElement.forEach((element) => {
+                            expect(element.getAttribute("aria-hidden")).toBe(
+                                "true"
+                            );
+                        });
+
+                        triggerEvent(legendItemLow, "click", () => {
+                            const regionElement = document.querySelectorAll(
+                                `rect[aria-describedby="region_${inputPrimary.key}_high"]`
+                            );
+
+                            regionElement.forEach((element) => {
+                                expect(
+                                    element.getAttribute("aria-hidden")
+                                ).toBe("false");
+                            });
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+    });
 });

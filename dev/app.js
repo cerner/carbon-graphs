@@ -110,7 +110,8 @@ import { renderSplineLine } from "./examples/controls/spline";
 import {
     renderTimeline,
     renderTimelineCustomPadding,
-    renderTimelinePanning
+    renderTimelinePanning,
+    renderTimelineNoXAxisTickLabel
 } from "./examples/controls/timeline";
 import { createElementLegendBindTo } from "./examples/helpers";
 
@@ -572,6 +573,17 @@ renderSiteApp(
                             pathname: "/axes/bar/x-axis-orientation-top",
                             content: renderBarTimeSeriesXOrientationTop,
                             title: "X Axis Orientation Top"
+                        }
+                    ]
+                },
+                {
+                    pathname: "/axes/timeline",
+                    children: [
+                        {
+                            pathname:
+                                "/axes/timeline/x-axis-without-tick-label",
+                            content: renderTimelineNoXAxisTickLabel,
+                            title: "X Axis Without Tick Label"
                         }
                     ]
                 }
