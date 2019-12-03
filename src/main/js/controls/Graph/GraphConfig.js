@@ -152,7 +152,10 @@ export const processInput = (input, config, type) => {
  * @returns {boolean} false if not unique
  */
 export const isUniqueKey = (dictionary, key) =>
-    !utils.hasValue(dictionary.map((i) => i.config.key), key);
+    !utils.hasValue(
+        dictionary.map((i) => i.config.key),
+        key
+    );
 
 /**
  * Validates the newly added content into the graph before rendering

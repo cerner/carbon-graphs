@@ -49,7 +49,6 @@ import {
  * @private
  * @param {object} val - A value
  * @param {string} type - High, mid or low
- * @private
  * @returns {object} value of the type
  */
 const getValue = (val, type) => (val ? val[type] : "");
@@ -144,10 +143,9 @@ const translatePoints = (scale, canvasSVG, config) =>
                         )
                     )
                     .attr("transform", function() {
-                        return transformPoint(
-                            scale,
-                            type
-                        )(d)(getTransformScale(this));
+                        return transformPoint(scale, type)(d)(
+                            getTransformScale(this)
+                        );
                     });
             });
     });
@@ -271,8 +269,8 @@ const drawLine = (scale, config, boxPath) =>
         const shouldCreateLine = (d) =>
             d.high &&
             d.low &&
-            (utils.hasValue(config.shownTargets, d.high.key) &&
-                utils.hasValue(config.shownTargets, d.low.key));
+            utils.hasValue(config.shownTargets, d.high.key) &&
+                utils.hasValue(config.shownTargets, d.low.key);
         return d3
             .select(this)
             .append("path")

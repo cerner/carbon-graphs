@@ -9,6 +9,7 @@ Any graph that inherits from `Graph` API will inherit the following `Axis` and `
             -   [Constraints](#constraints)
     -   [AXIS_TYPE](#axistype)
     -   [AXES_ORIENTATION](#axesorientation)
+    -   [X Axis Domain Padding](#x-axis-domain-padding)
 
 ## JSON Properties
 
@@ -64,3 +65,22 @@ Sets the orientation for Axes (X-Axis for now, for Right orientation use Y2 axis
 | -------- | ----------- |
 | X        | TOP, BOTTOM |
 | Y        | LEFT, RIGHT |
+
+## X Axis Domain Padding
+
+Unlike Y Axis, X Axis can have different types of values as ticks namely numeric, datetime etc. By design, domain padding has not been provided for this reason. Consumers however who are more acquainted with their dataset can judge how much value padding is necessary and achieve similar results as Y Axis.
+
+Example:
+
+```js
+const padXAxisLimits = (extent) => {
+    const range = extent[1] - extent[0];
+    return [extent[0] - range * 0.05, extent[1] + range * 0.05];
+};
+
+const datetime = padXAxisLimits(
+    d3.extent([
+        /* Array containing all the datetime in RFC3339 format*/
+    ])
+);
+```
