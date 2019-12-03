@@ -12,7 +12,12 @@ import { loadLegendItem } from "../../../../main/js/helpers/legend";
 import styles from "../../../../main/js/helpers/styles";
 import utils from "../../../../main/js/helpers/utils";
 import LOCALE from "../../../../main/js/locale/index";
-import { delay, toNumber, triggerEvent } from "../../helpers/commonHelpers";
+import {
+    delay,
+    PADDING_BOTTOM,
+    toNumber,
+    triggerEvent
+} from "../../helpers/commonHelpers";
 import {
     axisJSON,
     datelineAlt,
@@ -806,7 +811,7 @@ describe("Gantt - Generate", () => {
                     datelineGroupElement.getAttribute("transform")
                 ).translate;
                 expect(toNumber(translate[0], 10)).toBeCloseTo(106);
-                expect(toNumber(translate[1], 10)).toBeCloseTo(5);
+                expect(toNumber(translate[1], 10)).toBeCloseTo(PADDING_BOTTOM);
                 done();
             });
             expect(datelineGroupElement.childNodes.length).toBe(2);
@@ -821,13 +826,13 @@ describe("Gantt - Generate", () => {
                 const datelineElement = fetchElementByClass(styles.dateline);
                 expect(
                     toNumber(datelineElement.getAttribute("x1"), 10)
-                ).toBeCloseTo(338);
+                ).toBeCloseTo(340);
                 expect(
                     toNumber(datelineElement.getAttribute("y1"), 10)
                 ).toBeCloseTo(0);
                 expect(
                     toNumber(datelineElement.getAttribute("x2"), 10)
-                ).toBeCloseTo(338);
+                ).toBeCloseTo(340);
                 expect(
                     toNumber(datelineElement.getAttribute("y2"), 10)
                 ).toBeCloseTo(0);
@@ -880,7 +885,7 @@ describe("Gantt - Generate", () => {
                 const translate = getSVGAnimatedTransformList(
                     datelinePointGroupElement.getAttribute("transform")
                 ).translate;
-                expect(toNumber(translate[0], 10)).toBeCloseTo(338);
+                expect(toNumber(translate[0], 10)).toBeCloseTo(340);
                 expect(toNumber(translate[1], 10)).toBeCloseTo(0);
                 done();
             });

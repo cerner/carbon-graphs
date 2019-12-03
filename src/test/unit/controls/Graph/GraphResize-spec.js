@@ -191,7 +191,7 @@ describe("Graph - Resize", () => {
             graph = new Graph(axisData);
             const expectedOutput = {
                 top: 10,
-                bottom: 5,
+                bottom: 2.5,
                 left: 30,
                 right: 50,
                 hasCustomPadding: false
@@ -207,7 +207,7 @@ describe("Graph - Resize", () => {
             graph = new Graph(axisData);
             const expectedOutput = {
                 top: 40,
-                bottom: 5,
+                bottom: 2.5,
                 left: 30,
                 right: 50,
                 hasCustomPadding: true

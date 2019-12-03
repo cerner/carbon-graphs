@@ -529,7 +529,7 @@ describe("Graph", () => {
                 expect(graph.config.canvasHeight).toBeGreaterThan(0);
             });
             it("Sets the height correctly", () => {
-                expect(graph.config.height).toBe(235);
+                expect(graph.config.height).toBe(237.5);
             });
             it("Sets X axis position correctly", () => {
                 const axisXElement = fetchElementByClass(styles.axisX);

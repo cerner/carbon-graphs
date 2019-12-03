@@ -5,6 +5,7 @@ import styles from "../../../../main/js/helpers/styles";
 import { getSVGAnimatedTransformList } from "../../../../main/js/helpers/transformUtils";
 import {
     loadCustomJasmineMatcher,
+    PADDING_BOTTOM,
     toNumber,
     delay
 } from "../../helpers/commonHelpers";
@@ -68,7 +69,7 @@ describe("Graph - Panning", () => {
                     datelineGroup.getAttribute("transform")
                 ).translate;
                 expect(toNumber(translate[0], 10)).toBeCloserTo(73);
-                expect(toNumber(translate[1], 10)).toBeCloserTo(5);
+                expect(toNumber(translate[1], 10)).toBeCloseTo(PADDING_BOTTOM);
                 done();
             });
         });
@@ -94,7 +95,7 @@ describe("Graph - Panning", () => {
                     datelineGroup.getAttribute("transform")
                 ).translate;
                 expect(toNumber(translate[0], 10)).toBeCloserTo(73);
-                expect(toNumber(translate[1], 10)).toBeCloserTo(5);
+                expect(toNumber(translate[1], 10)).toBeCloseTo(PADDING_BOTTOM);
                 done();
             });
         });
@@ -120,7 +121,7 @@ describe("Graph - Panning", () => {
                     datelineGroup.getAttribute("transform")
                 ).translate;
                 expect(toNumber(translate[0], 10)).toBeCloserTo(73);
-                expect(toNumber(translate[1], 10)).toBeCloserTo(5);
+                expect(toNumber(translate[1], 10)).toBeCloseTo(PADDING_BOTTOM);
                 done();
             });
         });

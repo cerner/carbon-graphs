@@ -9,6 +9,7 @@ import { getSVGAnimatedTransformList } from "../../../../main/js/helpers/transfo
 import utils from "../../../../main/js/helpers/utils";
 import {
     loadCustomJasmineMatcher,
+    PADDING_BOTTOM,
     toNumber,
     triggerEvent,
     delay
@@ -351,7 +352,7 @@ describe("Graph - Dateline", () => {
                     datelineGroup.getAttribute("transform")
                 ).translate;
                 expect(toNumber(translate[0], 10)).toBeCloserTo(73);
-                expect(toNumber(translate[1], 10)).toBeCloserTo(5);
+                expect(toNumber(translate[1], 10)).toBeCloseTo(PADDING_BOTTOM);
                 done();
             });
         });

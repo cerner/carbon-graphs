@@ -149,7 +149,7 @@ export const AXES_ORIENTATION = {
 export default {
     PADDING: {
         top: 10,
-        bottom: 5,
+        bottom: 2.5,
         left: 30,
         right: 50,
         trackLabel: 100

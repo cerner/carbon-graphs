@@ -6,6 +6,7 @@ import utils from "../../../../main/js/helpers/utils";
 import {
     loadCustomJasmineMatcher,
     toNumber,
+    PADDING_BOTTOM,
     delay
 } from "../../helpers/commonHelpers";
 import {
@@ -68,7 +69,7 @@ describe("Bar - Panning", () => {
                     datelineGroup.getAttribute("transform")
                 ).translate;
                 expect(toNumber(translate[0], 10)).toBeGreaterThanOrEqual(72);
-                expect(toNumber(translate[1], 10)).toBeCloseTo(5);
+                expect(toNumber(translate[1], 10)).toBeCloseTo(PADDING_BOTTOM);
                 done();
             });
         });
@@ -104,7 +105,7 @@ describe("Bar - Panning", () => {
                     datelineGroup.getAttribute("transform")
                 ).translate;
                 expect(toNumber(translate[0], 10)).toBeGreaterThanOrEqual(72);
-                expect(toNumber(translate[1], 10)).toBeCloseTo(5);
+                expect(toNumber(translate[1], 10)).toBeCloseTo(PADDING_BOTTOM);
                 done();
             });
         });
