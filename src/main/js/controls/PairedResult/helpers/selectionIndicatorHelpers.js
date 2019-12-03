@@ -272,9 +272,9 @@ export const translateSelectionItem = (scale, canvasSVG, config) =>
                     constants.d3Transition(config.settingsDictionary.transition)
                 )
                 .attr("transform", function() {
-                    return transformPartialPoint(
-                        scale
-                    )(value)(getTransformScale(this));
+                    return transformPartialPoint(scale)(value)(
+                        getTransformScale(this)
+                    );
                 });
         });
 /**
