@@ -45,7 +45,7 @@
     }
   },
   "dependencies": {
-    "d3": "^5.14.2"
+    "d3": "^3.5.17"
   },
   "devDependencies": {
     "@babel/core": "^7.7.4",
@@ -115,6 +115,11 @@
     "lib",
     "README.md"
   ],
+  "greenkeeper": {
+    "ignore": [
+      "d3"
+    ]
+  },
   "homepage": "https://engineering.cerner.com/carbon-graphs/",
   "husky": {
     "hooks": {

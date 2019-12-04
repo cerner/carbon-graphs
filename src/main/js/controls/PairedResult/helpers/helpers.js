@@ -270,7 +270,7 @@ const drawLine = (scale, config, boxPath) =>
             d.high &&
             d.low &&
             utils.hasValue(config.shownTargets, d.high.key) &&
-                utils.hasValue(config.shownTargets, d.low.key);
+            utils.hasValue(config.shownTargets, d.low.key);
         return d3
             .select(this)
             .append("path")
