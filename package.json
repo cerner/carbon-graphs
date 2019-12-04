@@ -115,6 +115,11 @@
     "lib",
     "README.md"
   ],
+  "greenkeeper": {
+    "ignore": [
+      "d3"
+    ]
+  },
   "homepage": "https://engineering.cerner.com/carbon-graphs/",
   "husky": {
     "hooks": {
