@@ -75,7 +75,8 @@ import {
     renderMultiLineIdenticalDatasetRegion,
     renderNoDataView,
     renderLineCustomPadding,
-    renderLineWithPanning
+    renderLineWithPanning,
+    renderDashedLine
 } from "./examples/controls/line";
 import {
     renderMultiPairedResultRegion,
@@ -172,6 +173,11 @@ renderSiteApp(
                     pathname: "/line/no-data",
                     content: renderNoDataView,
                     title: "No Data"
+                },
+                {
+                    pathname: "/line/dashed-line",
+                    content: renderDashedLine,
+                    title: "Dashed Line"
                 }
             ]
         },

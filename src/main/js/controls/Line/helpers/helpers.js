@@ -3,7 +3,8 @@ import d3 from "d3";
 import { Shape } from "../../../core";
 import {
     getInterpolationType,
-    parseTypedValue
+    parseTypedValue,
+    getDefaultValue
 } from "../../../core/BaseConfig";
 import { getDefaultSVGProps } from "../../../core/Shape";
 import {
@@ -266,6 +267,11 @@ const processDataPoints = (graphConfig, dataTarget) => {
     // Update the interpolation type
     dataTarget.interpolationType = getInterpolationType(dataTarget.type);
 
+    dataTarget.style = getDefaultValue(dataTarget.style, {});
+    dataTarget.style = {
+        strokeDashArray: getStrokeDashArray(dataTarget.style)
+    };
+
     graphConfig.shownTargets.push(dataTarget.key);
     dataTarget.internalValuesSubset = dataTarget.values.map((value) => ({
         onClick: dataTarget.onClick,
@@ -317,7 +323,13 @@ const drawDataLines = (scale, config, lineGroupSVG) =>
         .classed(styles.line, true)
         .append("path")
         .attr("d", (value) => createLine(scale, value))
-        .attr("style", (value) => `stroke: ${getColorForTarget(value)};`)
+        .attr(
+            "style",
+            (value) =>
+                `stroke: ${getColorForTarget(value)}; stroke-dasharray: ${
+                    value.style.strokeDashArray
+                };`
+        )
         .attr("aria-hidden", (value) =>
             shouldHideDataPoints(config.shownTargets, value)
         )
@@ -540,6 +552,16 @@ const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
  */
 const clear = (canvasSVG, dataTarget) =>
     d3RemoveElement(canvasSVG, `g[aria-describedby="${dataTarget.key}"]`);
+
+/**
+ * Validate and return the strokeDashArray property
+ *
+ * @private
+ * @param {object} style - style you want to apply for the line
+ * @returns {string} - stroke-dasharray css value for the line
+ */
+const getStrokeDashArray = (style) =>
+    getDefaultValue(style.strokeDashArray, "0");
 
 export {
     toggleDataPointSelection,
