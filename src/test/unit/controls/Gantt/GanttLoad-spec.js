@@ -470,7 +470,7 @@ describe("When custom padding is used in input", () => {
         gantt = new Gantt(ganttConfig);
         const expectedOutput = {
             top: 10,
-            bottom: 2.5,
+            bottom: 5,
             left: 100, // defaults to constants trackLabel
             right: 50,
             hasCustomPadding: false
@@ -481,9 +481,7 @@ describe("When custom padding is used in input", () => {
         expect(toNumber(contentContainer.attr("x"), 10)).toEqual(
             gantt.config.axisSizes.y + gantt.config.axisLabelWidths.y
         );
-        expect(toNumber(contentContainer.attr("y"), 10)).toEqual(
-            (2.5 + 10) * 2
-        );
+        expect(toNumber(contentContainer.attr("y"), 10)).toEqual((5 + 10) * 2);
     });
     it("default padding applied when custom padding half used", () => {
         const primaryContent = getData();
@@ -494,7 +492,7 @@ describe("When custom padding is used in input", () => {
         gantt = new Gantt(ganttConfig);
         const expectedOutput = {
             top: 50,
-            bottom: 2.5,
+            bottom: 5,
             left: 100,
             right: 50,
             hasCustomPadding: true
@@ -505,9 +503,7 @@ describe("When custom padding is used in input", () => {
         expect(toNumber(contentContainer.attr("x"), 10)).toEqual(
             gantt.config.axisSizes.y + gantt.config.axisLabelWidths.y
         );
-        expect(toNumber(contentContainer.attr("y"), 10)).toEqual(
-            (50 + 2.5) * 2
-        );
+        expect(toNumber(contentContainer.attr("y"), 10)).toEqual((50 + 5) * 2);
     });
     it("position of content container starts where canvas starts", () => {
         const primaryContent = getData();

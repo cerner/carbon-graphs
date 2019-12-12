@@ -191,7 +191,7 @@ describe("Graph - Resize", () => {
             graph = new Graph(axisData);
             const expectedOutput = {
                 top: 10,
-                bottom: 2.5,
+                bottom: 5,
                 left: 30,
                 right: 50,
                 hasCustomPadding: false
@@ -207,7 +207,7 @@ describe("Graph - Resize", () => {
             graph = new Graph(axisData);
             const expectedOutput = {
                 top: 40,
-                bottom: 2.5,
+                bottom: 5,
                 left: 30,
                 right: 50,
                 hasCustomPadding: true
@@ -295,7 +295,7 @@ describe("Graph - Resize", () => {
                 );
                 expect(
                     toNumber(contentContainer.attr("width"), 10)
-                ).toBeCloserTo(762);
+                ).toBeCloserTo(742);
                 expect(toNumber(contentContainer.attr("height"))).toBeCloserTo(
                     250
                 );
