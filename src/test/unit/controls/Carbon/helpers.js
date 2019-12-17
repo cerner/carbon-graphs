@@ -7,7 +7,8 @@ export const LIBRARY_LIST = [
     "pairedResult",
     "timeline",
     "bar",
-    "pie"
+    "pie",
+    "scatter"
 ];
 export const TOOLS_LIST = ["shape", "defaultSVGProps"];
 export const nativeInput = {

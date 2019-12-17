@@ -5,6 +5,7 @@ import Line from "./Line";
 import PairedResult from "./PairedResult";
 import Pie from "./Pie";
 import Timeline from "./Timeline";
+import Scatter from "./Scatter";
 
 /**
  * @module api
@@ -23,5 +24,6 @@ export default {
     pairedResult: (input) => new PairedResult(input),
     timeline: (input) => new Timeline(input),
     pie: (input) => new Pie(input),
-    bar: (input) => new Bar(input)
+    bar: (input) => new Bar(input),
+    scatter: (input) => new Scatter(input)
 };

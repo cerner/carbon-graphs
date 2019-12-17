@@ -29,7 +29,8 @@ import {
     renderCriticalityMultiLine,
     renderCriticalityMultiPairedResult,
     renderCriticalityPairedResultSimple,
-    renderCriticalityTimeline
+    renderCriticalityTimeline,
+    renderCriticalityScatter
 } from "./examples/controls/criticality";
 import {
     renderGantt,
@@ -115,6 +116,34 @@ import {
     renderTimelineNoXAxisTickLabel
 } from "./examples/controls/timeline";
 import { createElementLegendBindTo } from "./examples/helpers";
+import {
+    renderScatter,
+    renderScatterTimeSeries,
+    renderScatterWithDateline,
+    renderScatterY2Axis,
+    renderScatterLabelHidden,
+    renderScatterLegendHidden,
+    renderScatterLegendTo,
+    renderScatterLegendItemDisabled,
+    renderScatterRegionSimple,
+    renderMultiScatterRegion,
+    renderScatterRegionMultiple,
+    renderRegionScatter,
+    renderScatterRegionY2,
+    renderScatterRegionNoLower,
+    renderScatterRegionNoUpper,
+    renderScatterGridHHidden,
+    renderScatterGridVHidden,
+    renderScatterXHidden,
+    renderScatterYHidden,
+    renderScatterXStaticTicks,
+    renderScatterXAxisFormatted,
+    renderScatterXAlternateLocale,
+    renderScatterDateTimeBuckets,
+    renderScatterXOrientationTop,
+    renderScatterCustomPadding,
+    renderScatterWithPanning
+} from "./examples/controls/scatter";
 
 renderSiteApp(
     [
@@ -297,6 +326,54 @@ renderSiteApp(
             ]
         },
         {
+            pathname: "/scatter",
+            children: [
+                {
+                    pathname: "/scatter/simple",
+                    content: renderScatter,
+                    title: "Simple"
+                },
+                {
+                    pathname: "/scatter/timeseries",
+                    content: renderScatterTimeSeries,
+                    title: "Timeseries"
+                },
+                {
+                    pathname: "/scatter/timeseries-dateline",
+                    content: renderScatterWithDateline,
+                    title: "Timeseries With Dateline"
+                },
+                {
+                    pathname: "/scatter/y2-axis",
+                    content: renderScatterY2Axis,
+                    title: "Y2 Axis"
+                },
+                {
+                    pathname: "/scatter/label-hidden",
+                    content: renderScatterLabelHidden,
+                    title: "Label Hidden"
+                },
+                {
+                    pathname: "/scatter/legend-hidden",
+                    content: renderScatterLegendHidden,
+                    title: "Legend Hidden"
+                },
+                {
+                    pathname: "/scatter/custom-legend-placement",
+                    content: (id) => {
+                        createElementLegendBindTo(id);
+                        return renderScatterLegendTo(id);
+                    },
+                    title: "Custom Legend Placement"
+                },
+                {
+                    pathname: "/scatter/legend-item-disabled",
+                    content: renderScatterLegendItemDisabled,
+                    title: "Legend Item Disabled"
+                }
+            ]
+        },
+        {
             pathname: "/combination",
             children: [
                 {
@@ -436,6 +513,16 @@ renderSiteApp(
                             title: "Simple"
                         }
                     ]
+                },
+                {
+                    pathname: "/panning/scatter",
+                    children: [
+                        {
+                            pathname: "/panning/scatter/simple",
+                            content: renderScatterWithPanning,
+                            title: "Simple"
+                        }
+                    ]
                 }
             ]
         },
@@ -470,6 +557,21 @@ renderSiteApp(
                             pathname:
                                 "/grid/paired-result/vertical-grid-hidden",
                             content: renderPairedResultGridVHidden,
+                            title: "Vertical Grid Hidden"
+                        }
+                    ]
+                },
+                {
+                    pathname: "/grid/scatter",
+                    children: [
+                        {
+                            pathname: "/grid/scatter/horizontal-grid-hidden",
+                            content: renderScatterGridHHidden,
+                            title: "Horizontal Grid Hidden"
+                        },
+                        {
+                            pathname: "/grid/scatter/vertical-grid-hidden",
+                            content: renderScatterGridVHidden,
                             title: "Vertical Grid Hidden"
                         }
                     ]
@@ -592,6 +694,46 @@ renderSiteApp(
                             title: "X Axis Without Tick Label"
                         }
                     ]
+                },
+                {
+                    pathname: "/axes/scatter",
+                    children: [
+                        {
+                            pathname: "/axes/scatter/x-axis-hidden",
+                            content: renderScatterXHidden,
+                            title: "X Axis Hidden"
+                        },
+                        {
+                            pathname: "/axes/scatter/y-axis-hidden",
+                            content: renderScatterYHidden,
+                            title: "Y Axis Hidden"
+                        },
+                        {
+                            pathname: "/axes/scatter/static-x-axis-ticks",
+                            content: renderScatterXStaticTicks,
+                            title: "Static X Axis Ticks"
+                        },
+                        {
+                            pathname: "/axes/scatter/x-axis-ticks-formatted",
+                            content: renderScatterXAxisFormatted,
+                            title: "X Axis Ticks Formatted"
+                        },
+                        {
+                            pathname: "/axes/scatter/x-axis-alternate-locale",
+                            content: renderScatterXAlternateLocale,
+                            title: "X Axis Alternate Locale"
+                        },
+                        {
+                            pathname: "/axes/scatter/datetime-buckets",
+                            content: renderScatterDateTimeBuckets,
+                            title: "Datetime Buckets"
+                        },
+                        {
+                            pathname: "/axes/scatter/x-axis-orientation-top",
+                            content: renderScatterXOrientationTop,
+                            title: "X Axis Orientation Top"
+                        }
+                    ]
                 }
             ]
         },
@@ -698,6 +840,46 @@ renderSiteApp(
                             title: "Dataset Region Identical"
                         }
                     ]
+                },
+                {
+                    pathname: "regions/scatter",
+                    children: [
+                        {
+                            pathname: "/regions/scatter/simple",
+                            content: renderScatterRegionSimple,
+                            title: "Simple"
+                        },
+                        {
+                            pathname: "/regions/scatter/multiple-scatter",
+                            content: renderMultiScatterRegion,
+                            title: "Multiple scatter"
+                        },
+                        {
+                            pathname: "/regions/scatter/multiple-regions",
+                            content: renderScatterRegionMultiple,
+                            title: "Multiple Regions"
+                        },
+                        {
+                            pathname: "/regions/scatter/region-line",
+                            content: renderRegionScatter,
+                            title: "Region-line"
+                        },
+                        {
+                            pathname: "/regions/scatter/with-y2-axis",
+                            content: renderScatterRegionY2,
+                            title: "With Y2 Axis"
+                        },
+                        {
+                            pathname: "/regions/scatter/no-lower-bound",
+                            content: renderScatterRegionNoLower,
+                            title: "No Lower Bound"
+                        },
+                        {
+                            pathname: "/regions/scatter/no-upper-bound",
+                            content: renderScatterRegionNoUpper,
+                            title: "No Upper Bound"
+                        }
+                    ]
                 }
             ]
         },
@@ -728,6 +910,11 @@ renderSiteApp(
                     pathname: "/criticality/timeline",
                     content: renderCriticalityTimeline,
                     title: "Timeline"
+                },
+                {
+                    pathname: "/criticality/scatter",
+                    content: renderCriticalityScatter,
+                    title: "Scatter"
                 }
             ]
         },
@@ -761,6 +948,16 @@ renderSiteApp(
                             pathname:
                                 "/padding/timeline/custom-content-padding",
                             content: renderTimelineCustomPadding,
+                            title: "Custom Content Padding"
+                        }
+                    ]
+                },
+                {
+                    pathname: "/padding/scatter",
+                    children: [
+                        {
+                            pathname: "/padding/scatter/custom-content-padding",
+                            content: renderScatterCustomPadding,
                             title: "Custom Content Padding"
                         }
                     ]

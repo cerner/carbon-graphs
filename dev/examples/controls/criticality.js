@@ -116,3 +116,34 @@ export const renderCriticalityTimeline = (id) => {
     timelineDefault.loadContent(timelineData.data[1]);
     return timelineDefault;
 };
+export const renderCriticalityScatter = (id) => {
+    const scatterDefault = Carbon.api.graph(
+        getDemoData(`#${id}`, "LINE_DEFAULT")
+    );
+    const data = utils.deepClone(getDemoData(`#${id}`, "LINE_DEFAULT").data[0]);
+    data.values[0].isCritical = true;
+    data.values[5].isCritical = true;
+    data.values[10].isCritical = true;
+    data.regions = [
+        {
+            start: 2
+        }
+    ];
+    const dataAlt = utils.deepClone(
+        getDemoData(`#${id}`, "LINE_DEFAULT").data[2]
+    );
+    dataAlt.values[6].isCritical = true;
+    dataAlt.values[11].isCritical = true;
+    dataAlt.regions = [
+        {
+            start: 2,
+            end: 14
+        }
+    ];
+    scatterDefault.loadContent(Carbon.api.scatter(data));
+    scatterDefault.loadContent(Carbon.api.scatter(dataAlt));
+    scatterDefault.loadContent(
+        Carbon.api.scatter(getDemoData(`#${id}`, "LINE_DEFAULT").data[4])
+    );
+    return scatterDefault;
+};
