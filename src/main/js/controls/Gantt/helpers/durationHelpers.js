@@ -35,7 +35,10 @@ const getActivityStyle = (data = {}) => {
         return currentStyle;
     }
     if (data.style.isHashed === true) {
-        currentStyle = `fill: ${constants.DEFAULT_ACTIVITY_BAR_HASH_COLOR}; fill-opacity: ${constants.DEFAULT_GANTT_ACTIVITY_OPACITY};`;
+        currentStyle = `fill: ${data.color ||
+            constants.DEFAULT_ACTIVITY_BAR_HASH_COLOR}; fill-opacity: ${
+            constants.DEFAULT_GANTT_ACTIVITY_OPACITY
+        };`;
     }
     return currentStyle;
 };

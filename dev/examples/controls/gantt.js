@@ -231,6 +231,7 @@ const activities = [
             label: {
                 display: "Story Apex Hashed Activity"
             },
+            color: "#000",
             startDate: new Date(2018, 0, 1).toISOString(),
             endDate: new Date(2018, 3, 1).toISOString(),
             style: {
@@ -611,6 +612,7 @@ export const renderGanttStyle = (id) => {
                 label: {
                     display: "Story Apex Activity hash"
                 },
+                color: "#000",
                 startDate: new Date(2018, 2, 1).toISOString(),
                 endDate: new Date(2018, 11, 1).toISOString(),
                 style: {
