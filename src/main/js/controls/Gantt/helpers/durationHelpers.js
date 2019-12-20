@@ -28,7 +28,7 @@ const getTaskStyle = (data = {}) =>
  */
 const getActivityStyle = (data = {}) => {
     const color = data.color || COLORS.BLUE;
-    let currentStyle = `fill: ${color}; fill-opacity: ${constants.DEFAULT_GANTT_ACTIVITY_OPACITY};`;
+    let currentStyle = `fill: ${color}; fill-opacity: ${constants.DEFAULT_GANTT_ACTIVITY_OPACITY}; stroke-width: 1px; stroke: ${color}`;
 
     // If style property is not provided then we use treat it as filled.
     if (utils.isEmpty(data.style)) {

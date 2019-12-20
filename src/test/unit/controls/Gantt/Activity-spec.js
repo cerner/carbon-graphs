@@ -353,6 +353,12 @@ describe("Gantt -> Track -> Activity", () => {
             expect(activityElement.getAttribute("style")).toContain(
                 "opacity: 0.5"
             );
+            expect(activityElement.getAttribute("style")).toContain(
+                "stroke-width: 1px"
+            );
+            expect(activityElement.getAttribute("style")).toContain(
+                "stroke: #007cc3"
+            );
             expect(toNumber(activityElement.getAttribute("x"))).toBeGreaterThan(
                 0
             );
