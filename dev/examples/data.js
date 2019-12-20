@@ -1136,7 +1136,6 @@ const DATA = [
                                 display: "Support"
                             },
                             onClick: () => {},
-                            color: "#007cc3",
                             startDate: new Date(2018, 1, 1).toISOString(),
                             endDate: new Date(2018, 1, 10).toISOString(),
                             duration: () => daysToMilliseconds(12),

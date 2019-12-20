@@ -28,14 +28,17 @@ const getTaskStyle = (data = {}) =>
  */
 const getActivityStyle = (data = {}) => {
     const color = data.color || COLORS.BLUE;
-    let currentStyle = `fill: ${color}; fill-opacity: ${constants.DEFAULT_GANTT_ACTIVITY_OPACITY};`;
+    let currentStyle = `fill: ${color}; fill-opacity: ${constants.DEFAULT_GANTT_ACTIVITY_OPACITY}; stroke-width: 1px; stroke: ${color}`;
 
     // If style property is not provided then we use treat it as filled.
     if (utils.isEmpty(data.style)) {
         return currentStyle;
     }
     if (data.style.isHashed === true) {
-        currentStyle = `fill: ${constants.DEFAULT_ACTIVITY_BAR_HASH_COLOR}; fill-opacity: ${constants.DEFAULT_GANTT_ACTIVITY_OPACITY};`;
+        currentStyle = `fill: ${data.color ||
+            constants.DEFAULT_ACTIVITY_BAR_HASH_COLOR}; fill-opacity: ${
+            constants.DEFAULT_GANTT_ACTIVITY_OPACITY
+        };`;
     }
     return currentStyle;
 };
