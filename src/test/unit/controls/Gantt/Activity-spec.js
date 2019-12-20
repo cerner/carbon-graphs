@@ -351,7 +351,7 @@ describe("Gantt -> Track -> Activity", () => {
             expect(activityElement.getAttribute("style")).toContain("fill");
             // Opacity ensures, it is layered above grid lines.
             expect(activityElement.getAttribute("style")).toContain(
-                "opacity: 0.3"
+                "opacity: 0.5"
             );
             expect(toNumber(activityElement.getAttribute("x"))).toBeGreaterThan(
                 0
