@@ -471,7 +471,8 @@ describe("Timeline", () => {
             const currentWidth =
                 constants.PADDING.left +
                 constants.PADDING.right +
-                (constants.PADDING.top + constants.PADDING.bottom) * 2;
+                constants.PADDING.top * 1.5 +
+                constants.PADDING.bottom;
             const defsElement = fetchElementByClass(styles.canvas).firstChild;
             expect(defsElement.nodeName).toBe("defs");
             expect(defsElement.firstChild.nodeName).toBe("clipPath");

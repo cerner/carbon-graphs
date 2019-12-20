@@ -826,13 +826,13 @@ describe("Gantt - Generate", () => {
                 const datelineElement = fetchElementByClass(styles.dateline);
                 expect(
                     toNumber(datelineElement.getAttribute("x1"), 10)
-                ).toBeCloseTo(340);
+                ).toBeCloseTo(338);
                 expect(
                     toNumber(datelineElement.getAttribute("y1"), 10)
                 ).toBeCloseTo(0);
                 expect(
                     toNumber(datelineElement.getAttribute("x2"), 10)
-                ).toBeCloseTo(340);
+                ).toBeCloseTo(338);
                 expect(
                     toNumber(datelineElement.getAttribute("y2"), 10)
                 ).toBeCloseTo(0);
@@ -885,7 +885,7 @@ describe("Gantt - Generate", () => {
                 const translate = getSVGAnimatedTransformList(
                     datelinePointGroupElement.getAttribute("transform")
                 ).translate;
-                expect(toNumber(translate[0], 10)).toBeCloseTo(340);
+                expect(toNumber(translate[0], 10)).toBeCloseTo(338);
                 expect(toNumber(translate[1], 10)).toBeCloseTo(0);
                 done();
             });

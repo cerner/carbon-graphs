@@ -6,7 +6,7 @@ export const TRANSITION_DELAY = 400;
 /*
  * @type {number} Padding bottom
  */
-export const PADDING_BOTTOM = 2;
+export const PADDING_BOTTOM = 5;
 /**
  * Flushes all D3 transitions before calling an event
  *

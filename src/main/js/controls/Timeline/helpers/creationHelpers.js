@@ -91,7 +91,7 @@ const getXAxisXPosition = (config) => config.padding.left;
  * @returns {number} Position for the axis
  */
 const getXAxisYPosition = (config) =>
-    (config.padding.top + config.padding.bottom) * 2;
+    config.padding.top * 1.5 + config.padding.bottom;
 
 /**
  * X Axis's width that will hold equally spaced ticks
