@@ -118,7 +118,16 @@
   "greenkeeper": {
     "ignore": [
       "d3"
-    ]
+    ],
+    "commitMessages": {
+      "initialBadge": "Docs: Add Greenkeeper badge",
+      "initialDependencies": "Upgrade: Update dependencies",
+      "initialBranches": "Build: Whitelist Greenkeeper branches",
+      "dependencyUpdate": "Upgrade: Update ${dependency} to version ${version}",
+      "devDependencyUpdate": "Upgrade: Update ${dependency} to version ${version}",
+      "dependencyPin": "Fix: Pin ${dependency} to ${oldVersion}",
+      "devDependencyPin": "Fix: Pin ${dependency} to ${oldVersion}"
+    }
   },
   "homepage": "https://engineering.cerner.com/carbon-graphs/",
   "husky": {
