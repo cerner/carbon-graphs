@@ -33,18 +33,6 @@ export const renderScatter = (id) => {
     );
     return scatterDefault;
 };
-export const renderScatterY2Axis = (id) => {
-    const axisData = utils.deepClone(getDemoData(`#${id}`, "LINE_TIMESERIES"));
-    axisData.axis.y2.show = true;
-    const scatterTime = Carbon.api.graph(axisData);
-    scatterTime.loadContent(
-        Carbon.api.scatter(getDemoData(`#${id}`, "LINE_TIMESERIES").data[0])
-    );
-    scatterTime.loadContent(
-        Carbon.api.scatter(getDemoData(`#${id}`, "LINE_TIMESERIES").data[1])
-    );
-    return scatterTime;
-};
 export const renderScatterWithDateline = (id) => {
     const scatterTime = Carbon.api.graph(
         getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE")
@@ -177,61 +165,6 @@ export const renderScatterRegionSimple = (id) => {
     scatterDefault.loadContent(Carbon.api.scatter(data));
     return scatterDefault;
 };
-export const renderScatterRegionMultiple = (id) => {
-    const scatterDefault = Carbon.api.graph(
-        getDemoData(`#${id}`, "LINE_DEFAULT")
-    );
-    const data = utils.deepClone(getDemoData(`#${id}`, "LINE_DEFAULT").data[4]);
-    data.regions = regions;
-    scatterDefault.loadContent(Carbon.api.scatter(data));
-    return scatterDefault;
-};
-export const renderScatterRegionNoLower = (id) => {
-    const scatterDefault = Carbon.api.graph(
-        getDemoData(`#${id}`, "LINE_DEFAULT")
-    );
-    const data = utils.deepClone(getDemoData(`#${id}`, "LINE_DEFAULT").data[0]);
-    data.regions = [
-        {
-            end: 10
-        }
-    ];
-    scatterDefault.loadContent(Carbon.api.scatter(data));
-    return scatterDefault;
-};
-export const renderScatterRegionNoUpper = (id) => {
-    const scatterDefault = Carbon.api.graph(
-        getDemoData(`#${id}`, "LINE_DEFAULT")
-    );
-    const data = utils.deepClone(getDemoData(`#${id}`, "LINE_DEFAULT").data[0]);
-    data.regions = [
-        {
-            start: 2
-        }
-    ];
-    scatterDefault.loadContent(Carbon.api.scatter(data));
-    return scatterDefault;
-};
-export const renderScatterRegionY2 = (id) => {
-    const axisData = utils.deepClone(getDemoData(`#${id}`, "LINE_TIMESERIES"));
-    const dataValueObject = utils.deepClone(
-        getDemoData(`#${id}`, "LINE_TIMESERIES").data[1]
-    );
-    axisData.axis.y2.show = true;
-    dataValueObject.regions = [
-        {
-            axis: "y2",
-            start: 50,
-            end: 150
-        }
-    ];
-    const scatterTime = Carbon.api.graph(axisData);
-    scatterTime.loadContent(
-        Carbon.api.scatter(getDemoData(`#${id}`, "LINE_TIMESERIES").data[0])
-    );
-    scatterTime.loadContent(Carbon.api.scatter(dataValueObject));
-    return scatterTime;
-};
 export const renderMultiScatterRegion = (id) => {
     const scatterDefault = Carbon.api.graph(
         getDemoData(`#${id}`, "LINE_DEFAULT")
@@ -280,21 +213,6 @@ export const renderMultiScatterIdenticalDatasetRegion = (id) => {
     ];
     scatterDefault.loadContent(Carbon.api.scatter(data));
     scatterDefault.loadContent(Carbon.api.scatter(dataAlt));
-    return scatterDefault;
-};
-export const renderRegionScatter = (id) => {
-    const scatterDefault = Carbon.api.graph(
-        getDemoData(`#${id}`, "LINE_DEFAULT")
-    );
-    const data = utils.deepClone(getDemoData(`#${id}`, "LINE_DEFAULT").data[5]);
-    data.regions = [
-        {
-            start: 15,
-            end: 15,
-            color: "#bcbfc0"
-        }
-    ];
-    scatterDefault.loadContent(Carbon.api.scatter(data));
     return scatterDefault;
 };
 export const renderScatterBlankDataPoint = (id) => {

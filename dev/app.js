@@ -120,18 +120,12 @@ import {
     renderScatter,
     renderScatterTimeSeries,
     renderScatterWithDateline,
-    renderScatterY2Axis,
     renderScatterLabelHidden,
     renderScatterLegendHidden,
     renderScatterLegendTo,
     renderScatterLegendItemDisabled,
     renderScatterRegionSimple,
     renderMultiScatterRegion,
-    renderScatterRegionMultiple,
-    renderRegionScatter,
-    renderScatterRegionY2,
-    renderScatterRegionNoLower,
-    renderScatterRegionNoUpper,
     renderScatterGridHHidden,
     renderScatterGridVHidden,
     renderScatterXHidden,
@@ -342,11 +336,6 @@ renderSiteApp(
                     pathname: "/scatter/timeseries-dateline",
                     content: renderScatterWithDateline,
                     title: "Timeseries With Dateline"
-                },
-                {
-                    pathname: "/scatter/y2-axis",
-                    content: renderScatterY2Axis,
-                    title: "Y2 Axis"
                 },
                 {
                     pathname: "/scatter/label-hidden",
@@ -842,7 +831,7 @@ renderSiteApp(
                     ]
                 },
                 {
-                    pathname: "regions/scatter",
+                    pathname: "/regions/scatter",
                     children: [
                         {
                             pathname: "/regions/scatter/simple",
@@ -853,31 +842,6 @@ renderSiteApp(
                             pathname: "/regions/scatter/multiple-scatter",
                             content: renderMultiScatterRegion,
                             title: "Multiple scatter"
-                        },
-                        {
-                            pathname: "/regions/scatter/multiple-regions",
-                            content: renderScatterRegionMultiple,
-                            title: "Multiple Regions"
-                        },
-                        {
-                            pathname: "/regions/scatter/region-line",
-                            content: renderRegionScatter,
-                            title: "Region-line"
-                        },
-                        {
-                            pathname: "/regions/scatter/with-y2-axis",
-                            content: renderScatterRegionY2,
-                            title: "With Y2 Axis"
-                        },
-                        {
-                            pathname: "/regions/scatter/no-lower-bound",
-                            content: renderScatterRegionNoLower,
-                            title: "No Lower Bound"
-                        },
-                        {
-                            pathname: "/regions/scatter/no-upper-bound",
-                            content: renderScatterRegionNoUpper,
-                            title: "No Upper Bound"
                         }
                     ]
                 }

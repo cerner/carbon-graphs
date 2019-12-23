@@ -14,7 +14,6 @@ A native scatter graph using D3 based on standard design patterns.
         -   [Values](#values)
             -   [Required](#required-1)
             -   [Optional](#optional-1)
-                -   [Style](#style)
         -   [Regions](#regions)
             -   [Required](#required-2)
             -   [Optional](#optional-2)
