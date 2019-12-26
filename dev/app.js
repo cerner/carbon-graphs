@@ -36,7 +36,8 @@ import {
     renderGantt,
     renderGanttAction,
     renderGanttActivities,
-    renderGanttCustomPadding,
+    renderGanttCustomContainerPadding,
+    renderGanttCustomContentPadding,
     renderGanttDateTimeBuckets,
     renderGanttEvents,
     renderGanttPercentage,
@@ -75,7 +76,8 @@ import {
     renderMultiLineRegion,
     renderMultiLineIdenticalDatasetRegion,
     renderNoDataView,
-    renderLineCustomPadding,
+    renderLineCustomContainerPadding,
+    renderLineCustomContentPadding,
     renderLineWithPanning,
     renderDashedLine
 } from "./examples/controls/line";
@@ -111,7 +113,8 @@ import {
 import { renderSplineLine } from "./examples/controls/spline";
 import {
     renderTimeline,
-    renderTimelineCustomPadding,
+    renderTimelineCustomContainerPadding,
+    renderTimelineCustomContentPadding,
     renderTimelinePanning,
     renderTimelineNoXAxisTickLabel
 } from "./examples/controls/timeline";
@@ -791,44 +794,64 @@ renderSiteApp(
             ]
         },
         {
-            pathname: "/padding",
-            children: [
-                {
-                    pathname: "/padding/line",
-                    children: [
-                        {
-                            pathname: "/padding/line/custom-content-padding",
-                            content: renderLineCustomPadding,
-                            title: "Custom Content Padding"
-                        }
-                    ]
-                },
-                {
-                    pathname: "/padding/gantt",
-                    children: [
-                        {
-                            pathname: "/padding/gantt/custom-content-padding",
-                            content: renderGanttCustomPadding,
-                            title: "Custom Content Padding"
-                        }
-                    ]
-                },
-                {
-                    pathname: "/padding/timeline",
-                    children: [
-                        {
-                            pathname:
-                                "/padding/timeline/custom-content-padding",
-                            content: renderTimelineCustomPadding,
-                            title: "Custom Content Padding"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
             pathname: "/styles",
             children: [
+                {
+                    pathname: "/styles/padding",
+                    children: [
+                        {
+                            pathname: "/styles/padding/line",
+                            children: [
+                                {
+                                    pathname:
+                                        "/styles/padding/line/custom-container-padding",
+                                    content: renderLineCustomContainerPadding,
+                                    title: "Container Padding"
+                                },
+                                {
+                                    pathname:
+                                        "/styles/padding/line/custom-content-padding",
+                                    content: renderLineCustomContentPadding,
+                                    title: "Content Padding"
+                                }
+                            ]
+                        },
+                        {
+                            pathname: "/styles/padding/gantt",
+                            children: [
+                                {
+                                    pathname:
+                                        "/styles/padding/gantt/custom-container-padding",
+                                    content: renderGanttCustomContainerPadding,
+                                    title: "Container Padding"
+                                },
+                                {
+                                    pathname:
+                                        "/styles/padding/gantt/custom-content-padding",
+                                    content: renderGanttCustomContentPadding,
+                                    title: "Content Padding"
+                                }
+                            ]
+                        },
+                        {
+                            pathname: "/styles/padding/timeline",
+                            children: [
+                                {
+                                    pathname:
+                                        "/styles/padding/timeline/custom-container-padding",
+                                    content: renderTimelineCustomContainerPadding,
+                                    title: "Container Padding"
+                                },
+                                {
+                                    pathname:
+                                        "/styles/padding/timeline/custom-content-padding",
+                                    content: renderTimelineCustomContentPadding,
+                                    title: "Content Padding"
+                                }
+                            ]
+                        }
+                    ]
+                },
                 {
                     pathname: "/styles/shapes",
                     children: [

@@ -1,6 +1,7 @@
 import Carbon from "../../../src/main/js/carbon";
 import { getDemoData } from "../data";
 import utils from "../../../src/main/js/helpers/utils";
+import { CUSTOM_CONTAINER_STYLE } from "../helpers";
 import { createPanningControls } from "../panHelpers";
 
 const tickValues = [
@@ -21,15 +22,29 @@ export const renderTimeline = (id) => {
     timelineDefault.loadContent(getDemoData(`#${id}`, "TIMELINE").data[1]);
     return timelineDefault;
 };
-export const renderTimelineCustomPadding = (id) => {
+export const renderTimelineCustomContentPadding = (id) => {
     const data = utils.deepClone(getDemoData(`#${id}`, "TIMELINE"));
     data.showLegend = false;
+    data.showLabel = false;
+
     data.padding = {
         left: 150,
         right: 300,
         top: 0,
         bottom: 0
     };
+    const timelineDefault = Carbon.api.timeline(data);
+    timelineDefault.loadContent(getDemoData(`#${id}`, "TIMELINE").data[0]);
+    return timelineDefault;
+};
+export const renderTimelineCustomContainerPadding = (id) => {
+    const containerElement = document.querySelector(`#${id}`);
+    containerElement.setAttribute(
+        "class",
+        `${containerElement.getAttribute("class")} ${CUSTOM_CONTAINER_STYLE}`
+    );
+
+    const data = utils.deepClone(getDemoData(`#${id}`, "TIMELINE"));
     const timelineDefault = Carbon.api.timeline(data);
     timelineDefault.loadContent(getDemoData(`#${id}`, "TIMELINE").data[0]);
     return timelineDefault;

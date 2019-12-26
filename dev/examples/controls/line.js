@@ -1,6 +1,7 @@
 import Carbon from "../../../src/main/js/carbon";
 import utils from "../../../src/main/js/helpers/utils";
 import { getDemoData } from "../data";
+import { CUSTOM_CONTAINER_STYLE } from "../helpers";
 import { createPanningControls } from "../panHelpers";
 
 const tickValues = [
@@ -428,9 +429,10 @@ export const renderNoDataView = (id) => {
     );
     return lineDefault;
 };
-export const renderLineCustomPadding = (id) => {
+export const renderLineCustomContentPadding = (id) => {
     const data = utils.deepClone(getDemoData(`#${id}`, "LINE_DEFAULT"));
     data.showLegend = false;
+    data.showLabel = false;
     data.axis.x.show = false;
     data.axis.y.show = false;
     data.padding = {
@@ -442,6 +444,20 @@ export const renderLineCustomPadding = (id) => {
     const lineDefault = Carbon.api.graph(data);
     lineDefault.loadContent(
         Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[0])
+    );
+    return lineDefault;
+};
+export const renderLineCustomContainerPadding = (id) => {
+    const containerElement = document.querySelector(`#${id}`);
+    containerElement.setAttribute(
+        "class",
+        `${containerElement.getAttribute("class")} ${CUSTOM_CONTAINER_STYLE}`
+    );
+
+    const data = utils.deepClone(getDemoData(`#${id}`, "LINE_DEFAULT"));
+    const lineDefault = Carbon.api.graph(data);
+    lineDefault.loadContent(
+        Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[5])
     );
     return lineDefault;
 };

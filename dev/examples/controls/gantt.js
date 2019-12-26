@@ -2,6 +2,7 @@
 import Carbon from "../../../src/main/js/carbon";
 import { COLORS } from "../../../src/main/js/helpers/constants";
 import utils from "../../../src/main/js/helpers/utils";
+import { CUSTOM_CONTAINER_STYLE } from "../helpers";
 import { getDemoData } from "../data";
 import {
     loadPopup,
@@ -685,7 +686,7 @@ export const renderGanttDateTimeBuckets = (id) => {
     });
     return ganttDefault;
 };
-export const renderGanttCustomPadding = (id) => {
+export const renderGanttCustomContentPadding = (id) => {
     const data = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
     data.showActionLegend = false;
     data.padding = {
@@ -694,6 +695,18 @@ export const renderGanttCustomPadding = (id) => {
         top: 0,
         bottom: 0
     };
+    const ganttDefault = Carbon.api.gantt(data);
+    loadTracks(ganttDefault, tasks, [], [], [], 4);
+    return ganttDefault;
+};
+export const renderGanttCustomContainerPadding = (id) => {
+    const containerElement = document.querySelector(`#${id}`);
+    containerElement.setAttribute(
+        "class",
+        `${containerElement.getAttribute("class")} ${CUSTOM_CONTAINER_STYLE}`
+    );
+
+    const data = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
     const ganttDefault = Carbon.api.gantt(data);
     loadTracks(ganttDefault, tasks, [], [], [], 4);
     return ganttDefault;
