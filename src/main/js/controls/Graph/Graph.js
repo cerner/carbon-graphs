@@ -18,6 +18,7 @@ import styles from "../../helpers/styles";
 import GraphConfig, { processInput, validateContent } from "./GraphConfig";
 import utils from "../../helpers/utils";
 import { createDateline, redrawDatelineContent } from "../../helpers/dateline";
+import { getElementBoxSizingParameters } from "../../helpers/paddingUtils";
 import {
     attachEventHandlers,
     createContentContainer,
@@ -50,7 +51,9 @@ const BASE_CANVAS_WIDTH_PADDING = constants.BASE_CANVAS_WIDTH_PADDING;
  * @returns {undefined} - returns nothing
  */
 const setCanvasWidth = (container, config) => {
-    config.canvasWidth = parseInt(container.style("width"), 10);
+    config.canvasWidth =
+        parseInt(container.style("width"), 10) -
+        getElementBoxSizingParameters(container);
 };
 
 /**
