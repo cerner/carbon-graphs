@@ -120,22 +120,8 @@ import {
     renderScatter,
     renderScatterTimeSeries,
     renderScatterWithDateline,
-    renderScatterLabelHidden,
-    renderScatterLegendHidden,
-    renderScatterLegendTo,
-    renderScatterLegendItemDisabled,
-    renderScatterRegionSimple,
-    renderMultiScatterRegion,
-    renderScatterGridHHidden,
-    renderScatterGridVHidden,
     renderScatterXHidden,
     renderScatterYHidden,
-    renderScatterXStaticTicks,
-    renderScatterXAxisFormatted,
-    renderScatterXAlternateLocale,
-    renderScatterDateTimeBuckets,
-    renderScatterXOrientationTop,
-    renderScatterCustomPadding,
     renderScatterWithPanning
 } from "./examples/controls/scatter";
 
@@ -336,29 +322,6 @@ renderSiteApp(
                     pathname: "/scatter/timeseries-dateline",
                     content: renderScatterWithDateline,
                     title: "Timeseries With Dateline"
-                },
-                {
-                    pathname: "/scatter/label-hidden",
-                    content: renderScatterLabelHidden,
-                    title: "Label Hidden"
-                },
-                {
-                    pathname: "/scatter/legend-hidden",
-                    content: renderScatterLegendHidden,
-                    title: "Legend Hidden"
-                },
-                {
-                    pathname: "/scatter/custom-legend-placement",
-                    content: (id) => {
-                        createElementLegendBindTo(id);
-                        return renderScatterLegendTo(id);
-                    },
-                    title: "Custom Legend Placement"
-                },
-                {
-                    pathname: "/scatter/legend-item-disabled",
-                    content: renderScatterLegendItemDisabled,
-                    title: "Legend Item Disabled"
                 }
             ]
         },
@@ -549,21 +512,6 @@ renderSiteApp(
                             title: "Vertical Grid Hidden"
                         }
                     ]
-                },
-                {
-                    pathname: "/grid/scatter",
-                    children: [
-                        {
-                            pathname: "/grid/scatter/horizontal-grid-hidden",
-                            content: renderScatterGridHHidden,
-                            title: "Horizontal Grid Hidden"
-                        },
-                        {
-                            pathname: "/grid/scatter/vertical-grid-hidden",
-                            content: renderScatterGridVHidden,
-                            title: "Vertical Grid Hidden"
-                        }
-                    ]
                 }
             ]
         },
@@ -696,31 +644,6 @@ renderSiteApp(
                             pathname: "/axes/scatter/y-axis-hidden",
                             content: renderScatterYHidden,
                             title: "Y Axis Hidden"
-                        },
-                        {
-                            pathname: "/axes/scatter/static-x-axis-ticks",
-                            content: renderScatterXStaticTicks,
-                            title: "Static X Axis Ticks"
-                        },
-                        {
-                            pathname: "/axes/scatter/x-axis-ticks-formatted",
-                            content: renderScatterXAxisFormatted,
-                            title: "X Axis Ticks Formatted"
-                        },
-                        {
-                            pathname: "/axes/scatter/x-axis-alternate-locale",
-                            content: renderScatterXAlternateLocale,
-                            title: "X Axis Alternate Locale"
-                        },
-                        {
-                            pathname: "/axes/scatter/datetime-buckets",
-                            content: renderScatterDateTimeBuckets,
-                            title: "Datetime Buckets"
-                        },
-                        {
-                            pathname: "/axes/scatter/x-axis-orientation-top",
-                            content: renderScatterXOrientationTop,
-                            title: "X Axis Orientation Top"
                         }
                     ]
                 }
@@ -829,21 +752,6 @@ renderSiteApp(
                             title: "Dataset Region Identical"
                         }
                     ]
-                },
-                {
-                    pathname: "/regions/scatter",
-                    children: [
-                        {
-                            pathname: "/regions/scatter/simple",
-                            content: renderScatterRegionSimple,
-                            title: "Simple"
-                        },
-                        {
-                            pathname: "/regions/scatter/multiple-scatter",
-                            content: renderMultiScatterRegion,
-                            title: "Multiple scatter"
-                        }
-                    ]
                 }
             ]
         },
@@ -912,16 +820,6 @@ renderSiteApp(
                             pathname:
                                 "/padding/timeline/custom-content-padding",
                             content: renderTimelineCustomPadding,
-                            title: "Custom Content Padding"
-                        }
-                    ]
-                },
-                {
-                    pathname: "/padding/scatter",
-                    children: [
-                        {
-                            pathname: "/padding/scatter/custom-content-padding",
-                            content: renderScatterCustomPadding,
                             title: "Custom Content Padding"
                         }
                     ]
