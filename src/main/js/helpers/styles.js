@@ -129,5 +129,9 @@ export default {
     pieContentSlice: "carbon-data-pie-slice",
     pieLegendItem: "carbon-pie-legend-item",
     pieLegendItemIcon: "carbon-pie-legend-item-icon",
-    pieLegendItemSliceHover: "carbon-pie-legend-item-slice-hover"
+    pieLegendItemSliceHover: "carbon-pie-legend-item-slice-hover",
+    /**
+     * Scatter
+     */
+    scatterGraphContent: "carbon-scatter-graph-content"
 };

@@ -29,7 +29,8 @@ import {
     renderCriticalityMultiLine,
     renderCriticalityMultiPairedResult,
     renderCriticalityPairedResultSimple,
-    renderCriticalityTimeline
+    renderCriticalityTimeline,
+    renderCriticalityScatter
 } from "./examples/controls/criticality";
 import {
     renderGantt,
@@ -115,6 +116,14 @@ import {
     renderTimelineNoXAxisTickLabel
 } from "./examples/controls/timeline";
 import { createElementLegendBindTo } from "./examples/helpers";
+import {
+    renderScatter,
+    renderScatterTimeSeries,
+    renderScatterWithDateline,
+    renderScatterXHidden,
+    renderScatterYHidden,
+    renderScatterWithPanning
+} from "./examples/controls/scatter";
 
 renderSiteApp(
     [
@@ -297,6 +306,26 @@ renderSiteApp(
             ]
         },
         {
+            pathname: "/scatter",
+            children: [
+                {
+                    pathname: "/scatter/simple",
+                    content: renderScatter,
+                    title: "Simple"
+                },
+                {
+                    pathname: "/scatter/timeseries",
+                    content: renderScatterTimeSeries,
+                    title: "Timeseries"
+                },
+                {
+                    pathname: "/scatter/timeseries-dateline",
+                    content: renderScatterWithDateline,
+                    title: "Timeseries With Dateline"
+                }
+            ]
+        },
+        {
             pathname: "/combination",
             children: [
                 {
@@ -433,6 +462,16 @@ renderSiteApp(
                         {
                             pathname: "/panning/paired-result/simple",
                             content: renderPairedResultWithPanning,
+                            title: "Simple"
+                        }
+                    ]
+                },
+                {
+                    pathname: "/panning/scatter",
+                    children: [
+                        {
+                            pathname: "/panning/scatter/simple",
+                            content: renderScatterWithPanning,
                             title: "Simple"
                         }
                     ]
@@ -592,6 +631,21 @@ renderSiteApp(
                             title: "X Axis Without Tick Label"
                         }
                     ]
+                },
+                {
+                    pathname: "/axes/scatter",
+                    children: [
+                        {
+                            pathname: "/axes/scatter/x-axis-hidden",
+                            content: renderScatterXHidden,
+                            title: "X Axis Hidden"
+                        },
+                        {
+                            pathname: "/axes/scatter/y-axis-hidden",
+                            content: renderScatterYHidden,
+                            title: "Y Axis Hidden"
+                        }
+                    ]
                 }
             ]
         },
@@ -728,6 +782,11 @@ renderSiteApp(
                     pathname: "/criticality/timeline",
                     content: renderCriticalityTimeline,
                     title: "Timeline"
+                },
+                {
+                    pathname: "/criticality/scatter",
+                    content: renderCriticalityScatter,
+                    title: "Scatter"
                 }
             ]
         },

@@ -66,6 +66,7 @@ npm i @cerner/carbon-graphs --save-dev
 -   [Timeline](./docs/controls/Timeline.md#usage)
 -   [Pie](./docs/controls/Pie.md#usage)
 -   [Gantt](./docs/controls/Gantt.md#usage)
+-   [Scatter](./docs/controls/Scatter.md#usage)
 
 ### Graph Settings/Toggles
 
@@ -104,7 +105,6 @@ npm i @cerner/carbon-graphs --save-dev
 
 ## Potential features
 
--   [ ] Scatter-plot graph
 -   [ ] Bubble graph
 -   [ ] Upgrade to latest D3 version
 -   [ ] Support additional themes
