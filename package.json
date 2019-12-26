@@ -127,6 +127,14 @@
       "devDependencyUpdate": "Upgrade: Update ${dependency} to version ${version}",
       "dependencyPin": "Fix: Pin ${dependency} to ${oldVersion}",
       "devDependencyPin": "Fix: Pin ${dependency} to ${oldVersion}"
+    },
+    "prTitles": {
+      "initialPR": "Upgrade: Update dependencies to enable Greenkeeper [skip ci]",
+      "initialPrBadge": "Chore: Add badge to enable Greenkeeper [skip ci]",
+      "initialPrBadgeOnly": "Chore: Add Greenkeeper badge [skip ci]",
+      "initialSubgroupPR": "Upgrade: Update dependencies for ${group} [skip ci]",
+      "basicPR": "Upgrade: Update ${dependency} to the latest [skip ci]",
+      "groupPR": "Upgrade: Update ${dependency} in group ${group} to the latest [skip ci]"
     }
   },
   "homepage": "https://engineering.cerner.com/carbon-graphs/",

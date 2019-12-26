@@ -469,7 +469,7 @@ describe("Timeline", () => {
         });
         it("Creates defs element with height and width", () => {
             const currentWidth =
-            constants.PADDING.left + constants.PADDING.right;
+                constants.PADDING.left + constants.PADDING.right;
             const defsElement = fetchElementByClass(styles.canvas).firstChild;
             expect(defsElement.nodeName).toBe("defs");
             expect(defsElement.firstChild.nodeName).toBe("clipPath");
