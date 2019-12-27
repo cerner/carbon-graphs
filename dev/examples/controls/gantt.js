@@ -502,6 +502,7 @@ export const renderGanttPanning = (id) => {
         graphData,
         creationHandler: createGraph
     });
+    return graph;
 };
 
 export const renderGanttAction = (id) => {

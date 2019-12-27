@@ -510,8 +510,6 @@ export const renderLineWithPanning = (id) => {
                     )}, ${getXAxisYPosition(graph.config)})`
                 )
                 .call(axisData);
-
-            svg.exit().remove();
             d3RemoveElement(
                 graph.graphContainer,
                 `.${styles.lineGraphContent}`
@@ -531,6 +529,7 @@ export const renderLineWithPanning = (id) => {
         graphData,
         creationHandler: createGraph
     });
+    return graph;
 };
 export const renderDashedLine = (id) => {
     const axisData = utils.deepClone(getDemoData(`#${id}`, "LINE_DEFAULT"));

@@ -487,4 +487,5 @@ export const renderBarWithPanning = (id) => {
         graphData,
         creationHandler: createGraph
     });
+    return graph;
 };
