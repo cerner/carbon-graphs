@@ -1,6 +1,10 @@
 "use strict";
+import d3 from "d3";
 import Carbon from "../../../src/main/js/carbon";
-import { COLORS } from "../../../src/main/js/helpers/constants";
+import constants, {
+    COLORS,
+    AXIS_TYPE
+} from "../../../src/main/js/helpers/constants";
 import utils from "../../../src/main/js/helpers/utils";
 import { getDemoData } from "../data";
 import {
@@ -10,6 +14,14 @@ import {
     loadTrackPopup
 } from "../popup";
 import { createPanningControls } from "../panHelpers";
+import { getDomain } from "../../../src/main/js/core/BaseConfig/helper";
+import styles from "../../../src/main/js/helpers/styles";
+import {
+    getXAxisXPosition,
+    getXAxisYPosition,
+    getXAxisWidth
+} from "../../../src/main/js/controls/Gantt/helpers/creationHelpers";
+import { d3RemoveElement } from "../../../src/main/js/controls/Graph/helpers/helpers";
 
 const daysToMilliseconds = (d) => 24 * 60 * 60 * 1000 * d;
 const scheduled = {
@@ -431,11 +443,58 @@ export const renderGanttPanning = (id) => {
     };
     const createGraph = (axis, values) => {
         if (graph) {
-            graph.destroy();
+            graph.config.axis.x = axis.axis.x;
+            graph.config.axis.x.domain = getDomain(
+                AXIS_TYPE.TIME_SERIES,
+                graph.config.axis.x.lowerLimit,
+                graph.config.axis.x.upperLimit
+            );
+            graph.config.axis.x.ticks = {};
+            const width = getXAxisWidth(graph.config);
+            const scale = d3.time
+                .scale()
+                .domain(graph.config.axis.x.domain)
+                .range([0, width])
+                .clamp(graph.config.settingsDictionary.shouldClamp);
+            const axisData = d3.svg
+                .axis()
+                .scale(scale)
+                .ticks(
+                    Math.max(
+                        Math.ceil(width / constants.MAX_TICK_VARIANCE),
+                        constants.MIN_TICKS
+                    )
+                )
+                .orient(graph.config.axis.x.orientation);
+
+            const svg = d3
+                .selectAll("svg")
+                .selectAll(`.${styles.axis}.${styles.axisX}`)
+                .data(graph.config.axis.x.domain);
+            svg.enter();
+            svg.transition()
+                .attr("class", styles.axis)
+                .attr("class", styles.axisX)
+                .attr("aria-hidden", !graph.config.axis.x.show)
+                .attr(
+                    "transform",
+                    `translate(${getXAxisXPosition(
+                        graph.config
+                    )}, ${getXAxisYPosition(graph.config)})`
+                )
+                .call(axisData);
+            svg.selectAll("text")
+                .attr("dy", "0em")
+                .attr("y", "-9");
+            svg.exit().remove();
+            d3RemoveElement(graph.graphContainer, `.${styles.trackGroup}`);
+            graph.tracks = [];
+            graph.loadContent(values);
+        } else {
+            graph = Carbon.api.gantt(axis);
+            graph.loadContent(values);
+            return graph;
         }
-        graph = Carbon.api.gantt(axis);
-        graph.loadContent(values);
-        return graph;
     };
     graph = createGraph(axisData, graphData);
     createPanningControls(id, {
@@ -443,7 +502,6 @@ export const renderGanttPanning = (id) => {
         graphData,
         creationHandler: createGraph
     });
-    return graph;
 };
 
 export const renderGanttAction = (id) => {
