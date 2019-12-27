@@ -430,6 +430,7 @@ export const renderBarWithPanning = (id) => {
     };
     const createGraph = (axis, values) => {
         if (graph) {
+            axis.axis.x.orientation = graph.config.axis.x.orientation;
             graph.config.axis.x = axis.axis.x;
             graph.config.axis.x.rangeRounding = true;
             graph.config.axis.x.domain = getDomain(
