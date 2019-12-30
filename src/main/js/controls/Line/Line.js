@@ -89,6 +89,7 @@ class Line extends GraphContent {
     constructor(input) {
         super();
         this.config = loadInput(input);
+        this.type = "Line";
         this.config.yAxis = getDefaultValue(
             this.config.yAxis,
             constants.Y_AXIS

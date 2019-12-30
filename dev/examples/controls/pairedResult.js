@@ -388,11 +388,13 @@ export const renderPairedResultWithPanning = (id) => {
     };
     const createGraph = (axis, values) => {
         if (graph) {
-            graph.destroy();
+            graph.reflow(values);
+        } else {
+            graph = Carbon.api.graph(axis);
+            graph.loadContent(Carbon.api.pairedResult(values));
+            axis.axis = graph.config.axis;
+            return graph;
         }
-        graph = Carbon.api.graph(axis);
-        graph.loadContent(Carbon.api.pairedResult(values));
-        return graph;
     };
     graph = createGraph(axisData, graphData);
     createPanningControls(id, {

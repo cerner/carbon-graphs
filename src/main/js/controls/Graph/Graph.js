@@ -2,6 +2,9 @@
 import d3 from "d3";
 import Construct from "../../core/Construct";
 import {
+    getXAxisXPosition,
+    getXAxisYPosition,
+    getXAxisWidth,
     calculateAxesLabelSize,
     calculateAxesSize,
     createAxes,
@@ -34,6 +37,8 @@ import {
     removeNoDataView,
     drawNoDataView
 } from "./helpers/helpers";
+import { getDomain } from "../../core/BaseConfig/helper";
+import Carbon from "../../carbon";
 
 /**
  * @typedef {object} Graph
@@ -245,6 +250,9 @@ class Graph extends Construct {
         createXAxisInfoRow(this.axis, this.scale, this.config, this.svg);
         createLabel(this.config, this.svg, this);
         createAxisReferenceLine(this.axis, this.scale, this.config, this.svg);
+        this.config.pan = {
+            initial: false
+        };
         if (
             utils.notEmpty(this.config.dateline) &&
             this.config.axis.x.type === AXIS_TYPE.TIME_SERIES
@@ -308,7 +316,10 @@ class Graph extends Construct {
             this.config,
             this.content
         );
-        if (isRangeModified(this.config, content.config.yAxis)) {
+        if (
+            isRangeModified(this.config, content.config.yAxis) &&
+            !this.config.pan.initial
+        ) {
             updateAxesDomain(this.config, content);
         }
         content.load(this);
@@ -354,6 +365,90 @@ class Graph extends Construct {
             drawNoDataView(this.config, this.svg);
         }
         this.resize();
+        return this;
+    }
+
+    reflow(values) {
+        this.config.axis.x.domain = getDomain(
+            this.config.axis.x.type,
+            this.config.axis.x.lowerLimit,
+            this.config.axis.x.upperLimit
+        );
+        const width = getXAxisWidth(this.config);
+        scaleGraph(this.scale, this.config);
+        const aData = d3.svg
+            .axis()
+            .scale(this.scale.x)
+            .ticks(
+                Math.max(
+                    Math.ceil(width / constants.MAX_TICK_VARIANCE),
+                    constants.MIN_TICKS
+                )
+            )
+            .orient(this.config.axis.x.orientation);
+
+        const svg = d3
+            .selectAll("svg")
+            .selectAll(`.${styles.axis}.${styles.axisX}`)
+            .data(this.config.axis.x.domain);
+        svg.enter();
+        svg.transition()
+            .attr("class", styles.axis)
+            .attr("class", styles.axisX)
+            .attr("aria-hidden", !this.config.axis.x.show)
+            .attr(
+                "transform",
+                `translate(${getXAxisXPosition(
+                    this.config
+                )}, ${getXAxisYPosition(this.config)})`
+            )
+            .call(aData);
+
+        svg.exit().remove();
+        if (this.content[0].type === "Line") {
+            d3RemoveElement(this.graphContainer, `.${styles.lineGraphContent}`);
+            d3RemoveElement(
+                this.graphContainer,
+                `.${styles.axisLabelYShapeContainer} .${styles.svgIcon} `,
+                true
+            );
+            d3RemoveElement(this.graphContainer, `.${styles.legendItem}`);
+            this.content = [];
+            this.loadContent(Carbon.api.line(values));
+        } else if (this.content[0].type === "Bar") {
+            d3RemoveElement(this.graphContainer, `.${styles.barGraphContent}`);
+            d3RemoveElement(
+                this.graphContainer,
+                `.${styles.axisLabelYShapeContainer} .${styles.svgIcon} `,
+                true
+            );
+            d3RemoveElement(this.graphContainer, `.${styles.legendItem}`);
+            this.content = [];
+            this.loadContent(Carbon.api.bar(values));
+        } else if (this.content[0].type === "PairedResult") {
+            d3RemoveElement(this.graphContainer, `.${styles.pairedBoxGroup}`);
+            d3RemoveElement(
+                this.graphContainer,
+                `.${styles.axisLabelYShapeContainer} .${styles.svgIcon} `,
+                true
+            );
+            d3RemoveElement(this.graphContainer, `.${styles.legendItem}`, true);
+            this.content = [];
+            this.loadContent(Carbon.api.pairedResult(values));
+        } else if (this.content[0].type === "Scatter") {
+            d3RemoveElement(
+                this.graphContainer,
+                `.${styles.scatterGraphContent}`
+            );
+            d3RemoveElement(
+                this.graphContainer,
+                `.${styles.axisLabelYShapeContainer} .${styles.svgIcon} `,
+                true
+            );
+            d3RemoveElement(this.graphContainer, `.${styles.legendItem}`, true);
+            this.content = [];
+            this.loadContent(Carbon.api.scatter(values));
+        }
         return this;
     }
 

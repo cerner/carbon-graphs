@@ -89,6 +89,7 @@ class Scatter extends GraphContent {
     constructor(input) {
         super();
         this.config = loadInput(input);
+        this.type = "Scatter";
         this.config.yAxis = getDefaultValue(
             this.config.yAxis,
             constants.Y_AXIS

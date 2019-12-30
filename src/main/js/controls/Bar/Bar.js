@@ -103,6 +103,7 @@ class Bar extends GraphContent {
         super();
         initConfig(this);
         this.config = loadInput(input);
+        this.type = "Bar";
         this.config.yAxis = getDefaultValue(
             this.config.yAxis,
             constants.Y_AXIS

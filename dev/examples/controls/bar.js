@@ -1,23 +1,10 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-sequences */
-import d3 from "d3";
 import Carbon from "../../../src/main/js/carbon";
 import utils from "../../../src/main/js/helpers/utils";
 import { getDemoData } from "../data";
 import { loadDatelinePopup, loadTextLabelPopup, loadBarPopup } from "../popup";
 import { createPanningControls } from "../panHelpers";
-import {
-    getScale,
-    getDomain
-} from "../../../src/main/js/core/BaseConfig/helper";
-import constants from "../../../src/main/js/helpers/constants";
-import styles from "../../../src/main/js/helpers/styles";
-import {
-    getXAxisXPosition,
-    getXAxisYPosition,
-    getXAxisWidth
-} from "../../../src/main/js/helpers/axis";
-import { d3RemoveElement } from "../../../src/main/js/controls/Graph/helpers/helpers";
 
 const tickValues = [
     new Date(2018, 0, 1).toISOString(),
@@ -385,9 +372,6 @@ export const renderBarWithPanning = (id) => {
     const axisData = utils.deepClone(getDemoData(`#${id}`, "BAR_TIMESERIES"));
     axisData.axis.x.lowerLimit = new Date(2016, 0, 1, 0).toISOString();
     axisData.axis.x.upperLimit = new Date(2016, 0, 2, 0).toISOString();
-    axisData.pan = {
-        enabled: true
-    };
     axisData.axis.x.ticks = {
         values: [
             new Date(2016, 0, 1, 3).toISOString(),
@@ -430,54 +414,11 @@ export const renderBarWithPanning = (id) => {
     };
     const createGraph = (axis, values) => {
         if (graph) {
-            axis.axis.x.orientation = graph.config.axis.x.orientation;
-            graph.config.axis.x = axis.axis.x;
-            graph.config.axis.x.rangeRounding = true;
-            graph.config.axis.x.domain = getDomain(
-                graph.config.axis.x.type,
-                graph.config.axis.x.lowerLimit,
-                graph.config.axis.x.upperLimit
-            );
-            const width = getXAxisWidth(graph.config);
-            const scale = getScale(graph.config.axis.x.type)
-                .domain(graph.config.axis.x.domain)
-                .range([0, width]);
-            const axisData = d3.svg
-                .axis()
-                .scale(scale)
-                .ticks(
-                    Math.max(
-                        Math.ceil(width / constants.MAX_TICK_VARIANCE),
-                        constants.MIN_TICKS
-                    )
-                )
-                .orient(graph.config.axis.x.orientation);
-
-            const svg = d3
-                .selectAll("svg")
-                .selectAll(`.${styles.axis}.${styles.axisX}`)
-                .data(graph.config.axis.x.domain);
-            svg.enter();
-            svg.transition()
-                .attr("class", styles.axis)
-                .attr("class", styles.axisX)
-                .attr("aria-hidden", !graph.config.axis.x.show)
-                .attr(
-                    "transform",
-                    `translate(${getXAxisXPosition(
-                        graph.config
-                    )}, ${getXAxisYPosition(graph.config)})`
-                )
-                .call(axisData);
-
-            svg.exit().remove();
-            d3RemoveElement(graph.graphContainer, `.${styles.barGraphContent}`);
-            d3RemoveElement(graph.graphContainer, `.${styles.legendItem}`);
-            graph.content = [];
-            graph.loadContent(Carbon.api.bar(values));
+            graph.reflow(values);
         } else {
             graph = Carbon.api.graph(axis);
             graph.loadContent(Carbon.api.bar(values));
+            axis.axis = graph.config.axis;
             return graph;
         }
     };
