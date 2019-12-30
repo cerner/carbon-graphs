@@ -13,10 +13,14 @@ import {
     getAxes,
     getData
 } from "./helpers";
+import { loadCustomJasmineMatcher } from "../../helpers/commonHelpers";
 
 describe("Gantt", () => {
     let gantt = null;
     let ganttChartContainer;
+    beforeAll(() => {
+        loadCustomJasmineMatcher();
+    });
     beforeEach(() => {
         ganttChartContainer = document.createElement("div");
         ganttChartContainer.id = "testCarbonGantt";
@@ -285,6 +289,15 @@ describe("Gantt", () => {
             it("Sets canvas width", () => {
                 expect(gantt.config.canvasWidth).not.toBe(0);
                 expect(gantt.config.canvasWidth).toBe(1024);
+            });
+            it("Sets canvas width taking container padding into consideration", () => {
+                gantt.destroy();
+                ganttChartContainer.setAttribute(
+                    "style",
+                    "width: 1024px; height: 400px; padding: 3rem"
+                );
+                gantt = new Gantt(getAxes(axisJSON));
+                expect(gantt.config.canvasWidth).toBeCloserTo(928);
             });
             it("Sets canvas height", () => {
                 expect(gantt.config.canvasHeight).toBe(
