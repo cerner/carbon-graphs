@@ -1,6 +1,3 @@
-"use strict";
-import d3 from "d3";
-
 /**
  * @module paddingUtils
  * @alias module:paddingUtils
@@ -12,7 +9,7 @@ import d3 from "d3";
  * however they want.
  *
  * @private
- * @param {d3.Selection} d3Element - d3 element of the graph container provided by consumer
+ * @param {Selection} d3Element - d3 element of the graph container provided by consumer
  * @returns {number} Total box sizing parameters for the container - margin and padding
  */
 const getElementBoxSizingParameters = (d3Element) => {
