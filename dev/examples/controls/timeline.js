@@ -45,18 +45,18 @@ export const renderTimelinePanning = (id) => {
     const graphData = utils.deepClone(
         getDemoData(`#${id}`, "TIMELINE").data[1]
     );
-    const createGraph = (axis, values) => {
-        if (graph) {
-            graph.destroy();
-        }
-        graph = Carbon.api.timeline(axis);
-        graph.loadContent(values);
-        return graph;
+    const createGraph = () => {
+        graph.reflow();
     };
-    graph = createGraph(axisData, graphData);
+    if (!graph) {
+        graph = Carbon.api.timeline(axisData);
+        graph.loadContent(graphData);
+        axisData.axis = graph.config.axis;
+    } else {
+        graph = createGraph();
+    }
     createPanningControls(id, {
         axisData,
-        graphData,
         creationHandler: createGraph
     });
     return graph;

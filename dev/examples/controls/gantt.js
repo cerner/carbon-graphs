@@ -1,10 +1,6 @@
 "use strict";
-import d3 from "d3";
 import Carbon from "../../../src/main/js/carbon";
-import constants, {
-    COLORS,
-    AXIS_TYPE
-} from "../../../src/main/js/helpers/constants";
+import { COLORS } from "../../../src/main/js/helpers/constants";
 import utils from "../../../src/main/js/helpers/utils";
 import { getDemoData } from "../data";
 import {
@@ -14,14 +10,6 @@ import {
     loadTrackPopup
 } from "../popup";
 import { createPanningControls } from "../panHelpers";
-import { getDomain } from "../../../src/main/js/core/BaseConfig/helper";
-import styles from "../../../src/main/js/helpers/styles";
-import {
-    getXAxisXPosition,
-    getXAxisYPosition,
-    getXAxisWidth
-} from "../../../src/main/js/controls/Gantt/helpers/creationHelpers";
-import { d3RemoveElement } from "../../../src/main/js/controls/Graph/helpers/helpers";
 
 const daysToMilliseconds = (d) => 24 * 60 * 60 * 1000 * d;
 const scheduled = {
@@ -441,65 +429,18 @@ export const renderGanttPanning = (id) => {
         },
         tasks: tasks2[0]
     };
-    const createGraph = (axis, values) => {
-        if (graph) {
-            graph.config.axis.x = axis.axis.x;
-            graph.config.axis.x.domain = getDomain(
-                AXIS_TYPE.TIME_SERIES,
-                graph.config.axis.x.lowerLimit,
-                graph.config.axis.x.upperLimit
-            );
-            graph.config.axis.x.ticks = {};
-            const width = getXAxisWidth(graph.config);
-            const scale = d3.time
-                .scale()
-                .domain(graph.config.axis.x.domain)
-                .range([0, width])
-                .clamp(graph.config.settingsDictionary.shouldClamp);
-            const axisData = d3.svg
-                .axis()
-                .scale(scale)
-                .ticks(
-                    Math.max(
-                        Math.ceil(width / constants.MAX_TICK_VARIANCE),
-                        constants.MIN_TICKS
-                    )
-                )
-                .orient(graph.config.axis.x.orientation);
-
-            const svg = d3
-                .selectAll("svg")
-                .selectAll(`.${styles.axis}.${styles.axisX}`)
-                .data(graph.config.axis.x.domain);
-            svg.enter();
-            svg.transition()
-                .attr("class", styles.axis)
-                .attr("class", styles.axisX)
-                .attr("aria-hidden", !graph.config.axis.x.show)
-                .attr(
-                    "transform",
-                    `translate(${getXAxisXPosition(
-                        graph.config
-                    )}, ${getXAxisYPosition(graph.config)})`
-                )
-                .call(axisData);
-            svg.selectAll("text")
-                .attr("dy", "0em")
-                .attr("y", "-9");
-            svg.exit().remove();
-            d3RemoveElement(graph.graphContainer, `.${styles.trackGroup}`);
-            graph.tracks = [];
-            graph.loadContent(values);
-        } else {
-            graph = Carbon.api.gantt(axis);
-            graph.loadContent(values);
-            return graph;
-        }
+    const createGraph = () => {
+        graph.reflow();
     };
-    graph = createGraph(axisData, graphData);
+    if (!graph) {
+        graph = Carbon.api.gantt(axisData);
+        graph.loadContent(graphData);
+        axisData.axis = graph.config.axis;
+    } else {
+        graph = createGraph();
+    }
     createPanningControls(id, {
         axisData,
-        graphData,
         creationHandler: createGraph
     });
     return graph;
@@ -890,7 +831,7 @@ export const renderGanttTrackSelection = (id) => {
  * @param {Array} tasks - gantt tasks that needs to be loaded
  * @param {Array} activities - gantt activities that needs to be loaded
  * @param {Array} events - gantt events that needs to be loaded
- * @param {Array} actions - gannt actions that needs to be loaded
+ * @param {Array} actions - gantt actions that needs to be loaded
  * @param {number} totalTracks - total required number of tracks
  * @param {boolean} isTrackSelectable - indicator to specify if track is selectable or not.
  * @returns {undefined} - returns nothing

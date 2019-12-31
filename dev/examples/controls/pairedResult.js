@@ -3,7 +3,6 @@ import utils from "../../../src/main/js/helpers/utils";
 import { getDemoData } from "../data";
 import { loadDatelinePopup, loadPopup } from "../popup";
 import { createPanningControls } from "../panHelpers";
-import { hasY2Axis } from "../../../src/main/js/helpers/axis";
 
 const tickValues = [
     new Date(2016, 0, 1, 1, 0).toISOString(),
@@ -387,20 +386,18 @@ export const renderPairedResultWithPanning = (id) => {
             }
         ]
     };
-    const createGraph = (axis, values) => {
-        if (graph) {
-            graph.reflow(values);
-        } else {
-            graph = Carbon.api.graph(axis);
-            graph.loadContent(Carbon.api.pairedResult(values));
-            axis.axis = graph.config.axis;
-            return graph;
-        }
+    const createGraph = () => {
+        graph.reflow();
     };
-    graph = createGraph(axisData, graphDataY);
+    if (!graph) {
+        graph = Carbon.api.graph(axisData);
+        graph.loadContent(Carbon.api.pairedResult(graphDataY));
+        axisData.axis = graph.config.axis;
+    } else {
+        graph = createGraph();
+    }
     createPanningControls(id, {
         axisData,
-        graphDataY,
         creationHandler: createGraph
     });
     return graph;
@@ -528,31 +525,20 @@ export const renderPairedResultY2AxisWithPanning = (id) => {
             }
         ]
     };
-    const createGraph = (axis, valuesY, valuesY2) => {
-        if (graph) {
-            graph.reflow(valuesY, valuesY2);
-        } else {
-            graph = Carbon.api.graph(axis);
-            graph.loadContent(Carbon.api.pairedResult(valuesY));
-            graph.loadContent(Carbon.api.pairedResult(valuesY2));
-            axis.axis = graph.config.axis;
-            return graph;
-        }
+    const createGraph = () => {
+        graph.reflow();
     };
-    graph = createGraph(axisData, graphDataY, graphDataY2);
-    if (hasY2Axis(graph.config.axis)) {
-        createPanningControls(id, {
-            axisData,
-            graphDataY,
-            creationHandler: createGraph,
-            graphDataY2
-        });
+    if (!graph) {
+        graph = Carbon.api.graph(axisData);
+        graph.loadContent(Carbon.api.pairedResult(graphDataY));
+        graph.loadContent(Carbon.api.pairedResult(graphDataY2));
+        axisData.axis = graph.config.axis;
     } else {
-        createPanningControls(id, {
-            axisData,
-            graphDataY,
-            creationHandler: createGraph
-        });
+        graph = createGraph();
     }
+    createPanningControls(id, {
+        axisData,
+        creationHandler: createGraph
+    });
     return graph;
 };

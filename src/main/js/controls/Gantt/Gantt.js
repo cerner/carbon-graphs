@@ -32,9 +32,13 @@ import {
     prepareLoadAtIndex,
     scaleGraph,
     updateAxesDomain,
-    d3RemoveElement
+    d3RemoveElement,
+    getXAxisXPosition,
+    getXAxisYPosition,
+    getXAxisWidth
 } from "./helpers/creationHelpers";
 import { translateGraph, translateLabelText } from "./helpers/translateHelpers";
+import { getDomain } from "../../core/BaseConfig/helper";
 
 /**
  * @typedef {object} Gantt
@@ -55,7 +59,7 @@ const setCanvasWidth = (container, config) => {
 };
 /**
  * Sets the canvas width. Canvas rests within a container.
- * On resize, the canvas is subjected to resizing but its sibling: Legend isnt.
+ * On resize, the canvas is subjected to resizing but its sibling: Legend isn't.
  *
  * @private
  * @param {object} config - config object derived from input JSON
@@ -174,7 +178,7 @@ class Gantt extends Construct {
      * Draw function that is called by the parent control. This draws the x-axis, grid, legend and
      * trackLabels for the chart construct.
      *
-     * @description Since we dont have the concept of z-index in visualization,
+     * @description Since we don't have the concept of z-index in visualization,
      * the order of rendering should be following:
      *  * SVG container
      *  * Grid
@@ -311,6 +315,54 @@ class Gantt extends Construct {
         updateAxesDomain(this.config);
         this.config.height = determineHeight(this.config);
         setCanvasHeight(this.config);
+        this.resize();
+        return this;
+    }
+
+    reflow() {
+        this.config.axis.x.domain = getDomain(
+            this.config.axis.x.type,
+            this.config.axis.x.lowerLimit,
+            this.config.axis.x.upperLimit
+        );
+        this.config.axis.x.ticks = {};
+        const width = getXAxisWidth(this.config);
+        const scale = d3.time
+            .scale()
+            .domain(this.config.axis.x.domain)
+            .range([0, width])
+            .clamp(this.config.settingsDictionary.shouldClamp);
+        const axisData = d3.svg
+            .axis()
+            .scale(scale)
+            .ticks(
+                Math.max(
+                    Math.ceil(width / constants.MAX_TICK_VARIANCE),
+                    constants.MIN_TICKS
+                )
+            )
+            .orient(this.config.axis.x.orientation);
+
+        const svg = d3
+            .selectAll("svg")
+            .selectAll(`.${styles.axis} .${styles.axisX}`)
+            .data(this.config.axis.x.domain);
+        svg.enter();
+        svg.transition()
+            .attr("class", styles.axis)
+            .attr("class", styles.axisX)
+            .attr("aria-hidden", !this.config.axis.x.show)
+            .attr(
+                "transform",
+                `translate(${getXAxisXPosition(
+                    this.config
+                )}, ${getXAxisYPosition(this.config)})`
+            )
+            .call(axisData);
+        svg.selectAll("text")
+            .attr("dy", "0em")
+            .attr("y", "-9");
+        svg.exit().remove();
         this.resize();
         return this;
     }

@@ -2,7 +2,6 @@ import Carbon from "../../../src/main/js/carbon";
 import utils from "../../../src/main/js/helpers/utils";
 import { getDemoData } from "../data";
 import { createPanningControls } from "../panHelpers";
-import { hasY2Axis } from "../../../src/main/js/helpers/axis";
 
 const regions = [
     {
@@ -119,24 +118,23 @@ export const renderScatterWithPanning = (id) => {
     axisData.pan = {
         enabled: true
     };
-    const graphData = utils.deepClone(
+    const graphDataY = utils.deepClone(
         getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE").data[0]
     );
-    graphData.regions = [regions[0]];
-    const createGraph = (axis, values) => {
-        if (graph) {
-            graph.reflow(values);
-        } else {
-            graph = Carbon.api.graph(axis);
-            graph.loadContent(Carbon.api.scatter(values));
-            axis.axis = graph.config.axis;
-            return graph;
-        }
+    graphDataY.regions = [regions[0]];
+
+    const createGraph = () => {
+        graph.reflow();
     };
-    graph = createGraph(axisData, graphData);
+    if (!graph) {
+        graph = Carbon.api.graph(axisData);
+        graph.loadContent(Carbon.api.scatter(graphDataY));
+        axisData.axis = graph.config.axis;
+    } else {
+        graph = createGraph();
+    }
     createPanningControls(id, {
         axisData,
-        graphData,
         creationHandler: createGraph
     });
     return graph;
@@ -156,31 +154,20 @@ export const renderScatterY2AxisWithPanning = (id) => {
         getDemoData(`#${id}`, "LINE_TIMESERIES").data[1]
     );
     graphDataY.regions = [regions[0]];
-    const createGraph = (axis, valuesY, valuesY2) => {
-        if (graph) {
-            graph.reflow(valuesY, valuesY2);
-        } else {
-            graph = Carbon.api.graph(axis);
-            graph.loadContent(Carbon.api.scatter(valuesY));
-            graph.loadContent(Carbon.api.scatter(valuesY2));
-            axis.axis = graph.config.axis;
-            return graph;
-        }
+    const createGraph = () => {
+        graph.reflow();
     };
-    graph = createGraph(axisData, graphDataY, graphDataY2);
-    if (hasY2Axis(graph.config.axis)) {
-        createPanningControls(id, {
-            axisData,
-            graphDataY,
-            creationHandler: createGraph,
-            graphDataY2
-        });
+    if (!graph) {
+        graph = Carbon.api.graph(axisData);
+        graph.loadContent(Carbon.api.scatter(graphDataY));
+        graph.loadContent(Carbon.api.scatter(graphDataY2));
+        axisData.axis = graph.config.axis;
     } else {
-        createPanningControls(id, {
-            axisData,
-            graphDataY,
-            creationHandler: createGraph
-        });
+        graph = createGraph();
     }
+    createPanningControls(id, {
+        axisData,
+        creationHandler: createGraph
+    });
     return graph;
 };

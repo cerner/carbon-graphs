@@ -11,8 +11,7 @@ import {
     createAxisReferenceLine,
     createXAxisInfoRow,
     getAxesDataRange,
-    getYAxisHeight,
-    hasY2Axis
+    getYAxisHeight
 } from "../../helpers/axis";
 import constants, { AXIS_TYPE } from "../../helpers/constants";
 import errors from "../../helpers/errors";
@@ -39,7 +38,6 @@ import {
     drawNoDataView
 } from "./helpers/helpers";
 import { getDomain } from "../../core/BaseConfig/helper";
-import Carbon from "../../carbon";
 
 /**
  * @typedef {object} Graph
@@ -363,7 +361,7 @@ class Graph extends Construct {
         return this;
     }
 
-    reflow(valuesY, valuesY2) {
+    reflow() {
         this.config.axis.x.domain = getDomain(
             this.config.axis.x.type,
             this.config.axis.x.lowerLimit,
@@ -400,86 +398,7 @@ class Graph extends Construct {
             .call(axisData);
 
         svg.exit().remove();
-        if (this.content[0].type === "Line") {
-            d3RemoveElement(
-                this.graphContainer,
-                `.${styles.lineGraphContent}`,
-                true
-            );
-            d3RemoveElement(
-                this.graphContainer,
-                `.${styles.axisLabelYShapeContainer} .${styles.svgIcon} `,
-                true
-            );
-            d3RemoveElement(this.graphContainer, `.${styles.legendItem}`, true);
-            this.content = [];
-            this.loadContent(Carbon.api.line(valuesY));
-            if (hasY2Axis(this.config.axis)) {
-                d3RemoveElement(
-                    this.graphContainer,
-                    `.${styles.axisLabelY2ShapeContainer} .${styles.svgIcon} `,
-                    true
-                );
-                this.loadContent(Carbon.api.line(valuesY2));
-            }
-        } else if (this.content[0].type === "Bar") {
-            d3RemoveElement(
-                this.graphContainer,
-                `.${styles.barGraphContent}`,
-                true
-            );
-            d3RemoveElement(
-                this.graphContainer,
-                `.${styles.axisLabelYShapeContainer} .${styles.svgIcon} `,
-                true
-            );
-            d3RemoveElement(this.graphContainer, `.${styles.legendItem}`);
-            this.content = [];
-            this.loadContent(Carbon.api.bar(valuesY));
-        } else if (this.content[0].type === "PairedResult") {
-            d3RemoveElement(
-                this.graphContainer,
-                `.${styles.pairedBoxGroup}`,
-                true
-            );
-            d3RemoveElement(
-                this.graphContainer,
-                `.${styles.axisLabelYShapeContainer} .${styles.svgIcon} `,
-                true
-            );
-            d3RemoveElement(this.graphContainer, `.${styles.legendItem}`, true);
-            this.content = [];
-            this.loadContent(Carbon.api.pairedResult(valuesY));
-            if (hasY2Axis(this.config.axis)) {
-                d3RemoveElement(
-                    this.graphContainer,
-                    `.${styles.axisLabelY2ShapeContainer} .${styles.svgIcon} `,
-                    true
-                );
-                this.loadContent(Carbon.api.pairedResult(valuesY2));
-            }
-        } else if (this.content[0].type === "Scatter") {
-            d3RemoveElement(
-                this.graphContainer,
-                `.${styles.scatterGraphContent}`
-            );
-            d3RemoveElement(
-                this.graphContainer,
-                `.${styles.axisLabelYShapeContainer} .${styles.svgIcon} `,
-                true
-            );
-            d3RemoveElement(this.graphContainer, `.${styles.legendItem}`, true);
-            this.content = [];
-            this.loadContent(Carbon.api.scatter(valuesY));
-            if (hasY2Axis(this.config.axis)) {
-                d3RemoveElement(
-                    this.graphContainer,
-                    `.${styles.axisLabelY2ShapeContainer} .${styles.svgIcon} `,
-                    true
-                );
-                this.loadContent(Carbon.api.scatter(valuesY2));
-            }
-        }
+        this.resize();
         return this;
     }
 
