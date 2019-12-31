@@ -370,6 +370,9 @@ export const renderStackedBarAxisInfoTextLabels = (id) => {
 export const renderBarWithPanning = (id) => {
     let graph;
     const axisData = utils.deepClone(getDemoData(`#${id}`, "BAR_TIMESERIES"));
+    axisData.pan = {
+        enabled: true
+    };
     axisData.axis.x.lowerLimit = new Date(2016, 0, 1, 0).toISOString();
     axisData.axis.x.upperLimit = new Date(2016, 0, 2, 0).toISOString();
     axisData.axis.x.ticks = {
@@ -382,7 +385,7 @@ export const renderBarWithPanning = (id) => {
         ],
         format: "%H"
     };
-    const graphData = {
+    const graphDataY = {
         key: "uid_bar_t1",
         label: {
             display: "Data Label"
@@ -422,10 +425,10 @@ export const renderBarWithPanning = (id) => {
             return graph;
         }
     };
-    graph = createGraph(axisData, graphData);
+    graph = createGraph(axisData, graphDataY);
     createPanningControls(id, {
         axisData,
-        graphData,
+        graphDataY,
         creationHandler: createGraph
     });
     return graph;

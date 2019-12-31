@@ -11,7 +11,8 @@ import {
     createAxisReferenceLine,
     createXAxisInfoRow,
     getAxesDataRange,
-    getYAxisHeight
+    getYAxisHeight,
+    hasY2Axis
 } from "../../helpers/axis";
 import constants, { AXIS_TYPE } from "../../helpers/constants";
 import errors from "../../helpers/errors";
@@ -60,7 +61,7 @@ const setCanvasWidth = (container, config) => {
 
 /**
  * Sets the canvas width. Canvas rests within a container.
- * On resize, the canvas is subjected to resizing but its sibling: Legend isnt.
+ * On resize, the canvas is subjected to resizing but its sibling: Legend isn't.
  *
  * @private
  * @param {object} config - config object derived from input JSON
@@ -208,7 +209,7 @@ class Graph extends Construct {
      * Draw function that is called by the parent control. This draws the Axes, grid, legend and
      * labels for the chart construct.
      *
-     * @description Since we dont have the concept of z-index in visualization,
+     * @description Since we don't have the concept of z-index in visualization,
      * the order of rendering should be following:
      *  * SVG container
      *  * Reference ranges
@@ -250,9 +251,6 @@ class Graph extends Construct {
         createXAxisInfoRow(this.axis, this.scale, this.config, this.svg);
         createLabel(this.config, this.svg, this);
         createAxisReferenceLine(this.axis, this.scale, this.config, this.svg);
-        this.config.pan = {
-            initial: false
-        };
         if (
             utils.notEmpty(this.config.dateline) &&
             this.config.axis.x.type === AXIS_TYPE.TIME_SERIES
@@ -316,10 +314,7 @@ class Graph extends Construct {
             this.config,
             this.content
         );
-        if (
-            isRangeModified(this.config, content.config.yAxis) &&
-            !this.config.pan.initial
-        ) {
+        if (isRangeModified(this.config, content.config.yAxis)) {
             updateAxesDomain(this.config, content);
         }
         content.load(this);
@@ -368,7 +363,7 @@ class Graph extends Construct {
         return this;
     }
 
-    reflow(values) {
+    reflow(valuesY, valuesY2) {
         this.config.axis.x.domain = getDomain(
             this.config.axis.x.type,
             this.config.axis.x.lowerLimit,
@@ -376,7 +371,7 @@ class Graph extends Construct {
         );
         const width = getXAxisWidth(this.config);
         scaleGraph(this.scale, this.config);
-        const aData = d3.svg
+        const axisData = d3.svg
             .axis()
             .scale(this.scale.x)
             .ticks(
@@ -402,31 +397,15 @@ class Graph extends Construct {
                     this.config
                 )}, ${getXAxisYPosition(this.config)})`
             )
-            .call(aData);
+            .call(axisData);
 
         svg.exit().remove();
         if (this.content[0].type === "Line") {
-            d3RemoveElement(this.graphContainer, `.${styles.lineGraphContent}`);
             d3RemoveElement(
                 this.graphContainer,
-                `.${styles.axisLabelYShapeContainer} .${styles.svgIcon} `,
+                `.${styles.lineGraphContent}`,
                 true
             );
-            d3RemoveElement(this.graphContainer, `.${styles.legendItem}`);
-            this.content = [];
-            this.loadContent(Carbon.api.line(values));
-        } else if (this.content[0].type === "Bar") {
-            d3RemoveElement(this.graphContainer, `.${styles.barGraphContent}`);
-            d3RemoveElement(
-                this.graphContainer,
-                `.${styles.axisLabelYShapeContainer} .${styles.svgIcon} `,
-                true
-            );
-            d3RemoveElement(this.graphContainer, `.${styles.legendItem}`);
-            this.content = [];
-            this.loadContent(Carbon.api.bar(values));
-        } else if (this.content[0].type === "PairedResult") {
-            d3RemoveElement(this.graphContainer, `.${styles.pairedBoxGroup}`);
             d3RemoveElement(
                 this.graphContainer,
                 `.${styles.axisLabelYShapeContainer} .${styles.svgIcon} `,
@@ -434,7 +413,51 @@ class Graph extends Construct {
             );
             d3RemoveElement(this.graphContainer, `.${styles.legendItem}`, true);
             this.content = [];
-            this.loadContent(Carbon.api.pairedResult(values));
+            this.loadContent(Carbon.api.line(valuesY));
+            if (hasY2Axis(this.config.axis)) {
+                d3RemoveElement(
+                    this.graphContainer,
+                    `.${styles.axisLabelY2ShapeContainer} .${styles.svgIcon} `,
+                    true
+                );
+                this.loadContent(Carbon.api.line(valuesY2));
+            }
+        } else if (this.content[0].type === "Bar") {
+            d3RemoveElement(
+                this.graphContainer,
+                `.${styles.barGraphContent}`,
+                true
+            );
+            d3RemoveElement(
+                this.graphContainer,
+                `.${styles.axisLabelYShapeContainer} .${styles.svgIcon} `,
+                true
+            );
+            d3RemoveElement(this.graphContainer, `.${styles.legendItem}`);
+            this.content = [];
+            this.loadContent(Carbon.api.bar(valuesY));
+        } else if (this.content[0].type === "PairedResult") {
+            d3RemoveElement(
+                this.graphContainer,
+                `.${styles.pairedBoxGroup}`,
+                true
+            );
+            d3RemoveElement(
+                this.graphContainer,
+                `.${styles.axisLabelYShapeContainer} .${styles.svgIcon} `,
+                true
+            );
+            d3RemoveElement(this.graphContainer, `.${styles.legendItem}`, true);
+            this.content = [];
+            this.loadContent(Carbon.api.pairedResult(valuesY));
+            if (hasY2Axis(this.config.axis)) {
+                d3RemoveElement(
+                    this.graphContainer,
+                    `.${styles.axisLabelY2ShapeContainer} .${styles.svgIcon} `,
+                    true
+                );
+                this.loadContent(Carbon.api.pairedResult(valuesY2));
+            }
         } else if (this.content[0].type === "Scatter") {
             d3RemoveElement(
                 this.graphContainer,
@@ -447,7 +470,15 @@ class Graph extends Construct {
             );
             d3RemoveElement(this.graphContainer, `.${styles.legendItem}`, true);
             this.content = [];
-            this.loadContent(Carbon.api.scatter(values));
+            this.loadContent(Carbon.api.scatter(valuesY));
+            if (hasY2Axis(this.config.axis)) {
+                d3RemoveElement(
+                    this.graphContainer,
+                    `.${styles.axisLabelY2ShapeContainer} .${styles.svgIcon} `,
+                    true
+                );
+                this.loadContent(Carbon.api.scatter(valuesY2));
+            }
         }
         return this;
     }

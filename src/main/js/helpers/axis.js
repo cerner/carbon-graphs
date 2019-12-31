@@ -1045,8 +1045,12 @@ const getAxesDataRange = (
     const prevMin = config.axis[axis].dataRange.oldMin;
     const prevMax = config.axis[axis].dataRange.oldMax;
     const isRangeModified =
-        !(prevMin && prevMax) ||
-        !(prevMin <= curRange.min || prevMax >= curRange.max);
+        ((!(prevMin && prevMax) ||
+            !(prevMin <= curRange.min || prevMax >= curRange.max)) &&
+            !(curRange.max < config.axis[axis].domain.upperLimit) &&
+                curRange.min > config.axis[axis].domain.lowerLimit) ||
+        (curRange.max < config.axis[axis].domain.upperLimit &&
+            !(curRange.min > config.axis[axis].domain.lowerLimit));
     config.axis[axis].dataRange.isRangeModified = isRangeModified;
     if (isRangeModified) {
         config.axis[axis].dataRange.oldMin = config.axis[axis].dataRange.min;

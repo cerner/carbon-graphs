@@ -77,6 +77,7 @@ import {
     renderNoDataView,
     renderLineCustomPadding,
     renderLineWithPanning,
+    renderLineY2AxisWithPanning,
     renderDashedLine
 } from "./examples/controls/line";
 import {
@@ -98,7 +99,8 @@ import {
     renderPairedResultXStaticTicks,
     renderPairedResultY2Axis,
     renderPairedResultYHidden,
-    renderPairedResultWithPanning
+    renderPairedResultWithPanning,
+    renderPairedResultY2AxisWithPanning
 } from "./examples/controls/pairedResult";
 import { renderPieLegendTo, renderPieSimple } from "./examples/controls/pie";
 import {
@@ -118,11 +120,13 @@ import {
 import { createElementLegendBindTo } from "./examples/helpers";
 import {
     renderScatter,
+    renderScatterY2Axis,
     renderScatterTimeSeries,
     renderScatterWithDateline,
     renderScatterXHidden,
     renderScatterYHidden,
-    renderScatterWithPanning
+    renderScatterWithPanning,
+    renderScatterY2AxisWithPanning
 } from "./examples/controls/scatter";
 
 renderSiteApp(
@@ -314,6 +318,11 @@ renderSiteApp(
                     title: "Simple"
                 },
                 {
+                    pathname: "/scatter/y2-axis",
+                    content: renderScatterY2Axis,
+                    title: "Y2 Axis"
+                },
+                {
                     pathname: "/scatter/timeseries",
                     content: renderScatterTimeSeries,
                     title: "Timeseries"
@@ -423,6 +432,11 @@ renderSiteApp(
                             pathname: "/panning/line/simple",
                             content: renderLineWithPanning,
                             title: "Simple"
+                        },
+                        {
+                            pathname: "/panning/line/y2-axis",
+                            content: renderLineY2AxisWithPanning,
+                            title: "Y2 Axis"
                         }
                     ]
                 },
@@ -463,6 +477,11 @@ renderSiteApp(
                             pathname: "/panning/paired-result/simple",
                             content: renderPairedResultWithPanning,
                             title: "Simple"
+                        },
+                        {
+                            pathname: "/panning/paired-result/y2-axis",
+                            content: renderPairedResultY2AxisWithPanning,
+                            title: "Y2 Axis"
                         }
                     ]
                 },
@@ -473,6 +492,11 @@ renderSiteApp(
                             pathname: "/panning/scatter/simple",
                             content: renderScatterWithPanning,
                             title: "Simple"
+                        },
+                        {
+                            pathname: "/panning/scatter/y2-axis",
+                            content: renderScatterY2AxisWithPanning,
+                            title: "Y2 Axis"
                         }
                     ]
                 }

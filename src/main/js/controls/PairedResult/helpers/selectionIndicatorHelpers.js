@@ -215,8 +215,6 @@ const updateSelectionIndicatorAttributes = (d3PairElement, scale, value) =>
 const transformPartialPoint = (scale) => (value) => (scaleFactor) => {
     const getX = (val) => scale.x(getIncompletePairObject(val).x);
     const getY = (val) => scale[value.yAxis](getIncompletePairObject(val).y);
-    console.log(getX(value));
-    console.log(getY(value));
     return `translate(${getX(value)},${getY(value)}) scale(${scaleFactor})`;
 };
 /**

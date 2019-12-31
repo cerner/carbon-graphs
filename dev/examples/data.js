@@ -1324,7 +1324,7 @@ const DATA = [
                     upperLimit: 35
                 },
                 y2: {
-                    show: false,
+                    show: true,
                     label: "Line Set B",
                     lowerLimit: 0,
                     upperLimit: 30
@@ -1368,6 +1368,7 @@ const DATA = [
                     },
                     color: Carbon.helpers.COLORS.LIGHT_PURPLE,
                     onClick: loadBarPopup,
+                    yAxis: "y2",
                     values: [
                         {
                             x: 1,
