@@ -432,12 +432,12 @@ export const renderGanttPanning = (id) => {
     const createGraph = () => {
         graph.reflow();
     };
-    if (!graph) {
+    if (graph) {
+        graph = createGraph();
+    } else {
         graph = Carbon.api.gantt(axisData);
         graph.loadContent(graphData);
         axisData.axis = graph.config.axis;
-    } else {
-        graph = createGraph();
     }
     createPanningControls(id, {
         axisData,

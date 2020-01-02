@@ -126,12 +126,12 @@ export const renderScatterWithPanning = (id) => {
     const createGraph = () => {
         graph.reflow();
     };
-    if (!graph) {
+    if (graph) {
+        graph = createGraph();
+    } else {
         graph = Carbon.api.graph(axisData);
         graph.loadContent(Carbon.api.scatter(graphDataY));
         axisData.axis = graph.config.axis;
-    } else {
-        graph = createGraph();
     }
     createPanningControls(id, {
         axisData,
@@ -157,13 +157,13 @@ export const renderScatterY2AxisWithPanning = (id) => {
     const createGraph = () => {
         graph.reflow();
     };
-    if (!graph) {
+    if (graph) {
+        graph = createGraph();
+    } else {
         graph = Carbon.api.graph(axisData);
         graph.loadContent(Carbon.api.scatter(graphDataY));
         graph.loadContent(Carbon.api.scatter(graphDataY2));
         axisData.axis = graph.config.axis;
-    } else {
-        graph = createGraph();
     }
     createPanningControls(id, {
         axisData,

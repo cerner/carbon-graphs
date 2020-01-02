@@ -418,12 +418,12 @@ export const renderBarWithPanning = (id) => {
     const createGraph = () => {
         graph.reflow();
     };
-    if (!graph) {
+    if (graph) {
+        graph = createGraph();
+    } else {
         graph = Carbon.api.graph(axisData);
         graph.loadContent(Carbon.api.bar(graphDataY));
         axisData.axis = graph.config.axis;
-    } else {
-        graph = createGraph();
     }
     createPanningControls(id, {
         axisData,
