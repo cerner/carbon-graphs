@@ -264,6 +264,11 @@ class Timeline extends Construct {
         return this;
     }
 
+    /**
+     * Updates the graph axisData and content.
+     *
+     *  @returns {Timeline} - Timeline instance
+     */
     reflow() {
         this.config.axis.x.domain = getDomain(
             this.config.axis.x.type,

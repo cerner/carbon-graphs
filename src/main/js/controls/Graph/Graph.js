@@ -361,6 +361,11 @@ class Graph extends Construct {
         return this;
     }
 
+    /**
+     * Updates the graph axisData and content.
+     *
+     *  @returns {Graph} - Graph instance
+     */
     reflow() {
         this.config.axis.x.domain = getDomain(
             this.config.axis.x.type,

@@ -319,6 +319,11 @@ class Gantt extends Construct {
         return this;
     }
 
+    /**
+     * Updates the graph axisData and content.
+     *
+     *  @returns {Gantt} - Gantt instance
+     */
     reflow() {
         this.config.axis.x.domain = getDomain(
             this.config.axis.x.type,
