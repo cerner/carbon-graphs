@@ -111,7 +111,6 @@ export const renderScatterBlankDataPoint = (id) => {
     return scatterTime;
 };
 export const renderScatterWithPanning = (id) => {
-    let graph;
     const axisData = utils.deepClone(
         getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE")
     );
@@ -126,13 +125,11 @@ export const renderScatterWithPanning = (id) => {
     const createGraph = () => {
         graph.reflow();
     };
-    if (graph) {
-        graph = createGraph();
-    } else {
-        graph = Carbon.api.graph(axisData);
-        graph.loadContent(Carbon.api.scatter(graphDataY));
-        axisData.axis = graph.config.axis;
-    }
+
+    const graph = Carbon.api.graph(axisData);
+    graph.loadContent(Carbon.api.scatter(graphDataY));
+    axisData.axis = graph.config.axis;
+
     createPanningControls(id, {
         axisData,
         creationHandler: createGraph
@@ -141,7 +138,6 @@ export const renderScatterWithPanning = (id) => {
 };
 
 export const renderScatterY2AxisWithPanning = (id) => {
-    let graph;
     const axisData = utils.deepClone(getDemoData(`#${id}`, "LINE_TIMESERIES"));
     axisData.pan = {
         enabled: true
@@ -157,14 +153,12 @@ export const renderScatterY2AxisWithPanning = (id) => {
     const createGraph = () => {
         graph.reflow();
     };
-    if (graph) {
-        graph = createGraph();
-    } else {
-        graph = Carbon.api.graph(axisData);
-        graph.loadContent(Carbon.api.scatter(graphDataY));
-        graph.loadContent(Carbon.api.scatter(graphDataY2));
-        axisData.axis = graph.config.axis;
-    }
+
+    const graph = Carbon.api.graph(axisData);
+    graph.loadContent(Carbon.api.scatter(graphDataY));
+    graph.loadContent(Carbon.api.scatter(graphDataY2));
+    axisData.axis = graph.config.axis;
+
     createPanningControls(id, {
         axisData,
         creationHandler: createGraph

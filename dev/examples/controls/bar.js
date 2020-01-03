@@ -368,7 +368,6 @@ export const renderStackedBarAxisInfoTextLabels = (id) => {
     return barStackedAxisInfoRow;
 };
 export const renderBarWithPanning = (id) => {
-    let graph;
     const axisData = utils.deepClone(getDemoData(`#${id}`, "BAR_TIMESERIES"));
     axisData.pan = {
         enabled: true
@@ -418,13 +417,11 @@ export const renderBarWithPanning = (id) => {
     const createGraph = () => {
         graph.reflow();
     };
-    if (graph) {
-        graph = createGraph();
-    } else {
-        graph = Carbon.api.graph(axisData);
-        graph.loadContent(Carbon.api.bar(graphDataY));
-        axisData.axis = graph.config.axis;
-    }
+
+    const graph = Carbon.api.graph(axisData);
+    graph.loadContent(Carbon.api.bar(graphDataY));
+    axisData.axis = graph.config.axis;
+
     createPanningControls(id, {
         axisData,
         creationHandler: createGraph

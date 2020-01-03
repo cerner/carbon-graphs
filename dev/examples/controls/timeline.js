@@ -35,7 +35,6 @@ export const renderTimelineCustomPadding = (id) => {
     return timelineDefault;
 };
 export const renderTimelinePanning = (id) => {
-    let graph;
     const axisData = utils.deepClone(getDemoData(`#${id}`, "TIMELINE"));
     axisData.axis.x.lowerLimit = new Date(2016, 0, 1, 0).toISOString();
     axisData.axis.x.upperLimit = new Date(2016, 0, 2, 0).toISOString();
@@ -48,13 +47,11 @@ export const renderTimelinePanning = (id) => {
     const createGraph = () => {
         graph.reflow();
     };
-    if (graph) {
-        graph = createGraph();
-    } else {
-        graph = Carbon.api.timeline(axisData);
-        graph.loadContent(graphData);
-        axisData.axis = graph.config.axis;
-    }
+
+    const graph = Carbon.api.timeline(axisData);
+    graph.loadContent(graphData);
+    axisData.axis = graph.config.axis;
+
     createPanningControls(id, {
         axisData,
         creationHandler: createGraph

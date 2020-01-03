@@ -322,7 +322,6 @@ export const renderPairedResultXOrientationTop = (id) => {
     return pairedDefault;
 };
 export const renderPairedResultWithPanning = (id) => {
-    let graph;
     const axisData = utils.deepClone(
         getDemoData(`#${id}`, "PAIRED_TIMESERIES")
     );
@@ -389,13 +388,11 @@ export const renderPairedResultWithPanning = (id) => {
     const createGraph = () => {
         graph.reflow();
     };
-    if (graph) {
-        graph = createGraph();
-    } else {
-        graph = Carbon.api.graph(axisData);
-        graph.loadContent(Carbon.api.pairedResult(graphDataY));
-        axisData.axis = graph.config.axis;
-    }
+
+    const graph = Carbon.api.graph(axisData);
+    graph.loadContent(Carbon.api.pairedResult(graphDataY));
+    axisData.axis = graph.config.axis;
+
     createPanningControls(id, {
         axisData,
         creationHandler: createGraph
@@ -528,9 +525,7 @@ export const renderPairedResultY2AxisWithPanning = (id) => {
     const createGraph = () => {
         graph.reflow();
     };
-    if (graph) {
-        graph = createGraph();
-    } else {
+    if (!graph) {
         graph = Carbon.api.graph(axisData);
         graph.loadContent(Carbon.api.pairedResult(graphDataY));
         graph.loadContent(Carbon.api.pairedResult(graphDataY2));

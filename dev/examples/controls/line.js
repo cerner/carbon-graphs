@@ -446,7 +446,6 @@ export const renderLineCustomPadding = (id) => {
     return lineDefault;
 };
 export const renderLineWithPanning = (id) => {
-    let graph;
     const axisData = utils.deepClone(
         getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE")
     );
@@ -460,13 +459,11 @@ export const renderLineWithPanning = (id) => {
     const createGraph = () => {
         graph.reflow();
     };
-    if (graph) {
-        graph = createGraph();
-    } else {
-        graph = Carbon.api.graph(axisData);
-        graph.loadContent(Carbon.api.line(graphDataY));
-        axisData.axis = graph.config.axis;
-    }
+
+    const graph = Carbon.api.graph(axisData);
+    graph.loadContent(Carbon.api.line(graphDataY));
+    axisData.axis = graph.config.axis;
+
     createPanningControls(id, {
         axisData,
         creationHandler: createGraph
@@ -475,7 +472,6 @@ export const renderLineWithPanning = (id) => {
 };
 
 export const renderLineY2AxisWithPanning = (id) => {
-    let graph;
     const axisData = utils.deepClone(
         getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE")
     );
@@ -493,14 +489,12 @@ export const renderLineY2AxisWithPanning = (id) => {
     const createGraph = () => {
         graph.reflow();
     };
-    if (graph) {
-        graph = createGraph();
-    } else {
-        graph = Carbon.api.graph(axisData);
-        graph.loadContent(Carbon.api.line(graphDataY));
-        graph.loadContent(Carbon.api.line(graphDataY2));
-        axisData.axis = graph.config.axis;
-    }
+
+    const graph = Carbon.api.graph(axisData);
+    graph.loadContent(Carbon.api.line(graphDataY));
+    graph.loadContent(Carbon.api.line(graphDataY2));
+    axisData.axis = graph.config.axis;
+
     createPanningControls(id, {
         axisData,
         creationHandler: createGraph

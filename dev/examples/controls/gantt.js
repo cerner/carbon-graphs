@@ -402,7 +402,6 @@ export const renderGanttPercentage = (id) => {
     return ganttDefault;
 };
 export const renderGanttPanning = (id) => {
-    let graph;
     const axisData = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
     axisData.showActionLegend = false;
     axisData.axis.x.lowerLimit = new Date(2016, 0, 1, 0).toISOString();
@@ -432,13 +431,11 @@ export const renderGanttPanning = (id) => {
     const createGraph = () => {
         graph.reflow();
     };
-    if (graph) {
-        graph = createGraph();
-    } else {
-        graph = Carbon.api.gantt(axisData);
-        graph.loadContent(graphData);
-        axisData.axis = graph.config.axis;
-    }
+
+    const graph = Carbon.api.gantt(axisData);
+    graph.loadContent(graphData);
+    axisData.axis = graph.config.axis;
+
     createPanningControls(id, {
         axisData,
         creationHandler: createGraph
