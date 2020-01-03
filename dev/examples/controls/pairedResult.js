@@ -400,7 +400,6 @@ export const renderPairedResultWithPanning = (id) => {
     return graph;
 };
 export const renderPairedResultY2AxisWithPanning = (id) => {
-    let graph;
     const axisData = utils.deepClone(
         getDemoData(`#${id}`, "PAIRED_TIMESERIES")
     );
@@ -526,7 +525,7 @@ export const renderPairedResultY2AxisWithPanning = (id) => {
         graph.reflow();
     };
 
-    graph = Carbon.api.graph(axisData);
+    const graph = Carbon.api.graph(axisData);
     graph.loadContent(Carbon.api.pairedResult(graphDataY));
     graph.loadContent(Carbon.api.pairedResult(graphDataY2));
     axisData.axis = graph.config.axis;
