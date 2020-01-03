@@ -525,12 +525,12 @@ export const renderPairedResultY2AxisWithPanning = (id) => {
     const createGraph = () => {
         graph.reflow();
     };
-    if (!graph) {
-        graph = Carbon.api.graph(axisData);
-        graph.loadContent(Carbon.api.pairedResult(graphDataY));
-        graph.loadContent(Carbon.api.pairedResult(graphDataY2));
-        axisData.axis = graph.config.axis;
-    }
+
+    graph = Carbon.api.graph(axisData);
+    graph.loadContent(Carbon.api.pairedResult(graphDataY));
+    graph.loadContent(Carbon.api.pairedResult(graphDataY2));
+    axisData.axis = graph.config.axis;
+
     createPanningControls(id, {
         axisData,
         creationHandler: createGraph

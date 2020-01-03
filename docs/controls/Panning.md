@@ -11,9 +11,36 @@ Panning is applied with timeline/custom button
 
 ## Usage
 
+Panning can only be used with graphs having the construct as Graph, Gantt and Timeline.
+
 ```javascript
-var pan = {
-    enabled: true
+export const renderLineWithPanning = (id) => {
+    const axisData = utils.deepClone(
+        getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE")
+    );
+    axisData.pan = {
+        enabled: true
+    };
+    const graphData = utils.deepClone(
+        getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE").data[0]
+    );
+    graphData.regions = [regions[0]];
+
+    const createGraph = () => {
+        graph.reflow();
+    };
+
+    const graph = Carbon.api.graph(axisData);
+    graph.loadContent(Carbon.api.line(graphData));
+    // Additional data-sets to be loaded here only, like:
+    graph.loadContent(Carbon.api.line(/* Data array */));
+    axisData.axis = graph.config.axis;
+
+    createPanningControls(id, {
+        axisData,
+        creationHandler: createGraph
+    });
+    return graph;
 };
 ```
 
