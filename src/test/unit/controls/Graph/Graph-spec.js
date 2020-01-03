@@ -524,6 +524,16 @@ describe("Graph", () => {
                 expect(graph.config.canvasWidth).not.toBe(0);
                 expect(graph.config.canvasWidth).toBe(1024);
             });
+            it("Sets canvas width taking container padding into consideration", () => {
+                graph.destroy();
+                graphContainer.setAttribute(
+                    "style",
+                    "width: 1024px; height: 400px; padding: 3rem"
+                );
+                graph = new Graph(getAxes(axisDefault));
+
+                expect(graph.config.canvasWidth).toBeCloserTo(928);
+            });
             it("Sets canvas height", () => {
                 expect(graph.config.canvasHeight).not.toBe(0);
                 expect(graph.config.canvasHeight).toBeGreaterThan(0);

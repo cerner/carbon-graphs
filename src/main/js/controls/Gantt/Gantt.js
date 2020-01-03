@@ -17,6 +17,7 @@ import {
     renderLegendItems
 } from "./helpers/actionHelpers";
 import { createDateline } from "../../helpers/dateline";
+import { getElementBoxSizingParameters } from "../../helpers/paddingUtils";
 import {
     attachEventHandlers,
     calculateAxesLabelSize,
@@ -51,7 +52,9 @@ const BASE_CANVAS_WIDTH_PADDING = constants.BASE_CANVAS_WIDTH_PADDING;
  * @returns {undefined} - returns nothing
  */
 const setCanvasWidth = (container, config) => {
-    config.canvasWidth = parseInt(container.style("width"), 10);
+    config.canvasWidth =
+        parseInt(container.style("width"), 10) -
+        getElementBoxSizingParameters(container);
 };
 /**
  * Sets the canvas width. Canvas rests within a container.

@@ -16,10 +16,14 @@ import {
     getData,
     valuesJSON
 } from "./helpers";
+import { loadCustomJasmineMatcher } from "../../helpers/commonHelpers";
 
 describe("Timeline", () => {
     let timeline = null;
     let TimelineGraphContainer;
+    beforeAll(() => {
+        loadCustomJasmineMatcher();
+    });
     beforeEach(() => {
         TimelineGraphContainer = document.createElement("div");
         TimelineGraphContainer.id = "testCarbonTimeline";
@@ -285,6 +289,15 @@ describe("Timeline", () => {
             it("Sets canvas width", () => {
                 expect(timeline.config.canvasWidth).not.toBe(0);
                 expect(timeline.config.canvasWidth).toBe(1024);
+            });
+            it("Sets canvas width taking container padding into consideration", () => {
+                timeline.destroy();
+                TimelineGraphContainer.setAttribute(
+                    "style",
+                    "width: 1024px; height: 400px; padding: 3rem"
+                );
+                timeline = new Timeline(getAxes(axisJSON));
+                expect(timeline.config.canvasWidth).toBeCloserTo(928);
             });
             it("Sets canvas height", () => {
                 expect(timeline.config.canvasHeight).toBe(
