@@ -34,7 +34,6 @@ svg:not(:root) {
     stroke: @grey30;
 }
 
-.carbon-axis,
 .carbon-grid line,
 .carbon-content-container {
     .carbon-shape-rendering();
@@ -56,8 +55,13 @@ svg:not(:root) {
     }
 }
 
-.carbon-grid line {
-    stroke: @grey10;
+.carbon-grid {
+    > * .domain[stroke] {
+        stroke: @grey10;
+    }
+    & line {
+        stroke: @grey10;
+    }
 }
 
 .carbon-lower-step-grid line {

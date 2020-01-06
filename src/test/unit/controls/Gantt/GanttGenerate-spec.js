@@ -1,15 +1,15 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import sinon from "sinon";
 import Gantt from "../../../../main/js/controls/Gantt";
 import constants, {
     COLORS,
     SHAPES
 } from "../../../../main/js/helpers/constants";
-import { getSVGAnimatedTransformList } from "../../../../main/js/helpers/transformUtils";
 import errors from "../../../../main/js/helpers/errors";
 import { loadLegendItem } from "../../../../main/js/helpers/legend";
 import styles from "../../../../main/js/helpers/styles";
+import { getSVGAnimatedTransformList } from "../../../../main/js/helpers/transformUtils";
 import utils from "../../../../main/js/helpers/utils";
 import LOCALE from "../../../../main/js/locale/index";
 import {
@@ -358,14 +358,23 @@ describe("Gantt - Generate", () => {
                 `${styles.axis} ${styles.axisY} ${styles.axisYTrackLabel}`
             );
         });
-        it("Creates correct text for each track", () => {
+        it("Creates correct text for each track", (done) => {
             gantt.destroy();
             gantt = new Gantt(getAxes(axisJSON));
             gantt.loadContent(getData());
-            const yAxisElement = fetchElementByClass(styles.axisYTrackLabel);
-            const textElementList = yAxisElement.querySelectorAll(".tick text");
-            expect(textElementList[0].getAttribute("transform")).not.toBeNull(); // Project A
-            expect(textElementList[0].innerHTML).toBe("Project A"); // Project A
+            delay(() => {
+                const yAxisElement = fetchElementByClass(
+                    styles.axisYTrackLabel
+                );
+                const textElementList = yAxisElement.querySelectorAll(
+                    ".tick text"
+                );
+                expect(
+                    textElementList[0].getAttribute("transform")
+                ).not.toBeNull(); // Project A
+                expect(textElementList[0].innerHTML).toBe("Project A"); // Project A
+                done();
+            });
         });
         it("Hides x axis when not enabled", () => {
             gantt.destroy();
@@ -446,16 +455,17 @@ describe("Gantt - Generate", () => {
                 const allXAxisElements = document.querySelectorAll(
                     `.${styles.axisX}`
                 );
-                expect(
-                    allXAxisElements[0].childNodes[0].querySelector("text")
-                        .textContent
-                ).toBe("Feb 2017");
+                // The first child element is the domain itself, and second child onwards denote the ticks
                 expect(
                     allXAxisElements[0].childNodes[1].querySelector("text")
                         .textContent
-                ).toBe("Apr 2017");
+                ).toBe("Feb 2017");
                 expect(
                     allXAxisElements[0].childNodes[2].querySelector("text")
+                        .textContent
+                ).toBe("Apr 2017");
+                expect(
+                    allXAxisElements[0].childNodes[3].querySelector("text")
                         .textContent
                 ).toBe("Jun 2017");
             });
@@ -480,10 +490,11 @@ describe("Gantt - Generate", () => {
                 const allXAxisElements = document.querySelectorAll(
                     `.${styles.axisX}`
                 );
-                const start = allXAxisElements[0].childNodes[0].querySelector(
+                // The first child element is the domain itself, and second child onwards denote the ticks
+                const start = allXAxisElements[0].childNodes[1].querySelector(
                     "text"
                 );
-                const end = allXAxisElements[0].childNodes[1].querySelector(
+                const end = allXAxisElements[0].childNodes[2].querySelector(
                     "text"
                 );
                 expect(start.textContent).toBe("Dec 2016");
@@ -521,19 +532,20 @@ describe("Gantt - Generate", () => {
                 const allXAxisElements = document.querySelectorAll(
                     `.${styles.axisX}`
                 );
-                const lowerAxis1 = allXAxisElements[0].childNodes[0].querySelector(
+                // The first child element is the domain itself, and second child onwards denote the ticks
+                const lowerAxis1 = allXAxisElements[0].childNodes[1].querySelector(
                     "text"
                 );
-                const lowerAxis2 = allXAxisElements[0].childNodes[1].querySelector(
+                const lowerAxis2 = allXAxisElements[0].childNodes[2].querySelector(
                     "text"
                 );
-                const lowerAxis3 = allXAxisElements[0].childNodes[2].querySelector(
+                const lowerAxis3 = allXAxisElements[0].childNodes[3].querySelector(
                     "text"
                 );
-                const upperAxis1 = allXAxisElements[0].childNodes[3].querySelector(
+                const upperAxis1 = allXAxisElements[0].childNodes[4].querySelector(
                     "text"
                 );
-                const upperAxis2 = allXAxisElements[0].childNodes[4].querySelector(
+                const upperAxis2 = allXAxisElements[0].childNodes[5].querySelector(
                     "text"
                 );
                 expect(lowerAxis1.textContent).toBe("Feb 2017");

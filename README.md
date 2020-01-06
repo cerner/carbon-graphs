@@ -106,7 +106,7 @@ npm i @cerner/carbon-graphs --save-dev
 
 ## Potential features
 
--   [ ] Upgrade to latest D3 version
+-   [ ] Bubble graph
 -   [ ] Support additional themes
 -   [ ] a11y
 -   [ ] Area graph

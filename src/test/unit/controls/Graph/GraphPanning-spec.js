@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import Graph from "../../../../main/js/controls/Graph/index";
 import styles from "../../../../main/js/helpers/styles";
 import { getSVGAnimatedTransformList } from "../../../../main/js/helpers/transformUtils";
@@ -68,7 +68,7 @@ describe("Graph - Panning", () => {
                 const translate = getSVGAnimatedTransformList(
                     datelineGroup.getAttribute("transform")
                 ).translate;
-                expect(toNumber(translate[0], 10)).toBeCloserTo(73);
+                expect(toNumber(translate[0], 10)).toBeCloserTo(72);
                 expect(toNumber(translate[1], 10)).toBeCloseTo(PADDING_BOTTOM);
                 done();
             });
@@ -94,7 +94,7 @@ describe("Graph - Panning", () => {
                 const translate = getSVGAnimatedTransformList(
                     datelineGroup.getAttribute("transform")
                 ).translate;
-                expect(toNumber(translate[0], 10)).toBeCloserTo(73);
+                expect(toNumber(translate[0], 10)).toBeCloserTo(72);
                 expect(toNumber(translate[1], 10)).toBeCloseTo(PADDING_BOTTOM);
                 done();
             });
@@ -120,7 +120,7 @@ describe("Graph - Panning", () => {
                 const translate = getSVGAnimatedTransformList(
                     datelineGroup.getAttribute("transform")
                 ).translate;
-                expect(toNumber(translate[0], 10)).toBeCloserTo(73);
+                expect(toNumber(translate[0], 10)).toBeCloserTo(72);
                 expect(toNumber(translate[1], 10)).toBeCloseTo(PADDING_BOTTOM);
                 done();
             });

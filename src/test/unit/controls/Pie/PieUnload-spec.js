@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import Pie from "../../../../main/js/controls/Pie";
 import errors from "../../../../main/js/helpers/errors";
 import styles from "../../../../main/js/helpers/styles";

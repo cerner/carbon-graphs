@@ -1,4 +1,5 @@
 "use strict";
+import * as d3 from "d3";
 
 /**
  * @module constants
@@ -124,8 +125,8 @@ export const AXIS_TYPE = {
  * @enum {{LINEAR: string, SPLINE: string}}
  */
 export const LINE_TYPE = {
-    LINEAR: "linear",
-    SPLINE: "cardinal"
+    LINEAR: d3.curveLinear,
+    SPLINE: d3.curveCardinal
 };
 
 /**
@@ -227,21 +228,23 @@ export default {
     DEFAULT_COLOR: COLORS.BLACK,
     DEFAULT_PIE_COLOR: COLORS.BLUE,
     DEFAULT_PIE_LEGEND_SHAPE: SHAPES.SQUARE,
+    DEFAULT_PIE_INNER_RADIUS: 1,
+    DEFAULT_PIE_PAD_ANGLE: 0.01,
     X_AXIS: "x",
     Y_AXIS: "y",
     Y2_AXIS: "y2",
     MIN_TICKS: 3,
     MAX_TICK_VARIANCE: 140,
-    DEFAULT_INTERPOLATION: "linear",
+    DEFAULT_INTERPOLATION: d3.curveLinear,
     SELECTION_INDICATOR_X_POSITION: 10,
     SELECTION_INDICATOR_Y_POSITION: 12.5,
     D3_TRANSITION_PROPERTIES_ENABLED: {
         duration: 250,
-        ease: "linear"
+        ease: d3.easeLinear
     },
     D3_TRANSITION_PROPERTIES_DISABLED: {
         duration: 0,
-        ease: ""
+        ease: d3.easeLinear
     },
     d3Transition: (d) => (transition) =>
         transition.duration(d.duration).ease(d.ease),

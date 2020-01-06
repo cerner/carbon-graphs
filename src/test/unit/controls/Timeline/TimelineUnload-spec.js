@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import Timeline from "../../../../main/js/controls/Timeline";
 import { getXAxisYPosition } from "../../../../main/js/controls/Timeline/helpers/creationHelpers";
 import { getYAxisHeight } from "../../../../main/js/helpers/axis";

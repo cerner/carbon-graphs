@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import { getType } from "../../../core/BaseConfig";
 import {
     calculateVerticalPadding,
@@ -203,15 +203,15 @@ const getXAxisXPosition = (config) =>
  *
  * @private
  * @param {object} scale - d3 scale taking into account the input parameters
- * @param {object} ordinalScale - bar x-axis ordinal scale
+ * @param {object} bandScale - bar x-axis band scale
  * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {object} dataTarget - Data points
  * @returns {undefined} - returns nothing
  */
-const draw = (scale, ordinalScale, config, canvasSVG, dataTarget) => {
+const draw = (scale, bandScale, config, canvasSVG, dataTarget) => {
     if (canvasSVG.select(`.${styles.barSelectionGroup}`).empty()) {
-        drawSelectionBars(scale, ordinalScale, config, canvasSVG);
+        drawSelectionBars(scale, bandScale, config, canvasSVG);
     }
     const barSVG = canvasSVG
         .append("g")
@@ -234,7 +234,7 @@ const draw = (scale, ordinalScale, config, canvasSVG, dataTarget) => {
         .data(dataTarget.internalValuesSubset);
     drawDataBars(
         scale,
-        ordinalScale,
+        bandScale,
         config,
         canvasSVG,
         bars.enter(),
@@ -245,21 +245,21 @@ const draw = (scale, ordinalScale, config, canvasSVG, dataTarget) => {
 
 /**
  * Contains logic to calculate x, y, height, width for bar
- * x is calculated using ordinal scale. Padding between each bar should be half of its width.
+ * x is calculated using band scale. Padding between each bar should be half of its width.
  * width of bar should be 2/3 of range band. Remaining 1/3 of range band is for padding between bars.
  * height of bar should be
  *
  * @private
  * @param {object} scale - d3 scale for Graph
- * @param {object} ordinalScale - bar x-axis ordinal scale
+ * @param {object} bandScale - bar x-axis band scale
  * @returns {object} Object that contains methods for calculating x, y, height, width.
  */
-const barAttributesHelper = (scale, ordinalScale) => {
+const barAttributesHelper = (scale, bandScale) => {
     const leftShiftOffset =
-        ordinalScale.x0.rangeBand() *
+        bandScale.x0.bandwidth() *
         constants.DEFAULT_BAR_GRAPH_PADDING_ATTRIBUTES.LEFT_SHIFT_OFFSET_RATIO; // this value is used to center bars by shifting left
     const leftShiftPadding =
-        ordinalScale.x1.rangeBand() *
+        bandScale.x1.bandwidth() *
         constants.DEFAULT_BAR_GRAPH_PADDING_ATTRIBUTES
             .LEFT_SHIFT_OFFSET_PADDING_RATIO; // padding to be added on left side of bar
     const getXRange = (x, groupOffset) =>
@@ -268,13 +268,13 @@ const barAttributesHelper = (scale, ordinalScale) => {
     return {
         x: (d) => {
             // x offset for grouped bars. By default every content is treated as a grouped bar.
-            const groupOffset = ordinalScale.x1(d.group);
+            const groupOffset = bandScale.x1(d.group);
             return getXRange(d.x, groupOffset || 0) || 0;
         },
         y: (d) => (d.y < 0 ? scale[d.yAxis](d.y0) : scale[d.yAxis](d.y + d.y0)),
         height: (d) => Math.abs(scale[d.yAxis](0) - scale[d.yAxis](+d.y)),
-        width:
-            ordinalScale.x1.rangeBand() *
+        width: () =>
+            bandScale.x1.bandwidth() *
             constants.DEFAULT_BAR_GRAPH_PADDING_ATTRIBUTES.WIDTH_RATIO
     };
 };
@@ -284,7 +284,7 @@ const barAttributesHelper = (scale, ordinalScale) => {
  *
  * @private
  * @param {object} scale - d3 scale for Graph
- * @param {object} ordinalScale - bar x-axis ordinal scale
+ * @param {object} bandScale - bar x-axis band scale
  * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {object} barGroupSVG - d3 object for bar group svg
@@ -294,14 +294,14 @@ const barAttributesHelper = (scale, ordinalScale) => {
  */
 const drawDataBars = (
     scale,
-    ordinalScale,
+    bandScale,
     config,
     canvasSVG,
     barGroupSVG,
     regionList,
     axisInfoRowList
 ) => {
-    const attributeHelper = barAttributesHelper(scale, ordinalScale);
+    const attributeHelper = barAttributesHelper(scale, bandScale);
     return barGroupSVG
         .append("g")
         .classed(styles.bar, true)
@@ -314,7 +314,7 @@ const drawDataBars = (
                       dataPointSVG,
                       attributeHelper.x(dataPoint),
                       attributeHelper.y(dataPoint),
-                      attributeHelper.width,
+                      attributeHelper.width(),
                       attributeHelper.height(dataPoint),
                       dataPoint.style
                   ).selectAll("rect")
@@ -322,7 +322,7 @@ const drawDataBars = (
                       dataPointSVG,
                       attributeHelper.x(dataPoint),
                       attributeHelper.y(dataPoint),
-                      attributeHelper.width,
+                      attributeHelper.width(),
                       attributeHelper.height(dataPoint)
                   ).attr("style", `${dataPoint.style}`);
             rectPath
@@ -363,7 +363,7 @@ const drawDataBars = (
                 );
                 if (utils.notEmpty(textLabels)) {
                     createAxisInfoRowLabel(
-                        ordinalScale,
+                        bandScale,
                         scale,
                         config,
                         canvasSVG,

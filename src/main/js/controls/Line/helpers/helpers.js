@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import { Shape } from "../../../core";
 import {
     getInterpolationType,
@@ -49,12 +49,12 @@ import { getStrokeDashArray } from "../../../core/BaseConfig/helper";
  * @returns {object} d3 line object
  */
 const createLine = (scale, d) => {
-    const newLine = d3.svg
+    const newLine = d3
         .line()
         .defined((value) => value.y !== null)
         .x((value) => scale.x(value.x))
         .y((value) => scale[value.yAxis](value.y))
-        .interpolate(d.interpolationType);
+        .curve(d.interpolationType);
     return newLine(getDataPointValues(d));
 };
 /**

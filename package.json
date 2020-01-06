@@ -45,7 +45,7 @@
     }
   },
   "dependencies": {
-    "d3": "^3.5.17"
+    "d3": "^5.15.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",
@@ -110,18 +110,12 @@
     "webpack-dev-server": "^3.10.3",
     "webpack-merge": "^4.2.2"
   },
-  "engines": {
-    "node": ">=8.0.0"
-  },
   "files": [
     "dist",
     "lib",
     "README.md"
   ],
   "greenkeeper": {
-    "ignore": [
-      "d3"
-    ],
     "commitMessages": {
       "initialBadge": "Docs: Add Greenkeeper badge",
       "initialDependencies": "Upgrade: Update dependencies",

@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import sinon from "sinon";
 import Gantt from "../../../../main/js/controls/Gantt";
 import { COLORS, SHAPES } from "../../../../main/js/helpers/constants";
@@ -839,7 +839,7 @@ describe("Gantt -> Track -> Action", () => {
                                 .firstChild
                         )[0]
                     ).not.toEqual(currentPointPos[0]);
-                    // currentPointPos[1] referes to y-value of translate. Since the updateTrackProps happen prior to loadActions, the y-value doesn't change.
+                    // currentPointPos[1] refers to y-value of translate. Since the updateTrackProps happen prior to loadActions, the y-value doesn't change.
                     expect(
                         getTranslate(
                             fetchElementByClass(styles.dataPointSelection)

@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import constants from "../../../helpers/constants";
 import { loadPieLegendItem } from "../../../helpers/legend";
 import styles from "../../../helpers/styles";
@@ -34,15 +34,20 @@ const determineHeight = (config, dimension) => {
  * @private
  * @returns {Function} d3 function that decides which pie should go where in the graph.
  */
-const createPieLayout = () => d3.layout.pie().value((d) => d.value);
+const createPieLayout = () => d3.pie().value((d) => d.value);
 /**
  * Creates an arc based on the pie chart radius
  *
  * @private
  * @param {number} r - Radius of the pie chart.
- * @returns {Function} d3.svg.arc function that would calculate the arc for each pie value
+ * @returns {Function} d3.arc function that would calculate the arc for each pie value
  */
-const createArc = (r) => d3.svg.arc().outerRadius(r);
+const createArc = (r) =>
+    d3
+        .arc()
+        .innerRadius(constants.DEFAULT_PIE_INNER_RADIUS)
+        .outerRadius(r)
+        .padAngle(constants.DEFAULT_PIE_PAD_ANGLE);
 /**
  * Added defs element for the canvas. This currently holds the clip paths for the entire chart.
  * Clip path rectangle has the same width and height, making it a square within with we

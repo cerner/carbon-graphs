@@ -546,7 +546,7 @@ describe("Graph", () => {
                 const translate = getSVGAnimatedTransformList(
                     axisXElement.getAttribute("transform")
                 ).translate;
-                expect(toNumber(translate[0], 10)).toBeCloserTo(72);
+                expect(toNumber(translate[0], 10)).toBeCloserTo(67);
                 expect(toNumber(translate[1], 10)).toBeCloserTo(240);
             });
             it("Returns the consumer set height if dimension is provided", () => {
@@ -789,7 +789,7 @@ describe("Graph", () => {
             const translate = getSVGAnimatedTransformList(
                 axisXElement.getAttribute("transform")
             ).translate;
-            expect(toNumber(translate[0], 10)).toBeCloserTo(72);
+            expect(toNumber(translate[0], 10)).toBeCloserTo(67);
             expect(toNumber(translate[1], 10)).toBeCloserTo(45);
         });
         it("Sets x axis position correctly when x axis is hidden", () => {
@@ -801,7 +801,7 @@ describe("Graph", () => {
             const translate = getSVGAnimatedTransformList(
                 axisXElement.getAttribute("transform")
             ).translate;
-            expect(toNumber(translate[0], 10)).toBeCloserTo(72);
+            expect(toNumber(translate[0], 10)).toBeCloserTo(67);
             expect(toNumber(translate[1], 10)).toBeCloserTo(45);
         });
         it("Sets x axis position correctly when labels are hidden", () => {
@@ -832,7 +832,7 @@ describe("Graph", () => {
             const translate = getSVGAnimatedTransformList(
                 axisXElement.getAttribute("transform")
             ).translate;
-            expect(toNumber(translate[0], 10)).toBeCloserTo(72);
+            expect(toNumber(translate[0], 10)).toBeCloserTo(67);
             expect(toNumber(translate[1], 10)).toBeCloserTo(10);
         });
     });

@@ -351,7 +351,7 @@ describe("Graph - Dateline", () => {
                 const translate = getSVGAnimatedTransformList(
                     datelineGroup.getAttribute("transform")
                 ).translate;
-                expect(toNumber(translate[0], 10)).toBeCloserTo(73);
+                expect(toNumber(translate[0], 10)).toBeCloserTo(72);
                 expect(toNumber(translate[1], 10)).toBeCloseTo(PADDING_BOTTOM);
                 done();
             });
