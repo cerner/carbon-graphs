@@ -312,7 +312,7 @@ const updateAxesDomain = (config, input = {}) => {
     const setDomain = (outlierStretchFactor, lowerLimit, upperLimit, yAxis) => {
         const halfDomain = (upperLimit - lowerLimit) / 2;
         const midPoint = (upperLimit + lowerLimit) / 2;
-        const a = padDomain(
+        return padDomain(
             {
                 lowerLimit:
                     midPoint - halfDomain * outlierStretchFactor.lowerLimit,
@@ -321,7 +321,6 @@ const updateAxesDomain = (config, input = {}) => {
             },
             config.axisPadding[yAxis]
         );
-        return a;
     };
 
     if (utils.notEmpty(input)) {

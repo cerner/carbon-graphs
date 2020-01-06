@@ -271,7 +271,7 @@ const drawLine = (scale, config, boxPath) =>
             d.low &&
             utils.hasValue(config.shownTargets, d.high.key) &&
             utils.hasValue(config.shownTargets, d.low.key);
-        const a = d3
+        return d3
             .select(this)
             .append("path")
             .classed(styles.pairedLine, true)
@@ -282,7 +282,6 @@ const drawLine = (scale, config, boxPath) =>
             .on("click", function() {
                 dataPointActionHandler(config, value, index, this.parentNode);
             });
-        return a;
     });
 /**
  * Draws the points with options opted in the input JSON by the consumer for each data set.
