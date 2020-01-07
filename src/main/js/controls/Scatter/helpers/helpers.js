@@ -344,23 +344,6 @@ const drawDataPoints = (scale, config, pointGroupPath) => {
         });
 };
 /**
- * Handler for Request animation frame, executes on resize.
- *  * Order of execution
- *      * Redraws the content
- *      * Shows/hides the regions
- *
- * @private
- * @param {object} graphContext - Graph instance
- * @param {Scatter} control - Scatter instance
- * @param {object} config - Graph config object derived from input JSON
- * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @returns {function()} callback function handler for RAF
- */
-const onAnimationHandler = (graphContext, control, config, canvasSVG) => () => {
-    control.redraw(graphContext);
-    processRegions(config, canvasSVG);
-};
-/**
  * Click handler for legend item. Removes the data points from scatter graph when clicked and calls redraw
  *
  * @private
@@ -374,25 +357,28 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
     element,
     item
 ) => {
-    const updateShownTarget = (shownTargets, item) => {
-        const index = shownTargets.indexOf(item.key);
-        if (index > -1) {
-            shownTargets.splice(index, 1);
-        } else {
-            shownTargets.push(item.key);
-        }
-    };
-    legendClickHandler(element);
-    updateShownTarget(config.shownTargets, item);
+    const legend = legendClickHandler(element);
     canvasSVG
-        .selectAll(`path[aria-describedby="${item.key}"]`)
+        .selectAll(
+            `.${styles.dataPointSelection}[aria-describedby="${item.key}"]`
+        )
         .attr("aria-hidden", true);
-    canvasSVG
-        .selectAll(`.${styles.point}[aria-describedby="${item.key}"]`)
-        .attr("aria-hidden", true);
-    window.requestAnimationFrame(
-        onAnimationHandler(graphContext, control, config, canvasSVG)
-    );
+    if (!legend) {
+        canvasSVG
+            .selectAll(`path[aria-describedby="${item.key}"]`)
+            .attr("aria-hidden", true);
+        canvasSVG
+            .selectAll(`.${styles.point}[aria-describedby="${item.key}"]`)
+            .attr("aria-hidden", true);
+    } else {
+        canvasSVG
+            .selectAll(`path[aria-describedby="${item.key}"]`)
+            .attr("aria-hidden", false);
+        canvasSVG
+            .selectAll(`.${styles.point}[aria-describedby="${item.key}"]`)
+            .attr("aria-hidden", false);
+    }
+    processRegions(config, canvasSVG);
 };
 /**
  * Hover handler for legend item. Highlights current scatter data points and blurs the rest of the targets in Graph

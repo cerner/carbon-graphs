@@ -150,7 +150,8 @@ const createLegend = (container) =>
 const legendClickHandler = (element) => {
     const target = d3.select(element);
     const isSelected = target.attr("aria-current");
-    return target.attr("aria-current", isSelected !== "true");
+    target.attr("aria-current", isSelected !== "true");
+    return isSelected !== "true";
 };
 /**
  * Hover handler for legend items.
