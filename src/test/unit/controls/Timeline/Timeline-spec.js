@@ -237,7 +237,13 @@ describe("Timeline", () => {
             expect(cfg.bindTo).toBe("#testCarbonTimeline");
             expect(cfg.axis.x.lowerLimit).toBe(axisJSON.x.lowerLimit);
             expect(cfg.axis.x.upperLimit).toBe(axisJSON.x.upperLimit);
+            expect(cfg.padding.left).toEqual(input.padding.left);
+            expect(cfg.padding.right).toEqual(input.padding.right);
             expect(cfg.padding.hasCustomPadding).toBe(true);
+            expect(timeline.scale.x.range()).toEqual([
+                0,
+                getXAxisWidth(timeline.config)
+            ]);
             expect(timeline.contentConfig.length).toBe(1);
             expect(timeline.contentConfig[0].config.key).toBe(data.key);
         });
