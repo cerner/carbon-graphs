@@ -362,7 +362,7 @@ const onAnimationHandler = (config, canvasSVG) => () => {
  *
  * @private
  * @param {object} graphContext - Graph instance
- * @param {Line} control - Line instance
+ * @param {Scatter} control - Scatter instance
  * @param {object} config - Graph config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {Function} - returns callback function that handles click action on legend item
