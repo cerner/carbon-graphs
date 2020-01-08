@@ -344,11 +344,25 @@ const drawDataPoints = (scale, config, pointGroupPath) => {
         });
 };
 /**
- * Click handler for legend item. Removes the data points from scatter graph when clicked and calls redraw
+ * Handler for Request animation frame, executes on resize.
+ *  * Order of execution
+ *      * Redraws the content
+ *      * Shows/hides the regions
+ *
+ * @private
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
+ * @returns {function()} callback function handler for RAF
+ */
+const onAnimationHandler = (config, canvasSVG) => () => {
+    processRegions(config, canvasSVG);
+};
+/**
+ * Click handler for legend item. Removes the line from graph when clicked and calls redraw
  *
  * @private
  * @param {object} graphContext - Graph instance
- * @param {Scatter} control - Scatter instance
+ * @param {Line} control - Line instance
  * @param {object} config - Graph config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {Function} - returns callback function that handles click action on legend item
@@ -357,7 +371,16 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
     element,
     item
 ) => {
+    const updateShownTarget = (shownTargets, item) => {
+        const index = shownTargets.indexOf(item.key);
+        if (index > -1) {
+            shownTargets.splice(index, 1);
+        } else {
+            shownTargets.push(item.key);
+        }
+    };
     const legend = legendClickHandler(element);
+    updateShownTarget(config.shownTargets, item);
     canvasSVG
         .selectAll(
             `.${styles.dataPointSelection}[aria-describedby="${item.key}"]`
@@ -378,7 +401,7 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
             .selectAll(`.${styles.point}[aria-describedby="${item.key}"]`)
             .attr("aria-hidden", false);
     }
-    processRegions(config, canvasSVG);
+    window.requestAnimationFrame(onAnimationHandler(config, canvasSVG));
 };
 /**
  * Hover handler for legend item. Highlights current scatter data points and blurs the rest of the targets in Graph
