@@ -504,7 +504,6 @@ const isRegionMappedToAllValues = (value, regionList) =>
 /**
  * Handler for Request animation frame, executes on resize.
  *  * Order of execution
- *      * Redraws the content
  *      * Shows/hides the regions
  *
  * @private
@@ -518,7 +517,7 @@ const onAnimationHandler = (graphContext, config, canvasSVG, item) => () => {
     processRegions(graphContext, config, canvasSVG, item);
 };
 /**
- * Click handler for legend item. Removes the line from graph when clicked and calls redraw
+ * Click handler for legend item. Removes the line from graph when clicked
  *
  * @private
  * @param {object} graphContext - Graph instance
@@ -539,22 +538,10 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
             shownTargets.push(item.key);
         }
     };
-    const legend = legendClickHandler(element);
+    const isLegendSelected = legendClickHandler(element);
     updateShownTarget(config.shownTargets, item);
     const value = item.key.substr(0, item.key.lastIndexOf("_"));
-    if (!legend) {
-        canvasSVG
-            .selectAll(`path[aria-describedby="${item.key}"]`)
-            .attr("aria-hidden", true);
-        if (item.key.indexOf("_mid") === -1) {
-            canvasSVG
-                .selectAll(`path[aria-describedby="${value}"]`)
-                .attr("aria-hidden", true);
-        }
-        canvasSVG
-            .selectAll(`.${styles.pairedPoint}[aria-describedby="${item.key}"]`)
-            .attr("aria-hidden", true);
-    } else {
+    if (isLegendSelected) {
         canvasSVG
             .selectAll(`path[aria-describedby="${item.key}"]`)
             .attr("aria-hidden", false);
@@ -566,6 +553,18 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
         canvasSVG
             .selectAll(`.${styles.pairedPoint}[aria-describedby="${item.key}"]`)
             .attr("aria-hidden", false);
+    } else {
+        canvasSVG
+            .selectAll(`path[aria-describedby="${item.key}"]`)
+            .attr("aria-hidden", true);
+        if (item.key.indexOf("_mid") === -1) {
+            canvasSVG
+                .selectAll(`path[aria-describedby="${value}"]`)
+                .attr("aria-hidden", true);
+        }
+        canvasSVG
+            .selectAll(`.${styles.pairedPoint}[aria-describedby="${item.key}"]`)
+            .attr("aria-hidden", true);
     }
     window.requestAnimationFrame(
         onAnimationHandler(graphContext, config, canvasSVG, item)

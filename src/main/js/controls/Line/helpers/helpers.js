@@ -436,7 +436,6 @@ const drawDataPoints = (scale, config, pointGroupPath) => {
 /**
  * Handler for Request animation frame, executes on resize.
  *  * Order of execution
- *      * Redraws the content
  *      * Shows/hides the regions
  *
  * @private
@@ -448,7 +447,7 @@ const onAnimationHandler = (config, canvasSVG) => () => {
     processRegions(config, canvasSVG);
 };
 /**
- * Click handler for legend item. Removes the line from graph when clicked and calls redraw
+ * Click handler for legend item. Removes the line from graph when clicked
  *
  * @private
  * @param {object} graphContext - Graph instance
@@ -469,27 +468,27 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
             shownTargets.push(item.key);
         }
     };
-    const legend = legendClickHandler(element);
+    const isLegendSelected = legendClickHandler(element);
     updateShownTarget(config.shownTargets, item);
     canvasSVG
         .selectAll(
             `.${styles.dataPointSelection}[aria-describedby="${item.key}"]`
         )
         .attr("aria-hidden", true);
-    if (!legend) {
+    if (isLegendSelected) {
         canvasSVG
             .selectAll(`path[aria-describedby="${item.key}"]`)
-            .attr("aria-hidden", true);
+            .attr("aria-hidden", false);
         canvasSVG
             .selectAll(`.${styles.point}[aria-describedby="${item.key}"]`)
-            .attr("aria-hidden", true);
+            .attr("aria-hidden", false);
     } else {
         canvasSVG
             .selectAll(`path[aria-describedby="${item.key}"]`)
-            .attr("aria-hidden", false);
+            .attr("aria-hidden", true);
         canvasSVG
             .selectAll(`.${styles.point}[aria-describedby="${item.key}"]`)
-            .attr("aria-hidden", false);
+            .attr("aria-hidden", true);
     }
     window.requestAnimationFrame(onAnimationHandler(config, canvasSVG));
 };
