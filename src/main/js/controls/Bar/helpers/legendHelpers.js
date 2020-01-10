@@ -1,6 +1,8 @@
+import d3 from "d3";
 import {
     legendClickHandler,
-    legendHoverHandler
+    legendHoverHandler,
+    isSelected
 } from "../../../helpers/legend";
 import styles from "../../../helpers/styles";
 import { setSelectionIndicatorAttributes } from "./creationHelpers";
@@ -21,13 +23,11 @@ import { setSelectionIndicatorAttributes } from "./creationHelpers";
  * @param {Bar} control - Bar instance
  * @returns {function()} callback function handler for RAF
  */
-const onAnimationHandler = (graphContext, control) => () => {
-    control.redraw(graphContext);
+const onAnimationHandler = (graphContext) => () => {
     graphContext.resize();
 };
 /**
- * Click handler for legend item. Removes the bar from graph when clicked and calls redraw.
- * This will also redraws selection bars and update datum. So, we hide selection bar when legend is clicked.
+ * Click handler for legend item. Hide and display the bar from graph when clicked.
  *
  * @private
  * @param {object} graphContext - Graph instance
@@ -49,15 +49,16 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
         }
     };
     legendClickHandler(element);
+    const isLegendSelected = isSelected(d3.select(element));
     updateShownTarget(config.shownTargets, item);
     canvasSVG
         .selectAll(`g[aria-describedby="${item.key}"]`)
-        .attr("aria-hidden", true);
+        .attr("aria-hidden", isLegendSelected);
     setSelectionIndicatorAttributes(
         canvasSVG.selectAll(`.${styles.taskBarSelection}`),
         false
     );
-    window.requestAnimationFrame(onAnimationHandler(graphContext, control));
+    window.requestAnimationFrame(onAnimationHandler(graphContext));
 };
 /**
  * Hover handler for legend item. Highlights current bar and blurs the rest of the targets in Graph

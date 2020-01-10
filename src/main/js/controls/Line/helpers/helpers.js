@@ -17,7 +17,8 @@ import errors from "../../../helpers/errors";
 import {
     legendClickHandler,
     legendHoverHandler,
-    loadLegendItem
+    loadLegendItem,
+    isSelected
 } from "../../../helpers/legend";
 import {
     processRegions,
@@ -468,28 +469,20 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
             shownTargets.push(item.key);
         }
     };
-    const isLegendSelected = legendClickHandler(element);
+    legendClickHandler(element);
+    const isLegendSelected = isSelected(d3.select(element));
     updateShownTarget(config.shownTargets, item);
     canvasSVG
         .selectAll(
             `.${styles.dataPointSelection}[aria-describedby="${item.key}"]`
         )
         .attr("aria-hidden", true);
-    if (isLegendSelected) {
-        canvasSVG
-            .selectAll(`path[aria-describedby="${item.key}"]`)
-            .attr("aria-hidden", false);
-        canvasSVG
-            .selectAll(`.${styles.point}[aria-describedby="${item.key}"]`)
-            .attr("aria-hidden", false);
-    } else {
-        canvasSVG
-            .selectAll(`path[aria-describedby="${item.key}"]`)
-            .attr("aria-hidden", true);
-        canvasSVG
-            .selectAll(`.${styles.point}[aria-describedby="${item.key}"]`)
-            .attr("aria-hidden", true);
-    }
+    canvasSVG
+        .selectAll(`path[aria-describedby="${item.key}"]`)
+        .attr("aria-hidden", isLegendSelected);
+    canvasSVG
+        .selectAll(`.${styles.point}[aria-describedby="${item.key}"]`)
+        .attr("aria-hidden", isLegendSelected);
     window.requestAnimationFrame(onAnimationHandler(config, canvasSVG));
 };
 /**

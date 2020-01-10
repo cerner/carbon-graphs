@@ -13,7 +13,8 @@ import errors from "../../../helpers/errors";
 import {
     legendClickHandler,
     legendHoverHandler,
-    loadLegendItem
+    loadLegendItem,
+    isSelected
 } from "../../../helpers/legend";
 import {
     createRegion,
@@ -538,34 +539,21 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
             shownTargets.push(item.key);
         }
     };
-    const isLegendSelected = legendClickHandler(element);
+    legendClickHandler(element);
+    const isLegendSelected = isSelected(d3.select(element));
     updateShownTarget(config.shownTargets, item);
-    const value = item.key.substr(0, item.key.lastIndexOf("_"));
-    if (isLegendSelected) {
+    const parentKey = item.key.substr(0, item.key.lastIndexOf("_"));
+    canvasSVG
+        .selectAll(`path[aria-describedby="${item.key}"]`)
+        .attr("aria-hidden", isLegendSelected);
+    if (item.key.indexOf("_mid") === -1) {
         canvasSVG
-            .selectAll(`path[aria-describedby="${item.key}"]`)
-            .attr("aria-hidden", false);
-        if (item.key.indexOf("_mid") === -1) {
-            canvasSVG
-                .selectAll(`path[aria-describedby="${value}"]`)
-                .attr("aria-hidden", false);
-        }
-        canvasSVG
-            .selectAll(`.${styles.pairedPoint}[aria-describedby="${item.key}"]`)
-            .attr("aria-hidden", false);
-    } else {
-        canvasSVG
-            .selectAll(`path[aria-describedby="${item.key}"]`)
-            .attr("aria-hidden", true);
-        if (item.key.indexOf("_mid") === -1) {
-            canvasSVG
-                .selectAll(`path[aria-describedby="${value}"]`)
-                .attr("aria-hidden", true);
-        }
-        canvasSVG
-            .selectAll(`.${styles.pairedPoint}[aria-describedby="${item.key}"]`)
-            .attr("aria-hidden", true);
+            .selectAll(`path[aria-describedby="${parentKey}"]`)
+            .attr("aria-hidden", isLegendSelected);
     }
+    canvasSVG
+        .selectAll(`.${styles.pairedPoint}[aria-describedby="${item.key}"]`)
+        .attr("aria-hidden", isLegendSelected);
     window.requestAnimationFrame(
         onAnimationHandler(graphContext, config, canvasSVG, item)
     );

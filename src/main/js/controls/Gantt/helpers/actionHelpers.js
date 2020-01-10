@@ -6,7 +6,8 @@ import errors from "../../../helpers/errors";
 import {
     legendClickHandler,
     legendHoverHandler,
-    loadLegendItem
+    loadLegendItem,
+    isSelected
 } from "../../../helpers/legend";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
@@ -98,12 +99,12 @@ export const clickHandler = (graphContext, config, canvasSVG) => (
     item
 ) => {
     legendClickHandler(element);
+    const isLegendSelected = isSelected(d3.select(element));
     updateShownTarget(config.shownTargets, item);
     canvasSVG
         .selectAll(`.${styles.point}[aria-describedby="${item.key}"]`)
-        .attr("aria-hidden", function() {
-            return !(d3.select(this).attr("aria-hidden") === "true");
-        });
+        // .attr("aria-hidden", isLegendSelected);
+        .attr("aria-hidden", isLegendSelected);
 };
 /**
  * Hover handler for legend item. Blurs the rest of the targets in Graph
