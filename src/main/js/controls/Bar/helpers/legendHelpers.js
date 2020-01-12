@@ -20,7 +20,6 @@ import { setSelectionIndicatorAttributes } from "./creationHelpers";
  *
  * @private
  * @param {object} graphContext - Graph instance
- * @param {Bar} control - Bar instance
  * @returns {function()} callback function handler for RAF
  */
 const onAnimationHandler = (graphContext) => () => {
