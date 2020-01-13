@@ -352,6 +352,27 @@ const drawPoints = (scale, config, canvasSVG) => {
     });
 };
 /**
+ * Shows line between the 2 data points high and low. If either one of them is missing
+ * then the line is not shown.
+ *
+ * @private
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {Array} boxPath - d3 html element of the paired box
+ * @returns {object} - d3 append object
+ */
+const showLine = (config, boxPath) =>
+    boxPath.each(function() {
+        const shouldCreateLine = (d) =>
+            d.high &&
+            d.low &&
+            utils.hasValue(config.shownTargets, d.high.key) &&
+            utils.hasValue(config.shownTargets, d.low.key);
+        return d3
+            .select(this)
+            .select(`.${styles.pairedLine}`)
+            .attr("aria-hidden", (d) => !shouldCreateLine(d));
+    });
+/**
  * Draws the criticality points with options opted in the input JSON by the consumer for each data set.
  *  On click content callback function is called.
  *
@@ -542,18 +563,14 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
     legendClickHandler(element);
     const isLegendSelected = isSelected(d3.select(element));
     updateShownTarget(config.shownTargets, item);
-    const parentKey = item.key.substr(0, item.key.lastIndexOf("_"));
     canvasSVG
         .selectAll(`path[aria-describedby="${item.key}"]`)
         .attr("aria-hidden", isLegendSelected);
-    if (item.key.indexOf("_mid") === -1) {
-        canvasSVG
-            .selectAll(`path[aria-describedby="${parentKey}"]`)
-            .attr("aria-hidden", isLegendSelected);
-    }
     canvasSVG
         .selectAll(`.${styles.pairedPoint}[aria-describedby="${item.key}"]`)
         .attr("aria-hidden", isLegendSelected);
+    const boxPath = d3.selectAll(`.${styles.pairedBox}`);
+    showLine(config, boxPath);
     window.requestAnimationFrame(
         onAnimationHandler(graphContext, config, canvasSVG, item)
     );
