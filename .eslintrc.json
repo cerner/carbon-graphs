@@ -14,6 +14,7 @@
         "sourceType": "module"
     },
     "rules": {
+        "jsdoc/require-property": 0,
         "linebreak-style": 0,
         "constructor-super": 2,
         "no-var": 1,
