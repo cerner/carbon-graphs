@@ -18,6 +18,7 @@ import {
 } from "./helpers/actionHelpers";
 import { createDateline } from "../../helpers/dateline";
 import { getElementBoxSizingParameters } from "../../helpers/paddingUtils";
+import { createEventline } from "../../helpers/eventline";
 import {
     attachEventHandlers,
     calculateAxesLabelSize,
@@ -114,6 +115,7 @@ const initConfig = (control) => {
         shownTargets: {},
         actionLegend: [],
         dateline: [],
+        eventline: [],
         pan: {}
     };
     control.axis = {};
@@ -216,6 +218,9 @@ class Gantt extends Construct {
         createGanttContent(this.config, this.svg);
         if (utils.notEmpty(this.config.dateline)) {
             createDateline(this.scale, this.config, this.svg);
+        }
+        if (utils.notEmpty(this.config.eventline)) {
+            createEventline(this.scale, this.config, this.svg);
         }
         if (this.config.showActionLegend) {
             this.legendSVG = createLegend(

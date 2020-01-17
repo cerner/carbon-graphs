@@ -25,6 +25,7 @@ For documentation on code: [**JSDocs**](https://engineering.cerner.com/carbon-gr
 
 -   [Carbon Lifecycle](core/Lifecycle.md)
 -   [Dateline](helpers/Dateline.md)
+-   [Eventline](helpers/Eventline.md)
 -   [Axes](helpers/Axes.md)
 -   [Shape](core/Shape.md)
 

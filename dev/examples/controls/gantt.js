@@ -363,6 +363,31 @@ export const renderGanttActivities = (id) => {
     loadTracks(ganttDefault, tasks, activities, [], [], 4);
     return ganttDefault;
 };
+
+export const renderGanttEventline = (id) => {
+    const data = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
+    data.eventline = [
+        {
+            color: Carbon.helpers.COLORS.GREY,
+            style: {
+                strokeDashArray: "4,4"
+            },
+            value: new Date(2018, 10, 13).toISOString()
+        },
+        {
+            color: Carbon.helpers.COLORS.BLACK,
+            style: {
+                strokeDashArray: "2,2"
+            },
+            value: new Date(2018, 10, 20).toISOString()
+        }
+    ];
+    data.showActionLegend = false;
+    const ganttDefault = Carbon.api.gantt(data);
+    loadTracks(ganttDefault, tasks, [], [], [], 4);
+    return ganttDefault;
+};
+
 export const renderGanttPercentage = (id) => {
     const data = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
     data.showActionLegend = false;

@@ -73,6 +73,34 @@ export const renderLineWithDateline = (id) => {
     );
     return lineTime;
 };
+
+export const renderLineWithEventline = (id) => {
+    const data = utils.deepClone(getDemoData(`#${id}`, "LINE_TIMESERIES"));
+    data.eventline = [
+        {
+            color: Carbon.helpers.COLORS.GREY,
+            style: {
+                strokeDashArray: "4,4"
+            },
+            value: new Date(2016, 0, 1, 8).toISOString()
+        },
+        {
+            color: Carbon.helpers.COLORS.BLACK,
+            style: {
+                strokeDashArray: "2,2"
+            },
+            value: new Date(2016, 0, 1, 12).toISOString()
+        }
+    ];
+    const lineTime = Carbon.api.graph(data);
+    lineTime.loadContent(
+        Carbon.api.line(
+            getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE").data[0]
+        )
+    );
+    return lineTime;
+};
+
 export const renderLineXStaticTicks = (id) => {
     const axisData = utils.deepClone(getDemoData(`#${id}`, "LINE_TIMESERIES"));
     axisData.axis.x.ticks = {

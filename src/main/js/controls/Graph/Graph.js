@@ -20,6 +20,10 @@ import utils from "../../helpers/utils";
 import { createDateline, redrawDatelineContent } from "../../helpers/dateline";
 import { getElementBoxSizingParameters } from "../../helpers/paddingUtils";
 import {
+    createEventline,
+    redrawEventlineContent
+} from "../../helpers/eventline";
+import {
     attachEventHandlers,
     createContentContainer,
     createDefs,
@@ -131,6 +135,7 @@ const initConfig = (control) => {
         },
         shownTargets: {},
         dateline: [],
+        eventline: [],
         pan: {}
     };
     control.axis = {
@@ -254,6 +259,12 @@ class Graph extends Construct {
         ) {
             createDateline(this.scale, this.config, this.svg);
         }
+        if (
+            utils.notEmpty(this.config.eventline) &&
+            this.config.axis.x.type === AXIS_TYPE.TIME_SERIES
+        ) {
+            createEventline(this.scale, this.config, this.svg);
+        }
         if (this.config.showLegend) {
             /*
             If the consumer doesn't wish to show legend item then they can pass blank.
@@ -320,6 +331,12 @@ class Graph extends Construct {
             this.config.axis.x.type === AXIS_TYPE.TIME_SERIES
         ) {
             redrawDatelineContent(this.scale, this.config, this.svg);
+        }
+        if (
+            utils.notEmpty(this.config.eventline) &&
+            this.config.axis.x.type === AXIS_TYPE.TIME_SERIES
+        ) {
+            redrawEventlineContent(this.scale, this.config, this.svg);
         }
         if (utils.notEmpty(content.config.values)) {
             removeNoDataView(this.svg);

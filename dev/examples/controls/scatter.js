@@ -37,6 +37,34 @@ export const renderScatterWithDateline = (id) => {
     );
     return scatterTime;
 };
+
+export const renderScatterWithEventline = (id) => {
+    const data = utils.deepClone(getDemoData(`#${id}`, "LINE_TIMESERIES"));
+    data.eventline = [
+        {
+            color: Carbon.helpers.COLORS.GREY,
+            style: {
+                strokeDashArray: "4,4"
+            },
+            value: new Date(2016, 0, 1, 8).toISOString()
+        },
+        {
+            color: Carbon.helpers.COLORS.BLACK,
+            style: {
+                strokeDashArray: "2,2"
+            },
+            value: new Date(2016, 0, 1, 12).toISOString()
+        }
+    ];
+    const scatterTime = Carbon.api.graph(data);
+    scatterTime.loadContent(
+        Carbon.api.scatter(
+            getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE").data[0]
+        )
+    );
+    return scatterTime;
+};
+
 export const renderScatterXHidden = (id) => {
     const axisData = utils.deepClone(getDemoData(`#${id}`, "LINE_DEFAULT"));
     axisData.axis.x.show = false;

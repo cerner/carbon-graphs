@@ -725,6 +725,7 @@ describe("Graph", () => {
                 }),
                 shownTargets: Object({}),
                 dateline: [],
+                eventline: [],
                 pan: {}
             });
             expect(graph.axis).toEqual({

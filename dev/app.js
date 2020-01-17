@@ -15,6 +15,7 @@ import {
     renderBarTimeSeriesXOrientationTop,
     renderSimpleBarAxisInfoTextLabels,
     renderStackedBarAxisInfoTextLabels,
+    renderBarTimeSeriesWithEventline,
     renderBarWithPanning
 } from "./examples/controls/bar";
 import { renderColorsExample } from "./examples/controls/colors";
@@ -44,7 +45,8 @@ import {
     renderGanttStyle,
     renderGanttTrackSelection,
     renderGanttTruncate,
-    renderGanttPanning
+    renderGanttPanning,
+    renderGanttEventline
 } from "./examples/controls/gantt";
 import {
     renderRegionLine,
@@ -79,6 +81,7 @@ import {
     renderLineCustomContainerPadding,
     renderLineCustomContentPadding,
     renderLineWithPanning,
+    renderLineWithEventline,
     renderDashedLine
 } from "./examples/controls/line";
 import {
@@ -100,7 +103,8 @@ import {
     renderPairedResultXStaticTicks,
     renderPairedResultY2Axis,
     renderPairedResultYHidden,
-    renderPairedResultWithPanning
+    renderPairedResultWithPanning,
+    renderPairedResultTimeseriesEventline
 } from "./examples/controls/pairedResult";
 import { renderPieLegendTo, renderPieSimple } from "./examples/controls/pie";
 import {
@@ -125,7 +129,8 @@ import {
     renderScatterWithDateline,
     renderScatterXHidden,
     renderScatterYHidden,
-    renderScatterWithPanning
+    renderScatterWithPanning,
+    renderScatterWithEventline
 } from "./examples/controls/scatter";
 
 renderSiteApp(
@@ -147,6 +152,11 @@ renderSiteApp(
                     pathname: "/line/timeseries-dateline",
                     content: renderLineWithDateline,
                     title: "Timeseries With Dateline"
+                },
+                {
+                    pathname: "/line/eventline",
+                    content: renderLineWithEventline,
+                    title: "Timeseries With Eventline"
                 },
                 {
                     pathname: "/line/y2-axis",
@@ -242,6 +252,11 @@ renderSiteApp(
                     title: "Timeseries With Dateline"
                 },
                 {
+                    pathname: "/paired-result/timeseries-eventline",
+                    content: renderPairedResultTimeseriesEventline,
+                    title: "Timeseries With Eventline"
+                },
+                {
                     pathname: "/paired-result/y2-axis",
                     content: renderPairedResultY2Axis,
                     title: "Y2 Axis"
@@ -280,6 +295,11 @@ renderSiteApp(
                     pathname: "/bar/timeseries-dateline",
                     content: renderBarTimeSeriesWithDateline,
                     title: "Timeseries With Dateline"
+                },
+                {
+                    pathname: "/bar/timeseries-eventline",
+                    content: renderBarTimeSeriesWithEventline,
+                    title: "Timeseries With Eventline"
                 },
                 {
                     pathname: "/bar/grouped-bars",
@@ -325,6 +345,11 @@ renderSiteApp(
                     pathname: "/scatter/timeseries-dateline",
                     content: renderScatterWithDateline,
                     title: "Timeseries With Dateline"
+                },
+                {
+                    pathname: "/scatter/timeseries-eventline",
+                    content: renderScatterWithEventline,
+                    title: "Timeseries With Eventline"
                 }
             ]
         },
@@ -360,6 +385,11 @@ renderSiteApp(
                     pathname: "/gantt/percentage",
                     content: renderGanttPercentage,
                     title: "Percentage"
+                },
+                {
+                    pathname: "/gantt/eventline",
+                    content: renderGanttEventline,
+                    title: "Eventline"
                 },
                 {
                     pathname: "/gantt/actions",

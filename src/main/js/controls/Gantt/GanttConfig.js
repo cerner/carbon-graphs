@@ -11,6 +11,7 @@ import errors from "../../helpers/errors";
 import utils from "../../helpers/utils";
 import { DEFAULT_LOCALE } from "../../locale/index";
 import { validateDateline } from "../../helpers/dateline";
+import { validateEventline } from "../../helpers/eventline";
 
 /**
  * Validates the newly added task into the graph before rendering
@@ -193,6 +194,7 @@ export const processInput = (input, config) => {
         constants.RESIZE_THROTTLE
     );
     config.dateline = getDefaultValue(utils.deepClone(input.dateline), []);
+    config.eventline = getDefaultValue(utils.deepClone(input.eventline), []);
     config.actionLegend = getDefaultValue(
         utils.deepClone(input.actionLegend),
         []
@@ -305,6 +307,11 @@ class GanttConfig extends BaseConfig {
         if (utils.notEmpty(this.input.dateline)) {
             this.input.dateline.forEach((dateline) => {
                 validateDateline(dateline);
+            });
+        }
+        if (utils.notEmpty(this.input.eventline)) {
+            this.input.eventline.forEach((eventline) => {
+                validateEventline(eventline);
             });
         }
         return this;

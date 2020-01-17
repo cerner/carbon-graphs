@@ -14,6 +14,7 @@ import constants, {
 import errors from "../../helpers/errors";
 import utils from "../../helpers/utils";
 import { validateDateline } from "../../helpers/dateline";
+import { validateEventline } from "../../helpers/eventline";
 import { DEFAULT_LOCALE } from "../../locale/index";
 
 const initialAxisInfo = {
@@ -89,6 +90,7 @@ export const processInput = (input, config, type) => {
     config.bindLegendTo = input.bindLegendTo;
     config.axis = _axis;
     config.dateline = getDefaultValue(utils.deepClone(input.dateline), []);
+    config.eventline = getDefaultValue(utils.deepClone(input.eventline), []);
     config.padding = getPadding(config, input.padding);
     config.locale = getDefaultValue(input.locale, DEFAULT_LOCALE);
     config.showNoDataText = getDefaultValue(input.showNoDataText, true);
@@ -294,6 +296,20 @@ class GraphConfig extends BaseConfig {
         ) {
             this.input.dateline.forEach((dateline) => {
                 validateDateline(dateline);
+            });
+        }
+        if (
+            utils.notEmpty(this.input.eventline) &&
+            this.input.axis.x.type !== AXIS_TYPE.TIME_SERIES
+        ) {
+            throw new Error(errors.THROW_MSG_INVALID_TYPE);
+        }
+        if (
+            utils.notEmpty(this.input.eventline) &&
+            this.input.axis.x.type === AXIS_TYPE.TIME_SERIES
+        ) {
+            this.input.eventline.forEach((eventline) => {
+                validateEventline(eventline);
             });
         }
         return this;

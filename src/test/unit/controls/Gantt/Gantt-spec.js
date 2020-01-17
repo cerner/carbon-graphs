@@ -219,6 +219,7 @@ describe("Gantt", () => {
             expect(gantt.config.locale).not.toBeNull();
             expect(gantt.config.throttle).toEqual(constants.RESIZE_THROTTLE);
             expect(gantt.config.dateline).toEqual(input.dateline || []);
+            expect(gantt.config.eventline).toEqual(input.eventline || []);
             expect(gantt.config.actionLegend).toEqual(input.actionLegend || []);
             expect(gantt.config.axis.x.type).toEqual(AXIS_TYPE.TIME_SERIES);
             expect(gantt.config.axis.x.ticks).toEqual({});
@@ -420,6 +421,7 @@ describe("Gantt", () => {
                 shownTargets: Object({}),
                 actionLegend: [],
                 dateline: [],
+                eventline: [],
                 pan: {}
             });
             expect(gantt.axis).toEqual({});
