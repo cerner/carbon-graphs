@@ -44,7 +44,7 @@ npm i @cerner/carbon-graphs --save-dev
 
 ## Dependencies
 
--   **D3** [_v3.5.17_]
+-   D3 [_v3.5.17_]
 -   Polyfills:
     -   Object.assign
     -   Object.values
@@ -116,7 +116,7 @@ npm i @cerner/carbon-graphs --save-dev
 
 ## LICENSE
 
-Copyright 2017 - 2019 Cerner Innovation, Inc.
+Copyright 2017 - 2020 Cerner Innovation, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
