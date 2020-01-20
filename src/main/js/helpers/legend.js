@@ -145,7 +145,7 @@ const createLegend = (container) =>
  * @param {HTMLElement} target - d3 svg object
  * @returns {boolean} - returns boolean
  */
-const isSelected = (target) => target.attr("aria-current") !== "true";
+const legendSelected = (target) => target.attr("aria-current") !== "true";
 /**
  * Handler that will need to be called when a legend item is clicked along
  * with any other operations that will be need to taken care of by the parent
@@ -157,7 +157,7 @@ const isSelected = (target) => target.attr("aria-current") !== "true";
  */
 const legendClickHandler = (element) => {
     const target = d3.select(element);
-    return target.attr("aria-current", isSelected(target));
+    return target.attr("aria-current", legendSelected(target));
 };
 /**
  * Hover handler for legend items.
@@ -301,5 +301,5 @@ export {
     removeLegendItem,
     legendClickHandler,
     legendHoverHandler,
-    isSelected
+    legendSelected
 };

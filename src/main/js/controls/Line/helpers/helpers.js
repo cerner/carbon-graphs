@@ -18,7 +18,7 @@ import {
     legendClickHandler,
     legendHoverHandler,
     loadLegendItem,
-    isSelected
+    legendSelected
 } from "../../../helpers/legend";
 import {
     processRegions,
@@ -470,7 +470,7 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
         }
     };
     legendClickHandler(element);
-    const isLegendSelected = isSelected(d3.select(element));
+    const isLegendSelected = legendSelected(d3.select(element));
     updateShownTarget(config.shownTargets, item);
     canvasSVG
         .selectAll(
