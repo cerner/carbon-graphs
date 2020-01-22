@@ -18,7 +18,7 @@ import {
     legendClickHandler,
     legendHoverHandler,
     loadLegendItem,
-    legendSelected
+    isLegendSelected
 } from "../../../helpers/legend";
 import {
     processRegions,
@@ -470,7 +470,7 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
         }
     };
     legendClickHandler(element);
-    const isLegendSelected = legendSelected(d3.select(element));
+    const legendSelected = isLegendSelected(d3.select(element));
     updateShownTarget(config.shownTargets, item);
     canvasSVG
         .selectAll(
@@ -479,10 +479,10 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
         .attr("aria-hidden", true);
     canvasSVG
         .selectAll(`path[aria-describedby="${item.key}"]`)
-        .attr("aria-hidden", isLegendSelected);
+        .attr("aria-hidden", legendSelected);
     canvasSVG
         .selectAll(`.${styles.point}[aria-describedby="${item.key}"]`)
-        .attr("aria-hidden", isLegendSelected);
+        .attr("aria-hidden", legendSelected);
     window.requestAnimationFrame(onAnimationHandler(config, canvasSVG));
 };
 /**

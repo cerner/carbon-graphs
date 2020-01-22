@@ -14,7 +14,7 @@ import {
     legendClickHandler,
     legendHoverHandler,
     loadLegendItem,
-    legendSelected
+    isLegendSelected
 } from "../../../helpers/legend";
 import {
     createRegion,
@@ -561,14 +561,14 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
         }
     };
     legendClickHandler(element);
-    const isLegendSelected = legendSelected(d3.select(element));
+    const legendSelected = isLegendSelected(d3.select(element));
     updateShownTarget(config.shownTargets, item);
     canvasSVG
         .selectAll(`path[aria-describedby="${item.key}"]`)
-        .attr("aria-hidden", isLegendSelected);
+        .attr("aria-hidden", legendSelected);
     canvasSVG
         .selectAll(`.${styles.pairedPoint}[aria-describedby="${item.key}"]`)
-        .attr("aria-hidden", isLegendSelected);
+        .attr("aria-hidden", legendSelected);
     const boxPath = d3.selectAll(`.${styles.pairedBox}`);
     showLine(config, boxPath);
     window.requestAnimationFrame(

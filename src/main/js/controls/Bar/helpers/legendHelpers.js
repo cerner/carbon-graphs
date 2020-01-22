@@ -2,7 +2,7 @@ import d3 from "d3";
 import {
     legendClickHandler,
     legendHoverHandler,
-    legendSelected
+    isLegendSelected
 } from "../../../helpers/legend";
 import styles from "../../../helpers/styles";
 import { setSelectionIndicatorAttributes } from "./creationHelpers";
@@ -51,7 +51,7 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
     updateShownTarget(config.shownTargets, item);
     canvasSVG
         .selectAll(`g[aria-describedby="${item.key}"]`)
-        .attr("aria-hidden", legendSelected(d3.select(element)));
+        .attr("aria-hidden", isLegendSelected(d3.select(element)));
     setSelectionIndicatorAttributes(
         canvasSVG.selectAll(`.${styles.taskBarSelection}`),
         false
