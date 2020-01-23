@@ -109,7 +109,7 @@
     "webpack-merge": "^4.2.2"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=8.0.0 <12"
   },
   "files": [
     "dist",
