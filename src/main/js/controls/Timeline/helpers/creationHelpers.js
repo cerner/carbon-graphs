@@ -15,7 +15,8 @@ import constants, { SHAPES } from "../../../helpers/constants";
 import {
     legendClickHandler,
     legendHoverHandler,
-    loadLegendItem
+    loadLegendItem,
+    isLegendSelected
 } from "../../../helpers/legend";
 import { getSVGObject } from "../../../helpers/shapeSVG";
 import styles from "../../../helpers/styles";
@@ -505,7 +506,7 @@ const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
  * @returns {function()} callback function handler for RAF
  */
 const onAnimationHandler = (graphContext, control) => () => {
-    control.redraw(graphContext);
+    // control.redraw(graphContext);
 };
 /**
  * Click handler for legend item. Removes the line from graph when clicked and calls redraw
@@ -533,7 +534,7 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
     updateShownTarget(config.shownTargets, item);
     canvasSVG
         .selectAll(`.${styles.point}[aria-describedby="${item.key}"]`)
-        .attr("aria-hidden", true);
+        .attr("aria-hidden", isLegendSelected(d3.select(element)));
     window.requestAnimationFrame(onAnimationHandler(graphContext, control));
 };
 /**

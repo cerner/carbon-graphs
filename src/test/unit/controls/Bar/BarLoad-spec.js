@@ -1105,4 +1105,28 @@ describe("Bar - Load lifecycle", () => {
             expect(svgPath.getAttribute("aria-describedby")).toBe("uid_4");
         });
     });
+    describe("When legend item is clicked", () => {
+        it("Preserves the DOM order", () => {
+            graphDefault.destroy();
+            const graph = new Graph(getAxes(axisDefault));
+            const barPrimary = getInput(valuesDefault, true, true, true);
+            const barSecondary = getInput(valuesDefault, true, true, false);
+            barPrimary.key = "uid_1";
+            barSecondary.key = "uid_2";
+            graph.loadContent(new Bar(barPrimary));
+            graph.loadContent(new Bar(barSecondary));
+            const legendItem = document.querySelector(
+                `.${styles.legendItem}[aria-describedby="${barPrimary.key}"]`
+            );
+            expect(graph.config.shownTargets).toEqual(["uid_1", "uid_2"]);
+            triggerEvent(legendItem, "click");
+            triggerEvent(legendItem, "click");
+            expect(graph.config.shownTargets).toEqual(["uid_2", "uid_1"]);
+            expect(
+                document
+                    .querySelector(`.${styles.barGraphContent}`)
+                    .getAttribute("aria-describedby")
+            ).toEqual(barPrimary.key);
+        });
+    });
 });

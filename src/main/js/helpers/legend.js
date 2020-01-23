@@ -139,6 +139,14 @@ const createLegend = (container) =>
         .classed(styles.legend, true)
         .attr("role", "list");
 /**
+ * Returns a boolean after checking the attribute `aria-current`.
+ *
+ * @private
+ * @param {HTMLElement} target - d3 svg object
+ * @returns {boolean} - returns boolean
+ */
+const isLegendSelected = (target) => target.attr("aria-current") !== "true";
+/**
  * Handler that will need to be called when a legend item is clicked along
  * with any other operations that will be need to taken care of by the parent
  * control.
@@ -149,8 +157,7 @@ const createLegend = (container) =>
  */
 const legendClickHandler = (element) => {
     const target = d3.select(element);
-    const isSelected = target.attr("aria-current");
-    return target.attr("aria-current", isSelected !== "true");
+    return target.attr("aria-current", isLegendSelected(target));
 };
 /**
  * Hover handler for legend items.
@@ -293,5 +300,6 @@ export {
     loadPieLegendItem,
     removeLegendItem,
     legendClickHandler,
-    legendHoverHandler
+    legendHoverHandler,
+    isLegendSelected
 };

@@ -1865,4 +1865,42 @@ describe("Paired Result - Load", () => {
             );
         });
     });
+    describe("When legend item is clicked", () => {
+        it("Preserves the DOM order", () => {
+            graphDefault.destroy();
+            const graph = new Graph(getAxes(axisDefault));
+            const pairPrimary = getInput(valuesDefault, true, true, true);
+            const pairSecondary = getInput(valuesDefault, true, true, false);
+            pairPrimary.key = "uid_1";
+            pairSecondary.key = "uid_2";
+            graph.loadContent(new PairedResult(pairPrimary));
+            graph.loadContent(new PairedResult(pairSecondary));
+            const legendItem = document.querySelector(
+                `.${styles.legendItem}[aria-describedby="${pairPrimary.key}_high"]`
+            );
+            expect(graph.config.shownTargets).toEqual([
+                "uid_1_high",
+                "uid_1_mid",
+                "uid_1_low",
+                "uid_2_high",
+                "uid_2_mid",
+                "uid_2_low"
+            ]);
+            triggerEvent(legendItem, "click");
+            triggerEvent(legendItem, "click");
+            expect(graph.config.shownTargets).toEqual([
+                "uid_1_mid",
+                "uid_1_low",
+                "uid_2_high",
+                "uid_2_mid",
+                "uid_2_low",
+                "uid_1_high"
+            ]);
+            expect(
+                document
+                    .querySelector(`.${styles.pairedBoxGroup}`)
+                    .getAttribute("aria-describedby")
+            ).toEqual(pairPrimary.key);
+        });
+    });
 });

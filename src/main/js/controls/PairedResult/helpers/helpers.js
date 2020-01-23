@@ -13,7 +13,8 @@ import errors from "../../../helpers/errors";
 import {
     legendClickHandler,
     legendHoverHandler,
-    loadLegendItem
+    loadLegendItem,
+    isLegendSelected
 } from "../../../helpers/legend";
 import {
     createRegion,
@@ -351,6 +352,27 @@ const drawPoints = (scale, config, canvasSVG) => {
     });
 };
 /**
+ * Shows line between the 2 data points high and low. If either one of them is missing
+ * then the line is not shown.
+ *
+ * @private
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {Array} boxPath - d3 html element of the paired box
+ * @returns {object} - d3 append object
+ */
+const showLine = (config, boxPath) =>
+    boxPath.each(function() {
+        const shouldCreateLine = (d) =>
+            d.high &&
+            d.low &&
+            utils.hasValue(config.shownTargets, d.high.key) &&
+            utils.hasValue(config.shownTargets, d.low.key);
+        return d3
+            .select(this)
+            .select(`.${styles.pairedLine}`)
+            .attr("aria-hidden", (d) => !shouldCreateLine(d));
+    });
+/**
  * Draws the criticality points with options opted in the input JSON by the consumer for each data set.
  *  On click content callback function is called.
  *
@@ -504,29 +526,20 @@ const isRegionMappedToAllValues = (value, regionList) =>
 /**
  * Handler for Request animation frame, executes on resize.
  *  * Order of execution
- *      * Redraws the content
  *      * Shows/hides the regions
  *
  * @private
  * @param {object} graphContext - Graph instance
- * @param {PairedResult} control - Paired Result instance
  * @param {object} config - Graph config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {string} item - paired result type unique key
  * @returns {function()} callback function handler for RAF
  */
-const onAnimationHandler = (
-    graphContext,
-    control,
-    config,
-    canvasSVG,
-    item
-) => () => {
-    control.redraw(graphContext);
+const onAnimationHandler = (graphContext, config, canvasSVG, item) => () => {
     processRegions(graphContext, config, canvasSVG, item);
 };
 /**
- * Click handler for legend item. Removes the line from graph when clicked and calls redraw
+ * Click handler for legend item. Removes the line from graph when clicked
  *
  * @private
  * @param {object} graphContext - Graph instance
@@ -548,15 +561,18 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
         }
     };
     legendClickHandler(element);
+    const legendSelected = isLegendSelected(d3.select(element));
     updateShownTarget(config.shownTargets, item);
     canvasSVG
         .selectAll(`path[aria-describedby="${item.key}"]`)
-        .attr("aria-hidden", true);
+        .attr("aria-hidden", legendSelected);
     canvasSVG
         .selectAll(`.${styles.pairedPoint}[aria-describedby="${item.key}"]`)
-        .attr("aria-hidden", true);
+        .attr("aria-hidden", legendSelected);
+    const boxPath = d3.selectAll(`.${styles.pairedBox}`);
+    showLine(config, boxPath);
     window.requestAnimationFrame(
-        onAnimationHandler(graphContext, control, config, canvasSVG, item)
+        onAnimationHandler(graphContext, config, canvasSVG, item)
     );
 };
 /**
