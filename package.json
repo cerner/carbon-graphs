@@ -190,7 +190,7 @@
     "lint:source": "eslint src dev --color --max-warnings 0",
     "lint:styles": "stylelint src/main/less/**/*.less",
     "prepublishOnly": "npm run clean && npm run build && npm run build:dist",
-    "start-heroku": "npm run dev",
+    "start-heroku": "node ./build/webpack/dev-server.js $PORT",
     "style": "prettier \"src/**/*.*\" \"dev/**/*.*\" \"docs/**/*.md*\" --write",
     "test": "karma start ./build/karma/karma.config.js --single-run --no-auto-watch",
     "test:persist": "karma start ./build/karma/karma.config.js --no-single-run"
