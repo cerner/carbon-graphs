@@ -1,0 +1,20 @@
+{
+  "name": "carbon-graphs",
+  "description": "Heroku reviews app for carbon-graphs development",
+  "keywords": [
+    "productivity"
+  ],
+  "website": "https://engineering.cerner.com/carbon-graphs",
+  "repository": "https://github.com/cerner/carbon-graphs",
+  "success_url": "/",
+  "scripts": {},
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "free"
+    }
+  },
+  "stack": "heroku-16",
+  "addons": [],
+  "buildpacks": []
+}
