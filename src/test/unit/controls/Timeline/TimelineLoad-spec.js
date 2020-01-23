@@ -752,7 +752,7 @@ describe("Timeline - Load", () => {
                 document
                     .querySelector(`.${styles.timelineContentGroup}`)
                     .getAttribute("aria-describedby")
-            ).toEqual("uid_1");
+            ).toEqual(inputPrimary.key);
         });
     });
 });

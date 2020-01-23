@@ -1126,7 +1126,7 @@ describe("Bar - Load lifecycle", () => {
                 document
                     .querySelector(`.${styles.barGraphContent}`)
                     .getAttribute("aria-describedby")
-            ).toEqual("uid_1");
+            ).toEqual(barPrimary.key);
         });
     });
 });

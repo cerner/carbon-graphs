@@ -1233,7 +1233,7 @@ describe("Line - Load", () => {
                 document
                     .querySelector(`.${styles.lineGraphContent}`)
                     .getAttribute("aria-describedby")
-            ).toEqual("uid_1");
+            ).toEqual(linePrimary.key);
         });
     });
 });

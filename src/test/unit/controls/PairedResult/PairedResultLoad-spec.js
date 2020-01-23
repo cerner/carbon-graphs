@@ -1869,14 +1869,14 @@ describe("Paired Result - Load", () => {
         it("Preserves the DOM order", () => {
             graphDefault.destroy();
             const graph = new Graph(getAxes(axisDefault));
-            const linePrimary = getInput(valuesDefault, true, true, true);
-            const lineSecondary = getInput(valuesDefault, true, true, false);
-            linePrimary.key = "uid_1";
-            lineSecondary.key = "uid_2";
-            graph.loadContent(new PairedResult(linePrimary));
-            graph.loadContent(new PairedResult(lineSecondary));
+            const pairPrimary = getInput(valuesDefault, true, true, true);
+            const pairSecondary = getInput(valuesDefault, true, true, false);
+            pairPrimary.key = "uid_1";
+            pairSecondary.key = "uid_2";
+            graph.loadContent(new PairedResult(pairPrimary));
+            graph.loadContent(new PairedResult(pairSecondary));
             const legendItem = document.querySelector(
-                `.${styles.legendItem}[aria-describedby="${linePrimary.key}_high"]`
+                `.${styles.legendItem}[aria-describedby="${pairPrimary.key}_high"]`
             );
             expect(graph.config.shownTargets).toEqual([
                 "uid_1_high",
@@ -1900,7 +1900,7 @@ describe("Paired Result - Load", () => {
                 document
                     .querySelector(`.${styles.pairedBoxGroup}`)
                     .getAttribute("aria-describedby")
-            ).toEqual("uid_1");
+            ).toEqual(pairPrimary.key);
         });
     });
 });

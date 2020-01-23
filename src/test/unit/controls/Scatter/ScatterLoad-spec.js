@@ -1039,14 +1039,14 @@ describe("Scatter - Load", () => {
         it("Preserves the DOM order", () => {
             graphDefault.destroy();
             const graph = new Graph(getAxes(axisDefault));
-            const linePrimary = getInput(valuesDefault, true, true, true);
-            const lineSecondary = getInput(valuesDefault, true, true, false);
-            linePrimary.key = "uid_1";
-            lineSecondary.key = "uid_2";
-            graph.loadContent(new Scatter(linePrimary));
-            graph.loadContent(new Scatter(lineSecondary));
+            const scatterPrimary = getInput(valuesDefault, true, true, true);
+            const scatterSecondary = getInput(valuesDefault, true, true, false);
+            scatterPrimary.key = "uid_1";
+            scatterSecondary.key = "uid_2";
+            graph.loadContent(new Scatter(scatterPrimary));
+            graph.loadContent(new Scatter(scatterSecondary));
             const legendItem = document.querySelector(
-                `.${styles.legendItem}[aria-describedby="${linePrimary.key}"]`
+                `.${styles.legendItem}[aria-describedby="${scatterPrimary.key}"]`
             );
             expect(graph.config.shownTargets).toEqual(["uid_1", "uid_2"]);
             triggerEvent(legendItem, "click");
@@ -1056,7 +1056,7 @@ describe("Scatter - Load", () => {
                 document
                     .querySelector(`.${styles.scatterGraphContent}`)
                     .getAttribute("aria-describedby")
-            ).toEqual("uid_1");
+            ).toEqual(scatterPrimary.key);
         });
     });
 });

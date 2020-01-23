@@ -1,7 +1,10 @@
 import Graph from "../../../../main/js/controls/Graph/index";
 import Line from "../../../../main/js/controls/Line/Line";
 import PairedResult from "../../../../main/js/controls/PairedResult";
-import { loadCustomJasmineMatcher } from "../../helpers/commonHelpers";
+import {
+    loadCustomJasmineMatcher,
+    triggerEvent
+} from "../../helpers/commonHelpers";
 import { getAxes, axisDefault, fetchElementByClass } from "./helpers";
 import constants from "../../../../main/js/helpers/constants";
 import styles from "../../../../main/js/helpers/styles";
@@ -252,6 +255,39 @@ describe("Graph -> Combination", () => {
             );
             expect(regionsElement.length).toBe(1);
             expect(regionsElement[0].getAttribute("aria-hidden")).toBe("true");
+        });
+    });
+    describe("When legend item is clicked", () => {
+        it("Preserves the DOM order", () => {
+            graph = new Graph(getAxes(axisDefault));
+            const lineData = getLineInput(valuesLineDefault, false, false);
+            const prData = getPRInput(valuesPRDefault, false, false);
+            lineData.key = "uid_1";
+            prData.key = "uid_2";
+            graph.loadContent(new Line(lineData));
+            graph.loadContent(new PairedResult(prData));
+            const legendItem = document.querySelector(
+                `.${styles.legendItem}[aria-describedby="${lineData.key}"]`
+            );
+            expect(graph.config.shownTargets).toEqual([
+                "uid_1",
+                "uid_2_high",
+                "uid_2_mid",
+                "uid_2_low"
+            ]);
+            triggerEvent(legendItem, "click");
+            triggerEvent(legendItem, "click");
+            expect(graph.config.shownTargets).toEqual([
+                "uid_2_high",
+                "uid_2_mid",
+                "uid_2_low",
+                "uid_1"
+            ]);
+            expect(
+                document
+                    .querySelector(`.${styles.canvas}`)
+                    .lastChild.getAttribute("aria-describedby")
+            ).toEqual(prData.key);
         });
     });
 });
