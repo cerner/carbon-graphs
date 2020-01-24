@@ -10,7 +10,7 @@ import {
     getInput,
     valuesTimeSeries
 } from "./helpers";
-import { toNumber, delay } from "../../helpers/commonHelpers";
+import { toNumber, delay, PADDING_BOTTOM } from "../../helpers/commonHelpers";
 import { COLORS, SHAPES } from "../../../../main/js/helpers/constants";
 import { getSVGAnimatedTransformList } from "../../../../main/js/helpers/transformUtils";
 
@@ -62,7 +62,7 @@ describe("PairedResult", () => {
                     datelineGroup.getAttribute("transform")
                 ).translate;
                 expect(toNumber(translate[0], 10)).toBeGreaterThanOrEqual(80);
-                expect(toNumber(translate[1], 10)).toBeCloseTo(5);
+                expect(toNumber(translate[1], 10)).toBeCloseTo(PADDING_BOTTOM);
                 done();
             });
         });
@@ -98,7 +98,7 @@ describe("PairedResult", () => {
                     datelineGroup.getAttribute("transform")
                 ).translate;
                 expect(toNumber(translate[0], 10)).toBeGreaterThanOrEqual(80);
-                expect(toNumber(translate[1], 10)).toBeCloseTo(5);
+                expect(toNumber(translate[1], 10)).toBeCloseTo(PADDING_BOTTOM);
                 done();
             });
         });

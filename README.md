@@ -10,24 +10,24 @@
 [![npm latest version](https://img.shields.io/npm/v/@cerner/carbon-graphs/latest.svg)](https://www.npmjs.com/package/@cerner/carbon-graphs)
 [![Cerner OSS](https://badgen.net/badge/Cerner/OSS/blue)](https://engineering.cerner.com/open_source/)
 [![License](https://badgen.net/badge/license/Apache-2.0/blue)](https://github.com/cerner/carbon-graphs/blob/master/LICENSE)
-[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 [![dependencies Status](https://david-dm.org/cerner/carbon-graphs/status.svg)](https://david-dm.org/cerner/carbon-graphs)
 [![devDependencies Status](https://david-dm.org/cerner/carbon-graphs/dev-status.svg)](https://david-dm.org/cerner/carbon-graphs?type=dev)
 [![Bugs](https://img.shields.io/github/issues/cerner/carbon-graphs/bug.svg)](https://github.com/cerner/carbon-graphs/issues?utf8=✓&q=is%3Aissue+is%3Aopen+label%3Abug)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 Carbon is a graphing library built using D3 visualization library. It provides an API for generating native graphs such as Line and Paired Result graphs based on design standards.
 
-- [Install](#install)
-- [Getting Started](#getting-started)
-- [Dependencies](#dependencies)
-- [Features](#features)
-  - [Graph types](#graph-types)
-  - [Graph Settings/Toggles](#graph-settingstoggles)
-  - [Other highlights](#other-highlights)
-- [Resources](#resources)
-- [Browser support](#browser-support)
-- [Potential features](#potential-features)
-- [LICENSE](#license)
+-   [Install](#install)
+-   [Getting Started](#getting-started)
+-   [Dependencies](#dependencies)
+-   [Features](#features)
+    -   [Graph types](#graph-types)
+    -   [Graph Settings/Toggles](#graph-settingstoggles)
+    -   [Other highlights](#other-highlights)
+-   [Resources](#resources)
+-   [Browser support](#browser-support)
+-   [Potential features](#potential-features)
+-   [LICENSE](#license)
 
 ## Install
 
@@ -44,7 +44,7 @@ npm i @cerner/carbon-graphs --save-dev
 
 ## Dependencies
 
--   **D3** [_v3.5.17_]
+-   D3 [_v3.5.17_]
 -   Polyfills:
     -   Object.assign
     -   Object.values
@@ -66,6 +66,7 @@ npm i @cerner/carbon-graphs --save-dev
 -   [Timeline](./docs/controls/Timeline.md#usage)
 -   [Pie](./docs/controls/Pie.md#usage)
 -   [Gantt](./docs/controls/Gantt.md#usage)
+-   [Scatter](./docs/controls/Scatter.md#usage)
 
 ### Graph Settings/Toggles
 
@@ -104,7 +105,6 @@ npm i @cerner/carbon-graphs --save-dev
 
 ## Potential features
 
--   [ ] Scatter-plot graph
 -   [ ] Bubble graph
 -   [ ] Upgrade to latest D3 version
 -   [ ] Support additional themes
@@ -116,7 +116,7 @@ npm i @cerner/carbon-graphs --save-dev
 
 ## LICENSE
 
-Copyright 2017 - 2019 Cerner Innovation, Inc.
+Copyright 2017 - 2020 Cerner Innovation, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 

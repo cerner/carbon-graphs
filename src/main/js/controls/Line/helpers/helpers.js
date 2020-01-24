@@ -3,7 +3,8 @@ import d3 from "d3";
 import { Shape } from "../../../core";
 import {
     getInterpolationType,
-    parseTypedValue
+    parseTypedValue,
+    getDefaultValue
 } from "../../../core/BaseConfig";
 import { getDefaultSVGProps } from "../../../core/Shape";
 import {
@@ -20,7 +21,8 @@ import errors from "../../../helpers/errors";
 import {
     legendClickHandler,
     legendHoverHandler,
-    loadLegendItem
+    loadLegendItem,
+    isLegendSelected
 } from "../../../helpers/legend";
 import {
     processRegions,
@@ -300,6 +302,11 @@ const processDataPoints = (graphConfig, dataTarget) => {
     // Update the interpolation type
     dataTarget.interpolationType = getInterpolationType(dataTarget.type);
 
+    dataTarget.style = getDefaultValue(dataTarget.style, {});
+    dataTarget.style = {
+        strokeDashArray: getStrokeDashArray(dataTarget.style)
+    };
+
     graphConfig.shownTargets.push(dataTarget.key);
     dataTarget.internalValuesSubset = dataTarget.values.map((value) => ({
         onClick: dataTarget.onClick,
@@ -351,7 +358,13 @@ const drawDataLines = (scale, config, lineGroupSVG) =>
         .classed(styles.line, true)
         .append("path")
         .attr("d", (value) => createLine(scale, value))
-        .attr("style", (value) => `stroke: ${getColorForTarget(value)};`)
+        .attr(
+            "style",
+            (value) =>
+                `stroke: ${getColorForTarget(value)}; stroke-dasharray: ${
+                    value.style.strokeDashArray
+                };`
+        )
         .attr("aria-hidden", (value) =>
             shouldHideDataPoints(config.shownTargets, value)
         )
@@ -458,22 +471,18 @@ const drawDataPoints = (scale, config, pointGroupPath) => {
 /**
  * Handler for Request animation frame, executes on resize.
  *  * Order of execution
- *      * Redraws the content
  *      * Shows/hides the regions
  *
  * @private
- * @param {object} graphContext - Graph instance
- * @param {Line} control - Line instance
  * @param {object} config - Graph config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {function()} callback function handler for RAF
  */
-const onAnimationHandler = (graphContext, control, config, canvasSVG) => () => {
-    control.redraw(graphContext);
+const onAnimationHandler = (config, canvasSVG) => () => {
     processRegions(config, canvasSVG);
 };
 /**
- * Click handler for legend item. Removes the line from graph when clicked and calls redraw
+ * Click handler for legend item. Removes the line from graph when clicked
  *
  * @private
  * @param {object} graphContext - Graph instance
@@ -495,16 +504,20 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
         }
     };
     legendClickHandler(element);
+    const legendSelected = isLegendSelected(d3.select(element));
     updateShownTarget(config.shownTargets, item);
     canvasSVG
-        .selectAll(`path[aria-describedby="${item.key}"]`)
+        .selectAll(
+            `.${styles.dataPointSelection}[aria-describedby="${item.key}"]`
+        )
         .attr("aria-hidden", true);
     canvasSVG
+        .selectAll(`path[aria-describedby="${item.key}"]`)
+        .attr("aria-hidden", legendSelected);
+    canvasSVG
         .selectAll(`.${styles.point}[aria-describedby="${item.key}"]`)
-        .attr("aria-hidden", true);
-    window.requestAnimationFrame(
-        onAnimationHandler(graphContext, control, config, canvasSVG)
-    );
+        .attr("aria-hidden", legendSelected);
+    window.requestAnimationFrame(onAnimationHandler(config, canvasSVG));
 };
 /**
  * Hover handler for legend item. Highlights current line and blurs the rest of the targets in Graph
@@ -574,6 +587,16 @@ const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
  */
 const clear = (canvasSVG, dataTarget) =>
     d3RemoveElement(canvasSVG, `g[aria-describedby="${dataTarget.key}"]`);
+
+/**
+ * Validate and return the strokeDashArray property
+ *
+ * @private
+ * @param {object} style - style you want to apply for the line
+ * @returns {string} - stroke-dasharray css value for the line
+ */
+const getStrokeDashArray = (style) =>
+    getDefaultValue(style.strokeDashArray, "0");
 
 export {
     toggleDataPointSelection,

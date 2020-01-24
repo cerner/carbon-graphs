@@ -29,6 +29,7 @@ import {
     translateDateline,
     getDatelineIndicatorHeight
 } from "../../../helpers/dateline";
+import { translateEventline } from "../../../helpers/eventline";
 
 const TRACK_LABEL_TEXT_CLASS = `.${styles.axisYTrackLabel} .tick text`;
 /**
@@ -403,10 +404,9 @@ const translatePoints = (scale, config, trackPath, style) =>
             .transition()
             .call(constants.d3Transition(config.settingsDictionary.transition))
             .attr("transform", function() {
-                return transformPoint(
-                    scale,
-                    config
-                )(d)(getTransformScale(this));
+                return transformPoint(scale, config)(d)(
+                    getTransformScale(this)
+                );
             });
     });
 /**
@@ -428,6 +428,12 @@ const translateGraph = (control) => {
     translateGrid(control.axis, control.scale, control.config, control.svg);
     translateContentContainer(control.config, control.svg);
     translateDateline(
+        control.scale,
+        control.config,
+        control.svg,
+        getYAxisYPosition
+    );
+    translateEventline(
         control.scale,
         control.config,
         control.svg,

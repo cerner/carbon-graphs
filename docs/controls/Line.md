@@ -15,6 +15,7 @@ A native line graph using D3 based on standard design patterns.
         -   [Values](#values)
             -   [Required](#required-1)
             -   [Optional](#optional-1)
+                -   [Style](#style)
         -   [Regions](#regions)
             -   [Required](#required-2)
             -   [Optional](#optional-2)
@@ -180,6 +181,17 @@ Refer [Graph](../core/Graph.md) `Root` for more details.
 | color         | string   | COLORS.BLACK       | Color for the data point and line                                     |
 | shape         | string   | SHAPES.DARK.CIRCLE | Shape for representing the data points                                |
 | onClick       | Function | undefined          | Any action that can be performed when clicking on the data point      |
+| style         | object   | {}                 | Any style that can be applied. Refer [Styles](#style)                 |
+
+##### Style
+
+Each line can have a style object in [Values](#values) level.
+
+###### Optional
+
+| Property Name   | Expected | Default | Description                                            |
+| --------------- | -------- | ------- | ------------------------------------------------------ |
+| strokeDashArray | string   | "0"     | Applies stroke-dasharray CSS property to the SVG line. |
 
 ### Values
 

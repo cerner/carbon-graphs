@@ -727,4 +727,32 @@ describe("Timeline - Load", () => {
             });
         });
     });
+    describe("When legend item is clicked", () => {
+        it("Preserves the DOM order", () => {
+            timeline.destroy();
+            timeline = new Timeline(getAxes(axisJSON));
+            const inputPrimary = getData(valuesJSON, false, false);
+            const inputSecondary = {
+                key: `uid_2`,
+                label: {
+                    display: "Data Label B"
+                },
+                values: valuesJSON
+            };
+            timeline.loadContent(inputPrimary);
+            timeline.loadContent(inputSecondary);
+            const legendItem = document.querySelector(
+                `.${styles.legendItem}[aria-describedby="${inputPrimary.key}"]`
+            );
+            expect(timeline.config.shownTargets).toEqual(["uid_1", "uid_2"]);
+            triggerEvent(legendItem, "click");
+            triggerEvent(legendItem, "click");
+            expect(timeline.config.shownTargets).toEqual(["uid_2", "uid_1"]);
+            expect(
+                document
+                    .querySelector(`.${styles.timelineContentGroup}`)
+                    .getAttribute("aria-describedby")
+            ).toEqual(inputPrimary.key);
+        });
+    });
 });

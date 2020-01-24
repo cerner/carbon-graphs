@@ -812,11 +812,9 @@ const getY2AxisWidth = (config) => {
     if (config.padding.hasCustomPadding) {
         return config.padding.right;
     }
-    return (
-        (hasY2Axis(config.axis)
-            ? getYAxisWidth(constants.Y2_AXIS, config)
-            : 20) + config.padding.right
-    );
+    return hasY2Axis(config.axis)
+        ? getYAxisWidth(constants.Y2_AXIS, config)
+        : 20;
 };
 /**
  * Checks if X Axis orientation is set to top
@@ -841,7 +839,7 @@ const calculateAxesSize = (config) => {
     config.axisSizes = {};
     config.axisSizes.y =
         getYAxisWidth(constants.Y_AXIS, config) + config.padding.left;
-    config.axisSizes.y2 = getY2AxisWidth(config);
+    config.axisSizes.y2 = getY2AxisWidth(config) + config.padding.right;
     config.axisSizes.x = getXAxisHeight(config);
 };
 /**

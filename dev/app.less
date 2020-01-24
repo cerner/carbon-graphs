@@ -113,3 +113,16 @@ body {
         background-color: #dedfe0;
     }
 }
+
+.custom-container-style {
+    border: 1px dashed;
+    padding: 5rem 5rem 0;
+
+    // Override site width and height parameters
+    height: auto !important;
+    .carbon-graph-container,
+    .legend-bindto-container {
+        // Override site padding parameters
+        padding: 0;
+    }
+}

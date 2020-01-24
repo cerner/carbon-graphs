@@ -116,6 +116,40 @@ export const renderPairedResultTimeseriesDateline = (id) => {
     );
     return pairedTime;
 };
+
+export const renderPairedResultTimeseriesEventline = (id) => {
+    const pairedTimeDateline = utils.deepClone(
+        getDemoData(`#${id}`, "PAIRED_TIMESERIES")
+    );
+    pairedTimeDateline.eventline = [
+        {
+            color: Carbon.helpers.COLORS.GREY,
+            style: {
+                strokeDashArray: "4,4"
+            },
+            value: new Date(2016, 8, 1, 8).toISOString()
+        },
+        {
+            color: Carbon.helpers.COLORS.BLACK,
+            style: {
+                strokeDashArray: "2,2"
+            },
+            value: new Date(2017, 5, 1, 12).toISOString()
+        }
+    ];
+    pairedTimeDateline.clickPassThrough = {
+        dateline: false
+    };
+    const pairedTime = Carbon.api.graph(pairedTimeDateline);
+
+    pairedTime.loadContent(
+        Carbon.api.pairedResult(
+            getDemoData(`#${id}`, "PAIRED_TIMESERIES").data[0]
+        )
+    );
+    return pairedTime;
+};
+
 export const renderPairedResultY2Axis = (id) => {
     const axisData = utils.deepClone(
         getDemoData(`#${id}`, "PAIRED_TIMESERIES")

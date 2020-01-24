@@ -245,11 +245,7 @@ const getActivityHashedBar = (
     // Draw the background rect
     getRect(path, x, y, width, height)
         .classed(styles.activityBar, true)
-        .attr(
-            "style",
-            style ||
-                `fill: ${constants.DEFAULT_ACTIVITY_BAR_HASH_COLOR}; fill-opacity: ${constants.DEFAULT_GANTT_ACTIVITY_OPACITY};`
-        );
+        .attr("style", style);
     // Opacity for bar with hashes
     getRect(path, x, y, width, height)
         .classed(styles.activityBar, true)

@@ -71,6 +71,7 @@ const DATA = [
                     },
                     shape: Carbon.helpers.SHAPES.DARK.TRIANGLE,
                     color: Carbon.helpers.COLORS.BLUE,
+                    style: { strokeDashArray: "2,2" },
                     onClick: loadPopup,
                     values: new Array(18).fill("").map((_, i) => ({
                         y: Math.sin(i) * Math.PI * 2,
@@ -1078,7 +1079,6 @@ const DATA = [
                                 display: "Support"
                             },
                             onClick: () => {},
-                            color: "#007cc3",
                             startDate: new Date(2018, 1, 1).toISOString(),
                             endDate: new Date(2018, 1, 10).toISOString(),
                             duration: () => daysToMilliseconds(12),

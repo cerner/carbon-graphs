@@ -213,7 +213,7 @@ describe("Line - Load", () => {
                 lineGroup.firstChild.classList.contains(styles.line)
             ).toBeTruthy();
         });
-        it("adds line with correct color", () => {
+        it("adds line with correct color with default stroke-dasharray to 0", () => {
             const lineElement = fetchElementByClass(
                 lineGraphContainer,
                 styles.line
@@ -221,7 +221,7 @@ describe("Line - Load", () => {
             expect(lineElement.firstChild.tagName).toBe("path");
             expect(
                 lineElement.firstChild.attributes.getNamedItem("style").value
-            ).toBe("stroke: #007cc3;");
+            ).toBe("stroke: #007cc3; stroke-dasharray: 0;");
         });
         it("adds line with correct unique key", () => {
             const lineElement = fetchElementByClass(
@@ -349,6 +349,66 @@ describe("Line - Load", () => {
                 input.key
             );
         });
+        describe("adds line with stroke-dasharray as provided by consumer with", () => {
+            it("comma seperated values", () => {
+                graphDefault.destroy();
+                graphDefault = new Graph(getAxes(axisDefault));
+                input = getInput(valuesDefault, false, false);
+                input.style = {
+                    strokeDashArray: "2,2"
+                };
+                const line = new Line(input);
+                graphDefault.loadContent(line);
+                const lineElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.line
+                );
+                expect(lineElement.firstChild.tagName).toBe("path");
+                expect(
+                    lineElement.firstChild.attributes.getNamedItem("style")
+                        .value
+                ).toBe("stroke: #007cc3; stroke-dasharray: 2,2;");
+            });
+            it("space seperated values", () => {
+                graphDefault.destroy();
+                graphDefault = new Graph(getAxes(axisDefault));
+                input = getInput(valuesDefault, false, false);
+                input.style = {
+                    strokeDashArray: "2 2"
+                };
+                const line = new Line(input);
+                graphDefault.loadContent(line);
+                const lineElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.line
+                );
+                expect(lineElement.firstChild.tagName).toBe("path");
+                expect(
+                    lineElement.firstChild.attributes.getNamedItem("style")
+                        .value
+                ).toBe("stroke: #007cc3; stroke-dasharray: 2 2;");
+            });
+            it("just a single value", () => {
+                graphDefault.destroy();
+                graphDefault = new Graph(getAxes(axisDefault));
+                input = getInput(valuesDefault, false, false);
+                input.style = {
+                    strokeDashArray: "2"
+                };
+                const line = new Line(input);
+                graphDefault.loadContent(line);
+                const lineElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.line
+                );
+                expect(lineElement.firstChild.tagName).toBe("path");
+                expect(
+                    lineElement.firstChild.attributes.getNamedItem("style")
+                        .value
+                ).toBe("stroke: #007cc3; stroke-dasharray: 2;");
+            });
+        });
+        it("adds line with correct stroke-dasharray", () => {});
         describe("when clicked on a data point", () => {
             it("does not do anything if no onClick callback is provided", (done) => {
                 graphDefault.destroy();
@@ -1150,6 +1210,30 @@ describe("Line - Load", () => {
             expect(svgPath.tagName).toBe("svg");
             expect(svgPath.getAttribute("x")).toBe("20");
             expect(svgPath.getAttribute("aria-describedby")).toBe("uid_4");
+        });
+    });
+    describe("When legend item is clicked", () => {
+        it("Preserves the DOM order", () => {
+            graphDefault.destroy();
+            const graph = new Graph(getAxes(axisDefault));
+            const linePrimary = getInput(valuesDefault, true, true, true);
+            const lineSecondary = getInput(valuesDefault, true, true, false);
+            linePrimary.key = "uid_1";
+            lineSecondary.key = "uid_2";
+            graph.loadContent(new Line(linePrimary));
+            graph.loadContent(new Line(lineSecondary));
+            const legendItem = document.querySelector(
+                `.${styles.legendItem}[aria-describedby="${linePrimary.key}"]`
+            );
+            expect(graph.config.shownTargets).toEqual(["uid_1", "uid_2"]);
+            triggerEvent(legendItem, "click");
+            triggerEvent(legendItem, "click");
+            expect(graph.config.shownTargets).toEqual(["uid_2", "uid_1"]);
+            expect(
+                document
+                    .querySelector(`.${styles.lineGraphContent}`)
+                    .getAttribute("aria-describedby")
+            ).toEqual(linePrimary.key);
         });
     });
 });

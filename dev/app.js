@@ -15,6 +15,7 @@ import {
     renderBarTimeSeriesXOrientationTop,
     renderSimpleBarAxisInfoTextLabels,
     renderStackedBarAxisInfoTextLabels,
+    renderBarTimeSeriesWithEventline,
     renderBarWithPanning
 } from "./examples/controls/bar";
 import { renderColorsExample } from "./examples/controls/colors";
@@ -29,20 +30,23 @@ import {
     renderCriticalityMultiLine,
     renderCriticalityMultiPairedResult,
     renderCriticalityPairedResultSimple,
-    renderCriticalityTimeline
+    renderCriticalityTimeline,
+    renderCriticalityScatter
 } from "./examples/controls/criticality";
 import {
     renderGantt,
     renderGanttAction,
     renderGanttActivities,
-    renderGanttCustomPadding,
+    renderGanttCustomContainerPadding,
+    renderGanttCustomContentPadding,
     renderGanttDateTimeBuckets,
     renderGanttEvents,
     renderGanttPercentage,
     renderGanttStyle,
     renderGanttTrackSelection,
     renderGanttTruncate,
-    renderGanttPanning
+    renderGanttPanning,
+    renderGanttEventline
 } from "./examples/controls/gantt";
 import {
     renderRegionLine,
@@ -74,8 +78,11 @@ import {
     renderMultiLineRegion,
     renderMultiLineIdenticalDatasetRegion,
     renderNoDataView,
-    renderLineCustomPadding,
-    renderLineWithPanning
+    renderLineCustomContainerPadding,
+    renderLineCustomContentPadding,
+    renderLineWithPanning,
+    renderLineWithEventline,
+    renderDashedLine
 } from "./examples/controls/line";
 import {
     renderMultiPairedResultRegion,
@@ -96,7 +103,8 @@ import {
     renderPairedResultXStaticTicks,
     renderPairedResultY2Axis,
     renderPairedResultYHidden,
-    renderPairedResultWithPanning
+    renderPairedResultWithPanning,
+    renderPairedResultTimeseriesEventline
 } from "./examples/controls/pairedResult";
 import { renderPieLegendTo, renderPieSimple } from "./examples/controls/pie";
 import {
@@ -109,11 +117,21 @@ import {
 import { renderSplineLine } from "./examples/controls/spline";
 import {
     renderTimeline,
-    renderTimelineCustomPadding,
+    renderTimelineCustomContainerPadding,
+    renderTimelineCustomContentPadding,
     renderTimelinePanning,
     renderTimelineNoXAxisTickLabel
 } from "./examples/controls/timeline";
 import { createElementLegendBindTo } from "./examples/helpers";
+import {
+    renderScatter,
+    renderScatterTimeSeries,
+    renderScatterWithDateline,
+    renderScatterXHidden,
+    renderScatterYHidden,
+    renderScatterWithPanning,
+    renderScatterWithEventline
+} from "./examples/controls/scatter";
 
 renderSiteApp(
     [
@@ -134,6 +152,11 @@ renderSiteApp(
                     pathname: "/line/timeseries-dateline",
                     content: renderLineWithDateline,
                     title: "Timeseries With Dateline"
+                },
+                {
+                    pathname: "/line/eventline",
+                    content: renderLineWithEventline,
+                    title: "Timeseries With Eventline"
                 },
                 {
                     pathname: "/line/y2-axis",
@@ -172,6 +195,11 @@ renderSiteApp(
                     pathname: "/line/no-data",
                     content: renderNoDataView,
                     title: "No Data"
+                },
+                {
+                    pathname: "/line/dashed-line",
+                    content: renderDashedLine,
+                    title: "Dashed Line"
                 }
             ]
         },
@@ -224,6 +252,11 @@ renderSiteApp(
                     title: "Timeseries With Dateline"
                 },
                 {
+                    pathname: "/paired-result/timeseries-eventline",
+                    content: renderPairedResultTimeseriesEventline,
+                    title: "Timeseries With Eventline"
+                },
+                {
                     pathname: "/paired-result/y2-axis",
                     content: renderPairedResultY2Axis,
                     title: "Y2 Axis"
@@ -264,6 +297,11 @@ renderSiteApp(
                     title: "Timeseries With Dateline"
                 },
                 {
+                    pathname: "/bar/timeseries-eventline",
+                    content: renderBarTimeSeriesWithEventline,
+                    title: "Timeseries With Eventline"
+                },
+                {
                     pathname: "/bar/grouped-bars",
                     content: renderBarGroup,
                     title: "Grouped bars"
@@ -287,6 +325,31 @@ renderSiteApp(
                     pathname: "/bar/stacked-axis-info-text-labels",
                     content: renderStackedBarAxisInfoTextLabels,
                     title: "Stacked - Axis Info Text Labels"
+                }
+            ]
+        },
+        {
+            pathname: "/scatter",
+            children: [
+                {
+                    pathname: "/scatter/simple",
+                    content: renderScatter,
+                    title: "Simple"
+                },
+                {
+                    pathname: "/scatter/timeseries",
+                    content: renderScatterTimeSeries,
+                    title: "Timeseries"
+                },
+                {
+                    pathname: "/scatter/timeseries-dateline",
+                    content: renderScatterWithDateline,
+                    title: "Timeseries With Dateline"
+                },
+                {
+                    pathname: "/scatter/timeseries-eventline",
+                    content: renderScatterWithEventline,
+                    title: "Timeseries With Eventline"
                 }
             ]
         },
@@ -322,6 +385,11 @@ renderSiteApp(
                     pathname: "/gantt/percentage",
                     content: renderGanttPercentage,
                     title: "Percentage"
+                },
+                {
+                    pathname: "/gantt/eventline",
+                    content: renderGanttEventline,
+                    title: "Eventline"
                 },
                 {
                     pathname: "/gantt/actions",
@@ -427,6 +495,16 @@ renderSiteApp(
                         {
                             pathname: "/panning/paired-result/simple",
                             content: renderPairedResultWithPanning,
+                            title: "Simple"
+                        }
+                    ]
+                },
+                {
+                    pathname: "/panning/scatter",
+                    children: [
+                        {
+                            pathname: "/panning/scatter/simple",
+                            content: renderScatterWithPanning,
                             title: "Simple"
                         }
                     ]
@@ -586,6 +664,21 @@ renderSiteApp(
                             title: "X Axis Without Tick Label"
                         }
                     ]
+                },
+                {
+                    pathname: "/axes/scatter",
+                    children: [
+                        {
+                            pathname: "/axes/scatter/x-axis-hidden",
+                            content: renderScatterXHidden,
+                            title: "X Axis Hidden"
+                        },
+                        {
+                            pathname: "/axes/scatter/y-axis-hidden",
+                            content: renderScatterYHidden,
+                            title: "Y Axis Hidden"
+                        }
+                    ]
                 }
             ]
         },
@@ -722,48 +815,73 @@ renderSiteApp(
                     pathname: "/criticality/timeline",
                     content: renderCriticalityTimeline,
                     title: "Timeline"
-                }
-            ]
-        },
-        {
-            pathname: "/padding",
-            children: [
-                {
-                    pathname: "/padding/line",
-                    children: [
-                        {
-                            pathname: "/padding/line/custom-content-padding",
-                            content: renderLineCustomPadding,
-                            title: "Custom Content Padding"
-                        }
-                    ]
                 },
                 {
-                    pathname: "/padding/gantt",
-                    children: [
-                        {
-                            pathname: "/padding/gantt/custom-content-padding",
-                            content: renderGanttCustomPadding,
-                            title: "Custom Content Padding"
-                        }
-                    ]
-                },
-                {
-                    pathname: "/padding/timeline",
-                    children: [
-                        {
-                            pathname:
-                                "/padding/timeline/custom-content-padding",
-                            content: renderTimelineCustomPadding,
-                            title: "Custom Content Padding"
-                        }
-                    ]
+                    pathname: "/criticality/scatter",
+                    content: renderCriticalityScatter,
+                    title: "Scatter"
                 }
             ]
         },
         {
             pathname: "/styles",
             children: [
+                {
+                    pathname: "/styles/padding",
+                    children: [
+                        {
+                            pathname: "/styles/padding/line",
+                            children: [
+                                {
+                                    pathname:
+                                        "/styles/padding/line/custom-container-padding",
+                                    content: renderLineCustomContainerPadding,
+                                    title: "Container Padding"
+                                },
+                                {
+                                    pathname:
+                                        "/styles/padding/line/custom-content-padding",
+                                    content: renderLineCustomContentPadding,
+                                    title: "Content Padding"
+                                }
+                            ]
+                        },
+                        {
+                            pathname: "/styles/padding/gantt",
+                            children: [
+                                {
+                                    pathname:
+                                        "/styles/padding/gantt/custom-container-padding",
+                                    content: renderGanttCustomContainerPadding,
+                                    title: "Container Padding"
+                                },
+                                {
+                                    pathname:
+                                        "/styles/padding/gantt/custom-content-padding",
+                                    content: renderGanttCustomContentPadding,
+                                    title: "Content Padding"
+                                }
+                            ]
+                        },
+                        {
+                            pathname: "/styles/padding/timeline",
+                            children: [
+                                {
+                                    pathname:
+                                        "/styles/padding/timeline/custom-container-padding",
+                                    content: renderTimelineCustomContainerPadding,
+                                    title: "Container Padding"
+                                },
+                                {
+                                    pathname:
+                                        "/styles/padding/timeline/custom-content-padding",
+                                    content: renderTimelineCustomContentPadding,
+                                    title: "Content Padding"
+                                }
+                            ]
+                        }
+                    ]
+                },
                 {
                     pathname: "/styles/shapes",
                     children: [

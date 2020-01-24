@@ -9,7 +9,11 @@ import constants from "../../../../main/js/helpers/constants";
 import errors from "../../../../main/js/helpers/errors";
 import styles from "../../../../main/js/helpers/styles";
 import utils from "../../../../main/js/helpers/utils";
-import { toNumber, triggerEvent } from "../../helpers/commonHelpers";
+import {
+    loadCustomJasmineMatcher,
+    toNumber,
+    triggerEvent
+} from "../../helpers/commonHelpers";
 import {
     axisDefault,
     fetchElementByClass,
@@ -21,6 +25,9 @@ import {
 } from "./helpers";
 
 describe("Line - Region", () => {
+    beforeAll(() => {
+        loadCustomJasmineMatcher();
+    });
     let line = null;
     let data = null;
     let graphDefault = null;
@@ -304,7 +311,7 @@ describe("Line - Region", () => {
             expect(+regionElement.getAttribute("x")).toBe(
                 getXAxisXPosition(graphDefault.config)
             );
-            expect(toNumber(regionElement.getAttribute("y"), 10)).toBe(
+            expect(toNumber(regionElement.getAttribute("y"), 10)).toBeCloserTo(
                 toNumber(graphDefault.scale.y(15), 10) +
                     constants.PADDING.bottom
             );
@@ -498,7 +505,7 @@ describe("Line - Region", () => {
             expect(+regionElement.getAttribute("x")).toBe(
                 getXAxisXPosition(graphDefault.config)
             );
-            expect(toNumber(regionElement.getAttribute("y"), 10)).toBe(
+            expect(toNumber(regionElement.getAttribute("y"), 10)).toBeCloserTo(
                 toNumber(graphDefault.scale.y2(15), 10) +
                     constants.PADDING.bottom
             );

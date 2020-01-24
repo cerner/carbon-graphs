@@ -7,6 +7,7 @@ import PairedResult from "../../../../main/js/controls/PairedResult";
 import Pie from "../../../../main/js/controls/Pie";
 import Timeline from "../../../../main/js/controls/Timeline";
 import Shape from "../../../../main/js/core/Shape/Shape";
+import Scatter from "../../../../main/js/controls/Scatter";
 import {
     ganttInput,
     LIBRARY_LIST,
@@ -133,5 +134,22 @@ describe("Carbon", () => {
         const pie = Carbon.api.pie(pieInput);
         expect(Carbon.api.line).toEqual(jasmine.any(Function));
         expect(pie instanceof Pie).toBeTruthy();
+    });
+    it("registers Scatter", () => {
+        const data = {
+            key: "uid_1",
+            label: {
+                display: "Data Label 1"
+            },
+            values: [
+                {
+                    x: 35,
+                    y: 4
+                }
+            ]
+        };
+        const scatter = Carbon.api.scatter(data);
+        expect(Carbon.api.scatter).toEqual(jasmine.any(Function));
+        expect(scatter instanceof Scatter).toBeTruthy();
     });
 });

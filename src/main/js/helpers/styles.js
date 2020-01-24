@@ -43,6 +43,9 @@ export default {
     datelineGroup: "carbon-dateline-group",
     datelinePoint: "carbon-dateline-point",
     dateline: "carbon-dateline",
+    eventlineContent: "carbon-eventline-content",
+    eventlineGroup: "carbon-eventline-group",
+    eventline: "carbon-eventline",
     noDataContainer: "carbon-no-data-container",
     noDataLabel: "carbon-no-data-label",
     noDataOverlay: "carbon-no-data-overlay",
@@ -129,5 +132,9 @@ export default {
     pieContentSlice: "carbon-data-pie-slice",
     pieLegendItem: "carbon-pie-legend-item",
     pieLegendItemIcon: "carbon-pie-legend-item-icon",
-    pieLegendItemSliceHover: "carbon-pie-legend-item-slice-hover"
+    pieLegendItemSliceHover: "carbon-pie-legend-item-slice-hover",
+    /**
+     * Scatter
+     */
+    scatterGraphContent: "carbon-scatter-graph-content"
 };
