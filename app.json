@@ -1,0 +1,37 @@
+{
+  "name": "carbon-graphs",
+  "description": "Heroku reviews app for carbon-graphs development",
+  "keywords": [
+    "productivity"
+  ],
+  "website": "https://engineering.cerner.com/carbon-graphs",
+  "repository": "https://github.com/cerner/carbon-graphs",
+  "success_url": "/",
+  "scripts": {},
+  "env": {
+    "NODE_ENV": {
+      "description": "node environment",
+      "value": "production"
+    },
+    "HEROKU": {
+      "description": "Heroku environment",
+      "value": "true"
+    },
+    "NPM_CONFIG_PRODUCTION": {
+      "description": "development environment",
+      "value": "false"
+    },
+    "NODE_MODULES_CACHE": {
+      "description": "No cache",
+      "value": "false"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "free"
+    }
+  },
+  "addons": [],
+  "buildpacks": []
+}
