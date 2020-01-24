@@ -1,4 +1,5 @@
 const express = require('express');
+const rateLimit = require('express-rate-limit');
 const fs = require('fs');
 
 const displayServer = (localAddress) => {
@@ -16,6 +17,11 @@ const staticApp = (site, index) => {
     // If an extension-less file can't be found search for it with .html and .htm
     extensions: ['html', 'htm'],
   };
+  const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100 // limit each IP to 100 requests per windowMs
+  });
+  app.use(limiter);
   // Return any files in the site. If no extension is provided check the file with the htm or html extension.
   app.use(express.static(site, options));
   // Match on *.htm, *.html or routes without extensions.
