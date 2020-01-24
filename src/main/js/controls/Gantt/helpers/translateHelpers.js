@@ -26,6 +26,7 @@ import {
     translateDateline,
     getDatelineIndicatorHeight
 } from "../../../helpers/dateline";
+import { translateEventline } from "../../../helpers/eventline";
 
 const TRACK_LABEL_TEXT_CLASS = `.${styles.axisYTrackLabel} .tick text`;
 /**
@@ -394,6 +395,12 @@ const translateGraph = (control) => {
     translateGrid(control.axis, control.scale, control.config, control.svg);
     translateContentContainer(control.config, control.svg);
     translateDateline(
+        control.scale,
+        control.config,
+        control.svg,
+        getYAxisYPosition
+    );
+    translateEventline(
         control.scale,
         control.config,
         control.svg,

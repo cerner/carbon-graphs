@@ -234,6 +234,40 @@ export const renderBarTimeSeriesWithDateline = (id) => {
     );
     return barTimeDateline;
 };
+
+export const renderBarTimeSeriesWithEventline = (id) => {
+    const axisData = utils.deepClone(getDemoData(`#${id}`, "BAR_TIMESERIES"));
+    axisData.axis.x.ticks = {
+        values: tickValues,
+        format: "%a %b %e"
+    };
+    (axisData.eventline = [
+        {
+            color: Carbon.helpers.COLORS.GREY,
+            style: {
+                strokeDashArray: "4,4"
+            },
+            value: new Date(2017, 12, 2).toISOString()
+        },
+        {
+            color: Carbon.helpers.COLORS.BLACK,
+            style: {
+                strokeDashArray: "2,2"
+            },
+            value: new Date(2017, 12, 3).toISOString()
+        }
+    ]),
+        (axisData.clickPassThrough = {
+            dateline: false
+        }),
+        (axisData.showVGrid = false);
+
+    const barTimeDateline = Carbon.api.graph(axisData);
+    barTimeDateline.loadContent(
+        Carbon.api.bar(getDemoData(`#${id}`, "BAR_TIMESERIES").data[0])
+    );
+    return barTimeDateline;
+};
 export const renderBarGroup = (id) => {
     const axisData = utils.deepClone(getDemoData(`#${id}`, "BAR_DEFAULT"));
     axisData.axis.x.ticks = numberedTicks;

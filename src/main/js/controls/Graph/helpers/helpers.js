@@ -37,6 +37,7 @@ import {
     translateDateline,
     getDatelineIndicatorHeight
 } from "../../../helpers/dateline";
+import { translateEventline } from "../../../helpers/eventline";
 
 const BASE_CANVAS_WIDTH_PADDING = constants.BASE_CANVAS_WIDTH_PADDING;
 const DEFAULT_HEIGHT = constants.DEFAULT_HEIGHT;
@@ -584,6 +585,12 @@ const translateGraph = (control) => {
         control.svg
     );
     translateDateline(
+        control.scale,
+        control.config,
+        control.svg,
+        getYAxisYPosition
+    );
+    translateEventline(
         control.scale,
         control.config,
         control.svg,

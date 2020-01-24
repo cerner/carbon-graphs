@@ -41,6 +41,15 @@ export const datelineJSON = [
         value: new Date(2016, 8, 1).toISOString()
     }
 ];
+export const eventlineJSON = [
+    {
+        color: COLORS.GREY,
+        style: {
+            strokeDashArray: "4,4"
+        },
+        value: new Date(2016, 8, 28).toISOString()
+    }
+];
 export const dimension = {
     height: 200
 };
@@ -116,10 +125,20 @@ export const axisDefaultWithDateline = {
     axis: axisDefault,
     dateline: datelineJSON
 };
+export const axisDefaultWithEventline = {
+    bindTo: "#testGraph_carbon",
+    axis: axisDefault,
+    eventline: eventlineJSON
+};
 export const axisTimeseriesWithDateline = {
     bindTo: "#testGraph_carbon",
     axis: axisTimeSeries,
     dateline: datelineJSON
+};
+export const axisTimeseriesWithEventline = {
+    bindTo: "#testGraph_carbon",
+    axis: axisTimeSeries,
+    eventline: eventlineJSON
 };
 export const axisDefaultWithPanning = {
     bindTo: "#testGraph_carbon",

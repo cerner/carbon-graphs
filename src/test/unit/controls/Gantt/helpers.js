@@ -110,6 +110,24 @@ export const datelineJSON = [
     }
 ];
 
+export const eventlineJSON = [
+    {
+        color: Carbon.helpers.COLORS.GREY,
+        style: {
+            strokeDashArray: "4,4"
+        },
+        value: new Date(2018, 5, 1).toISOString()
+    }
+];
+
+export const eventlineAlt = {
+    color: Carbon.helpers.COLORS.GREY,
+    style: {
+        strokeDashArray: "4,4"
+    },
+    value: new Date(2018, 5, 1).toISOString()
+};
+
 export const datelineAlt = {
     showDatelineIndicator: true,
     label: {

@@ -1,6 +1,7 @@
 import Carbon from "../../../src/main/js/carbon";
 import utils from "../../../src/main/js/helpers/utils";
 import { getDemoData } from "../data";
+import { CUSTOM_CONTAINER_STYLE } from "../helpers";
 import { createPanningControls } from "../panHelpers";
 
 const tickValues = [
@@ -72,6 +73,34 @@ export const renderLineWithDateline = (id) => {
     );
     return lineTime;
 };
+
+export const renderLineWithEventline = (id) => {
+    const data = utils.deepClone(getDemoData(`#${id}`, "LINE_TIMESERIES"));
+    data.eventline = [
+        {
+            color: Carbon.helpers.COLORS.GREY,
+            style: {
+                strokeDashArray: "4,4"
+            },
+            value: new Date(2016, 0, 1, 8).toISOString()
+        },
+        {
+            color: Carbon.helpers.COLORS.BLACK,
+            style: {
+                strokeDashArray: "2,2"
+            },
+            value: new Date(2016, 0, 1, 12).toISOString()
+        }
+    ];
+    const lineTime = Carbon.api.graph(data);
+    lineTime.loadContent(
+        Carbon.api.line(
+            getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE").data[0]
+        )
+    );
+    return lineTime;
+};
+
 export const renderLineXStaticTicks = (id) => {
     const axisData = utils.deepClone(getDemoData(`#${id}`, "LINE_TIMESERIES"));
     axisData.axis.x.ticks = {
@@ -428,9 +457,10 @@ export const renderNoDataView = (id) => {
     );
     return lineDefault;
 };
-export const renderLineCustomPadding = (id) => {
+export const renderLineCustomContentPadding = (id) => {
     const data = utils.deepClone(getDemoData(`#${id}`, "LINE_DEFAULT"));
     data.showLegend = false;
+    data.showLabel = false;
     data.axis.x.show = false;
     data.axis.y.show = false;
     data.padding = {
@@ -442,6 +472,20 @@ export const renderLineCustomPadding = (id) => {
     const lineDefault = Carbon.api.graph(data);
     lineDefault.loadContent(
         Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[0])
+    );
+    return lineDefault;
+};
+export const renderLineCustomContainerPadding = (id) => {
+    const containerElement = document.querySelector(`#${id}`);
+    containerElement.setAttribute(
+        "class",
+        `${containerElement.getAttribute("class")} ${CUSTOM_CONTAINER_STYLE}`
+    );
+
+    const data = utils.deepClone(getDemoData(`#${id}`, "LINE_DEFAULT"));
+    const lineDefault = Carbon.api.graph(data);
+    lineDefault.loadContent(
+        Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[5])
     );
     return lineDefault;
 };

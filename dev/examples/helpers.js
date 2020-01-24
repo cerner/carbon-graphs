@@ -35,3 +35,4 @@ export const h3 = {
         return elem;
     }
 };
+export const CUSTOM_CONTAINER_STYLE = "custom-container-style";

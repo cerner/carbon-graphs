@@ -1035,4 +1035,28 @@ describe("Scatter - Load", () => {
             expect(svgPoints.getAttribute("aria-describedby")).toBe("uid_4");
         });
     });
+    describe("When legend item is clicked", () => {
+        it("Preserves the DOM order", () => {
+            graphDefault.destroy();
+            const graph = new Graph(getAxes(axisDefault));
+            const scatterPrimary = getInput(valuesDefault, true, true, true);
+            const scatterSecondary = getInput(valuesDefault, true, true, false);
+            scatterPrimary.key = "uid_1";
+            scatterSecondary.key = "uid_2";
+            graph.loadContent(new Scatter(scatterPrimary));
+            graph.loadContent(new Scatter(scatterSecondary));
+            const legendItem = document.querySelector(
+                `.${styles.legendItem}[aria-describedby="${scatterPrimary.key}"]`
+            );
+            expect(graph.config.shownTargets).toEqual(["uid_1", "uid_2"]);
+            triggerEvent(legendItem, "click");
+            triggerEvent(legendItem, "click");
+            expect(graph.config.shownTargets).toEqual(["uid_2", "uid_1"]);
+            expect(
+                document
+                    .querySelector(`.${styles.scatterGraphContent}`)
+                    .getAttribute("aria-describedby")
+            ).toEqual(scatterPrimary.key);
+        });
+    });
 });

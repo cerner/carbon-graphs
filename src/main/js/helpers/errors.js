@@ -152,6 +152,17 @@ export default {
     THROW_MSG_DATELINE_SHAPE_NOT_PROVIDED:
         "Invalid property, a valid dateline shape value must be provided.",
     /**
+     * @description Eventline
+     */
+    THROW_MSG_EVENTLINE_OBJECT_NOT_PROVIDED:
+        "Invalid property, a valid eventline object must be provided.",
+    THROW_MSG_EVENTLINE_NOT_PROVIDED:
+        "Invalid property, a valid eventline value must be provided.",
+    THROW_MSG_EVENTLINE_TYPE_NOT_VALID:
+        "Invalid property, eventline value type must be in ISO8601 datetime format.",
+    THROW_MSG_EVENTLINE_COLOR_NOT_PROVIDED:
+        "Invalid property, a valid eventline color value must be provided.",
+    /**
      * @description Bar
      */
     THROW_MSG_INVALID_X_AXIS_TICK_VALUES:

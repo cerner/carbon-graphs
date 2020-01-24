@@ -2,6 +2,7 @@
 import Carbon from "../../../src/main/js/carbon";
 import { COLORS } from "../../../src/main/js/helpers/constants";
 import utils from "../../../src/main/js/helpers/utils";
+import { CUSTOM_CONTAINER_STYLE } from "../helpers";
 import { getDemoData } from "../data";
 import {
     loadPopup,
@@ -362,6 +363,31 @@ export const renderGanttActivities = (id) => {
     loadTracks(ganttDefault, tasks, activities, [], [], 4);
     return ganttDefault;
 };
+
+export const renderGanttEventline = (id) => {
+    const data = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
+    data.eventline = [
+        {
+            color: Carbon.helpers.COLORS.GREY,
+            style: {
+                strokeDashArray: "4,4"
+            },
+            value: new Date(2018, 10, 13).toISOString()
+        },
+        {
+            color: Carbon.helpers.COLORS.BLACK,
+            style: {
+                strokeDashArray: "2,2"
+            },
+            value: new Date(2018, 10, 20).toISOString()
+        }
+    ];
+    data.showActionLegend = false;
+    const ganttDefault = Carbon.api.gantt(data);
+    loadTracks(ganttDefault, tasks, [], [], [], 4);
+    return ganttDefault;
+};
+
 export const renderGanttPercentage = (id) => {
     const data = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
     data.showActionLegend = false;
@@ -682,7 +708,7 @@ export const renderGanttDateTimeBuckets = (id) => {
     });
     return ganttDefault;
 };
-export const renderGanttCustomPadding = (id) => {
+export const renderGanttCustomContentPadding = (id) => {
     const data = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
     data.showActionLegend = false;
     data.padding = {
@@ -691,6 +717,18 @@ export const renderGanttCustomPadding = (id) => {
         top: 0,
         bottom: 0
     };
+    const ganttDefault = Carbon.api.gantt(data);
+    loadTracks(ganttDefault, tasks, [], [], [], 4);
+    return ganttDefault;
+};
+export const renderGanttCustomContainerPadding = (id) => {
+    const containerElement = document.querySelector(`#${id}`);
+    containerElement.setAttribute(
+        "class",
+        `${containerElement.getAttribute("class")} ${CUSTOM_CONTAINER_STYLE}`
+    );
+
+    const data = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
     const ganttDefault = Carbon.api.gantt(data);
     loadTracks(ganttDefault, tasks, [], [], [], 4);
     return ganttDefault;

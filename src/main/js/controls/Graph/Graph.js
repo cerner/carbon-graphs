@@ -21,6 +21,11 @@ import styles from "../../helpers/styles";
 import GraphConfig, { processInput, validateContent } from "./GraphConfig";
 import utils from "../../helpers/utils";
 import { createDateline, redrawDatelineContent } from "../../helpers/dateline";
+import { getElementBoxSizingParameters } from "../../helpers/paddingUtils";
+import {
+    createEventline,
+    redrawEventlineContent
+} from "../../helpers/eventline";
 import {
     attachEventHandlers,
     createContentContainer,
@@ -54,7 +59,9 @@ const BASE_CANVAS_WIDTH_PADDING = constants.BASE_CANVAS_WIDTH_PADDING;
  * @returns {undefined} - returns nothing
  */
 const setCanvasWidth = (container, config) => {
-    config.canvasWidth = parseInt(container.style("width"), 10);
+    config.canvasWidth =
+        parseInt(container.style("width"), 10) -
+        getElementBoxSizingParameters(container);
 };
 
 /**
@@ -132,6 +139,7 @@ const initConfig = (control) => {
         },
         shownTargets: {},
         dateline: [],
+        eventline: [],
         pan: {}
     };
     control.axis = {
@@ -255,6 +263,12 @@ class Graph extends Construct {
         ) {
             createDateline(this.scale, this.config, this.svg);
         }
+        if (
+            utils.notEmpty(this.config.eventline) &&
+            this.config.axis.x.type === AXIS_TYPE.TIME_SERIES
+        ) {
+            createEventline(this.scale, this.config, this.svg);
+        }
         if (this.config.showLegend) {
             /*
             If the consumer doesn't wish to show legend item then they can pass blank.
@@ -321,6 +335,12 @@ class Graph extends Construct {
             this.config.axis.x.type === AXIS_TYPE.TIME_SERIES
         ) {
             redrawDatelineContent(this.scale, this.config, this.svg);
+        }
+        if (
+            utils.notEmpty(this.config.eventline) &&
+            this.config.axis.x.type === AXIS_TYPE.TIME_SERIES
+        ) {
+            redrawEventlineContent(this.scale, this.config, this.svg);
         }
         if (utils.notEmpty(content.config.values)) {
             removeNoDataView(this.svg);

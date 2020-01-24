@@ -16,10 +16,14 @@ import {
     getData,
     valuesJSON
 } from "./helpers";
+import { loadCustomJasmineMatcher } from "../../helpers/commonHelpers";
 
 describe("Timeline", () => {
     let timeline = null;
     let TimelineGraphContainer;
+    beforeAll(() => {
+        loadCustomJasmineMatcher();
+    });
     beforeEach(() => {
         TimelineGraphContainer = document.createElement("div");
         TimelineGraphContainer.id = "testCarbonTimeline";
@@ -217,6 +221,71 @@ describe("Timeline", () => {
             expect(timeline.contentConfig.length).toBe(1);
             expect(timeline.contentConfig[0].config.key).toBe(data.key);
         });
+        it("Applies custom padding to the timeline instead of default padding", () => {
+            const data = getData(valuesJSON);
+            const input = getAxes(axisJSON);
+            input.padding = {
+                left: 10,
+                right: 20
+            };
+            timeline = new Timeline(input);
+            timeline.loadContent(data);
+            input.bindTo = "";
+            input.axis = {};
+            input.content = null;
+            data.tasks = [];
+            const cfg = timeline.config;
+            expect(input.bindTo).toBe("");
+            expect(input.axis).toEqual({});
+            expect(data.tasks).toEqual([]);
+            expect(cfg.bindTo).toBe("#testCarbonTimeline");
+            expect(cfg.axis.x.lowerLimit).toBe(axisJSON.x.lowerLimit);
+            expect(cfg.axis.x.upperLimit).toBe(axisJSON.x.upperLimit);
+            expect(cfg.padding.left).toEqual(input.padding.left);
+            expect(cfg.padding.right).toEqual(input.padding.right);
+            expect(cfg.padding.top).toEqual(constants.PADDING.top);
+            expect(cfg.padding.bottom).toEqual(constants.PADDING.bottom);
+            expect(cfg.padding.hasCustomPadding).toBe(true);
+            expect(timeline.scale.x.range()).toEqual([
+                0,
+                getXAxisWidth(timeline.config)
+            ]);
+            expect(timeline.contentConfig.length).toBe(1);
+            expect(timeline.contentConfig[0].config.key).toBe(data.key);
+        });
+        it("Applies custom padding to the timeline if provided else default values", () => {
+            const data = getData(valuesJSON);
+            const input = getAxes(axisJSON);
+            input.padding = {
+                top: 15,
+                bottom: 15
+            };
+            timeline = new Timeline(input);
+            timeline.loadContent(data);
+            input.bindTo = "";
+            input.axis = {};
+            input.content = null;
+            data.tasks = [];
+            const cfg = timeline.config;
+            expect(input.bindTo).toBe("");
+            expect(input.axis).toEqual({});
+            expect(data.tasks).toEqual([]);
+            expect(cfg.bindTo).toBe("#testCarbonTimeline");
+            expect(cfg.axis.x.lowerLimit).toBe(axisJSON.x.lowerLimit);
+            expect(cfg.axis.x.upperLimit).toBe(axisJSON.x.upperLimit);
+            expect(cfg.padding.top).toEqual(input.padding.top);
+            expect(cfg.padding.bottom).toEqual(input.padding.bottom);
+            expect(cfg.padding.right).toEqual(constants.PADDING.right);
+            expect(cfg.padding.left).toEqual(constants.PADDING.left);
+            expect(cfg.padding.hasCustomPadding).toBe(true);
+            expect(timeline.scale.x.range()).toEqual([
+                0,
+                getXAxisWidth(timeline.config)
+            ]);
+            expect(timeline.contentConfig.length).toBe(1);
+            expect(timeline.contentConfig[0].config.key).toBe(data.key);
+        });
+
         it("Processes the default input correctly", () => {
             const input = getAxes(axisJSON);
             timeline = new Timeline(input);
@@ -285,6 +354,15 @@ describe("Timeline", () => {
             it("Sets canvas width", () => {
                 expect(timeline.config.canvasWidth).not.toBe(0);
                 expect(timeline.config.canvasWidth).toBe(1024);
+            });
+            it("Sets canvas width taking container padding into consideration", () => {
+                timeline.destroy();
+                TimelineGraphContainer.setAttribute(
+                    "style",
+                    "width: 1024px; height: 400px; padding: 3rem"
+                );
+                timeline = new Timeline(getAxes(axisJSON));
+                expect(timeline.config.canvasWidth).toBeCloserTo(928);
             });
             it("Sets canvas height", () => {
                 expect(timeline.config.canvasHeight).toBe(
