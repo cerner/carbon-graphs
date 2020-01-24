@@ -101,7 +101,6 @@
     "style-loader": "^1.1.2",
     "stylelint": "^13.0.0",
     "stylelint-config-standard": "^19.0.0",
-    "terra-toolkit": "^5.19.0",
     "url-loader": "^3.0.0",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
@@ -109,7 +108,7 @@
     "webpack-merge": "^4.2.2"
   },
   "engines": {
-    "node": ">=8.0.0 <12"
+    "node": ">=8.0.0"
   },
   "files": [
     "dist",
@@ -192,7 +191,7 @@
     "lint:source": "eslint src dev --color --max-warnings 0",
     "lint:styles": "stylelint src/main/less/**/*.less",
     "prepublishOnly": "npm run clean && npm run build && npm run build:dist",
-    "start-heroku": "tt-serve-static --port $PORT --site './.site'",
+    "start-heroku": "node bin/serve-static --port $PORT --site './.site'",
     "style": "prettier \"src/**/*.*\" \"dev/**/*.*\" \"docs/**/*.md*\" --write",
     "test": "karma start ./build/karma/karma.config.js --single-run --no-auto-watch",
     "test:persist": "karma start ./build/karma/karma.config.js --no-single-run"
