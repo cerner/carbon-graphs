@@ -105,7 +105,7 @@ import {
     renderPairedResultY2Axis,
     renderPairedResultYHidden,
     renderPairedResultWithPanning,
-    renderPairedResultY2AxisWithPanning
+    renderPairedResultY2AxisWithPanning,
     renderPairedResultTimeseriesEventline
 } from "./examples/controls/pairedResult";
 import { renderPieLegendTo, renderPieSimple } from "./examples/controls/pie";
