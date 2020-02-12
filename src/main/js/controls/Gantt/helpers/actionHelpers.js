@@ -210,17 +210,6 @@ const loadActionInput = (inputJSON) => {
     return utils.deepClone(inputJSON);
 };
 /**
- * Checks if the data-set is currently shown in the graph or if the y data-point value is null
- * If they are, then true. False, otherwise
- *
- * @private
- * @param {object} shownTargets - graph targets config object
- * @param {object} value - data point value object
- * @returns {boolean} true if data point needs to be hidden, false otherwise
- */
-const shouldHideDataPoints = (shownTargets, value) =>
-    shownTargets.indexOf(value.key) < 0 || value.y === null;
-/**
  * Renders the data point in the provided path element.
  * It uses the consumer opted Shape, color of the data point.
  * Behavior when clicked on the data point etc.
@@ -244,10 +233,7 @@ const renderDataPointPath = (scale, config, path, dataPoint, index) =>
                     dataPointActionHandler(dataPoint, index, this);
                 },
                 a11yAttributes: {
-                    "aria-hidden": shouldHideDataPoints(
-                        config.shownTargets,
-                        dataPoint
-                    ),
+                    "aria-hidden": false,
                     "aria-describedby": dataPoint.key,
                     "aria-disabled": !utils.isFunction(dataPoint.onClick)
                 },
@@ -275,9 +261,23 @@ const drawActionDataPoints = (scale, config, canvasSVG) =>
         .append("g")
         .classed(styles.pointGroup, true)
         .each(function(dataPoint, index) {
-            const dataPointSVG = d3.select(this);
-            renderSelectionPath(scale, config, dataPointSVG, dataPoint, index);
-            renderDataPointPath(scale, config, dataPointSVG, dataPoint, index);
+            if (dataPoint.y !== null) {
+                const dataPointSVG = d3.select(this);
+                renderSelectionPath(
+                    scale,
+                    config,
+                    dataPointSVG,
+                    dataPoint,
+                    index
+                );
+                renderDataPointPath(
+                    scale,
+                    config,
+                    dataPointSVG,
+                    dataPoint,
+                    index
+                );
+            }
         });
 /**
  * Creates an element container with data points from the input JSON property: action

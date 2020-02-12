@@ -298,17 +298,6 @@ const processDataPoints = (graphConfig, dataTarget) => {
  */
 const getDataPointValues = (target) => target.internalValuesSubset;
 /**
- * Checks the data-set is currently shown in the graph and if the y data-point value is null
- * If they are then true, false otherwise
- *
- * @private
- * @param {object} shownTargets - graph targets config object
- * @param {object} value - data point value object
- * @returns {boolean} true if data point needs to be hidden, false otherwise
- */
-const shouldHideDataPoints = (shownTargets, value) =>
-    shownTargets.indexOf(value.key) < 0 || value.y === null;
-/**
  * Draws lines using the data point values.
  * Lines are created using d3 svg line with linear interpolation.
  *
@@ -331,9 +320,7 @@ const drawDataLines = (scale, config, lineGroupSVG) =>
                     value.style.strokeDashArray
                 };`
         )
-        .attr("aria-hidden", (value) =>
-            shouldHideDataPoints(config.shownTargets, value)
-        )
+        .attr("aria-hidden", false)
         .attr("aria-describedby", (target) => target.key);
 /**
  * Draws the points with options opted in the input JSON by the consumer for each data set.
@@ -358,10 +345,7 @@ const drawDataPoints = (scale, config, pointGroupPath) => {
                         dataPointActionHandler(value, index, this);
                     },
                     a11yAttributes: {
-                        "aria-hidden": shouldHideDataPoints(
-                            config.shownTargets,
-                            value
-                        ),
+                        "aria-hidden": false,
                         "aria-describedby": value.key,
                         "aria-disabled": !utils.isFunction(value.onClick)
                     }
@@ -400,10 +384,7 @@ const drawDataPoints = (scale, config, pointGroupPath) => {
                         dataPointActionHandler(value, index, this);
                     },
                     a11yAttributes: {
-                        "aria-hidden": shouldHideDataPoints(
-                            config.shownTargets,
-                            value
-                        ),
+                        "aria-hidden": false,
                         "aria-describedby": value.key,
                         "aria-disabled": !utils.isFunction(value.onClick)
                     }
@@ -414,24 +395,26 @@ const drawDataPoints = (scale, config, pointGroupPath) => {
         .append("g")
         .classed(styles.pointGroup, true)
         .each(function(d, i) {
-            const dataPointSVG = d3.select(this);
-            renderSelectionPath(dataPointSVG, d, i);
-            if (d.isCritical) {
-                config.hasCriticality = true;
-                renderCriticalityPath(
-                    dataPointSVG,
-                    d,
-                    i,
-                    styles.criticalityOuterPoint
-                );
-                renderCriticalityPath(
-                    dataPointSVG,
-                    d,
-                    i,
-                    styles.criticalityInnerPoint
-                );
+            if (d.y !== null) {
+                const dataPointSVG = d3.select(this);
+                renderSelectionPath(dataPointSVG, d, i);
+                if (d.isCritical) {
+                    config.hasCriticality = true;
+                    renderCriticalityPath(
+                        dataPointSVG,
+                        d,
+                        i,
+                        styles.criticalityOuterPoint
+                    );
+                    renderCriticalityPath(
+                        dataPointSVG,
+                        d,
+                        i,
+                        styles.criticalityInnerPoint
+                    );
+                }
+                renderDataPointPath(dataPointSVG, d, i);
             }
-            renderDataPointPath(dataPointSVG, d, i);
         });
 };
 /**

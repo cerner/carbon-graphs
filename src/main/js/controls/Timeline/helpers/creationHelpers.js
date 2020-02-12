@@ -383,7 +383,7 @@ const createPoints = (scale, config, canvasSVG) => {
     const renderDataPointPath = (path, value, index) => {
         let cls;
         const objectScale = constants.DEFAULT_TIMELINE_SCALE;
-        const hiddenConfig = shouldHideDataPoints(config.shownTargets, value);
+        const hiddenConfig = false;
         const fillStyle = getColorForTarget(value);
         const shapeStyle = getShapeForTarget(value);
         const pointStyle = styles.point;
@@ -420,7 +420,7 @@ const createPoints = (scale, config, canvasSVG) => {
     const renderCriticalityPath = (path, value, index, cls, config) => {
         let fillStyle;
         const objectScale = constants.DEFAULT_TIMELINE_SCALE;
-        const hiddenConfig = shouldHideDataPoints(config.shownTargets, value);
+        const hiddenConfig = false;
         const shapeStyle = getShapeForTarget(value);
         const pointStyle = styles.point;
 
@@ -460,17 +460,6 @@ const createPoints = (scale, config, canvasSVG) => {
             renderDataPointPath(dataPointSVG, d, i);
         });
 };
-/**
- * Checks the data-set is currently shown in the graph and if the y data-point value is null
- * If they are then true, false otherwise
- *
- * @private
- * @param {object} shownTargets - graph targets config object
- * @param {object} value - data point value object
- * @returns {boolean} true if data point needs to be hidden, false otherwise
- */
-const shouldHideDataPoints = (shownTargets, value) =>
-    shownTargets.indexOf(value.key) < 0 || value.y === null;
 /**
  * A callback that will be sent to Graph class so that when graph is
  * created the Graph API will execute this callback function and the legend
