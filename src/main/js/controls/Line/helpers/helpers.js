@@ -395,8 +395,8 @@ const drawDataPoints = (scale, config, pointGroupPath) => {
         .append("g")
         .classed(styles.pointGroup, true)
         .each(function(d, i) {
+            const dataPointSVG = d3.select(this);
             if (d.y !== null) {
-                const dataPointSVG = d3.select(this);
                 renderSelectionPath(dataPointSVG, d, i);
                 if (d.isCritical) {
                     config.hasCriticality = true;
@@ -414,6 +414,8 @@ const drawDataPoints = (scale, config, pointGroupPath) => {
                     );
                 }
                 renderDataPointPath(dataPointSVG, d, i);
+            } else {
+                dataPointSVG.remove();
             }
         });
 };

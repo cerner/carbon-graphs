@@ -204,13 +204,11 @@ describe("Scatter - Load", () => {
                 scatterGraphContainer,
                 styles.currentPointsGroup
             );
-            const points = fetchElementByClass(pointsGroup, styles.point);
             const selectedPoint = fetchElementByClass(
                 pointsGroup,
                 styles.dataPointSelection
             );
-            expect(pointsGroup.children.length).toBe(3);
-            expect(points.getAttribute("aria-hidden")).toContain("true");
+            expect(pointsGroup.children.length).toBe(valuesDefault.length - 1);
             expect(selectedPoint.getAttribute("aria-hidden")).toContain("true");
         });
         it("add points group for data points", () => {
@@ -511,10 +509,10 @@ describe("Scatter - Load", () => {
                     );
                     expect(scatterGroup.length).toBe(1);
                     expect(
-                        scatterGraphContainer
-                            .querySelectorAll(`.${styles.point}`)[2]
-                            .getAttribute("aria-hidden")
-                    ).toBe("true");
+                        scatterGraphContainer.querySelectorAll(
+                            `.${styles.point}`
+                        ).length
+                    ).toBe(values.length - 1);
                     expect(graph.config.axis.y.domain.lowerLimit).toBe(11);
                     expect(graph.config.axis.y.domain.upperLimit).toBe(209);
                 });
@@ -532,10 +530,10 @@ describe("Scatter - Load", () => {
                     );
                     expect(scatterGroup.length).toBe(1);
                     expect(
-                        scatterGraphContainer
-                            .querySelectorAll(`.${styles.point}`)[2]
-                            .getAttribute("aria-hidden")
-                    ).toBe("true");
+                        scatterGraphContainer.querySelectorAll(
+                            `.${styles.point}`
+                        ).length
+                    ).toBe(values.length - 1);
                     expect(graph.config.axis.y.domain.lowerLimit).toBe(20);
                     expect(graph.config.axis.y.domain.upperLimit).toBe(200);
                 });
@@ -552,10 +550,10 @@ describe("Scatter - Load", () => {
                     );
                     expect(scatterGroup.length).toBe(1);
                     expect(
-                        scatterGraphContainer
-                            .querySelectorAll(`.${styles.point}`)[2]
-                            .getAttribute("aria-hidden")
-                    ).toBe("true");
+                        scatterGraphContainer.querySelectorAll(
+                            `.${styles.point}`
+                        ).length
+                    ).toBe(values.length - 1);
                     expect(graph.config.axis.y2.domain.lowerLimit).toBe(11);
                     expect(graph.config.axis.y2.domain.upperLimit).toBe(209);
                 });
@@ -572,10 +570,10 @@ describe("Scatter - Load", () => {
                     );
                     expect(scatterGroup.length).toBe(1);
                     expect(
-                        scatterGraphContainer
-                            .querySelectorAll(`.${styles.point}`)[2]
-                            .getAttribute("aria-hidden")
-                    ).toBe("true");
+                        scatterGraphContainer.querySelectorAll(
+                            `.${styles.point}`
+                        ).length
+                    ).toBe(values.length - 1);
                     expect(graph.config.axis.y2.domain.lowerLimit).toBe(20);
                     expect(graph.config.axis.y2.domain.upperLimit).toBe(200);
                 });
@@ -746,12 +744,11 @@ describe("Scatter - Load", () => {
             ).and.callThrough();
             const input = getInput(valuesDefault, false, false);
             const scatter = new Scatter(input);
-            const graph = graphDefault.loadContent(scatter);
+            graphDefault.loadContent(scatter);
             triggerEvent(
                 fetchElementByClass(scatterGraphContainer, styles.legendItem),
                 "click",
                 () => {
-                    scatter.redraw(graph);
                     expect(window.requestAnimationFrame).toHaveBeenCalledTimes(
                         1
                     );
@@ -789,8 +786,6 @@ describe("Scatter - Load", () => {
                 fetchElementByClass(scatterGraphContainer, styles.legendItem),
                 "click",
                 () => {
-                    primaryScatter.redraw(graph);
-                    secondaryScatter.redraw(graph);
                     const primaryScatterElement = scatterGraphContainer.querySelector(
                         `.${styles.scatterGraphContent}[aria-describedby="${inputPrimary.key}"]`
                     );

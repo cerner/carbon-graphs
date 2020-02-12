@@ -234,7 +234,7 @@ describe("Line - Load", () => {
                 ).value
             ).toBe(input.key);
         });
-        it("does not show data point if data point is null", () => {
+        it("does not render data point if data point is null", () => {
             graphDefault.destroy();
             const graph = new Graph(getAxes(axisDefault));
             const data = utils.deepClone(valuesDefault);
@@ -245,13 +245,11 @@ describe("Line - Load", () => {
                 lineGraphContainer,
                 styles.currentPointsGroup
             );
-            const points = fetchElementByClass(pointsGroup, styles.point);
             const selectedPoint = fetchElementByClass(
                 pointsGroup,
                 styles.dataPointSelection
             );
-            expect(pointsGroup.children.length).toBe(3);
-            expect(points.getAttribute("aria-hidden")).toContain("true");
+            expect(pointsGroup.children.length).toBe(valuesDefault.length - 1);
             expect(selectedPoint.getAttribute("aria-hidden")).toContain("true");
         });
         it("does not render points if shapes needs to be hidden", () => {
@@ -637,10 +635,9 @@ describe("Line - Load", () => {
                     );
                     expect(lineGroup.length).toBe(1);
                     expect(
-                        lineGraphContainer
-                            .querySelectorAll(`.${styles.point}`)[2]
-                            .getAttribute("aria-hidden")
-                    ).toBe("true");
+                        lineGraphContainer.querySelectorAll(`.${styles.point}`)
+                            .length
+                    ).toEqual(values.length - 1);
                     expect(graph.config.axis.y.domain.lowerLimit).toBe(11);
                     expect(graph.config.axis.y.domain.upperLimit).toBe(209);
                 });
@@ -658,10 +655,9 @@ describe("Line - Load", () => {
                     );
                     expect(lineGroup.length).toBe(1);
                     expect(
-                        lineGraphContainer
-                            .querySelectorAll(`.${styles.point}`)[2]
-                            .getAttribute("aria-hidden")
-                    ).toBe("true");
+                        lineGraphContainer.querySelectorAll(`.${styles.point}`)
+                            .length
+                    ).toEqual(values.length - 1);
                     expect(graph.config.axis.y.domain.lowerLimit).toBe(20);
                     expect(graph.config.axis.y.domain.upperLimit).toBe(200);
                 });
@@ -678,10 +674,9 @@ describe("Line - Load", () => {
                     );
                     expect(lineGroup.length).toBe(1);
                     expect(
-                        lineGraphContainer
-                            .querySelectorAll(`.${styles.point}`)[2]
-                            .getAttribute("aria-hidden")
-                    ).toBe("true");
+                        lineGraphContainer.querySelectorAll(`.${styles.point}`)
+                            .length
+                    ).toEqual(values.length - 1);
                     expect(graph.config.axis.y2.domain.lowerLimit).toBe(11);
                     expect(graph.config.axis.y2.domain.upperLimit).toBe(209);
                 });
@@ -698,10 +693,9 @@ describe("Line - Load", () => {
                     );
                     expect(lineGroup.length).toBe(1);
                     expect(
-                        lineGraphContainer
-                            .querySelectorAll(`.${styles.point}`)[2]
-                            .getAttribute("aria-hidden")
-                    ).toBe("true");
+                        lineGraphContainer.querySelectorAll(`.${styles.point}`)
+                            .length
+                    ).toEqual(values.length - 1);
                     expect(graph.config.axis.y2.domain.lowerLimit).toBe(20);
                     expect(graph.config.axis.y2.domain.upperLimit).toBe(200);
                 });
@@ -871,12 +865,11 @@ describe("Line - Load", () => {
             ).and.callThrough();
             const input = getInput(valuesDefault, false, false);
             const line = new Line(input);
-            const graph = graphDefault.loadContent(line);
+            graphDefault.loadContent(line);
             triggerEvent(
                 fetchElementByClass(lineGraphContainer, styles.legendItem),
                 "click",
                 () => {
-                    line.redraw(graph);
                     expect(window.requestAnimationFrame).toHaveBeenCalledTimes(
                         1
                     );
@@ -920,8 +913,6 @@ describe("Line - Load", () => {
                 fetchElementByClass(lineGraphContainer, styles.legendItem),
                 "click",
                 () => {
-                    primaryLine.redraw(graph);
-                    secondaryLine.redraw(graph);
                     const primaryLineElement = lineGraphContainer.querySelector(
                         `.${styles.lineGraphContent}[aria-describedby="${inputPrimary.key}"]`
                     );

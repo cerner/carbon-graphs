@@ -261,8 +261,8 @@ const drawActionDataPoints = (scale, config, canvasSVG) =>
         .append("g")
         .classed(styles.pointGroup, true)
         .each(function(dataPoint, index) {
+            const dataPointSVG = d3.select(this);
             if (dataPoint.y !== null) {
-                const dataPointSVG = d3.select(this);
                 renderSelectionPath(
                     scale,
                     config,
@@ -277,6 +277,8 @@ const drawActionDataPoints = (scale, config, canvasSVG) =>
                     dataPoint,
                     index
                 );
+            } else {
+                dataPointSVG.remove();
             }
         });
 /**
