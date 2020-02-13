@@ -384,9 +384,10 @@ class Graph extends Construct {
     /**
      * Updates the graph axisData and content.
      *
-     *  @returns {Graph} - Graph instance
+     * @returns {Graph} - Graph instance
+     * @param graphData
      */
-    reflow() {
+    reflow(graphData) {
         this.config.axis.x.domain = getDomain(
             this.config.axis.x.type,
             this.config.axis.x.lowerLimit,
@@ -421,8 +422,37 @@ class Graph extends Construct {
                 )}, ${getXAxisYPosition(this.config)})`
             )
             .call(axisData);
-
         svg.exit().remove();
+
+        if (graphData && this.contentKeys.includes(graphData.key)) {
+            let position;
+            this.contentConfig.forEach((config, index) => {
+                if (config.key === graphData.key) position = index;
+            });
+            this.contentConfig[position].values = graphData.values;
+            // if (utils.notEmpty(this.content[position].config.values)) {
+            //     removeNoDataView(this.svg);
+            // } else {
+            //     drawNoDataView(this.config, this.svg)
+            // }
+            scaleGraph(this.scale, this.config);
+            this.content[position].update(this, graphData);
+            setAxisPadding(this.config.axisPadding, this.content[position]);
+            getAxesDataRange(
+                this.content[position],
+                this.content[position].config.yAxis,
+                this.config,
+                this.content
+            );
+            if (
+                isRangeModified(
+                    this.config,
+                    this.content[position].config.yAxis
+                )
+            ) {
+                updateAxesDomain(this.config, this.content[position]);
+            }
+        }
         this.resize();
         return this;
     }

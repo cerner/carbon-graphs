@@ -1,4 +1,5 @@
 "use strict";
+import d3 from "d3";
 import { GraphContent } from "../../core";
 import { getDefaultValue } from "../../core/BaseConfig";
 import constants from "../../helpers/constants";
@@ -23,7 +24,9 @@ import {
     hoverHandler,
     prepareLegendItems,
     processDataPoints,
-    translateScatterGraph
+    translateScatterGraph,
+    drawDataPoints,
+    getDataPointValues
 } from "./helpers/helpers";
 import ScatterConfig from "./ScatterConfig";
 
@@ -183,6 +186,36 @@ class Scatter extends GraphContent {
         );
         translateScatterGraph(graph.scale, graph.svg, graph.config);
         return this;
+    }
+
+    update(graph, graphData) {
+        this.dataTarget = processDataPoints(graph.config, this.config);
+        console.log(graphData.key);
+        const currentPointsPath = d3
+            .select(`g[aria-describedby="${graphData.key}"]`)
+            .selectAll(`.${styles.pointGroup}`)
+            .data(this.dataTarget);
+        currentPointsPath.exit().remove();
+        const pointPath = d3
+            .select(`g[aria-describedby="${graphData.key}"]`)
+            .select(`.${styles.currentPointsGroup}`)
+            .selectAll(`[class=".${styles.point}"]`)
+            .data(getDataPointValues(this.dataTarget));
+        drawDataPoints(graph.scale, graph.config, pointPath.enter());
+        pointPath
+            .exit()
+            .transition()
+            .call(
+                constants.d3Transition(
+                    graph.config.settingsDictionary.transition
+                )
+            )
+            .remove();
+
+        this.valuesRange = calculateValuesRange(
+            this.config.values,
+            this.config.yAxis
+        );
     }
 
     /**

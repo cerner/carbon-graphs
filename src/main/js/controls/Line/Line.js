@@ -1,4 +1,5 @@
 "use strict";
+import d3 from "d3";
 import { GraphContent } from "../../core";
 import { getDefaultValue } from "../../core/BaseConfig";
 import constants from "../../helpers/constants";
@@ -20,6 +21,9 @@ import {
     clear,
     clickHandler,
     draw,
+    getDataPointValues,
+    drawDataPoints,
+    drawDataLines,
     hoverHandler,
     prepareLegendItems,
     processDataPoints,
@@ -183,6 +187,43 @@ class Line extends GraphContent {
         );
         translateLineGraph(graph.scale, graph.svg, graph.config);
         return this;
+    }
+
+    update(graph, graphData) {
+        this.dataTarget = processDataPoints(graph.config, this.config);
+        const lineSVG = d3
+            .selectAll(`g[aria-describedby="${graphData.key}"]`)
+            .selectAll(`.${styles.line}`)
+            .data([this.dataTarget]);
+        drawDataLines(graph.scale, graph.config, lineSVG.enter());
+        lineSVG.exit().remove();
+
+        if (graph.config.showShapes) {
+            const currentPointsPath = d3
+                .select(`g[aria-describedby="${graphData.key}"]`)
+                .selectAll(`.${styles.pointGroup}`)
+                .data(this.dataTarget);
+            currentPointsPath.exit().remove();
+            const pointPath = d3
+                .select(`g[aria-describedby="${graphData.key}"]`)
+                .select(`.${styles.currentPointsGroup}`)
+                .selectAll(`[class=".${styles.point}"]`)
+                .data(getDataPointValues(this.dataTarget));
+            drawDataPoints(graph.scale, graph.config, pointPath.enter());
+            pointPath
+                .exit()
+                .transition()
+                .call(
+                    constants.d3Transition(
+                        graph.config.settingsDictionary.transition
+                    )
+                )
+                .remove();
+        }
+        this.valuesRange = calculateValuesRange(
+            this.config.values,
+            this.config.yAxis
+        );
     }
 
     /**

@@ -151,7 +151,10 @@ export const renderScatterWithPanning = (id) => {
     graphDataY.regions = [regions[0]];
 
     const createGraph = () => {
-        graph.reflow();
+        const graphData = utils.deepClone(
+            getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE").data[1]
+        );
+        graph.reflow(graphData);
     };
 
     const graph = Carbon.api.graph(axisData);
@@ -179,7 +182,10 @@ export const renderScatterY2AxisWithPanning = (id) => {
     );
     graphDataY.regions = [regions[0]];
     const createGraph = () => {
-        graph.reflow();
+        const graphData = utils.deepClone(
+            getDemoData(`#${id}`, "LINE_TIMESERIES").data[3]
+        );
+        graph.reflow(graphData);
     };
 
     const graph = Carbon.api.graph(axisData);

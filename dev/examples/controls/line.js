@@ -501,7 +501,15 @@ export const renderLineWithPanning = (id) => {
     );
     graphDataY.regions = [regions[0]];
     const createGraph = () => {
-        graph.reflow();
+        const graphData = utils.deepClone(
+            getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE").data[1]
+        );
+        if (
+            JSON.stringify(graph.contentConfig[0].values) ===
+            JSON.stringify(graphData.values)
+        )
+            graph.reflow(graphDataY);
+        else graph.reflow(graphData);
     };
 
     const graph = Carbon.api.graph(axisData);
@@ -531,7 +539,10 @@ export const renderLineY2AxisWithPanning = (id) => {
         getDemoData(`#${id}`, "LINE_TIMESERIES").data[1]
     );
     const createGraph = () => {
-        graph.reflow();
+        const graphData = utils.deepClone(
+            getDemoData(`#${id}`, "LINE_TIMESERIES").data[3]
+        );
+        graph.reflow(graphData);
     };
 
     const graph = Carbon.api.graph(axisData);

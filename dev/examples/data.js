@@ -341,6 +341,36 @@ const DATA = [
                         }
                     ],
                     yAxis: "y"
+                },
+                {
+                    key: "uid_2",
+                    values: [
+                        {
+                            x: new Date(2016, 0, 1, 1, 5).toISOString(),
+                            y: 0
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 2, 15).toISOString(),
+                            y: 50
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 7, 0).toISOString(),
+                            y: 150,
+                            isCritical: true
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 8, 15).toISOString(),
+                            y: 185
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 9, 45).toISOString(),
+                            y: 200
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 15, 15).toISOString(),
+                            y: 300
+                        }
+                    ]
                 }
             ],
             showLabel: true,
@@ -456,6 +486,53 @@ const DATA = [
                         }
                     ],
                     yAxis: "y"
+                },
+                {
+                    key: "uid_1",
+                    values: [
+                        {
+                            x: new Date(2016, 0, 1, 6, 15).toISOString(),
+                            y: 9,
+                            isCritical: true
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 7, 0).toISOString(),
+                            y: 6,
+                            isCritical: true
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 8, 15).toISOString(),
+                            y: 34
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 9, 45).toISOString(),
+                            y: 45
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 12, 15).toISOString(),
+                            y: 17
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 13, 15).toISOString(),
+                            y: 28
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 14, 15).toISOString(),
+                            y: 12
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 19, 45).toISOString(),
+                            y: 16
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 21, 15).toISOString(),
+                            y: 14
+                        },
+                        {
+                            x: new Date(2016, 0, 1, 19, 45).toISOString(),
+                            y: 13
+                        }
+                    ]
                 }
             ],
             showLabel: true,
