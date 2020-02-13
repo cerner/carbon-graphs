@@ -385,7 +385,7 @@ class Graph extends Construct {
      * Updates the graph axisData and content.
      *
      * @returns {Graph} - Graph instance
-     * @param graphData
+     * @param {Array} graphData - Input array that holds updated values and key
      */
     reflow(graphData) {
         this.config.axis.x.domain = getDomain(
