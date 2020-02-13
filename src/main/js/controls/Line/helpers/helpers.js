@@ -239,7 +239,7 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
         const pointPath = lineSVG
             .select(`.${styles.currentPointsGroup}`)
             .selectAll(`.${styles.point}`)
-            .data(getDataPointValues);
+            .data(getDataPointValues(dataTarget).filter((d) => d.y != null));
         drawDataPoints(scale, config, pointPath.enter());
         pointPath
             .exit()
@@ -396,27 +396,23 @@ const drawDataPoints = (scale, config, pointGroupPath) => {
         .classed(styles.pointGroup, true)
         .each(function(d, i) {
             const dataPointSVG = d3.select(this);
-            if (d.y !== null) {
-                renderSelectionPath(dataPointSVG, d, i);
-                if (d.isCritical) {
-                    config.hasCriticality = true;
-                    renderCriticalityPath(
-                        dataPointSVG,
-                        d,
-                        i,
-                        styles.criticalityOuterPoint
-                    );
-                    renderCriticalityPath(
-                        dataPointSVG,
-                        d,
-                        i,
-                        styles.criticalityInnerPoint
-                    );
-                }
-                renderDataPointPath(dataPointSVG, d, i);
-            } else {
-                dataPointSVG.remove();
+            renderSelectionPath(dataPointSVG, d, i);
+            if (d.isCritical) {
+                config.hasCriticality = true;
+                renderCriticalityPath(
+                    dataPointSVG,
+                    d,
+                    i,
+                    styles.criticalityOuterPoint
+                );
+                renderCriticalityPath(
+                    dataPointSVG,
+                    d,
+                    i,
+                    styles.criticalityInnerPoint
+                );
             }
+            renderDataPointPath(dataPointSVG, d, i);
         });
 };
 /**

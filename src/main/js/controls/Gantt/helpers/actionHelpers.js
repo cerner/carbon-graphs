@@ -262,24 +262,8 @@ const drawActionDataPoints = (scale, config, canvasSVG) =>
         .classed(styles.pointGroup, true)
         .each(function(dataPoint, index) {
             const dataPointSVG = d3.select(this);
-            if (dataPoint.y !== null) {
-                renderSelectionPath(
-                    scale,
-                    config,
-                    dataPointSVG,
-                    dataPoint,
-                    index
-                );
-                renderDataPointPath(
-                    scale,
-                    config,
-                    dataPointSVG,
-                    dataPoint,
-                    index
-                );
-            } else {
-                dataPointSVG.remove();
-            }
+            renderSelectionPath(scale, config, dataPointSVG, dataPoint, index);
+            renderDataPointPath(scale, config, dataPointSVG, dataPoint, index);
         });
 /**
  * Creates an element container with data points from the input JSON property: action
