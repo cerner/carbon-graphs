@@ -272,6 +272,10 @@ const processDataPoints = (graphConfig, dataTarget) => {
     dataTarget.style = {
         strokeDashArray: getStrokeDashArray(dataTarget.style)
     };
+    dataTarget.legendOptions = getDefaultValue(dataTarget.legendOptions, {
+        showShape: getDefaultValue(graphConfig.showShapes, true),
+        showLine: true
+    });
 
     graphConfig.shownTargets.push(dataTarget.key);
     dataTarget.internalValuesSubset = dataTarget.values.map((value) => ({

@@ -12,7 +12,7 @@ import {
 } from "../controls/Graph/helpers/helpers";
 import { Shape } from "../core";
 import { getDefaultSVGProps } from "../core/Shape";
-import constants from "../helpers/constants";
+import constants, { COLORS } from "../helpers/constants";
 import errors from "../helpers/errors";
 import styles from "../helpers/styles";
 import utils from "../helpers/utils";
@@ -92,26 +92,84 @@ const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
                 eventHandlers.hoverHandler(t, constants.HOVER_EVENT.MOUSE_EXIT)
             );
     }
-    itemPath
+    const button = itemPath
         .append("button")
         .classed(styles.legendItemBtn, true)
         .attr("title", text)
         .attr("tabindex", shouldForceDisableLegendItem ? -1 : 0)
-        .append(() =>
-            new Shape(getShapeForTarget(t)).getShapeElement(
-                getDefaultSVGProps({
-                    svgClassNames: styles.legendItemIcon,
-                    svgStyles: `fill: ${getColorForTarget(t)};`
-                }),
-                true
-            )
-        );
+        .append("span")
+        .attr("class", styles.legendItemSpan);
+
+    if (t.legendOptions) {
+        if (t.legendOptions.showShape) {
+            displayIcon(button, t, t.legendOptions.showLine);
+        }
+        if (t.legendOptions.showLine) {
+            displayLine(button, t, t.legendOptions.showShape);
+        }
+    } else {
+        displayIcon(button, t, false);
+    }
+
     itemPath
         .append("label")
         .classed(styles.legendItemText, true)
         .attr("tabindex", -1)
         .text(text);
     return legendSVG;
+};
+
+/**
+ * Creates a icon in the legend button
+ *
+ * @private
+ * @param {object} itemPath - d3 svg object
+ * @param {object} dataPoint - Data points object
+ * @param {boolean} showLine - if the line is shown along with icon
+ */
+const displayIcon = (itemPath, dataPoint, showLine) => {
+    const className = showLine
+        ? styles.legendItemIconWithLine
+        : styles.legendItemIcon;
+    itemPath.append(() =>
+        new Shape(getShapeForTarget(dataPoint)).getShapeElement(
+            getDefaultSVGProps({
+                svgClassNames: className,
+                svgStyles: `fill: ${getColorForTarget(dataPoint)};`
+            }),
+            true
+        )
+    );
+};
+
+/**
+ * Creates a line in the legend button
+ *
+ * @private
+ * @param {object} itemPath - d3 svg object
+ * @param {object} dataPoint - Data points object
+ * @param {object} showShape - Shape is shown along with line
+ */
+const displayLine = (itemPath, dataPoint, showShape) => {
+    const className = showShape
+        ? styles.legendItemLineWithIcon
+        : styles.legendItemLine;
+    const svg = itemPath.append("svg").attr("class", className);
+    svg.append("line") // creating white line
+        .attr("x1", 0)
+        .attr("x2", 35)
+        .attr("style", `stroke: ${COLORS.WHITE}; stroke-width: 5px;`);
+    svg.append("line")
+        .attr("x1", showShape ? 1 : 1)
+        .attr("x2", showShape ? 17 : 27)
+        .attr("y1", 1)
+        .attr("y2", 1)
+        .attr(
+            "style",
+            `stroke: ${getColorForTarget(dataPoint)}; stroke-dasharray: ${
+                dataPoint.style.strokeDashArray
+            }; stroke-width: 1px`
+        );
 };
 /**
  * Removes the legend item from legend SVG in the graph

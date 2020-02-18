@@ -54,7 +54,11 @@ const DATA = [
                     values: new Array(20).fill("").map((_, i) => ({
                         y: Math.sin(i) * Math.PI,
                         x: 85 + i * 10
-                    }))
+                    })),
+                    legendOptions: {
+                        showLine: false,
+                        showShape: true
+                    }
                 },
                 {
                     key: "uid_2",
@@ -68,7 +72,11 @@ const DATA = [
                     values: new Array(18).fill("").map((_, i) => ({
                         y: Math.sin(i) * Math.PI * 2,
                         x: 85 + i * 10
-                    }))
+                    })),
+                    legendOptions: {
+                        showLine: true,
+                        showShape: true
+                    }
                 },
                 {
                     key: "uid_3",
@@ -81,7 +89,11 @@ const DATA = [
                     values: new Array(12).fill("").map((_, i) => ({
                         y: Math.sin(i) * Math.PI * 3,
                         x: 85 + i * 10
-                    }))
+                    })),
+                    legendOptions: {
+                        showLine: true,
+                        showShape: false
+                    }
                 },
                 {
                     key: "uid_4",

@@ -102,7 +102,9 @@ svg:not(:root) {
             align-self: flex-start;
             align-content: center;
             margin-right: 0.5rem;
-            padding: 0.5rem;
+            padding: 0;
+            height: 1.866rem;
+            width: 1.866rem;
             border-radius: 0.25rem;
             border: 0;
             background-color: @grey15;
@@ -138,10 +140,38 @@ svg:not(:root) {
 
         & .carbon-legend-item-icon {
             display: block;
-            width: 0.866rem;
-            height: 0.866rem;
             stroke: @white;
             stroke-width: 5px;
+            margin: 0.5rem;
+        }
+
+        & .carbon-legend-item-icon-with-line {
+            display: block;
+            stroke: @white;
+            stroke-width: 5px;
+            width: 10px;
+        }
+
+        & .carbon-legend-item-span {
+            display: flex;
+            flex-wrap: nowrap;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        & .carbon-legend-item-line {
+            display: block;
+            stroke: @dark;
+            height: 2px;
+            width: 28px;
+        }
+
+        & .carbon-legend-item-line-with-icon {
+            display: block;
+            stroke: @dark;
+            height: 2px;
+            width: 18px;
         }
     }
 
