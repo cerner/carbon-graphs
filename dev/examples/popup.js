@@ -113,6 +113,23 @@ export const loadPopup = (onCloseCB, key, index, value) => {
         }
     }
 };
+export const loadBubblePopup = (onCloseCB, key, index, value) => {
+    removeOldPopup();
+    const path = renderPopup(onCloseCB);
+    const pair = path.append("g");
+    if (value.x) {
+        // Line
+        createItem(
+            pair,
+            "X axis",
+            `${checkDate(value.x) ? getDate(value.x) : value.x}`
+        );
+        createItem(pair, `year`, value.y);
+    }
+    if (value.weight) {
+        createItem(pair, `${value.label.display}`, `${value.weight}`);
+    }
+};
 export const loadBarPopup = (onCloseCB, key, index, values) => {
     removeOldPopup();
     const path = renderPopup(onCloseCB);

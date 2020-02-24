@@ -24,6 +24,7 @@ export default {
     gridUpperStep: "carbon-upper-step-grid",
     highlight: "carbon-highlight",
     blur: "carbon-blur",
+    bubbleBlur: "carbon-bubble-blur",
     svgIcon: "carbon-svgIcon",
     axisLabelX: "carbon-x-axis-label",
     axisLabelY: "carbon-y-axis-label",
@@ -58,6 +59,11 @@ export default {
     currentPointsGroup: "carbon-data-points-group",
     dataPointSelection: "carbon-selected-data-point",
     dataPointDisplayEnable: "carbon-data-pair--selected",
+
+    /**
+     * Bubble
+     */
+    bubbleGraphContent: "carbon-bubble-graph-content",
     /**
      * Paired Result
      */
