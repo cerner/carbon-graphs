@@ -1,7 +1,7 @@
 {
   "name": "@cerner/carbon-graphs",
   "description": "A graphing library built using d3 based on Cerner design standards",
-  "version": "1.20.1",
+  "version": "1.21.0",
   "author": "Cerner Corporation",
   "browserslist": [
     "Android >= 4",
