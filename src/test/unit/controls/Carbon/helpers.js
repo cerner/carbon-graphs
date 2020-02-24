@@ -8,7 +8,8 @@ export const LIBRARY_LIST = [
     "timeline",
     "bar",
     "pie",
-    "scatter"
+    "scatter",
+    "bubble"
 ];
 export const TOOLS_LIST = ["shape", "defaultSVGProps"];
 export const nativeInput = {

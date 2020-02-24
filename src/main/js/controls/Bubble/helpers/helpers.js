@@ -1,17 +1,12 @@
 "use strict";
 import d3 from "d3";
-import { Shape } from "../../../core";
-import {
-    getInterpolationType,
-    parseTypedValue
-} from "../../../core/BaseConfig";
-import { getDefaultSVGProps } from "../../../core/Shape";
+import { parseTypedValue } from "../../../core/BaseConfig";
 import {
     calculateVerticalPadding,
     getXAxisXPosition,
     isValidAxisType
 } from "../../../helpers/axis";
-import constants, { SHAPES } from "../../../helpers/constants";
+import constants from "../../../helpers/constants";
 import errors from "../../../helpers/errors";
 import {
     legendClickHandler,
@@ -23,33 +18,29 @@ import {
     processRegions,
     regionLegendHoverHandler
 } from "../../../helpers/region";
-import { getSVGObject } from "../../../helpers/shapeSVG";
 import styles from "../../../helpers/styles";
-import { getTransformScale } from "../../../helpers/transformUtils";
 import utils from "../../../helpers/utils";
-import {
-    d3RemoveElement,
-    getColorForTarget,
-    getShapeForTarget
-} from "../../Graph/helpers/helpers";
+import { d3RemoveElement } from "../../Graph/helpers/helpers";
+import { generateColor, bubbleScale } from "./colorGradient";
 
 /**
- * @typedef Scatter
+ * @typedef Bubble
  */
+
 /**
- * Transforms the points in the Scatter graph on resize
+ * Transforms the point in the bubble graph on resize
  *
  * @private
  * @param {object} scale - d3 scale for Graph
  * @returns {Function} - translate function for d3 transform
  */
-const transformPoint = (scale) => (value) => (scaleFactor) => {
+const transformPoint = (scale) => (value) => {
     const getX = (val) => scale.x(val.x);
     const getY = (val) => scale[val.yAxis](val.y);
-    return `translate(${getX(value)},${getY(value)}) scale(${scaleFactor})`;
+    return `translate(${getX(value)},${getY(value)})`;
 };
 /**
- * Transforms points for a data point set in the Scatter graph on resize
+ * Transforms points for a data point set in the bubble graph on resize
  *
  * @private
  * @param {object} scale - d3 scale for Graph
@@ -60,19 +51,17 @@ const transformPoint = (scale) => (value) => (scaleFactor) => {
  */
 const translatePoints = (scale, canvasSVG, cls, config) =>
     canvasSVG
-        .selectAll(`.${styles.scatterGraphContent} .${cls}`)
+        .selectAll(`.${styles.bubbleGraphContent} .${cls}`)
         .each(function(d) {
             const pointSVG = d3.select(this);
             pointSVG
-                .select("g")
                 .transition()
                 .call(
                     constants.d3Transition(config.settingsDictionary.transition)
                 )
-                .attr("transform", function() {
-                    return transformPoint(scale)(d)(getTransformScale(this));
-                });
+                .attr("transform", () => transformPoint(scale)(d));
         });
+
 /**
  * Toggles the selection of a data point, executes on click of a data point.
  *
@@ -81,6 +70,7 @@ const translatePoints = (scale, canvasSVG, cls, config) =>
  * @returns {Array} d3 html element of the selected point
  */
 const toggleDataPointSelection = (target) => {
+    blurActionHandler(target);
     const selectedPointNode = d3
         .select(target.parentNode)
         .select(`.${styles.dataPointSelection}`);
@@ -90,6 +80,7 @@ const toggleDataPointSelection = (target) => {
     );
     return selectedPointNode;
 };
+
 /**
  * Handler for the data point on click. If the content property is present for the data point
  * then the callback is executed other wise it is NOP.
@@ -115,6 +106,7 @@ const dataPointActionHandler = (value, index, target) => {
         value.onClick(
             () => {
                 selectedTarget.attr("aria-hidden", true);
+                removeBubbleBlur();
             },
             value.key,
             index,
@@ -135,17 +127,17 @@ const dataPointActionHandler = (value, index, target) => {
  * @param {object} config - config object derived from input JSON
  * @returns {undefined} - returns nothing
  */
-const translateScatterGraph = (scale, canvasSVG, config) => {
+const translateBubbleGraph = (scale, canvasSVG, config) => {
     translatePoints(scale, canvasSVG, styles.point, config);
     translatePoints(scale, canvasSVG, styles.dataPointSelection, config);
 };
 /**
- * Draws the Scatter graph on the canvas element. This calls the Graph API to render the following first
+ * Draws the bubble graph on the canvas element. This calls the Graph API to render the following first
  *  Grid
  *  Axes
  *  Legend
  *  Labels
- * Once these items are rendered, we will parse through the data points and render the points
+ * Once these items are rendered, we will parse through the data points and render the bubbles
  *
  * @private
  * @param {object} scale - d3 scale taking into account the input parameters
@@ -155,15 +147,16 @@ const translateScatterGraph = (scale, canvasSVG, config) => {
  * @returns {undefined} - returns nothing
  */
 const draw = (scale, config, canvasSVG, dataTarget) => {
-    const scatterSVG = canvasSVG
+    const BubbleSVG = canvasSVG
         .append("g")
-        .classed(styles.scatterGraphContent, true)
+        .classed(styles.bubbleGraphContent, true)
         .attr("clip-path", `url(#${config.clipPathId})`)
         .attr("aria-hidden", config.shownTargets.indexOf(dataTarget.key) < 0)
         .attr("aria-describedby", dataTarget.key);
-    const currentPointsPath = scatterSVG
-        .selectAll(`.${styles.currentPointsGroup}`)
-        .data([dataTarget]);
+
+    const currentPointsPath = BubbleSVG.selectAll(
+        `.${styles.currentPointsGroup}`
+    ).data([dataTarget]);
     currentPointsPath
         .enter()
         .append("g")
@@ -179,12 +172,12 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
         .transition()
         .call(constants.d3Transition(config.settingsDictionary.transition))
         .remove();
-    const pointPath = scatterSVG
-        .select(`.${styles.currentPointsGroup}`)
+
+    const bubblePoint = BubbleSVG.select(`.${styles.currentPointsGroup}`)
         .selectAll(`.${styles.point}`)
-        .data(getDataPointValues(dataTarget).filter((d) => d.y !== null));
-    drawDataPoints(scale, config, pointPath.enter());
-    pointPath
+        .data(getDataPointValues);
+    drawBubbles(scale, config, bubblePoint.enter(), dataTarget);
+    bubblePoint
         .exit()
         .transition()
         .call(constants.d3Transition(config.settingsDictionary.transition))
@@ -207,8 +200,6 @@ const processDataPoints = (graphConfig, dataTarget) => {
         }
         return parseTypedValue(x, type);
     };
-    // Update the interpolation type
-    dataTarget.interpolationType = getInterpolationType(dataTarget.type);
 
     graphConfig.shownTargets.push(dataTarget.key);
     dataTarget.internalValuesSubset = dataTarget.values.map((value) => ({
@@ -216,9 +207,9 @@ const processDataPoints = (graphConfig, dataTarget) => {
         isCritical: value.isCritical || false,
         x: getXDataValues(value.x),
         y: value.y,
+        weight: value.weight,
         color: dataTarget.color || constants.DEFAULT_COLOR,
         label: dataTarget.label || {},
-        shape: dataTarget.shape || SHAPES.CIRCLE,
         yAxis: dataTarget.yAxis || constants.Y_AXIS,
         key: dataTarget.key
     }));
@@ -235,102 +226,193 @@ const processDataPoints = (graphConfig, dataTarget) => {
  */
 const getDataPointValues = (target) => target.internalValuesSubset;
 /**
+ * Checks the data-set is currently shown in the graph and if the y data-point value is null
+ * If they are then true, false otherwise
+ *
+ * @private
+ * @param {object} shownTargets - graph targets config object
+ * @param {object} value - data point value object
+ * @returns {boolean} true if data point needs to be hidden, false otherwise
+ */
+const shouldHideDataPoints = (shownTargets, value) =>
+    shownTargets.indexOf(value.key) < 0 || value.y === null;
+
+/**
+ * Enforces blur state for all the bubbles that is not the one clicked on.
+ * This is provided regardless of whether onClick is present or not.
+ *
+ * @private
+ * @param {object} target - target node of bubble which is clicked
+ * @returns {undefined} - returns nothing
+ */
+const enforceBubbleBlur = (target) => {
+    d3.selectAll(`.${styles.point}`)
+        .select("circle")
+        .attr("fill-opacity", constants.DEFAULT_BUBBLE_BLUR_OPACITY)
+        .attr("stroke-opacity", constants.DEFAULT_BUBBLE_BLUR_STROKE_OPACITY);
+
+    d3.select(target)
+        .select("circle")
+        .attr("fill-opacity", constants.DEFAULT_BUBBLE_OPACITY)
+        .attr("stroke-opacity", constants.DEFAULT_BUBBLE_STROKE_OPACITY);
+};
+
+/**
+ * Removes the carbon-bubbleBlur style from all the bubbles to unblur all the bubbles in the bubble graph.
+ *
+ * @private
+ * @returns {object} - d3 Selection object
+ */
+const removeBubbleBlur = () =>
+    d3
+        .selectAll(`.${styles.point}`)
+        .attr("aria-selected", false)
+        .select("circle")
+        .attr("fill-opacity", constants.DEFAULT_BUBBLE_OPACITY)
+        .attr("stroke-opacity", constants.DEFAULT_BUBBLE_STROKE_OPACITY);
+
+/**
+ * Handler for the bubble that is clicked on. It blurs all other bubble in the bubble graph except one which is selected.
+ *
+ * @private
+ * @param {HTMLElement} target - Target element bubble clicked on
+ * @returns {undefined} - returns nothing
+ */
+const blurActionHandler = (target) => {
+    d3.select(target).attr("aria-selected", true);
+    enforceBubbleBlur(target);
+};
+
+/**
  * Draws the points with options opted in the input JSON by the consumer for each data set.
- *  Render the point with appropriate color, shape, x and y co-ordinates, label etc.
+ *  Render the point with appropriate color, x and y co-ordinates, label etc.
  *  On click content callback function is called.
  *
  * @private
  * @param {object} scale - d3 scale for Graph
  * @param {object} config - Graph config object derived from input JSON
  * @param {Array} pointGroupPath - d3 html element of the points group
+ * @param {object} dataTarget - data for the bubble graph
  * @returns {undefined} - returns nothing
  */
-const drawDataPoints = (scale, config, pointGroupPath) => {
-    const renderDataPointPath = (path, value, index) =>
-        path.append(() =>
-            new Shape(getShapeForTarget(value)).getShapeElement(
-                getDefaultSVGProps({
-                    svgClassNames: styles.point,
-                    svgStyles: `fill: ${getColorForTarget(value)};`,
-                    transformFn: transformPoint(scale)(value),
-                    onClickFn() {
-                        dataPointActionHandler(value, index, this);
-                    },
-                    a11yAttributes: {
-                        "aria-hidden": false,
-                        "aria-describedby": value.key,
-                        "aria-disabled": !utils.isFunction(value.onClick)
-                    }
-                })
+const drawBubbles = (scale, config, pointGroupPath, dataTarget) => {
+    const renderDataPoint = (path, value, index) => {
+        const bubblePoint = path
+            .append("g")
+            .classed(styles.point, true)
+            .attr("aria-disabled", !utils.isFunction(value.onClick))
+            .attr("transform", transformPoint(scale)(value))
+            .attr("aria-describedby", `${value.key}`)
+            .attr("aria-selected", false)
+            .attr("aria-hidden", (value) =>
+                shouldHideDataPoints(config.shownTargets, value)
             )
-        );
-    const renderSelectionPath = (path, value, index) =>
-        path.append(() =>
-            new Shape(
-                getSVGObject(
-                    SHAPES.CIRCLE,
-                    constants.DEFAULT_PLOT_SELECTION_SCALE
-                )
-            ).getShapeElement(
-                getDefaultSVGProps({
-                    svgClassNames: styles.dataPointSelection,
-                    transformFn: transformPoint(scale)(value),
-                    onClickFn() {
-                        dataPointActionHandler(value, index, this);
-                    },
-                    a11yAttributes: {
-                        "aria-hidden": true,
-                        "aria-describedby": value.key,
-                        "aria-disabled": !utils.isFunction(value.onClick)
-                    }
-                })
-            )
-        );
-    const renderCriticalityPath = (path, value, index, cls) =>
-        path.append(() =>
-            new Shape(getShapeForTarget(value)).getShapeElement(
-                getDefaultSVGProps({
-                    svgClassNames: `${styles.point} ${cls}`,
-                    transformFn: transformPoint(scale)(value),
-                    onClickFn() {
-                        dataPointActionHandler(value, index, this);
-                    },
-                    a11yAttributes: {
-                        "aria-hidden": false,
-                        "aria-describedby": value.key,
-                        "aria-disabled": !utils.isFunction(value.onClick)
-                    }
-                })
-            )
-        );
+            .on("click", function() {
+                dataPointActionHandler(value, index, this);
+            });
+
+        bubblePoint
+            .append("circle")
+            .attr("aria-describedby", value.key)
+            .attr("r", (d) => decideRadius(dataTarget, d))
+            .attr("fill", (d) => decideColor(dataTarget, d))
+            .attr("fill-opacity", constants.DEFAULT_BUBBLE_OPACITY)
+            .attr("stroke", (d) => decideColor(dataTarget, d));
+    };
+
+    const renderSelectionPath = (path, value, index) => {
+        path.append("g")
+            .classed(styles.dataPointSelection, true)
+            .attr("transform", transformPoint(scale)(value))
+            .attr("aria-disabled", utils.isDefined(value.onClick))
+            .attr("aria-hidden", true)
+            .attr("aria-describedby", value.key)
+            .on("click", function() {
+                dataPointActionHandler(value, index, this);
+            })
+            .append("circle")
+            .attr(
+                "r",
+                (d) =>
+                    decideRadius(dataTarget, d) +
+                    constants.DEFAULT_BUBBLE_SELECTOR_RADIUS
+            );
+    };
     pointGroupPath
         .append("g")
         .classed(styles.pointGroup, true)
         .each(function(d, i) {
             const dataPointSVG = d3.select(this);
             renderSelectionPath(dataPointSVG, d, i);
-            if (d.isCritical) {
-                config.hasCriticality = true;
-                renderCriticalityPath(
-                    dataPointSVG,
-                    d,
-                    i,
-                    styles.criticalityOuterPoint
-                );
-                renderCriticalityPath(
-                    dataPointSVG,
-                    d,
-                    i,
-                    styles.criticalityInnerPoint
-                );
-            }
-            renderDataPointPath(dataPointSVG, d, i);
+            renderDataPoint(dataPointSVG, d, i);
         });
 };
+
 /**
- * Handler for Request animation frame, executes on resize.
- *  * Order of execution
- *      * Shows/hides the regions
+ * Checks if the weight object is defined with min and max values.
+ *
+ * @private
+ * @param {object} dataTarget - data for the bubble graph
+ * @returns {boolean} - returns true if weight is defined and inside weight min and max is also defined else false.
+ */
+const areWeightsDefined = (dataTarget) =>
+    utils.isDefined(dataTarget.weight)
+        ? utils.isDefined(dataTarget.weight.min) &&
+          utils.isDefined(dataTarget.weight.max)
+        : false;
+
+/**
+ * Checks if hue is defined in the input JSON to get color gradient.
+ *
+ * @private
+ * @param {object} hue - hue is object defining the color range.
+ * @returns {boolean} - returns true if hue is defined else false.
+ */
+const isHueDefined = (hue) => utils.isDefined(hue);
+
+/**
+ * Decides the radius for each bubble
+ *
+ * @private
+ * @param {object} dataTarget - data for the bubble graph
+ * @param {number} value - data point whose radius has to be decided
+ * @returns {number} - returns the radius of the bubble
+ */
+const decideRadius = (dataTarget, value) => {
+    if (
+        areWeightsDefined(dataTarget) &&
+        utils.isUndefined(dataTarget.weight.maxRadius)
+    ) {
+        return bubbleScale(dataTarget)(value.weight);
+    } else if (utils.isUndefined(dataTarget.weight)) {
+        return constants.DEFAULT_BUBBLE_RADIUS_MAX;
+    } else {
+        return dataTarget.weight.maxRadius;
+    }
+};
+
+/**
+ * Decides the color for each bubble
+ *
+ * @private
+ * @param {object} dataTarget - data for the bubble graph
+ * @param {number} value - data point whose color has to be decided
+ * @returns {string} - returns color string for each bubble
+ */
+const decideColor = (dataTarget, value) => {
+    if (isHueDefined(dataTarget.hue) && areWeightsDefined(dataTarget)) {
+        return generateColor(dataTarget)(bubbleScale(dataTarget)(value.weight));
+    } else if (
+        isHueDefined(dataTarget.hue) &&
+        areWeightsDefined(dataTarget) === false
+    ) {
+        return generateColor(dataTarget)(value.y);
+    } else {
+        return dataTarget.color;
+    }
+};
+/**
+ * Handler for Request animation frame, executes on resize shows/hides the regions.
  *
  * @private
  * @param {object} config - Graph config object derived from input JSON
@@ -341,11 +423,11 @@ const onAnimationHandler = (config, canvasSVG) => () => {
     processRegions(config, canvasSVG);
 };
 /**
- * Click handler for legend item. Removes the data points from scatter graph when clicked
+ * Click handler for legend item. Removes the bubble from the graph
  *
  * @private
  * @param {object} graphContext - Graph instance
- * @param {Scatter} control - Scatter instance
+ * @param {Bubble} control - Bubble instance
  * @param {object} config - Graph config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {Function} - returns callback function that handles click action on legend item
@@ -363,23 +445,29 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
         }
     };
     legendClickHandler(element);
-    const legendSelected = isLegendSelected(d3.select(element));
+    const isSelected = isLegendSelected(d3.select(element));
     updateShownTarget(config.shownTargets, item);
     canvasSVG
         .selectAll(
             `.${styles.dataPointSelection}[aria-describedby="${item.key}"]`
         )
         .attr("aria-hidden", true);
-    canvasSVG
-        .selectAll(`path[aria-describedby="${item.key}"]`)
-        .attr("aria-hidden", legendSelected);
-    canvasSVG
-        .selectAll(`.${styles.point}[aria-describedby="${item.key}"]`)
-        .attr("aria-hidden", legendSelected);
+
+    const getAllBubblePoint = canvasSVG.selectAll(
+        `.${styles.point}[aria-describedby="${item.key}"]`
+    );
+
+    getAllBubblePoint.each(function(bubbleNode) {
+        if (bubbleNode.y !== null) {
+            d3.select(this).attr("aria-hidden", isSelected);
+        } else {
+            d3.select(this).attr("aria-hidden", true);
+        }
+    });
     window.requestAnimationFrame(onAnimationHandler(config, canvasSVG));
 };
 /**
- * Hover handler for legend item. Highlights current scatter data points and blurs the rest of the targets in Graph
+ * Hover handler for legend item. Highlights current bubble and blurs the rest of the targets in Graph
  * if present.
  *
  * @private
@@ -402,14 +490,9 @@ const hoverHandler = (graphTargets, canvasSVG) => (item, state) => {
     legendHoverHandler(graphTargets, canvasSVG, item.key, state, [
         additionalHoverHandler
     ]);
-    // Highlight the scatter data points of the item hovered on
     canvasSVG
-        .selectAll(`path[aria-describedby="${item.key}"]`)
+        .selectAll(`.${styles.point}[aria-describedby="${item.key}"]`)
         .classed(styles.highlight, state === constants.HOVER_EVENT.MOUSE_ENTER);
-    canvasSVG
-        .selectAll(`svg[aria-describedby="${item.key}"]`)
-        .classed(styles.highlight, state === constants.HOVER_EVENT.MOUSE_ENTER);
-
     // Highlight region(s) of the item hovered on, only if the content is currently displayed
     regionLegendHoverHandler(graphTargets, canvasSVG, item.key, state);
 };
@@ -437,7 +520,7 @@ const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
     }
 };
 /**
- * CLear the graph data points and scatter data points currently rendered
+ * Clear the graph data points currently rendered
  *
  * @private
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
@@ -449,15 +532,13 @@ const clear = (canvasSVG, dataTarget) =>
 
 export {
     toggleDataPointSelection,
-    translatePoints,
-    translateScatterGraph,
     draw,
+    translateBubbleGraph,
     clickHandler,
     hoverHandler,
     transformPoint,
     prepareLegendItems,
     processDataPoints,
     getDataPointValues,
-    drawDataPoints,
     clear
 };
