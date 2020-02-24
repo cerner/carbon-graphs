@@ -196,7 +196,7 @@ Each line can have a style object in [Values](#values) level.
 
 ##### LegendOptions
 
-Each line cna have a legendOptions object in [Values](#values) level.
+Each line can have a legendOptions object in [Values](#values) level.
 
 ###### Required
 
