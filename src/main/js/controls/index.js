@@ -6,6 +6,7 @@ import PairedResult from "./PairedResult";
 import Pie from "./Pie";
 import Timeline from "./Timeline";
 import Scatter from "./Scatter";
+import Bubble from "./Bubble";
 
 /**
  * @module api
@@ -15,6 +16,7 @@ import Scatter from "./Scatter";
  * @property {object} bar Bar graph based on Graph
  * @property {object} pairedResult Paired Result graph based on Graph
  * @property {object} timeline Timeline graph based on Construct
+ * @property {object} bubble Bubble graph based on Graph
  * @enum {object}
  */
 export default {
@@ -25,5 +27,6 @@ export default {
     timeline: (input) => new Timeline(input),
     pie: (input) => new Pie(input),
     bar: (input) => new Bar(input),
-    scatter: (input) => new Scatter(input)
+    scatter: (input) => new Scatter(input),
+    bubble: (input) => new Bubble(input)
 };

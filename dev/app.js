@@ -132,6 +132,13 @@ import {
     renderScatterWithPanning,
     renderScatterWithEventline
 } from "./examples/controls/scatter";
+import {
+    renderSimpleBubble,
+    renderWeightBasedBubbleGraph,
+    renderColorBasedBubbleGraph,
+    renderWeightColorCombination,
+    renderCustomBubbleSize
+} from "./examples/controls/bubble";
 
 renderSiteApp(
     [
@@ -350,6 +357,36 @@ renderSiteApp(
                     pathname: "/scatter/timeseries-eventline",
                     content: renderScatterWithEventline,
                     title: "Timeseries With Eventline"
+                }
+            ]
+        },
+        {
+            pathname: "/bubble",
+            children: [
+                {
+                    pathname: "/bubble/simple",
+                    content: renderSimpleBubble,
+                    title: "Simple"
+                },
+                {
+                    pathname: "/bubble/weight-based",
+                    content: renderWeightBasedBubbleGraph,
+                    title: "Weight Based"
+                },
+                {
+                    pathname: "/bubble/color-based",
+                    content: renderColorBasedBubbleGraph,
+                    title: "Color Based"
+                },
+                {
+                    pathname: "/bubble/weight-color-combination",
+                    content: renderWeightColorCombination,
+                    title: "Weight and Color Combination"
+                },
+                {
+                    pathname: "/bubble/custom-bubble-size",
+                    content: renderCustomBubbleSize,
+                    title: "Custom Bubble size"
                 }
             ]
         },

@@ -8,6 +8,8 @@ import Pie from "../../../../main/js/controls/Pie";
 import Timeline from "../../../../main/js/controls/Timeline";
 import Shape from "../../../../main/js/core/Shape/Shape";
 import Scatter from "../../../../main/js/controls/Scatter";
+import Bubble from "../../../../main/js/controls/Bubble";
+
 import {
     ganttInput,
     LIBRARY_LIST,
@@ -151,5 +153,23 @@ describe("Carbon", () => {
         const scatter = Carbon.api.scatter(data);
         expect(Carbon.api.scatter).toEqual(jasmine.any(Function));
         expect(scatter instanceof Scatter).toBeTruthy();
+    });
+    it("register Bubble", () => {
+        const data = {
+            key: "uid_12",
+            label: {
+                display: "Data Label 1"
+            },
+            values: [
+                {
+                    x: 35,
+                    y: 4
+                }
+            ]
+        };
+
+        const bubble = Carbon.api.bubble(data);
+        expect(Carbon.api.bubble).toEqual(jasmine.any(Function));
+        expect(bubble instanceof Bubble).toBeTruthy();
     });
 });
