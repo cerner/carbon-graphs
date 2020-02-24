@@ -239,7 +239,7 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
         const pointPath = lineSVG
             .select(`.${styles.currentPointsGroup}`)
             .selectAll(`.${styles.point}`)
-            .data(getDataPointValues(dataTarget).filter((d) => d.y != null));
+            .data(getDataPointValues(dataTarget).filter((d) => d.y !== null));
         drawDataPoints(scale, config, pointPath.enter());
         pointPath
             .exit()
