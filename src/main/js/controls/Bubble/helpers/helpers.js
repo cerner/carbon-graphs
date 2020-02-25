@@ -175,7 +175,7 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
 
     const bubblePoint = BubbleSVG.select(`.${styles.currentPointsGroup}`)
         .selectAll(`.${styles.point}`)
-        .data(getDataPointValues);
+        .data(getDataPointValues(dataTarget).filter((d) => d.y !== null));
     drawBubbles(scale, config, bubblePoint.enter(), dataTarget);
     bubblePoint
         .exit()
@@ -225,17 +225,6 @@ const processDataPoints = (graphConfig, dataTarget) => {
  * @returns {Array} List of data point subsets
  */
 const getDataPointValues = (target) => target.internalValuesSubset;
-/**
- * Checks the data-set is currently shown in the graph and if the y data-point value is null
- * If they are then true, false otherwise
- *
- * @private
- * @param {object} shownTargets - graph targets config object
- * @param {object} value - data point value object
- * @returns {boolean} true if data point needs to be hidden, false otherwise
- */
-const shouldHideDataPoints = (shownTargets, value) =>
-    shownTargets.indexOf(value.key) < 0 || value.y === null;
 
 /**
  * Enforces blur state for all the bubbles that is not the one clicked on.
@@ -304,9 +293,7 @@ const drawBubbles = (scale, config, pointGroupPath, dataTarget) => {
             .attr("transform", transformPoint(scale)(value))
             .attr("aria-describedby", `${value.key}`)
             .attr("aria-selected", false)
-            .attr("aria-hidden", (value) =>
-                shouldHideDataPoints(config.shownTargets, value)
-            )
+            .attr("aria-hidden", false)
             .on("click", function() {
                 dataPointActionHandler(value, index, this);
             });
@@ -452,18 +439,9 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
             `.${styles.dataPointSelection}[aria-describedby="${item.key}"]`
         )
         .attr("aria-hidden", true);
-
-    const getAllBubblePoint = canvasSVG.selectAll(
-        `.${styles.point}[aria-describedby="${item.key}"]`
-    );
-
-    getAllBubblePoint.each(function(bubbleNode) {
-        if (bubbleNode.y !== null) {
-            d3.select(this).attr("aria-hidden", isSelected);
-        } else {
-            d3.select(this).attr("aria-hidden", true);
-        }
-    });
+    canvasSVG
+        .selectAll(`.${styles.point}[aria-describedby="${item.key}"]`)
+        .attr("aria-hidden", isSelected);
     window.requestAnimationFrame(onAnimationHandler(config, canvasSVG));
 };
 /**
