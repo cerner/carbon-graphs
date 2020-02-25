@@ -44,7 +44,7 @@ npm i @cerner/carbon-graphs --save-dev
 
 ## Dependencies
 
--   D3 [_v3.5.17_]
+-   D3
 -   Polyfills:
     -   Object.assign
     -   Object.values
@@ -106,7 +106,6 @@ npm i @cerner/carbon-graphs --save-dev
 
 ## Potential features
 
--   [ ] Bubble graph
 -   [ ] Support additional themes
 -   [ ] a11y
 -   [ ] Area graph
