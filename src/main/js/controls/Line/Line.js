@@ -1,5 +1,4 @@
 "use strict";
-import d3 from "d3";
 import { GraphContent } from "../../core";
 import { getDefaultValue } from "../../core/BaseConfig";
 import constants from "../../helpers/constants";
@@ -189,22 +188,26 @@ class Line extends GraphContent {
         return this;
     }
 
-    update(graph, graphData) {
+    reflow(graph, graphData) {
         this.dataTarget = processDataPoints(graph.config, this.config);
-        const lineSVG = d3
-            .selectAll(`g[aria-describedby="${graphData.key}"]`)
+        const position = graph.config.shownTargets.lastIndexOf(graphData.key);
+        if (position > -1) {
+            graph.config.shownTargets.splice(position, 1);
+        }
+        const lineSVG = graph.svg
+            .select(`g[aria-describedby="${graphData.key}"]`)
             .selectAll(`.${styles.line}`)
             .data([this.dataTarget]);
         drawDataLines(graph.scale, graph.config, lineSVG.enter());
         lineSVG.exit().remove();
 
         if (graph.config.showShapes) {
-            const currentPointsPath = d3
+            const currentPointsPath = graph.svg
                 .select(`g[aria-describedby="${graphData.key}"]`)
                 .selectAll(`.${styles.pointGroup}`)
                 .data(this.dataTarget);
             currentPointsPath.exit().remove();
-            const pointPath = d3
+            const pointPath = graph.svg
                 .select(`g[aria-describedby="${graphData.key}"]`)
                 .select(`.${styles.currentPointsGroup}`)
                 .selectAll(`[class=".${styles.point}"]`)

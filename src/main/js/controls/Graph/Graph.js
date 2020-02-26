@@ -11,7 +11,8 @@ import {
     createAxisReferenceLine,
     createXAxisInfoRow,
     getAxesDataRange,
-    getYAxisHeight
+    getYAxisHeight,
+    updateXAxisDomain
 } from "../../helpers/axis";
 import constants, { AXIS_TYPE } from "../../helpers/constants";
 import errors from "../../helpers/errors";
@@ -42,7 +43,6 @@ import {
     removeNoDataView,
     drawNoDataView
 } from "./helpers/helpers";
-import { getDomain } from "../../core/BaseConfig/helper";
 
 /**
  * @typedef {object} Graph
@@ -388,11 +388,7 @@ class Graph extends Construct {
      * @param {Array} graphData - Input array that holds updated values and key
      */
     reflow(graphData) {
-        this.config.axis.x.domain = getDomain(
-            this.config.axis.x.type,
-            this.config.axis.x.lowerLimit,
-            this.config.axis.x.upperLimit
-        );
+        updateXAxisDomain(this.config);
         const width = getXAxisWidth(this.config);
         scaleGraph(this.scale, this.config);
         const axisData = d3.svg
@@ -406,8 +402,7 @@ class Graph extends Construct {
             )
             .orient(this.config.axis.x.orientation);
 
-        const svg = d3
-            .selectAll("svg")
+        const svg = this.svg
             .selectAll(`.${styles.axis}.${styles.axisX}`)
             .data(this.config.axis.x.domain);
         svg.enter();
@@ -436,7 +431,7 @@ class Graph extends Construct {
             //     drawNoDataView(this.config, this.svg)
             // }
             scaleGraph(this.scale, this.config);
-            this.content[position].update(this, graphData);
+            this.content[position].reflow(this, graphData);
             setAxisPadding(this.config.axisPadding, this.content[position]);
             getAxesDataRange(
                 this.content[position],

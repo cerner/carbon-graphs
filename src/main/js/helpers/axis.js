@@ -2,7 +2,7 @@
 
 import d3 from "d3";
 import Bar from "../controls/Bar/Bar";
-import { getScale, getType } from "../core/BaseConfig";
+import { getScale, getType, getDomain } from "../core/BaseConfig";
 import constants, { AXES_ORIENTATION, AXIS_TYPE } from "../helpers/constants";
 import styles from "../helpers/styles";
 import utils from "../helpers/utils";
@@ -802,6 +802,20 @@ const getLowerOutlierStretchFactorList = (config) => {
     }
     return lowerStretchFactors;
 };
+
+/**
+ * Updates the x axis domain values.
+ *
+ * @private
+ * @param {object} config - config object derived from input JSON
+ */
+const updateXAxisDomain = (config) => {
+    config.axis.x.domain = getDomain(
+        config.axis.x.type,
+        config.axis.x.lowerLimit,
+        config.axis.x.upperLimit
+    );
+};
 /**
  * Calculates the upper part of the outlier based on data points.
  * If the content has any data points that are outside the lower and upper bounds set
@@ -1118,5 +1132,6 @@ export {
     isValidAxisType,
     calculateVerticalPadding,
     isXAxisOrientationTop,
-    getAxisInfoRowYPosition
+    getAxisInfoRowYPosition,
+    updateXAxisDomain
 };
