@@ -158,12 +158,12 @@ const displayLine = (itemPath, dataPoint, showShape) => {
     svg.append("line") // creating white line
         .attr("x1", 0)
         .attr("x2", 35)
-        .attr("style", `stroke: ${COLORS.WHITE}; stroke-width: 5px;`);
+        .attr("style", `stroke: ${COLORS.WHITE}; stroke-width: 6;`);
     svg.append("line")
         .attr("x1", showShape ? 1 : 1)
         .attr("x2", showShape ? 17 : 27)
-        .attr("y1", 1)
-        .attr("y2", 1)
+        .attr("y1", 1.5)
+        .attr("y2", 1.5)
         .attr(
             "style",
             `stroke: ${getColorForTarget(dataPoint)}; stroke-dasharray: ${
