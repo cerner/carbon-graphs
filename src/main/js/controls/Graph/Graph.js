@@ -424,7 +424,6 @@ class Graph extends Construct {
             this.contentConfig.forEach((config, index) => {
                 if (config.key === graphData.key) position = index;
             });
-            this.contentConfig[position].values = graphData.values;
             // if (utils.notEmpty(this.content[position].config.values)) {
             //     removeNoDataView(this.svg);
             // } else {

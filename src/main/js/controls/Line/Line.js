@@ -189,6 +189,7 @@ class Line extends GraphContent {
     }
 
     reflow(graph, graphData) {
+        this.config.values = graphData.values;
         this.dataTarget = processDataPoints(graph.config, this.config);
         const position = graph.config.shownTargets.lastIndexOf(graphData.key);
         if (position > -1) {
