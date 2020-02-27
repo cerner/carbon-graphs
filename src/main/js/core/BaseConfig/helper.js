@@ -127,3 +127,13 @@ export const parseTypedValue = (x, xAxisType) =>
  */
 export const isPanningModeEnabled = (config) =>
     utils.isDefined(config.pan) && config.pan.enabled;
+
+/**
+ * Validate and return the strokeDashArray property
+ *
+ * @private
+ * @param {object} style - style you want to apply for the line
+ * @returns {string} - stroke-dasharray css value for the line
+ */
+export const getStrokeDashArray = (style) =>
+    getDefaultValue(style.strokeDashArray, "0");

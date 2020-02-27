@@ -673,6 +673,7 @@ describe("Scatter - Load", () => {
                 scatterGraphContainer,
                 styles.legendItemBtn
             );
+            const iconSVG = legendItemBtn.children[0].firstChild;
             expect(legendItem).not.toBeNull();
             expect(legendItem.getAttribute("aria-current")).toBe("true");
             expect(legendItem.getAttribute("aria-disabled")).toBe("false");
@@ -687,11 +688,9 @@ describe("Scatter - Load", () => {
             expect(legendItemBtn.getAttribute("class")).toBe(
                 styles.legendItemBtn
             );
-            expect(legendItemBtn.children[0].tagName).toBe("svg");
+            expect(iconSVG.tagName).toBe("svg");
             expect(
-                legendItemBtn.children[0].classList.contains(
-                    styles.legendItemIcon
-                )
+                iconSVG.classList.contains(styles.legendItemIcon)
             ).toBeTruthy();
         });
         it("loads the correct shape", () => {

@@ -16,6 +16,8 @@ import constants from "../helpers/constants";
 import errors from "../helpers/errors";
 import styles from "../helpers/styles";
 import utils from "../helpers/utils";
+import { getDefaultValue } from "../core/BaseConfig";
+import { getStrokeDashArray } from "../core/BaseConfig/helper";
 
 /**
  * Validates legend label
@@ -92,26 +94,99 @@ const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
                 eventHandlers.hoverHandler(t, constants.HOVER_EVENT.MOUSE_EXIT)
             );
     }
-    itemPath
+    const buttonPath = itemPath
         .append("button")
         .classed(styles.legendItemBtn, true)
         .attr("title", text)
         .attr("tabindex", shouldForceDisableLegendItem ? -1 : 0)
-        .append(() =>
-            new Shape(getShapeForTarget(t)).getShapeElement(
-                getDefaultSVGProps({
-                    svgClassNames: styles.legendItemIcon,
-                    svgStyles: `fill: ${getColorForTarget(t)};`
-                }),
-                true
-            )
-        );
+        .append("span")
+        .attr("class", styles.legendItemSpan);
+
+    processLegendOptions(buttonPath, t);
+
     itemPath
         .append("label")
         .classed(styles.legendItemText, true)
         .attr("tabindex", -1)
         .text(text);
     return legendSVG;
+};
+
+/**
+ * Creates legend button content based on legend options
+ *
+ * @private
+ * @param {object} buttonPath - d3 svg object
+ * @param {object} input - input item object processed from the input JSON
+ */
+const processLegendOptions = (buttonPath, input) => {
+    if (input.legendOptions) {
+        if (input.legendOptions.showShape) {
+            createLegendIcon(buttonPath, input);
+        }
+        if (input.legendOptions.showLine) {
+            createLegendLine(buttonPath, input);
+        }
+    } else {
+        createLegendIcon(buttonPath, input);
+    }
+};
+
+/**
+ * Creates an icon in the legend button
+ *
+ * @private
+ * @param {object} buttonPath - d3 svg object
+ * @param {object} input - input item object processed from the input JSON
+ * @returns {object} returns the d3 element path for the legend
+ */
+const createLegendIcon = (buttonPath, input) =>
+    buttonPath.append(() =>
+        new Shape(getShapeForTarget(input)).getShapeElement(
+            getDefaultSVGProps({
+                svgClassNames: styles.legendItemIcon,
+                svgStyles: `fill: ${getColorForTarget(input)};`
+            }),
+            true
+        )
+    );
+
+/**
+ * Creates a line in the legend button
+ *
+ * @private
+ * @param {object} buttonPath - d3 svg object
+ * @param {object} t - input item object processed from the input JSON
+ */
+const createLegendLine = (buttonPath, t) => {
+    const { legendOptions } = t;
+    const svg = buttonPath
+        .append("svg")
+        .classed(
+            legendOptions.showShape
+                ? styles.legendItemLineWithIcon
+                : styles.legendItemLine,
+            true
+        );
+    svg.append("line") // creating white line
+        .attr("x2", constants.DEFAULT_LEGEND_LINE_WIDTH)
+        .classed(styles.legendItemWhiteLine, true);
+    svg.append("line")
+        .attr("x1", 1)
+        .attr(
+            "x2",
+            legendOptions.showShape
+                ? constants.DEFAULT_LEGEND_LINE_WIDTH_WITH_SYMBOL - 1
+                : constants.DEFAULT_LEGEND_LINE_WIDTH - 1
+        )
+        .attr("y1", constants.LEGEND_LINE_POSITION)
+        .attr("y2", constants.LEGEND_LINE_POSITION)
+        .attr(
+            "style",
+            `stroke: ${getColorForTarget(t)};
+            stroke-dasharray: ${legendOptions.style.strokeDashArray};
+            stroke-width: 1px;`
+        );
 };
 /**
  * Removes the legend item from legend SVG in the graph
@@ -290,6 +365,26 @@ const loadPieLegendItem = (legendSVG, dataTarget, { hoverHandler }) => {
             hoverHandler(dataTarget, constants.HOVER_EVENT.MOUSE_EXIT)
         );
 };
+/**
+ * Validate and return the legendOptions property
+ *
+ * @private
+ * @param {object} graphConfig - config object of Graph API
+ * @param {object} dataTarget - Data points object
+ * @returns {object} legendOptions - legendOptions for the legend
+ */
+const getDefaultLegendOptions = (graphConfig, dataTarget) => {
+    const legendOptions = getDefaultValue(dataTarget.legendOptions, {
+        showShape: true,
+        showLine: false
+    });
+    legendOptions.style = getDefaultValue(legendOptions.style, {});
+    legendOptions.style = {
+        strokeDashArray: getStrokeDashArray(legendOptions.style)
+    };
+
+    return legendOptions;
+};
 
 /**
  * @enum {Function}
@@ -301,5 +396,6 @@ export {
     removeLegendItem,
     legendClickHandler,
     legendHoverHandler,
-    isLegendSelected
+    isLegendSelected,
+    getDefaultLegendOptions
 };
