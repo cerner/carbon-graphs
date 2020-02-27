@@ -117,18 +117,18 @@ const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
  *
  * @private
  * @param {object} buttonPath - d3 svg object
- * @param {object} t - input item object processed from the input JSON
+ * @param {object} input - input item object processed from the input JSON
  */
-const processLegendOptions = (buttonPath, t) => {
-    if (t.legendOptions) {
-        if (t.legendOptions.showShape) {
-            createLegendIcon(buttonPath, t);
+const processLegendOptions = (buttonPath, input) => {
+    if (input.legendOptions) {
+        if (input.legendOptions.showShape) {
+            createLegendIcon(buttonPath, input);
         }
-        if (t.legendOptions.showLine) {
-            createLegendLine(buttonPath, t);
+        if (input.legendOptions.showLine) {
+            createLegendLine(buttonPath, input);
         }
     } else {
-        createLegendIcon(buttonPath, t);
+        createLegendIcon(buttonPath, input);
     }
 };
 
@@ -137,19 +137,19 @@ const processLegendOptions = (buttonPath, t) => {
  *
  * @private
  * @param {object} buttonPath - d3 svg object
- * @param {object} t - input item object processed from the input JSON
+ * @param {object} input - input item object processed from the input JSON
+ * @returns {object} returns the d3 element path for the legend
  */
-const createLegendIcon = (buttonPath, t) => {
+const createLegendIcon = (buttonPath, input) =>
     buttonPath.append(() =>
-        new Shape(getShapeForTarget(t)).getShapeElement(
+        new Shape(getShapeForTarget(input)).getShapeElement(
             getDefaultSVGProps({
                 svgClassNames: styles.legendItemIcon,
-                svgStyles: `fill: ${getColorForTarget(t)};`
+                svgStyles: `fill: ${getColorForTarget(input)};`
             }),
             true
         )
     );
-};
 
 /**
  * Creates a line in the legend button
@@ -179,8 +179,8 @@ const createLegendLine = (buttonPath, t) => {
                 ? constants.DEFAULT_LEGEND_LINE_WIDTH_WITH_SYMBOL - 1
                 : constants.DEFAULT_LEGEND_LINE_WIDTH - 1
         )
-        .attr("y1", 1.5)
-        .attr("y2", 1.5)
+        .attr("y1", constants.LEGEND_LINE_POSITION)
+        .attr("y2", constants.LEGEND_LINE_POSITION)
         .attr(
             "style",
             `stroke: ${getColorForTarget(t)};
@@ -375,7 +375,7 @@ const loadPieLegendItem = (legendSVG, dataTarget, { hoverHandler }) => {
  */
 const getDefaultLegendOptions = (graphConfig, dataTarget) => {
     const legendOptions = getDefaultValue(dataTarget.legendOptions, {
-        showShape: getDefaultValue(graphConfig.showShapes, true),
+        showShape: true,
         showLine: false
     });
     legendOptions.style = getDefaultValue(legendOptions.style, {});

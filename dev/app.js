@@ -83,7 +83,7 @@ import {
     renderLineWithPanning,
     renderLineWithEventline,
     renderDashedLine,
-    renderLegendWithOptions
+    renderLineWithLegendOptions
 } from "./examples/controls/line";
 import {
     renderMultiPairedResultRegion,
@@ -211,8 +211,8 @@ renderSiteApp(
                 },
                 {
                     pathname: "/line/legend-options",
-                    content: renderLegendWithOptions,
-                    title: "Custom Legend Options"
+                    content: renderLineWithLegendOptions,
+                    title: "Line with Legend Options"
                 }
             ]
         },
