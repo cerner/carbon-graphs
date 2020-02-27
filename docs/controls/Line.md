@@ -200,10 +200,11 @@ Each line can have a legendOptions object in [Values](#values) level.
 
 ###### Required
 
-| Property Name | Expected | Default | Description                  |
-| ------------- | -------- | ------- | ---------------------------- |
-| showShape     | boolean  | true    | Display Shape in the legend. |
-| showLine      | boolean  | true    | Display Line in the legend.  |
+| Property Name | Expected | Default | Description                                           |
+| ------------- | -------- | ------- | ----------------------------------------------------- |
+| showShape     | boolean  | true    | Display Shape in the legend.                          |
+| showLine      | boolean  | false   | Display Line in the legend.                           |
+| style         | object   | {}      | Any style that can be applied. Refer [Styles](#style) |
 
 ### Values
 

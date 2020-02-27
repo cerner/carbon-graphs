@@ -142,13 +142,6 @@ svg:not(:root) {
             display: block;
             stroke: @white;
             stroke-width: 5px;
-            margin: 0.5rem;
-        }
-
-        & .carbon-legend-item-icon-with-line {
-            display: block;
-            stroke: @white;
-            stroke-width: 5px;
         }
 
         & .carbon-legend-item-span {
@@ -160,19 +153,20 @@ svg:not(:root) {
         }
 
         & .carbon-legend-item-line {
-            display: block;
-            stroke: @dark;
-            height: 6px;
+            height: 5px;
             width: 28px;
             padding-top: 1px;
         }
 
         & .carbon-legend-item-line-with-icon {
-            display: block;
-            stroke: @dark;
-            height: 6px;
+            height: 5px;
             width: 18px;
             padding-top: 1px;
+        }
+
+        & .carbon-legend-white-line {
+            stroke: @white;
+            stroke-width: 6px;
         }
     }
 

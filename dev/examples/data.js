@@ -54,11 +54,7 @@ const DATA = [
                     values: new Array(20).fill("").map((_, i) => ({
                         y: Math.sin(i) * Math.PI,
                         x: 85 + i * 10
-                    })),
-                    legendOptions: {
-                        showLine: false,
-                        showShape: true
-                    }
+                    }))
                 },
                 {
                     key: "uid_2",
@@ -75,7 +71,8 @@ const DATA = [
                     })),
                     legendOptions: {
                         showLine: true,
-                        showShape: true
+                        showShape: false,
+                        style: { strokeDashArray: "2,2" }
                     }
                 },
                 {
@@ -89,11 +86,7 @@ const DATA = [
                     values: new Array(12).fill("").map((_, i) => ({
                         y: Math.sin(i) * Math.PI * 3,
                         x: 85 + i * 10
-                    })),
-                    legendOptions: {
-                        showLine: true,
-                        showShape: false
-                    }
+                    }))
                 },
                 {
                     key: "uid_4",
@@ -119,7 +112,11 @@ const DATA = [
                     values: new Array(20).fill("").map((_, i) => ({
                         y: Math.cos(i) * Math.PI * 5,
                         x: 85 + i * 10
-                    }))
+                    })),
+                    legendOptions: {
+                        showLine: true,
+                        showShape: true
+                    }
                 },
                 {
                     key: "uid_6",

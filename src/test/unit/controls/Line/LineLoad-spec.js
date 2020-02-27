@@ -784,7 +784,7 @@ describe("Line - Load", () => {
             expect(legendContainer.tagName).toBe("UL");
             expect(legendItems.length).toBe(1);
         });
-        it("loads item with a shape, line and text", () => {
+        it("loads item with a shape and text", () => {
             const input = getInput(valuesDefault, false, false);
             graphDefault.loadContent(new Line(input));
             const legendItem = fetchElementByClass(
@@ -796,7 +796,6 @@ describe("Line - Load", () => {
                 styles.legendItemBtn
             );
             const iconSVG = legendItemBtn.children[0].firstChild;
-            const lineSVG = legendItemBtn.children[0].children[1];
             expect(legendItem).not.toBeNull();
             expect(legendItem.getAttribute("aria-current")).toBe("true");
             expect(legendItem.getAttribute("aria-disabled")).toBe("false");
@@ -813,11 +812,7 @@ describe("Line - Load", () => {
             );
             expect(iconSVG.tagName).toBe("svg");
             expect(
-                iconSVG.classList.contains(styles.legendItemIconWithLine)
-            ).toBeTruthy();
-            expect(lineSVG.tagName).toBe("svg");
-            expect(
-                lineSVG.classList.contains(styles.legendItemLineWithIcon)
+                iconSVG.classList.contains(styles.legendItemIcon)
             ).toBeTruthy();
         });
         it("loads the correct shape", () => {
@@ -829,11 +824,9 @@ describe("Line - Load", () => {
             );
             const svgElements = legendItem.querySelectorAll("svg");
             const iconSVG = svgElements[0];
-            const lineSVG = svgElements[1];
             const iconPath = legendItem.querySelector("path");
             expect(iconSVG).not.toBeNull();
-            expect(iconSVG.classList).toContain(styles.legendItemIconWithLine);
-            expect(lineSVG.classList).toContain(styles.legendItemLineWithIcon);
+            expect(iconSVG.classList).toContain(styles.legendItemIcon);
             expect(iconPath).not.toBeNull();
             expect(iconPath.getAttribute("d")).not.toBeNull();
             expect(iconPath.getAttribute("d")).toBe(SHAPES.RHOMBUS.path.d);
@@ -847,18 +840,12 @@ describe("Line - Load", () => {
             );
             const svgElements = legendItem.querySelectorAll("svg");
             const iconSVG = svgElements[0];
-            const lineSVG = svgElements[1];
             const iconPath = legendItem.querySelector("path");
             expect(iconSVG).not.toBeNull();
-            expect(iconSVG.classList).toContain(styles.legendItemIconWithLine);
+            expect(iconSVG.classList).toContain(styles.legendItemIcon);
             expect(iconSVG.getAttribute("style")).toBe(`fill: ${COLORS.BLUE};`);
             expect(iconPath).not.toBeNull();
             expect(iconPath.getAttribute("d")).not.toBeNull();
-            expect(lineSVG).not.toBeNull();
-            expect(lineSVG.classList).toContain(styles.legendItemLineWithIcon);
-            expect(
-                lineSVG.children[1].attributes.getNamedItem("style").value
-            ).toContain(`stroke: ${COLORS.BLUE};`);
         });
         it("loads only line if user sets showLine to be true and showShape to be false", () => {
             const input = getInput(valuesDefault, false, false);
@@ -899,8 +886,12 @@ describe("Line - Load", () => {
         });
         it("loads the line with provided stroke dashArray", () => {
             const input = getInput(valuesDefault, false, false);
-            input.style = {
-                strokeDashArray: "2,2"
+            input.legendOptions = {
+                showShape: false,
+                showLine: true,
+                style: {
+                    strokeDashArray: "2,2"
+                }
             };
             graphDefault.loadContent(new Line(input));
             const legendItem = fetchElementByClass(
@@ -908,9 +899,9 @@ describe("Line - Load", () => {
                 styles.legendItem
             );
             const svgElements = legendItem.querySelectorAll("svg");
-            const lineSVG = svgElements[1];
+            const lineSVG = svgElements[0];
             expect(lineSVG).not.toBeNull();
-            expect(lineSVG.classList).toContain(styles.legendItemLineWithIcon);
+            expect(lineSVG.classList).toContain(styles.legendItemLine);
             expect(
                 lineSVG.children[1].attributes.getNamedItem("style").value
             ).toContain(`stroke-dasharray: 2,2;`);

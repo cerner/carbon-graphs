@@ -82,7 +82,8 @@ import {
     renderLineCustomContentPadding,
     renderLineWithPanning,
     renderLineWithEventline,
-    renderDashedLine
+    renderDashedLine,
+    renderLegendWithOptions
 } from "./examples/controls/line";
 import {
     renderMultiPairedResultRegion,
@@ -207,6 +208,11 @@ renderSiteApp(
                     pathname: "/line/dashed-line",
                     content: renderDashedLine,
                     title: "Dashed Line"
+                },
+                {
+                    pathname: "/line/legend-options",
+                    content: renderLegendWithOptions,
+                    title: "Custom Legend Options"
                 }
             ]
         },
