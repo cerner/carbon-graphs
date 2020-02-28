@@ -1,5 +1,4 @@
 "use strict";
-import d3 from "d3";
 import BaseConfig, { getDefaultValue, getDomain } from "../../core/BaseConfig";
 import {
     generateClipPathId,
@@ -11,10 +10,10 @@ import constants, {
     AXES_ORIENTATION,
     AXIS_TYPE
 } from "../../helpers/constants";
-import errors from "../../helpers/errors";
-import utils from "../../helpers/utils";
 import { validateDateline } from "../../helpers/dateline";
+import errors from "../../helpers/errors";
 import { validateEventline } from "../../helpers/eventline";
+import utils from "../../helpers/utils";
 import { DEFAULT_LOCALE } from "../../locale/index";
 
 const initialAxisInfo = {
@@ -93,8 +92,8 @@ export const processInput = (input, config, type) => {
     config.eventline = getDefaultValue(utils.deepClone(input.eventline), []);
     config.padding = getPadding(config, input.padding);
     config.locale = getDefaultValue(input.locale, DEFAULT_LOCALE);
+    config.d3Locale = getDefaultValue(input.locale, DEFAULT_LOCALE);
     config.showNoDataText = getDefaultValue(input.showNoDataText, true);
-    config.d3Locale = d3.locale(getDefaultValue(input.locale, DEFAULT_LOCALE));
     config.throttle = getDefaultValue(
         input.throttle,
         constants.RESIZE_THROTTLE

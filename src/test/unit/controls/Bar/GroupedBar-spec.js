@@ -1,10 +1,10 @@
 "use strict";
-import d3 from "d3";
 import Bar from "../../../../main/js/controls/Bar/Bar";
 import Graph from "../../../../main/js/controls/Graph/Graph";
 import styles from "../../../../main/js/helpers/styles";
 import {
     getCurrentTransform,
+    getSVGAnimatedTransformList,
     round2Decimals
 } from "../../../../main/js/helpers/transformUtils";
 import utils from "../../../../main/js/helpers/utils";
@@ -294,55 +294,63 @@ describe("Grouped Bar", () => {
                 expect(axisInfoRowElement.length).toBeCloserTo(6);
                 expect(
                     toNumber(
-                        d3.transform(getCurrentTransform(axisInfoRowElement[0]))
-                            .translate[0],
+                        getSVGAnimatedTransformList(
+                            getCurrentTransform(axisInfoRowElement[0])
+                        ).translate[0],
                         10
                     )
                 ).toBeCloserTo(169);
                 expect(
                     round2Decimals(
-                        d3.transform(getCurrentTransform(axisInfoRowElement[0]))
-                            .translate[1]
+                        getSVGAnimatedTransformList(
+                            getCurrentTransform(axisInfoRowElement[0])
+                        ).translate[1]
                     )
                 ).toBeCloserTo(-10);
                 expect(
                     toNumber(
-                        d3.transform(getCurrentTransform(axisInfoRowElement[1]))
-                            .translate[0],
+                        getSVGAnimatedTransformList(
+                            getCurrentTransform(axisInfoRowElement[1])
+                        ).translate[0],
                         10
                     )
-                ).toBeCloserTo(311);
+                ).toBeCloserTo(320);
                 expect(
                     round2Decimals(
-                        d3.transform(getCurrentTransform(axisInfoRowElement[1]))
-                            .translate[1]
+                        getSVGAnimatedTransformList(
+                            getCurrentTransform(axisInfoRowElement[1])
+                        ).translate[1]
                     )
                 ).toBeCloserTo(-10);
                 expect(
                     toNumber(
-                        d3.transform(getCurrentTransform(axisInfoRowElement[2]))
-                            .translate[0],
+                        getSVGAnimatedTransformList(
+                            getCurrentTransform(axisInfoRowElement[2])
+                        ).translate[0],
                         10
                     )
                 ).toBeCloserTo(453);
                 expect(
                     toNumber(
-                        d3.transform(getCurrentTransform(axisInfoRowElement[3]))
-                            .translate[0],
+                        getSVGAnimatedTransformList(
+                            getCurrentTransform(axisInfoRowElement[3])
+                        ).translate[0],
                         10
                     )
                 ).toBeCloserTo(112);
                 expect(
                     toNumber(
-                        d3.transform(getCurrentTransform(axisInfoRowElement[4]))
-                            .translate[0],
+                        getSVGAnimatedTransformList(
+                            getCurrentTransform(axisInfoRowElement[4])
+                        ).translate[0],
                         10
                     )
                 ).toBeCloserTo(254);
                 expect(
                     toNumber(
-                        d3.transform(getCurrentTransform(axisInfoRowElement[5]))
-                            .translate[0],
+                        getSVGAnimatedTransformList(
+                            getCurrentTransform(axisInfoRowElement[5])
+                        ).translate[0],
                         10
                     )
                 ).toBeCloserTo(396);

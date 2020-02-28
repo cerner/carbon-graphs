@@ -320,18 +320,18 @@ describe("Bar - Load lifecycle", () => {
                     styles.taskBar
                 );
                 triggerEvent(point, "click", () => {
-                    expect(toNumber(selectionPoint.getAttribute("x"))).toEqual(
-                        toNumber(point.getAttribute("x")) - 5
-                    );
-                    expect(toNumber(selectionPoint.getAttribute("y"))).toEqual(
-                        toNumber(point.getAttribute("y")) - 5
-                    );
+                    expect(
+                        toNumber(selectionPoint.getAttribute("x"))
+                    ).toBeCloserTo(toNumber(point.getAttribute("x")) - 5);
+                    expect(
+                        toNumber(selectionPoint.getAttribute("y"))
+                    ).toBeCloserTo(toNumber(point.getAttribute("y")) - 5);
                     expect(
                         toNumber(selectionPoint.getAttribute("height"))
-                    ).toEqual(toNumber(point.getAttribute("height")) + 10);
+                    ).toBeCloserTo(toNumber(point.getAttribute("height")) + 10);
                     expect(
                         toNumber(selectionPoint.getAttribute("width"))
-                    ).toEqual(toNumber(point.getAttribute("width")) + 10);
+                    ).toBeCloserTo(toNumber(point.getAttribute("width")) + 10);
                     done();
                 });
             });

@@ -1,8 +1,16 @@
 "use strict";
-import Graph from "../../../../main/js/controls/Graph/Graph";
 import Bubble from "../../../../main/js/controls/Bubble";
+import Graph from "../../../../main/js/controls/Graph/Graph";
+import { COLORS, SHAPES } from "../../../../main/js/helpers/constants";
 import styles from "../../../../main/js/helpers/styles";
+import { getSVGAnimatedTransformList } from "../../../../main/js/helpers/transformUtils";
 import utils from "../../../../main/js/helpers/utils";
+import {
+    delay,
+    loadCustomJasmineMatcher,
+    PADDING_BOTTOM,
+    toNumber
+} from "../../helpers/commonHelpers";
 import {
     axisDefault,
     axisTimeSeries,
@@ -10,13 +18,13 @@ import {
     getInput,
     valuesTimeSeries
 } from "./helpers";
-import { toNumber, delay, PADDING_BOTTOM } from "../../helpers/commonHelpers";
-import { COLORS, SHAPES } from "../../../../main/js/helpers/constants";
-import { getSVGAnimatedTransformList } from "../../../../main/js/helpers/transformUtils";
 
 describe("Bubble - Panning", () => {
     let graphDefault = null;
     let bubbleGraphContainer;
+    beforeAll(() => {
+        loadCustomJasmineMatcher();
+    });
     beforeEach(() => {
         bubbleGraphContainer = document.createElement("div");
         bubbleGraphContainer.id = "testBubble_carbon";
@@ -60,7 +68,7 @@ describe("Bubble - Panning", () => {
                 const translate = getSVGAnimatedTransformList(
                     datelineGroup.getAttribute("transform")
                 ).translate;
-                expect(toNumber(translate[0], 10)).toBeGreaterThanOrEqual(72);
+                expect(toNumber(translate[0], 10)).toBeCloserTo(72);
                 expect(toNumber(translate[1], 10)).toBeCloseTo(PADDING_BOTTOM);
                 done();
             });
@@ -96,7 +104,7 @@ describe("Bubble - Panning", () => {
                 const translate = getSVGAnimatedTransformList(
                     datelineGroup.getAttribute("transform")
                 ).translate;
-                expect(toNumber(translate[0], 10)).toBeGreaterThanOrEqual(72);
+                expect(toNumber(translate[0], 10)).toBeCloserTo(72);
                 expect(toNumber(translate[1], 10)).toBeCloseTo(PADDING_BOTTOM);
                 done();
             });

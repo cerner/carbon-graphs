@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import sinon from "sinon";
 import Timeline from "../../../../main/js/controls/Timeline";
 import {

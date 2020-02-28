@@ -1,24 +1,24 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import Construct from "../../core/Construct";
 import { getYAxisHeight } from "../../helpers/axis";
 import constants from "../../helpers/constants";
-import errors from "../../helpers/errors";
-import { createLegend } from "../../helpers/legend";
-import styles from "../../helpers/styles";
-import utils from "../../helpers/utils";
 import {
     contentLoadHandler,
     contentUnloadHandler
 } from "../../helpers/constructUtils";
+import { createDateline } from "../../helpers/dateline";
+import errors from "../../helpers/errors";
+import { createEventline } from "../../helpers/eventline";
+import { createLegend } from "../../helpers/legend";
+import { getElementBoxSizingParameters } from "../../helpers/paddingUtils";
+import styles from "../../helpers/styles";
+import utils from "../../helpers/utils";
 import GanttConfig, { processInput } from "./GanttConfig";
 import {
     prepareLegendEventHandlers,
     renderLegendItems
 } from "./helpers/actionHelpers";
-import { createDateline } from "../../helpers/dateline";
-import { getElementBoxSizingParameters } from "../../helpers/paddingUtils";
-import { createEventline } from "../../helpers/eventline";
 import {
     attachEventHandlers,
     calculateAxesLabelSize,
@@ -29,12 +29,12 @@ import {
     createGanttContent,
     createGrid,
     createTrack,
+    d3RemoveElement,
     detachEventHandlers,
     determineHeight,
     prepareLoadAtIndex,
     scaleGraph,
-    updateAxesDomain,
-    d3RemoveElement
+    updateAxesDomain
 } from "./helpers/creationHelpers";
 import { translateGraph, translateLabelText } from "./helpers/translateHelpers";
 
@@ -59,7 +59,7 @@ const setCanvasWidth = (container, config) => {
 };
 /**
  * Sets the canvas width. Canvas rests within a container.
- * On resize, the canvas is subjected to resizing but its sibling: Legend isnt.
+ * On resize, the canvas is subjected to resizing but its sibling: Legend isn't.
  *
  * @private
  * @param {object} config - config object derived from input JSON
@@ -179,13 +179,12 @@ class Gantt extends Construct {
      * Draw function that is called by the parent control. This draws the x-axis, grid, legend and
      * trackLabels for the chart construct.
      *
-     * @description Since we dont have the concept of z-index in visualization,
+     * @description Since we don't have the concept of z-index in visualization,
      * the order of rendering should be following:
      *  * SVG container
      *  * Grid
      *  * X-Axis
-     *  * Y-Axis
-     *  * Track Labels
+     *  * Y-Axis (Track Labels)
      *  * Legend
      *  * Data [In our case we have load and unload]
      * @param {object} input - Input JSON

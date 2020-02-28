@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import sinon from "sinon";
 import Gantt from "../../../../main/js/controls/Gantt";
 import {
@@ -268,198 +268,230 @@ describe("Gantt -> Track -> Task", () => {
                 }).not.toThrowError();
             });
         });
-        it("Renders task group correctly", () => {
+        it("Renders task group correctly", (done) => {
             loadData(gantt);
-            const taskGroup = document.querySelectorAll(`.${styles.taskGroup}`);
-            expect(taskGroup.length).toBe(1);
-            expect(taskGroup[0].childNodes.length).toBe(4);
-            expect(taskGroup[0].getAttribute("transform")).not.toBeNull();
-        });
-        it("Adds data to each task correctly", () => {
-            loadData(gantt);
-            const taskGroupElement = document.querySelectorAll(
-                `.${styles.task}`
-            );
-            taskGroupElement.forEach((t) => {
-                expect(d3.select(t).datum()).not.toBeUndefined();
+            delay(() => {
+                const taskGroup = document.querySelectorAll(
+                    `.${styles.taskGroup}`
+                );
+                expect(taskGroup.length).toBe(1);
+                expect(taskGroup[0].childNodes.length).toBe(4);
+                expect(taskGroup[0].getAttribute("transform")).not.toBeNull();
+                done();
             });
         });
-        it("Prepares task", () => {
+        it("Adds data to each task correctly", (done) => {
             loadData(gantt);
-            const d3TaskElement = d3.select(`.${styles.task}`);
-            const taskData = d3TaskElement.datum();
-            expect(taskData.key).toBe(taskValuesJSON[0].key);
-            expect(taskData.y).toBe("Project A Really long");
-            expect(taskData.onClick).toEqual(jasmine.any(Function));
-            expect(taskData.color).toBe(COLORS.BLUE);
-            expect(taskData.startDate).toEqual(
-                new Date(taskValuesJSON[0].startDate)
-            );
-            expect(taskData.endDate).toEqual(
-                new Date(taskValuesJSON[0].endDate)
-            );
-            expect(taskData.percentage).toEqual(taskValuesJSON[0].percentage);
-            expect(taskData.dependancies).toEqual(
-                taskValuesJSON[0].dependancies
-            );
-            expect(taskData.label).toEqual(taskValuesJSON[0].label);
-            expect(taskData.style).toContain("fill");
-            expect(taskData.style).toContain(COLORS.BLUE);
-            expect(taskData.style).toContain("stroke");
-            expect(taskData.clickPassThrough).toEqual(false);
+            delay(() => {
+                const taskGroupElement = document.querySelectorAll(
+                    `.${styles.task}`
+                );
+                taskGroupElement.forEach((t) => {
+                    expect(d3.select(t).datum()).not.toBeUndefined();
+                });
+                done();
+            });
         });
-        it("Renders bar correctly", () => {
+        it("Prepares task", (done) => {
             loadData(gantt);
-            const taskElement = fetchElementByClass(styles.task);
-            expect(taskElement.nodeName).toBe("g");
-            expect(taskElement.getAttribute("class")).toBe(styles.task);
-            expect(taskElement.getAttribute("aria-selected")).toBe("false");
-            expect(taskElement.getAttribute("aria-describedby")).toBe(
-                taskValuesJSON[0].key
-            );
-            expect(taskElement.getAttribute("pointer-events")).toBe("auto");
-            expect(taskElement.childNodes.length).toBe(2);
-            expect(taskElement.childNodes[1]).not.toBeNull();
-            expect(taskElement.childNodes[1].nodeName).toBe("rect");
-            expect(taskElement.childNodes[1].getAttribute("class")).toBe(
-                styles.taskBar
-            );
-            expect(taskElement.childNodes[1].getAttribute("style")).toContain(
-                COLORS.BLUE
-            );
-            expect(taskElement.childNodes[1].getAttribute("style")).toContain(
-                "fill"
-            );
-            expect(taskElement.childNodes[1].getAttribute("style")).toContain(
-                "stroke"
-            );
-            expect(
-                toNumber(taskElement.childNodes[1].getAttribute("x"))
-            ).toBeGreaterThan(0);
-            expect(
-                toNumber(taskElement.childNodes[1].getAttribute("y"))
-            ).toBeGreaterThan(0);
-            expect(
-                toNumber(taskElement.childNodes[1].getAttribute("width"))
-            ).toBeGreaterThan(0);
-            expect(
-                toNumber(taskElement.childNodes[1].getAttribute("height"))
-            ).toBeGreaterThan(0);
+            delay(() => {
+                const d3TaskElement = d3.select(`.${styles.task}`);
+                const taskData = d3TaskElement.datum();
+                expect(taskData.key).toBe(taskValuesJSON[0].key);
+                expect(taskData.y).toBe("Project A Really long");
+                expect(taskData.onClick).toEqual(jasmine.any(Function));
+                expect(taskData.color).toBe(COLORS.BLUE);
+                expect(taskData.startDate).toEqual(
+                    new Date(taskValuesJSON[0].startDate)
+                );
+                expect(taskData.endDate).toEqual(
+                    new Date(taskValuesJSON[0].endDate)
+                );
+                expect(taskData.percentage).toEqual(
+                    taskValuesJSON[0].percentage
+                );
+                expect(taskData.dependancies).toEqual(
+                    taskValuesJSON[0].dependancies
+                );
+                expect(taskData.label).toEqual(taskValuesJSON[0].label);
+                expect(taskData.style).toContain("fill");
+                expect(taskData.style).toContain(COLORS.BLUE);
+                expect(taskData.style).toContain("stroke");
+                expect(taskData.clickPassThrough).toEqual(false);
+                done();
+            });
         });
-        it("Renders chunk correctly", () => {
+        it("Renders bar correctly", (done) => {
             loadData(gantt);
-            const taskElement = document.querySelectorAll(`.${styles.task}`)[1];
-            expect(taskElement.nodeName).toBe("g");
-            expect(taskElement.getAttribute("class")).toBe(styles.task);
-            expect(taskElement.getAttribute("aria-selected")).toBe("false");
-            expect(taskElement.getAttribute("aria-describedby")).toBe(
-                taskValuesJSON[1].key
-            );
-            expect(taskElement.getAttribute("pointer-events")).toBe("auto");
-            expect(taskElement.childNodes.length).toBe(2);
-            expect(taskElement.childNodes[1]).not.toBeNull();
-            expect(taskElement.childNodes[1].nodeName).toBe("rect");
-            expect(taskElement.childNodes[1].getAttribute("class")).toBe(
-                styles.taskBar
-            );
-            expect(taskElement.childNodes[1].getAttribute("style")).toContain(
-                COLORS.BLUE
-            );
-            expect(taskElement.childNodes[1].getAttribute("style")).toContain(
-                "fill"
-            );
-            expect(taskElement.childNodes[1].getAttribute("style")).toContain(
-                "stroke"
-            );
-            expect(
-                toNumber(taskElement.childNodes[1].getAttribute("x"))
-            ).toBeGreaterThan(0);
-            expect(
-                toNumber(taskElement.childNodes[1].getAttribute("y"))
-            ).toBeGreaterThan(0);
-            expect(
-                toNumber(taskElement.childNodes[1].getAttribute("width"))
-            ).toBe(5);
-            expect(
-                toNumber(taskElement.childNodes[1].getAttribute("height"))
-            ).toBeGreaterThan(0);
+            delay(() => {
+                const taskElement = fetchElementByClass(styles.task);
+                expect(taskElement.nodeName).toBe("g");
+                expect(taskElement.getAttribute("class")).toBe(styles.task);
+                expect(taskElement.getAttribute("aria-selected")).toBe("false");
+                expect(taskElement.getAttribute("aria-describedby")).toBe(
+                    taskValuesJSON[0].key
+                );
+                expect(taskElement.getAttribute("pointer-events")).toBe("auto");
+                expect(taskElement.childNodes.length).toBe(2);
+                expect(taskElement.childNodes[1]).not.toBeNull();
+                expect(taskElement.childNodes[1].nodeName).toBe("rect");
+                expect(taskElement.childNodes[1].getAttribute("class")).toBe(
+                    styles.taskBar
+                );
+                expect(
+                    taskElement.childNodes[1].getAttribute("style")
+                ).toContain(COLORS.BLUE);
+                expect(
+                    taskElement.childNodes[1].getAttribute("style")
+                ).toContain("fill");
+                expect(
+                    taskElement.childNodes[1].getAttribute("style")
+                ).toContain("stroke");
+                expect(
+                    toNumber(taskElement.childNodes[1].getAttribute("x"))
+                ).toBeGreaterThan(0);
+                expect(
+                    toNumber(taskElement.childNodes[1].getAttribute("y"))
+                ).toBeGreaterThan(0);
+                expect(
+                    toNumber(taskElement.childNodes[1].getAttribute("width"))
+                ).toBeGreaterThan(0);
+                expect(
+                    toNumber(taskElement.childNodes[1].getAttribute("height"))
+                ).toBeGreaterThan(0);
+                done();
+            });
         });
-        it("Renders percentage bar correctly", () => {
+        it("Renders chunk correctly", (done) => {
             loadData(gantt);
-            const taskElement = document.querySelectorAll(`.${styles.task}`)[2];
-            expect(taskElement.nodeName).toBe("g");
-            expect(taskElement.getAttribute("class")).toBe(styles.task);
-            expect(taskElement.getAttribute("aria-describedby")).toBe(
-                taskValuesJSON[2].key
-            );
-            expect(taskElement.getAttribute("pointer-events")).toBe("auto");
-            expect(taskElement.getAttribute("aria-selected")).toBe("false");
-            expect(taskElement.childNodes.length).toBe(3);
-            expect(taskElement.childNodes[1]).not.toBeNull();
-            expect(taskElement.childNodes[2]).not.toBeNull();
+            delay(() => {
+                const taskElement = document.querySelectorAll(
+                    `.${styles.task}`
+                )[1];
+                expect(taskElement.nodeName).toBe("g");
+                expect(taskElement.getAttribute("class")).toBe(styles.task);
+                expect(taskElement.getAttribute("aria-selected")).toBe("false");
+                expect(taskElement.getAttribute("aria-describedby")).toBe(
+                    taskValuesJSON[1].key
+                );
+                expect(taskElement.getAttribute("pointer-events")).toBe("auto");
+                expect(taskElement.childNodes.length).toBe(2);
+                expect(taskElement.childNodes[1]).not.toBeNull();
+                expect(taskElement.childNodes[1].nodeName).toBe("rect");
+                expect(taskElement.childNodes[1].getAttribute("class")).toBe(
+                    styles.taskBar
+                );
+                expect(
+                    taskElement.childNodes[1].getAttribute("style")
+                ).toContain(COLORS.BLUE);
+                expect(
+                    taskElement.childNodes[1].getAttribute("style")
+                ).toContain("fill");
+                expect(
+                    taskElement.childNodes[1].getAttribute("style")
+                ).toContain("stroke");
+                expect(
+                    toNumber(taskElement.childNodes[1].getAttribute("x"))
+                ).toBeGreaterThan(0);
+                expect(
+                    toNumber(taskElement.childNodes[1].getAttribute("y"))
+                ).toBeGreaterThan(0);
+                expect(
+                    toNumber(taskElement.childNodes[1].getAttribute("width"))
+                ).toBe(5);
+                expect(
+                    toNumber(taskElement.childNodes[1].getAttribute("height"))
+                ).toBeGreaterThan(0);
+                done();
+            });
+        });
+        it("Renders percentage bar correctly", (done) => {
+            loadData(gantt);
+            delay(() => {
+                const taskElement = document.querySelectorAll(
+                    `.${styles.task}`
+                )[2];
+                expect(taskElement.nodeName).toBe("g");
+                expect(taskElement.getAttribute("class")).toBe(styles.task);
+                expect(taskElement.getAttribute("aria-describedby")).toBe(
+                    taskValuesJSON[2].key
+                );
+                expect(taskElement.getAttribute("pointer-events")).toBe("auto");
+                expect(taskElement.getAttribute("aria-selected")).toBe("false");
+                expect(taskElement.childNodes.length).toBe(3);
+                expect(taskElement.childNodes[1]).not.toBeNull();
+                expect(taskElement.childNodes[2]).not.toBeNull();
 
-            expect(taskElement.childNodes[1].nodeName).toBe("rect");
-            expect(taskElement.childNodes[2].nodeName).toBe("rect");
+                expect(taskElement.childNodes[1].nodeName).toBe("rect");
+                expect(taskElement.childNodes[2].nodeName).toBe("rect");
 
-            expect(taskElement.childNodes[1].getAttribute("class")).toBe(
-                styles.taskBar
-            );
-            expect(taskElement.childNodes[2].getAttribute("class")).toBe(
-                styles.taskBarCompletion
-            );
+                expect(taskElement.childNodes[1].getAttribute("class")).toBe(
+                    styles.taskBar
+                );
+                expect(taskElement.childNodes[2].getAttribute("class")).toBe(
+                    styles.taskBarCompletion
+                );
 
-            expect(taskElement.childNodes[1].getAttribute("style")).toContain(
-                COLORS.WHITE
-            );
-            expect(taskElement.childNodes[2].getAttribute("style")).toContain(
-                "fill"
-            );
-            expect(taskElement.childNodes[1].getAttribute("style")).toContain(
-                "stroke"
-            );
-            expect(taskElement.childNodes[1].getAttribute("style")).toContain(
-                "stroke-width"
-            );
-            expect(taskElement.childNodes[2].getAttribute("style")).toContain(
-                COLORS.BLUE
-            );
+                expect(
+                    taskElement.childNodes[1].getAttribute("style")
+                ).toContain(COLORS.WHITE);
+                expect(
+                    taskElement.childNodes[2].getAttribute("style")
+                ).toContain("fill");
+                expect(
+                    taskElement.childNodes[1].getAttribute("style")
+                ).toContain("stroke");
+                expect(
+                    taskElement.childNodes[1].getAttribute("style")
+                ).toContain("stroke-width");
+                expect(
+                    taskElement.childNodes[2].getAttribute("style")
+                ).toContain(COLORS.BLUE);
 
-            expect(
-                toNumber(taskElement.childNodes[1].getAttribute("x"))
-            ).toBeGreaterThan(0);
-            expect(
-                toNumber(taskElement.childNodes[1].getAttribute("y"))
-            ).toBeGreaterThan(0);
-            expect(
-                toNumber(taskElement.childNodes[1].getAttribute("width"))
-            ).toBeGreaterThan(0);
-            expect(
-                toNumber(taskElement.childNodes[1].getAttribute("height"))
-            ).toBeGreaterThan(0);
+                expect(
+                    toNumber(taskElement.childNodes[1].getAttribute("x"))
+                ).toBeGreaterThan(0);
+                expect(
+                    toNumber(taskElement.childNodes[1].getAttribute("y"))
+                ).toBeGreaterThan(0);
+                expect(
+                    toNumber(taskElement.childNodes[1].getAttribute("width"))
+                ).toBeGreaterThan(0);
+                expect(
+                    toNumber(taskElement.childNodes[1].getAttribute("height"))
+                ).toBeGreaterThan(0);
 
-            expect(
-                toNumber(taskElement.childNodes[2].getAttribute("x"))
-            ).toBeGreaterThan(0);
-            expect(
-                toNumber(taskElement.childNodes[2].getAttribute("y"))
-            ).toBeGreaterThan(0);
-            expect(
-                toNumber(taskElement.childNodes[2].getAttribute("width"))
-            ).toBeGreaterThan(0);
-            expect(
-                toNumber(taskElement.childNodes[2].getAttribute("height"))
-            ).toBeGreaterThan(0);
-            expect(
-                toNumber(taskElement.childNodes[2].getAttribute("width"))
-            ).toBeLessThan(
-                toNumber(taskElement.childNodes[1].getAttribute("width"))
-            );
-            // Check if the percentage is actually 50% of the entire bar
-            expect(
-                toNumber(taskElement.childNodes[2].getAttribute("width"))
-            ).toEqual(
-                toNumber(taskElement.childNodes[1].getAttribute("width")) / 2
-            );
+                expect(
+                    toNumber(taskElement.childNodes[2].getAttribute("x"))
+                ).toBeGreaterThan(0);
+                expect(
+                    toNumber(taskElement.childNodes[2].getAttribute("y"))
+                ).toBeGreaterThan(0);
+                expect(
+                    toNumber(taskElement.childNodes[2].getAttribute("width"))
+                ).toBeGreaterThan(0);
+                expect(
+                    toNumber(taskElement.childNodes[2].getAttribute("height"))
+                ).toBeGreaterThan(0);
+                expect(
+                    toNumber(taskElement.childNodes[2].getAttribute("width"))
+                ).toBeLessThan(
+                    toNumber(taskElement.childNodes[1].getAttribute("width"))
+                );
+                // Check if the percentage is actually 50% of the entire bar
+                expect(
+                    toNumber(
+                        taskElement.childNodes[2].getAttribute("width"),
+                        10
+                    )
+                ).toEqual(
+                    toNumber(
+                        taskElement.childNodes[1].getAttribute("width") / 2,
+                        10
+                    )
+                );
+                done();
+            });
         });
         it("Renders selection for bar correctly", (done) => {
             loadData(gantt);

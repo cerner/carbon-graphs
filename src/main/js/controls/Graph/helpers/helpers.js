@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import { getScale } from "../../../core/BaseConfig/index";
 import {
     buildAxisLabel,
@@ -530,8 +530,8 @@ const scaleGraph = (scale, config) => {
         .range(getXAxisRange(config))
         .clamp(config.settingsDictionary.shouldClamp);
 
-    scale.y = d3.scale
-        .linear()
+    scale.y = d3
+        .scaleLinear()
         .domain([
             config.axis.y.domain.lowerLimit,
             config.axis.y.domain.upperLimit
@@ -545,8 +545,8 @@ const scaleGraph = (scale, config) => {
         scale.y.nice();
     }
     if (hasY2Axis(config.axis)) {
-        scale.y2 = d3.scale
-            .linear()
+        scale.y2 = d3
+            .scaleLinear()
             .domain([
                 config.axis.y2.domain.lowerLimit,
                 config.axis.y2.domain.upperLimit
@@ -675,11 +675,11 @@ const attachEventHandlers = (control) => {
     const boundResize = control.resize.bind(control);
     const setRequestAnimationFrame = () =>
         window.requestAnimationFrame(boundResize);
-    const getConfig = (control, config) => () => {
+    const getConfig = (config) => () => {
         clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(setRequestAnimationFrame, config.throttle);
+        resizeTimeout = d3.timeout(setRequestAnimationFrame, config.throttle);
     };
-    const resizeCallback = getConfig(control, control.config);
+    const resizeCallback = getConfig(control.config);
     window.addEventListener("resize", resizeCallback, true);
     control.resizeHandler = resizeCallback;
 };

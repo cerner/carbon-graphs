@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import Construct from "../../core/Construct";
 import errors from "../../helpers/errors";
 import { createLegend } from "../../helpers/legend";

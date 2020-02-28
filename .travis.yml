@@ -3,7 +3,6 @@ node_js:
     - "lts/*"
 notifications:
     email: false
-cache: false
 sudo: required
 script: skip
 branches:
@@ -27,7 +26,7 @@ jobs:
               skip_cleanup: true
               script: npx semantic-release
         - stage: deploy
-          name: "Deploy site to gh-pages"
+          name: "Deploy to gh-pages"
           script: skip
           before_deploy:
               - npm run build:site

@@ -1,5 +1,4 @@
 "use strict";
-import d3 from "d3";
 import BaseConfig, { getDefaultValue, getDomain } from "../../core/BaseConfig";
 import {
     generateClipPathId,
@@ -60,7 +59,7 @@ export const processInput = (input, config) => {
     config.axis = {
         x: {}
     };
-    config.d3Locale = d3.locale(getDefaultValue(input.locale, DEFAULT_LOCALE));
+    config.d3Locale = getDefaultValue(input.locale, DEFAULT_LOCALE);
     config.throttle = getDefaultValue(
         input.throttle,
         constants.RESIZE_THROTTLE

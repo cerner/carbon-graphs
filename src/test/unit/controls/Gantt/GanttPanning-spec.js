@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import Gantt from "../../../../main/js/controls/Gantt";
 import styles from "../../../../main/js/helpers/styles";
 import { getSVGAnimatedTransformList } from "../../../../main/js/helpers/transformUtils";

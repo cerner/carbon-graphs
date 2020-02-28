@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import { Shape } from "../../../core";
 import { getDefaultSVGProps } from "../../../core/Shape";
 import {
@@ -165,8 +165,8 @@ const getAxesScale = (axis, scale, config) => {
  * @returns {undefined} - returns nothing
  */
 const scaleGraph = (scale, config) => {
-    scale.x = d3.time
-        .scale()
+    scale.x = d3
+        .scaleTime()
         .domain(config.axis.x.domain)
         .range([0, getXAxisWidth(config)])
         .clamp(config.settingsDictionary.shouldClamp);

@@ -1,14 +1,14 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import Gantt from "../../../../main/js/controls/Gantt";
 import { COLORS } from "../../../../main/js/helpers/constants";
-import { getSVGAnimatedTransformList } from "../../../../main/js/helpers/transformUtils";
 import errors from "../../../../main/js/helpers/errors";
 import styles from "../../../../main/js/helpers/styles";
+import { getSVGAnimatedTransformList } from "../../../../main/js/helpers/transformUtils";
 import utils from "../../../../main/js/helpers/utils";
 import {
-    loadCustomJasmineMatcher,
     delay,
+    loadCustomJasmineMatcher,
     PADDING_BOTTOM,
     toNumber
 } from "../../helpers/commonHelpers";

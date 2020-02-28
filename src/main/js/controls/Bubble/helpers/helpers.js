@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import { parseTypedValue } from "../../../core/BaseConfig";
 import {
     calculateVerticalPadding,

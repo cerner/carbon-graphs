@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import { getXAxisRange } from "../../../helpers/axis";
 import constants from "../../../helpers/constants";
 import utils from "../../../helpers/utils";
@@ -32,7 +32,7 @@ const getBands = (content, shownTargets) => {
     return bands;
 };
 /**
- * Calculates and returns outer padding ratio for ordidnal scale unit bandwidth
+ * Calculates and returns outer padding ratio for band scale unit bandwidth
  * Outer padding should be 2.5 times the inner padding
  * Inner padding should be 0.5 times the bar width
  *
@@ -46,42 +46,42 @@ const getBandwidthPaddingRatio = (content, shownTargets) =>
     (3 * getBands(content, shownTargets).length +
         constants.DEFAULT_BAR_GRAPH_PADDING_ATTRIBUTES.OUTER_PADDING_RATIO);
 /**
- * Creates and sets the d3 ordinalScale for the Graph. This scale is created only if
+ * Creates and sets the d3 bandScale for the Graph. This scale is created only if
  * static x-axis is provided for graph.
- * To create a d3 ordinalScale, we need domain, rangeBands and bandwidth padding
+ * To create a d3 bandScale, we need domain, range and bandwidth padding
  *
  * @private
- * @param {object} ordinalScale - d3 ordinalScale taking into account the input parameters
+ * @param {object} bandScale - d3 bandScale taking into account the input parameters
  * @param {object} config - config object derived from input JSON
  * @param {Array} content - Array of targets
  * @returns {undefined} - returns nothing
  */
-const scaleOrdinalAxis = (ordinalScale, config, content) => {
+const scaleBandAxis = (bandScale, config, content) => {
     if (
         utils.notEmpty(config.axis.x.ticks) &&
         utils.notEmpty(config.axis.x.ticks.values)
     ) {
-        ordinalScale.x0 = d3.scale
-            .ordinal()
+        bandScale.x0 = d3
+            .scaleBand()
             .domain(config.axis.x.ticks.values)
-            .rangeBands(
-                getXAxisRange(config),
+            .range(getXAxisRange(config))
+            .paddingInner(
                 getBandwidthPaddingRatio(content, config.shownTargets)
             );
-        ordinalScale.x1 = d3.scale.ordinal();
+        bandScale.x1 = d3.scaleBand();
     }
 };
 /**
- * Sets domain and range bands for ordinal scale
+ * Sets domain and range bands for band scale
  *
  * @private
  * @param {Array} bands - bands array for bandwidth
  * @param {Array} content - Array of targets
- * @param {object} ordinalScale - ordinal scale object
+ * @param {object} bandScale - band scale object
  * @param {object} config - config object derived from input JSON
  * @returns {undefined} - returns nothing
  */
-const setX0X1Scale = (bands, content, ordinalScale, config) => {
+const setX0X1Scale = (bands, content, bandScale, config) => {
     if (
         utils.isEmpty(content) ||
         utils.isEmpty(bands) ||
@@ -90,7 +90,7 @@ const setX0X1Scale = (bands, content, ordinalScale, config) => {
     ) {
         return;
     }
-    ordinalScale.x1.domain(bands).rangeBands([0, ordinalScale.x0.rangeBand()]);
+    bandScale.x1.domain(bands).range([0, bandScale.x0.bandwidth()]);
 };
 /**
  * Sets offsets for bars on content load
@@ -99,11 +99,11 @@ const setX0X1Scale = (bands, content, ordinalScale, config) => {
  * @param {Array} content - Array of targets
  * @param {Array} contentConfig - Array of targets config objects
  * @param {object} input - load input object
- * @param {object} ordinalScale - ordinal scale object
+ * @param {object} bandScale - band scale object
  * @param {object} config - config object derived from input JSON
  * @returns {undefined} - returns nothing
  */
-const setBarOffsets = (content, contentConfig, input, ordinalScale, config) => {
+const setBarOffsets = (content, contentConfig, input, bandScale, config) => {
     const shownTargets = config.shownTargets;
     const group = contentConfig.filter(
         (d) =>
@@ -118,7 +118,7 @@ const setBarOffsets = (content, contentConfig, input, ordinalScale, config) => {
     setX0X1Scale(
         getBands(content, config.shownTargets),
         content,
-        ordinalScale,
+        bandScale,
         config
     );
 };
@@ -151,4 +151,4 @@ const setStackOffset = (inputValues, group) => {
     });
 };
 
-export { scaleOrdinalAxis, setBarOffsets };
+export { scaleBandAxis, setBarOffsets };

@@ -4,7 +4,7 @@
  */
 
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import {
     d3RemoveElement,
     getColorForTarget,

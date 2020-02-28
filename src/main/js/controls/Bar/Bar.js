@@ -20,7 +20,7 @@ import {
 } from "./helpers/creationHelpers";
 import { processGoalLines, translateRegion } from "./helpers/goalLineHelpers";
 import { clickHandler, hoverHandler } from "./helpers/legendHelpers";
-import { scaleOrdinalAxis, setBarOffsets } from "./helpers/resizeHelpers";
+import { scaleBandAxis, setBarOffsets } from "./helpers/resizeHelpers";
 import {
     clearSelectionDatum,
     updateSelectionBars
@@ -72,7 +72,7 @@ const loadInput = (inputJSON) =>
  */
 const initConfig = (control) => {
     control.config = {};
-    control.ordinalScale = {
+    control.bandScale = {
         x0: {},
         x1: {}
     };
@@ -119,11 +119,11 @@ class Bar extends GraphContent {
      */
     load(graph) {
         setGroupName(this.config, graph.content);
-        scaleOrdinalAxis(this.ordinalScale, graph.config, graph.content);
+        scaleBandAxis(this.bandScale, graph.config, graph.content);
         this.dataTarget = processDataPoints(graph.config, this.config);
         draw(
             graph.scale,
-            this.ordinalScale,
+            this.bandScale,
             graph.config,
             graph.svg,
             this.dataTarget
@@ -179,24 +179,24 @@ class Bar extends GraphContent {
      * @inheritdoc
      */
     resize(graph) {
-        scaleOrdinalAxis(this.ordinalScale, graph.config, graph.content);
+        scaleBandAxis(this.bandScale, graph.config, graph.content);
         setBarOffsets(
             graph.content,
             graph.contentConfig,
             this,
-            this.ordinalScale,
+            this.bandScale,
             graph.config
         );
         translateBarGraph(
             graph.scale,
-            this.ordinalScale,
+            this.bandScale,
             graph.svg,
             this.dataTarget,
             graph.config
         );
         if (utils.notEmpty(this.dataTarget.axisInfoRow)) {
             translateTextLabel(
-                this.ordinalScale,
+                this.bandScale,
                 graph.scale,
                 graph.config,
                 graph.svg,
@@ -207,7 +207,7 @@ class Bar extends GraphContent {
         if (utils.notEmpty(this.dataTarget.regions)) {
             processGoalLines(
                 graph.scale,
-                this.ordinalScale,
+                this.bandScale,
                 graph.config,
                 this.dataTarget,
                 this.config.yAxis
@@ -234,7 +234,7 @@ class Bar extends GraphContent {
         );
         draw(
             graph.scale,
-            this.ordinalScale,
+            this.bandScale,
             graph.config,
             graph.svg,
             this.dataTarget

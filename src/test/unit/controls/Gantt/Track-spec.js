@@ -1,18 +1,18 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import sinon from "sinon";
 import Gantt from "../../../../main/js/controls/Gantt";
 import { getXAxisWidth } from "../../../../main/js/controls/Gantt/helpers/creationHelpers";
 import constants from "../../../../main/js/helpers/constants";
 import errors from "../../../../main/js/helpers/errors";
 import styles from "../../../../main/js/helpers/styles";
-import { fetchAllElementsByClass } from "../Bar/helpers";
 import {
     delay,
     toNumber,
     TRANSITION_DELAY,
     triggerEvent
 } from "../../helpers/commonHelpers";
+import { fetchAllElementsByClass } from "../Bar/helpers";
 import {
     axisJSON,
     fetchElementByClass,
@@ -111,26 +111,32 @@ describe("Gantt -> Track", () => {
                 }
             });
         });
-        it("Truncates if too long", () => {
-            expect(
-                document.querySelectorAll(
-                    `.${styles.axisYTrackLabel} .tick text`
-                )[0].textContent
-            ).toBe("Project long...");
-            expect(
-                document
-                    .querySelectorAll(
+        it("Truncates if too long", (done) => {
+            delay(() => {
+                expect(
+                    document.querySelectorAll(
                         `.${styles.axisYTrackLabel} .tick text`
-                    )[0]
-                    .getAttribute("aria-disabled")
-            ).toBe(null);
+                    )[0].textContent
+                ).toBe("Project long...");
+                expect(
+                    document
+                        .querySelectorAll(
+                            `.${styles.axisYTrackLabel} .tick text`
+                        )[0]
+                        .getAttribute("aria-disabled")
+                ).toBe(null);
+                done();
+            });
         });
-        it("Does not truncate if not long", () => {
-            expect(
-                document.querySelectorAll(
-                    `.${styles.axisYTrackLabel} .tick text`
-                )[1].textContent
-            ).toBe("Project A");
+        it("Does not truncate if not long", (done) => {
+            delay(() => {
+                expect(
+                    document.querySelectorAll(
+                        `.${styles.axisYTrackLabel} .tick text`
+                    )[1].textContent
+                ).toBe("Project A");
+                done();
+            });
         });
     });
     describe("Adds clickHandler for Label", () => {
@@ -184,15 +190,20 @@ describe("Gantt -> Track", () => {
                 }
             );
         });
-        it("Truncates label on exceeding max length", () => {
-            const truncatedLabelElement = document.querySelectorAll(
-                `.${styles.axisYTrackLabel} .tick text`
-            )[1];
-            expect(truncatedLabelElement.textContent).toBe("Project long...");
+        it("Truncates label on exceeding max length", (done) => {
+            delay(() => {
+                const truncatedLabelElement = document.querySelectorAll(
+                    `.${styles.axisYTrackLabel} .tick text`
+                )[1];
+                expect(truncatedLabelElement.textContent).toBe(
+                    "Project long..."
+                );
+                done();
+            });
         });
     });
     describe("Track selection", () => {
-        it("Selecter bar has aria-disabled property set to true", () => {
+        it("Selected bar has aria-disabled property set to true", () => {
             gantt.loadContent({
                 key: "track 1",
                 trackLabel: {

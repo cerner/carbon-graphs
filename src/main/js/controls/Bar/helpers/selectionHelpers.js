@@ -81,12 +81,12 @@ const updateSelectionBars = (internalValueSubset, canvasSVG, config) => {
  *
  * @private
  * @param {object} scale - d3 scale for Graph
- * @param {object} ordinalScale - bar x-axis ordinal scale
+ * @param {object} bandScale - bar x-axis band scale
  * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
-const drawSelectionBars = (scale, ordinalScale, config, canvasSVG) => {
+const drawSelectionBars = (scale, bandScale, config, canvasSVG) => {
     const tickValues = config.axis.x.ticks.values.map((d) => ({
         x: d,
         valueSubsetArray: []
@@ -128,13 +128,13 @@ const drawSelectionBars = (scale, ordinalScale, config, canvasSVG) => {
  *
  * @private
  * @param {object} scale - d3 scale for Graph
- * @param {object} ordinalScale - bar x-axis ordinal scale
+ * @param {object} bandScale - bar x-axis band scale
  * @param {Array} shownTargets - graph's shownTarget array
  * @param {Array} datum - selection datum array
  * @returns {object} Object that contains methods for calculating x, y, height, width.
  */
-const selectionAttributeHelper = (scale, ordinalScale, shownTargets, datum) => {
-    const barAttributeHelper = barAttributesHelper(scale, ordinalScale);
+const selectionAttributeHelper = (scale, bandScale, shownTargets, datum) => {
+    const barAttributeHelper = barAttributesHelper(scale, bandScale);
     const shownDatum = datum.filter((v) => shownTargets.indexOf(v.key) > -1);
     const maxYIndex = ((targets) => {
         let maxIndex = 0;
@@ -186,7 +186,8 @@ const selectionAttributeHelper = (scale, ordinalScale, shownTargets, datum) => {
         ? barAttributeHelper.y(shownDatum[maxYIndex])
         : 0;
     const rightRange = utils.notEmpty(shownDatum)
-        ? barAttributeHelper.x(shownDatum[maxXIndex]) + barAttributeHelper.width
+        ? barAttributeHelper.x(shownDatum[maxXIndex]) +
+          barAttributeHelper.width()
         : 0;
     const bottomRange = utils.notEmpty(shownDatum)
         ? barAttributeHelper.y(shownDatum[minYIndex]) +
@@ -211,16 +212,16 @@ const selectionAttributeHelper = (scale, ordinalScale, shownTargets, datum) => {
  *
  * @private
  * @param {object} scale - d3 scale for Graph
- * @param {object} ordinalScale - bar x-axis ordinal scale
+ * @param {object} bandScale - bar x-axis band scale
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {object} config - config object derived from input JSON
  * @returns {object} d3 object for selection bars
  */
-const translateSelectBars = (scale, ordinalScale, canvasSVG, config) =>
+const translateSelectBars = (scale, bandScale, canvasSVG, config) =>
     canvasSVG.selectAll(`.${styles.taskBarSelection}`).each((dataPoint, i) => {
         const selectionAttrHelper = selectionAttributeHelper(
             scale,
-            ordinalScale,
+            bandScale,
             config.shownTargets,
             dataPoint.valueSubsetArray
         );

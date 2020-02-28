@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import sinon from "sinon";
 import Gantt from "../../../../main/js/controls/Gantt";
 import { getActivityStyle } from "../../../../main/js/controls/Gantt/helpers/durationHelpers";
@@ -503,12 +503,12 @@ describe("Gantt -> Track -> Activity", () => {
                 })
             );
             const trackElement = d3.select(`.${styles.trackGroup}`);
-            expect(trackElement[0][0].childNodes[1].getAttribute("class")).toBe(
-                "carbon-data-activity-group"
-            );
-            expect(trackElement[0][0].childNodes[2].getAttribute("class")).toBe(
-                "carbon-data-task-group"
-            );
+            expect(
+                trackElement.node().childNodes[1].getAttribute("class")
+            ).toBe("carbon-data-activity-group");
+            expect(
+                trackElement.node().childNodes[2].getAttribute("class")
+            ).toBe("carbon-data-task-group");
         });
 
         /**
@@ -547,14 +547,18 @@ describe("Gantt -> Track -> Activity", () => {
             );
             const trackElement = d3.select(`.${styles.trackGroup}`);
             expect(
-                trackElement[0][0].childNodes[1].childNodes[0].childNodes[0].getAttribute(
-                    "height"
-                )
+                trackElement
+                    .node()
+                    .childNodes[1].childNodes[0].childNodes[0].getAttribute(
+                        "height"
+                    )
             ).toBe("31");
             expect(
-                trackElement[0][0].childNodes[2].childNodes[0].childNodes[1].getAttribute(
-                    "height"
-                )
+                trackElement
+                    .node()
+                    .childNodes[2].childNodes[0].childNodes[1].getAttribute(
+                        "height"
+                    )
             ).toBe("23");
 
             triggerEvent(fetchElementByClass(styles.taskBar), "click", () => {

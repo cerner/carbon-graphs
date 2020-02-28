@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import utils from "./utils";
 import errors from "./errors";
 import styles from "./styles";

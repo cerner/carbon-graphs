@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import Gantt from "../../../../main/js/controls/Gantt";
 import { getXAxisWidth } from "../../../../main/js/controls/Gantt/helpers/creationHelpers";
 import constants from "../../../../main/js/helpers/constants";

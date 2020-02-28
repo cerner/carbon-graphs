@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import { parseTypedValue } from "../../../core/BaseConfig";
 import { isValidAxisType } from "../../../helpers/axis";
 import constants from "../../../helpers/constants";
@@ -14,17 +14,17 @@ import utils from "../../../helpers/utils";
  *
  * @private
  * @param {object} scale - d3 scale for Graph
- * @param {object} ordinalScale - bar x-axis ordinal scale
+ * @param {object} bandScale - bar x-axis band scale
  * @param {object} region - region input
  * @returns {number} - xRange of region
  */
-const getXRange = (scale, ordinalScale, region) => {
+const getXRange = (scale, bandScale, region) => {
     const leftShiftOffset =
-        ordinalScale.x0.rangeBand() *
+        bandScale.x0.bandwidth() *
         constants.DEFAULT_BAR_GRAPH_PADDING_ATTRIBUTES.LEFT_SHIFT_OFFSET_RATIO; // this value is used to center bars by shifting left
-    const groupOffset = ordinalScale.x1(region.group);
+    const groupOffset = bandScale.x1(region.group);
     const leftShiftPadding =
-        ordinalScale.x1.rangeBand() *
+        bandScale.x1.bandwidth() *
         constants.DEFAULT_BAR_GRAPH_PADDING_ATTRIBUTES
             .REGION_LEFT_SHIFT_OFFSET_PADDING_RATIO; // padding to be added on left side of bar
 
@@ -58,7 +58,7 @@ const validateBarRegion = (region, targetAxis, ticks, xAxisType) => {
  *
  * @private
  * @param {object} scale - d3 scale for Graph
- * @param {object} ordinalScale - bar x-axis ordinal scale
+ * @param {object} bandScale - bar x-axis band scale
  * @param {object} config - Graph config object derived from input JSON
  * @param {object} dataTarget - Data input object
  * @param {string} targetAxis - Axis for which region needs to be shown
@@ -66,13 +66,13 @@ const validateBarRegion = (region, targetAxis, ticks, xAxisType) => {
  */
 const processGoalLines = (
     scale,
-    ordinalScale,
+    bandScale,
     config,
     dataTarget,
     targetAxis = constants.Y_AXIS
 ) => {
     const regionWidth =
-        ordinalScale.x1.rangeBand() *
+        bandScale.x1.bandwidth() *
         constants.DEFAULT_BAR_GRAPH_PADDING_ATTRIBUTES.REGION_WIDTH_RATIO;
     dataTarget.regions.forEach((region) => {
         validateBarRegion(
@@ -83,7 +83,7 @@ const processGoalLines = (
         );
         region.x = parseTypedValue(region.x, config.axis.x.type);
         region.group = dataTarget.group;
-        region.xRange = getXRange(scale, ordinalScale, region);
+        region.xRange = getXRange(scale, bandScale, region);
         region.width = regionWidth;
     });
 };
