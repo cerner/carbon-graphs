@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import Gantt from "../../../../main/js/controls/Gantt";
 import { getXAxisWidth } from "../../../../main/js/controls/Gantt/helpers/creationHelpers";
 import Track from "../../../../main/js/controls/Gantt/Track";
@@ -80,7 +80,8 @@ describe("Gantt - Unload", () => {
     it("Removes the grid and track", (done) => {
         gantt.unloadContent(primaryContent);
         delay(() => {
-            expect(gantt.scale.y.domain()).toEqual([]);
+            expect(gantt.tracks).toEqual([]);
+            expect(gantt.trackConfig).toEqual([]);
             expect(gantt.scale.y.range()).toEqual([0]);
             done();
         }, TRANSITION_DELAY);

@@ -3,6 +3,7 @@ import Graph from "../../../../main/js/controls/Graph/index";
 import Line from "../../../../main/js/controls/Line/Line";
 import { AXES_ORIENTATION } from "../../../../main/js/helpers/constants";
 import styles from "../../../../main/js/helpers/styles";
+import { getSVGAnimatedTransformList } from "../../../../main/js/helpers/transformUtils";
 import utils from "../../../../main/js/helpers/utils";
 import LOCALE from "../../../../main/js/locale/index";
 import { loadCustomJasmineMatcher } from "../../helpers/commonHelpers";
@@ -201,11 +202,13 @@ describe("Graph - Axes", () => {
             })
         );
         const y2AxisElement = document.querySelectorAll(`.${styles.axisY2}`);
+        // The first child element is the domain itself, and second child onwards denote the ticks
         expect(
-            y2AxisElement[0].childNodes[0].querySelector("text").textContent
+            y2AxisElement[0].childNodes[1].querySelector("text").textContent
         ).toBe("0");
     });
     it("Sets x axis orientation to bottom", () => {
+        graph.destroy();
         const xAxisBottomOrientation = utils.deepClone(axisDefault);
         xAxisBottomOrientation.x.orientation = AXES_ORIENTATION.X.BOTTOM;
         const input = getAxes(xAxisBottomOrientation);
@@ -237,21 +240,45 @@ describe("Graph - Axes", () => {
         expect(yAxisElement.getAttribute("aria-hidden")).toBe("true");
     });
     it("Sets axis info row orientation to top when x axis orientation is bottom", () => {
+        graph.destroy();
         const xAxisBottomOrientation = utils.deepClone(axisDefault);
         xAxisBottomOrientation.x.orientation = AXES_ORIENTATION.X.BOTTOM;
         const input = getAxes(xAxisBottomOrientation);
         graph = new Graph(input);
-        expect(graph.axis.axisInfoRow.x.orient()).toEqual(
+        expect(graph.config.axis.x.orientation).not.toEqual(
             AXES_ORIENTATION.X.TOP
+        );
+        expect(
+            getSVGAnimatedTransformList(
+                fetchElementByClass(styles.axisInfoRow).getAttribute(
+                    "transform"
+                )
+            ).translate[1]
+        ).toBeLessThan(
+            getSVGAnimatedTransformList(
+                fetchElementByClass(styles.axisX).getAttribute("transform")
+            ).translate[1]
         );
     });
     it("Sets axis info row orientation to bottom when x axis orientation is top", () => {
+        graph.destroy();
         const xAxisBottomOrientation = utils.deepClone(axisDefault);
         xAxisBottomOrientation.x.orientation = AXES_ORIENTATION.X.TOP;
         const input = getAxes(xAxisBottomOrientation);
         graph = new Graph(input);
-        expect(graph.axis.axisInfoRow.x.orient()).toEqual(
+        expect(graph.config.axis.x.orientation).not.toEqual(
             AXES_ORIENTATION.X.BOTTOM
+        );
+        expect(
+            getSVGAnimatedTransformList(
+                fetchElementByClass(styles.axisInfoRow).getAttribute(
+                    "transform"
+                )
+            ).translate[1]
+        ).toBeGreaterThan(
+            getSVGAnimatedTransformList(
+                fetchElementByClass(styles.axisX).getAttribute("transform")
+            ).translate[1]
         );
     });
     it("Creates the y axis reference line markup even when hidden", () => {
@@ -391,16 +418,17 @@ describe("Graph - Axes", () => {
             const allXAxisElements = document.querySelectorAll(
                 `.${styles.axisX}`
             );
-            expect(
-                allXAxisElements[0].childNodes[0].querySelector("text")
-                    .textContent
-            ).toBe("Feb 2017");
+            // The first child element is the domain itself, and second child onwards denote the ticks
             expect(
                 allXAxisElements[0].childNodes[1].querySelector("text")
                     .textContent
-            ).toBe("Apr 2017");
+            ).toBe("Feb 2017");
             expect(
                 allXAxisElements[0].childNodes[2].querySelector("text")
+                    .textContent
+            ).toBe("Apr 2017");
+            expect(
+                allXAxisElements[0].childNodes[3].querySelector("text")
                     .textContent
             ).toBe("Jun 2017");
             const gridLowerStepElement = fetchElementByClass(
@@ -430,10 +458,10 @@ describe("Graph - Axes", () => {
             const allXAxisElements = document.querySelectorAll(
                 `.${styles.axisX}`
             );
-            const start = allXAxisElements[0].childNodes[0].querySelector(
+            const start = allXAxisElements[0].childNodes[1].querySelector(
                 "text"
             );
-            const end = allXAxisElements[0].childNodes[1].querySelector("text");
+            const end = allXAxisElements[0].childNodes[2].querySelector("text");
             expect(start.textContent).toBe("Dec 2016");
             expect(end.textContent).toBe("Feb 2018");
             const gridUpperStepElement = fetchElementByClass(
@@ -474,10 +502,10 @@ describe("Graph - Axes", () => {
             const allXAxisElements = document.querySelectorAll(
                 `.${styles.axisX}`
             );
-            const lowerAxis = allXAxisElements[0].childNodes[0].querySelector(
+            const lowerAxis = allXAxisElements[0].childNodes[1].querySelector(
                 "text"
             );
-            const upperAxis = allXAxisElements[0].childNodes[3].querySelector(
+            const upperAxis = allXAxisElements[0].childNodes[4].querySelector(
                 "text"
             );
             expect(lowerAxis.textContent).toBe("Feb 2017");
@@ -540,7 +568,7 @@ describe("Graph - Axes", () => {
             const tick = xAxisElement.querySelectorAll(".tick");
             expect(
                 tick[tick.length - 1].querySelector("text").textContent
-            ).toBe("20.000");
+            ).toContain("20.000");
         });
         it("Hides x axis tick labels when format is blank", () => {
             graph.destroy();

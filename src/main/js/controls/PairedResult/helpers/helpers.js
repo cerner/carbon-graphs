@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import { Shape } from "../../../core";
 import { parseTypedValue } from "../../../core/BaseConfig";
 import { getDefaultSVGProps } from "../../../core/Shape";
@@ -71,11 +71,11 @@ const iterateOnPairType = (fn) => constants.PAIR_ITEM_TYPES.forEach(fn);
  * @returns {undefined} - returns nothing
  */
 const createLine = (scale, d) => {
-    const newLine = d3.svg
+    const newLine = d3
         .line()
         .x((value) => scale.x(value.x))
         .y((value) => scale[d.yAxis](value.y))
-        .interpolate(constants.DEFAULT_INTERPOLATION);
+        .curve(constants.DEFAULT_INTERPOLATION);
     return newLine([
         {
             x: d.high.x,

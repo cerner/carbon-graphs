@@ -1,4 +1,4 @@
-import d3 from "d3";
+import * as d3 from "d3";
 /**
  * @type {number} Delay duration
  */
@@ -14,12 +14,12 @@ export const PADDING_BOTTOM = 5;
  * @returns {undefined} returns nothing
  */
 const flushAllD3Transitions = () => {
-    const now = Date.now;
-    Date.now = function() {
+    const now = performance.now;
+    performance.now = function() {
         return Infinity;
     };
-    d3.timer.flush();
-    Date.now = now;
+    d3.timerFlush();
+    performance.now = now;
 };
 /**
  * Triggers an event on provided element
@@ -42,7 +42,6 @@ export const triggerEvent = (
         event.initEvent(eventName, true, true);
         element.dispatchEvent(event);
         if (cb) {
-            flushAllD3Transitions();
             delay(cb, delayDuration);
         }
     } catch (e) {
@@ -58,7 +57,10 @@ export const triggerEvent = (
  * @param {number} [time] - Timeout milliseconds
  * @returns {number} Timeout identifier
  */
-export const delay = (fn, time = TRANSITION_DELAY) => setTimeout(fn, time);
+export const delay = (fn, time = TRANSITION_DELAY) => {
+    flushAllD3Transitions();
+    return d3.timeout(fn, time);
+};
 /**
  * Converts string number from HTML attributes to a number
  *
@@ -79,7 +81,7 @@ export const loadCustomJasmineMatcher = () => {
             return {
                 compare(actualValue, expectedResult) {
                     const base = +(expectedResult[0] || expectedResult);
-                    const offset = +(expectedResult[1] || 5);
+                    const offset = +(expectedResult[1] || 10);
                     const lower = base - offset;
                     const upper = base + offset;
                     const result = {

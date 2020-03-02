@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import sinon from "sinon";
 import Carbon from "../../../../main/js/carbon";
 import Pie from "../../../../main/js/controls/Pie";

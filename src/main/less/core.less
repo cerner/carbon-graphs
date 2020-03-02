@@ -7,8 +7,8 @@ svg:not(:root) {
 }
 
 .carbon-svgIcon {
-    width: 1rem;
-    height: 1rem;
+    width: 0.625rem;
+    height: 0.625rem;
     display: inline-block;
 }
 
@@ -34,7 +34,6 @@ svg:not(:root) {
     stroke: @grey30;
 }
 
-.carbon-axis,
 .carbon-grid line,
 .carbon-content-container {
     .carbon-shape-rendering();
@@ -56,8 +55,13 @@ svg:not(:root) {
     }
 }
 
-.carbon-grid line {
-    stroke: @grey10;
+.carbon-grid {
+    > * .domain[stroke] {
+        stroke: @grey10;
+    }
+    & line {
+        stroke: @grey10;
+    }
 }
 
 .carbon-lower-step-grid line {
@@ -102,7 +106,9 @@ svg:not(:root) {
             align-self: flex-start;
             align-content: center;
             margin-right: 0.5rem;
-            padding: 0.5rem;
+            padding: 0;
+            height: 1.875rem;
+            width: 2.1875rem;
             border-radius: 0.25rem;
             border: 0;
             background-color: @grey15;
@@ -138,10 +144,32 @@ svg:not(:root) {
 
         & .carbon-legend-item-icon {
             display: block;
-            width: 0.866rem;
-            height: 0.866rem;
             stroke: @white;
             stroke-width: 5px;
+        }
+
+        & .carbon-legend-item-span {
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        & .carbon-legend-item-line {
+            height: 5px;
+            width: 28px;
+            padding-top: 1px;
+        }
+
+        & .carbon-legend-item-line-with-icon {
+            height: 5px;
+            width: 18px;
+            padding-top: 1px;
+        }
+
+        & .carbon-legend-white-line {
+            stroke: @white;
+            stroke-width: 6px;
         }
     }
 

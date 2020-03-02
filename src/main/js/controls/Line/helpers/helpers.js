@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import { Shape } from "../../../core";
 import {
     getInterpolationType,
@@ -18,7 +18,8 @@ import {
     legendClickHandler,
     legendHoverHandler,
     loadLegendItem,
-    isLegendSelected
+    isLegendSelected,
+    getDefaultLegendOptions
 } from "../../../helpers/legend";
 import {
     processRegions,
@@ -33,6 +34,7 @@ import {
     getColorForTarget,
     getShapeForTarget
 } from "../../Graph/helpers/helpers";
+import { getStrokeDashArray } from "../../../core/BaseConfig/helper";
 
 /**
  * @typedef Line
@@ -47,12 +49,12 @@ import {
  * @returns {object} d3 line object
  */
 const createLine = (scale, d) => {
-    const newLine = d3.svg
+    const newLine = d3
         .line()
         .defined((value) => value.y !== null)
         .x((value) => scale.x(value.x))
         .y((value) => scale[value.yAxis](value.y))
-        .interpolate(d.interpolationType);
+        .curve(d.interpolationType);
     return newLine(getDataPointValues(d));
 };
 /**
@@ -272,6 +274,7 @@ const processDataPoints = (graphConfig, dataTarget) => {
     dataTarget.style = {
         strokeDashArray: getStrokeDashArray(dataTarget.style)
     };
+    dataTarget.legendOptions = getDefaultLegendOptions(graphConfig, dataTarget);
 
     graphConfig.shownTargets.push(dataTarget.key);
     dataTarget.internalValuesSubset = dataTarget.values.map((value) => ({
@@ -534,16 +537,6 @@ const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
  */
 const clear = (canvasSVG, dataTarget) =>
     d3RemoveElement(canvasSVG, `g[aria-describedby="${dataTarget.key}"]`);
-
-/**
- * Validate and return the strokeDashArray property
- *
- * @private
- * @param {object} style - style you want to apply for the line
- * @returns {string} - stroke-dasharray css value for the line
- */
-const getStrokeDashArray = (style) =>
-    getDefaultValue(style.strokeDashArray, "0");
 
 export {
     toggleDataPointSelection,

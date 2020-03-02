@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import { AXIS_TYPE, LINE_TYPE } from "../../helpers/constants";
 import errors from "../../helpers/errors";
 import utils from "../../helpers/utils";
@@ -88,9 +88,7 @@ export const getInterpolationType = (type) =>
  * @returns {object} d3 scale object
  */
 export const getScale = (type) =>
-    getType(type) === AXIS_TYPE.TIME_SERIES
-        ? d3.time.scale()
-        : d3.scale.linear();
+    getType(type) === AXIS_TYPE.TIME_SERIES ? d3.scaleTime() : d3.scaleLinear();
 /**
  * Returns the domain for the axes. If the range is a number then the domain is treated
  * as a number or if its a datetime then they are converted to a date object and returned as
@@ -127,3 +125,13 @@ export const parseTypedValue = (x, xAxisType) =>
  */
 export const isPanningModeEnabled = (config) =>
     utils.isDefined(config.pan) && config.pan.enabled;
+
+/**
+ * Validate and return the strokeDashArray property
+ *
+ * @private
+ * @param {object} style - style you want to apply for the line
+ * @returns {string} - stroke-dasharray css value for the line
+ */
+export const getStrokeDashArray = (style) =>
+    getDefaultValue(style.strokeDashArray, "0");

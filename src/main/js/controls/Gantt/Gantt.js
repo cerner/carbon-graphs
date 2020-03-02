@@ -1,24 +1,24 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import Construct from "../../core/Construct";
 import { getYAxisHeight } from "../../helpers/axis";
 import constants from "../../helpers/constants";
-import errors from "../../helpers/errors";
-import { createLegend } from "../../helpers/legend";
-import styles from "../../helpers/styles";
-import utils from "../../helpers/utils";
 import {
     contentLoadHandler,
     contentUnloadHandler
 } from "../../helpers/constructUtils";
+import { createDateline } from "../../helpers/dateline";
+import errors from "../../helpers/errors";
+import { createEventline } from "../../helpers/eventline";
+import { createLegend } from "../../helpers/legend";
+import { getElementBoxSizingParameters } from "../../helpers/paddingUtils";
+import styles from "../../helpers/styles";
+import utils from "../../helpers/utils";
 import GanttConfig, { processInput } from "./GanttConfig";
 import {
     prepareLegendEventHandlers,
     renderLegendItems
 } from "./helpers/actionHelpers";
-import { createDateline } from "../../helpers/dateline";
-import { getElementBoxSizingParameters } from "../../helpers/paddingUtils";
-import { createEventline } from "../../helpers/eventline";
 import {
     attachEventHandlers,
     calculateAxesLabelSize,
@@ -29,6 +29,7 @@ import {
     createGanttContent,
     createGrid,
     createTrack,
+    d3RemoveElement,
     detachEventHandlers,
     determineHeight,
     prepareLoadAtIndex,
@@ -188,8 +189,7 @@ class Gantt extends Construct {
      *  * SVG container
      *  * Grid
      *  * X-Axis
-     *  * Y-Axis
-     *  * Track Labels
+     *  * Y-Axis (Track Labels)
      *  * Legend
      *  * Data [In our case we have load and unload]
      * @param {object} input - Input JSON

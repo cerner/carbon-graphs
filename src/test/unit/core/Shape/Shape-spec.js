@@ -49,7 +49,7 @@ describe("Shape", () => {
             expect(shapeSVG.getAttribute("role") === "img").toBeTruthy();
             expect(shapePath.nodeName).toBeDefined();
             expect(shapeSVG.querySelector("[fill]").getAttribute("fill")).toBe(
-                "#FFFFFF"
+                "#FFF"
             );
         });
     });

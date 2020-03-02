@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import { Shape } from "../../../core";
 import { getDefaultSVGProps } from "../../../core/Shape";
 import {
@@ -21,7 +21,7 @@ import { barAttributesHelper } from "./creationHelpers";
  * Creates text labels based on input object provided. Text label can be one or many.
  *
  * @private
- * @param {object} ordinalScale - ordinal scale object
+ * @param {object} bandScale - band scale object
  * @param {object} scale - d3 scale taking into account the input parameters
  * @param {object} config - config object derived from input JSON
  * @param {object} canvasSVG - d3 object of canvas group svg
@@ -31,7 +31,7 @@ import { barAttributesHelper } from "./creationHelpers";
  * @returns {undefined} - returns nothing
  */
 const createAxisInfoRowLabel = (
-    ordinalScale,
+    bandScale,
     scale,
     config,
     canvasSVG,
@@ -42,7 +42,7 @@ const createAxisInfoRowLabel = (
     if (config.axis.x.type === AXIS_TYPE.TIME_SERIES) {
         textLabelList.x = utils.parseDateTime(textLabelList.x); // for time series
     }
-    const attributeHelper = barAttributesHelper(scale, ordinalScale);
+    const attributeHelper = barAttributesHelper(scale, bandScale);
     const axisInfoRow = canvasSVG
         .select(`.${styles.axisInfoRow}`)
         .attr("aria-hidden", false)
@@ -152,7 +152,7 @@ const toggleDataPointSelection = (value, canvasSVG, type, uniqueKey, index) => {
     const selectedPointNodes = canvasSVG.selectAll(
         `g[aria-describedby=text_label_${uniqueKey}]`
     );
-    const selectedPointNode = d3.select(selectedPointNodes[0][index]);
+    const selectedPointNode = d3.select(selectedPointNodes.nodes()[index]);
     const isSelected = selectedPointNode.attr("aria-selected") === "true";
     setOnSelectionAttributes(selectedPointNode, !isSelected);
     return selectedPointNode;
@@ -231,8 +231,8 @@ const getTextLabel = (label, characterCount) =>
  */
 const getTextLabelsXPosition = (attributeHelper, textLabelList, index) =>
     utils.isDefined(index) && index < textLabelList.length
-        ? attributeHelper.x(textLabelList[index]) + attributeHelper.width / 2
-        : attributeHelper.x(textLabelList) + attributeHelper.width / 2;
+        ? attributeHelper.x(textLabelList[index]) + attributeHelper.width() / 2
+        : attributeHelper.x(textLabelList) + attributeHelper.width() / 2;
 
 /**
  * Y position for the text label

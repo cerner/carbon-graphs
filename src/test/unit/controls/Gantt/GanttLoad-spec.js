@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import Gantt from "../../../../main/js/controls/Gantt";
 import { getXAxisWidth } from "../../../../main/js/controls/Gantt/helpers/creationHelpers";
 import Track from "../../../../main/js/controls/Gantt/Track";
@@ -448,7 +448,7 @@ describe("Gantt - Load", () => {
 /**
  * BF12182018.01 - Verify the consumer has the option to provide custom padding for the graph-container.
  */
-describe("When custom padding is used in input", () => {
+describe("Gantt - Load - When custom padding is used", () => {
     let gantt = null;
     let ganttChartContainer;
     beforeEach(() => {
@@ -479,7 +479,10 @@ describe("When custom padding is used in input", () => {
         gantt.loadContent(primaryContent);
         const contentContainer = d3.select(`.${styles.contentContainer}`);
         expect(toNumber(contentContainer.attr("x"), 10)).toEqual(
-            gantt.config.axisSizes.y + gantt.config.axisLabelWidths.y
+            toNumber(
+                gantt.config.axisSizes.y + gantt.config.axisLabelWidths.y,
+                10
+            )
         );
         expect(toNumber(contentContainer.attr("y"), 10)).toEqual((5 + 10) * 2);
     });

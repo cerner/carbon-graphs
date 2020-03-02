@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import sinon from "sinon";
 import Timeline from "../../../../main/js/controls/Timeline";
 import {
@@ -493,6 +493,7 @@ describe("Timeline - Load", () => {
             timeline.loadContent(input);
             const legendItem = fetchElementByClass(styles.legendItem);
             const legendItemBtn = fetchElementByClass(styles.legendItemBtn);
+            const iconSVG = legendItemBtn.children[0].firstChild;
             expect(legendItem).not.toBeNull();
             expect(legendItem.getAttribute("aria-current")).toBe("true");
             expect(legendItem.getAttribute("aria-disabled")).toBe("false");
@@ -507,11 +508,9 @@ describe("Timeline - Load", () => {
             expect(legendItemBtn.getAttribute("class")).toBe(
                 styles.legendItemBtn
             );
-            expect(legendItemBtn.children[0].tagName).toBe("svg");
+            expect(iconSVG.tagName).toBe("svg");
             expect(
-                legendItemBtn.children[0].classList.contains(
-                    styles.legendItemIcon
-                )
+                iconSVG.classList.contains(styles.legendItemIcon)
             ).toBeTruthy();
         });
         it("Loads the correct shape", () => {

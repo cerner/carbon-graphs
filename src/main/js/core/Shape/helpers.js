@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import constants from "../../helpers/constants";
 import errors from "../../helpers/errors";
 import styles from "../../helpers/styles";
@@ -25,7 +25,7 @@ const tagList = {
  * @returns {HTMLElement} an SVG or path element
  */
 const createElementNS = (tag) =>
-    document.createElementNS(d3.ns.prefix.svg, tag);
+    document.createElementNS(d3.namespaces.svg, tag);
 /**
  * Validates a shape for basic structure
  *

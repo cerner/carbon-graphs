@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import {
     getYAxisHeight,
     getYAxisXPosition,
@@ -7,8 +7,12 @@ import {
     processTickValues
 } from "../../../helpers/axis";
 import constants, { AXES_ORIENTATION } from "../../../helpers/constants";
+import {
+    getDatelineIndicatorHeight,
+    translateDateline
+} from "../../../helpers/dateline";
 import { prepareHAxis, translateVGrid } from "../../../helpers/datetimeBuckets";
-import { shouldTruncateLabel, truncateLabel } from "../../../helpers/label";
+import { translateEventline } from "../../../helpers/eventline";
 import styles from "../../../helpers/styles";
 import { getTransformScale } from "../../../helpers/transformUtils";
 import utils from "../../../helpers/utils";
@@ -22,11 +26,6 @@ import {
 } from "./creationHelpers";
 import { calculatePercentage } from "./durationHelpers";
 import { generatorArgs } from "./trackHelpers";
-import {
-    translateDateline,
-    getDatelineIndicatorHeight
-} from "../../../helpers/dateline";
-import { translateEventline } from "../../../helpers/eventline";
 
 const TRACK_LABEL_TEXT_CLASS = `.${styles.axisYTrackLabel} .tick text`;
 /**
@@ -214,14 +213,12 @@ const translateVerticalGrid = (axis, config) => {
     if (utils.notEmpty(config.axis.x.ticks.values)) {
         const ticks = config.axis.x.ticks.values;
         xAxisGrid = axis.x
-            .orient(AXES_ORIENTATION.X.BOTTOM)
             .tickValues(processTickValues(ticks))
-            .tickSize(getYAxisHeight(config), 0, 0)
+            .tickSize(getYAxisHeight(config) * -1, 0, 0)
             .tickFormat("");
     } else {
         xAxisGrid = axis.x
-            .orient(AXES_ORIENTATION.X.BOTTOM)
-            .tickSize(getYAxisHeight(config), 0, 0)
+            .tickSize(getYAxisHeight(config) * -1, 0, 0)
             .tickFormat("");
     }
     return xAxisGrid;
@@ -317,25 +314,6 @@ const translateLabelText = (scale, config, canvasSVG) =>
     canvasSVG
         .selectAll(TRACK_LABEL_TEXT_CLASS)
         .attr("transform", getTrackLabelTransformProperty(scale, config));
-/**
- * Checks if the track label needs to be truncated and returns the truncated value
- *
- * @private
- * @param {string} label - Track label display property
- * @returns {string} if more than constants.DEFAULT_LABEL_CHARACTER_LIMIT then truncates,
- * normal label otherwise
- */
-const getTrackLabel = (label) =>
-    shouldTruncateLabel(label) ? truncateLabel(label) : label;
-/**
- * Truncates Track label text using d3
- *
- * @private
- * @returns {undefined} - returns nothing
- */
-const truncateTrackLabelText = () =>
-    d3.selectAll(TRACK_LABEL_TEXT_CLASS).text((d) => getTrackLabel(d));
-
 /**
  * Transforms the point in the gantt graph on resize
  *
@@ -595,7 +573,6 @@ export {
     translateHorizontalGrid,
     translateVerticalGrid,
     translateLabelText,
-    truncateTrackLabelText,
     transformPoint,
     translateDataPoints,
     translateTasks,

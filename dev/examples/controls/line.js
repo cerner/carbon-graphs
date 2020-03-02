@@ -562,3 +562,11 @@ export const renderDashedLine = (id) => {
     lineDefault.loadContent(Carbon.api.line(axisData.data[1]));
     return lineDefault;
 };
+export const renderLineWithLegendOptions = (id) => {
+    const axisData = utils.deepClone(getDemoData(`#${id}`, "LINE_DEFAULT"));
+    const lineDefault = Carbon.api.graph(axisData);
+    lineDefault.loadContent(Carbon.api.line(axisData.data[1]));
+    lineDefault.loadContent(Carbon.api.line(axisData.data[3]));
+    lineDefault.loadContent(Carbon.api.line(axisData.data[4]));
+    return lineDefault;
+};

@@ -1,7 +1,7 @@
 {
   "name": "@cerner/carbon-graphs",
   "description": "A graphing library built using d3 based on Cerner design standards",
-  "version": "1.21.2",
+  "version": "2.0.0",
   "author": "Cerner Corporation",
   "browserslist": [
     "Android >= 4",
@@ -45,14 +45,14 @@
     }
   },
   "dependencies": {
-    "d3": "^3.5.17"
+    "d3": "^5.15.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.4",
-    "@babel/plugin-transform-classes": "^7.8.3",
+    "@babel/core": "^7.8.6",
+    "@babel/plugin-transform-classes": "^7.8.6",
     "@babel/plugin-transform-runtime": "^7.8.3",
     "@babel/polyfill": "^7.8.3",
-    "@babel/preset-env": "^7.8.4",
+    "@babel/preset-env": "^7.8.6",
     "@babel/runtime": "^7.8.4",
     "@cerner/carbon-site-helpers": "^1.10.2",
     "@cerner/svg-to-carbon": "^1.1.3",
@@ -110,18 +110,12 @@
     "webpack-dev-server": "^3.10.3",
     "webpack-merge": "^4.2.2"
   },
-  "engines": {
-    "node": ">=8.0.0"
-  },
   "files": [
     "dist",
     "lib",
     "README.md"
   ],
   "greenkeeper": {
-    "ignore": [
-      "d3"
-    ],
     "commitMessages": {
       "initialBadge": "Docs: Add Greenkeeper badge",
       "initialDependencies": "Upgrade: Update dependencies",
