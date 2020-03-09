@@ -35,7 +35,6 @@ import {
     prepareLoadAtIndex,
     scaleGraph,
     updateAxesDomain,
-    d3RemoveElement,
     getXAxisXPosition,
     getXAxisYPosition,
     getXAxisWidth
@@ -340,8 +339,7 @@ class Gantt extends Construct {
         );
         this.config.axis.x.ticks = {};
         const width = getXAxisWidth(this.config);
-        const scale = d3.time
-            .scale()
+        const scale = d3.scaleTime()
             .domain(this.config.axis.x.domain)
             .range([0, width])
             .clamp(this.config.settingsDictionary.shouldClamp);

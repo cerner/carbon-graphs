@@ -12,7 +12,8 @@ import {
     createXAxisInfoRow,
     getAxesDataRange,
     getYAxisHeight,
-    updateXAxisDomain
+    updateXAxisDomain,
+    isXAxisOrientationTop
 } from "../../helpers/axis";
 import constants, { AXIS_TYPE } from "../../helpers/constants";
 import errors from "../../helpers/errors";
@@ -391,24 +392,21 @@ class Graph extends Construct {
         updateXAxisDomain(this.config);
         const width = getXAxisWidth(this.config);
         scaleGraph(this.scale, this.config);
-        const axisData = d3.svg
-            .axis()
-            .scale(this.scale.x)
+
+        const d3Axis = isXAxisOrientationTop(this.axis.x.orientation) ? d3.axisTop(this.scale.x) : d3.axisBottom(this.scale.x);
+        const axisData = d3Axis
             .ticks(
                 Math.max(
                     Math.ceil(width / constants.MAX_TICK_VARIANCE),
                     constants.MIN_TICKS
                 )
-            )
-            .orient(this.config.axis.x.orientation);
+            );
 
         const svg = this.svg
             .selectAll(`.${styles.axis}.${styles.axisX}`)
             .data(this.config.axis.x.domain);
         svg.enter();
         svg.transition()
-            .attr("class", styles.axis)
-            .attr("class", styles.axisX)
             .attr("aria-hidden", !this.config.axis.x.show)
             .attr(
                 "transform",
