@@ -60,7 +60,7 @@ describe("Scatter - Panning", () => {
                 const translate = getSVGAnimatedTransformList(
                     datelineGroup.getAttribute("transform")
                 ).translate;
-                expect(toNumber(translate[0], 10)).toBeGreaterThanOrEqual(72);
+                expect(toNumber(translate[0], 10)).toBeGreaterThanOrEqual(67);
                 expect(toNumber(translate[1], 10)).toBeCloseTo(PADDING_BOTTOM);
                 done();
             });
@@ -96,7 +96,7 @@ describe("Scatter - Panning", () => {
                 const translate = getSVGAnimatedTransformList(
                     datelineGroup.getAttribute("transform")
                 ).translate;
-                expect(toNumber(translate[0], 10)).toBeGreaterThanOrEqual(72);
+                expect(toNumber(translate[0], 10)).toBeGreaterThanOrEqual(67);
                 expect(toNumber(translate[1], 10)).toBeCloseTo(PADDING_BOTTOM);
                 done();
             });

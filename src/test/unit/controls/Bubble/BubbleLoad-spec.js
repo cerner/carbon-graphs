@@ -191,18 +191,10 @@ describe("Bubble - Load", () => {
             data[0].y = null;
             input = getInput(data);
             graph.loadContent(new Bubble(input));
-            const pointsGroup = fetchElementByClass(
-                bubbleGraphContainer,
-                styles.currentPointsGroup
+            const pointsGroups = bubbleGraphContainer.querySelectorAll(
+                `.${styles.point}`
             );
-            const points = fetchElementByClass(pointsGroup, styles.point);
-            const selectedPoint = fetchElementByClass(
-                pointsGroup,
-                styles.dataPointSelection
-            );
-            expect(pointsGroup.children.length).toBe(3);
-            expect(points.getAttribute("aria-hidden")).toContain("true");
-            expect(selectedPoint.getAttribute("aria-hidden")).toContain("true");
+            expect(pointsGroups.length).toBe(2);
         });
         it("add points group for data points", () => {
             const pointsGroup = fetchElementByClass(
@@ -598,10 +590,10 @@ describe("Bubble - Load", () => {
                     );
                     expect(bubbleGroup.length).toBe(1);
                     expect(
-                        bubbleGraphContainer
-                            .querySelectorAll(`.${styles.point}`)[2]
-                            .getAttribute("aria-hidden")
-                    ).toBe("true");
+                        bubbleGraphContainer.querySelectorAll(
+                            `.${styles.point}`
+                        ).length
+                    ).toBe(4);
                     expect(graph.config.axis.y.domain.lowerLimit).toBe(11);
                     expect(graph.config.axis.y.domain.upperLimit).toBe(209);
                 });
@@ -619,10 +611,10 @@ describe("Bubble - Load", () => {
                     );
                     expect(bubbleGroup.length).toBe(1);
                     expect(
-                        bubbleGraphContainer
-                            .querySelectorAll(`.${styles.point}`)[2]
-                            .getAttribute("aria-hidden")
-                    ).toBe("true");
+                        bubbleGraphContainer.querySelectorAll(
+                            `.${styles.point}`
+                        ).length
+                    ).toBe(4);
                     expect(graph.config.axis.y.domain.lowerLimit).toBe(20);
                     expect(graph.config.axis.y.domain.upperLimit).toBe(200);
                 });
@@ -639,10 +631,10 @@ describe("Bubble - Load", () => {
                     );
                     expect(bubbleGroup.length).toBe(1);
                     expect(
-                        bubbleGraphContainer
-                            .querySelectorAll(`.${styles.point}`)[2]
-                            .getAttribute("aria-hidden")
-                    ).toBe("true");
+                        bubbleGraphContainer.querySelectorAll(
+                            `.${styles.point}`
+                        ).length
+                    ).toBe(4);
                     expect(graph.config.axis.y2.domain.lowerLimit).toBe(11);
                     expect(graph.config.axis.y2.domain.upperLimit).toBe(209);
                 });
@@ -659,10 +651,10 @@ describe("Bubble - Load", () => {
                     );
                     expect(bubbleGroup.length).toBe(1);
                     expect(
-                        bubbleGraphContainer
-                            .querySelectorAll(`.${styles.point}`)[2]
-                            .getAttribute("aria-hidden")
-                    ).toBe("true");
+                        bubbleGraphContainer.querySelectorAll(
+                            `.${styles.point}`
+                        ).length
+                    ).toBe(4);
                     expect(graph.config.axis.y2.domain.lowerLimit).toBe(20);
                     expect(graph.config.axis.y2.domain.upperLimit).toBe(200);
                 });
@@ -762,6 +754,7 @@ describe("Bubble - Load", () => {
                 bubbleGraphContainer,
                 styles.legendItemBtn
             );
+            const iconSVG = legendItemBtn.children[0].firstChild;
             expect(legendItem).not.toBeNull();
             expect(legendItem.getAttribute("aria-current")).toBe("true");
             expect(legendItem.getAttribute("aria-disabled")).toBe("false");
@@ -776,11 +769,9 @@ describe("Bubble - Load", () => {
             expect(legendItemBtn.getAttribute("class")).toBe(
                 styles.legendItemBtn
             );
-            expect(legendItemBtn.children[0].tagName).toBe("svg");
+            expect(iconSVG.tagName).toBe("svg");
             expect(
-                legendItemBtn.children[0].classList.contains(
-                    styles.legendItemIcon
-                )
+                iconSVG.classList.contains(styles.legendItemIcon)
             ).toBeTruthy();
         });
         it("loads the correct color", () => {
@@ -817,12 +808,11 @@ describe("Bubble - Load", () => {
             ).and.callThrough();
             const input = getInput(valuesDefault, false, false);
             const bubble = new Bubble(input);
-            const graph = graphDefault.loadContent(bubble);
+            graphDefault.loadContent(bubble);
             triggerEvent(
                 fetchElementByClass(bubbleGraphContainer, styles.legendItem),
                 "click",
                 () => {
-                    bubble.redraw(graph);
                     expect(window.requestAnimationFrame).toHaveBeenCalledTimes(
                         1
                     );
@@ -860,8 +850,6 @@ describe("Bubble - Load", () => {
                 fetchElementByClass(bubbleGraphContainer, styles.legendItem),
                 "click",
                 () => {
-                    primaryBubble.redraw(graph);
-                    secondaryBubble.redraw(graph);
                     const primaryBubbleElement = bubbleGraphContainer.querySelector(
                         `.${styles.bubbleGraphContent}[aria-describedby="${inputPrimary.key}"]`
                     );

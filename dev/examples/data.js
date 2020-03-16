@@ -68,7 +68,12 @@ const DATA = [
                     values: new Array(18).fill("").map((_, i) => ({
                         y: Math.sin(i) * Math.PI * 2,
                         x: 85 + i * 10
-                    }))
+                    })),
+                    legendOptions: {
+                        showLine: true,
+                        showShape: false,
+                        style: { strokeDashArray: "2,2" }
+                    }
                 },
                 {
                     key: "uid_3",
@@ -107,7 +112,11 @@ const DATA = [
                     values: new Array(20).fill("").map((_, i) => ({
                         y: Math.cos(i) * Math.PI * 5,
                         x: 85 + i * 10
-                    }))
+                    })),
+                    legendOptions: {
+                        showLine: true,
+                        showShape: true
+                    }
                 },
                 {
                     key: "uid_6",

@@ -1,8 +1,16 @@
 "use strict";
 import Graph from "../../../../main/js/controls/Graph/Graph";
 import Line from "../../../../main/js/controls/Line";
+import { COLORS, SHAPES } from "../../../../main/js/helpers/constants";
 import styles from "../../../../main/js/helpers/styles";
+import { getSVGAnimatedTransformList } from "../../../../main/js/helpers/transformUtils";
 import utils from "../../../../main/js/helpers/utils";
+import {
+    delay,
+    loadCustomJasmineMatcher,
+    PADDING_BOTTOM,
+    toNumber
+} from "../../helpers/commonHelpers";
 import {
     axisDefault,
     axisTimeSeries,
@@ -10,13 +18,13 @@ import {
     getInput,
     valuesTimeSeries
 } from "./helpers";
-import { toNumber, delay, PADDING_BOTTOM } from "../../helpers/commonHelpers";
-import { COLORS, SHAPES } from "../../../../main/js/helpers/constants";
-import { getSVGAnimatedTransformList } from "../../../../main/js/helpers/transformUtils";
 
 describe("Line - Panning", () => {
     let graphDefault = null;
     let lineGraphContainer;
+    beforeAll(() => {
+        loadCustomJasmineMatcher();
+    });
     beforeEach(() => {
         lineGraphContainer = document.createElement("div");
         lineGraphContainer.id = "testLine_carbon";
@@ -60,7 +68,7 @@ describe("Line - Panning", () => {
                 const translate = getSVGAnimatedTransformList(
                     datelineGroup.getAttribute("transform")
                 ).translate;
-                expect(toNumber(translate[0], 10)).toBeGreaterThanOrEqual(72);
+                expect(toNumber(translate[0], 10)).toBeGreaterThanOrEqual(67);
                 expect(toNumber(translate[1], 10)).toBeCloseTo(PADDING_BOTTOM);
                 done();
             });
@@ -96,8 +104,8 @@ describe("Line - Panning", () => {
                 const translate = getSVGAnimatedTransformList(
                     datelineGroup.getAttribute("transform")
                 ).translate;
-                expect(toNumber(translate[0], 10)).toBeGreaterThanOrEqual(72);
-                expect(toNumber(translate[1], 10)).toBeCloseTo(PADDING_BOTTOM);
+                expect(toNumber(translate[0], 10)).toBeCloserTo(67);
+                expect(toNumber(translate[1], 10)).toBeCloserTo(PADDING_BOTTOM);
                 done();
             });
         });

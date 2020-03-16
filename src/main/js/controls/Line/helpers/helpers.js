@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import { Shape } from "../../../core";
 import {
     getInterpolationType,
@@ -18,7 +18,8 @@ import {
     legendClickHandler,
     legendHoverHandler,
     loadLegendItem,
-    isLegendSelected
+    isLegendSelected,
+    getDefaultLegendOptions
 } from "../../../helpers/legend";
 import {
     processRegions,
@@ -33,6 +34,7 @@ import {
     getColorForTarget,
     getShapeForTarget
 } from "../../Graph/helpers/helpers";
+import { getStrokeDashArray } from "../../../core/BaseConfig/helper";
 
 /**
  * @typedef Line
@@ -47,12 +49,12 @@ import {
  * @returns {object} d3 line object
  */
 const createLine = (scale, d) => {
-    const newLine = d3.svg
+    const newLine = d3
         .line()
         .defined((value) => value.y !== null)
         .x((value) => scale.x(value.x))
         .y((value) => scale[value.yAxis](value.y))
-        .interpolate(d.interpolationType);
+        .curve(d.interpolationType);
     return newLine(getDataPointValues(d));
 };
 /**
@@ -239,7 +241,7 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
         const pointPath = lineSVG
             .select(`.${styles.currentPointsGroup}`)
             .selectAll(`.${styles.point}`)
-            .data(getDataPointValues);
+            .data(getDataPointValues(dataTarget).filter((d) => d.y !== null));
         drawDataPoints(scale, config, pointPath.enter());
         pointPath
             .exit()
@@ -272,6 +274,7 @@ const processDataPoints = (graphConfig, dataTarget) => {
     dataTarget.style = {
         strokeDashArray: getStrokeDashArray(dataTarget.style)
     };
+    dataTarget.legendOptions = getDefaultLegendOptions(graphConfig, dataTarget);
 
     graphConfig.shownTargets.push(dataTarget.key);
     dataTarget.internalValuesSubset = dataTarget.values.map((value) => ({
@@ -298,17 +301,6 @@ const processDataPoints = (graphConfig, dataTarget) => {
  */
 const getDataPointValues = (target) => target.internalValuesSubset;
 /**
- * Checks the data-set is currently shown in the graph and if the y data-point value is null
- * If they are then true, false otherwise
- *
- * @private
- * @param {object} shownTargets - graph targets config object
- * @param {object} value - data point value object
- * @returns {boolean} true if data point needs to be hidden, false otherwise
- */
-const shouldHideDataPoints = (shownTargets, value) =>
-    shownTargets.indexOf(value.key) < 0 || value.y === null;
-/**
  * Draws lines using the data point values.
  * Lines are created using d3 svg line with linear interpolation.
  *
@@ -331,9 +323,7 @@ const drawDataLines = (scale, config, lineGroupSVG) =>
                     value.style.strokeDashArray
                 };`
         )
-        .attr("aria-hidden", (value) =>
-            shouldHideDataPoints(config.shownTargets, value)
-        )
+        .attr("aria-hidden", false)
         .attr("aria-describedby", (target) => target.key);
 /**
  * Draws the points with options opted in the input JSON by the consumer for each data set.
@@ -358,10 +348,7 @@ const drawDataPoints = (scale, config, pointGroupPath) => {
                         dataPointActionHandler(value, index, this);
                     },
                     a11yAttributes: {
-                        "aria-hidden": shouldHideDataPoints(
-                            config.shownTargets,
-                            value
-                        ),
+                        "aria-hidden": false,
                         "aria-describedby": value.key,
                         "aria-disabled": !utils.isFunction(value.onClick)
                     }
@@ -400,10 +387,7 @@ const drawDataPoints = (scale, config, pointGroupPath) => {
                         dataPointActionHandler(value, index, this);
                     },
                     a11yAttributes: {
-                        "aria-hidden": shouldHideDataPoints(
-                            config.shownTargets,
-                            value
-                        ),
+                        "aria-hidden": false,
                         "aria-describedby": value.key,
                         "aria-disabled": !utils.isFunction(value.onClick)
                     }
@@ -553,16 +537,6 @@ const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
  */
 const clear = (canvasSVG, dataTarget) =>
     d3RemoveElement(canvasSVG, `g[aria-describedby="${dataTarget.key}"]`);
-
-/**
- * Validate and return the strokeDashArray property
- *
- * @private
- * @param {object} style - style you want to apply for the line
- * @returns {string} - stroke-dasharray css value for the line
- */
-const getStrokeDashArray = (style) =>
-    getDefaultValue(style.strokeDashArray, "0");
 
 export {
     toggleDataPointSelection,

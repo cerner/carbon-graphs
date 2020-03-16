@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import constants from "../../../helpers/constants";
 import utils from "../../../helpers/utils";
 
@@ -11,8 +11,8 @@ import utils from "../../../helpers/utils";
  * @returns {d3.scale} - returns a function to get bubble radius
  */
 export const bubbleScale = (dataTarget) =>
-    d3.scale
-        .linear()
+    d3
+        .scaleLinear()
         .domain([dataTarget.weight.min, dataTarget.weight.max])
         .range([
             constants.DEFAULT_BUBBLE_RADIUS_MIN,
@@ -37,8 +37,8 @@ export const generateColor = (dataTarget) => {
             bubbleScale(dataTarget)(element.weight)
         );
     }
-    const huePaletteList = d3.scale
-        .linear()
+    const huePaletteList = d3
+        .scaleLinear()
         .domain(d3.extent(radiusData))
         .range([lowerShade, upperShade]);
 

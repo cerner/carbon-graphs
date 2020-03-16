@@ -7,12 +7,7 @@ import {
 import { getYAxisHeight } from "../../../../main/js/helpers/axis";
 import constants from "../../../../main/js/helpers/constants";
 import styles from "../../../../main/js/helpers/styles";
-import {
-    delay,
-    toNumber,
-    TRANSITION_DELAY,
-    triggerEvent
-} from "../../helpers/commonHelpers";
+import { toNumber, triggerEvent } from "../../helpers/commonHelpers";
 import {
     axisJSON,
     fetchElementByClass,
@@ -51,11 +46,9 @@ describe("Timeline - Resize", () => {
         );
         timeline.resize();
         triggerEvent(window, "resize", () => {
-            delay(() => {
-                expect(timeline.config.canvasWidth).toBe(800);
-                rafSpy.calls.reset();
-                done();
-            }, TRANSITION_DELAY);
+            expect(timeline.config.canvasWidth).toBe(800);
+            rafSpy.calls.reset();
+            done();
         });
     });
     it("Sets the defs clipPath width and height correctly", (done) => {

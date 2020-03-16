@@ -6,13 +6,9 @@ about: Create a report to help us improve
 **Describe the bug**
 A clear and concise description of what the bug is.
 
-**To Reproduce**
-Steps to reproduce the behavior:
+**Link to CodeSandbox**
 
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+Use [this](https://codesandbox.io/s/carbon-sandbox-vd27d) template to reproduce the behavior. 
 
 **Expected behavior**
 A clear and concise description of what you expected to happen.
