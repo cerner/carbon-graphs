@@ -347,6 +347,21 @@ describe("Line - Load", () => {
                 input.key
             );
         });
+        it("does not render points if shapes are hidden per data set", () => {
+            graphDefault.destroy();
+            const hiddenShapeInput = getAxes(axisDefault);
+            hiddenShapeInput.showShapes = true;
+            const hiddenShapeGraph = new Graph(hiddenShapeInput);
+            input = getInput(valuesDefault, false, false);
+            input.showShapes = false;
+            hiddenShapeGraph.loadContent(new Line(input));
+            expect(
+                fetchElementByClass(
+                    lineGraphContainer,
+                    styles.currentPointsGroup
+                )
+            ).toBeNull();
+        });
         describe("adds line with stroke-dasharray as provided by consumer with", () => {
             it("comma seperated values", () => {
                 graphDefault.destroy();

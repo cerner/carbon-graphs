@@ -83,7 +83,8 @@ import {
     renderLineWithPanning,
     renderLineWithEventline,
     renderDashedLine,
-    renderLineWithLegendOptions
+    renderLineWithLegendOptions,
+    renderLineWithShapesShownPerDataSet
 } from "./examples/controls/line";
 import {
     renderMultiPairedResultRegion,
@@ -213,6 +214,11 @@ renderSiteApp(
                     pathname: "/line/legend-options",
                     content: renderLineWithLegendOptions,
                     title: "Line with Legend Options"
+                },
+                {
+                    pathname: "/line/show-or-hide-shapes-per-data-set",
+                    content: renderLineWithShapesShownPerDataSet,
+                    title: "Show or Hide Shapes Per Data Set"
                 }
             ]
         },

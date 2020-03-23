@@ -183,6 +183,7 @@ Refer [Graph](../core/Graph.md) `Root` for more details.
 | onClick       | Function | undefined          | Any action that can be performed when clicking on the data point             |
 | style         | object   | {}                 | Any style that can be applied. Refer [Styles](#style)                        |
 | legendOptions | object   | undefined          | Option to show/hide shape and/or line. Refer [LegendOptions](#legendOptions) |
+| showShapes    | boolean  | undefined          | Option to show/hide shapes per data set                                      |
 
 ##### Style
 
