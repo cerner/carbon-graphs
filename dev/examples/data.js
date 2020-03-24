@@ -33,7 +33,7 @@ const DATA = [
                 y: {
                     show: true,
                     label: "Line Set A",
-                    lowerLimit: 0,
+                    lowerLimit: -20,
                     upperLimit: 20
                 },
                 y2: {
