@@ -537,5 +537,13 @@ export const renderLineWithShapesShownPerDataSet = (id) => {
     lineDefault.loadContent(Carbon.api.line(axisData.data[1]));
     lineDefault.loadContent(Carbon.api.line(axisData.data[3]));
     lineDefault.loadContent(Carbon.api.line(axisData.data[4]));
+};
+export const renderDisableCalibration = (id) => {
+    const axisData = utils.deepClone(getDemoData(`#${id}`, "LINE_DEFAULT"));
+    axisData.allowCalibration = false;
+    const lineDefault = Carbon.api.graph(axisData);
+    lineDefault.loadContent(
+        Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[6])
+    );
     return lineDefault;
 };

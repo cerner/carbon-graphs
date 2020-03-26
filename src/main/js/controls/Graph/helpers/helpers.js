@@ -537,7 +537,7 @@ const scaleGraph = (scale, config) => {
             config.axis.y.domain.upperLimit
         ])
         .range(getYAxisRange(config))
-        .clamp(true);
+        .clamp(config.allowCalibration);
     if (config.axis.x.rangeRounding) {
         scale.x.nice();
     }
@@ -552,7 +552,7 @@ const scaleGraph = (scale, config) => {
                 config.axis.y2.domain.upperLimit
             ])
             .range(getYAxisRange(config))
-            .clamp(true);
+            .clamp(config.allowCalibration);
         if (config.axis.y2.rangeRounding) {
             scale.y2.nice();
         }

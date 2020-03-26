@@ -84,7 +84,8 @@ import {
     renderLineWithEventline,
     renderDashedLine,
     renderLineWithLegendOptions,
-    renderLineWithShapesShownPerDataSet
+    renderLineWithShapesShownPerDataSet,
+    renderDisableCalibration
 } from "./examples/controls/line";
 import {
     renderMultiPairedResultRegion,
@@ -219,6 +220,11 @@ renderSiteApp(
                     pathname: "/line/show-or-hide-shapes-per-data-set",
                     content: renderLineWithShapesShownPerDataSet,
                     title: "Show or Hide Shapes Per Data Set"
+                },
+                {
+                    pathname: "/line/disable-calibration",
+                    content: renderDisableCalibration,
+                    title: "Disable Calibration"
                 }
             ]
         },
