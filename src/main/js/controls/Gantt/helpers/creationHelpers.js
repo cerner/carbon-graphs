@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import {
     getAxisTickFormat,
     getXAxisHeight,
@@ -7,11 +7,13 @@ import {
     getYAxisHeight,
     getYAxisXPosition,
     prepareHorizontalAxis,
-    prepareXAxis
+    prepareXAxis,
+    resetD3FontSize
 } from "../../../helpers/axis";
 import constants, { AXES_ORIENTATION } from "../../../helpers/constants";
 import { createVGrid, prepareHAxis } from "../../../helpers/datetimeBuckets";
 import errors from "../../../helpers/errors";
+import { shouldTruncateLabel, truncateLabel } from "../../../helpers/label";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 import {
@@ -119,6 +121,16 @@ const updateAxesDomain = (config) => {
     return config;
 };
 /**
+ * Checks if the track label needs to be truncated and returns the truncated value
+ *
+ * @private
+ * @param {string} label - Track label display property
+ * @returns {string} if more than constants.DEFAULT_LABEL_CHARACTER_LIMIT then truncates,
+ * normal label otherwise
+ */
+const formatTrackLabel = (label) =>
+    shouldTruncateLabel(label) ? truncateLabel(label) : label;
+/**
  * Creates the axis using the scale provided for Y Axis using d3 svg axis
  *
  * @private
@@ -127,11 +139,10 @@ const updateAxesDomain = (config) => {
  * @returns {object} d3 object which forms the y-axis scale
  */
 const prepareYAxis = (scale, height) =>
-    d3.svg
-        .axis()
-        .scale(scale)
-        .orient(AXES_ORIENTATION.Y.LEFT)
+    d3
+        .axisLeft(scale)
         .ticks(height / constants.DEFAULT_Y_AXIS_SPACING)
+        .tickFormat(formatTrackLabel)
         .tickPadding(8);
 /**
  * Calculates axes sizes, specifically:
@@ -147,7 +158,7 @@ const prepareYAxis = (scale, height) =>
 const calculateAxesSize = (config) => {
     config.axisSizes = {};
     config.axisSizes.x = getXAxisHeight(config);
-    config.axisSizes.y = getYAxisWidth(constants.Y_AXIS, config);
+    config.axisSizes.y = getYAxisWidth(config);
 };
 /**
  *  Calculates the label size needed for each axes.
@@ -165,22 +176,18 @@ const calculateAxesLabelSize = (config) => {
  * Dynamically generate the label width for y axes
  *
  * @private
- * @param {string} id - y or y2
  * @param {object} config - config object derived from input JSON
  * @returns {number} label width
  */
-const getYAxisWidth = (id, config) => {
+const getYAxisWidth = (config) => {
     if (config.padding.hasCustomPadding) {
         return config.padding.left;
     }
-    const scale = d3.scale
-        .ordinal()
+    const scale = d3
+        .scaleOrdinal()
         .domain(getYAxisDomain(config.axis.y.trackList))
         .range([0, ...getYAxisRange(config.axis.y.trackList)]);
-    const axis = d3.svg
-        .axis()
-        .scale(scale)
-        .orient(AXES_ORIENTATION.Y.LEFT);
+    const axis = d3.axisLeft(scale);
     const dummy = d3.select("body").append("div");
     const svg = dummy.append("svg");
     const yAxisSVG = svg.append("g").call(axis);
@@ -291,13 +298,13 @@ const getYAxisRange = (trackList) =>
  * @returns {undefined} - returns nothing
  */
 const scaleGraph = (scale, config) => {
-    scale.x = d3.time
-        .scale()
+    scale.x = d3
+        .scaleTime()
         .domain(config.axis.x.domain)
         .range([0, getXAxisWidth(config)])
         .clamp(config.settingsDictionary.shouldClamp);
-    scale.y = d3.scale
-        .ordinal()
+    scale.y = d3
+        .scaleOrdinal()
         .domain(getYAxisDomain(config.axis.y.trackList))
         .range([0, ...getYAxisRange(config.axis.y.trackList)]);
     if (config.axis.x.rangeRounding) {
@@ -415,7 +422,8 @@ const createAxes = (axis, scale, config, canvasSVG) => {
                 config
             )})`
         )
-        .call(axis.x);
+        .call(axis.x)
+        .call(resetD3FontSize);
     canvasSVG
         .append("g")
         .classed(styles.axis, true)
@@ -428,7 +436,8 @@ const createAxes = (axis, scale, config, canvasSVG) => {
                 config
             )})`
         )
-        .call(axis.y);
+        .call(axis.y)
+        .call(resetD3FontSize);
 };
 
 /**
@@ -480,7 +489,7 @@ const createGanttContent = (config, canvasSVG) =>
  * @private
  * @param {object} scale - d3 scale
  * @param {object} config - config object derived from input JSON
- * @param {object} content - track content which needs to be laoded
+ * @param {object} content - track content which needs to be loaded
  * @param {number} length - length of all tracks
  * @throws module:errors.THROW_MSG_INVALID_LOAD_CONTENT_AT_INDEX
  * @returns {number} - index where we would insert the new track content

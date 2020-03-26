@@ -1,5 +1,5 @@
 /* eslint-disable */
-import d3 from "d3";
+import * as d3 from "d3";
 import constants from "../../src/main/js/helpers/constants";
 import utils from "../../src/main/js/helpers/utils";
 
@@ -111,6 +111,23 @@ export const loadPopup = (onCloseCB, key, index, value) => {
         if (value.low) {
             createItem(pair, "Low", getPairData(value.low.y));
         }
+    }
+};
+export const loadBubblePopup = (onCloseCB, key, index, value) => {
+    removeOldPopup();
+    const path = renderPopup(onCloseCB);
+    const pair = path.append("g");
+    if (value.x) {
+        // Line
+        createItem(
+            pair,
+            "X axis",
+            `${checkDate(value.x) ? getDate(value.x) : value.x}`
+        );
+        createItem(pair, `year`, value.y);
+    }
+    if (value.weight) {
+        createItem(pair, `${value.label.display}`, `${value.weight}`);
     }
 };
 export const loadBarPopup = (onCloseCB, key, index, values) => {

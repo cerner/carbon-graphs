@@ -4,11 +4,11 @@
  * @typedef {object} GraphContent
  * @typedef {object} GanttConfig
  */
-import d3 from "d3";
+import * as d3 from "d3";
 import { GraphContent } from "../../core";
 import constants from "../../helpers/constants";
-import { shouldTruncateLabel } from "../../helpers/label";
 import errors from "../../helpers/errors";
+import { shouldTruncateLabel } from "../../helpers/label";
 import styles from "../../helpers/styles";
 import utils from "../../helpers/utils";
 import { isUniqueKey } from "./GanttConfig";
@@ -29,8 +29,7 @@ import {
     translateActivities,
     translateDataPoints,
     translateTasks,
-    translateTrackSelector,
-    truncateTrackLabelText
+    translateTrackSelector
 } from "./helpers/translateHelpers";
 
 /**
@@ -155,7 +154,7 @@ class Track extends GraphContent {
          * To load the gantt track selector, we need to find the track-height, this gets updated only when updateTrackProps gets called.
          *
          * We Need to loadGanttTrackSelector prior to all other components, since trackSelector is part of trackGroup and should be layered bottom,
-         * to ensure the clicable functionality.
+         * to ensure the clickable functionality.
          */
         updateTrackProps(graph.config, this.config, true);
         loadGanttTrackSelector(graph, this.trackGroupPath, this.config);
@@ -221,7 +220,6 @@ class Track extends GraphContent {
      * @inheritdoc
      */
     resize(graph) {
-        truncateTrackLabelText();
         if (utils.notEmpty(this.trackGroupPath)) {
             translateTrackSelector(
                 graph.scale,

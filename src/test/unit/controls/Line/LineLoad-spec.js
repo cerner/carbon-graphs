@@ -234,7 +234,7 @@ describe("Line - Load", () => {
                 ).value
             ).toBe(input.key);
         });
-        it("does not show data point if data point is null", () => {
+        it("does not render data point if data point is null", () => {
             graphDefault.destroy();
             const graph = new Graph(getAxes(axisDefault));
             const data = utils.deepClone(valuesDefault);
@@ -245,13 +245,11 @@ describe("Line - Load", () => {
                 lineGraphContainer,
                 styles.currentPointsGroup
             );
-            const points = fetchElementByClass(pointsGroup, styles.point);
             const selectedPoint = fetchElementByClass(
                 pointsGroup,
                 styles.dataPointSelection
             );
-            expect(pointsGroup.children.length).toBe(3);
-            expect(points.getAttribute("aria-hidden")).toContain("true");
+            expect(pointsGroup.children.length).toBe(valuesDefault.length - 1);
             expect(selectedPoint.getAttribute("aria-hidden")).toContain("true");
         });
         it("does not render points if shapes needs to be hidden", () => {
@@ -348,6 +346,21 @@ describe("Line - Load", () => {
             expect(selectedPoints.getAttribute("aria-describedby")).toBe(
                 input.key
             );
+        });
+        it("does not render points if shapes are hidden per data set", () => {
+            graphDefault.destroy();
+            const hiddenShapeInput = getAxes(axisDefault);
+            hiddenShapeInput.showShapes = true;
+            const hiddenShapeGraph = new Graph(hiddenShapeInput);
+            input = getInput(valuesDefault, false, false);
+            input.showShapes = false;
+            hiddenShapeGraph.loadContent(new Line(input));
+            expect(
+                fetchElementByClass(
+                    lineGraphContainer,
+                    styles.currentPointsGroup
+                )
+            ).toBeNull();
         });
         describe("adds line with stroke-dasharray as provided by consumer with", () => {
             it("comma seperated values", () => {
@@ -637,10 +650,9 @@ describe("Line - Load", () => {
                     );
                     expect(lineGroup.length).toBe(1);
                     expect(
-                        lineGraphContainer
-                            .querySelectorAll(`.${styles.point}`)[2]
-                            .getAttribute("aria-hidden")
-                    ).toBe("true");
+                        lineGraphContainer.querySelectorAll(`.${styles.point}`)
+                            .length
+                    ).toEqual(values.length - 1);
                     expect(graph.config.axis.y.domain.lowerLimit).toBe(11);
                     expect(graph.config.axis.y.domain.upperLimit).toBe(209);
                 });
@@ -658,10 +670,9 @@ describe("Line - Load", () => {
                     );
                     expect(lineGroup.length).toBe(1);
                     expect(
-                        lineGraphContainer
-                            .querySelectorAll(`.${styles.point}`)[2]
-                            .getAttribute("aria-hidden")
-                    ).toBe("true");
+                        lineGraphContainer.querySelectorAll(`.${styles.point}`)
+                            .length
+                    ).toEqual(values.length - 1);
                     expect(graph.config.axis.y.domain.lowerLimit).toBe(20);
                     expect(graph.config.axis.y.domain.upperLimit).toBe(200);
                 });
@@ -678,10 +689,9 @@ describe("Line - Load", () => {
                     );
                     expect(lineGroup.length).toBe(1);
                     expect(
-                        lineGraphContainer
-                            .querySelectorAll(`.${styles.point}`)[2]
-                            .getAttribute("aria-hidden")
-                    ).toBe("true");
+                        lineGraphContainer.querySelectorAll(`.${styles.point}`)
+                            .length
+                    ).toEqual(values.length - 1);
                     expect(graph.config.axis.y2.domain.lowerLimit).toBe(11);
                     expect(graph.config.axis.y2.domain.upperLimit).toBe(209);
                 });
@@ -698,10 +708,9 @@ describe("Line - Load", () => {
                     );
                     expect(lineGroup.length).toBe(1);
                     expect(
-                        lineGraphContainer
-                            .querySelectorAll(`.${styles.point}`)[2]
-                            .getAttribute("aria-hidden")
-                    ).toBe("true");
+                        lineGraphContainer.querySelectorAll(`.${styles.point}`)
+                            .length
+                    ).toEqual(values.length - 1);
                     expect(graph.config.axis.y2.domain.lowerLimit).toBe(20);
                     expect(graph.config.axis.y2.domain.upperLimit).toBe(200);
                 });
@@ -801,6 +810,7 @@ describe("Line - Load", () => {
                 lineGraphContainer,
                 styles.legendItemBtn
             );
+            const iconSVG = legendItemBtn.children[0].firstChild;
             expect(legendItem).not.toBeNull();
             expect(legendItem.getAttribute("aria-current")).toBe("true");
             expect(legendItem.getAttribute("aria-disabled")).toBe("false");
@@ -815,11 +825,9 @@ describe("Line - Load", () => {
             expect(legendItemBtn.getAttribute("class")).toBe(
                 styles.legendItemBtn
             );
-            expect(legendItemBtn.children[0].tagName).toBe("svg");
+            expect(iconSVG.tagName).toBe("svg");
             expect(
-                legendItemBtn.children[0].classList.contains(
-                    styles.legendItemIcon
-                )
+                iconSVG.classList.contains(styles.legendItemIcon)
             ).toBeTruthy();
         });
         it("loads the correct shape", () => {
@@ -829,7 +837,8 @@ describe("Line - Load", () => {
                 lineGraphContainer,
                 styles.legendItem
             );
-            const iconSVG = legendItem.querySelector("svg");
+            const svgElements = legendItem.querySelectorAll("svg");
+            const iconSVG = svgElements[0];
             const iconPath = legendItem.querySelector("path");
             expect(iconSVG).not.toBeNull();
             expect(iconSVG.classList).toContain(styles.legendItemIcon);
@@ -844,13 +853,73 @@ describe("Line - Load", () => {
                 lineGraphContainer,
                 styles.legendItem
             );
-            const iconSVG = legendItem.querySelector("svg");
+            const svgElements = legendItem.querySelectorAll("svg");
+            const iconSVG = svgElements[0];
             const iconPath = legendItem.querySelector("path");
             expect(iconSVG).not.toBeNull();
             expect(iconSVG.classList).toContain(styles.legendItemIcon);
             expect(iconSVG.getAttribute("style")).toBe(`fill: ${COLORS.BLUE};`);
             expect(iconPath).not.toBeNull();
             expect(iconPath.getAttribute("d")).not.toBeNull();
+        });
+        it("loads only line if user sets showLine to be true and showShape to be false", () => {
+            const input = getInput(valuesDefault, false, false);
+            input.legendOptions = {
+                showShape: false,
+                showLine: true
+            };
+            graphDefault.loadContent(new Line(input));
+            const legendItem = fetchElementByClass(
+                lineGraphContainer,
+                styles.legendItem
+            );
+            const svgElements = legendItem.querySelectorAll("svg");
+            const lineSVG = svgElements[0];
+            expect(svgElements.length).toBe(1);
+            expect(lineSVG).not.toBeNull();
+            expect(lineSVG.classList).toContain(styles.legendItemLine);
+        });
+        it("loads only shape if user sets showLine to be false and showShape to be true", () => {
+            const input = getInput(valuesDefault, false, false);
+            input.legendOptions = {
+                showShape: true,
+                showLine: false
+            };
+            graphDefault.loadContent(new Line(input));
+            const legendItem = fetchElementByClass(
+                lineGraphContainer,
+                styles.legendItem
+            );
+            const svgElements = legendItem.querySelectorAll("svg");
+            const iconPath = legendItem.querySelector("path");
+            const iconSVG = svgElements[0];
+            expect(svgElements.length).toBe(1);
+            expect(iconSVG).not.toBeNull();
+            expect(iconSVG.classList).toContain(styles.legendItemIcon);
+            expect(iconPath).not.toBeNull();
+            expect(iconPath.getAttribute("d")).not.toBeNull();
+        });
+        it("loads the line with provided stroke dashArray", () => {
+            const input = getInput(valuesDefault, false, false);
+            input.legendOptions = {
+                showShape: false,
+                showLine: true,
+                style: {
+                    strokeDashArray: "2,2"
+                }
+            };
+            graphDefault.loadContent(new Line(input));
+            const legendItem = fetchElementByClass(
+                lineGraphContainer,
+                styles.legendItem
+            );
+            const svgElements = legendItem.querySelectorAll("svg");
+            const lineSVG = svgElements[0];
+            expect(lineSVG).not.toBeNull();
+            expect(lineSVG.classList).toContain(styles.legendItemLine);
+            expect(
+                lineSVG.children[1].attributes.getNamedItem("style").value
+            ).toContain(`stroke-dasharray: 2,2;`);
         });
         it("attaches click event handlers correctly", (done) => {
             const input = getInput(valuesDefault, false, false);
@@ -871,12 +940,11 @@ describe("Line - Load", () => {
             ).and.callThrough();
             const input = getInput(valuesDefault, false, false);
             const line = new Line(input);
-            const graph = graphDefault.loadContent(line);
+            graphDefault.loadContent(line);
             triggerEvent(
                 fetchElementByClass(lineGraphContainer, styles.legendItem),
                 "click",
                 () => {
-                    line.redraw(graph);
                     expect(window.requestAnimationFrame).toHaveBeenCalledTimes(
                         1
                     );
@@ -920,8 +988,6 @@ describe("Line - Load", () => {
                 fetchElementByClass(lineGraphContainer, styles.legendItem),
                 "click",
                 () => {
-                    primaryLine.redraw(graph);
-                    secondaryLine.redraw(graph);
                     const primaryLineElement = lineGraphContainer.querySelector(
                         `.${styles.lineGraphContent}[aria-describedby="${inputPrimary.key}"]`
                     );

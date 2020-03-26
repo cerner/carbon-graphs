@@ -1,4 +1,4 @@
-import d3 from "d3";
+import * as d3 from "d3";
 import Carbon from "../../src/main/js/carbon";
 import {
     LEFT_CHEVRON,

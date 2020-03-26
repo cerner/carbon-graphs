@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import { Shape } from "../../../core";
 import { getDefaultSVGProps } from "../../../core/Shape";
 import { SHAPES } from "../../../helpers/constants";

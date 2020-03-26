@@ -1,6 +1,6 @@
 "use strict";
 
-import d3 from "d3";
+import * as d3 from "d3";
 import Bar from "../controls/Bar/Bar";
 import { getScale, getType } from "../core/BaseConfig";
 import constants, { AXES_ORIENTATION, AXIS_TYPE } from "../helpers/constants";
@@ -44,7 +44,7 @@ const getReferenceLineData = (scale) => [
  * @returns {d3.Line} A d3 line
  */
 const createReferenceLine = (scale, yAxis) =>
-    d3.svg
+    d3
         .line()
         .x((value) => scale.x(value.x))
         .y((value) => scale[yAxis](value.y));
@@ -74,7 +74,8 @@ const createAxes = (axis, scale, config, canvasSVG) => {
                 config
             )})`
         )
-        .call(axis.x);
+        .call(axis.x)
+        .call(resetD3FontSize);
     canvasSVG
         .append("g")
         .classed(styles.axis, true)
@@ -86,7 +87,8 @@ const createAxes = (axis, scale, config, canvasSVG) => {
                 config
             )})`
         )
-        .call(axis.y);
+        .call(axis.y)
+        .call(resetD3FontSize);
     if (hasY2Axis(config.axis)) {
         canvasSVG
             .append("g")
@@ -98,7 +100,8 @@ const createAxes = (axis, scale, config, canvasSVG) => {
                     config
                 )})`
             )
-            .call(axis.y2);
+            .call(axis.y2)
+            .call(resetD3FontSize);
     }
 };
 
@@ -125,7 +128,8 @@ const createXAxisInfoRow = (axis, scale, config, canvasSVG) => {
                 config
             )})`
         )
-        .call(axis.axisInfoRow.x);
+        .call(axis.axisInfoRow.x)
+        .call(resetD3FontSize);
 };
 
 /**
@@ -219,14 +223,15 @@ const getAxisTickFormat = (locale, format, type = AXIS_TYPE.DEFAULT) => {
     if (format === "") {
         return format;
     }
+    const _locale =
+        type === AXIS_TYPE.TIME_SERIES
+            ? d3.timeFormatDefaultLocale(locale)
+            : d3.formatDefaultLocale(locale);
+
     if (utils.isEmpty(format)) {
         return DEFAULT_TICK_FORMAT;
     }
-    if (type === AXIS_TYPE.TIME_SERIES) {
-        return locale.timeFormat(format);
-    } else {
-        return locale.numberFormat(format);
-    }
+    return _locale.format(format);
 };
 /**
  * Gets the tick values with correct format.
@@ -276,16 +281,19 @@ const prepareXAxis = (
     width,
     format,
     orientation = AXES_ORIENTATION.X.BOTTOM
-) =>
-    d3.svg
-        .axis()
-        .scale(scale)
-        .orient(orientation)
+) => {
+    let d3Axis = d3.axisBottom(scale);
+    if (isXAxisOrientationTop(orientation)) {
+        d3Axis = d3.axisTop(scale);
+    }
+    d3Axis
         .ticks(
             Math.max(width / constants.MAX_TICK_VARIANCE, constants.MIN_TICKS)
         )
         .tickValues(processTickValues(tickValues))
         .tickFormat(format);
+    return d3Axis;
+};
 
 /**
  * Creates the axis using the scale provided for X Axis using d3 svg axis.
@@ -295,12 +303,17 @@ const prepareXAxis = (
  * @param {string} [orientation] - Axis orientation
  * @returns {object} d3 object which forms the text label axis scale
  */
-const prepareXAxisInfoRow = (scale, orientation = AXES_ORIENTATION.X.BOTTOM) =>
-    d3.svg
-        .axis()
-        .scale(scale)
-        .orient(orientation)
-        .tickValues([]);
+const prepareXAxisInfoRow = (
+    scale,
+    orientation = AXES_ORIENTATION.X.BOTTOM
+) => {
+    let d3Axis = d3.axisBottom(scale);
+    if (isXAxisOrientationTop(orientation)) {
+        d3Axis = d3.axisTop(scale);
+    }
+    d3Axis.tickValues([]);
+    return d3Axis;
+};
 
 /**
  * Helper function to Create the axis using the scale provided for X Axis using d3 svg axis.
@@ -334,10 +347,8 @@ const prepareHorizontalAxis = (scale, tickValues, config, orientation) =>
  * @returns {object} d3 object which forms the y-axis scale
  */
 const prepareYAxis = (scale, tickValues, height, format) =>
-    d3.svg
-        .axis()
-        .scale(scale)
-        .orient("left")
+    d3
+        .axisLeft(scale)
         .ticks(height / constants.DEFAULT_Y_AXIS_SPACING)
         .tickValues(processTickValues(tickValues))
         .tickFormat(format);
@@ -352,10 +363,9 @@ const prepareYAxis = (scale, tickValues, height, format) =>
  * @returns {object} d3 object which forms the y2-axis scale
  */
 const prepareY2Axis = (scale, tickValues, height, format) =>
-    d3.svg
-        .axis()
-        .scale(scale)
-        .orient("right")
+    d3
+        .axisRight(scale)
+
         .ticks(height / constants.DEFAULT_Y_AXIS_SPACING)
         .tickValues(processTickValues(tickValues))
         .tickFormat(format);
@@ -587,10 +597,7 @@ const getXAxisHeight = (config) => {
     const scale = getScale(config.axis.x.type)
         .domain(config.axis.x.domain)
         .range([0, config.canvasWidth]);
-    const axis = d3.svg
-        .axis()
-        .scale(scale)
-        .orient(AXES_ORIENTATION.X.BOTTOM);
+    const axis = d3.axisBottom(scale);
     const dummy = d3.select("body").append("div");
     const svg = dummy.append("svg");
     const group = svg.append("g").call(axis);
@@ -661,17 +668,14 @@ const getYAxisWidth = (id, config) => {
     if (config.padding.hasCustomPadding) {
         return config.padding.left;
     }
-    const scale = d3.scale
-        .linear()
+    const scale = d3
+        .scaleLinear()
         .domain([
             config.axis[id].domain.lowerLimit,
             config.axis[id].domain.upperLimit
         ])
         .range([config.height, 0]);
-    const axis = d3.svg
-        .axis()
-        .scale(scale)
-        .orient("left");
+    const axis = d3.axisLeft(scale);
     const dummy = d3.select("body").append("div");
     const svg = dummy.append("svg");
     const yAxisSVG = svg.append("g").call(axis);
@@ -876,6 +880,17 @@ const buildAxisLabel = (group, label) =>
  * @returns {boolean} True if enabled
  */
 const hasY2Axis = (axis) => utils.isDefined(axis.y2) && axis.y2.show;
+/**
+ * D3 adds font-size and font-family by default to axis, to use/inherit consumer fonts
+ * we have to override the properties.
+ * https://github.com/d3/d3-axis/issues/36
+ *
+ * @private
+ * @param {d3.selection} axisD3Element - Axis element post rendering in D3
+ * @returns {undefined} returns nothing
+ */
+const resetD3FontSize = (axisD3Element) =>
+    axisD3Element.attr("font-size", null).attr("font-family", null);
 /**
  * Updates the x, y, y2 (if enabled) and axis info row(if enabled) positions on resize
  *
@@ -1116,6 +1131,7 @@ export {
     translateAxes,
     translateAxisReferenceLine,
     isValidAxisType,
+    resetD3FontSize,
     calculateVerticalPadding,
     isXAxisOrientationTop,
     getAxisInfoRowYPosition

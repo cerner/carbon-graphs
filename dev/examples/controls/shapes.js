@@ -1,4 +1,4 @@
-import d3 from "d3";
+import * as d3 from "d3";
 import Carbon from "../../../src/main/js/carbon";
 import { getBar, getHashedBar } from "../../../src/main/js/helpers/barType";
 import styles from "../../../src/main/js/helpers/styles";

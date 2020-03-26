@@ -82,7 +82,9 @@ import {
     renderLineCustomContentPadding,
     renderLineWithPanning,
     renderLineWithEventline,
-    renderDashedLine
+    renderDashedLine,
+    renderLineWithLegendOptions,
+    renderLineWithShapesShownPerDataSet
 } from "./examples/controls/line";
 import {
     renderMultiPairedResultRegion,
@@ -132,6 +134,13 @@ import {
     renderScatterWithPanning,
     renderScatterWithEventline
 } from "./examples/controls/scatter";
+import {
+    renderSimpleBubble,
+    renderWeightBasedBubbleGraph,
+    renderColorBasedBubbleGraph,
+    renderWeightColorCombination,
+    renderCustomBubbleSize
+} from "./examples/controls/bubble";
 
 renderSiteApp(
     [
@@ -200,6 +209,16 @@ renderSiteApp(
                     pathname: "/line/dashed-line",
                     content: renderDashedLine,
                     title: "Dashed Line"
+                },
+                {
+                    pathname: "/line/legend-options",
+                    content: renderLineWithLegendOptions,
+                    title: "Line with Legend Options"
+                },
+                {
+                    pathname: "/line/show-or-hide-shapes-per-data-set",
+                    content: renderLineWithShapesShownPerDataSet,
+                    title: "Show or Hide Shapes Per Data Set"
                 }
             ]
         },
@@ -350,6 +369,36 @@ renderSiteApp(
                     pathname: "/scatter/timeseries-eventline",
                     content: renderScatterWithEventline,
                     title: "Timeseries With Eventline"
+                }
+            ]
+        },
+        {
+            pathname: "/bubble",
+            children: [
+                {
+                    pathname: "/bubble/simple",
+                    content: renderSimpleBubble,
+                    title: "Simple"
+                },
+                {
+                    pathname: "/bubble/weight-based",
+                    content: renderWeightBasedBubbleGraph,
+                    title: "Weight Based"
+                },
+                {
+                    pathname: "/bubble/color-based",
+                    content: renderColorBasedBubbleGraph,
+                    title: "Color Based"
+                },
+                {
+                    pathname: "/bubble/weight-color-combination",
+                    content: renderWeightColorCombination,
+                    title: "Weight and Color Combination"
+                },
+                {
+                    pathname: "/bubble/custom-bubble-size",
+                    content: renderCustomBubbleSize,
+                    title: "Custom Bubble size"
                 }
             ]
         },

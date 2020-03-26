@@ -1019,15 +1019,14 @@ describe("Paired Result - Load", () => {
                 pairedResultGraphContainer,
                 styles.legendItemBtn
             );
+            const iconSVG = legendItemBtn.children[0].firstChild;
             expect(legendItemBtn).not.toBeNull();
             expect(legendItemBtn.getAttribute("class")).toBe(
                 styles.legendItemBtn
             );
-            expect(legendItemBtn.children[0].tagName).toBe("svg");
+            expect(iconSVG.tagName).toBe("svg");
             expect(
-                legendItemBtn.children[0].classList.contains(
-                    styles.legendItemIcon
-                )
+                iconSVG.classList.contains(styles.legendItemIcon)
             ).toBeTruthy();
         });
         it("loads item with a correct text", () => {

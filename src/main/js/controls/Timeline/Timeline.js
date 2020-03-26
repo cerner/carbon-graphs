@@ -1,5 +1,5 @@
 "use strict";
-import d3 from "d3";
+import * as d3 from "d3";
 import Construct from "../../core/Construct";
 import { getYAxisHeight } from "../../helpers/axis";
 import constants from "../../helpers/constants";

@@ -24,6 +24,7 @@ export default {
     gridUpperStep: "carbon-upper-step-grid",
     highlight: "carbon-highlight",
     blur: "carbon-blur",
+    bubbleBlur: "carbon-bubble-blur",
     svgIcon: "carbon-svgIcon",
     axisLabelX: "carbon-x-axis-label",
     axisLabelY: "carbon-y-axis-label",
@@ -37,6 +38,10 @@ export default {
     legendItem: "carbon-legend-item",
     legendItemBtn: "carbon-legend-item-btn",
     legendItemIcon: "carbon-legend-item-icon",
+    legendItemLine: "carbon-legend-item-line",
+    legendItemLineWithIcon: "carbon-legend-item-line-with-icon",
+    legendItemSpan: "carbon-legend-item-span",
+    legendItemWhiteLine: "carbon-legend-white-line",
     legendItemText: "carbon-legend-item-text",
     contentContainer: "carbon-content-container",
     datelineContent: "carbon-dateline-content",
@@ -58,6 +63,11 @@ export default {
     currentPointsGroup: "carbon-data-points-group",
     dataPointSelection: "carbon-selected-data-point",
     dataPointDisplayEnable: "carbon-data-pair--selected",
+
+    /**
+     * Bubble
+     */
+    bubbleGraphContent: "carbon-bubble-graph-content",
     /**
      * Paired Result
      */
