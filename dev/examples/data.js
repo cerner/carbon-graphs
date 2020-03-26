@@ -73,7 +73,8 @@ const DATA = [
                         showLine: true,
                         showShape: false,
                         style: { strokeDashArray: "2,2" }
-                    }
+                    },
+                    showShapes: false
                 },
                 {
                     key: "uid_3",
