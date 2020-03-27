@@ -266,6 +266,33 @@ describe("Line - Load", () => {
                 )
             ).toBeNull();
         });
+        it("does not update y axis range if allow calibration is disabled", () => {
+            graphDefault.destroy();
+            const disableCalibrationInput = getAxes(axisDefault);
+            disableCalibrationInput.allowCalibration = false;
+            const disableCalibrationGraph = new Graph(disableCalibrationInput);
+            input = getInput(valuesDefault, false, false);
+            disableCalibrationGraph.loadContent(new Line(input));
+            expect(disableCalibrationInput.axis.y.upperLimit).toEqual(
+                disableCalibrationGraph.config.axis.y.domain.upperLimit
+            );
+            expect(disableCalibrationInput.axis.y.lowerLimit).toEqual(
+                disableCalibrationGraph.config.axis.y.domain.lowerLimit
+            );
+        });
+        it("update y axis range by default", () => {
+            graphDefault.destroy();
+            const disableCalibrationInput = getAxes(axisDefault);
+            const disableCalibrationGraph = new Graph(disableCalibrationInput);
+            input = getInput(valuesDefault, false, false);
+            disableCalibrationGraph.loadContent(new Line(input));
+            expect(disableCalibrationInput.axis.y.upperLimit).not.toEqual(
+                disableCalibrationGraph.config.axis.y.domain.upperLimit
+            );
+            expect(disableCalibrationInput.axis.y.lowerLimit).not.toEqual(
+                disableCalibrationGraph.config.axis.y.domain.lowerLimit
+            );
+        });
         it("add points group for data points", () => {
             const pointsGroup = fetchElementByClass(
                 lineGraphContainer,
