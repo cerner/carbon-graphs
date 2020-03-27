@@ -235,14 +235,18 @@ describe("Timeline", () => {
             input.content = null;
             data.tasks = [];
             const cfg = timeline.config;
+            const ticks = document.getElementsByClassName("tick");
+            const leftValue = ticks[0].getBoundingClientRect().width / 2;
+            const rightValue =
+                ticks[ticks.length - 1].getBoundingClientRect().width / 2;
             expect(input.bindTo).toBe("");
             expect(input.axis).toEqual({});
             expect(data.tasks).toEqual([]);
             expect(cfg.bindTo).toBe("#testCarbonTimeline");
             expect(cfg.axis.x.lowerLimit).toBe(axisJSON.x.lowerLimit);
             expect(cfg.axis.x.upperLimit).toBe(axisJSON.x.upperLimit);
-            expect(cfg.padding.left).toEqual(11.125);
-            expect(cfg.padding.right).toEqual(11.125);
+            expect(cfg.padding.left).toEqual(leftValue);
+            expect(cfg.padding.right).toEqual(rightValue);
             expect(cfg.padding.top).toEqual(constants.PADDING.top);
             expect(cfg.padding.bottom).toEqual(constants.PADDING.bottom);
             expect(cfg.padding.hasCustomPadding).toBe(true);
