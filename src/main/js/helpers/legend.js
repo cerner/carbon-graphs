@@ -147,6 +147,7 @@ const createLegendIcon = (buttonPath, input) =>
                 svgClassNames: styles.legendItemIcon,
                 svgStyles: `fill: ${getColorForTarget(input)};`
             }),
+            true,
             true
         )
     );

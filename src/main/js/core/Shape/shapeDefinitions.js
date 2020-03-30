@@ -8,10 +8,16 @@
  * @type {{path: {d: string}, options: {x: number, y: number, scale: number}}}
  */
 export const CIRCLE = {
-    path: {
-        d: "M24 48C10.7 48 0 37.3 0 24S10.7 0 24 0s24 10.7 24 24-10.7 24-24 24z"
+    circle: {
+        cx: "24",
+        cy: "24",
+        r: "24"
     },
-    options: { x: -5, y: -5, scale: 0.2 }
+    path: {
+        d: "M24 5c10.5 0 19 8.5 19 19s-8.5 19-19 19S5 34.5 5 24 13.5 5 24 5m0-5C10.7 0 0 10.7 0 24s10.7 24 24 24 24-10.7 24-24S37.3 0 24 0z",
+        fill: "#FFF"
+    },
+    options: { x: -5, y: -5, scale: 0.2 },
 };
 /**
  * The S_0002_diamond.svg SVG file as an object.
@@ -20,7 +26,18 @@ export const CIRCLE = {
  * @type {{path: {d: string}, options: {x: number, y: number, scale: number}}}
  */
 export const RHOMBUS = {
-    path: { d: "M24 0l24 24-24 24L0 24 24 0z" },
+    rect: {
+        x: "18",
+        y: "-16",
+        height: 32,
+        width: 32,
+        transform: "rotate(45)"
+    },
+    path: { 
+        d: "M24,0 L0,24 L24,48 L48,24z M24,6 L6,24 L24,42 L42,24z",
+        fill: "#FFF",
+        "fill-rule": "evenodd"
+    },
     options: { x: -6, y: -6, scale: 0.25 }
 };
 /**

@@ -10,10 +10,10 @@ import utils from "../../helpers/utils";
  * @private
  */
 const tagList = {
-    PATH: "path",
     CIRCLE: "circle",
     RECT: "rect",
     POLYGON: "polygon",
+    PATH: "path",
     G: "g",
     STYLE: "style"
 };
@@ -90,14 +90,16 @@ const setSVGChildProperty = (d3Elem, elementType, shapePath) => {
  * @param {number} scale - transform scale for the path
  * @returns {undefined} returns nothing
  */
-const appendSVGChildren = (groupElement, shape, transformFn, scale) => {
+const appendSVGChildren = (groupElement, shape, transformFn, scale, legend=false) => {
     // Add transform property to the entire "g" to move all child elements within nested svg
     groupElement.attr("transform", transformFn(scale));
     Object.keys(tagList).forEach((el) => {
         if (!shape[tagList[el]]) {
             return;
         }
-        setSVGChildProperty(groupElement, tagList[el], shape[tagList[el]]);
+        if (legend === true || el !== "PATH") {
+            setSVGChildProperty(groupElement, tagList[el], shape[tagList[el]]);
+        }
     });
 };
 /**
@@ -143,7 +145,8 @@ const createSVG = (
         a11yAttributes,
         additionalAttributes
     },
-    includeViewBox = false
+    includeViewBox = false,
+    legend = false
 ) => {
     const d3SVGElement = d3
         .select(createElementNS("svg"))
@@ -169,7 +172,7 @@ const createSVG = (
         "aria-disabled"
     )(d3SVGElement, a11yAttributes);
     const groupElement = d3SVGElement.append("g");
-    appendSVGChildren(groupElement, shape, transformFn, shape.options.scale);
+    appendSVGChildren(groupElement, shape, transformFn, shape.options.scale, legend);
     return d3SVGElement.node();
 };
 

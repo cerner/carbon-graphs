@@ -51,11 +51,12 @@ class Shape {
      * @param {boolean} [includeViewBox] -  Include viewBox in the SVG element or otherwise. False by default
      * @returns {HTMLElement} an svg element
      */
-    getShapeElement(svgProps, includeViewBox = false) {
+    getShapeElement(svgProps, includeViewBox = false, legend = false) {
         return createSVG(
             this.shape,
             svgProps || getDefaultSVGProps(),
-            includeViewBox
+            includeViewBox,
+            legend
         );
     }
 }
