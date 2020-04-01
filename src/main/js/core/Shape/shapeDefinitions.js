@@ -11,11 +11,13 @@ export const CIRCLE = {
     circle: {
         cx: "24",
         cy: "24",
-        r: "24"
+        r: "22",
+        "stroke-width": "4",
+        stroke: "#FFF",
+        fill: "none"
     },
     path: {
-        d: "M24 5c10.5 0 19 8.5 19 19s-8.5 19-19 19S5 34.5 5 24 13.5 5 24 5m0-5C10.7 0 0 10.7 0 24s10.7 24 24 24 24-10.7 24-24S37.3 0 24 0z",
-        fill: "#FFF"
+        d: "M2,24 a22,22 0 1,0 44,0 a22,22 0 1,0 -44,0z ",
     },
     options: { x: -5, y: -5, scale: 0.2 },
 };

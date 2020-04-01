@@ -10,10 +10,10 @@ import utils from "../../helpers/utils";
  * @private
  */
 const tagList = {
+    PATH: "path",
     CIRCLE: "circle",
     RECT: "rect",
     POLYGON: "polygon",
-    PATH: "path",
     G: "g",
     STYLE: "style"
 };
@@ -97,7 +97,7 @@ const appendSVGChildren = (groupElement, shape, transformFn, scale, legend=false
         if (!shape[tagList[el]]) {
             return;
         }
-        if (legend === true || el !== "PATH") {
+        if (legend === true || el === "PATH") {
             setSVGChildProperty(groupElement, tagList[el], shape[tagList[el]]);
         }
     });
@@ -159,6 +159,7 @@ const createSVG = (
             "pointer-events",
             additionalAttributes["pointer-events"] ? "none" : "auto"
         )
+        .attr("xmlns", "http://www.w3.org/2000/svg")
         .on("click", onClickFn);
 
     if (includeViewBox) {
