@@ -327,7 +327,10 @@ class Graph extends Construct {
             this.config,
             this.content
         );
-        if (isRangeModified(this.config, content.config.yAxis)) {
+        if (
+            this.config.allowCalibration &&
+            isRangeModified(this.config, content.config.yAxis)
+        ) {
             updateAxesDomain(this.config, content);
         }
         content.load(this);
