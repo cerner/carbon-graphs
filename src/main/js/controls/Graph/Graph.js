@@ -389,6 +389,17 @@ class Graph extends Construct {
      * @param {Array} graphData - Input array that holds updated values and key
      */
     reflow(graphData) {
+        let position;
+        if(graphData) {
+            this.contentConfig.forEach((config, index) => {
+                if (config.key === graphData.key) position = index;
+            });   
+        }     
+        if(this.content[position].type === "Bar") {
+            this.config.axis.x.ticks.values = [];
+            graphData.values.forEach((v) => this.config.axis.x.ticks.values.push(v.x));
+        }
+
         updateXAxisDomain(this.config);
         const width = getXAxisWidth(this.config);
         scaleGraph(this.scale, this.config);
@@ -418,10 +429,6 @@ class Graph extends Construct {
         svg.exit().remove();
 
         if (graphData && this.contentKeys.includes(graphData.key)) {
-            let position;
-            this.contentConfig.forEach((config, index) => {
-                if (config.key === graphData.key) position = index;
-            });
             // if (utils.notEmpty(this.content[position].config.values)) {
             //     removeNoDataView(this.svg);
             // } else {

@@ -511,5 +511,7 @@ export {
     setSelectionIndicatorAttributes,
     hasInvalidTicks,
     barActionHandler,
-    getSelectedData
+    getSelectedData,
+    setDataPoints,
+    drawDataBars
 };

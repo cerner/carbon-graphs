@@ -412,48 +412,68 @@ export const renderBarWithPanning = (id) => {
         values: [
             new Date(2016, 0, 1, 3).toISOString(),
             new Date(2016, 0, 1, 6).toISOString(),
-            new Date(2016, 0, 1, 9).toISOString(),
             new Date(2016, 0, 1, 12).toISOString(),
             new Date(2016, 0, 1, 15).toISOString()
         ],
         format: "%H"
     };
-    const graphDataY = {
+    const graphData = {
         key: "uid_bar_t1",
         label: {
             display: "Data Label"
         },
         color: Carbon.helpers.COLORS.BLUE,
         onClick: loadBarPopup,
-        values: [
-            {
-                x: new Date(2016, 0, 1, 3).toISOString(),
-                y: 15
-            },
-            {
-                x: new Date(2016, 0, 1, 6).toISOString(),
-                y: 19
-            },
-            {
-                x: new Date(2016, 0, 1, 9).toISOString(),
-                y: 10
-            },
-            {
-                x: new Date(2016, 0, 1, 12).toISOString(),
-                y: 13
-            },
-            {
-                x: new Date(2016, 0, 1, 15).toISOString(),
-                y: 15
-            }
-        ]
+values: [
+    {
+        x: new Date(2016, 0, 1, 3).toISOString(),
+        y: 15
+    },
+    {
+        x: new Date(2016, 0, 1, 6).toISOString(),
+        y: 19
+    },
+    {
+        x: new Date(2016, 0, 1, 12).toISOString(),
+        y: 13
+    },
+    {
+        x: new Date(2016, 0, 1, 15).toISOString(),
+        y: 15
+    }
+]
+    };
+    const graphDataY = {
+        key: "uid_bar_t1",
+values: [
+    {
+        x: new Date(2016, 0, 1, 4).toISOString(),
+        y: 16
+    },
+    {
+        x: new Date(2016, 0, 1, 7).toISOString(),
+        y: 18
+    },
+    {
+        x: new Date(2016, 0, 1, 13).toISOString(),
+        y: 13
+    },
+    {
+        x: new Date(2016, 0, 1, 16).toISOString(),
+        y: 16
+    },
+    {
+        x: new Date(2016, 0, 1, 0).toISOString(),
+        y: 20
+    }
+]
     };
     const createGraph = () => {
-        graph.reflow();
+        graph.reflow(graphDataY);
     };
 
     const graph = Carbon.api.graph(axisData);
-    graph.loadContent(Carbon.api.bar(graphDataY));
+    graph.loadContent(Carbon.api.bar(graphData));
     axisData.axis = graph.config.axis;
 
     createPanningControls(id, {

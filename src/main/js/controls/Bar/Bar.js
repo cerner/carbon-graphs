@@ -16,7 +16,9 @@ import {
     draw,
     prepareLegendItems,
     processDataPoints,
-    setGroupName
+    setGroupName,
+    setDataPoints,
+    drawDataBars
 } from "./helpers/creationHelpers";
 import { processGoalLines, translateRegion } from "./helpers/goalLineHelpers";
 import { clickHandler, hoverHandler } from "./helpers/legendHelpers";
@@ -223,6 +225,73 @@ class Bar extends GraphContent {
         }
         return this;
     }
+
+    reflow(graph, graphData) {
+        this.config.values = graphData.values;
+        this.dataTarget = setDataPoints(graph.config, this.config);
+        const tickValues = graph.config.axis.x.ticks.values.map((d) => (
+            {
+            x: d,
+            valueSubsetArray: []
+        }));
+
+        scaleBandAxis(this.bandScale, graph.config, graph.content);
+        const barSelectionGroup = graph.svg.select(`.${styles.barSelectionGroup}`)
+                                    .selectAll(`.${styles.taskBarSelection}`)
+                                    .data(tickValues);
+    barSelectionGroup
+        .enter()
+        .append("rect")
+        .attr("aria-hidden", true)
+        .classed(styles.taskBarSelection, true)
+        .attr(
+            "aria-describedby",
+            (value) => `bar-selector-${tickValues.indexOf(value)}`
+        )
+        .attr("rx", 3)
+        .attr("ry", 3);
+    barSelectionGroup
+        .exit()
+        .transition()
+        .call(constants.d3Transition(graph.config.settingsDictionary.transition))
+        .remove();
+    
+    updateSelectionBars( this.dataTarget.internalValuesSubset,
+        graph.svg,
+        graph.config
+    );
+
+    const currentBarsPath = graph.svg
+                            .select(`g[aria-describedby="${graphData.key}"]`)
+                            .select(`[class="${styles.currentBarsGroup}"]`);
+    currentBarsPath.data([this.dataTarget]);
+    currentBarsPath.enter();
+    currentBarsPath.exit().remove();
+    const bars = currentBarsPath
+                .selectAll(`[class*=".${styles.bar}"]`)
+                .data(this.dataTarget.internalValuesSubset);
+    currentBarsPath.selectAll(`[class*="${styles.bar}"]`).remove();
+    drawDataBars(
+        graph.scale,
+        this.bandScale,
+        graph.config,
+        graph.svg,
+        bars.enter(),
+        this.dataTarget.regions,
+        this.dataTarget.axisInfoRow
+    );
+    bars
+        .exit()
+        .transition()
+        .call(
+            constants.d3Transition(
+                graph.config.settingsDictionary.transition
+            )
+        )
+        .remove();
+    this.resize(graph);
+    }
+
 
     /**
      * @inheritdoc

@@ -202,7 +202,7 @@ class Scatter extends GraphContent {
         const pointPath = graph.svg
             .select(`g[aria-describedby="${graphData.key}"]`)
             .select(`.${styles.currentPointsGroup}`)
-            .selectAll(`[class=".${styles.point}"]`)
+            .selectAll(`[class*="${styles.point}"]`)
             .data(getDataPointValues(this.dataTarget));
         drawDataPoints(graph.scale, graph.config, pointPath.enter());
         pointPath
