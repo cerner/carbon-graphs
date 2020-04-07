@@ -19,7 +19,10 @@ import {
     clear,
     clickHandler,
     draw,
+    drawLine,
+    drawPoints,
     getValue,
+    getDataPointValues,
     hoverHandler,
     iterateOnPairType,
     prepareLegendItems,
@@ -28,6 +31,9 @@ import {
     isRegionMappedToAllValues,
     translatePairedResultGraph
 } from "./helpers/helpers";
+import {
+    drawSelectionIndicator
+} from "./helpers/selectionIndicatorHelpers";
 import PairedResultConfig from "./PairedResultConfig";
 
 /**
@@ -232,6 +238,36 @@ class PairedResult extends GraphContent {
 
         translatePairedResultGraph(graph.scale, graph.svg, graph.config);
         return this;
+    }
+
+    reflow(graph, graphData) {
+        this.config.values = graphData.values;
+        this.dataTarget = processDataPoints(graph.config, this.config);
+        const drawBox = (boxPath) => {
+            drawSelectionIndicator(graph.scale, graph.config, boxPath);
+            drawLine(graph.scale, graph.config, boxPath);
+            drawPoints(graph.scale, graph.config, boxPath);
+        };
+        const internalValuesSubset = getDataPointValues(this.dataTarget);
+        graph.svg.select(`g[aria-describedby="${graphData.key}"]`).selectAll(`.${styles.pairedBox}`).remove();
+        const pairedBoxSVG = graph.svg
+                                    .select(`g[aria-describedby="${graphData.key}"]`)
+                                    .selectAll(`.${styles.pairedBox}`)
+                                    .data(internalValuesSubset);
+        pairedBoxSVG
+            .enter()
+            .append('g')
+            .classed(styles.pairedBox, true)
+            .call(drawBox);
+        pairedBoxSVG
+            .exit()
+            .remove();
+        this.resize(graph);
+
+        this.valuesRange = calculateValuesRange(
+            this.config.values,
+            this.config.yAxis
+        );
     }
 
     /**

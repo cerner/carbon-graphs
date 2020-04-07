@@ -265,12 +265,9 @@ class Bar extends GraphContent {
                             .select(`g[aria-describedby="${graphData.key}"]`)
                             .select(`[class="${styles.currentBarsGroup}"]`);
     currentBarsPath.data([this.dataTarget]);
-    currentBarsPath.enter();
-    currentBarsPath.exit().remove();
     const bars = currentBarsPath
-                .selectAll(`[class*=".${styles.bar}"]`)
+                .selectAll(`.${styles.bar} > rect`)
                 .data(this.dataTarget.internalValuesSubset);
-    currentBarsPath.selectAll(`[class*="${styles.bar}"]`).remove();
     drawDataBars(
         graph.scale,
         this.bandScale,
@@ -290,6 +287,10 @@ class Bar extends GraphContent {
         )
         .remove();
     this.resize(graph);
+    this.valuesRange = calculateValuesRange(
+        this.config.values,
+        this.config.yAxis
+    );
     }
 
 
