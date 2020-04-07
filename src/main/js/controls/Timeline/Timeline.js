@@ -1,7 +1,10 @@
 "use strict";
 import * as d3 from "d3";
 import Construct from "../../core/Construct";
-import { getYAxisHeight } from "../../helpers/axis";
+import { 
+    getYAxisHeight,
+    updateXAxisDomain
+} from "../../helpers/axis";
 import constants from "../../helpers/constants";
 import errors from "../../helpers/errors";
 import { createLegend } from "../../helpers/legend";
@@ -26,7 +29,6 @@ import {
 import { translateTimelineGraph } from "./helpers/translateHelpers";
 import TimelineConfig, { processInput } from "./TimelineConfig";
 import TimelineContent from "./TimelineContent";
-import { getDomain } from "../../core/BaseConfig/helper";
 
 /**
  * @typedef {object} Timeline
@@ -285,34 +287,25 @@ class Timeline extends Construct {
      * Updates the graph axisData and content.
      *
      *  @returns {Timeline} - Timeline instance
+     * @param {Array} graphData - Input array that holds updated values and key
      */
-    reflow() {
-        this.config.axis.x.domain = getDomain(
-            this.config.axis.x.type,
-            this.config.axis.x.lowerLimit,
-            this.config.axis.x.upperLimit
-        );
-        this.config.axis.x.ticks = {};
+    reflow(graphData) {
+        updateXAxisDomain(this.config);
         const width = getXAxisWidth(this.config);
-        const scale = d3.scaleTime()
-            .domain(this.config.axis.x.domain)
-            .range([0, width])
-            .clamp(this.config.settingsDictionary.shouldClamp);
-        const axisData = d3.svg
-            .axis()
-            .scale(scale)
+        scaleGraph(this.scale, this.config);
+
+        const axisData = d3
+            .axisBottom(this.scale.x)
             .ticks(
                 Math.max(
                     Math.ceil(width / constants.MAX_TICK_VARIANCE),
                     constants.MIN_TICKS
                 )
-            )
-            .orient(this.config.axis.x.orientation);
+            );
 
-        const svg = d3
-            .selectAll("svg")
-            .selectAll(`.${styles.axis} .${styles.axisX}`)
-            .data(this.config.axis.x.domain);
+        const svg = this.svg
+                    .selectAll(`.${styles.axis} .${styles.axisX}`)
+                    .data(this.config.axis.x.domain);
         svg.enter();
         svg.transition()
             .attr("class", styles.axis)
@@ -325,10 +318,15 @@ class Timeline extends Construct {
                 )}, ${getXAxisYPosition(this.config)})`
             )
             .call(axisData);
-        svg.selectAll("text")
-            .attr("dy", "0em")
-            .attr("y", "-9");
         svg.exit().remove();
+
+        let position;
+        if(graphData  && this.content.includes(graphData.key)) {
+            this.contentConfig.forEach((config, index) => {
+                if (config.config.key === graphData.key) position = index;
+            });
+            this.contentConfig[position].reflow(this, graphData);
+        }
         this.resize();
         return this;
     }

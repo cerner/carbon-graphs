@@ -60,7 +60,7 @@ export const renderTimelinePanning = (id) => {
         getDemoData(`#${id}`, "TIMELINE").data[1]
     );
     const createGraph = () => {
-        graph.reflow();
+        graph.reflow(graphData);
     };
 
     const graph = Carbon.api.timeline(axisData);
