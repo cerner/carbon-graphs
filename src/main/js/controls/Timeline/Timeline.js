@@ -201,6 +201,20 @@ class Timeline extends Construct {
             );
         createDefs(this.config, this.svg);
         createAxes(this.axis, this.scale, this.config, this.svg);
+        const ticks = document.getElementsByClassName("tick");
+        const firstTick = ticks[0].getBoundingClientRect().width;
+        const lastTick = ticks[ticks.length - 1].getBoundingClientRect().width;
+        const xAxis = document
+            .getElementsByClassName("carbon-axis carbon-axis-x")[0]
+            .getBoundingClientRect().width;
+        if (xAxis + firstTick / 2 + lastTick / 2 > this.config.canvasWidth) {
+            d3RemoveElement(this.graphContainer, "defs");
+            d3RemoveElement(this.graphContainer, `.${styles.axisX}`);
+            this.config.padding.left = firstTick / 2;
+            this.config.padding.right = lastTick / 2;
+            createDefs(this.config, this.svg);
+            createAxes(this.axis, this.scale, this.config, this.svg);
+        }
         createTimelineContent(this.config, this.svg);
         createLabel(this.config, this.svg);
         if (this.config.showLegend) {

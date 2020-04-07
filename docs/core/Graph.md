@@ -31,21 +31,22 @@ Graph is a set of graphs that share a common set of base visualization structure
 
 ### Optional
 
-| Property Name  | Expected | Default                                       | Description                                                                          |
-| -------------- | -------- | --------------------------------------------- | ------------------------------------------------------------------------------------ |
-| bindLegendTo   | string   | null                                          | If DOM id provided, binds legend into that container (Example: `"#legendContainer"`) |
-| locale         | object   | LOCALE.en_US                                  | Locale object for X-Axis tick values                                                 |
-| dimension      | object   | {}                                            | Refer [Dimension](#dimension)                                                        |
-| throttle       | number   | (1000/60) => time in ms                       | Delay between resize of a browser window                                             |
-| showLabel      | boolean  | true                                          | Toggle to show axes labels                                                           |
-| showLegend     | boolean  | true                                          | Toggle to show graph legend                                                          |
-| showShapes     | boolean  | true                                          | Toggle to show shapes in the line graph                                              |
-| showVGrid      | boolean  | true                                          | Toggle to show vertical grid                                                         |
-| showHGrid      | boolean  | true                                          | Toggle to show horizontal grid                                                       |
-| dateline       | array    | []                                            | Refer [Dateline](../helpers/Dateline.md)                                             |
-| pan            | object   | {}                                            | Refer [Panning](../controls/Panning.md)                                              |
-| padding        | object   | `{ top: 10, bottom: 5, left: 30, right: 50 }` | Refer [Padding](../controls/Padding.md)                                              |
-| showNoDataText | boolean  | true                                          | Toggle to show no data text                                                          |
+| Property Name    | Expected | Default                                       | Description                                                                          |
+| ---------------- | -------- | --------------------------------------------- | ------------------------------------------------------------------------------------ |
+| bindLegendTo     | string   | null                                          | If DOM id provided, binds legend into that container (Example: `"#legendContainer"`) |
+| locale           | object   | LOCALE.en_US                                  | Locale object for X-Axis tick values                                                 |
+| dimension        | object   | {}                                            | Refer [Dimension](#dimension)                                                        |
+| throttle         | number   | (1000/60) => time in ms                       | Delay between resize of a browser window                                             |
+| showLabel        | boolean  | true                                          | Toggle to show axes labels                                                           |
+| showLegend       | boolean  | true                                          | Toggle to show graph legend                                                          |
+| showShapes       | boolean  | true                                          | Toggle to show shapes in the line graph                                              |
+| showVGrid        | boolean  | true                                          | Toggle to show vertical grid                                                         |
+| showHGrid        | boolean  | true                                          | Toggle to show horizontal grid                                                       |
+| dateline         | array    | []                                            | Refer [Dateline](../helpers/Dateline.md)                                             |
+| pan              | object   | {}                                            | Refer [Panning](../controls/Panning.md)                                              |
+| padding          | object   | `{ top: 10, bottom: 5, left: 30, right: 50 }` | Refer [Padding](../controls/Padding.md)                                              |
+| showNoDataText   | boolean  | true                                          | Toggle to show no data text                                                          |
+| allowCalibration | boolean  | true                                          | Toggle to allow calibration to adjust the y axis                                     |
 
 ## Dimension
 

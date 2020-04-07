@@ -219,7 +219,7 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
         .call(constants.d3Transition(config.settingsDictionary.transition))
         .remove();
 
-    if (config.showShapes) {
+    if (dataTarget.showShapes) {
         const currentPointsPath = lineSVG
             .selectAll(`.${styles.currentPointsGroup}`)
             .data([dataTarget]);
@@ -275,6 +275,10 @@ const processDataPoints = (graphConfig, dataTarget) => {
         strokeDashArray: getStrokeDashArray(dataTarget.style)
     };
     dataTarget.legendOptions = getDefaultLegendOptions(graphConfig, dataTarget);
+    dataTarget.showShapes = getDefaultValue(
+        dataTarget.showShapes,
+        graphConfig.showShapes
+    );
 
     graphConfig.shownTargets.push(dataTarget.key);
     dataTarget.internalValuesSubset = dataTarget.values.map((value) => ({
