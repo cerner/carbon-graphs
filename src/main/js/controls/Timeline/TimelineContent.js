@@ -207,7 +207,6 @@ class TimelineContent extends GraphContent {
      * @inheritdoc
      */
     reflow(graph, graphData) {
-        console.log(this.config);
         this.config.values = graphData.values;
         this.dataTarget = processDataPoints(graph.config, this.config);
         const currentPointsPath = graph.svg
