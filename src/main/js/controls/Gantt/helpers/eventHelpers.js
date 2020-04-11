@@ -129,6 +129,35 @@ const loadEventInput = (inputJSON) => {
     return utils.deepClone(inputJSON);
 };
 
+const reflowEvents = (
+    config,
+    scale,
+    gantt,
+    trackGroupPath
+) => {
+    gantt.config.events.forEach((event) => {
+        validateEvent(event);
+    });
+    trackGroupPath
+        .selectAll(`.${styles.currentPointsGroup}[event="true"]`)
+        .remove();
+    gantt.config.events.forEach((event) => {
+    drawDataPoints(
+        scale,
+        config,
+        trackGroupPath,
+        processEvents(
+            config,
+            gantt.config.trackLabel,
+            loadEventInput(event)
+        ),
+        drawEventDataPoints,
+        true
+    );
+    });
+    
+}
+
 /**
  * Creates an element container with data points from the input JSON property: events
  *
@@ -136,11 +165,11 @@ const loadEventInput = (inputJSON) => {
  * @param {object} graphContext - Gantt instance
  * @param {object} trackPathSVG - Track container element
  * @param {object} trackLabel - Track label
- * @param {Array} events - input JSON for creating events
+ * @param {Array} gantt - input config for creating events
  * @returns {undefined} - returns nothing
  */
-const loadEvents = (graphContext, trackPathSVG, trackLabel, events) => {
-    events.forEach((event) => {
+const loadEvents = (graphContext, trackPathSVG, trackLabel, gantt) => {
+    gantt.events.forEach((event, i) => {
         drawDataPoints(
             graphContext.scale,
             graphContext.config,
@@ -150,8 +179,10 @@ const loadEvents = (graphContext, trackPathSVG, trackLabel, events) => {
                 trackLabel,
                 loadEventInput(event)
             ),
-            drawEventDataPoints
+            drawEventDataPoints,
+            true
         );
+        gantt.eventKeys.splice(i, 0, event.key);
     });
 };
 
@@ -166,4 +197,4 @@ const loadEvents = (graphContext, trackPathSVG, trackLabel, events) => {
 const unloadEvents = (graphContext, trackPathSVG) =>
     trackPathSVG.selectAll(`g.${styles.currentPointsGroup}`).remove();
 
-export { loadEvents, unloadEvents };
+export { loadEvents, unloadEvents, reflowEvents };

@@ -111,6 +111,8 @@ export default {
     activityGroup: "carbon-data-activity-group",
     activity: "carbon-data-activity",
     activityBar: "carbon-data-activity-bar",
+    eventGroup: "carbon-data-event-group",
+    actionGroup: "carbon-data-event-group",
     /**
      * Timeline
      */

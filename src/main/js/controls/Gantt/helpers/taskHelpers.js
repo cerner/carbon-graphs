@@ -175,8 +175,6 @@ const renderSelectionIndicator = (indicatorArgs) => {
  */
 const renderPercentageBarGroup = (scale, taskData, index, taskPath) => {
     const _args = generatorArgs(scale, taskData, taskPath);
-    // Create Selection indicator for Percentage Task
-    renderSelectionIndicator(_args);
     // Create Percentage Task
     getPercentageBar(
         _args.path,
@@ -213,7 +211,6 @@ const renderPercentageBarGroup = (scale, taskData, index, taskPath) => {
  */
 const renderTaskGroup = (scale, taskData, index, taskPath) => {
     const _args = generatorArgs(scale, taskData, taskPath);
-    renderSelectionIndicator(_args);
     (isAChunk(taskData.startDate, taskData.endDate) ? getChunk : getBar)(
         _args.path,
         _args.x,
@@ -244,7 +241,6 @@ const renderTaskGroup = (scale, taskData, index, taskPath) => {
  */
 const renderHashedTaskGroup = (canvasSVG, scale, data, index, path) => {
     const _args = generatorArgs(scale, data, path);
-    renderSelectionIndicator(_args);
     getHashedBar(
         canvasSVG,
         canvasSVG.select("defs"),
@@ -298,6 +294,9 @@ const drawTasks = (
         .attr("aria-selected", false)
         .attr("aria-describedby", (d) => d.key)
         .each(function(d, i) {
+            // Create Selection indicator for Task
+            const _args = generatorArgs(scale, d, this);
+            renderSelectionIndicator(_args);
             if (d.percentage) {
                 renderPercentageBarGroup(scale, d, i, this);
             } else {
@@ -313,6 +312,29 @@ const drawTasks = (
         .remove();
 };
 
+const reflowTasks = (
+    canvasSVG,
+    config,
+    scale,
+    gantt,
+    trackGroupPath
+) => {
+    gantt.config.tasks.forEach((a) => {
+        validateTask(a);
+    });
+    const taskPath = trackGroupPath
+        .selectAll(`.${styles.taskGroup}`);
+    taskPath.selectAll("g").remove();
+    drawTasks(
+        canvasSVG,
+        scale,
+        config,
+        gantt.config.trackLabel,
+        taskPath,
+        gantt.config.tasks
+    );
+}
+
 /**
  * Creates an element container with data points from the input JSON property: tasks
  *
@@ -320,10 +342,10 @@ const drawTasks = (
  * @param {object} graphContext - Gantt instance
  * @param {object} trackPathSVG - Track container element
  * @param {object} trackLabel - Track label
- * @param {Array} tasks - input JSON for creating tasks
+ * @param {Array} gantt - input config for creating tasks
  * @returns {undefined} - returns nothing
  */
-const loadTasks = (graphContext, trackPathSVG, trackLabel, tasks) => {
+const loadTasks = (graphContext, trackPathSVG, trackLabel, gantt) => {
     const taskGroupPath = trackPathSVG
         .append("g")
         .classed(styles.taskGroup, true)
@@ -333,8 +355,9 @@ const loadTasks = (graphContext, trackPathSVG, trackLabel, tasks) => {
                 graphContext.config
             )},${getXAxisYPosition(graphContext.config)})`
         );
-    tasks.forEach((a) => {
+    gantt.tasks.forEach((a, i) => {
         validateTask(a);
+        gantt.taskKeys.splice(i, 0, a.key);
     });
     drawTasks(
         graphContext.svg,
@@ -342,7 +365,7 @@ const loadTasks = (graphContext, trackPathSVG, trackLabel, tasks) => {
         graphContext.config,
         trackLabel,
         taskGroupPath,
-        tasks
+        gantt.tasks
     );
 };
 /**
@@ -356,4 +379,14 @@ const loadTasks = (graphContext, trackPathSVG, trackLabel, tasks) => {
 const unloadTasks = (graphContext, trackPathSVG) =>
     trackPathSVG.select(`g.${styles.taskGroup}`).remove();
 
-export { loadTasks, unloadTasks };
+export { 
+    loadTasks,
+    unloadTasks,
+    processTask,
+    reflowTasks,
+    renderHashedTaskGroup,
+    renderPercentageBarGroup,
+    renderSelectionIndicator,
+    renderTaskGroup,
+    generatorArgs
+};

@@ -272,11 +272,11 @@ const drawActionDataPoints = (scale, config, canvasSVG) =>
  * @param {object} graphContext - Gantt instance
  * @param {object} trackPathSVG - Track container element
  * @param {object} trackLabel - Track label
- * @param {object} actions - input JSON for creating an action
+ * @param {object} gantt - input config for creating an action
  * @returns {undefined} - returns nothing
  */
-export const loadActions = (graphContext, trackPathSVG, trackLabel, actions) =>
-    actions.forEach((a) => {
+const loadActions = (graphContext, trackPathSVG, trackLabel, gantt) =>
+    gantt.actions.forEach((a,i) => {
         drawDataPoints(
             graphContext.scale,
             graphContext.config,
@@ -286,9 +286,41 @@ export const loadActions = (graphContext, trackPathSVG, trackLabel, actions) =>
                 trackLabel,
                 loadActionInput(a)
             ),
-            drawActionDataPoints
+            drawActionDataPoints,
+            false
         );
+    gantt.actionKeys.splice(i, 0, a.key);
     });
+
+const reflowActions = (
+        config,
+        scale,
+        gantt,
+        trackGroupPath
+    ) => {
+        gantt.config.actions.forEach((action) => {
+            validateActionContent(action);
+        });
+        trackGroupPath
+            .selectAll(`.${styles.currentPointsGroup}[event="false"]`)
+            .remove();
+        gantt.config.actions.forEach((action) => {
+            drawDataPoints(
+                scale,
+                config,
+                trackGroupPath,
+                processActionItems(
+                    config,
+                    gantt.config.trackLabel,
+                    loadActionInput(action)
+                ),
+                drawActionDataPoints,
+                false
+            );
+        });
+    
+    }
+
 /**
  * Selects all the data point groups from the track and removes them
  *
@@ -297,5 +329,7 @@ export const loadActions = (graphContext, trackPathSVG, trackLabel, actions) =>
  * @param {object} trackPathSVG - Track container element
  * @returns {Selection} - track container element
  */
-export const unloadActions = (graphContext, trackPathSVG) =>
+const unloadActions = (graphContext, trackPathSVG) =>
     trackPathSVG.selectAll(`g.${styles.currentPointsGroup}`).remove();
+
+export { loadActions, unloadActions, reflowActions };
