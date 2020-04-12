@@ -278,7 +278,6 @@ class Track extends GraphContent {
                     const position = this.config.activityKeys.indexOf(key);
                     this.config.activityKeys.splice(position, 1);
                     this.config.activities.splice(position, 1);
-                    i= i-1;
                 }
             });
             const trackGroupPath = graph.svg.selectAll(`.${styles.trackGroup}[aria-describedby="${this.config.key}"]`);
@@ -302,7 +301,6 @@ class Track extends GraphContent {
                     const position = this.config.taskKeys.indexOf(key);
                     this.config.taskKeys.splice(position, 1);
                     this.config.tasks.splice(position, 1);
-                    i= i-1;
                 }
             });
             const trackGroupPath = graph.svg.selectAll(`.${styles.trackGroup}[aria-describedby="${this.config.key}"]`);
