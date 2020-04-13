@@ -188,6 +188,9 @@ class Line extends GraphContent {
         return this;
     }
 
+    /**
+     * @inheritdoc
+     */
     reflow(graph, graphData) {
         this.config.values = graphData.values;
         this.dataTarget = processDataPoints(graph.config, this.config);

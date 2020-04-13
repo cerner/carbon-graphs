@@ -144,7 +144,8 @@ import {
     renderWeightBasedBubbleGraph,
     renderColorBasedBubbleGraph,
     renderWeightColorCombination,
-    renderCustomBubbleSize
+    renderCustomBubbleSize,
+    renderBubbleWithPanning
 } from "./examples/controls/bubble";
 
 renderSiteApp(
@@ -587,7 +588,17 @@ renderSiteApp(
                             title: "Y2 Axis"
                         }
                     ]
-                }
+                },
+                {
+                    pathname: "/panning/bubble",
+                    children: [
+                        {
+                            pathname: "/panning/bubble/simple",
+                            content: renderBubbleWithPanning,
+                            title: "Simple"
+                        }
+                    ]
+                },
             ]
         },
         {

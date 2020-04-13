@@ -394,13 +394,14 @@ class Graph extends Construct {
     reflow(graphData) {
         let position;
         if(graphData) {
-            this.contentConfig.forEach((config, index) => {
-                if (config.key === graphData.key) position = index;
+            this.contentKeys.forEach((key, index) => {
+                if (key === graphData.key) position = index;
             });   
-             
-            if(this.content[position].type === "Bar") {
-                this.config.axis.x.ticks.values = [];
-                graphData.values.forEach((v) => this.config.axis.x.ticks.values.push(v.x));
+            if (position) {
+                if(this.content[position].type === "Bar") {
+                    this.config.axis.x.ticks.values = [];
+                    graphData.values.forEach((v) => this.config.axis.x.ticks.values.push(v.x));
+                }
             }
         }
 

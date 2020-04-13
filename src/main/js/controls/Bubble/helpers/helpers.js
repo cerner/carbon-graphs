@@ -518,5 +518,6 @@ export {
     prepareLegendItems,
     processDataPoints,
     getDataPointValues,
-    clear
+    clear,
+    drawBubbles
 };

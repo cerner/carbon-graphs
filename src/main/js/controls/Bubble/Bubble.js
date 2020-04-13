@@ -23,7 +23,9 @@ import {
     hoverHandler,
     prepareLegendItems,
     processDataPoints,
-    translateBubbleGraph
+    translateBubbleGraph,
+    getDataPointValues,
+    drawBubbles
 } from "./helpers/helpers";
 import BubbleConfig from "./BubbleConfig";
 
@@ -182,6 +184,51 @@ class Bubble extends GraphContent {
         );
         translateBubbleGraph(graph.scale, graph.svg, graph.config);
         return this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    reflow(graph,graphData) {this.config.values = graphData.values;
+        this.dataTarget = processDataPoints(graph.config, this.config);
+        const position = graph.config.shownTargets.lastIndexOf(graphData.key);
+        if (position > -1) {
+            graph.config.shownTargets.splice(position, 1);
+        }
+
+        const currentPointsGroup = graph.svg
+                                    .select(`g[aria-describedby="${graphData.key}"]`)
+                                    .select(`.${styles.currentPointsGroup}`)
+                                    .data([this.dataTarget]);
+        currentPointsGroup
+            .exit()
+            .remove();
+        const currentPointsPath = currentPointsGroup
+            .selectAll(`.${styles.pointGroup}`)
+            .data(this.dataTarget);
+        currentPointsPath
+        .exit()
+        .remove();
+        const pointPath = graph.svg
+            .select(`g[aria-describedby="${graphData.key}"]`)
+            .select(`.${styles.currentPointsGroup}`)
+            .selectAll(`[class="${styles.point}"]`)
+            .data(getDataPointValues(this.dataTarget));
+        drawBubbles(graph.scale, graph.config, pointPath.enter(), this.dataTarget);
+        pointPath
+            .exit()
+            .transition()
+            .call(
+                constants.d3Transition(
+                    graph.config.settingsDictionary.transition
+                )
+            )
+            .remove();
+
+        this.valuesRange = calculateValuesRange(
+            this.config.values,
+            this.config.yAxis
+        );
     }
 
     /**
