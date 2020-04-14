@@ -396,8 +396,8 @@ class Graph extends Construct {
         if(graphData) {
             this.contentKeys.forEach((key, index) => {
                 if (key === graphData.key) position = index;
-            });   
-            if (position) {
+            });
+            if (position >= 0) {
                 if(this.content[position].type === "Bar") {
                     this.config.axis.x.ticks.values = [];
                     graphData.values.forEach((v) => this.config.axis.x.ticks.values.push(v.x));
@@ -434,11 +434,6 @@ class Graph extends Construct {
         svg.exit().remove();
 
         if (graphData && this.contentKeys.includes(graphData.key)) {
-            // if (utils.notEmpty(this.content[position].config.values)) {
-            //     removeNoDataView(this.svg);
-            // } else {
-            //     drawNoDataView(this.config, this.svg)
-            // }
             scaleGraph(this.scale, this.config);
             this.content[position].reflow(this, graphData);
             setAxisPadding(this.config.axisPadding, this.content[position]);

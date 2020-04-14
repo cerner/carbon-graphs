@@ -271,7 +271,12 @@ const drawLine = (scale, config, boxPath) =>
             d.high &&
             d.low &&
             utils.hasValue(config.shownTargets, d.high.key) &&
-            utils.hasValue(config.shownTargets, d.low.key);
+            utils.hasValue(config.shownTargets, d.low.key) &&
+            (document.querySelector(`li[aria-describedby="${getValue(d,"high").key}"]`) ? 
+            document.querySelector(`li[aria-describedby="${getValue(d,"high").key}"]`).getAttribute("aria-current") === "true" : true) 
+            &&
+            (document.querySelector(`li[aria-describedby="${getValue(d,"low").key}"]`) ?
+            document.querySelector(`li[aria-describedby="${getValue(d,"low").key}"]`).getAttribute("aria-current") === "true" : true);
         return d3
             .select(this)
             .append("path")
@@ -318,6 +323,8 @@ const drawPoints = (scale, config, canvasSVG) => {
                     },
                     a11yAttributes: {
                         "aria-hidden":
+                        document.querySelector(`li[aria-describedby="${getValue(value, type).key}"]`) ?
+                            document.querySelector(`li[aria-describedby="${getValue(value, type).key}"]`).getAttribute('aria-current') === "false" :
                             config.shownTargets.indexOf(
                                 getValue(value, type).key
                             ) < 0,
@@ -366,7 +373,12 @@ const showLine = (config, boxPath) =>
             d.high &&
             d.low &&
             utils.hasValue(config.shownTargets, d.high.key) &&
-            utils.hasValue(config.shownTargets, d.low.key);
+            utils.hasValue(config.shownTargets, d.low.key) &&
+            (document.querySelector(`li[aria-describedby="${getValue(d,"high").key}"]`) ? 
+            document.querySelector(`li[aria-describedby="${getValue(d,"high").key}"]`).getAttribute("aria-current") === "true" : true) 
+            &&
+            (document.querySelector(`li[aria-describedby="${getValue(d,"low").key}"]`) ?
+            document.querySelector(`li[aria-describedby="${getValue(d,"low").key}"]`).getAttribute("aria-current") === "true" : true);
         return d3
             .select(this)
             .select(`.${styles.pairedLine}`)

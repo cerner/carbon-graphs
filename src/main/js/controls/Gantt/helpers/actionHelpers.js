@@ -233,7 +233,10 @@ const renderDataPointPath = (scale, config, path, dataPoint, index) =>
                     dataPointActionHandler(dataPoint, index, this);
                 },
                 a11yAttributes: {
-                    "aria-hidden": false,
+                    "aria-hidden": 
+                    document.querySelector(`li[aria-describedby="${dataPoint.key}"]`) ?
+                        document.querySelector(`li[aria-describedby="${dataPoint.key}"]`).getAttribute('aria-current') === "false" :
+                        false,
                     "aria-describedby": dataPoint.key,
                     "aria-disabled": !utils.isFunction(dataPoint.onClick)
                 },
