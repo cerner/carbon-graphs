@@ -268,9 +268,6 @@ class Track extends GraphContent {
                     const position = this.config.activityKeys.indexOf(activity.key);
                     this.config.activities[position].startDate = activity.startDate;
                     this.config.activities[position].endDate = activity.endDate;
-                } else {
-                    this.config.activities.push(activity);
-                    this.config.activityKeys.push(activity.key);
                 }
             });
             this.config.activityKeys.slice(0).forEach((key, i) => {
@@ -291,9 +288,6 @@ class Track extends GraphContent {
                     const position = this.config.taskKeys.indexOf(task.key);
                     this.config.tasks[position].startDate = task.startDate;
                     this.config.tasks[position].endDate = task.endDate;
-                } else {
-                    this.config.tasks.push(task);
-                    this.config.taskKeys.push(task.key);
                 }
             });
             this.config.taskKeys.slice(0).forEach((key, i) => {
@@ -313,9 +307,6 @@ class Track extends GraphContent {
                 if(this.config.eventKeys.includes(event.key)) {
                     const position = this.config.eventKeys.indexOf(event.key);
                     this.config.events[position].values = event.values;
-                } else {
-                    this.config.events.push(event);
-                    this.config.eventKeys.push(event.key);
                 }
             });
             this.config.eventKeys.slice(0).forEach((key) => {
@@ -336,9 +327,6 @@ class Track extends GraphContent {
                 if(this.config.actionKeys.includes(action.key)) {
                     const position = this.config.actionKeys.indexOf(action.key);
                     this.config.actions[position].values = action.values;
-                } else {
-                    this.config.actions.push(action);
-                    this.config.actionKeys.push(action.key);
                 }
             });
             this.config.actionKeys.slice(0).forEach((key) => {

@@ -292,6 +292,26 @@ export const renderBubbleWithPanning = (id) => {
     };
     const graphDataY = data5;
     const createGraph = () => {
+        graph.reflow();
+    };
+
+    const graph = Carbon.api.graph(axisData);
+    graph.loadContent(Carbon.api.bubble(graphDataY));
+    axisData.axis = graph.config.axis;
+
+    createPanningControls(id, {
+        axisData,
+        creationHandler: createGraph
+    });
+    return graph;
+};
+export const renderBubblePanningWithDynamicData = (id) => {
+    const axisData = simpleAxisData(`#${id}`)
+    axisData.pan = {
+        enabled: true
+    };
+    const graphDataY = data5;
+    const createGraph = () => {
         const graphData = data6;
         graph.reflow(graphData);
     };
@@ -306,4 +326,3 @@ export const renderBubbleWithPanning = (id) => {
     });
     return graph;
 };
-

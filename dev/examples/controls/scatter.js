@@ -145,20 +145,17 @@ export const renderScatterWithPanning = (id) => {
     axisData.pan = {
         enabled: true
     };
-    const graphDataY = utils.deepClone(
+    const graphData = utils.deepClone(
         getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE").data[0]
     );
-    graphDataY.regions = [regions[0]];
+    graphData.regions = [regions[0]];
 
     const createGraph = () => {
-        const graphData = utils.deepClone(
-            getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE").data[1]
-        );
-        graph.reflow(graphData);
+        graph.reflow();
     };
 
     const graph = Carbon.api.graph(axisData);
-    graph.loadContent(Carbon.api.scatter(graphDataY));
+    graph.loadContent(Carbon.api.scatter(graphData));
     axisData.axis = graph.config.axis;
 
     createPanningControls(id, {
@@ -182,15 +179,41 @@ export const renderScatterY2AxisWithPanning = (id) => {
     );
     graphDataY.regions = [regions[0]];
     const createGraph = () => {
-        const graphData = utils.deepClone(
-            getDemoData(`#${id}`, "LINE_TIMESERIES").data[3]
-        );
-        graph.reflow(graphData);
+        graph.reflow();
     };
 
     const graph = Carbon.api.graph(axisData);
     graph.loadContent(Carbon.api.scatter(graphDataY));
     graph.loadContent(Carbon.api.scatter(graphDataY2));
+    axisData.axis = graph.config.axis;
+
+    createPanningControls(id, {
+        axisData,
+        creationHandler: createGraph
+    });
+    return graph;
+};
+export const renderScatterPanningWithDynamicData = (id) => {
+    const axisData = utils.deepClone(
+        getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE")
+    );
+    axisData.pan = {
+        enabled: true
+    };
+    const graphData = utils.deepClone(
+        getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE").data[0]
+    );
+    graphData.regions = [regions[0]];
+
+    const createGraph = () => {
+        const graphDataY = utils.deepClone(
+            getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE").data[1]
+        );
+        graph.reflow(graphDataY);
+    };
+
+    const graph = Carbon.api.graph(axisData);
+    graph.loadContent(Carbon.api.scatter(graphData));
     axisData.axis = graph.config.axis;
 
     createPanningControls(id, {

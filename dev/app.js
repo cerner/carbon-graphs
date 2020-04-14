@@ -16,7 +16,8 @@ import {
     renderSimpleBarAxisInfoTextLabels,
     renderStackedBarAxisInfoTextLabels,
     renderBarTimeSeriesWithEventline,
-    renderBarWithPanning
+    renderBarWithPanning,
+    renderBarPanningWithDynamicData
 } from "./examples/controls/bar";
 import { renderColorsExample } from "./examples/controls/colors";
 import {
@@ -46,6 +47,7 @@ import {
     renderGanttTrackSelection,
     renderGanttTruncate,
     renderGanttPanning,
+    renderGanttPanningWithDynamicData,
     renderGanttEventline
 } from "./examples/controls/gantt";
 import {
@@ -82,6 +84,7 @@ import {
     renderLineCustomContentPadding,
     renderLineWithPanning,
     renderLineY2AxisWithPanning,
+    renderLinePanningWithDynamicData,
     renderLineWithEventline,
     renderDashedLine,
     renderLineWithLegendOptions,
@@ -109,6 +112,7 @@ import {
     renderPairedResultYHidden,
     renderPairedResultWithPanning,
     renderPairedResultY2AxisWithPanning,
+    renderPairedResultPanningWithDynamicData,
     renderPairedResultTimeseriesEventline
 } from "./examples/controls/pairedResult";
 import { renderPieLegendTo, renderPieSimple } from "./examples/controls/pie";
@@ -125,6 +129,7 @@ import {
     renderTimelineCustomContainerPadding,
     renderTimelineCustomContentPadding,
     renderTimelinePanning,
+    renderTimelinePanningWithDynamicData,
     renderTimelineNoXAxisTickLabel
 } from "./examples/controls/timeline";
 import { createElementLegendBindTo } from "./examples/helpers";
@@ -137,7 +142,8 @@ import {
     renderScatterYHidden,
     renderScatterWithPanning,
     renderScatterY2AxisWithPanning,
-    renderScatterWithEventline
+    renderScatterWithEventline,
+    renderScatterPanningWithDynamicData
 } from "./examples/controls/scatter";
 import {
     renderSimpleBubble,
@@ -145,7 +151,8 @@ import {
     renderColorBasedBubbleGraph,
     renderWeightColorCombination,
     renderCustomBubbleSize,
-    renderBubbleWithPanning
+    renderBubbleWithPanning,
+    renderBubblePanningWithDynamicData
 } from "./examples/controls/bubble";
 
 renderSiteApp(
@@ -526,6 +533,11 @@ renderSiteApp(
                             pathname: "/panning/line/y2-axis",
                             content: renderLineY2AxisWithPanning,
                             title: "Y2 Axis"
+                        },
+                        {
+                            pathname: "/panning/line/dynamic-data",
+                            content: renderLinePanningWithDynamicData,
+                            title: "Dynamic Data"
                         }
                     ]
                 },
@@ -536,6 +548,11 @@ renderSiteApp(
                             pathname: "/panning/gantt/simple",
                             content: renderGanttPanning,
                             title: "Simple"
+                        },
+                        {
+                            pathname: "/panning/gantt/dynamic-data",
+                            content: renderGanttPanningWithDynamicData,
+                            title: "Dynamic Data"
                         }
                     ]
                 },
@@ -546,6 +563,11 @@ renderSiteApp(
                             pathname: "/panning/timeline/simple",
                             content: renderTimelinePanning,
                             title: "Simple"
+                        },
+                        {
+                            pathname: "/panning/timeline/dynamic-data",
+                            content: renderTimelinePanningWithDynamicData,
+                            title: "Dynamic Data"
                         }
                     ]
                 },
@@ -556,6 +578,11 @@ renderSiteApp(
                             pathname: "/panning/bar/simple",
                             content: renderBarWithPanning,
                             title: "Simple"
+                        },
+                        {
+                            pathname: "/panning/bar/dynamic-data",
+                            content: renderBarPanningWithDynamicData,
+                            title: "Dynamic Data"
                         }
                     ]
                 },
@@ -571,6 +598,11 @@ renderSiteApp(
                             pathname: "/panning/paired-result/y2-axis",
                             content: renderPairedResultY2AxisWithPanning,
                             title: "Y2 Axis"
+                        },
+                        {
+                            pathname: "/panning/paired-result/dynamic-data",
+                            content: renderPairedResultPanningWithDynamicData,
+                            title: "Dynamic Data"
                         }
                     ]
                 },
@@ -586,6 +618,11 @@ renderSiteApp(
                             pathname: "/panning/scatter/y2-axis",
                             content: renderScatterY2AxisWithPanning,
                             title: "Y2 Axis"
+                        },
+                        {
+                            pathname: "/panning/scatter/dynamic-data",
+                            content: renderScatterPanningWithDynamicData,
+                            title: "Dynamic Data"
                         }
                     ]
                 },
@@ -596,6 +633,11 @@ renderSiteApp(
                             pathname: "/panning/bubble/simple",
                             content: renderBubbleWithPanning,
                             title: "Simple"
+                        },
+                        {
+                            pathname: "/panning/bubble/dynamic-data",
+                            content: renderBubblePanningWithDynamicData,
+                            title: "Dynamic Data"
                         }
                     ]
                 },
