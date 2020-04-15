@@ -1077,6 +1077,65 @@ describe("Paired Result - Load", () => {
             );
             expect(iconSVG.getAttribute("style")).toBe(`fill: ${COLORS.BLUE};`);
         });
+        it("loads only line if user sets showLine to be true and showShape to be false", () => {
+            const input = getInput(valuesDefault, false, false);
+            input.legendOptions = {
+                showShape: false,
+                showLine: true
+            };
+            graphDefault.loadContent(new PairedResult(input));
+            const legendItem = fetchElementByClass(
+                pairedResultGraphContainer,
+                styles.legendItem
+            );
+            const svgElements = legendItem.querySelectorAll("svg");
+            const lineSVG = svgElements[0];
+            expect(svgElements.length).toBe(1);
+            expect(lineSVG).not.toBeNull();
+            expect(lineSVG.classList).toContain(styles.legendItemLine);
+        });
+        it("loads only shape if user sets showLine to be false and showShape to be true", () => {
+            const input = getInput(valuesDefault, false, false);
+            input.legendOptions = {
+                showShape: true,
+                showLine: false
+            };
+            graphDefault.loadContent(new PairedResult(input));
+            const legendItem = fetchElementByClass(
+                pairedResultGraphContainer,
+                styles.legendItem
+            );
+            const svgElements = legendItem.querySelectorAll("svg");
+            const iconPath = legendItem.querySelector("path");
+            const iconSVG = svgElements[0];
+            expect(svgElements.length).toBe(1);
+            expect(iconSVG).not.toBeNull();
+            expect(iconSVG.classList).toContain(styles.legendItemIcon);
+            expect(iconPath).not.toBeNull();
+            expect(iconPath.getAttribute("d")).not.toBeNull();
+        });
+        it("loads the line with provided stroke dashArray", () => {
+            const input = getInput(valuesDefault, false, false);
+            input.legendOptions = {
+                showShape: false,
+                showLine: true,
+                style: {
+                    strokeDashArray: "2,2"
+                }
+            };
+            graphDefault.loadContent(new PairedResult(input));
+            const legendItem = fetchElementByClass(
+                pairedResultGraphContainer,
+                styles.legendItem
+            );
+            const svgElements = legendItem.querySelectorAll("svg");
+            const lineSVG = svgElements[0];
+            expect(lineSVG).not.toBeNull();
+            expect(lineSVG.classList).toContain(styles.legendItemLine);
+            expect(
+                lineSVG.children[1].attributes.getNamedItem("style").value
+            ).toContain(`stroke-dasharray: 2,2;`);
+        });
         it("attaches click event handlers correctly", (done) => {
             const input = getInput(valuesDefault, false, false);
             graphDefault.loadContent(new PairedResult(input));
