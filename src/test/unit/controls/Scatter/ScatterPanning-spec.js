@@ -8,7 +8,8 @@ import {
     axisTimeSeries,
     getAxes,
     getInput,
-    valuesTimeSeries
+    valuesTimeSeries,
+    fetchAllElementsByClass
 } from "./helpers";
 import { toNumber, delay, PADDING_BOTTOM } from "../../helpers/commonHelpers";
 import { COLORS, SHAPES } from "../../../../main/js/helpers/constants";
@@ -64,6 +65,58 @@ describe("Scatter - Panning", () => {
                 expect(toNumber(translate[1], 10)).toBeCloseTo(PADDING_BOTTOM);
                 done();
             });
+        });
+        it("Dynamic Data is updated correctly when key matches", () => {
+            const panData = {
+                key: 'uid_1',
+                values: [
+                    {
+                        x: "2016-03-03T12:00:00Z",
+                        y: 2
+                    },
+                    {
+                        x: "2016-04-03T12:00:00Z",
+                        y: 20
+                    }
+                ]
+            };
+            let ScatterContent = fetchAllElementsByClass(
+                scatterGraphContainer,
+                styles.pointGroup
+            );
+            expect(ScatterContent.length).toEqual(3);
+            graphDefault.reflow(panData);
+            ScatterContent = fetchAllElementsByClass(
+                scatterGraphContainer,
+                styles.pointGroup
+            );
+            expect(ScatterContent.length).toEqual(2);
+        });
+        it("Dynamic Data is not updated when key does not match", () => {
+            const panData = {
+                key: 'uid_2',
+                values: [
+                    {
+                        x: "2016-03-03T12:00:00Z",
+                        y: 2
+                    },
+                    {
+                        x: "2016-04-03T12:00:00Z",
+                        y: 20
+                    }
+                ]
+            };
+            let ScatterContent = fetchAllElementsByClass(
+                scatterGraphContainer,
+                styles.pointGroup
+            );
+            expect(ScatterContent.length).toEqual(3);
+            graphDefault.reflow(panData);
+            ScatterContent = fetchAllElementsByClass(
+                scatterGraphContainer,
+                styles.pointGroup
+            );
+            expect(ScatterContent.length).toEqual(3);
         });
     });
     describe("When pan is disabled", () => {
