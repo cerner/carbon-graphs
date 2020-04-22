@@ -1142,7 +1142,6 @@ describe("Paired Result - Load", () => {
                 ).toContain(`stroke-dasharray: 2,2;`);
             });
         });
-
         describe("if user sets both showLine and showShape to be true", () => {
             it("loads both line and shape", () => {
                 const input = getInput(valuesDefault, false, false);
@@ -1165,6 +1164,23 @@ describe("Paired Result - Load", () => {
                 expect(lineSVG.classList).toContain(
                     styles.legendItemLineWithIcon
                 );
+            });
+        });
+
+        describe("if user sets both showLine and showShape to be false", () => {
+            it("loads empty legend button", () => {
+                const input = getInput(valuesDefault, false, false);
+                input.legendOptions = {
+                    showShape: false,
+                    showLine: false
+                };
+                graphDefault.loadContent(new PairedResult(input));
+                const legendItem = fetchElementByClass(
+                    pairedResultGraphContainer,
+                    styles.legendItem
+                );
+                const svgElements = legendItem.querySelectorAll("svg");
+                expect(svgElements.length).toBe(0);
             });
         });
         it("attaches click event handlers correctly", (done) => {
