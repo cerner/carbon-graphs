@@ -189,32 +189,29 @@ class Bubble extends GraphContent {
     /**
      * @inheritdoc
      */
-    reflow(graph,graphData) {this.config.values = graphData.values;
-        this.dataTarget = processDataPoints(graph.config, this.config);
+    reflow(graph,graphData) {
+        this.config.values = graphData.values;// Update the old Bubble config values with the new provided values
+        this.dataTarget = processDataPoints(graph.config, this.config); // Update the dataTarget
         const position = graph.config.shownTargets.lastIndexOf(graphData.key);
         if (position > -1) {
-            graph.config.shownTargets.splice(position, 1);
+            graph.config.shownTargets.splice(position, 1); // This is done to remove duplicate keys due to processDataPoints
         }
 
-        const currentPointsGroup = graph.svg
-                                    .select(`g[aria-describedby="${graphData.key}"]`)
-                                    .select(`.${styles.currentPointsGroup}`)
-                                    .data([this.dataTarget]);
-        currentPointsGroup
-            .exit()
-            .remove();
+        const currentPointsGroup = graph.svg // updating shapes starts here
+            .select(`g[aria-describedby="${graphData.key}"]`)
+            .select(`.${styles.currentPointsGroup}`)
+            .data([this.dataTarget]);// comparing new data to old data and creating enter and exit states.
+        currentPointsGroup.exit().remove();
         const currentPointsPath = currentPointsGroup
             .selectAll(`.${styles.pointGroup}`)
-            .data(this.dataTarget);
-        currentPointsPath
-        .exit()
-        .remove();
+            .data(this.dataTarget); // comparing new data to old data and creating enter and exit states.
+        currentPointsPath.exit().remove();
         const pointPath = graph.svg
             .select(`g[aria-describedby="${graphData.key}"]`)
             .select(`.${styles.currentPointsGroup}`)
             .selectAll(`[class="${styles.point}"]`)
-            .data(getDataPointValues(this.dataTarget));
-        drawBubbles(graph.scale, graph.config, pointPath.enter(), this.dataTarget);
+            .data(getDataPointValues(this.dataTarget)); // comparing new data to old data and creating enter and exit states.
+        drawBubbles(graph.scale, graph.config, pointPath.enter(), this.dataTarget); // Passing the enter state to be drawn
         pointPath
             .exit()
             .transition()
@@ -223,9 +220,9 @@ class Bubble extends GraphContent {
                     graph.config.settingsDictionary.transition
                 )
             )
-            .remove();
+            .remove(); // updating shapes ends here and data in exit state is removed
 
-        this.valuesRange = calculateValuesRange(
+        this.valuesRange = calculateValuesRange( // updating valuesRanges for Y axis
             this.config.values,
             this.config.yAxis
         );

@@ -17,7 +17,6 @@ import {
     prepareLegendItems,
     processDataPoints,
     setGroupName,
-    setDataPoints,
     drawDataBars
 } from "./helpers/creationHelpers";
 import { processGoalLines, translateRegion } from "./helpers/goalLineHelpers";
@@ -227,70 +226,74 @@ class Bar extends GraphContent {
     }
 
     reflow(graph, graphData) {
-        this.config.values = graphData.values;
-        this.dataTarget = setDataPoints(graph.config, this.config);
-        const tickValues = graph.config.axis.x.ticks.values.map((d) => (
+        this.config.values = graphData.values; // Update the old Bar config values with the new provided values
+        this.dataTarget = processDataPoints(graph.config, this.config); // Update the dataTarget
+        const position = graph.config.shownTargets.lastIndexOf(graphData.key);
+        if (position > -1) {
+            graph.config.shownTargets.splice(position, 1); // This is done to remove duplicate keys due to processDataPoints
+        }
+        const tickValues = graph.config.axis.x.ticks.values.map((d) => ( // consolidating data into an object
             {
             x: d,
             valueSubsetArray: []
         }));
 
         scaleBandAxis(this.bandScale, graph.config, graph.content);
-        const barSelectionGroup = graph.svg.select(`.${styles.barSelectionGroup}`)
+        const barSelectionGroup = graph.svg.select(`.${styles.barSelectionGroup}`) // Updating Bars Selection Group starts here.
                                     .selectAll(`.${styles.taskBarSelection}`)
-                                    .data(tickValues);
-    barSelectionGroup
-        .enter()
-        .append("rect")
-        .attr("aria-hidden", true)
-        .classed(styles.taskBarSelection, true)
-        .attr(
-            "aria-describedby",
-            (value) => `bar-selector-${tickValues.indexOf(value)}`
-        )
-        .attr("rx", 3)
-        .attr("ry", 3);
-    barSelectionGroup
-        .exit()
-        .transition()
-        .call(constants.d3Transition(graph.config.settingsDictionary.transition))
-        .remove();
-    
-    updateSelectionBars( this.dataTarget.internalValuesSubset,
-        graph.svg,
-        graph.config
-    );
-
-    const currentBarsPath = graph.svg
-                            .select(`g[aria-describedby="${graphData.key}"]`)
-                            .select(`[class="${styles.currentBarsGroup}"]`);
-    currentBarsPath.data([this.dataTarget]);
-    const bars = currentBarsPath
-                .selectAll(`.${styles.bar} > rect`)
-                .data(this.dataTarget.internalValuesSubset);
-    drawDataBars(
-        graph.scale,
-        this.bandScale,
-        graph.config,
-        graph.svg,
-        bars.enter(),
-        this.dataTarget.regions,
-        this.dataTarget.axisInfoRow
-    );
-    bars
-        .exit()
-        .transition()
-        .call(
-            constants.d3Transition(
-                graph.config.settingsDictionary.transition
+                                    .data(tickValues); // comparing new data to old data and creating enter and exit states.
+        barSelectionGroup
+            .enter()
+            .append("rect")
+            .attr("aria-hidden", true)
+            .classed(styles.taskBarSelection, true)
+            .attr(
+                "aria-describedby",
+                (value) => `bar-selector-${tickValues.indexOf(value)}`
             )
-        )
-        .remove();
-    this.resize(graph);
-    this.valuesRange = calculateValuesRange(
-        this.config.values,
-        this.config.yAxis
-    );
+            .attr("rx", 3)
+            .attr("ry", 3);
+        barSelectionGroup
+            .exit()
+            .transition()
+            .call(constants.d3Transition(graph.config.settingsDictionary.transition))
+            .remove();
+        
+        updateSelectionBars( this.dataTarget.internalValuesSubset, // Updating Bars Selection Group ends here.
+            graph.svg,
+            graph.config
+        );
+
+        const currentBarsPath = graph.svg // Updating Bars starts here.
+                                .select(`g[aria-describedby="${graphData.key}"]`)
+                                .select(`[class="${styles.currentBarsGroup}"]`)
+                                .data([this.dataTarget]); // comparing new data to old data and creating enter and exit states.
+        const bars = currentBarsPath
+                    .selectAll(`.${styles.bar} > rect`)
+                    .data(this.dataTarget.internalValuesSubset); // comparing new data to old data and creating enter and exit states.
+        drawDataBars( // Passing the enter state to be drawn
+            graph.scale,
+            this.bandScale,
+            graph.config,
+            graph.svg,
+            bars.enter(),
+            this.dataTarget.regions,
+            this.dataTarget.axisInfoRow
+        );
+        bars
+            .exit()
+            .transition()
+            .call(
+                constants.d3Transition(
+                    graph.config.settingsDictionary.transition
+                )
+            )
+            .remove();  // Updating Bars ends here.
+        this.valuesRange = calculateValuesRange( // updating valuesRanges for Y axis
+            this.config.values,
+            this.config.yAxis
+        );
+        this.resize(graph);
     }
 
 

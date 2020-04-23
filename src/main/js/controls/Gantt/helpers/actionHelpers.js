@@ -304,7 +304,7 @@ const reflowActions = (
         gantt.config.actions.forEach((action) => {
             validateActionContent(action);
         });
-        trackGroupPath
+        trackGroupPath // Due to data complexity removing all of the content and the redrawing all new activities on the graph
             .selectAll(`.${styles.currentPointsGroup}[event="false"]`)
             .remove();
         gantt.config.actions.forEach((action) => {

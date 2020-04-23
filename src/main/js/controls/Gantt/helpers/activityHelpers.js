@@ -315,7 +315,7 @@ const reflowActivities = (canvasSVG, config, scale, gantt, trackGroupPath) => {
         validateActivity(a);
     });
     const activityPath = trackGroupPath.selectAll(`.${styles.activityGroup}`);
-    activityPath.selectAll("g").remove();
+    activityPath.selectAll("g").remove(); // Due to data complexity removing all of the content and the redrawing all new activities on the graph
     drawActivities(
         canvasSVG,
         scale,

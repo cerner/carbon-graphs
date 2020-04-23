@@ -207,28 +207,32 @@ class TimelineContent extends GraphContent {
      * @inheritdoc
      */
     reflow(graph, graphData) {
-        this.config.values = graphData.values;
-        this.dataTarget = processDataPoints(graph.config, this.config);
-        const currentPointsPath = graph.svg
-                .select(`g[aria-describedby="${graphData.key}"]`)
-                .selectAll(`.${styles.pointGroup}`)
-                .data(this.dataTarget);
-            currentPointsPath.exit().remove();
-            const pointPath = graph.svg
-                .select(`g[aria-describedby="${graphData.key}"]`)
-                .selectAll(`[class*="${styles.point}"]`)
-                .data(this.dataTarget.internalValuesSubset);
-            createPoints(graph.scale, graph.config, pointPath.enter());
-            pointPath
-                .exit()
-                .transition()
-                .call(
-                    constants.d3Transition(
-                        graph.config.settingsDictionary.transition
-                    )
+        this.config.values = graphData.values; // Update the old Scatter config values with the new provided values
+        this.dataTarget = processDataPoints(graph.config, this.config); // Update the dataTarget
+        const position = graph.config.shownTargets.lastIndexOf(graphData.key);
+        if (position > -1) {
+            graph.config.shownTargets.splice(position, 1); // This is done to remove duplicate keys due to processDataPoints
+        }
+        const currentPointsPath = graph.svg // updating content starts here
+            .select(`g[aria-describedby="${graphData.key}"]`)
+            .selectAll(`.${styles.pointGroup}`)
+            .data(this.dataTarget);
+        currentPointsPath.exit().remove();
+        const pointPath = graph.svg
+            .select(`g[aria-describedby="${graphData.key}"]`)
+            .selectAll(`[class*="${styles.point}"]`)
+            .data(this.dataTarget.internalValuesSubset);
+        createPoints(graph.scale, graph.config, pointPath.enter()); // Passing the enter state to be drawn
+        pointPath
+            .exit()
+            .transition()
+            .call(
+                constants.d3Transition(
+                    graph.config.settingsDictionary.transition
                 )
-                .remove();
-            this.resize(graph);
+            )
+            .remove(); // updating shapes ends here and data in exit state is removed
+        this.resize(graph);
     }
 
     /**

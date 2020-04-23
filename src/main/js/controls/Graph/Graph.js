@@ -398,14 +398,14 @@ class Graph extends Construct {
                 if (key === graphData.key) position = index;
             });
             if (position >= 0) {
-                if(this.content[position].type === "Bar") {
+                if(this.content[position].type === "Bar") { // This is only required for Bar graph as ticks value must be provided for it.
                     this.config.axis.x.ticks.values = [];
                     graphData.values.forEach((v) => this.config.axis.x.ticks.values.push(v.x));
                 }
             }
         }
 
-        updateXAxisDomain(this.config);
+        updateXAxisDomain(this.config); // We need to update the domain as this refers to new lowerLimit and upperLimit of xAxis ticks to be displayed on the graph.
         const width = getXAxisWidth(this.config);
         scaleGraph(this.scale, this.config);
 
@@ -418,9 +418,10 @@ class Graph extends Construct {
                 )
             );
 
+        // Reflow for the xAxis starts here.
         const svg = this.svg
             .selectAll(`.${styles.axis}.${styles.axisX}`)
-            .data(this.config.axis.x.domain);
+            .data(this.config.axis.x.domain); // comparing new data to old data and creating enter and exit states.
         svg.enter();
         svg.transition()
             .attr("aria-hidden", !this.config.axis.x.show)
@@ -431,11 +432,10 @@ class Graph extends Construct {
                 )}, ${getXAxisYPosition(this.config)})`
             )
             .call(axisData);
-        svg.exit().remove();
+        svg.exit().remove(); // over here we remove the old data which wasn't present in the new data.
 
-        if (graphData && this.contentKeys.includes(graphData.key)) {
-            scaleGraph(this.scale, this.config);
-            this.content[position].reflow(this, graphData);
+        if (graphData && this.contentKeys.includes(graphData.key)) { // Its a check whether graphData exists and the key is also present or not.
+            this.content[position].reflow(this, graphData); // We call reflow on the position for that specific content whose key matches to new data.
             setAxisPadding(this.config.axisPadding, this.content[position]);
             getAxesDataRange(
                 this.content[position],
@@ -449,7 +449,7 @@ class Graph extends Construct {
                     this.content[position].config.yAxis
                 )
             ) {
-                updateAxesDomain(this.config, this.content[position]);
+                updateAxesDomain(this.config, this.content[position]); // This is done for y axis. 
             }
         }
         this.resize();

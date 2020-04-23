@@ -335,8 +335,7 @@ class Gantt extends Construct {
      *  @returns {Gantt} - Gantt instance
      */
     reflow(graphData) {
-        updateXAxisDomain(this.config);
-        this.config.axis.x.ticks = {};
+        updateXAxisDomain(this.config); // We need to update the domain as this refers to new lowerLimit and upperLimit of xAxis ticks to be displayed on the graph.
         const width = getXAxisWidth(this.config);
         scaleGraph(this.scale, this.config);
         const axisData = d3
@@ -347,10 +346,10 @@ class Gantt extends Construct {
                     constants.MIN_TICKS
                 )
             );
-
-        let svg = this.svg
-            .selectAll(`.${styles.axis} .${styles.axisX}`);
-        svg=svg.data(this.config.axis.x.domain);
+        // Reflow for the xAxis starts here.
+        const svg = this.svg
+            .selectAll(`.${styles.axis} .${styles.axisX}`)
+            .data(this.config.axis.x.domain); // comparing new data to old data and creating enter and exit states.
         svg.enter();
         svg.transition()
             .attr("class", styles.axis)
@@ -363,15 +362,18 @@ class Gantt extends Construct {
                 )}, ${getXAxisYPosition(this.config)})`
             )
             .call(axisData);
-        svg.exit().remove();
+        svg.exit().remove(); // over here we remove the old data which wasn't present in the new data.
         let position;
-        if(graphData  && this.tracks.includes(graphData.key)) {
+        if(graphData  && this.tracks.includes(graphData.key)) { // Its a check whether graphData exists and the key is also present or not.
             this.trackConfig.forEach((track, index) => {
                 if (track.config.key === graphData.key) position = index;
             });
-            this.trackConfig[position].reflow(this, graphData);
+            this.trackConfig[position].reflow(this, graphData); // We call reflow on the position for that specific content whose key matches to new data.
         }
+        this.config.height = determineHeight(this.config);
+        setCanvasHeight(this.config);
         this.resize();
+        this.trackConfig.forEach((control) => control.redraw(this));
         return this;
     }
 

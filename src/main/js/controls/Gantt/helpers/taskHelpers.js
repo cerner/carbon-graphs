@@ -324,7 +324,7 @@ const reflowTasks = (
     });
     const taskPath = trackGroupPath
         .selectAll(`.${styles.taskGroup}`);
-    taskPath.selectAll("g").remove();
+    taskPath.selectAll("g").remove(); // Due to data complexity removing all of the content and the redrawing all new activities on the graph
     drawTasks(
         canvasSVG,
         scale,

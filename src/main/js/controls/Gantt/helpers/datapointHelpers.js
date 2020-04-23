@@ -29,7 +29,7 @@ export const drawDataPoints = (
     ganttContentContainerPath,
     dataTarget,
     drawDataPointsHandler,
-    event
+    event // Added it too differentiate between events and actions in the DOM
 ) => {
     const allPointsPath = ganttContentContainerPath
         .append("g")

@@ -290,7 +290,7 @@ class Timeline extends Construct {
      * @param {Array} graphData - Input array that holds updated values and key
      */
     reflow(graphData) {
-        updateXAxisDomain(this.config);
+        updateXAxisDomain(this.config); // We need to update the domain as this refers to new lowerLimit and upperLimit of xAxis ticks to be displayed on the graph.
         const width = getXAxisWidth(this.config);
         scaleGraph(this.scale, this.config);
 
@@ -302,10 +302,10 @@ class Timeline extends Construct {
                     constants.MIN_TICKS
                 )
             );
-
+        // Reflow for the xAxis starts here.
         const svg = this.svg
-                    .selectAll(`.${styles.axis} .${styles.axisX}`)
-                    .data(this.config.axis.x.domain);
+            .selectAll(`.${styles.axis} .${styles.axisX}`)
+            .data(this.config.axis.x.domain); // comparing new data to old data and creating enter and exit states.
         svg.enter();
         svg.transition()
             .attr("class", styles.axis)
@@ -318,14 +318,14 @@ class Timeline extends Construct {
                 )}, ${getXAxisYPosition(this.config)})`
             )
             .call(axisData);
-        svg.exit().remove();
+        svg.exit().remove(); // over here we remove the old data which wasn't present in the new data.
 
         let position;
-        if(graphData  && this.content.includes(graphData.key)) {
+        if(graphData  && this.content.includes(graphData.key)) { // Its a check whether graphData exists and the key is also present or not.
             this.contentConfig.forEach((config, index) => {
                 if (config.config.key === graphData.key) position = index;
             });
-            this.contentConfig[position].reflow(this, graphData);
+            this.contentConfig[position].reflow(this, graphData); // We call reflow on the position for that specific content whose key matches to new data.
         }
         this.resize();
         return this;

@@ -264,13 +264,13 @@ class Track extends GraphContent {
             graphData.activityKeys=[];
             graphData.activities.forEach((activity) => {
                 graphData.activityKeys.push(activity.key);
-                if(this.config.activityKeys.includes(activity.key)) {
+                if(this.config.activityKeys.includes(activity.key)) { // updating data with one key at a time
                     const position = this.config.activityKeys.indexOf(activity.key);
                     this.config.activities[position].startDate = activity.startDate;
                     this.config.activities[position].endDate = activity.endDate;
                 }
             });
-            this.config.activityKeys.slice(0).forEach((key, i) => {
+            this.config.activityKeys.slice(0).forEach((key, i) => { // Searching for data that needs to be removed
                 if (!graphData.activityKeys.includes(key)) {
                     const position = this.config.activityKeys.indexOf(key);
                     this.config.activityKeys.splice(position, 1);
@@ -278,19 +278,19 @@ class Track extends GraphContent {
                 }
             });
             const trackGroupPath = graph.svg.selectAll(`.${styles.trackGroup}[aria-describedby="${this.config.key}"]`);
-            reflowActivities(graph.svg, graph.config, graph.scale, this, trackGroupPath);
+            reflowActivities(graph.svg, graph.config, graph.scale, this, trackGroupPath); // calling the function present in activity helpers
         }
         if (utils.notEmpty(graphData.tasks) && utils.notEmpty(this.config.tasks)) {
             graphData.taskKeys=[];
             graphData.tasks.forEach((task) => {
                 graphData.taskKeys.push(task.key);
-                if(this.config.taskKeys.includes(task.key)) {
+                if(this.config.taskKeys.includes(task.key)) { // updating data with one key at a time
                     const position = this.config.taskKeys.indexOf(task.key);
                     this.config.tasks[position].startDate = task.startDate;
                     this.config.tasks[position].endDate = task.endDate;
                 }
             });
-            this.config.taskKeys.slice(0).forEach((key, i) => {
+            this.config.taskKeys.slice(0).forEach((key, i) => { // Searching for data that needs to be removed
                 if (!graphData.taskKeys.includes(key)) {
                     const position = this.config.taskKeys.indexOf(key);
                     this.config.taskKeys.splice(position, 1);
@@ -298,7 +298,7 @@ class Track extends GraphContent {
                 }
             });
             const trackGroupPath = graph.svg.selectAll(`.${styles.trackGroup}[aria-describedby="${this.config.key}"]`);
-            reflowTasks(graph.svg, graph.config, graph.scale, this, trackGroupPath);   
+            reflowTasks(graph.svg, graph.config, graph.scale, this, trackGroupPath); // calling the function present in task helpers
         }
         if (utils.notEmpty(graphData.events) && utils.notEmpty(this.config.events)) {
             graphData.eventKeys=[];
@@ -318,7 +318,6 @@ class Track extends GraphContent {
             });
         const trackGroupPath = graph.svg.selectAll(`.${styles.trackGroup}[aria-describedby="${this.config.key}"]`);
         reflowEvents(graph.config, graph.scale, this, trackGroupPath);
-        console.log("eventKeys: ",this.config.eventKeys);
         }
         if (utils.notEmpty(graphData.actions) && utils.notEmpty(this.config.actions)) {
             graphData.actionKeys=[];
@@ -338,7 +337,6 @@ class Track extends GraphContent {
             })
         const trackGroupPath = graph.svg.selectAll(`.${styles.trackGroup}[aria-describedby="${this.config.key}"]`);
         reflowActions(graph.config, graph.scale, this, trackGroupPath);
-        console.log("actionKeys: ",this.config.actionKeys);
         }
 
         this.resize(graph);
