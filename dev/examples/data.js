@@ -33,8 +33,8 @@ const DATA = [
                 y: {
                     show: true,
                     label: "Line Set A",
-                    lowerLimit: 0,
-                    upperLimit: 20
+                    lowerLimit: -18,
+                    upperLimit: 18
                 },
                 y2: {
                     show: false,
@@ -73,7 +73,8 @@ const DATA = [
                         showLine: true,
                         showShape: false,
                         style: { strokeDashArray: "2,2" }
-                    }
+                    },
+                    showShapes: false
                 },
                 {
                     key: "uid_3",
