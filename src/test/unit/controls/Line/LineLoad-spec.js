@@ -266,6 +266,33 @@ describe("Line - Load", () => {
                 )
             ).toBeNull();
         });
+        it("does not update y axis range if allow calibration is disabled", () => {
+            graphDefault.destroy();
+            const disableCalibrationInput = getAxes(axisDefault);
+            disableCalibrationInput.allowCalibration = false;
+            const disableCalibrationGraph = new Graph(disableCalibrationInput);
+            input = getInput(valuesDefault, false, false);
+            disableCalibrationGraph.loadContent(new Line(input));
+            expect(disableCalibrationInput.axis.y.upperLimit).toEqual(
+                disableCalibrationGraph.config.axis.y.domain.upperLimit
+            );
+            expect(disableCalibrationInput.axis.y.lowerLimit).toEqual(
+                disableCalibrationGraph.config.axis.y.domain.lowerLimit
+            );
+        });
+        it("update y axis range by default", () => {
+            graphDefault.destroy();
+            const disableCalibrationInput = getAxes(axisDefault);
+            const disableCalibrationGraph = new Graph(disableCalibrationInput);
+            input = getInput(valuesDefault, false, false);
+            disableCalibrationGraph.loadContent(new Line(input));
+            expect(disableCalibrationInput.axis.y.upperLimit).not.toEqual(
+                disableCalibrationGraph.config.axis.y.domain.upperLimit
+            );
+            expect(disableCalibrationInput.axis.y.lowerLimit).not.toEqual(
+                disableCalibrationGraph.config.axis.y.domain.lowerLimit
+            );
+        });
         it("add points group for data points", () => {
             const pointsGroup = fetchElementByClass(
                 lineGraphContainer,
@@ -346,6 +373,21 @@ describe("Line - Load", () => {
             expect(selectedPoints.getAttribute("aria-describedby")).toBe(
                 input.key
             );
+        });
+        it("does not render points if shapes are hidden per data set", () => {
+            graphDefault.destroy();
+            const hiddenShapeInput = getAxes(axisDefault);
+            hiddenShapeInput.showShapes = true;
+            const hiddenShapeGraph = new Graph(hiddenShapeInput);
+            input = getInput(valuesDefault, false, false);
+            input.showShapes = false;
+            hiddenShapeGraph.loadContent(new Line(input));
+            expect(
+                fetchElementByClass(
+                    lineGraphContainer,
+                    styles.currentPointsGroup
+                )
+            ).toBeNull();
         });
         describe("adds line with stroke-dasharray as provided by consumer with", () => {
             it("comma seperated values", () => {

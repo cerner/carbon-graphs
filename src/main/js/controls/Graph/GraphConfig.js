@@ -105,6 +105,7 @@ export const processInput = (input, config, type) => {
     config.showHGrid = getDefaultValue(input.showHGrid, true);
     config.showVGrid = getDefaultValue(input.showVGrid, true);
     config.dimension = getDefaultValue(input.dimension, {});
+    config.allowCalibration = getDefaultValue(input.allowCalibration, true);
 
     // Additional X Axis properties defined on top of input axis
     config.axis.x.type = getDefaultValue(_axis.x.type, AXIS_TYPE.DEFAULT);
