@@ -221,7 +221,7 @@ describe("Timeline", () => {
             expect(timeline.contentConfig.length).toBe(1);
             expect(timeline.contentConfig[0].config.key).toBe(data.key);
         });
-        it("Applies custom padding to the timeline instead of default padding", () => {
+        it("Applies half of tick width as padding if custom padding is less than half of tick width", () => {
             const data = getData(valuesJSON);
             const input = getAxes(axisJSON);
             input.padding = {
@@ -241,8 +241,8 @@ describe("Timeline", () => {
             expect(cfg.bindTo).toBe("#testCarbonTimeline");
             expect(cfg.axis.x.lowerLimit).toBe(axisJSON.x.lowerLimit);
             expect(cfg.axis.x.upperLimit).toBe(axisJSON.x.upperLimit);
-            expect(cfg.padding.left).toEqual(input.padding.left);
-            expect(cfg.padding.right).toEqual(input.padding.right);
+            expect(cfg.padding.left).toBeCloseTo(11, -1);
+            expect(cfg.padding.right).toBeCloseTo(11, -1);
             expect(cfg.padding.top).toEqual(constants.PADDING.top);
             expect(cfg.padding.bottom).toEqual(constants.PADDING.bottom);
             expect(cfg.padding.hasCustomPadding).toBe(true);
