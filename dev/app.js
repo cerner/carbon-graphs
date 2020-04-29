@@ -107,7 +107,8 @@ import {
     renderPairedResultY2Axis,
     renderPairedResultYHidden,
     renderPairedResultWithPanning,
-    renderPairedResultTimeseriesEventline
+    renderPairedResultTimeseriesEventline,
+    renderPairedResultWithLegendOptions
 } from "./examples/controls/pairedResult";
 import { renderPieLegendTo, renderPieSimple } from "./examples/controls/pie";
 import {
@@ -300,6 +301,11 @@ renderSiteApp(
                     pathname: "/paired-result/legend-item-disabled",
                     content: renderPairedResultLegendItemDisabled,
                     title: "Legend Item Disabled"
+                },
+                {
+                    pathname: "/paired-result/legend-options",
+                    content: renderPairedResultWithLegendOptions,
+                    title: "Paired Result with Legend Options"
                 }
             ]
         },
