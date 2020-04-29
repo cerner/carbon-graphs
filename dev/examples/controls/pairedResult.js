@@ -436,3 +436,12 @@ export const renderPairedResultWithPanning = (id) => {
     });
     return graph;
 };
+export const renderPairedResultWithLegendOptions = (id) => {
+    const pairedDefault = Carbon.api.graph(
+        getDemoData(`#${id}`, "PAIRED_DEFAULT")
+    );
+    pairedDefault.loadContent(
+        Carbon.api.pairedResult(getDemoData(`#${id}`, "PAIRED_DEFAULT").data[1])
+    );
+    return pairedDefault;
+};
