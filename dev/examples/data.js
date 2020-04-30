@@ -717,7 +717,11 @@ const DATA = [
                         low: Carbon.helpers.COLORS.BLACK
                     },
                     onClick: loadPopup,
-                    yAxis: "y2",
+                    yAxis: "y",
+                    legendOptions: {
+                        showLine: true,
+                        showShape: true
+                    },
                     values: [
                         {
                             high: {

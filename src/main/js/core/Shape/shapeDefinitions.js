@@ -86,8 +86,8 @@ export const TEAR_ALT = {
  * @type {{path: {d: string}, options: {x: number, y: number, scale: number}}}
  */
 export const DIAMOND = {
-    path: { d: "M24 0l14 24-14 24-14-24L24 0z" },
-    options: { x: -8, y: -8, scale: 0.25 }
+    path: { d: "M24 0l12 24-12 24-12-24L24 0z" },
+    options: { x: -8, y: -8, scale: 0.34 }
 };
 /**
  * The S_0009_triangle.svg SVG file as an object.
@@ -245,7 +245,7 @@ export const DIAMOND_LIGHT = {
         { fill: "#FFF", d: "M34.5 24L24 42 13.5 24 24 6z" },
         { d: "M24 0L10 24l14 24 14-24L24 0zm0 6l10.5 18L24 42 13.5 24 24 6z" }
     ],
-    options: { x: -8, y: -8, scale: 0.25 }
+    options: { x: -8, y: -8, scale: 0.34 }
 };
 /**
  * The S_0009_triangle_light.svg SVG file as an object.

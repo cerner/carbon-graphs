@@ -14,7 +14,8 @@ import {
     legendClickHandler,
     legendHoverHandler,
     loadLegendItem,
-    isLegendSelected
+    isLegendSelected,
+    getDefaultLegendOptions
 } from "../../../helpers/legend";
 import {
     createRegion,
@@ -242,6 +243,7 @@ const processDataPoints = (graphConfig, dataTarget) => {
         subset.key = dataTarget.key;
         return subset;
     });
+    dataTarget.legendOptions = getDefaultLegendOptions(graphConfig, dataTarget);
     return dataTarget;
 };
 /**
@@ -647,7 +649,8 @@ const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
                 color: getValue(d.color, type),
                 label: getValue(d.label, type),
                 key: `${d.key}_${type}`,
-                values: dataTarget.values
+                values: dataTarget.values,
+                legendOptions: dataTarget.legendOptions
             }
         );
     if (dataTarget.label && legendSVG) {

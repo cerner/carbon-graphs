@@ -1077,6 +1077,112 @@ describe("Paired Result - Load", () => {
             );
             expect(iconSVG.getAttribute("style")).toBe(`fill: ${COLORS.BLUE};`);
         });
+        describe("if user sets showLine to be true and showShape to be false", () => {
+            it("loads only line", () => {
+                const input = getInput(valuesDefault, false, false);
+                input.legendOptions = {
+                    showShape: false,
+                    showLine: true
+                };
+                graphDefault.loadContent(new PairedResult(input));
+                const legendItem = fetchElementByClass(
+                    pairedResultGraphContainer,
+                    styles.legendItem
+                );
+                const svgElements = legendItem.querySelectorAll("svg");
+                const lineSVG = svgElements[0];
+                expect(svgElements.length).toBe(1);
+                expect(lineSVG).not.toBeNull();
+                expect(lineSVG.classList).toContain(styles.legendItemLine);
+            });
+        });
+        describe("if user sets showLine to be false and showShape to be true", () => {
+            it("loads only shape", () => {
+                const input = getInput(valuesDefault, false, false);
+                input.legendOptions = {
+                    showShape: true,
+                    showLine: false
+                };
+                graphDefault.loadContent(new PairedResult(input));
+                const legendItem = fetchElementByClass(
+                    pairedResultGraphContainer,
+                    styles.legendItem
+                );
+                const svgElements = legendItem.querySelectorAll("svg");
+                const iconPath = legendItem.querySelector("path");
+                const iconSVG = svgElements[0];
+                expect(svgElements.length).toBe(1);
+                expect(iconSVG).not.toBeNull();
+                expect(iconSVG.classList).toContain(styles.legendItemIcon);
+                expect(iconPath).not.toBeNull();
+                expect(iconPath.getAttribute("d")).not.toBeNull();
+            });
+        });
+        describe("if user sets showLine to be true, showShape to be false and provided stroke dashArray", () => {
+            it("loads the line", () => {
+                const input = getInput(valuesDefault, false, false);
+                input.legendOptions = {
+                    showShape: false,
+                    showLine: true,
+                    style: {
+                        strokeDashArray: "2,2"
+                    }
+                };
+                graphDefault.loadContent(new PairedResult(input));
+                const legendItem = fetchElementByClass(
+                    pairedResultGraphContainer,
+                    styles.legendItem
+                );
+                const svgElements = legendItem.querySelectorAll("svg");
+                const lineSVG = svgElements[0];
+                expect(lineSVG).not.toBeNull();
+                expect(lineSVG.classList).toContain(styles.legendItemLine);
+                expect(
+                    lineSVG.children[1].attributes.getNamedItem("style").value
+                ).toContain(`stroke-dasharray: 2,2;`);
+            });
+        });
+        describe("if user sets both showLine and showShape to be true", () => {
+            it("loads both line and shape", () => {
+                const input = getInput(valuesDefault, false, false);
+                input.legendOptions = {
+                    showShape: true,
+                    showLine: true
+                };
+                graphDefault.loadContent(new PairedResult(input));
+                const legendItem = fetchElementByClass(
+                    pairedResultGraphContainer,
+                    styles.legendItem
+                );
+                const svgElements = legendItem.querySelectorAll("svg");
+                const iconSVG = svgElements[0];
+                const lineSVG = svgElements[1];
+                expect(svgElements.length).toBe(2);
+                expect(iconSVG).not.toBeNull();
+                expect(iconSVG.classList).toContain(styles.legendItemIcon);
+                expect(lineSVG).not.toBeNull();
+                expect(lineSVG.classList).toContain(
+                    styles.legendItemLineWithIcon
+                );
+            });
+        });
+
+        describe("if user sets both showLine and showShape to be false", () => {
+            it("loads empty legend button", () => {
+                const input = getInput(valuesDefault, false, false);
+                input.legendOptions = {
+                    showShape: false,
+                    showLine: false
+                };
+                graphDefault.loadContent(new PairedResult(input));
+                const legendItem = fetchElementByClass(
+                    pairedResultGraphContainer,
+                    styles.legendItem
+                );
+                const svgElements = legendItem.querySelectorAll("svg");
+                expect(svgElements.length).toBe(0);
+            });
+        });
         it("attaches click event handlers correctly", (done) => {
             const input = getInput(valuesDefault, false, false);
             graphDefault.loadContent(new PairedResult(input));
