@@ -9,6 +9,7 @@
     },
     "extends": ["standard", "plugin:jsdoc/recommended", "prettier"],
     "plugins": ["jsdoc"],
+    "parser": "babel-eslint",
     "parserOptions": {
         "ecmaVersion": 6,
         "sourceType": "module"
