@@ -246,7 +246,7 @@ class PairedResult extends GraphContent {
 
     reflow(graph, graphData) {
         this.config.values = graphData.values; // Update the old Paired Result config values with the new provided values
-        this.dataTarget = processDataPoints(graph.config, this.config); // update the datatarget
+        this.dataTarget = processDataPoints(graph.config, this.config, true); // update the datatarget
         const drawBox = (boxPath) => {
             drawSelectionIndicator(graph.scale, graph.config, boxPath);
             drawLine(graph.scale, graph.config, boxPath);

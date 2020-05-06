@@ -202,9 +202,10 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
  * @private
  * @param {object} graphConfig - config object of Graph API
  * @param {object} dataTarget - Data points object
+ * @param {boolean} reflow - flag to check if reflow function called it
  * @returns {object} dataTarget - Updated data target object
  */
-const processDataPoints = (graphConfig, dataTarget) => {
+const processDataPoints = (graphConfig, dataTarget, reflow=false) => {
     const type = graphConfig.axis.x.type;
     const getXDataValues = (x) => {
         if (!isValidAxisType(x, type)) {
@@ -232,7 +233,7 @@ const processDataPoints = (graphConfig, dataTarget) => {
                     key: `${dataTarget.key}_${type}`
                 };
                 if (
-                    !utils.hasValue(graphConfig.shownTargets, subset[type].key)
+                    !utils.hasValue(graphConfig.shownTargets, subset[type].key) && !reflow
                 ) {
                     graphConfig.shownTargets.push(subset[type].key);
                 }
@@ -273,12 +274,7 @@ const drawLine = (scale, config, boxPath) =>
             d.high &&
             d.low &&
             utils.hasValue(config.shownTargets, d.high.key) &&
-            utils.hasValue(config.shownTargets, d.low.key) &&
-            (document.querySelector(`li[aria-describedby="${getValue(d,"high").key}"]`) ? 
-            document.querySelector(`li[aria-describedby="${getValue(d,"high").key}"]`).getAttribute("aria-current") === "true" : true) 
-            &&
-            (document.querySelector(`li[aria-describedby="${getValue(d,"low").key}"]`) ?
-            document.querySelector(`li[aria-describedby="${getValue(d,"low").key}"]`).getAttribute("aria-current") === "true" : true);
+            utils.hasValue(config.shownTargets, d.low.key);
         return d3
             .select(this)
             .append("path")
@@ -324,12 +320,7 @@ const drawPoints = (scale, config, canvasSVG) => {
                         );
                     },
                     a11yAttributes: {
-                        "aria-hidden":
-                        document.querySelector(`li[aria-describedby="${getValue(value, type).key}"]`) ?
-                            document.querySelector(`li[aria-describedby="${getValue(value, type).key}"]`).getAttribute('aria-current') === "false" :
-                            config.shownTargets.indexOf(
-                                getValue(value, type).key
-                            ) < 0,
+                        "aria-hidden": document.querySelector(`.${styles.legendItem}[aria-describedby="${getValue(value, type).key}"]`)?.getAttribute('aria-current') === "false",
                         "aria-describedby": getValue(value, type).key,
                         "aria-disabled": !utils.isFunction(value.onClick)
                     }
@@ -376,15 +367,17 @@ const showLine = (config, boxPath) =>
             d.low &&
             utils.hasValue(config.shownTargets, d.high.key) &&
             utils.hasValue(config.shownTargets, d.low.key) &&
-            (document.querySelector(`li[aria-describedby="${getValue(d,"high").key}"]`) ? 
-            document.querySelector(`li[aria-describedby="${getValue(d,"high").key}"]`).getAttribute("aria-current") === "true" : true) 
+            (document.querySelector(`.${styles.legendItem}[aria-describedby="${getValue(d,"high").key}"]`) ?.getAttribute("aria-current") === "true") 
             &&
-            (document.querySelector(`li[aria-describedby="${getValue(d,"low").key}"]`) ?
-            document.querySelector(`li[aria-describedby="${getValue(d,"low").key}"]`).getAttribute("aria-current") === "true" : true);
+            (document.querySelector(`.${styles.legendItem}[aria-describedby="${getValue(d,"low").key}"]`) ?.getAttribute("aria-current") === "true");
         return d3
             .select(this)
             .select(`.${styles.pairedLine}`)
-            .attr("aria-hidden", (d) => !shouldCreateLine(d));
+            .attr("aria-hidden", (d) => {
+                console.log(shouldCreateLine(d));
+                const a = !shouldCreateLine(d);
+                return a
+            });
     });
 /**
  * Draws the criticality points with options opted in the input JSON by the consumer for each data set.
@@ -422,10 +415,7 @@ const drawCriticalityPoints = (
                         );
                     },
                     a11yAttributes: {
-                        "aria-hidden":
-                            config.shownTargets.indexOf(
-                                getValue(value, type).key
-                            ) < 0,
+                        "aria-hidden": document.querySelector(`.${styles.legendItem}[aria-describedby="${getValue(value, type).key}"]`)?.getAttribute('aria-current') === "false",
                         "aria-describedby": getValue(value, type).key,
                         "aria-disabled": !utils.isFunction(value.onClick)
                     }
