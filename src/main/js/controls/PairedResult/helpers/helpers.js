@@ -367,9 +367,9 @@ const showLine = (config, boxPath) =>
             d.low &&
             utils.hasValue(config.shownTargets, d.high.key) &&
             utils.hasValue(config.shownTargets, d.low.key) &&
-            (document.querySelector(`.${styles.legendItem}[aria-describedby="${getValue(d,"high").key}"]`) ?.getAttribute("aria-current") === "true") 
+            (document.querySelector(`.${styles.legendItem}[aria-describedby="${d.high.key}"]`) ?.getAttribute("aria-current") === "true") 
             &&
-            (document.querySelector(`.${styles.legendItem}[aria-describedby="${getValue(d,"low").key}"]`) ?.getAttribute("aria-current") === "true");
+            (document.querySelector(`.${styles.legendItem}[aria-describedby="${d.low.key}"]`) ?.getAttribute("aria-current") === "true");
         return d3
             .select(this)
             .select(`.${styles.pairedLine}`)
