@@ -383,7 +383,7 @@ const createPoints = (scale, config, canvasSVG) => {
     const renderDataPointPath = (path, value, index) => {
         let cls;
         const objectScale = constants.DEFAULT_TIMELINE_SCALE;
-        const hiddenConfig = document.querySelector(`.${styles.legendItem}[aria-describedby=${value.key}]`)?.getAttribute('aria-current')==="false";
+        const hiddenConfig = document.querySelector(`.${styles.legendItem}[aria-describedby="${value.key}"]`)?.getAttribute('aria-current')==="false";
         const fillStyle = getColorForTarget(value);
         const shapeStyle = getShapeForTarget(value);
         const pointStyle = styles.point;
@@ -420,7 +420,7 @@ const createPoints = (scale, config, canvasSVG) => {
     const renderCriticalityPath = (path, value, index, cls, config) => {
         let fillStyle;
         const objectScale = constants.DEFAULT_TIMELINE_SCALE;
-        const hiddenConfig = document.querySelector(`.${styles.legendItem}[aria-describedby=${value.key}]`)?.getAttribute('aria-current')==="false";
+        const hiddenConfig = document.querySelector(`.${styles.legendItem}[aria-describedby="${value.key}"]`)?.getAttribute('aria-current')==="false";
         const shapeStyle = getShapeForTarget(value);
         const pointStyle = styles.point;
 
