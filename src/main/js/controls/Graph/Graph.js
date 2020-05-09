@@ -444,7 +444,7 @@ class Graph extends Construct {
                 this.content
             );
             if (
-                this.config.axis.y.rangeRounding &&
+                this.config.allowCalibration &&
                 isRangeModified(
                     this.config,
                     this.content[position].config.yAxis
