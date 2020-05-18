@@ -14,7 +14,7 @@ import { validateEvent } from "../GanttConfig";
 import {
     dataPointActionHandler,
     drawDataPoints,
-    renderSelectionPath
+    renderSelectionPathForEvents
 } from "./datapointHelpers";
 import { transformPoint } from "./translateHelpers";
 
@@ -74,7 +74,7 @@ const drawEventDataPoints = (scale, config, canvasSVG) => {
         .each(function (dataPoint, index) {
             const dataPointSVG = d3.select(this);
             if (utils.isFunction(dataPoint.onClick)) {
-                renderSelectionPath(
+                renderSelectionPathForEvents(
                     scale,
                     config,
                     dataPointSVG,

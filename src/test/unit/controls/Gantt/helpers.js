@@ -194,3 +194,12 @@ export const fetchElementByClass = (cls) => document.querySelector(`.${cls}`);
  */
 export const fetchAllElementsByClass = (id, cls) =>
     id.querySelectorAll(`.${cls}`);
+
+/**
+ * Returns scale value from the html element
+ *
+ * @param {HTMLElement} id - Id attribute name
+ * @returns {string} scale
+ */
+export const getScaleFromSelectionPoint = (id) =>
+    id.split(" ")[1].split(/[()]/)[1];

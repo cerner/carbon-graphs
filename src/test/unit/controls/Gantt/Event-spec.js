@@ -2,12 +2,21 @@
 import * as d3 from "d3";
 import sinon from "sinon";
 import Gantt from "../../../../main/js/controls/Gantt";
-import { COLORS, SHAPES } from "../../../../main/js/helpers/constants";
+import constants, {
+    COLORS,
+    SHAPES
+} from "../../../../main/js/helpers/constants";
 import errors from "../../../../main/js/helpers/errors";
 import styles from "../../../../main/js/helpers/styles";
 import { getSVGAnimatedTransformList } from "../../../../main/js/helpers/transformUtils";
 import { TRANSITION_DELAY, triggerEvent } from "../../helpers/commonHelpers";
-import { axisJSON, fetchElementByClass, getAxes, getData } from "./helpers";
+import {
+    axisJSON,
+    fetchElementByClass,
+    getAxes,
+    getData,
+    getScaleFromSelectionPoint
+} from "./helpers";
 
 /**
  * BF11272018.02 - Verify the system will allow consumers to utilize events within the Gantt Chart.
@@ -258,14 +267,16 @@ describe("Gantt -> Track -> Event", () => {
         });
         it("Renders selection data points correctly", () => {
             loadData(gantt);
-            const selectionPointElement = fetchElementByClass(
-                styles.dataPointSelection
+            const selectionPointElements = document.querySelectorAll(
+                `.${styles.dataPointSelection}`
             );
-            const groupElement = selectionPointElement.firstChild;
-            expect(selectionPointElement.tagName).toBe("svg");
-            expect(selectionPointElement.getAttribute("pointer-events")).toBe(
-                "auto"
-            );
+            const groupElement = selectionPointElements[0].firstChild;
+            const defaultPlot =
+                constants.DEFAULT_PLOT_SELECTION_SCALE_FOR_EVENTS;
+            expect(selectionPointElements[0].tagName).toBe("svg");
+            expect(
+                selectionPointElements[0].getAttribute("pointer-events")
+            ).toBe("auto");
             expect(groupElement.firstChild.nodeName).toBe("path");
             expect(groupElement.firstChild.getAttribute("d")).toBe(
                 SHAPES.CIRCLE.path.d
@@ -273,15 +284,53 @@ describe("Gantt -> Track -> Event", () => {
             expect(groupElement.firstChild.getAttribute("d")).toBe(
                 SHAPES.CIRCLE.path.d
             );
-            expect(selectionPointElement.classList).toContain(
+            expect(selectionPointElements[0].classList).toContain(
                 styles.dataPointSelection
             );
-            expect(selectionPointElement.getAttribute("aria-describedby")).toBe(
-                "uid_event_1"
-            );
-            expect(selectionPointElement.getAttribute("aria-hidden")).toBe(
+            expect(
+                selectionPointElements[0].getAttribute("aria-describedby")
+            ).toBe("uid_event_1");
+            expect(selectionPointElements[0].getAttribute("aria-hidden")).toBe(
                 "true"
             );
+
+            // verify if selection circle x-option is generated accurately.
+            expect(
+                parseFloat(selectionPointElements[0].getAttribute("x"))
+            ).toBe(
+                SHAPES.CIRCLE.options.x -
+                    defaultPlot.posX * SHAPES.CIRCLE.options.scale
+            );
+
+            // verify if selection circle y-option is generated accurately.
+            expect(
+                parseFloat(selectionPointElements[0].getAttribute("y"))
+            ).toBe(
+                SHAPES.CIRCLE.options.y -
+                    defaultPlot.posY * SHAPES.CIRCLE.options.scale
+            );
+
+            // verify if selection circle scale for circle event is generated accurately.
+            expect(
+                parseFloat(
+                    getScaleFromSelectionPoint(
+                        selectionPointElements[0].firstChild.getAttribute(
+                            "transform"
+                        )
+                    )
+                )
+            ).toBe(SHAPES.CIRCLE.options.scale * defaultPlot.scale);
+
+            // verify if selection circle scale for diamond is generated accurately.
+            expect(
+                parseFloat(
+                    getScaleFromSelectionPoint(
+                        selectionPointElements[1].firstChild.getAttribute(
+                            "transform"
+                        )
+                    )
+                )
+            ).toBe(SHAPES.DIAMOND.options.scale * defaultPlot.scale);
         });
         describe("When clicked on data point", () => {
             it("Does not do anything if no onClick callback is provided", (done) => {
