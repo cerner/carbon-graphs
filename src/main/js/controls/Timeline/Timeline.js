@@ -321,7 +321,7 @@ class Timeline extends Construct {
         svg.exit().remove(); // over here we remove the old data which wasn't present in the new data.
 
         let position;
-        if(graphData  && this.content.includes(graphData.key)) { // Its a check whether graphData exists and the key is also present or not.
+        if(graphData && graphData.values && this.content.includes(graphData.key)) { // Its a check whether graphData exists and the key is also present or not.
             this.contentConfig.forEach((config, index) => {
                 if (config.config.key === graphData.key) position = index;
             });

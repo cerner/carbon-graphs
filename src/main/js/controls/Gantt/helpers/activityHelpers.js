@@ -309,7 +309,17 @@ const getActivityChunk = (path, x, y, width, height, style) => {
 const unloadActivities = (graphContext, trackPathSVG) =>
     trackPathSVG.select(`g.${styles.activityGroup}`).remove();
 
-
+/**
+ * Update activities for the track.
+ *
+ * @private
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} gantt - Graph config object for the content.
+ * @param {object} trackGroupPath - Container for the track
+ * @returns {undefined} - returns nothing
+ */
 const reflowActivities = (canvasSVG, config, scale, gantt, trackGroupPath) => {
     gantt.config.activities.forEach((a) => {
         validateActivity(a);

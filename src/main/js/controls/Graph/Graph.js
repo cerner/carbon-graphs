@@ -388,12 +388,12 @@ class Graph extends Construct {
     /**
      * Updates the graph axisData and content.
      *
-     * @returns {Graph} - Graph instance
      * @param {Array} graphData - Input array that holds updated values and key
+     * @returns {Graph} - Graph instance
      */
     reflow(graphData) {
         let position;
-        if(graphData) {
+        if(graphData && graphData.values) {
             this.contentKeys.forEach((key, index) => {
                 if (key === graphData.key) position = index;
             });
@@ -434,7 +434,7 @@ class Graph extends Construct {
             .call(axisData);
         svg.exit().remove(); // over here we remove the old data which wasn't present in the new data.
 
-        if (graphData && this.contentKeys.includes(graphData.key)) { // Its a check whether graphData exists and the key is also present or not.
+        if (graphData && graphData.values && this.contentKeys.includes(graphData.key)) { // Its a check whether graphData exists and the key is also present or not.
             this.content[position].reflow(this, graphData); // We call reflow on the position for that specific content whose key matches to new data.
             setAxisPadding(this.config.axisPadding, this.content[position]);
             getAxesDataRange(
@@ -444,7 +444,7 @@ class Graph extends Construct {
                 this.content
             );
             if (
-                this.config.axis.y.rangeRounding &&
+                this.config.allowCalibration &&
                 isRangeModified(
                     this.config,
                     this.content[position].config.yAxis

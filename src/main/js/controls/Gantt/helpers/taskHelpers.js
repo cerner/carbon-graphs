@@ -259,6 +259,7 @@ const renderHashedTaskGroup = (canvasSVG, scale, data, index, path) => {
         )
         .on("click", () => taskClickActionHandler(data, index, path));
 };
+
 /**
  * Renders the tasks for a track. Each task is created based on start and end datetime.
  * Values needs to be in ISO8601 datetime format, along with the unique key for each task.
@@ -312,6 +313,17 @@ const drawTasks = (
         .remove();
 };
 
+/**
+ * Update tasks for the track.
+ *
+ * @private
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} gantt - Graph config object for the content.
+ * @param {object} trackGroupPath - Container for the track
+ * @returns {undefined} - returns nothing
+ */
 const reflowTasks = (
     canvasSVG,
     config,

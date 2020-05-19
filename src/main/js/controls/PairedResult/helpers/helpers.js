@@ -373,11 +373,7 @@ const showLine = (config, boxPath) =>
         return d3
             .select(this)
             .select(`.${styles.pairedLine}`)
-            .attr("aria-hidden", (d) => {
-                console.log(shouldCreateLine(d));
-                const a = !shouldCreateLine(d);
-                return a
-            });
+            .attr("aria-hidden", (d) => !shouldCreateLine(d));
     });
 /**
  * Draws the criticality points with options opted in the input JSON by the consumer for each data set.

@@ -364,7 +364,7 @@ class Gantt extends Construct {
             .call(axisData);
         svg.exit().remove(); // over here we remove the old data which wasn't present in the new data.
         let position;
-        if(graphData  && this.tracks.includes(graphData.key)) { // Its a check whether graphData exists and the key is also present or not.
+        if(graphData && this.tracks.includes(graphData.key)) { // Its a check whether graphData exists and the key is also present or not.
             this.trackConfig.forEach((track, index) => {
                 if (track.config.key === graphData.key) position = index;
             });
