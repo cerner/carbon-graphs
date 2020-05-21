@@ -38,11 +38,8 @@ import {
     prepareLoadAtIndex,
     scaleGraph,
     updateAxesDomain,
-    getXAxisXPosition,
-    getXAxisYPosition,
-    getXAxisWidth
 } from "./helpers/creationHelpers";
-import { translateGraph, translateLabelText } from "./helpers/translateHelpers";
+import { translateGraph, translateLabelText, translateAxes } from "./helpers/translateHelpers";
 
 /**
  * @typedef {object} Gantt
@@ -336,33 +333,10 @@ class Gantt extends Construct {
      */
     reflow(graphData) {
         updateXAxisDomain(this.config); // We need to update the domain as this refers to new lowerLimit and upperLimit of xAxis ticks to be displayed on the graph.
-        const width = getXAxisWidth(this.config);
         scaleGraph(this.scale, this.config);
-        const axisData = d3
-            .axisTop(this.scale.x)
-            .ticks(
-                Math.max(
-                    Math.ceil(width / constants.MAX_TICK_VARIANCE),
-                    constants.MIN_TICKS
-                )
-            );
-        // Reflow for the xAxis starts here.
-        const svg = this.svg
-            .selectAll(`.${styles.axis} .${styles.axisX}`)
-            .data(this.config.axis.x.domain); // comparing new data to old data and creating enter and exit states.
-        svg.enter();
-        svg.transition()
-            .attr("class", styles.axis)
-            .attr("class", styles.axisX)
-            .attr("aria-hidden", !this.config.axis.x.show)
-            .attr(
-                "transform",
-                `translate(${getXAxisXPosition(
-                    this.config
-                )}, ${getXAxisYPosition(this.config)})`
-            )
-            .call(axisData);
-        svg.exit().remove(); // over here we remove the old data which wasn't present in the new data.
+        
+        translateAxes(this.axis, this.scale, this.config, this.svg); 
+
         let position;
         if(graphData && this.tracks.includes(graphData.key)) { // Its a check whether graphData exists and the key is also present or not.
             this.trackConfig.forEach((track, index) => {

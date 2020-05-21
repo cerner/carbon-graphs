@@ -2,9 +2,6 @@
 import * as d3 from "d3";
 import Construct from "../../core/Construct";
 import {
-    getXAxisXPosition,
-    getXAxisYPosition,
-    getXAxisWidth,
     calculateAxesLabelSize,
     calculateAxesSize,
     createAxes,
@@ -13,7 +10,7 @@ import {
     getAxesDataRange,
     getYAxisHeight,
     updateXAxisDomain,
-    isXAxisOrientationTop
+    translateAxes,
 } from "../../helpers/axis";
 import constants, { AXIS_TYPE } from "../../helpers/constants";
 import errors from "../../helpers/errors";
@@ -406,33 +403,8 @@ class Graph extends Construct {
         }
 
         updateXAxisDomain(this.config); // We need to update the domain as this refers to new lowerLimit and upperLimit of xAxis ticks to be displayed on the graph.
-        const width = getXAxisWidth(this.config);
         scaleGraph(this.scale, this.config);
-
-        const d3Axis = isXAxisOrientationTop(this.axis.x.orientation) ? d3.axisTop(this.scale.x) : d3.axisBottom(this.scale.x);
-        const axisData = d3Axis
-            .ticks(
-                Math.max(
-                    Math.ceil(width / constants.MAX_TICK_VARIANCE),
-                    constants.MIN_TICKS
-                )
-            );
-
-        // Reflow for the xAxis starts here.
-        const svg = this.svg
-            .selectAll(`.${styles.axis}.${styles.axisX}`)
-            .data(this.config.axis.x.domain); // comparing new data to old data and creating enter and exit states.
-        svg.enter();
-        svg.transition()
-            .attr("aria-hidden", !this.config.axis.x.show)
-            .attr(
-                "transform",
-                `translate(${getXAxisXPosition(
-                    this.config
-                )}, ${getXAxisYPosition(this.config)})`
-            )
-            .call(axisData);
-        svg.exit().remove(); // over here we remove the old data which wasn't present in the new data.
+        translateAxes(this.axis, this.scale, this.config, this.svg);
 
         if (graphData && graphData.values && this.contentKeys.includes(graphData.key)) { // Its a check whether graphData exists and the key is also present or not.
             this.content[position].reflow(this, graphData); // We call reflow on the position for that specific content whose key matches to new data.
