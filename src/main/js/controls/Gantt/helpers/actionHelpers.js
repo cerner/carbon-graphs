@@ -101,7 +101,7 @@ export const clickHandler = (graphContext, config, canvasSVG) => (
     updateShownTarget(config.shownTargets, item);
     canvasSVG
         .selectAll(`.${styles.point}[aria-describedby="${item.key}"]`)
-        .attr("aria-hidden", function() {
+        .attr("aria-hidden", function () {
             return !(d3.select(this).attr("aria-hidden") === "true");
         });
 };
@@ -260,7 +260,7 @@ const drawActionDataPoints = (scale, config, canvasSVG) =>
     canvasSVG
         .append("g")
         .classed(styles.pointGroup, true)
-        .each(function(dataPoint, index) {
+        .each(function (dataPoint, index) {
             const dataPointSVG = d3.select(this);
             renderSelectionPath(scale, config, dataPointSVG, dataPoint, index);
             renderDataPointPath(scale, config, dataPointSVG, dataPoint, index);

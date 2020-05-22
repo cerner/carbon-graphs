@@ -438,7 +438,7 @@ const createPoints = (scale, config, canvasSVG) => {
     canvasSVG
         .append("g")
         .classed(styles.pointGroup, true)
-        .each(function(d, i) {
+        .each(function (d, i) {
             const dataPointSVG = d3.select(this);
             renderSelectionPath(dataPointSVG, d, i);
             if (d.isCritical) {

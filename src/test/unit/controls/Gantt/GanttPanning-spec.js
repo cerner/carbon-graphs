@@ -51,7 +51,7 @@ describe("Panning", () => {
         it("Check the height for dateline defs is proper", () => {
             const defsElement = fetchElementByClass(styles.canvas).firstChild;
             const shapeHeightArr = [];
-            d3.selectAll(`.${styles.datelinePoint}`).each(function() {
+            d3.selectAll(`.${styles.datelinePoint}`).each(function () {
                 const shapeHeight = this.getBBox().height;
                 shapeHeightArr.push(shapeHeight);
             });

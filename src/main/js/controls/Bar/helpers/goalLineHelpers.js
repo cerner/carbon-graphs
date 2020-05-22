@@ -122,7 +122,7 @@ const createRegion = (scale, config, regionGroupSVG, regionList, uniqueKey) => {
         .attr(constants.X_AXIS, (d) => d.xRange | 0)
         .attr(constants.Y_AXIS, getYAxisRangePosition(scale, config))
         .attr("width", (d) => d.width | 0)
-        .attr("height", function(d) {
+        .attr("height", function (d) {
             return getRegionHeight(d3.select(this), d, scale, config);
         });
     regionPath
@@ -148,7 +148,7 @@ const translateRegion = (scale, config, regionGroupSVG) => {
         .attr(constants.X_AXIS, (d) => d.xRange | 0)
         .attr(constants.Y_AXIS, getYAxisRangePosition(scale, config))
         .attr("width", (d) => d.width | 0)
-        .attr("height", function(d) {
+        .attr("height", function (d) {
             return getRegionHeight(d3.select(this), d, scale, config);
         });
 };

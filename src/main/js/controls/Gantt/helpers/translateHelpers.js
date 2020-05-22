@@ -342,13 +342,13 @@ const transformPoint = (scale, config) => (value) => (scaleFactor) =>
  * @returns {object} d3 select object
  */
 const translatePoints = (scale, config, trackPath, style) =>
-    trackPath.selectAll(style).each(function(d) {
+    trackPath.selectAll(style).each(function (d) {
         const pointSVG = d3.select(this);
         pointSVG
             .select("g")
             .transition()
             .call(constants.d3Transition(config.settingsDictionary.transition))
-            .attr("transform", function() {
+            .attr("transform", function () {
                 return transformPoint(scale, config)(d)(
                     getTransformScale(this)
                 );
@@ -426,7 +426,7 @@ const translateTaskBar = (scale, path, config) =>
             "y",
             (val) => scale.y(val.y) + constants.DEFAULT_GANTT_TASK_PADDING.top
         )
-        .attr("width", function(val) {
+        .attr("width", function (val) {
             if (val.percentage) {
                 return d3.select(this).classed(styles.taskBarCompletion)
                     ? calculatePercentage(
@@ -522,7 +522,7 @@ const translateTasks = (scale, config, trackPath) =>
     trackPath
         .selectAll(`g.${styles.task}`)
         .selectAll("rect")
-        .each(function() {
+        .each(function () {
             const path = d3.select(this);
             path.classed(styles.taskBarSelection)
                 ? translateTaskIndicator(scale, path, config)
@@ -542,7 +542,7 @@ const translateTrackSelector = (scale, config, trackPathSVG, trackConfig) => {
     const ganttTrackSelectorGroupPath = trackPathSVG.select(
         `.${styles.ganttTrackSelectorGroup}`
     );
-    ganttTrackSelectorGroupPath.select("rect").each(function() {
+    ganttTrackSelectorGroupPath.select("rect").each(function () {
         const path = d3.select(this);
         const _args = generatorArgs(config, scale, path, trackConfig);
         path.transition()
@@ -565,7 +565,7 @@ const translateActivities = (scale, config, trackPath) =>
     trackPath
         .selectAll(`g.${styles.activity}`)
         .selectAll(`rect.${styles.activityBar}`)
-        .each(function() {
+        .each(function () {
             translateActivityBar(scale, d3.select(this), config);
         });
 export {

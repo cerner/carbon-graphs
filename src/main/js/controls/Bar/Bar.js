@@ -58,11 +58,7 @@ const calculateValuesRange = (values, axis = constants.Y_AXIS) => {
  * @returns {object} BarConfig config object containing consumer data
  */
 const loadInput = (inputJSON) =>
-    new BarConfig()
-        .setInput(inputJSON)
-        .validateInput()
-        .clone()
-        .getConfig();
+    new BarConfig().setInput(inputJSON).validateInput().clone().getConfig();
 /**
  * Initializes the necessary Bar constructor objects
  *

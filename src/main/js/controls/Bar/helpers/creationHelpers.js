@@ -305,7 +305,7 @@ const drawDataBars = (
     return barGroupSVG
         .append("g")
         .classed(styles.bar, true)
-        .each(function(dataPoint, index) {
+        .each(function (dataPoint, index) {
             const dataPointSVG = d3.select(this);
             const rectPath = dataPoint.isHashed
                 ? getHashedBar(

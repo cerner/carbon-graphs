@@ -36,7 +36,7 @@ const translateEventline = (scale, config, canvasSVG, yAxisPositionHandler) => {
     eventlineGroup
         .selectAll(`.${styles.eventlinePoint}`)
         .select("g")
-        .attr("transform", function(d) {
+        .attr("transform", function (d) {
             return `translate(${scale.x(
                 utils.parseDateTime(d.value)
             )}, 0) scale(${getTransformScale(this)})`;

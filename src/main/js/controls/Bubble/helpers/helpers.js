@@ -52,7 +52,7 @@ const transformPoint = (scale) => (value) => {
 const translatePoints = (scale, canvasSVG, cls, config) =>
     canvasSVG
         .selectAll(`.${styles.bubbleGraphContent} .${cls}`)
-        .each(function(d) {
+        .each(function (d) {
             const pointSVG = d3.select(this);
             pointSVG
                 .transition()
@@ -294,7 +294,7 @@ const drawBubbles = (scale, config, pointGroupPath, dataTarget) => {
             .attr("aria-describedby", `${value.key}`)
             .attr("aria-selected", false)
             .attr("aria-hidden", false)
-            .on("click", function() {
+            .on("click", function () {
                 dataPointActionHandler(value, index, this);
             });
 
@@ -314,7 +314,7 @@ const drawBubbles = (scale, config, pointGroupPath, dataTarget) => {
             .attr("aria-disabled", utils.isDefined(value.onClick))
             .attr("aria-hidden", true)
             .attr("aria-describedby", value.key)
-            .on("click", function() {
+            .on("click", function () {
                 dataPointActionHandler(value, index, this);
             })
             .append("circle")
@@ -328,7 +328,7 @@ const drawBubbles = (scale, config, pointGroupPath, dataTarget) => {
     pointGroupPath
         .append("g")
         .classed(styles.pointGroup, true)
-        .each(function(d, i) {
+        .each(function (d, i) {
             const dataPointSVG = d3.select(this);
             renderSelectionPath(dataPointSVG, d, i);
             renderDataPoint(dataPointSVG, d, i);

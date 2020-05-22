@@ -107,7 +107,7 @@ const translatePoints = (scale, config, canvasSVG, key, style) =>
     canvasSVG
         .select(`.${styles.timelineContentGroup}[aria-describedby="${key}"]`)
         .selectAll(style)
-        .each(function(d) {
+        .each(function (d) {
             const pointGroupSVG = d3.select(this);
             pointGroupSVG
                 .select("g")
@@ -115,7 +115,7 @@ const translatePoints = (scale, config, canvasSVG, key, style) =>
                 .call(
                     constants.d3Transition(config.settingsDictionary.transition)
                 )
-                .attr("transform", function() {
+                .attr("transform", function () {
                     return transformPoint(scale, config)(d)(
                         getTransformScale(this)
                     );

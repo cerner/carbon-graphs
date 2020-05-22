@@ -134,7 +134,7 @@ const translatePoints = (scale, canvasSVG, config) =>
                     type
                 )}`
             )
-            .each(function(d) {
+            .each(function (d) {
                 const pairedPointSVG = d3.select(this);
                 pairedPointSVG
                     .select("g")
@@ -144,7 +144,7 @@ const translatePoints = (scale, canvasSVG, config) =>
                             config.settingsDictionary.transition
                         )
                     )
-                    .attr("transform", function() {
+                    .attr("transform", function () {
                         return transformPoint(scale, type)(d)(
                             getTransformScale(this)
                         );
@@ -268,7 +268,7 @@ const getDataPointValues = (target) => target.internalValuesSubset;
  * @returns {object} - d3 append object
  */
 const drawLine = (scale, config, boxPath) =>
-    boxPath.each(function(value, index) {
+    boxPath.each(function (value, index) {
         const shouldCreateLine = (d) =>
             d.high &&
             d.low &&
@@ -282,7 +282,7 @@ const drawLine = (scale, config, boxPath) =>
             .attr("aria-hidden", (d) => !shouldCreateLine(d))
             .attr("aria-disabled", !utils.isFunction(value.onClick))
             .attr("d", value.high && value.low ? createLine(scale, value) : "")
-            .on("click", function() {
+            .on("click", function () {
                 dataPointActionHandler(config, value, index, this.parentNode);
             });
     });
@@ -329,7 +329,7 @@ const drawPoints = (scale, config, canvasSVG) => {
                 })
             )
         );
-    canvasSVG.each(function(value, index) {
+    canvasSVG.each(function (value, index) {
         const boxPath = d3.select(this);
         iterateOnPairType((type) => {
             if (utils.isDefined(getValue(value, type))) {
@@ -363,7 +363,7 @@ const drawPoints = (scale, config, canvasSVG) => {
  * @returns {object} - d3 append object
  */
 const showLine = (config, boxPath) =>
-    boxPath.each(function() {
+    boxPath.each(function () {
         const shouldCreateLine = (d) =>
             d.high &&
             d.low &&

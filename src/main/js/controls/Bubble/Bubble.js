@@ -62,11 +62,7 @@ const calculateValuesRange = (values, axis = constants.Y_AXIS) => {
  * @returns {object} BubbleConfig config object containing consumer data
  */
 const loadInput = (inputJSON) =>
-    new BubbleConfig()
-        .setInput(inputJSON)
-        .validateInput()
-        .clone()
-        .getConfig();
+    new BubbleConfig().setInput(inputJSON).validateInput().clone().getConfig();
 
 /**
  * A Bubble graph is a graph used to represent a collection of data
