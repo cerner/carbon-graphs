@@ -15,7 +15,7 @@ export const PADDING_BOTTOM = 5;
  */
 const flushAllD3Transitions = () => {
     const now = performance.now;
-    performance.now = function() {
+    performance.now = function () {
         return Infinity;
     };
     d3.timerFlush();

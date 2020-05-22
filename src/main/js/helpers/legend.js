@@ -84,7 +84,7 @@ const loadLegendItem = (legendSVG, t, shownTargets, eventHandlers) => {
         .attr("aria-describedby", t.key);
     if (!shouldForceDisableLegendItem && index > -1) {
         itemPath
-            .on("click", function() {
+            .on("click", function () {
                 return eventHandlers.clickHandler(this, t);
             })
             .on("mouseenter", () =>
@@ -209,10 +209,7 @@ const removeLegendItem = (legendSVG, dataTarget) =>
  * @returns {object} - d3 svg object
  */
 const createLegend = (container) =>
-    container
-        .append("ul")
-        .classed(styles.legend, true)
-        .attr("role", "list");
+    container.append("ul").classed(styles.legend, true).attr("role", "list");
 /**
  * Returns a boolean after checking the attribute `aria-current`.
  *
@@ -353,10 +350,7 @@ const loadPieLegendItem = (legendSVG, dataTarget, { hoverHandler }) => {
             true
         )
     );
-    itemPath
-        .append("label")
-        .classed(styles.legendItemText, true)
-        .text(text);
+    itemPath.append("label").classed(styles.legendItemText, true).text(text);
     itemPath
         .on("mouseenter", () =>
             hoverHandler(dataTarget, constants.HOVER_EVENT.MOUSE_ENTER)

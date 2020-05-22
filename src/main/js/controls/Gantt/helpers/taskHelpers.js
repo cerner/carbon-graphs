@@ -297,7 +297,7 @@ const drawTasks = (
         .classed(styles.task, true)
         .attr("aria-selected", false)
         .attr("aria-describedby", (d) => d.key)
-        .each(function(d, i) {
+        .each(function (d, i) {
             if (d.percentage) {
                 renderPercentageBarGroup(scale, d, i, this);
             } else {

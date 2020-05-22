@@ -71,7 +71,7 @@ const drawEventDataPoints = (scale, config, canvasSVG) => {
     canvasSVG
         .append("g")
         .classed(styles.pointGroup, true)
-        .each(function(dataPoint, index) {
+        .each(function (dataPoint, index) {
             const dataPointSVG = d3.select(this);
             if (utils.isFunction(dataPoint.onClick)) {
                 renderSelectionPath(

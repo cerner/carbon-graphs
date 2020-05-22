@@ -96,11 +96,7 @@ const isRangeModified = (config, yAxis = constants.Y_AXIS) =>
  * @returns {object} config object containing consumer data
  */
 const loadInput = (inputJSON) =>
-    new GraphConfig()
-        .setInput(inputJSON)
-        .validateInput()
-        .clone()
-        .getConfig();
+    new GraphConfig().setInput(inputJSON).validateInput().clone().getConfig();
 /**
  * Executes the before init process checklist, needs to be called by parent control.
  *  Binds the chart id provided in the input JSON to graph container.

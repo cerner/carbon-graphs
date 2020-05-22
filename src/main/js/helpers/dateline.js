@@ -40,7 +40,7 @@ const translateDateline = (scale, config, canvasSVG, yAxisPositionHandler) => {
     datelineGroup
         .selectAll(`.${styles.datelinePoint}`)
         .select("g")
-        .attr("transform", function(d) {
+        .attr("transform", function (d) {
             return `translate(${scale.x(
                 utils.parseDateTime(d.value)
             )}, 0) scale(${getTransformScale(this)})`;
@@ -98,7 +98,7 @@ const datelineClickHandler = (value, target) => {
  */
 const getDatelineIndicatorHeight = () => {
     const shapeHeightArr = [];
-    d3.selectAll(`.${styles.datelinePoint}`).each(function() {
+    d3.selectAll(`.${styles.datelinePoint}`).each(function () {
         const shapeHeight = this.getBBox().height;
         shapeHeightArr.push(shapeHeight);
     });

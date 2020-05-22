@@ -69,12 +69,12 @@ const showHideSiblingDataPoint = (config, value, target) => {
     const targetNode = d3.select(target);
     targetNode
         .select("path")
-        .classed(styles.dataPointDisplayEnable, function() {
+        .classed(styles.dataPointDisplayEnable, function () {
             return !d3.select(this).classed(styles.dataPointDisplayEnable);
         });
     targetNode
         .selectAll("svg")
-        .classed(styles.dataPointDisplayEnable, function() {
+        .classed(styles.dataPointDisplayEnable, function () {
             return !d3.select(this).classed(styles.dataPointDisplayEnable);
         });
     const targetSelectionIndicator = targetNode.select("rect");
@@ -235,7 +235,7 @@ export const translateSelectionBox = (scale, canvasSVG, config) =>
         )
         .transition()
         .call(constants.d3Transition(config.settingsDictionary.transition))
-        .each(function(value) {
+        .each(function (value) {
             return updateSelectionIndicatorAttributes(
                 d3
                     .select(this)
@@ -263,7 +263,7 @@ export const translateSelectionBox = (scale, canvasSVG, config) =>
 export const translateSelectionItem = (scale, canvasSVG, config) =>
     canvasSVG
         .selectAll(`.${styles.pairedBoxGroup} .${styles.dataPointSelection}`)
-        .each(function(value) {
+        .each(function (value) {
             return d3
                 .select(this)
                 .select("g")
@@ -271,7 +271,7 @@ export const translateSelectionItem = (scale, canvasSVG, config) =>
                 .call(
                     constants.d3Transition(config.settingsDictionary.transition)
                 )
-                .attr("transform", function() {
+                .attr("transform", function () {
                     return transformPartialPoint(scale)(value)(
                         getTransformScale(this)
                     );
@@ -337,7 +337,7 @@ const addCircle = (d3PairElement, scale, config, value) =>
  * @returns {object} - d3 append object
  */
 export const drawSelectionIndicator = (scale, config, boxPath) =>
-    boxPath.each(function(value) {
+    boxPath.each(function (value) {
         if (!(value.high && value.low)) {
             return addCircle(d3.select(this), scale, config, value);
         }
