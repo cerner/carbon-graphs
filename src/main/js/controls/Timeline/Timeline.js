@@ -21,12 +21,9 @@ import {
     createTimelineContent,
     detachEventHandlers,
     determineHeight,
-    scaleGraph,
-    getXAxisXPosition,
-    getXAxisYPosition,
-    getXAxisWidth
+    scaleGraph
 } from "./helpers/creationHelpers";
-import { translateTimelineGraph } from "./helpers/translateHelpers";
+import { translateTimelineGraph, translateAxes } from "./helpers/translateHelpers";
 import TimelineConfig, { processInput } from "./TimelineConfig";
 import TimelineContent from "./TimelineContent";
 
@@ -291,37 +288,10 @@ class Timeline extends Construct {
      */
     reflow(graphData) {
         updateXAxisDomain(this.config); // We need to update the domain as this refers to new lowerLimit and upperLimit of xAxis ticks to be displayed on the graph.
-        const width = getXAxisWidth(this.config);
         scaleGraph(this.scale, this.config);
-
-        const axisData = d3
-            .axisBottom(this.scale.x)
-            .ticks(
-                Math.max(
-                    Math.ceil(width / constants.MAX_TICK_VARIANCE),
-                    constants.MIN_TICKS
-                )
-            );
-        // Reflow for the xAxis starts here.
-        const svg = this.svg
-            .selectAll(`.${styles.axis} .${styles.axisX}`)
-            .data(this.config.axis.x.domain); // comparing new data to old data and creating enter and exit states.
-        svg.enter();
-        svg.transition()
-            .attr("class", styles.axis)
-            .attr("class", styles.axisX)
-            .attr("aria-hidden", !this.config.axis.x.show)
-            .attr(
-                "transform",
-                `translate(${getXAxisXPosition(
-                    this.config
-                )}, ${getXAxisYPosition(this.config)})`
-            )
-            .call(axisData);
-        svg.exit().remove(); // over here we remove the old data which wasn't present in the new data.
-
+        translateAxes(this.axis, this.scale, this.config, this.svg);
         let position;
-        if(graphData  && this.content.includes(graphData.key)) { // Its a check whether graphData exists and the key is also present or not.
+        if(graphData && graphData.values && this.content.includes(graphData.key)) { // Its a check whether graphData exists and the key is also present or not.
             this.contentConfig.forEach((config, index) => {
                 if (config.config.key === graphData.key) position = index;
             });

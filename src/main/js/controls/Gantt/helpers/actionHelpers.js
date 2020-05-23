@@ -295,6 +295,16 @@ const loadActions = (graphContext, trackPathSVG, trackLabel, gantt) =>
     gantt.actionKeys.splice(i, 0, a.key);
     });
 
+/**
+ * Update activities for the track.
+ *
+ * @private
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} gantt - Graph config object for the content.
+ * @param {object} trackGroupPath - Container for the track
+ * @returns {undefined} - returns nothing
+ */
 const reflowActions = (
         config,
         scale,

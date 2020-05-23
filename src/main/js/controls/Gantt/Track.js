@@ -259,6 +259,9 @@ class Track extends GraphContent {
         return this;
     }
 
+    /**
+     * @inheritdoc
+     */
     reflow(graph, graphData) {
         if (utils.notEmpty(graphData.activities)&& utils.notEmpty(this.config.activities)) {
             graphData.activityKeys=[];

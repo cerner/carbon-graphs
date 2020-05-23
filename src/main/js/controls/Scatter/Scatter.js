@@ -187,6 +187,9 @@ class Scatter extends GraphContent {
         return this;
     }
 
+    /**
+     * @inheritdoc
+     */
     reflow(graph, graphData) {
         this.config.values = graphData.values; // Update the old Scatter config values with the new provided values
         this.dataTarget = processDataPoints(graph.config, this.config); // Update the dataTarget
