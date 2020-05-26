@@ -122,7 +122,7 @@ const createRegion = (
             .attr(constants.X_AXIS, getXAxisXPosition(config))
             .attr(constants.Y_AXIS, getYAxisRangePosition(scale, config)(item))
             .attr("width", getXAxisWidth(config))
-            .attr("height", function() {
+            .attr("height", function () {
                 return getRegionHeight(d3.select(this), item, scale, config);
             });
     });
@@ -192,7 +192,7 @@ const translateRegion = (scale, config, regionGroupSVG) =>
         .transition()
         .call(constants.d3Transition(config.settingsDictionary.transition))
         .attr("width", getXAxisWidth(config))
-        .attr("height", function(d) {
+        .attr("height", function (d) {
             return getRegionHeight(d3.select(this), d, scale, config);
         });
 /**
@@ -254,7 +254,7 @@ const showHideRegion = (canvasSVG, key, shouldShow) =>
 const toggleRegion = (canvasSVG, key) =>
     canvasSVG
         .selectAll(`.${styles.region}[aria-describedby="region_${key}"]`)
-        .attr("aria-hidden", function() {
+        .attr("aria-hidden", function () {
             return !(d3.select(this).attr("aria-hidden") === "true");
         });
 /**

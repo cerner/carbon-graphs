@@ -9,18 +9,12 @@ const getPairData = (value) =>
 const checkDate = (date) => date instanceof Date;
 const createItem = (pair, label, value) => {
     const item = pair.append("g").classed("popup-item", true);
-    item.append("label")
-        .classed("popup-label", true)
-        .text(label);
-    item.append("g")
-        .classed("popup-text", true)
-        .text(value);
+    item.append("label").classed("popup-label", true).text(label);
+    item.append("g").classed("popup-text", true).text(value);
 };
 const createTrackItem = (pair, label, items) => {
     const item = pair.append("g").classed("popup-item", true);
-    item.append("label")
-        .classed("popup-label", true)
-        .text(label);
+    item.append("label").classed("popup-label", true).text(label);
     const section = item.append("g").classed("section", true);
     for (const value of Object.values(items)) {
         const content = section.append("g").classed("content", true);
@@ -34,20 +28,14 @@ const createTrackItem = (pair, label, items) => {
                         .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
                         .replace(/(\b[a-z](?!\s))/g, (x) => x.toUpperCase())
                 );
-            subContent
-                .append("g")
-                .classed("popup-text", true)
-                .text(subItem);
+            subContent.append("g").classed("popup-text", true).text(subItem);
         });
     }
 };
 const renderPopup = (fn) => {
     const tip = document.querySelector("#tooltip");
     const clickHandler = () => {
-        d3.select(tip)
-            .attr("style", "display:none;")
-            .selectAll("g")
-            .remove();
+        d3.select(tip).attr("style", "display:none;").selectAll("g").remove();
         if (utils.isFunction(fn)) {
             fn();
         }
@@ -70,10 +58,7 @@ const renderPopup = (fn) => {
 const removeOldPopup = () => {
     // Remove old popup
     d3.select("#overlay").remove();
-    d3.select("#tooltip")
-        .attr("style", "")
-        .selectAll("g")
-        .remove();
+    d3.select("#tooltip").attr("style", "").selectAll("g").remove();
 };
 export const loadPopup = (onCloseCB, key, index, value) => {
     removeOldPopup();

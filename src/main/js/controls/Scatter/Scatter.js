@@ -64,11 +64,7 @@ const calculateValuesRange = (values, axis = constants.Y_AXIS) => {
  * @returns {object} ScatterConfig config object containing consumer data
  */
 const loadInput = (inputJSON) =>
-    new ScatterConfig()
-        .setInput(inputJSON)
-        .validateInput()
-        .clone()
-        .getConfig();
+    new ScatterConfig().setInput(inputJSON).validateInput().clone().getConfig();
 
 /**
  * A Scatter graph is a graph used to represent a collection of data

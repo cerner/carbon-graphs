@@ -65,11 +65,7 @@ const calculateValuesRange = (values, axis = constants.Y_AXIS) => {
  * @returns {object} LineConfig config object containing consumer data
  */
 const loadInput = (inputJSON) =>
-    new LineConfig()
-        .setInput(inputJSON)
-        .validateInput()
-        .clone()
-        .getConfig();
+    new LineConfig().setInput(inputJSON).validateInput().clone().getConfig();
 
 /**
  * A Line graph is a graph used to represent a collection of data

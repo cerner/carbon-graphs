@@ -91,14 +91,16 @@ const createAxisInfoRowLabel = (
             .classed(styles.axisInfoRowIcon, true)
             .attr(
                 "transform",
-                `translate(${-(
-                    getAxisLabelWidth(
-                        getTextLabel(
-                            textLabelList.value.label.display,
-                            textLabelList.value.characterCount
-                        )
-                    ) / 2
-                ) - constants.TEXT_LABEL_ICON_WIDTH_PADDING},
+                `translate(${
+                    -(
+                        getAxisLabelWidth(
+                            getTextLabel(
+                                textLabelList.value.label.display,
+                                textLabelList.value.characterCount
+                            )
+                        ) / 2
+                    ) - constants.TEXT_LABEL_ICON_WIDTH_PADDING
+                },
                 ${-constants.TEXT_LABEL_ICON_HEIGHT_PADDING})`
             );
         addTextLabelIcon(axisInfoRow, config, textLabelList, uniqueKey);
