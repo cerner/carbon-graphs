@@ -425,6 +425,18 @@ class Graph extends Construct {
                 updateAxesDomain(this.config, this.content[position]); // This is done for y axis. 
             }
         }
+        if (
+            utils.notEmpty(this.config.dateline) &&
+            this.config.axis.x.type === AXIS_TYPE.TIME_SERIES
+        ) {
+            redrawDatelineContent(this.scale, this.config, this.svg);
+        }
+        if (
+            utils.notEmpty(this.config.eventline) &&
+            this.config.axis.x.type === AXIS_TYPE.TIME_SERIES
+        ) {
+            redrawEventlineContent(this.scale, this.config, this.svg);
+        }
         this.resize();
         return this;
     }
