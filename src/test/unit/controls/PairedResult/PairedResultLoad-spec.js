@@ -2007,5 +2007,36 @@ describe("Paired Result - Load", () => {
                     .getAttribute("aria-describedby")
             ).toEqual(pairPrimary.key);
         });
+        describe("When multiple canvases with paired results present", () => {
+            it("Shoud not affect paired results in other canvases", () => {
+                const inputPrimary = getInput(valuesDefault);
+                const primaryGraph = new Graph(getAxes(axisDefault));
+                primaryGraph.loadContent(new PairedResult(inputPrimary));
+                const secondaryGraph = new Graph(getAxes(axisDefault));
+                secondaryGraph.loadContent(new PairedResult(inputSecondary));
+                const legendItem = document.querySelector(
+                    `.${styles.legendItem}[aria-describedby="${inputPrimary.key}_high"]`
+                );
+                triggerEvent(legendItem, "click");
+                const primaryGraphPRElement = pairedResultGraphContainer.querySelector(
+                    `.${styles.pairedBoxGroup}[aria-describedby="${inputPrimary.key}"]`
+                );
+                const secondaryGraphPRElement = pairedResultGraphContainer.querySelector(
+                    `.${styles.pairedBoxGroup}[aria-describedby="${inputSecondary.key}"]`
+                );
+                expect(
+                    fetchElementByClass(
+                        primaryGraphPRElement,
+                        styles.pairedLine
+                    ).getAttribute("aria-hidden")
+                ).toBe("true");
+                expect(
+                    fetchElementByClass(
+                        secondaryGraphPRElement,
+                        styles.pairedLine
+                    ).getAttribute("aria-hidden")
+                ).toBe("false");
+            });
+        });
     });
 });
