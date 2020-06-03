@@ -3,7 +3,7 @@ import { Shape } from "../../../core";
 import { getDefaultSVGProps } from "../../../core/Shape";
 import { getXAxisXPosition } from "../../../helpers/axis";
 import constants, { SHAPES } from "../../../helpers/constants";
-import { getSVGObject } from "../../../helpers/shapeSVG";
+import { getSVGObjectForEvent, getSVGObject } from "../../../helpers/shapeSVG";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 import { getXAxisYPosition } from "./creationHelpers";
@@ -65,6 +65,48 @@ export const renderSelectionPath = (scale, config, path, dataPoint, index) =>
     path.append(() =>
         new Shape(
             getSVGObject(SHAPES.CIRCLE, constants.DEFAULT_PLOT_SELECTION_SCALE)
+        ).getShapeElement(
+            getDefaultSVGProps({
+                svgClassNames: styles.dataPointSelection,
+                svgStyles: ``,
+                transformFn: transformPoint(scale, config)(dataPoint),
+                onClickFn() {
+                    dataPointActionHandler(dataPoint, index, this);
+                },
+                a11yAttributes: {
+                    "aria-hidden": true,
+                    "aria-describedby": dataPoint.key,
+                    "aria-disabled": !utils.isFunction(dataPoint.onClick)
+                }
+            })
+        )
+    );
+
+/**
+ * Renders the circle svg element for event which shows up when clicked on the data point.
+ * It is hidden by default and toggled visible onClick.
+ *
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {SVGElement} path - svg circle element
+ * @param {object} dataPoint - data point properties such as shape, color and onClick callback function
+ * @param {number} index - data point index
+ * @returns {object} - d3 selection object
+ */
+export const renderSelectionPathForEvents = (
+    scale,
+    config,
+    path,
+    dataPoint,
+    index
+) =>
+    path.append(() =>
+        new Shape(
+            getSVGObjectForEvent(
+                SHAPES.CIRCLE,
+                dataPoint.shape.options,
+                constants.DEFAULT_PLOT_SELECTION_SCALE_FOR_EVENTS
+            )
         ).getShapeElement(
             getDefaultSVGProps({
                 svgClassNames: styles.dataPointSelection,
