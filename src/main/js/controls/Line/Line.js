@@ -12,7 +12,8 @@ import {
     hideAllRegions,
     removeRegion,
     translateRegion,
-    areRegionsIdentical
+    areRegionsIdentical,
+    createValueRegion
 } from "../../helpers/region";
 import styles from "../../helpers/styles";
 import utils from "../../helpers/utils";
@@ -106,7 +107,17 @@ class Line extends GraphContent {
     load(graph) {
         this.dataTarget = processDataPoints(graph.config, this.config);
         draw(graph.scale, graph.config, graph.svg, this.dataTarget);
-        if (utils.notEmpty(this.dataTarget.regions)) {
+        if (!utils.isEmptyArray(this.dataTarget.valueRegionSubset)) {
+            createValueRegion(
+                graph.scale,
+                graph.config,
+                graph.svg.select(`.${styles.regionGroup}`),
+                this.dataTarget.valueRegionSubset,
+                `region_${this.dataTarget.key}`,
+                this.config.yAxis,
+                this.dataTarget.interpolationType
+            );
+        } else if (utils.notEmpty(this.dataTarget.regions)) {
             createRegion(
                 graph.scale,
                 graph.config,
@@ -162,23 +173,33 @@ class Line extends GraphContent {
      * @inheritdoc
      */
     resize(graph) {
-        if (utils.notEmpty(this.dataTarget.regions)) {
+        if (
+            utils.notEmpty(this.dataTarget.regions) ||
+            !utils.isEmptyArray(this.dataTarget.valueRegionSubset)
+        ) {
             if (graph.content.length > 1 && !graph.config.shouldHideAllRegion) {
                 if (areRegionsIdentical(graph.svg)) {
                     graph.config.shouldHideAllRegion = false;
                 } else {
-                    hideAllRegions(graph.svg);
                     graph.config.shouldHideAllRegion = true;
                 }
             }
         } else {
-            hideAllRegions(graph.svg);
             graph.config.shouldHideAllRegion = true;
+        }
+        if (graph.config.shouldHideAllRegion) {
+            hideAllRegions(graph.svg);
         }
         translateRegion(
             graph.scale,
             graph.config,
-            graph.svg.select(`.${styles.regionGroup}`)
+            graph.svg.select(
+                `.${styles.regionGroup}`,
+                this.dataTarget.valueRegionSubset
+            ),
+            this.dataTarget.yAxis,
+            !utils.isEmptyArray(this.dataTarget.valueRegionSubset),
+            this.dataTarget.interpolationType
         );
         translateLineGraph(graph.scale, graph.svg, graph.config);
         return this;

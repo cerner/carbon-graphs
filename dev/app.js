@@ -95,7 +95,8 @@ import {
     renderLineGraphAndLegendPaddingReduced,
     renderSuppressLegend,
     renderLineWithSuppressedTrailingZeros,
-    renderLineLabelTruncation
+    renderLineLabelTruncation,
+    renderLineValueRegion
 } from "./examples/controls/line";
 import {
     renderMultiPairedResultRegion,
@@ -121,7 +122,8 @@ import {
     renderPairedResultPanningWithDynamicData,
     renderPairedResultTimeseriesEventline,
     renderPairedResultWithLegendOptions,
-    renderPairedResultGraphAndLegendPaddingReduced
+    renderPairedResultGraphAndLegendPaddingReduced,
+    renderPairedResultValueRegion
 } from "./examples/controls/pairedResult";
 import {
     renderPieLegendTo,
@@ -135,7 +137,10 @@ import {
     renderShapesSimpleLight,
     renderCriticalityShapesLight
 } from "./examples/controls/shapes";
-import { renderSplineLine } from "./examples/controls/spline";
+import {
+    renderSplineLine,
+    renderSplineLineRegion
+} from "./examples/controls/spline";
 import {
     renderTimeline,
     renderTimelineCustomContainerPadding,
@@ -935,6 +940,11 @@ renderSiteApp(
                             pathname: "/regions/line/no-upper-bound",
                             content: renderLineRegionNoUpper,
                             title: "No Upper Bound"
+                        },
+                        {
+                            pathname: "/regions/line/value-level-region",
+                            content: renderLineValueRegion,
+                            title: "Value Region"
                         }
                     ]
                 },
@@ -961,6 +971,22 @@ renderSiteApp(
                                 "/regions/paired-result/multiple-paired-result",
                             content: renderMultiPairedResultRegion,
                             title: "Multiple Paired Result"
+                        },
+                        {
+                            pathname:
+                                "/regions/paired-result/value-level-region",
+                            content: renderPairedResultValueRegion,
+                            title: "Value Region"
+                        }
+                    ]
+                },
+                {
+                    pathname: "/regions/spline",
+                    children: [
+                        {
+                            pathname: "/regions/spline/valueRegion",
+                            content: renderSplineLineRegion,
+                            title: "Value Region"
                         }
                     ]
                 },

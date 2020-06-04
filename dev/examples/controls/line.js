@@ -31,7 +31,7 @@ const regions = [
 export const renderLine = (id) => {
     const lineDefault = Carbon.api.graph(getDemoData(`#${id}`, "LINE_DEFAULT"));
     lineDefault.loadContent(
-        Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[0])
+        Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[2])
     );
     return lineDefault;
 };
@@ -354,6 +354,9 @@ export const renderMultiLineRegion = (id) => {
     lineDefault.loadContent(
         Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[4])
     );
+    lineDefault.loadContent(
+        Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[3])
+    );
     return lineDefault;
 };
 export const renderMultiLineIdenticalDatasetRegion = (id) => {
@@ -389,6 +392,15 @@ export const renderRegionLine = (id) => {
         }
     ];
     lineDefault.loadContent(Carbon.api.line(data));
+    return lineDefault;
+};
+export const renderLineValueRegion = (id) => {
+    const lineDefault = Carbon.api.graph(
+        getDemoData(`#${id}`, "LINE_TIMESERIES")
+    );
+    lineDefault.loadContent(
+        Carbon.api.line(getDemoData(`#${id}`, "LINE_TIMESERIES").data[3])
+    );
     return lineDefault;
 };
 export const renderLineBlankDataPoint = (id) => {

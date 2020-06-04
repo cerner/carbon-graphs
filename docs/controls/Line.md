@@ -222,10 +222,13 @@ Each line can have a legendOptions object in [Values](#values) level.
 | Property Name | Expected | Default | Description                                                |
 | ------------- | -------- | ------- | ---------------------------------------------------------- |
 | isCritical    | boolean  | `false` | Shows an indicator surrounding the data point when enabled |
+| region        | object   | {}      | Refer [Regions](#regions)                                  |
 
 ### Regions
 
-Each data-set can have 1 or more regions. `start` and `end` is necessary for rendering a horizontal area.
+Each data-set can have 1 or more regions.
+Each value can have a region object.
+`start` and `end` is necessary for rendering a horizontal area.
 
 #### Required
 

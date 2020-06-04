@@ -457,6 +457,15 @@ export const renderPairedResultRegionSimple = (id) => {
     pairedDefault.loadContent(Carbon.api.pairedResult(data));
     return pairedDefault;
 };
+export const renderPairedResultValueRegion = (id) => {
+    const pairedDefault = Carbon.api.graph(
+        getDemoData(`#${id}`, "PAIRED_DEFAULT")
+    );
+    pairedDefault.loadContent(
+        Carbon.api.pairedResult(getDemoData(`#${id}`, "PAIRED_DEFAULT").data[2])
+    );
+    return pairedDefault;
+};
 export const renderMultiPairedResultRegion = (id) => {
     const axisData = utils.deepClone(
         getDemoData(`#${id}`, "PAIRED_TIMESERIES")

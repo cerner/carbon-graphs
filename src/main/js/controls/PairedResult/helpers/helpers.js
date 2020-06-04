@@ -23,7 +23,8 @@ import {
     isSingleTargetDisplayed,
     regionLegendHoverHandler,
     showHideRegion,
-    areRegionsIdentical
+    areRegionsIdentical,
+    createValueRegion
 } from "../../../helpers/region";
 import { getSVGObject } from "../../../helpers/shapeSVG";
 import styles from "../../../helpers/styles";
@@ -213,6 +214,25 @@ const processDataPoints = (graphConfig, dataTarget, reflow=false) => {
         }
         return parseTypedValue(x, type);
     };
+    const valueRegions = {
+        high: [],
+        low: [],
+        mid: []
+    };
+    const regionObject = {
+        high: {
+            color: undefined,
+            values: []
+        },
+        low: {
+            color: undefined,
+            values: []
+        },
+        mid: {
+            color: undefined,
+            values: []
+        }
+    };
     // Each value is a pair. Construct enough information so that you can
     // construct a box. Each box would need 3 icons so we need 3 (max) data sets
     dataTarget.internalValuesSubset = dataTarget.values.map((value) => {
@@ -237,6 +257,38 @@ const processDataPoints = (graphConfig, dataTarget, reflow=false) => {
                 ) {
                     graphConfig.shownTargets.push(subset[type].key);
                 }
+
+                // Generate value regions subset, by extracting the region object from each value
+                if (
+                    !utils.isEmpty(currentValue.region) &&
+                    !utils.isEmpty(currentValue.region.start) &&
+                    !utils.isEmpty(currentValue.region.end)
+                ) {
+                    // If the color is different, then move to new region set.
+                    if (
+                        regionObject[type].color !== currentValue.region.color
+                    ) {
+                        regionObject[type].values.length > 0 &&
+                            valueRegions[type].push(regionObject[type]);
+
+                        regionObject[type] = {
+                            color: currentValue.region.color,
+                            values: []
+                        };
+                    }
+                    regionObject[type].color = currentValue.region.color;
+                    regionObject[type].values.push({
+                        x: getXDataValues(currentValue.x),
+                        start: currentValue.region.start,
+                        end: currentValue.region.end
+                    });
+                } else if (regionObject[type].values.length > 0) {
+                    valueRegions[type].push(regionObject[type]);
+                    regionObject[type] = {
+                        color: undefined,
+                        values: []
+                    };
+                }
             }
         });
         subset.yAxis = dataTarget.yAxis || constants.Y_AXIS;
@@ -244,6 +296,38 @@ const processDataPoints = (graphConfig, dataTarget, reflow=false) => {
         subset.key = dataTarget.key;
         return subset;
     });
+    const valueRegionSubset = {
+        high: [],
+        low: [],
+        mid: []
+    };
+    let isValueRegionExist = false;
+    // Check if the value region exist and also
+    // Add start and end of a valueRegion to new valueRegion,
+    // This is to cover the start and end data value with region.
+    iterateOnPairType((type) => {
+        if (regionObject[type].values.length > 0) {
+            valueRegions[type].push(regionObject[type]);
+        }
+        valueRegions[type].forEach((region) => {
+            isValueRegionExist = true;
+            valueRegionSubset[type].push(region);
+            if (region.values.length > 1) {
+                valueRegionSubset[type].push({
+                    color: region.color,
+                    values: region.values.slice(0, 1)
+                });
+
+                valueRegionSubset[type].push({
+                    color: region.color,
+                    values: region.values.slice(region.values.length - 1)
+                });
+            }
+        });
+    });
+    dataTarget.valueRegionSubset = isValueRegionExist
+        ? valueRegionSubset
+        : undefined;
     dataTarget.legendOptions = getDefaultLegendOptions(graphConfig, dataTarget);
     return dataTarget;
 };
@@ -694,7 +778,19 @@ const renderRegion = (scale, config, canvasSVG, dataTarget) => {
         .attr("aria-describedby", `region_${dataTarget.key}`);
     regionPairGroup.call(() => {
         iterateOnPairType((type) => {
-            if (dataTarget.regions[type]) {
+            if (
+                dataTarget.valueRegionSubset &&
+                dataTarget.valueRegionSubset[type]
+            ) {
+                createValueRegion(
+                    scale,
+                    config,
+                    regionPairGroup,
+                    dataTarget.valueRegionSubset[type],
+                    `region_${dataTarget.key}_${type}`,
+                    dataTarget.yAxis
+                );
+            } else if (dataTarget.regions && dataTarget.regions[type]) {
                 if (
                     !utils.isArray(dataTarget.regions[type]) ||
                     utils.isUndefined(dataTarget.regions[type])
