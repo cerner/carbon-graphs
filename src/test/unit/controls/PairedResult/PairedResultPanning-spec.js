@@ -16,7 +16,8 @@ import {
     axisTimeSeries,
     getAxes,
     getInput,
-    valuesTimeSeries
+    valuesTimeSeries,
+    fetchAllElementsByClass
 } from "./helpers";
 
 describe("PairedResult", () => {
@@ -73,6 +74,70 @@ describe("PairedResult", () => {
                 expect(toNumber(translate[1], 10)).toBeCloseTo(PADDING_BOTTOM);
                 done();
             });
+        });
+        it("Dynamic Data is updated correctly when key matches", () => {
+            const panData = {
+                key: 'uid_1',
+                values: [
+                    {
+                        high: {
+                            x: "2016-09-17T12:00:00Z",
+                            y: 110
+                        },
+                        mid: {
+                            x: "2016-09-18T12:00:00Z",
+                            y: 70
+                        },
+                        low: {
+                            x: "2016-09-19T02:00:00Z",
+                            y: 30
+                        }
+                    }
+                ]
+            };
+            let pairedContent = fetchAllElementsByClass(
+                pairedResultGraphContainer,
+                styles.pairedBox
+            );
+            expect(pairedContent.length).toEqual(2);
+            graphDefault.reflow(panData);
+            pairedContent = fetchAllElementsByClass(
+                pairedResultGraphContainer,
+                styles.pairedBox
+            );
+            expect(pairedContent.length).toEqual(1);
+        });
+        it("Dynamic Data is not updated when key does not match", () => {
+            const panData = {
+                key: 'uid_2',
+                values: [
+                    {
+                        high: {
+                            x: "2016-09-17T12:00:00Z",
+                            y: 110
+                        },
+                        mid: {
+                            x: "2016-09-18T12:00:00Z",
+                            y: 70
+                        },
+                        low: {
+                            x: "2016-09-19T02:00:00Z",
+                            y: 30
+                        }
+                    }
+                ]
+            };
+            let pairedContent = fetchAllElementsByClass(
+                pairedResultGraphContainer,
+                styles.pairedBox
+            );
+            expect(pairedContent.length).toEqual(2);
+            graphDefault.reflow(panData);
+            pairedContent = fetchAllElementsByClass(
+                pairedResultGraphContainer,
+                styles.pairedBox
+            );
+            expect(pairedContent.length).toEqual(2);
         });
     });
     describe("When pan is disabled", () => {
