@@ -82,11 +82,7 @@ const setCanvasHeight = (config) =>
  * @returns {object} config object containing consumer data
  */
 const loadInput = (inputJSON) =>
-    new GanttConfig()
-        .setInput(inputJSON)
-        .validateInput()
-        .clone()
-        .getConfig();
+    new GanttConfig().setInput(inputJSON).validateInput().clone().getConfig();
 /**
  * Executes the before init process checklist, needs to be called by parent control.
  *  Binds the chart id provided in the input JSON to graph container.

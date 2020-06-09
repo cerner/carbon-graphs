@@ -110,10 +110,10 @@ const createPieContentGroup = (
         .attr("aria-describedby", contentConfig.key)
         .attr("aria-disabled", !utils.isFunction(dataTarget.onClick))
         .attr("aria-selected", false)
-        .on("click", function(value, index) {
+        .on("click", function (value, index) {
             sliceClickActionHandler(legendPath, value, index, this);
         })
-        .on("mouseenter", function(value) {
+        .on("mouseenter", function (value) {
             sliceHoverActionHandler(
                 legendPath,
                 this,
@@ -121,7 +121,7 @@ const createPieContentGroup = (
                 constants.HOVER_EVENT.MOUSE_ENTER
             );
         })
-        .on("mouseleave", function(value) {
+        .on("mouseleave", function (value) {
             sliceHoverActionHandler(
                 legendPath,
                 this,
@@ -158,7 +158,7 @@ const getAllSliceNodes = (target) =>
  * @returns {Array} d3.selection objects of slices with aria-selected toggled
  */
 const enforceSliceSelection = (nodes, selectedKey) =>
-    nodes.each(function() {
+    nodes.each(function () {
         const node = d3.select(this);
         node.attr(
             "aria-selected",
@@ -179,7 +179,7 @@ const enforceSliceBlur = (legendPath, nodes, selectedKey) => {
     legendPath
         .select(`.${styles.pieLegendItem}[aria-describedby="${selectedKey}"]`)
         .classed(styles.pieLegendItemSliceHover, true);
-    nodes.each(function() {
+    nodes.each(function () {
         const node = d3.select(this);
         node.classed(
             styles.blur,
@@ -195,7 +195,7 @@ const enforceSliceBlur = (legendPath, nodes, selectedKey) => {
  * @returns {Array} d3.selection objects of slices with aria-selected set to false
  */
 const removeSliceSelection = (nodes) =>
-    nodes.each(function() {
+    nodes.each(function () {
         const node = d3.select(this);
         node.attr("aria-selected", false);
     });
@@ -211,7 +211,7 @@ const removeSliceBlur = (legendPath, nodes) => {
     legendPath
         .selectAll(`.${styles.pieLegendItem}`)
         .classed(styles.pieLegendItemSliceHover, false);
-    nodes.each(function() {
+    nodes.each(function () {
         const node = d3.select(this);
         node.classed(styles.blur, false);
     });

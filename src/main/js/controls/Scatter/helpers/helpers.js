@@ -61,7 +61,7 @@ const transformPoint = (scale) => (value) => (scaleFactor) => {
 const translatePoints = (scale, canvasSVG, cls, config) =>
     canvasSVG
         .selectAll(`.${styles.scatterGraphContent} .${cls}`)
-        .each(function(d) {
+        .each(function (d) {
             const pointSVG = d3.select(this);
             pointSVG
                 .select("g")
@@ -69,7 +69,7 @@ const translatePoints = (scale, canvasSVG, cls, config) =>
                 .call(
                     constants.d3Transition(config.settingsDictionary.transition)
                 )
-                .attr("transform", function() {
+                .attr("transform", function () {
                     return transformPoint(scale)(d)(getTransformScale(this));
                 });
         });
@@ -306,7 +306,7 @@ const drawDataPoints = (scale, config, pointGroupPath) => {
     pointGroupPath
         .append("g")
         .classed(styles.pointGroup, true)
-        .each(function(d, i) {
+        .each(function (d, i) {
             const dataPointSVG = d3.select(this);
             renderSelectionPath(dataPointSVG, d, i);
             if (d.isCritical) {

@@ -103,11 +103,7 @@ const draw = (control, scale, config, timelineGraphContentSVG, dataTarget) => {
         .selectAll(`.${styles.point}`)
         .data(dataTarget.internalValuesSubset);
     createPoints(scale, config, pointPath.enter());
-    pointPath
-        .exit()
-        .transition()
-        .call(constants.d3Transition)
-        .remove();
+    pointPath.exit().transition().call(constants.d3Transition).remove();
 };
 /**
  * Data point sets can be loaded using this function.

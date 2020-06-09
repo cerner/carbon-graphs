@@ -170,7 +170,7 @@ const translateAllLabelShapeItem = (shapeContainerPath, config) =>
         .selectAll("svg")
         .transition()
         .call(constants.d3Transition(config.settingsDictionary.transition))
-        .each(function(data, index) {
+        .each(function (data, index) {
             d3.select(this).attr(
                 "x",
                 () => constants.BASE_LABEL_ICON_SPACING * index

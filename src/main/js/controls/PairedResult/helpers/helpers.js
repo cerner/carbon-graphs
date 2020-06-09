@@ -134,7 +134,7 @@ const translatePoints = (scale, canvasSVG, config) =>
                     type
                 )}`
             )
-            .each(function(d) {
+            .each(function (d) {
                 const pairedPointSVG = d3.select(this);
                 pairedPointSVG
                     .select("g")
@@ -144,7 +144,7 @@ const translatePoints = (scale, canvasSVG, config) =>
                             config.settingsDictionary.transition
                         )
                     )
-                    .attr("transform", function() {
+                    .attr("transform", function () {
                         return transformPoint(scale, type)(d)(
                             getTransformScale(this)
                         );
@@ -269,7 +269,7 @@ const getDataPointValues = (target) => target.internalValuesSubset;
  * @returns {object} - d3 append object
  */
 const drawLine = (scale, config, boxPath) =>
-    boxPath.each(function(value, index) {
+    boxPath.each(function (value, index) {
         const shouldCreateLine = (d) =>
             d.high &&
             d.low &&
@@ -283,7 +283,7 @@ const drawLine = (scale, config, boxPath) =>
             .attr("aria-hidden", (d) => !shouldCreateLine(d))
             .attr("aria-disabled", !utils.isFunction(value.onClick))
             .attr("d", value.high && value.low ? createLine(scale, value) : "")
-            .on("click", function() {
+            .on("click", function () {
                 dataPointActionHandler(config, value, index, this.parentNode);
             });
     });
@@ -327,7 +327,7 @@ const drawPoints = (scale, config, canvasSVG) => {
                 })
             )
         );
-    canvasSVG.each(function(value, index) {
+    canvasSVG.each(function (value, index) {
         const boxPath = d3.select(this);
         iterateOnPairType((type) => {
             if (utils.isDefined(getValue(value, type))) {
@@ -361,7 +361,7 @@ const drawPoints = (scale, config, canvasSVG) => {
  * @returns {object} - d3 append object
  */
 const showLine = (config, boxPath) =>
-    boxPath.each(function() {
+    boxPath.each(function () {
         const shouldCreateLine = (d) =>
             d.high &&
             d.low &&
@@ -573,8 +573,21 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
     canvasSVG
         .selectAll(`.${styles.pairedPoint}[aria-describedby="${item.key}"]`)
         .attr("aria-hidden", legendSelected);
-    const boxPath = d3.selectAll(`.${styles.pairedBox}`);
-    showLine(config, boxPath);
+    /*
+    Select only those .carbon-data-pair elements that belong to the particular canvas for which a paired result legend item was clicked
+    and  pass them to showLine() method.
+    This ensures that when there are multiple canvases with paired results in each canvas,
+    selecting a paired result legend item in one canvas does not affect paired results in other canvases.
+    */
+    const pairedBoxGroupClipPath = `url(#${config.clipPathId})`;
+    const pairedBoxGroup = d3.selectAll(`.${styles.pairedBoxGroup}`);
+    pairedBoxGroup.each(function () {
+        const clipPath = d3.select(this).attr("clip-path");
+        if (clipPath === pairedBoxGroupClipPath) {
+            const boxPath = d3.select(this).selectAll(`.${styles.pairedBox}`);
+            showLine(config, boxPath);
+        }
+    });
     window.requestAnimationFrame(
         onAnimationHandler(graphContext, config, canvasSVG, item)
     );

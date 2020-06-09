@@ -97,7 +97,7 @@ const hasMatchingTrackLabel = (control, display) =>
 const addTrackLabelEventHandler = (canvasSVG, labelObj) =>
     canvasSVG
         .selectAll(`.${styles.axisYTrackLabel} .tick text`)
-        .each(function(displayVal) {
+        .each(function (displayVal) {
             if (
                 !displayVal ||
                 !utils.isFunction(labelObj.onClick) ||

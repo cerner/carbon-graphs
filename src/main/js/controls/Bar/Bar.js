@@ -59,11 +59,7 @@ const calculateValuesRange = (values, axis = constants.Y_AXIS) => {
  * @returns {object} BarConfig config object containing consumer data
  */
 const loadInput = (inputJSON) =>
-    new BarConfig()
-        .setInput(inputJSON)
-        .validateInput()
-        .clone()
-        .getConfig();
+    new BarConfig().setInput(inputJSON).validateInput().clone().getConfig();
 /**
  * Initializes the necessary Bar constructor objects
  *
@@ -272,26 +268,22 @@ class Bar extends GraphContent {
                                 .select(`[class="${styles.currentBarsGroup}"]`)
                                 .data([this.dataTarget]); // comparing new data to old data and creating enter and exit states.
         const bars = currentBarsPath
+                        .selectAll(`.${styles.bar}`)
+                        .data(this.dataTarget.internalValuesSubset); // Comparing to get old bars to be removed
+        bars.exit().remove(); // Removing old bars
+        const barsContent = currentBarsPath
                     .selectAll(`.${styles.bar} > rect`)
                     .data(this.dataTarget.internalValuesSubset); // comparing new data to old data and creating enter and exit states.
-        drawDataBars( // Passing the enter state to be drawn
+        drawDataBars( // Passing the enter state for Bars to be drawn
             graph.scale,
             this.bandScale,
             graph.config,
             graph.svg,
-            bars.enter(),
+            barsContent.enter(),
             this.dataTarget.regions,
             this.dataTarget.axisInfoRow
-        );
-        bars
-            .exit()
-            .transition()
-            .call(
-                constants.d3Transition(
-                    graph.config.settingsDictionary.transition
-                )
-            )
-            .remove();  // Updating Bars ends here.
+        );  // Updating Bars ends here.
+        this.resize(graph);
         this.valuesRange = calculateValuesRange( // updating valuesRanges for Y axis
             this.config.values,
             this.config.yAxis
