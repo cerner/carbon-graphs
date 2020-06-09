@@ -173,6 +173,7 @@ export default {
     DEFAULT_HEIGHT: 250,
     DEFAULT_PLOT_SCALE: 0.275,
     DEFAULT_PLOT_SELECTION_SCALE: { posX: 1.95, posY: 1.95, scale: 2 },
+    DEFAULT_PLOT_SELECTION_SCALE_FOR_EVENTS: { posX: 9, posY: 7, scale: 1.3 },
     DEFAULT_TIMELINE_PLOT_SELECTION_SCALE: { posX: 2, posY: 2, scale: 2.2 },
     DEFAULT_TIMELINE_SCALE: { posX: 1.15, posY: 1.15, scale: 1.25 },
     DEFAULT_TIMELINE_TICK_LENGTH: 12,
