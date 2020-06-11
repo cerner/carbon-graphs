@@ -1,0 +1,16 @@
+classDiagram
+    
+    GraphContent <|-- Bar
+    GraphContent <|-- Bubble
+    GraphContent <|-- Gantt
+    GraphContent <|-- Line
+    GraphContent <|-- PairedResult
+    GraphContent <|-- Pie
+    GraphContent <|-- Scatter
+    GraphContent <|-- Timeline
+
+    GraphContent : +load(graph)
+    GraphContent : +unload(graph)
+    GraphContent : +resize(graph)
+    GraphContent : +redraw(graph)
+    
