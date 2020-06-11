@@ -164,6 +164,7 @@ const createAxisReferenceLine = (axis, scale, config, canvasSVG) => {
             .classed(styles.axisY2, true);
     }
 };
+
 /**
  * Prepares X,Y,Y2 and an optional axis info row (label row for Bar graphs) Axes according to their scale and available container width and height
  *
@@ -189,27 +190,46 @@ const getAxesScale = (axis, scale, config) => {
         scale.x,
         getAxisInfoOrientation(config.axis.x.orientation)
     );
+
+    // If ticksCount is undefined or greater than TICKS_MAXCOUNT
+    // AND if the Y2 is visible, then utilize a default value for
+    // the ticksCount. This is based on the ranges of the Y & Y2 axes.
+
+    if (
+        (utils.isUndefined(config.ticksCount) ||
+            config.ticksCount > constants.TICKSCOUNT_MAXLIMIT) &&
+        hasY2Axis(config.axis)
+    )
+        config.ticksCount = getAverageTicksCount(
+            config.axis.y.domain.upperLimit - config.axis.y.domain.lowerLimit,
+            config.axis.y2.domain.upperLimit - config.axis.y2.domain.lowerLimit
+        );
+
     axis.y = prepareYAxis(
         scale.y,
-        config.axis.y.ticks.values,
+        config.axis.y.domain,
         config.height,
-        getAxisTickFormat(config.locale, config.axis.y.ticks.format)
+        getAxisTickFormat(config.locale, config.axis.y.ticks.format),
+        config.ticksCount
     );
+
     if (hasY2Axis(config.axis)) {
         axis.y2 = prepareY2Axis(
             scale.y2,
-            config.axis.y2.ticks.values,
+            config.axis.y2.domain,
             config.height,
-            getAxisTickFormat(config.locale, config.axis.y2.ticks.format)
+            getAxisTickFormat(config.locale, config.axis.y2.ticks.format),
+            config.ticksCount
         );
     }
     return axis;
 };
+
 /**
  * Ticks can be formatted by passing the format string via input JSON.
- * * For Empty tick labels consumer would pass format as "" (blank)
- * * For formatting numbers (x,y,y2 axes ticks) use Python specifiers.
- * * Ticks can also be formatted for date time inputs.
+ * For Empty tick labels consumer would pass format as "" (blank)
+ * For formatting numbers (x,y,y2 axes ticks) use Python specifiers.
+ * Ticks can also be formatted for date time inputs.
  *
  * @private
  * @see https://docs.python.org/2/library/string.html#format-specification-mini-language
@@ -233,11 +253,12 @@ const getAxisTickFormat = (locale, format, type = AXIS_TYPE.DEFAULT) => {
     }
     return _locale.format(format);
 };
+
 /**
  * Gets the tick values with correct format.
- * * If there are no tick values provided then null is returned
- * * If the ticks values are in a ISO8601 format then a date object is returned
- * * No processing is done, otherwise
+ * If there are no tick values provided then null is returned
+ * If the ticks values are in a ISO8601 format then a date object is returned
+ * No processing is done, otherwise
  *
  * @private
  * @param {Array} ticks - Array of values that represent the tick values
@@ -249,10 +270,103 @@ const processTickValues = (ticks) => {
     }
     return ticks.map((t) => (utils.isDate(t) ? utils.parseDateTime(t) : t));
 };
+
+/**
+ * Gets the number of ticks on the axis based on the upper and lower limits
+ *
+ * @private
+ * @param {number} range - range of values (upperLimit - lowerLimits)
+ * @returns {number} returns number of ticks for that range, based on a predefined set
+ */
+const getTicksCountFromRange = (range) => {
+    let ticksCount;
+
+    switch (true) {
+        case range <= constants.AXISRANGE_ONE:
+            ticksCount = constants.DEFAULT_TICKSCOUNT - 4;
+            break;
+
+        case range <= constants.AXISRANGE_TWO:
+            ticksCount = constants.DEFAULT_TICKSCOUNT - 3;
+            break;
+
+        case range <= constants.AXISRANGE_THREE:
+            ticksCount = constants.DEFAULT_TICKSCOUNT - 2;
+            break;
+
+        case range <= constants.AXISRANGE_FOUR:
+            ticksCount = constants.DEFAULT_TICKSCOUNT - 1;
+            break;
+
+        default:
+            ticksCount = constants.DEFAULT_TICKSCOUNT;
+    }
+
+    return ticksCount;
+};
+
+/**
+ * Gets average number of ticks to be used based on the Y and Y2 axes
+ * result from getTicksCountFromRange for Y and Y2 axes
+ *
+ * @private
+ * @param {number} rangeY - Y axis range (upperLimit - lowerLimit)
+ * @param {number} rangeY2 - Y2 axis range (upperLimit - lowerLimit)
+ * @returns {number} returns number of ticks to be rendered between the upper limits & lower limits with
+ */
+const getAverageTicksCount = (rangeY, rangeY2) => {
+    const yTicksCount = getTicksCountFromRange(rangeY);
+    const y2TicksCount = getTicksCountFromRange(rangeY2);
+
+    return Math.round((yTicksCount + y2TicksCount) / 2);
+};
+
+/**
+ * Generates an array of tick values for to be used as the
+ * tick labels on the Y & Y2 axis.
+ *
+ * @private
+ * @param {number} lowerLimit - Lower limit of the Y or Y2 Axis
+ * @param {number} upperLimit - Upper limit of the Y or Y2 Axis
+ * @param {number} ticksCount - Number of ticks between the upper and lower limits
+ * @returns {(Array)} returns array of values to be used as tick labels
+ */
+const generateYAxesTickValues = (
+    lowerLimit,
+    upperLimit,
+    ticksCount = constants.DEFAULT_TICKSCOUNT
+) => {
+    ticksCount = Math.abs(ticksCount);
+    const tickValues = [];
+
+    // use the d3,js nice function to round off the upper and lower limits
+    // to multiples of 2, 5 or 10
+    const [newLowerLimit, newUpperLimit] = d3
+        .scaleLinear()
+        .domain([lowerLimit, upperLimit])
+        .nice()
+        .domain();
+
+    tickValues.push(newLowerLimit);
+    tickValues.push(newUpperLimit);
+
+    if (newLowerLimit < 0) {
+        tickValues.push(0);
+    }
+
+    const interval = (newUpperLimit - newLowerLimit) / (ticksCount + 1);
+
+    for (let index = 1; index <= ticksCount; index++) {
+        tickValues.push(newLowerLimit + interval * index);
+    }
+
+    return tickValues;
+};
+
 /**
  * Based on x axis orientation, sets the axis info row orientation.
- * * If x axis orientation is top, axis info row orientation is bottom.
- * * If x axis orientation is bottom, axis info row orientation is top.
+ * If x axis orientation is top, axis info row orientation is bottom.
+ * If x axis orientation is bottom, axis info row orientation is top.
  *
  * @private
  * @param {string} xAxisOrientation - x axis orientation
@@ -336,39 +450,55 @@ const prepareHorizontalAxis = (scale, tickValues, config, orientation) =>
         ),
         orientation
     );
+
 /**
  * Creates the axis using the scale provided for Y Axis using d3 svg axis
  *
  * @private
  * @param {object} scale - d3 scale calculated using domain and range
- * @param {Array} tickValues - Array of values that represent the tick values
+ * @param {number} domain -  d3 domain of the axis
  * @param {number} height - Height of the Y Axis to calculate the number of Y Axis ticks
  * @param {object} format - d3 locale object formatted to represent the tick.
+ * @param {number} ticksCount - Number of ticks between the upper and lower limits
  * @returns {object} d3 object which forms the y-axis scale
  */
-const prepareYAxis = (scale, tickValues, height, format) =>
+const prepareYAxis = (scale, domain, height, format, ticksCount) =>
     d3
         .axisLeft(scale)
         .ticks(height / constants.DEFAULT_Y_AXIS_SPACING)
-        .tickValues(processTickValues(tickValues))
+        .tickValues(
+            generateYAxesTickValues(
+                domain.lowerLimit,
+                domain.upperLimit,
+                ticksCount
+            )
+        )
         .tickFormat(format);
+
 /**
  * Creates the axis using the scale provided for Y2 Axis using d3 svg axis
  *
  * @private
  * @param {object} scale - d3 scale calculated using domain and range
- * @param {Array} tickValues - Array of values that represent the tick values
+ * @param {number} domain - d3 domain of the axis
  * @param {number} height - Height of the Y2 Axis to calculate the number of Y2 Axis ticks
  * @param {object} format - d3 locale object formatted to represent the tick.
+ * @param {number} ticksCount - Number of ticks between the upper and lower limits
  * @returns {object} d3 object which forms the y2-axis scale
  */
-const prepareY2Axis = (scale, tickValues, height, format) =>
+const prepareY2Axis = (scale, domain, height, format, ticksCount) =>
     d3
         .axisRight(scale)
-
         .ticks(height / constants.DEFAULT_Y_AXIS_SPACING)
-        .tickValues(processTickValues(tickValues))
+        .tickValues(
+            generateYAxesTickValues(
+                domain.lowerLimit,
+                domain.upperLimit,
+                ticksCount
+            )
+        )
         .tickFormat(format);
+
 /**
  * Returns the number of degrees the rotation of axis needs to be performed based on axis
  *
@@ -640,6 +770,7 @@ const getAxisLabelWidth = (label, axis) => {
     dummy.remove();
     return width;
 };
+
 /**
  * Dynamically generate the label height for axes
  *
@@ -656,6 +787,7 @@ const getAxisLabelHeight = (label) => {
     dummy.remove();
     return height;
 };
+
 /**
  * Dynamically generate the label width for y axes
  *
@@ -699,6 +831,7 @@ const getY2AxisWidth = (config) => {
         ? getYAxisWidth(constants.Y2_AXIS, config)
         : 20;
 };
+
 /**
  * Checks if X Axis orientation is set to top
  *
@@ -725,6 +858,7 @@ const calculateAxesSize = (config) => {
     config.axisSizes.y2 = getY2AxisWidth(config) + config.padding.right;
     config.axisSizes.x = getXAxisHeight(config);
 };
+
 /**
  * Calculates axes label sizes, specifically:
  *  X Axis Label: Height
@@ -759,6 +893,7 @@ const calculateAxesLabelSize = (config) => {
         }
     }
 };
+
 /**
  * Returns the mid value of the axis domain relative to the lower bound
  *
@@ -774,6 +909,7 @@ const getMidPoint = (config, yAxis) => {
         2;
     return config.axis[yAxis].domain.lowerLimit + axisMidValue;
 };
+
 /**
  * Calculates the lower part of the outlier based on data points.
  * If the content has any data points that are outside the lower and upper bounds set
@@ -806,6 +942,7 @@ const getLowerOutlierStretchFactorList = (config) => {
     }
     return lowerStretchFactors;
 };
+
 /**
  * Calculates the upper part of the outlier based on data points.
  * If the content has any data points that are outside the lower and upper bounds set
@@ -838,6 +975,7 @@ const getUpperOutlierStretchFactorList = (config) => {
     }
     return upperStretchFactors;
 };
+
 /**
  * Determines if the values provided exceed the lower and upper bounds provided in the Y or Y2 axes
  * If the values exceed the bounds then the range and domain are adjusted accordingly.
@@ -858,6 +996,7 @@ const determineOutlierStretchFactor = (config) => {
         )[0]
     };
 };
+
 /**
  * Returns the d3 html element after appending axis label text
  *
@@ -1127,6 +1266,7 @@ export {
     createAxisReferenceLine,
     getAxesDataRange,
     processTickValues,
+    generateYAxesTickValues,
     hasY2Axis,
     translateAxes,
     translateAxisReferenceLine,
@@ -1134,5 +1274,7 @@ export {
     resetD3FontSize,
     calculateVerticalPadding,
     isXAxisOrientationTop,
-    getAxisInfoRowYPosition
+    getAxisInfoRowYPosition,
+    getTicksCountFromRange,
+    getAverageTicksCount
 };

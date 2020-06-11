@@ -3,6 +3,7 @@
 Ticks and Grid lines representing Axes values.
 
 -   [Ticks](#ticks)
+    -   [Overview](#overview)
     -   [JSON Properties](#json-properties)
         -   [Required](#required)
         -   [Optional](#optional)
@@ -11,6 +12,12 @@ Ticks and Grid lines representing Axes values.
             -   [Values example](#values-example)
             -   [Datetime Buckets example](#datetime-buckets-example)
                 -   [Use Case](#use-case)
+
+## Overview
+
+Ticks are labels on the Axes to represent axis values. These values are determined by the upper and lower limits of its axis. If any datapoints on the graph exceed the upper or lower limits, the axis range will adjust accordingly and the tick labels will be updated.
+
+If there is only 1 axis in the graph, the tick intervals are calculated automatically using the d3.js `nice` function. If the Y2 axis is visible, the tick intervals are set based on the range of the Y & Y2 axes. This can be overridden to be custom using the `ticksCount` property in the graph configuration object. Acceptable values for `ticksCount` are `0 - 19`. Invalid values will result in `ticksCount` being ignored and going back to the default behavior.
 
 ## JSON Properties
 
