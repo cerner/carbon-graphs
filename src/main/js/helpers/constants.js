@@ -11,36 +11,49 @@ import * as DEFAULT_SHAPES from "../core/Shape/shapeDefinitions";
  * Consumers can pick a color from this default list
  *
  * @public
- * @property {string} BLACK "#1c1f21"
- * @property {string} BLUE "#007cc3"
- * @property {string} GREEN "#78c346"
- * @property {string} LIGHT_PURPLE "#c985da"
- * @property {string} ORANGE "#ffc20a"
+ * @property {string} BLUE "#176ba0"
+ * @property {string} GREEN "#076e00"
+ * @property {string} ORANGE "#b54900"
+ * @property {string} PINK "#ae0868"
+ * @property {string} PURPLE "#9c19a3"
  * @property {string} YELLOW "#ffc20a"
- * @property {string} GREY "#a7aaab"
- * @property {string} LIGHT_BLUE "#26a2e5"
- * @property {string} LIGHT_GREEN "#a5d784"
- * @property {string} PURPLE "#78288c"
- * @property {string} LIGHT_ORANGE "#ff7d00"
+ * @property {string} LIGHT_BLUE "#008fe0"
+ * @property {string} LIGHT_GREEN "#4b9b1c"
+ * @property {string} LIGHT_ORANGE "#e46511"
+ * @property {string} LIGHT_PINK "#e16092"
+ * @property {string} LIGHT_PURPLE "#bc70c7"
  * @property {string} LIGHT_YELLOW "#ffda6c"
+ * @property {string} BLACK "#1c1f21"
+ * @property {string} GREY "#a7aaab"
+ * @property {string} LAVENDER: "#8374c2"
  * @property {string} WHITE "#ffffff"
  * @enum {{Object: string}}
  */
+
 export const COLORS = {
-    BLACK: "#1c1f21",
-    BLUE: "#007cc3",
-    GREEN: "#78c346",
-    LIGHT_PURPLE: "#c985da",
-    ORANGE: "#ed5e00",
+    // Dark Colors
+    BLUE: "#176ba0",
+    GREEN: "#076e00",
+    ORANGE: "#b54900",
+    PINK: "#ae0868",
+    PURPLE: "#9c19a3",
     YELLOW: "#ffc20a",
-    GREY: "#a7aaab",
-    LIGHT_BLUE: "#26a2e5",
-    LIGHT_GREEN: "#a5d784",
-    PURPLE: "#78288c",
-    LIGHT_ORANGE: "#ff7d00",
+
+    // Light Colors
+    LIGHT_BLUE: "#008fe0",
+    LIGHT_GREEN: "#4b9b1c",
+    LIGHT_ORANGE: "#e46511",
+    LIGHT_PINK: "#e16092",
+    LIGHT_PURPLE: "#bc70c7",
     LIGHT_YELLOW: "#ffda6c",
+
+    // Common Colors
+    BLACK: "#1c1f21",
+    GREY: "#a7aaab",
+    LAVENDER: "#8374c2",
     WHITE: "#ffffff"
 };
+
 /**
  * Consumers can pick a shape from this default list
  *
@@ -214,7 +227,7 @@ export default {
     DEFAULT_REGION_LINE_STROKE_WIDTH: 5,
     DEFAULT_BAR_SELECTION_PADDING: 5,
     DEFAULT_ACTIVITY_BAR_HASH_COLOR: "#d3d4d5",
-    DEFAULT_TASK_BAR_HASH_COLOR: "#007cc3",
+    DEFAULT_TASK_BAR_HASH_COLOR: COLORS.BLUE,
     DEFAULT_BAR_STRIPE_COLOR: "#fff",
     DEFAULT_GANTT_TASK_STRIPE_WIDTH: 4,
     DEFAULT_GANTT_TASK_STRIPE_DISTANCE: 2,

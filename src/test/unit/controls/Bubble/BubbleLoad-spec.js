@@ -220,7 +220,7 @@ describe("Bubble - Load", () => {
             );
             const points = fetchElementByClass(pointsGroup, styles.point);
             const bubbleCircle = fetchElementByTag(points, "circle");
-            expect(bubbleCircle.attributes.fill.value).toEqual("#007cc3");
+            expect(bubbleCircle.attributes.fill.value).toEqual(COLORS.GREEN);
         });
         it("points have correct unique key assigned", () => {
             const pointsGroup = fetchElementByClass(
@@ -785,7 +785,9 @@ describe("Bubble - Load", () => {
             const iconPath = legendItem.querySelector("path");
             expect(iconSVG).not.toBeNull();
             expect(iconSVG.classList).toContain(styles.legendItemIcon);
-            expect(iconSVG.getAttribute("style")).toBe(`fill: ${COLORS.BLUE};`);
+            expect(iconSVG.getAttribute("style")).toBe(
+                `fill: ${COLORS.GREEN};`
+            );
             expect(iconPath).not.toBeNull();
             expect(iconPath.getAttribute("d")).not.toBeNull();
         });

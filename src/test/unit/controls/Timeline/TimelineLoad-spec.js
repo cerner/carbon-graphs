@@ -269,7 +269,7 @@ describe("Timeline - Load", () => {
         it("Points have correct color", () => {
             const points = fetchElementByClass(styles.point);
             expect(points.attributes.getNamedItem("style").value).toBe(
-                "fill: #007cc3;"
+                `fill: ${COLORS.GREEN};`
             );
         });
         it("Points have correct shape", () => {
@@ -536,7 +536,9 @@ describe("Timeline - Load", () => {
             expect(iconPath.getAttribute("d")).toEqual(
                 getShapeForTarget(input).path.d
             );
-            expect(iconSVG.getAttribute("style")).toBe(`fill: ${COLORS.BLUE};`);
+            expect(iconSVG.getAttribute("style")).toBe(
+                `fill: ${COLORS.GREEN};`
+            );
         });
         it("Attaches click event handlers correctly", (done) => {
             const input = getData(valuesJSON, false, false);

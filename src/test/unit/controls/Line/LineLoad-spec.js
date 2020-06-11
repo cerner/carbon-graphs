@@ -221,7 +221,7 @@ describe("Line - Load", () => {
             expect(lineElement.firstChild.tagName).toBe("path");
             expect(
                 lineElement.firstChild.attributes.getNamedItem("style").value
-            ).toBe("stroke: #007cc3; stroke-dasharray: 0;");
+            ).toBe(`stroke: ${COLORS.GREEN}; stroke-dasharray: 0;`);
         });
         it("adds line with correct unique key", () => {
             const lineElement = fetchElementByClass(
@@ -317,7 +317,7 @@ describe("Line - Load", () => {
             );
             const points = fetchElementByClass(pointsGroup, styles.point);
             expect(points.attributes.getNamedItem("style").value).toBe(
-                "fill: #007cc3;"
+                `fill: ${COLORS.GREEN};`
             );
         });
         it("points have correct shape", () => {
@@ -407,7 +407,7 @@ describe("Line - Load", () => {
                 expect(
                     lineElement.firstChild.attributes.getNamedItem("style")
                         .value
-                ).toBe("stroke: #007cc3; stroke-dasharray: 2,2;");
+                ).toBe(`stroke: ${COLORS.GREEN}; stroke-dasharray: 2,2;`);
             });
             it("space seperated values", () => {
                 graphDefault.destroy();
@@ -426,7 +426,7 @@ describe("Line - Load", () => {
                 expect(
                     lineElement.firstChild.attributes.getNamedItem("style")
                         .value
-                ).toBe("stroke: #007cc3; stroke-dasharray: 2 2;");
+                ).toBe(`stroke: ${COLORS.GREEN}; stroke-dasharray: 2 2;`);
             });
             it("just a single value", () => {
                 graphDefault.destroy();
@@ -445,7 +445,7 @@ describe("Line - Load", () => {
                 expect(
                     lineElement.firstChild.attributes.getNamedItem("style")
                         .value
-                ).toBe("stroke: #007cc3; stroke-dasharray: 2;");
+                ).toBe(`stroke: ${COLORS.GREEN}; stroke-dasharray: 2;`);
             });
         });
         it("adds line with correct stroke-dasharray", () => {});
@@ -885,7 +885,9 @@ describe("Line - Load", () => {
             const iconPath = legendItem.querySelector("path");
             expect(iconSVG).not.toBeNull();
             expect(iconSVG.classList).toContain(styles.legendItemIcon);
-            expect(iconSVG.getAttribute("style")).toBe(`fill: ${COLORS.BLUE};`);
+            expect(iconSVG.getAttribute("style")).toBe(
+                `fill: ${COLORS.GREEN};`
+            );
             expect(iconPath).not.toBeNull();
             expect(iconPath.getAttribute("d")).not.toBeNull();
         });

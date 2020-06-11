@@ -236,7 +236,7 @@ describe("Bar - Load lifecycle", () => {
             expect(barElement.firstChild.tagName).toBe("rect");
             expect(
                 barElement.firstChild.attributes.getNamedItem("style").value
-            ).toBe("fill: #007cc3; stroke: #007cc3;");
+            ).toBe(`fill: ${COLORS.GREEN}; stroke: ${COLORS.GREEN};`);
         });
         it("adds bar content with correct unique key", () => {
             const barElement = fetchElementByClass(
@@ -822,7 +822,7 @@ describe("Bar - Load lifecycle", () => {
             const iconPath = legendItem.querySelector("path");
             expect(iconSVG).not.toBeNull();
             expect(iconSVG.classList).toContain(styles.legendItemIcon);
-            expect(iconSVG.getAttribute("style")).toContain(COLORS.BLUE);
+            expect(iconSVG.getAttribute("style")).toContain(COLORS.GREEN);
             expect(iconPath).not.toBeNull();
             expect(iconPath.getAttribute("d")).not.toBeNull();
         });

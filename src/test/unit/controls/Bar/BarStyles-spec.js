@@ -3,6 +3,7 @@ import Bar from "../../../../main/js/controls/Bar/Bar";
 import Graph from "../../../../main/js/controls/Graph/Graph";
 import styles from "../../../../main/js/helpers/styles";
 import utils from "../../../../main/js/helpers/utils";
+import { COLORS } from "../../../../main/js/helpers/constants";
 import {
     axisDefault,
     fetchAllElementsByClass,
@@ -52,7 +53,7 @@ describe("Bar Styles", () => {
                 expect(barContentContainer).not.toBeNull();
                 expect(barContentContainer[0].nodeName).toBe("rect");
                 expect(barContentContainer[0].getAttribute("style")).toContain(
-                    "fill: #007cc3;"
+                    `fill: ${COLORS.GREEN};`
                 );
 
                 expect(barContentContainer[1].nodeName).toBe("rect");
