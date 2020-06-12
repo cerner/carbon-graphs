@@ -1,0 +1,12 @@
+sequenceDiagram
+    carbon.js-->>core.js: import { Shape } from "./core";
+    carbon.js-->>api.js: import api from "./controls";
+    api.js-->>Bar: new Bar()
+    api.js-->>Gantt: new Gantt
+    api.js-->>Graph: new Graph
+    api.js-->>Line: new Line
+    api.js-->>PairedResult: new PairedResult
+    api.js-->>Pie: new Pie
+    api.js-->>Timeline: new Timeline
+    api.js-->>Scatter: new Scatter
+    api.js-->>Bubble: new Bubble
