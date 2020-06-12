@@ -154,3 +154,18 @@ export const renderScatterWithPanning = (id) => {
     });
     return graph;
 };
+export const renderScatterGraphAndLegendPaddingReduced = (id) => {
+    const axisData = utils.deepClone(getDemoData(`#${id}`, "LINE_DEFAULT"));
+    axisData.removeContainerPadding = true;
+    axisData.legendPadding = {
+        left: 2.5,
+        right: 2.5,
+        top: 2.5,
+        bottom: 2.5
+    };
+    const scatterDefault = Carbon.api.graph(axisData);
+    scatterDefault.loadContent(
+        Carbon.api.scatter(getDemoData(`#${id}`, "LINE_DEFAULT").data[0])
+    );
+    return scatterDefault;
+};

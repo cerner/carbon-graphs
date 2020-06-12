@@ -183,7 +183,9 @@ class Timeline extends Construct {
         const containerSVG = d3
             .select(this.config.bindTo)
             .append("div")
-            .classed(styles.container, true);
+            .classed(styles.container, true)
+            .style("padding-top", this.config.removeContainerPadding && 0)
+            .style("padding-bottom", this.config.removeContainerPadding && 0);
         this.svg = containerSVG
             .insert("svg", ":first-child")
             .classed(styles.canvas, true)
@@ -215,6 +217,7 @@ class Timeline extends Construct {
         createLabel(this.config, this.svg);
         if (this.config.showLegend) {
             this.legendSVG = createLegend(
+                this.config,
                 this.config.bindLegendTo
                     ? d3.select(this.config.bindLegendTo)
                     : containerSVG

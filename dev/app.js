@@ -16,7 +16,8 @@ import {
     renderSimpleBarAxisInfoTextLabels,
     renderStackedBarAxisInfoTextLabels,
     renderBarTimeSeriesWithEventline,
-    renderBarWithPanning
+    renderBarWithPanning,
+    renderBarGraphAndLegendPaddingReduced
 } from "./examples/controls/bar";
 import { renderColorsExample } from "./examples/controls/colors";
 import {
@@ -46,7 +47,8 @@ import {
     renderGanttTrackSelection,
     renderGanttTruncate,
     renderGanttPanning,
-    renderGanttEventline
+    renderGanttEventline,
+    renderGanttGraphAndLegendPaddingReduced
 } from "./examples/controls/gantt";
 import {
     renderRegionLine,
@@ -85,7 +87,8 @@ import {
     renderDashedLine,
     renderLineWithLegendOptions,
     renderLineWithShapesShownPerDataSet,
-    renderDisableCalibration
+    renderDisableCalibration,
+    renderLineGraphAndLegendPaddingReduced
 } from "./examples/controls/line";
 import {
     renderMultiPairedResultRegion,
@@ -108,9 +111,14 @@ import {
     renderPairedResultYHidden,
     renderPairedResultWithPanning,
     renderPairedResultTimeseriesEventline,
-    renderPairedResultWithLegendOptions
+    renderPairedResultWithLegendOptions,
+    renderPairedResultGraphAndLegendPaddingReduced
 } from "./examples/controls/pairedResult";
-import { renderPieLegendTo, renderPieSimple } from "./examples/controls/pie";
+import {
+    renderPieLegendTo,
+    renderPieSimple,
+    renderPieGraphAndLegendPaddingReduced
+} from "./examples/controls/pie";
 import {
     renderCriticalityShapes,
     renderFillTypes,
@@ -124,7 +132,8 @@ import {
     renderTimelineCustomContainerPadding,
     renderTimelineCustomContentPadding,
     renderTimelinePanning,
-    renderTimelineNoXAxisTickLabel
+    renderTimelineNoXAxisTickLabel,
+    renderTimelineGraphAndLegendPaddingReduced
 } from "./examples/controls/timeline";
 import { createElementLegendBindTo } from "./examples/helpers";
 import {
@@ -134,14 +143,16 @@ import {
     renderScatterXHidden,
     renderScatterYHidden,
     renderScatterWithPanning,
-    renderScatterWithEventline
+    renderScatterWithEventline,
+    renderScatterGraphAndLegendPaddingReduced
 } from "./examples/controls/scatter";
 import {
     renderSimpleBubble,
     renderWeightBasedBubbleGraph,
     renderColorBasedBubbleGraph,
     renderWeightColorCombination,
-    renderCustomBubbleSize
+    renderCustomBubbleSize,
+    renderBubbleGraphAndLegendPaddingReduced
 } from "./examples/controls/bubble";
 
 renderSiteApp(
@@ -226,6 +237,14 @@ renderSiteApp(
                     pathname: "/line/disable-calibration",
                     content: renderDisableCalibration,
                     title: "Disable Calibration"
+                },
+                {
+                    pathname: "/line/graph-and-legend-padding-reduced",
+                    content: (id) => {
+                        createElementLegendBindTo(id);
+                        return renderLineGraphAndLegendPaddingReduced(id);
+                    },
+                    title: "Graph and Legend Padding Reduced"
                 }
             ]
         },
@@ -306,6 +325,11 @@ renderSiteApp(
                     pathname: "/paired-result/legend-options",
                     content: renderPairedResultWithLegendOptions,
                     title: "Paired Result with Legend Options"
+                },
+                {
+                    pathname: "/paired-result/graph-and-legend-padding-reduced",
+                    content: renderPairedResultGraphAndLegendPaddingReduced,
+                    title: "Graph and Legend Padding Reduced"
                 }
             ]
         },
@@ -356,6 +380,11 @@ renderSiteApp(
                     pathname: "/bar/stacked-axis-info-text-labels",
                     content: renderStackedBarAxisInfoTextLabels,
                     title: "Stacked - Axis Info Text Labels"
+                },
+                {
+                    pathname: "/bar/graph-and-legend-padding-reduced",
+                    content: renderBarGraphAndLegendPaddingReduced,
+                    title: "Graph and Legend Padding Reduced"
                 }
             ]
         },
@@ -381,6 +410,11 @@ renderSiteApp(
                     pathname: "/scatter/timeseries-eventline",
                     content: renderScatterWithEventline,
                     title: "Timeseries With Eventline"
+                },
+                {
+                    pathname: "/scatter/graph-and-legend-padding-reduced",
+                    content: renderScatterGraphAndLegendPaddingReduced,
+                    title: "Graph and Legend Padding Reduced"
                 }
             ]
         },
@@ -411,6 +445,11 @@ renderSiteApp(
                     pathname: "/bubble/custom-bubble-size",
                     content: renderCustomBubbleSize,
                     title: "Custom Bubble size"
+                },
+                {
+                    pathname: "/bubble/graph-and-legend-padding-reduced",
+                    content: renderBubbleGraphAndLegendPaddingReduced,
+                    title: "Graph and Legend Padding Reduced"
                 }
             ]
         },
@@ -476,6 +515,11 @@ renderSiteApp(
                     pathname: "/gantt/label-truncation",
                     content: renderGanttTruncate,
                     title: "Label Truncation"
+                },
+                {
+                    pathname: "/gantt/graph-and-legend-padding-reduced",
+                    content: renderGanttGraphAndLegendPaddingReduced,
+                    title: "Graph and Legend Padding Reduced"
                 }
             ]
         },
@@ -486,6 +530,11 @@ renderSiteApp(
                     pathname: "/timeline/simple",
                     content: renderTimeline,
                     title: "Simple"
+                },
+                {
+                    pathname: "/timeline/graph-and-legend-padding-reduced",
+                    content: renderTimelineGraphAndLegendPaddingReduced,
+                    title: "Graph and Legend Padding Reduced"
                 }
             ]
         },
@@ -504,6 +553,14 @@ renderSiteApp(
                         return renderPieLegendTo(id);
                     },
                     title: "Custom Legend Placement"
+                },
+                {
+                    pathname: "/pie/graph-and-legend-padding-reduced",
+                    content: (id) => {
+                        createElementLegendBindTo(id);
+                        return renderPieGraphAndLegendPaddingReduced(id);
+                    },
+                    title: "Graph and Legend Padding Reduced"
                 }
             ]
         },

@@ -36,3 +36,4 @@ export const h3 = {
     }
 };
 export const CUSTOM_CONTAINER_STYLE = "custom-container-style";
+export const CUSTOM_CONTAINER_LEGEND_STYLE = "custom-container-legend-style";

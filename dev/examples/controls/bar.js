@@ -465,3 +465,19 @@ export const renderBarWithPanning = (id) => {
     });
     return graph;
 };
+export const renderBarGraphAndLegendPaddingReduced = (id) => {
+    const axisData = utils.deepClone(getDemoData(`#${id}`, "BAR_DEFAULT"));
+    axisData.axis.x.ticks = numberedTicks;
+    axisData.removeContainerPadding = true;
+    axisData.legendPadding = {
+        left: 2.5,
+        right: 2.5,
+        top: 2.5,
+        bottom: 2.5
+    };
+    const barSimple = Carbon.api.graph(axisData);
+    barSimple.loadContent(
+        Carbon.api.bar(getDemoData(`#${id}`, "BAR_DEFAULT").data[0])
+    );
+    return barSimple;
+};

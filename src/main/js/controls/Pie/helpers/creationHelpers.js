@@ -315,13 +315,19 @@ const hoverHandler = (legendPath, canvasSVG) => (item, state) => {
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {object} legendSVG - d3 element that will be need to render the legend
  * items into.
+ * @param {object} config - Graph config object derived from input JSON
  * @returns {undefined} - returns nothing
  */
-const prepareLegendItems = (dataTarget, canvasSVG, legendSVG) => {
+const prepareLegendItems = (dataTarget, canvasSVG, legendSVG, config) => {
     if (legendSVG) {
-        loadPieLegendItem(legendSVG, dataTarget, {
-            hoverHandler: hoverHandler(legendSVG, canvasSVG)
-        });
+        loadPieLegendItem(
+            legendSVG,
+            dataTarget,
+            {
+                hoverHandler: hoverHandler(legendSVG, canvasSVG)
+            },
+            config
+        );
     }
 };
 /**

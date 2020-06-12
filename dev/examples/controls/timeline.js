@@ -86,3 +86,17 @@ export const renderTimelineNoXAxisTickLabel = (id) => {
     timelineDefault.loadContent(getDemoData(`#${id}`, "TIMELINE").data[0]);
     return timelineDefault;
 };
+export const renderTimelineGraphAndLegendPaddingReduced = (id) => {
+    const data = utils.deepClone(getDemoData(`#${id}`, "TIMELINE"));
+    data.removeContainerPadding = true;
+    data.legendPadding = {
+        left: 5,
+        right: 5,
+        top: 5,
+        bottom: 5
+    };
+    const timelineDefault = Carbon.api.timeline(data);
+    timelineDefault.loadContent(getDemoData(`#${id}`, "TIMELINE").data[0]);
+    timelineDefault.loadContent(getDemoData(`#${id}`, "TIMELINE").data[1]);
+    return timelineDefault;
+};

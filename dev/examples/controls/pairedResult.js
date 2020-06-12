@@ -445,3 +445,18 @@ export const renderPairedResultWithLegendOptions = (id) => {
     );
     return pairedDefault;
 };
+export const renderPairedResultGraphAndLegendPaddingReduced = (id) => {
+    const axisData = utils.deepClone(getDemoData(`#${id}`, "PAIRED_DEFAULT"));
+    axisData.removeContainerPadding = true;
+    axisData.legendPadding = {
+        left: 2.5,
+        right: 2.5,
+        top: 2.5,
+        bottom: 2.5
+    };
+    const pairedDefault = Carbon.api.graph(axisData);
+    pairedDefault.loadContent(
+        Carbon.api.pairedResult(getDemoData(`#${id}`, "PAIRED_DEFAULT").data[0])
+    );
+    return pairedDefault;
+};

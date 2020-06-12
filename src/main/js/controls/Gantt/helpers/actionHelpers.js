@@ -168,12 +168,7 @@ export const renderLegendItems = (
     legendSVG
 ) => {
     if (dataTarget.label && dataTarget.label.display && legendSVG) {
-        loadLegendItem(
-            legendSVG,
-            dataTarget,
-            config.shownTargets,
-            eventHandlers
-        );
+        loadLegendItem(legendSVG, dataTarget, config, eventHandlers);
     }
 };
 /**

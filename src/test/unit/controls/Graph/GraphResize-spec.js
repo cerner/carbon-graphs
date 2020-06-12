@@ -1,6 +1,7 @@
 "use strict";
 import * as d3 from "d3";
 import Graph from "../../../../main/js/controls/Graph/index";
+import Line from "../../../../main/js/controls/Line/Line";
 import { getXAxisWidth } from "../../../../main/js/helpers/axis";
 import constants from "../../../../main/js/helpers/constants";
 import styles from "../../../../main/js/helpers/styles";
@@ -10,7 +11,13 @@ import {
     toNumber,
     triggerEvent
 } from "../../helpers/commonHelpers";
-import { axisDefault, fetchElementByClass, getAxes } from "./helpers";
+import {
+    axisDefault,
+    fetchElementByClass,
+    getAxes,
+    getData,
+    valuesDefault
+} from "./helpers";
 
 describe("Graph - Resize", () => {
     let graph = null;
@@ -203,7 +210,7 @@ describe("Graph - Resize", () => {
             graph = new Graph(axisData);
             const expectedOutput = {
                 top: 10,
-                bottom: 5,
+                bottom: 10,
                 left: 30,
                 right: 50,
                 hasCustomPadding: false
@@ -219,7 +226,7 @@ describe("Graph - Resize", () => {
             graph = new Graph(axisData);
             const expectedOutput = {
                 top: 40,
-                bottom: 5,
+                bottom: 10,
                 left: 30,
                 right: 50,
                 hasCustomPadding: true
@@ -378,6 +385,159 @@ describe("Graph - Resize", () => {
                 );
                 done();
             });
+        });
+    });
+    describe("When removeContainerPadding is set to true", () => {
+        it("Removes carbon graph container padding", () => {
+            graph.destroy();
+            graph = new Graph(
+                Object.assign(
+                    {
+                        removeContainerPadding: true
+                    },
+                    getAxes(axisDefault)
+                )
+            );
+            const contentContainer = fetchElementByClass(styles.container);
+            expect(contentContainer.getAttribute("style")).toBe(
+                "padding-top: 0px; padding-bottom: 0px;"
+            );
+        });
+    });
+    describe("When legendPadding is provided", () => {
+        it("Sets the legend padding and removes legend margin of 8px", () => {
+            graph.destroy();
+            graph = new Graph(
+                Object.assign(
+                    {
+                        legendPadding: {
+                            left: 2.5,
+                            right: 2.5,
+                            top: 2.5,
+                            bottom: 2.5
+                        }
+                    },
+                    getAxes(axisDefault)
+                )
+            );
+            graph.loadContent(new Line(getData(valuesDefault)));
+            const legendElement = fetchElementByClass(styles.legendItem);
+            expect(legendElement.getAttribute("style")).toBe(
+                "margin: 0px; padding: 2.5px;"
+            );
+        });
+    });
+    describe("When removeContainerPadding is set to true and legendPadding is provided", () => {
+        it("Removes carbon graph container padding and sets the legend padding and removes legend margin of 8px", () => {
+            graph.destroy();
+            graph = new Graph(
+                Object.assign(
+                    {
+                        removeContainerPadding: true,
+                        legendPadding: {
+                            left: 5,
+                            right: 5,
+                            top: 4,
+                            bottom: 2.5
+                        }
+                    },
+                    getAxes(axisDefault)
+                )
+            );
+            graph.loadContent(new Line(getData(valuesDefault)));
+            const contentContainer = fetchElementByClass(styles.container);
+            const legendElement = fetchElementByClass(styles.legendItem);
+            expect(contentContainer.getAttribute("style")).toBe(
+                "padding-top: 0px; padding-bottom: 0px;"
+            );
+            expect(legendElement.getAttribute("style")).toBe(
+                "margin: 0px; padding: 4px 5px 2.5px;"
+            );
+        });
+    });
+    describe("When removeContainerPadding is set to false and legendPadding is not provided", () => {
+        it("Default Carbon graph container padding is applied and default legend padding is applied", () => {
+            graph.destroy();
+            graph = new Graph(
+                Object.assign(
+                    {
+                        removeContainerPadding: false
+                    },
+                    getAxes(axisDefault)
+                )
+            );
+            graph.loadContent(new Line(getData(valuesDefault)));
+            const contentContainer = fetchElementByClass(styles.container);
+            const legendElement = fetchElementByClass(styles.legendItem);
+            // Default Carbon graph container padding is applied. Hence no new style attribute will be present to reset padding top and bottom to 0.
+            expect(contentContainer.getAttribute("style")).toBeNull();
+            expect(legendElement.getAttribute("style")).toBe(
+                "padding: 4px 8px;"
+            );
+        });
+    });
+    describe("When x-axis show is set to true and showLabel is set to false", () => {
+        it("Sets canvas height correctly", () => {
+            graph.destroy();
+            const axisObj = utils.deepClone(axisDefault);
+            axisObj.x.show = true;
+            graph = new Graph(
+                Object.assign(
+                    {
+                        showLabel: false
+                    },
+                    getAxes(axisObj)
+                )
+            );
+            expect(graph.config.canvasHeight).toBe(270);
+        });
+    });
+    describe("When x-axis show is set to false and showLabel is set to true", () => {
+        it("Sets canvas height correctly", () => {
+            graph.destroy();
+            const axisObj = utils.deepClone(axisDefault);
+            axisObj.x.show = false;
+            graph = new Graph(
+                Object.assign(
+                    {
+                        showLabel: true
+                    },
+                    getAxes(axisObj)
+                )
+            );
+            expect(graph.config.canvasHeight).toBeCloserTo(306);
+        });
+    });
+    describe("When  both x-axis show and showLabel properties are set to true", () => {
+        it("Sets canvas height correctly", () => {
+            graph.destroy();
+            const axisObj = utils.deepClone(axisDefault);
+            axisObj.x.show = true;
+            graph = new Graph(
+                Object.assign(
+                    {
+                        showLabel: true
+                    },
+                    getAxes(axisObj)
+                )
+            );
+            expect(graph.config.canvasHeight).toBeCloserTo(306);
+        });
+    });
+    describe("When  both x-axis show and showLabel properties are set to false", () => {
+        it("Reduces the extra pixels added to canvas height", () => {
+            graph.destroy();
+            const axisObj = utils.deepClone(axisDefault);
+            axisObj.x.show = false;
+            graph = new Graph(
+                Object.assign(
+                    {
+                        showLabel: false
+                    },
+                    getAxes(axisObj)
+                )
+            );
+            expect(graph.config.canvasHeight).toBe(250);
         });
     });
 });

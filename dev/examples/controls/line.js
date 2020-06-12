@@ -1,7 +1,10 @@
 import Carbon from "../../../src/main/js/carbon";
 import utils from "../../../src/main/js/helpers/utils";
 import { getDemoData } from "../data";
-import { CUSTOM_CONTAINER_STYLE } from "../helpers";
+import {
+    CUSTOM_CONTAINER_STYLE,
+    CUSTOM_CONTAINER_LEGEND_STYLE
+} from "../helpers";
 import { createPanningControls } from "../panHelpers";
 
 const tickValues = [
@@ -546,4 +549,33 @@ export const renderDisableCalibration = (id) => {
         Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[6])
     );
     return lineDefault;
+};
+export const renderLineGraphAndLegendPaddingReduced = (id) => {
+    const containerElement = document.querySelector(`#${id}`);
+    containerElement.setAttribute(
+        "class",
+        `${containerElement.getAttribute(
+            "class"
+        )} ${CUSTOM_CONTAINER_LEGEND_STYLE}`
+    );
+    // Add legend container ID to input JSON
+    const data = utils.deepClone(
+        getDemoData(`#graphContainer`, "LINE_TIMESERIES")
+    );
+    data.bindLegendTo = "#legendContainer";
+    data.removeContainerPadding = true;
+    data.legendPadding = {
+        left: 2.5,
+        right: 2.5,
+        top: 2.5,
+        bottom: 2.5
+    };
+    const lineTime = Carbon.api.graph(data);
+    lineTime.loadContent(
+        Carbon.api.line(getDemoData(`#${id}`, "LINE_TIMESERIES").data[0])
+    );
+    lineTime.loadContent(
+        Carbon.api.line(getDemoData(`#${id}`, "LINE_TIMESERIES").data[2])
+    );
+    return lineTime;
 };

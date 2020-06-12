@@ -69,12 +69,20 @@ const setCanvasWidth = (container, config) => {
  * @returns {undefined} - returns nothing
  */
 const setCanvasHeight = (config) => {
-    config.canvasHeight =
-        getYAxisHeight(config) +
-        (config.padding.bottom +
+    if (config.showLabel || config.axis.x.show) {
+        config.canvasHeight =
+            getYAxisHeight(config) +
+            (config.padding.bottom +
+                config.padding.top +
+                config.axisLabelHeights.x) *
+                2;
+    } else {
+        config.canvasHeight =
+            getYAxisHeight(config) +
+            config.padding.bottom +
             config.padding.top +
-            config.axisLabelHeights.x) *
-            2;
+            config.axisLabelHeights.x;
+    }
 };
 /**
  * Checks if the min max range of the values have changed or otherwise
@@ -229,7 +237,9 @@ class Graph extends Construct {
         const containerSVG = d3
             .select(this.config.bindTo)
             .append("div")
-            .classed(styles.container, true);
+            .classed(styles.container, true)
+            .style("padding-top", this.config.removeContainerPadding && 0)
+            .style("padding-bottom", this.config.removeContainerPadding && 0);
         this.svg = containerSVG
             .insert("svg", ":first-child")
             .classed(styles.canvas, true)
@@ -269,6 +279,7 @@ class Graph extends Construct {
             using "bindLegendTo" property
             */
             this.legendSVG = createLegend(
+                this.config,
                 this.config.bindLegendTo
                     ? d3.select(this.config.bindLegendTo)
                     : containerSVG

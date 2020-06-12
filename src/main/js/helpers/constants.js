@@ -163,10 +163,22 @@ export const AXES_ORIENTATION = {
 export default {
     PADDING: {
         top: 10,
-        bottom: 5,
+        bottom: 10,
         left: 30,
         right: 50,
         trackLabel: 100
+    },
+    LEGEND_PADDING: {
+        top: 4,
+        bottom: 4,
+        left: 8,
+        right: 8
+    },
+    PIE_LEGEND_PADDING: {
+        top: 8,
+        bottom: 8,
+        left: 8,
+        right: 8
     },
     PAIR_ITEM_TYPES: ["high", "mid", "low"],
     ISO8601_DATE_TIME_MILLI: /(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}(:\d{2}(\.\d+)*)*)Z/,

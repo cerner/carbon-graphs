@@ -111,13 +111,13 @@ describe("Eventline", () => {
             const eventlineElement = fetchElementByClass(styles.eventline);
             expect(
                 toNumber(eventlineElement.getAttribute("x1"), 10)
-            ).toBeCloseTo(338);
+            ).toBeCloseTo(334);
             expect(
                 toNumber(eventlineElement.getAttribute("y1"), 10)
             ).toBeCloseTo(0);
             expect(
                 toNumber(eventlineElement.getAttribute("x2"), 10)
-            ).toBeCloseTo(338);
+            ).toBeCloseTo(334);
             expect(
                 toNumber(eventlineElement.getAttribute("y2"), 10)
             ).toBeCloseTo(0);

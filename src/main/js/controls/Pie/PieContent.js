@@ -134,7 +134,12 @@ class PieContent extends GraphContent {
             graph.legendSVG,
             this.dataTarget
         );
-        prepareLegendItems(this.dataTarget, graph.svg, graph.legendSVG);
+        prepareLegendItems(
+            this.dataTarget,
+            graph.svg,
+            graph.legendSVG,
+            graph.config
+        );
         return this;
     }
 

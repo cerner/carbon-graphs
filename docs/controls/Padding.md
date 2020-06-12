@@ -64,7 +64,7 @@ Use of content-based `padding` property is strictly use-case specific. Flags suc
 ```javascript
 var padding = {
     top: 10,
-    bottom: 5,
+    bottom: 10,
     left: 30,
     right: 50
 };

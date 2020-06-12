@@ -8,6 +8,7 @@ import constants, { AXIS_TYPE } from "../../helpers/constants";
 import errors from "../../helpers/errors";
 import utils from "../../helpers/utils";
 import { DEFAULT_LOCALE } from "../../locale/index";
+import { getLegendPadding } from "../../helpers/legend";
 
 /**
  * Helper function to set the right padding values based on input JSON.
@@ -56,6 +57,7 @@ export const processInput = (input, config) => {
     config.bindLegendTo = input.bindLegendTo;
     config.padding = getPadding(config, input.padding);
     config.padding.hasCustomPadding = utils.isDefined(input.padding);
+    config.legendPadding = getLegendPadding(config, input.legendPadding);
     config.axis = {
         x: {}
     };

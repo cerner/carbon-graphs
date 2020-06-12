@@ -904,3 +904,16 @@ const loadTracks = (
         }
     }); */
 };
+export const renderGanttGraphAndLegendPaddingReduced = (id) => {
+    const data = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
+    data.removeContainerPadding = true;
+    data.legendPadding = {
+        left: 2.5,
+        right: 2.5,
+        top: 2.5,
+        bottom: 2.5
+    };
+    const ganttDefault = Carbon.api.gantt(data);
+    loadTracks(ganttDefault, [], [], [], actions, 2);
+    return ganttDefault;
+};
