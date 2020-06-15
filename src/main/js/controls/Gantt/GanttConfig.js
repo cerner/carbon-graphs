@@ -11,6 +11,7 @@ import errors from "../../helpers/errors";
 import { validateEventline } from "../../helpers/eventline";
 import utils from "../../helpers/utils";
 import { DEFAULT_LOCALE } from "../../locale/index";
+import { getLegendPadding } from "../../helpers/legend";
 
 /**
  * Validates the newly added task into the graph before rendering
@@ -183,6 +184,7 @@ export const processInput = (input, config) => {
     config.bindTo = input.bindTo;
     config.bindLegendTo = input.bindLegendTo;
     config.padding = getPadding(config, input.padding);
+    config.legendPadding = getLegendPadding(config, input.legendPadding);
     config.axis = {
         x: {},
         y: {}

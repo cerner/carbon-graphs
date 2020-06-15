@@ -659,7 +659,7 @@ const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
                 loadLegendItem(
                     legendSVG,
                     constructLegendLabels(dataTarget, type),
-                    config.shownTargets,
+                    config,
                     eventHandlers
                 );
             }

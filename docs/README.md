@@ -31,21 +31,41 @@ For documentation on code: [**JSDocs**](https://engineering.cerner.com/carbon-gr
 
 ## Colors
 
+### Dark Colors
+
+| Constant | Value                                                              |
+| -------- | ------------------------------------------------------------------ |
+| BLUE     | ![#176ba0](https://placehold.it/15/176ba0/000000?text=+) `#176ba0` |
+| GREEN    | ![#076e00](https://placehold.it/15/076e00/000000?text=+) `#076e00` |
+| ORANGE   | ![#b54900](https://placehold.it/15/b54900/000000?text=+) `#b54900` |
+| PINK     | ![#ae0868](https://placehold.it/15/ae0868/000000?text=+) `#ae0868` |
+| PURPLE   | ![#9c19a3](https://placehold.it/15/9c19a3/000000?text=+) `#9c19a3` |
+| YELLOW   | ![#ffc20a](https://placehold.it/15/ffc20a/000000?text=+) `#ffc20a` |
+
+### Light Colors
+
 | Constant     | Value                                                              |
 | ------------ | ------------------------------------------------------------------ |
-| BLACK        | ![#1c1f21](https://placehold.it/15/1c1f21/000000?text=+) `#1c1f21` |
-| BLUE         | ![#007cc3](https://placehold.it/15/007cc3/000000?text=+) `#007cc3` |
-| GREEN        | ![#78c346](https://placehold.it/15/78c346/000000?text=+) `#78c346` |
-| LIGHT_PURPLE | ![#c985da](https://placehold.it/15/c985da/000000?text=+) `#c985da` |
-| ORANGE       | ![#ed5e00](https://placehold.it/15/ed5e00/000000?text=+) `#ed5e00` |
-| YELLOW       | ![#ffc20a](https://placehold.it/15/ffc20a/000000?text=+) `#ffc20a` |
-| GREY         | ![#a7aaab](https://placehold.it/15/a7aaab/000000?text=+) `#a7aaab` |
-| LIGHT_BLUE   | ![#26a2e5](https://placehold.it/15/26a2e5/000000?text=+) `#26a2e5` |
-| LIGHT_GREEN  | ![#a5d784](https://placehold.it/15/a5d784/000000?text=+) `#a5d784` |
-| PURPLE       | ![#78288c](https://placehold.it/15/78288c/000000?text=+) `#78288c` |
-| LIGHT_ORANGE | ![#ff7d00](https://placehold.it/15/ff7d00/000000?text=+) `#ff7d00` |
+| LIGHT_BLUE   | ![#008fe0](https://placehold.it/15/008fe0/000000?text=+) `#008fe0` |
+| LIGHT_GREEN  | ![#4b9b1c](https://placehold.it/15/4b9b1c/000000?text=+) `#4b9b1c` |
+| LIGHT_ORANGE | ![#e46511](https://placehold.it/15/e46511/000000?text=+) `#e46511` |
+| LIGHT_PINK   | ![#e16092](https://placehold.it/15/e16092/000000?text=+) `#e16092` |
+| LIGHT_PURPLE | ![#bc70c7](https://placehold.it/15/bc70c7/000000?text=+) `#bc70c7` |
 | LIGHT_YELLOW | ![#ffda6c](https://placehold.it/15/ffda6c/000000?text=+) `#ffda6c` |
-| WHITE        | ![#ffffff](https://placehold.it/15/ffffff/000000?text=+) `#ffffff` |
+
+### Common Colors
+
+| Constant | Value                                                              |
+| -------- | ------------------------------------------------------------------ |
+| BLACK    | ![#1c1f21](https://placehold.it/15/1c1f21/000000?text=+) `#1c1f21` |
+| GREY     | ![#a7aaab](https://placehold.it/15/a7aaab/000000?text=+) `#a7aaab` |
+| LAVENDER | ![#8374c2](https://placehold.it/15/8374c2/000000?text=+) `#8374c2` |
+| WHITE    | ![#ffffff](https://placehold.it/15/ffffff/000000?text=+) `#ffffff` |
+
+**Note:**
+
+-   In accordance with [accessibility guidelines](https://www.w3.org/WAI/WCAG21/Understanding/non-text-contrast.html), Carbon colors must meet a contrast ratio of 3:1. Therefore, `COLORS.YELLOW` and `COLORS.LIGHT_YELLOW` will eventually be removed from the color palette in a future major release.
+-   If you are currently using `COLORS.YELLOW` or `COLORS.LIGHT_YELLOW`, please switch to a different color.
 
 ## Shapes
 

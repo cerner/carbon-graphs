@@ -15,6 +15,7 @@ import errors from "../../helpers/errors";
 import { validateEventline } from "../../helpers/eventline";
 import utils from "../../helpers/utils";
 import { DEFAULT_LOCALE } from "../../locale/index";
+import { getLegendPadding } from "../../helpers/legend";
 
 const initialAxisInfo = {
     ticks: {},
@@ -55,6 +56,7 @@ const getPadding = (config, inputPadding) => {
         };
     }
 };
+
 /**
  * Processes the input from the JSON and updates the config object.
  * d3 domain and ranges are stored based on the upper and lower x, y and y2 limits.
@@ -106,6 +108,11 @@ export const processInput = (input, config, type) => {
     config.showVGrid = getDefaultValue(input.showVGrid, true);
     config.dimension = getDefaultValue(input.dimension, {});
     config.allowCalibration = getDefaultValue(input.allowCalibration, true);
+    config.removeContainerPadding = getDefaultValue(
+        input.removeContainerPadding,
+        false
+    );
+    config.legendPadding = getLegendPadding(config, input.legendPadding);
 
     // Additional X Axis properties defined on top of input axis
     config.axis.x.type = getDefaultValue(_axis.x.type, AXIS_TYPE.DEFAULT);

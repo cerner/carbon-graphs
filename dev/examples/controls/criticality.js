@@ -126,7 +126,8 @@ export const renderCriticalityScatter = (id) => {
     data.values[10].isCritical = true;
     data.regions = [
         {
-            start: 2
+            start: 2,
+            end: 14
         }
     ];
     const dataAlt = utils.deepClone(
@@ -142,8 +143,5 @@ export const renderCriticalityScatter = (id) => {
     ];
     scatterDefault.loadContent(Carbon.api.scatter(data));
     scatterDefault.loadContent(Carbon.api.scatter(dataAlt));
-    scatterDefault.loadContent(
-        Carbon.api.scatter(getDemoData(`#${id}`, "LINE_DEFAULT").data[4])
-    );
     return scatterDefault;
 };

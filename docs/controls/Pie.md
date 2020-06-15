@@ -92,11 +92,13 @@ pieDefault.loadContent(dataArray);
 
 #### Optional
 
-| Property Name | Expected | Default | Description                                                                          |
-| ------------- | -------- | ------- | ------------------------------------------------------------------------------------ |
-| bindLegendTo  | string   | null    | If DOM id provided, binds legend into that container (Example: `"#legendContainer"`) |
-| dimension     | object   | {}      | Refer [Dimension](#dimension)                                                        |
-| showLegend    | boolean  | true    | Toggle to show graph legend                                                          |
+| Property Name          | Expected | Default                                    | Description                                                                          |
+| ---------------------- | -------- | ------------------------------------------ | ------------------------------------------------------------------------------------ |
+| bindLegendTo           | string   | null                                       | If DOM id provided, binds legend into that container (Example: `"#legendContainer"`) |
+| dimension              | object   | {}                                         | Refer [Dimension](#dimension)                                                        |
+| legendPadding          | object   | `{ top: 8, bottom: 8, left: 8, right: 8 }` | Sets the legend padding and removes the carbon default margin of 8px around legend   |
+| removeContainerPadding | boolean  | false                                      | Toggle to remove carbon container top and bottom padding                             |
+| showLegend             | boolean  | true                                       | Toggle to show graph legend                                                          |
 
 ### Data
 

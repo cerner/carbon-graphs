@@ -53,6 +53,30 @@ const temperatureAxisData = (id) => ({
     }
 });
 
+const dataToReduceGraphAndLegendPadding = (id) => ({
+    bindTo: id,
+    axis: {
+        x: {
+            type: Carbon.helpers.AXIS_TYPE.TIME_SERIES,
+            label: "Datetime",
+            lowerLimit: new Date(2016, 0, 1, 1, 0).toISOString(),
+            upperLimit: new Date(2016, 0, 1, 23, 59).toISOString()
+        },
+        y: {
+            label: "Bubble",
+            lowerLimit: 10,
+            upperLimit: 200
+        }
+    },
+    removeContainerPadding: true,
+    legendPadding: {
+        left: 2.5,
+        right: 2.5,
+        top: 2.5,
+        bottom: 2.5
+    }
+});
+
 const data = {
     key: "uid_1",
     label: {
@@ -233,6 +257,34 @@ const data5 = {
 };
 
 const data6 = {
+    key: "uid_6",
+    label: {
+        display: "Bubble set C"
+    },
+    onClick: loadPopup,
+    color: "#004C76",
+    values: [
+        {
+            x: new Date(2016, 0, 1, 12, 0).toISOString(),
+            y: 50
+        },
+        {
+            x: new Date(2016, 0, 1, 15, 45).toISOString(),
+            y: 120
+        },
+        {
+            x: new Date(2016, 0, 1, 10, 30).toISOString(),
+            y: 130
+        },
+        {
+            x: new Date(2016, 0, 1, 18, 0).toISOString(),
+            y: 180
+        }
+    ],
+    yAxis: "y"
+};
+
+const panData = {
     key: "uid_5",
     values: [
         {
@@ -305,6 +357,7 @@ export const renderBubbleWithPanning = (id) => {
     });
     return graph;
 };
+
 export const renderBubblePanningWithDynamicData = (id) => {
     const axisData = simpleAxisData(`#${id}`)
     axisData.pan = {
@@ -312,7 +365,7 @@ export const renderBubblePanningWithDynamicData = (id) => {
     };
     const graphDataY = data5;
     const createGraph = () => {
-        const graphData = data6;
+        const graphData = panData;
         graph.reflow(graphData);
     };
 
@@ -325,4 +378,12 @@ export const renderBubblePanningWithDynamicData = (id) => {
         creationHandler: createGraph
     });
     return graph;
+};
+
+export const renderBubbleGraphAndLegendPaddingReduced = (id) => {
+    const bubbleGraph = Carbon.api.graph(
+        dataToReduceGraphAndLegendPadding(`#${id}`)
+    );
+    bubbleGraph.loadContent(Carbon.api.bubble(data6));
+    return bubbleGraph;
 };

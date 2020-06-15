@@ -235,7 +235,7 @@ describe("Scatter - Load", () => {
             );
             const points = fetchElementByClass(pointsGroup, styles.point);
             expect(points.attributes.getNamedItem("style").value).toBe(
-                "fill: #007cc3;"
+                `fill: ${COLORS.GREEN};`
             );
         });
         it("points have correct shape", () => {
@@ -719,7 +719,9 @@ describe("Scatter - Load", () => {
             const iconPath = legendItem.querySelector("path");
             expect(iconSVG).not.toBeNull();
             expect(iconSVG.classList).toContain(styles.legendItemIcon);
-            expect(iconSVG.getAttribute("style")).toBe(`fill: ${COLORS.BLUE};`);
+            expect(iconSVG.getAttribute("style")).toBe(
+                `fill: ${COLORS.GREEN};`
+            );
             expect(iconPath).not.toBeNull();
             expect(iconPath.getAttribute("d")).not.toBeNull();
         });

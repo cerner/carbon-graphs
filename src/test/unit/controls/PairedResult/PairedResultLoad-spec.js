@@ -458,7 +458,7 @@ describe("Paired Result - Load", () => {
                     `.${styles.pairedPoint}.${styles.high}`
                 );
                 expect(points.attributes.getNamedItem("style").value).toBe(
-                    "fill: #007cc3;"
+                    `fill: ${COLORS.GREEN};`
                 );
             });
             it("mid", () => {
@@ -470,7 +470,7 @@ describe("Paired Result - Load", () => {
                     `.${styles.pairedPoint}.${styles.mid}`
                 );
                 expect(points.attributes.getNamedItem("style").value).toBe(
-                    "fill: #78c346;"
+                    `fill: ${COLORS.ORANGE};`
                 );
             });
             it("low", () => {
@@ -482,7 +482,7 @@ describe("Paired Result - Load", () => {
                     `.${styles.pairedPoint}.${styles.low}`
                 );
                 expect(points.attributes.getNamedItem("style").value).toBe(
-                    "fill: #007cc3;"
+                    `fill: ${COLORS.GREEN};`
                 );
             });
         });
@@ -1075,7 +1075,9 @@ describe("Paired Result - Load", () => {
             expect(iconPath.getAttribute("d")).toEqual(
                 getShapeForTarget(input).high.path.d
             );
-            expect(iconSVG.getAttribute("style")).toBe(`fill: ${COLORS.BLUE};`);
+            expect(iconSVG.getAttribute("style")).toBe(
+                `fill: ${COLORS.GREEN};`
+            );
         });
         describe("if user sets showLine to be true and showShape to be false", () => {
             it("loads only line", () => {

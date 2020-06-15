@@ -475,12 +475,7 @@ const createPoints = (scale, config, canvasSVG) => {
  */
 const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
     if (dataTarget.label && dataTarget.label.display && legendSVG) {
-        loadLegendItem(
-            legendSVG,
-            dataTarget,
-            config.shownTargets,
-            eventHandlers
-        );
+        loadLegendItem(legendSVG, dataTarget, config, eventHandlers);
     }
 };
 /**

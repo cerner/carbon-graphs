@@ -15,7 +15,7 @@ export const renderColorsExample = (id) => {
         .enter()
         .append("circle")
         .attr("r", 20)
-        .attr("cx", (d, i) => i * 85 + 25)
+        .attr("cx", (d, i) => i * 68 + 30)
         .attr("cy", () => 75)
         .attr("style", (d) => `fill: ${Carbon.helpers.COLORS[d]};`);
 };
