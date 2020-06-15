@@ -7,7 +7,8 @@ import {
     fetchElementByClass,
     getAxes,
     getData,
-    valuesJSON
+    valuesJSON,
+    fetchAllElementsByClass
 } from "./helpers";
 import {
     getSVGAnimatedTransformList,
@@ -53,6 +54,38 @@ describe("Panning", () => {
                 getSVGAnimatedTransformList(getCurrentTransform(dataPoint))
                     .translate[1]
             ).not.toBeNull();
+        });
+        it("Dynamic Data is updated correctly when key matches", () => {
+            const panData = {
+                key: 'uid_1',
+                values: [
+                    {
+                        x: new Date(2018, 2, 1).toISOString(),
+                        content: "This is custom value of another unit"
+                    },
+                ]
+            };
+            let timelineContent = fetchAllElementsByClass(styles.pointGroup);
+            expect(timelineContent.length).toEqual(2);
+            timeline.reflow(panData);
+            timelineContent = fetchAllElementsByClass(styles.pointGroup);
+            expect(timelineContent.length).toEqual(1);
+        });
+        it("Dynamic Data is not updated when key does not match", () => {
+            const panData = {
+                key: 'uid_2',
+                values: [
+                    {
+                        x: new Date(2018, 2, 1).toISOString(),
+                        content: "This is custom value of another unit"
+                    },
+                ]
+            };
+            let timelineContent = fetchAllElementsByClass(styles.pointGroup);
+            expect(timelineContent.length).toEqual(2);
+            timeline.reflow(panData);
+            timelineContent = fetchAllElementsByClass(styles.pointGroup);
+            expect(timelineContent.length).toEqual(2);
         });
     });
     describe("When disabled", () => {
