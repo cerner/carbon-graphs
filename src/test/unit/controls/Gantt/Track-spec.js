@@ -161,34 +161,96 @@ describe("Gantt -> Track", () => {
                 }
             });
         });
-        it("Executes callback when clicked on label", (done) => {
-            triggerEvent(
-                fetchElementByClass(`${styles.axisYTrackLabel} .tick text`),
-                "click",
-                () => {
-                    const labelPath = fetchElementByClass(
-                        `${styles.axisYTrackLabel} .tick text`
-                    );
-                    expect(labelPath.getAttribute("aria-disabled")).toBeFalsy();
-                    expect(onClickPrimaryFunctionSpy.calledOnce).toBeFalsy();
-                    done();
-                }
-            );
+        describe("when small label and onClick function is provided", () => {
+            it("should disable click functionality for label", (done) => {
+                triggerEvent(
+                    fetchElementByClass(`${styles.axisYTrackLabel} .tick text`),
+                    "click",
+                    () => {
+                        const labelPath = fetchElementByClass(
+                            `${styles.axisYTrackLabel} .tick text`
+                        );
+                        expect(
+                            labelPath.getAttribute("aria-disabled")
+                        ).toBeFalsy();
+                        expect(
+                            onClickPrimaryFunctionSpy.calledOnce
+                        ).toBeFalsy();
+                        done();
+                    }
+                );
+            });
         });
-        it("Executes callback when clicked on truncated label", (done) => {
-            triggerEvent(
-                document.querySelectorAll(
-                    `.${styles.axisYTrackLabel} .tick text`
-                )[1],
-                "click",
-                () => {
-                    expect(onClickSecondaryFunctionSpy.calledOnce).toBeTruthy();
-                    expect(onClickSecondaryFunctionSpy.getCall(0).args[0]).toBe(
-                        largeLabel
-                    );
-                    done();
-                }
-            );
+        describe("when small label is provided and onClick function is not provided", () => {
+            it("should disable click functionality for label", (done) => {
+                const onClickThirdFunctionSpy = sinon.spy();
+                gantt.loadContent({
+                    key: "track 3",
+                    trackLabel: {
+                        display: smallLabel
+                    }
+                });
+                triggerEvent(
+                    fetchElementByClass(`${styles.axisYTrackLabel} .tick text`),
+                    "click",
+                    () => {
+                        const labelPath = fetchElementByClass(
+                            `${styles.axisYTrackLabel} .tick text`
+                        );
+                        expect(
+                            labelPath.getAttribute("aria-disabled")
+                        ).toBeFalsy();
+                        expect(onClickThirdFunctionSpy.calledOnce).toBeFalsy();
+                        done();
+                    }
+                );
+            });
+        });
+        describe("when large label and onClick function is provided", () => {
+            it("should enable click functionality for truncated label", (done) => {
+                triggerEvent(
+                    document.querySelectorAll(
+                        `.${styles.axisYTrackLabel} .tick text`
+                    )[1],
+                    "click",
+                    () => {
+                        expect(
+                            onClickSecondaryFunctionSpy.calledOnce
+                        ).toBeTruthy();
+                        expect(
+                            onClickSecondaryFunctionSpy.getCall(0).args[0]
+                        ).toBe(largeLabel);
+                        done();
+                    }
+                );
+            });
+        });
+        describe("when large label is provided and onClick function is not provided", (done) => {
+            it("should enable click functionality for truncated label", (done) => {
+                const onClickThirdFunctionSpy = sinon.spy();
+                gantt.loadContent({
+                    key: "track 3",
+                    trackLabel: {
+                        display: largeLabel
+                    }
+                });
+                d3.select(
+                    fetchElementByClass(`${styles.axisYTrackLabel} text`)
+                ).on("click", onClickThirdFunctionSpy(largeLabel, "y"));
+                triggerEvent(
+                    document.querySelectorAll(
+                        `.${styles.axisYTrackLabel} .tick text`
+                    )[1],
+                    "click",
+                    () => {
+                        expect(onClickThirdFunctionSpy.calledOnce).toBeTruthy();
+                        expect(onClickThirdFunctionSpy.getCall(0).args[0]).toBe(
+                            largeLabel
+                        );
+                        done();
+                    }
+                );
+            });
         });
         it("Truncates label on exceeding max length", (done) => {
             delay(() => {

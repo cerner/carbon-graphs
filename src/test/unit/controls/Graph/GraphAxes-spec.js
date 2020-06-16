@@ -8,10 +8,14 @@ import styles from "../../../../main/js/helpers/styles";
 import { getSVGAnimatedTransformList } from "../../../../main/js/helpers/transformUtils";
 import utils from "../../../../main/js/helpers/utils";
 import LOCALE from "../../../../main/js/locale/index";
-import { loadCustomJasmineMatcher } from "../../helpers/commonHelpers";
+import {
+    loadCustomJasmineMatcher,
+    triggerEvent
+} from "../../helpers/commonHelpers";
 import {
     axisDefault,
     axisTimeSeries,
+    dimension,
     fetchElementByClass,
     getAxes,
     getData
@@ -21,10 +25,16 @@ import {
     getTicksCountFromRange,
     getAverageTicksCount
 } from "../../../../main/js/helpers/axis";
+import sinon from "sinon";
+import * as d3 from "d3";
 
 describe("Graph - Axes", () => {
     let graph = null;
     let graphContainer;
+    const largeLabel =
+        "Project long display value which is only for testing, Project long display value which is only for testing " +
+        "Project long display value which is only for testing, Project long display value which is only for testing";
+    const smallLabel = "hello!";
     beforeAll(() => {
         loadCustomJasmineMatcher();
     });
@@ -1486,6 +1496,505 @@ describe("Graph - Axes", () => {
                 allY2AxisElements[0].childNodes[5].querySelector("text")
                     .textContent
             ).toBe("1.5");
+        });
+    });
+    describe("If axes width is 1024px and height is 230px", () => {
+        beforeEach(() => {
+            graph.destroy();
+            axisDefault.y2 = {
+                show: true,
+                label: "Some Y2 Label",
+                lowerLimit: 0,
+                upperLimit: 20
+            };
+        });
+        afterEach(() => {
+            axisDefault.y2 = "";
+        });
+        it("Truncates if too long", (done) => {
+            const labelAxisObj = utils.deepClone(axisDefault);
+            labelAxisObj.y.label = largeLabel;
+            labelAxisObj.y2.label = largeLabel;
+            labelAxisObj.x.label = largeLabel;
+            graph = new Graph(getAxes(labelAxisObj));
+            expect(
+                fetchElementByClass(styles.axisLabelX).querySelector("text")
+                    .textContent
+            ).toBe(
+                "Project long display value which is only for testing, Project long display value which is only for testing Project lon..."
+            );
+            expect(
+                fetchElementByClass(styles.axisLabelY).querySelector("text")
+                    .textContent
+            ).toBe("Project long display value w...");
+            expect(
+                fetchElementByClass(styles.axisLabelY2).querySelector("text")
+                    .textContent
+            ).toBe("Project long display value w...");
+            done();
+        });
+        it("Does not truncate if not long", (done) => {
+            graph = new Graph(getAxes(axisDefault));
+            expect(
+                fetchElementByClass(styles.axisLabelY).querySelector("text")
+                    .textContent
+            ).toBe("Some Y Label");
+            expect(
+                fetchElementByClass(styles.axisLabelX).querySelector("text")
+                    .textContent
+            ).toBe("Some X Label");
+            expect(
+                fetchElementByClass(styles.axisLabelY2).querySelector("text")
+                    .textContent
+            ).toBe("Some Y2 Label");
+            done();
+        });
+    });
+    describe("If axes width is 50px and height is 50px", () => {
+        beforeEach(() => {
+            graph.destroy();
+            graphContainer.setAttribute("style", "width: 50px; height: 50px");
+            dimension.height = 50;
+            axisDefault.y2 = {
+                show: true,
+                label: "Some Y2 Label",
+                lowerLimit: 0,
+                upperLimit: 20
+            };
+        });
+        afterEach(() => {
+            axisDefault.y2 = "";
+        });
+        it("Truncates if too long", (done) => {
+            const labelAxisObj = utils.deepClone(axisDefault);
+            labelAxisObj.y.label = largeLabel;
+            labelAxisObj.y2.label = largeLabel;
+            labelAxisObj.x.label = largeLabel;
+            graph = new Graph(
+                Object.assign({ dimension }, getAxes(labelAxisObj), dimension)
+            );
+            expect(
+                fetchElementByClass(styles.axisLabelX).querySelector("text")
+                    .textContent
+            ).toBe("Project long d...");
+            expect(
+                fetchElementByClass(styles.axisLabelY).querySelector("text")
+                    .textContent
+            ).toBe("Projec...");
+            expect(
+                fetchElementByClass(styles.axisLabelY2).querySelector("text")
+                    .textContent
+            ).toBe("Projec...");
+            done();
+        });
+        it("Does not truncate if not long", (done) => {
+            const labelAxisObj = utils.deepClone(axisDefault);
+            labelAxisObj.y.label = smallLabel;
+            labelAxisObj.y2.label = smallLabel;
+            labelAxisObj.x.label = smallLabel;
+            graph = new Graph(
+                Object.assign({ dimension }, getAxes(labelAxisObj), dimension)
+            );
+            expect(
+                fetchElementByClass(styles.axisLabelX).querySelector("text")
+                    .textContent
+            ).toBe("hello!");
+            expect(
+                fetchElementByClass(styles.axisLabelY).querySelector("text")
+                    .textContent
+            ).toBe("hello!");
+            expect(
+                fetchElementByClass(styles.axisLabelY2).querySelector("text")
+                    .textContent
+            ).toBe("hello!");
+            done();
+        });
+    });
+    describe("If axes width is 400px and height is 400px", () => {
+        beforeEach(() => {
+            graph.destroy();
+            graphContainer.setAttribute("style", "width: 400px; height: 400px");
+            dimension.height = 400;
+            axisDefault.y2 = {
+                show: true,
+                label: "Some Y2 Label",
+                lowerLimit: 0,
+                upperLimit: 20
+            };
+        });
+        afterEach(() => {
+            axisDefault.y2 = "";
+        });
+        it("Truncates if too long", (done) => {
+            const labelAxisObj = utils.deepClone(axisDefault);
+            labelAxisObj.y.label = largeLabel;
+            labelAxisObj.y2.label = largeLabel;
+            labelAxisObj.x.label = largeLabel;
+            graph = new Graph(
+                Object.assign({ dimension }, getAxes(labelAxisObj), dimension)
+            );
+            expect(
+                fetchElementByClass(styles.axisLabelX).querySelector("text")
+                    .textContent
+            ).toBe("Project long display value which ...");
+            expect(
+                fetchElementByClass(styles.axisLabelY).querySelector("text")
+                    .textContent
+            ).toBe("Project long display value which is only for testi...");
+            expect(
+                fetchElementByClass(styles.axisLabelY2).querySelector("text")
+                    .textContent
+            ).toBe("Project long display value which is only for testi...");
+            done();
+        });
+        it("Does not truncate if not long", (done) => {
+            graph = new Graph(getAxes(axisDefault));
+            expect(
+                fetchElementByClass(styles.axisLabelX).querySelector("text")
+                    .textContent
+            ).toBe("Some X Label");
+            expect(
+                fetchElementByClass(styles.axisLabelY).querySelector("text")
+                    .textContent
+            ).toBe("Some Y Label");
+            expect(
+                fetchElementByClass(styles.axisLabelY2).querySelector("text")
+                    .textContent
+            ).toBe("Some Y2 Label");
+            done();
+        });
+    });
+    describe("If axes width is 800px and height is 800px", () => {
+        beforeEach(() => {
+            graph.destroy();
+            graphContainer.setAttribute("style", "width: 800px; height: 800px");
+            dimension.height = 800;
+            axisDefault.y2 = {
+                show: true,
+                label: "Some Y2 Label",
+                lowerLimit: 0,
+                upperLimit: 20
+            };
+        });
+        afterEach(() => {
+            axisDefault.y2 = "";
+        });
+        it("Truncates if too long", (done) => {
+            const labelAxisObj = utils.deepClone(axisDefault);
+            labelAxisObj.y.label = largeLabel;
+            labelAxisObj.y2.label = largeLabel;
+            labelAxisObj.x.label = largeLabel;
+            graph = new Graph(
+                Object.assign({ dimension }, getAxes(labelAxisObj), dimension)
+            );
+            expect(
+                fetchElementByClass(styles.axisLabelX).querySelector("text")
+                    .textContent
+            ).toBe(
+                "Project long display value which is only for testing, Project long display value which ..."
+            );
+            expect(
+                fetchElementByClass(styles.axisLabelY).querySelector("text")
+                    .textContent
+            ).toBe(
+                "Project long display value which is only for testing, Project long display value which is only for t..."
+            );
+            expect(
+                fetchElementByClass(styles.axisLabelY2).querySelector("text")
+                    .textContent
+            ).toBe(
+                "Project long display value which is only for testing, Project long display value which is only for t..."
+            );
+            done();
+        });
+        it("Does not truncate if not long", (done) => {
+            graph = new Graph(getAxes(axisDefault));
+            expect(
+                fetchElementByClass(styles.axisLabelY).querySelector("text")
+                    .textContent
+            ).toBe("Some Y Label");
+            expect(
+                fetchElementByClass(styles.axisLabelX).querySelector("text")
+                    .textContent
+            ).toBe("Some X Label");
+            expect(
+                fetchElementByClass(styles.axisLabelY2).querySelector("text")
+                    .textContent
+            ).toBe("Some Y2 Label");
+            done();
+        });
+    });
+    describe("If axes width is 1400px and height is 1400px", () => {
+        beforeEach(() => {
+            graph.destroy();
+            graphContainer.setAttribute(
+                "style",
+                "width: 1400px; height: 1400px"
+            );
+            dimension.height = 1400;
+            axisDefault.y2 = {
+                show: true,
+                label: "Some Y2 Label",
+                lowerLimit: 0,
+                upperLimit: 20
+            };
+        });
+        afterEach(() => {
+            axisDefault.y2 = "";
+        });
+        it("Truncates if too long", (done) => {
+            const labelAxisObj = utils.deepClone(axisDefault);
+            labelAxisObj.y.label = largeLabel;
+            labelAxisObj.y2.label = largeLabel;
+            labelAxisObj.x.label = largeLabel;
+            graph = new Graph(
+                Object.assign({ dimension }, getAxes(labelAxisObj), dimension)
+            );
+            expect(
+                fetchElementByClass(styles.axisLabelX).querySelector("text")
+                    .textContent
+            ).toBe(
+                "Project long display value which is only for testing, Project long display value which is only for testing Project long display value which is only for testing, Project ..."
+            );
+            expect(
+                fetchElementByClass(styles.axisLabelY).querySelector("text")
+                    .textContent
+            ).toBe(
+                "Project long display value which is only for testing, Project long display value which is only for testing Project long display value which is only for testing, Project long d..."
+            );
+            expect(
+                fetchElementByClass(styles.axisLabelY2).querySelector("text")
+                    .textContent
+            ).toBe(
+                "Project long display value which is only for testing, Project long display value which is only for testing Project long display value which is only for testing, Project long d..."
+            );
+            done();
+        });
+        it("Does not truncate if not long", (done) => {
+            graph = new Graph(getAxes(axisDefault));
+            expect(
+                fetchElementByClass(styles.axisLabelX).querySelector("text")
+                    .textContent
+            ).toBe("Some X Label");
+            expect(
+                fetchElementByClass(styles.axisLabelY).querySelector("text")
+                    .textContent
+            ).toBe("Some Y Label");
+            expect(
+                fetchElementByClass(styles.axisLabelY2).querySelector("text")
+                    .textContent
+            ).toBe("Some Y2 Label");
+            done();
+        });
+    });
+    describe("Adds clickHandler for Label", () => {
+        beforeEach(() => {
+            graph.destroy();
+            axisDefault.y2 = {
+                show: true,
+                label: "Some Y2 Label",
+                lowerLimit: 0,
+                upperLimit: 20
+            };
+        });
+        afterEach(() => {
+            axisDefault.y2 = "";
+        });
+        describe("when small label is provided and onLabelClick function is not provided", () => {
+            it("should disable click functionality for label", (done) => {
+                const onClickPrimaryFunctionSpy = sinon.spy();
+                graph = new Graph(getAxes(axisDefault));
+                triggerEvent(
+                    fetchElementByClass(`${styles.axisLabelX} text`),
+                    "click",
+                    () => {
+                        expect(
+                            onClickPrimaryFunctionSpy.calledOnce
+                        ).toBeFalsy();
+                        done();
+                    }
+                );
+                triggerEvent(
+                    fetchElementByClass(`${styles.axisLabelY} text`),
+                    "click",
+                    () => {
+                        expect(
+                            onClickPrimaryFunctionSpy.calledOnce
+                        ).toBeFalsy();
+                        done();
+                    }
+                );
+                triggerEvent(
+                    fetchElementByClass(`${styles.axisLabelY2} text`),
+                    "click",
+                    () => {
+                        expect(
+                            onClickPrimaryFunctionSpy.calledOnce
+                        ).toBeFalsy();
+                        done();
+                    }
+                );
+            });
+        });
+        describe("when small label and onLabelClick function is provided", () => {
+            it("should disable click functionality for label", (done) => {
+                const onClickPrimaryFunctionSpy = sinon.spy();
+                const onClickSecondaryFunctionSpy = sinon.spy();
+                const onClickThirdFunctionSpy = sinon.spy();
+                graph.destroy();
+                const labelAxisObj = utils.deepClone(axisDefault);
+                labelAxisObj.x.onLabelClick = onClickPrimaryFunctionSpy;
+                labelAxisObj.y.onLabelClick = onClickSecondaryFunctionSpy;
+                labelAxisObj.y2.onLabelClick = onClickThirdFunctionSpy;
+                graph = new Graph(getAxes(labelAxisObj));
+                triggerEvent(
+                    fetchElementByClass(`${styles.axisLabelX} text`),
+                    "click",
+                    () => {
+                        expect(
+                            onClickPrimaryFunctionSpy.calledOnce
+                        ).toBeFalsy();
+                        done();
+                    }
+                );
+                triggerEvent(
+                    fetchElementByClass(`${styles.axisLabelY} text`),
+                    "click",
+                    () => {
+                        expect(
+                            onClickPrimaryFunctionSpy.calledOnce
+                        ).toBeFalsy();
+                        done();
+                    }
+                );
+                triggerEvent(
+                    fetchElementByClass(`${styles.axisLabelY2} text`),
+                    "click",
+                    () => {
+                        expect(
+                            onClickPrimaryFunctionSpy.calledOnce
+                        ).toBeFalsy();
+                        done();
+                    }
+                );
+            });
+        });
+        describe("when large label and onLabelClick function is provided", (done) => {
+            it("should enable click functionality for truncated label", (done) => {
+                const onClickSecondaryFunctionSpy = sinon.spy();
+                const onClickThirdFunctionSpy = sinon.spy();
+                const onClickFourthFunctionSpy = sinon.spy();
+                graph.destroy();
+                const labelAxisObj = utils.deepClone(axisDefault);
+                labelAxisObj.y.label = largeLabel;
+                labelAxisObj.x.label = largeLabel;
+                labelAxisObj.y2.label = largeLabel;
+                labelAxisObj.x.onLabelClick = onClickSecondaryFunctionSpy;
+                labelAxisObj.y.onLabelClick = onClickFourthFunctionSpy;
+                labelAxisObj.y2.onLabelClick = onClickThirdFunctionSpy;
+                graph = new Graph(getAxes(labelAxisObj));
+                triggerEvent(
+                    fetchElementByClass(`${styles.axisLabelX} text`),
+                    "click",
+                    () => {
+                        expect(
+                            onClickSecondaryFunctionSpy.calledOnce
+                        ).toBeTruthy();
+                        expect(
+                            onClickSecondaryFunctionSpy.getCall(0).args[0]
+                        ).toBe(largeLabel);
+                        done();
+                    }
+                );
+                triggerEvent(
+                    fetchElementByClass(`${styles.axisLabelY} text`),
+                    "click",
+                    () => {
+                        expect(
+                            onClickFourthFunctionSpy.calledOnce
+                        ).toBeTruthy();
+                        expect(
+                            onClickFourthFunctionSpy.getCall(0).args[0]
+                        ).toBe(largeLabel);
+                        done();
+                    }
+                );
+                triggerEvent(
+                    fetchElementByClass(`${styles.axisLabelY2} text`),
+                    "click",
+                    () => {
+                        expect(onClickThirdFunctionSpy.calledOnce).toBeTruthy();
+                        expect(onClickThirdFunctionSpy.getCall(0).args[0]).toBe(
+                            largeLabel
+                        );
+                        done();
+                    }
+                );
+            });
+        });
+        describe("when large label is provided and onLabelClick function is not provided", (done) => {
+            it("should enable click functionality for truncated label", (done) => {
+                const onClickSecondaryFunctionSpy = sinon.spy();
+                const onClickThirdFunctionSpy = sinon.spy();
+                const onClickFourthFunctionSpy = sinon.spy();
+                graph.destroy();
+                const labelAxisObj = utils.deepClone(axisDefault);
+                labelAxisObj.y.label = largeLabel;
+                labelAxisObj.x.label = largeLabel;
+                labelAxisObj.y2.label = largeLabel;
+                graph = new Graph(getAxes(labelAxisObj));
+                d3.select(fetchElementByClass(`${styles.axisLabelX} text`)).on(
+                    "click",
+                    onClickSecondaryFunctionSpy(labelAxisObj.x.label, "x")
+                );
+                triggerEvent(
+                    fetchElementByClass(`${styles.axisLabelX} text`),
+                    "click",
+                    () => {
+                        expect(
+                            onClickSecondaryFunctionSpy.calledOnce
+                        ).toBeTruthy();
+                        expect(
+                            onClickSecondaryFunctionSpy.getCall(0).args[0]
+                        ).toBe(largeLabel);
+                        done();
+                    }
+                );
+                d3.select(fetchElementByClass(`${styles.axisLabelY} text`)).on(
+                    "click",
+                    onClickThirdFunctionSpy(labelAxisObj.y.label, "y")
+                );
+                triggerEvent(
+                    fetchElementByClass(`${styles.axisLabelY} text`),
+                    "click",
+                    () => {
+                        expect(
+                            onClickSecondaryFunctionSpy.calledOnce
+                        ).toBeTruthy();
+                        expect(
+                            onClickSecondaryFunctionSpy.getCall(0).args[0]
+                        ).toBe(largeLabel);
+                        done();
+                    }
+                );
+                d3.select(fetchElementByClass(`${styles.axisLabelY2} text`)).on(
+                    "click",
+                    onClickFourthFunctionSpy(labelAxisObj.y2.label, "y2")
+                );
+                triggerEvent(
+                    fetchElementByClass(`${styles.axisLabelY2} text`),
+                    "click",
+                    () => {
+                        expect(
+                            onClickSecondaryFunctionSpy.calledOnce
+                        ).toBeTruthy();
+                        expect(
+                            onClickSecondaryFunctionSpy.getCall(0).args[0]
+                        ).toBe(largeLabel);
+                        done();
+                    }
+                );
+            });
         });
     });
 });
