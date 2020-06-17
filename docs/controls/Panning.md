@@ -61,7 +61,7 @@ const dataSet = {
 
 ```jsx
 // panData
-const dataSet = {
+const panData = {
     key: "uid_1", // key should already be present in the graph
     values: [
         {
