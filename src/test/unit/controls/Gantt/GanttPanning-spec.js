@@ -7,8 +7,15 @@ import {
     axisJSON,
     fetchElementByClass,
     getAxes,
+    getData,
     datelineAlt,
-    datelineJSON
+    datelineJSON,
+    fetchAllElementsByClass,
+    taskValuesJSON,
+    activityValuesJSON,
+    eventValuesJson,
+    actionValuesJson,
+    legendJSON
 } from "./helpers";
 import utils from "../../../../main/js/helpers/utils";
 import { delay, toNumber, PADDING_BOTTOM } from "../../helpers/commonHelpers";
@@ -32,7 +39,10 @@ describe("Panning", () => {
 
     describe("When enabled", () => {
         beforeEach(() => {
-            const axisData = utils.deepClone(getAxes(axisJSON));
+            const axisData = Object.assign(getAxes(axisJSON), {
+                showActionLegend: true,
+                actionLegend: legendJSON
+            });
             axisData.dateline = datelineJSON;
             axisData.pan = { enabled: true };
             gantt = new Gantt(axisData);
@@ -80,6 +90,168 @@ describe("Panning", () => {
                 expect(toNumber(translate[1], 10)).toBeCloseTo(PADDING_BOTTOM);
                 done();
             });
+        });
+        it("Dynamic Data is updated correctly when key matches", () => {
+            const primaryContent = getData(taskValuesJSON,activityValuesJSON,eventValuesJson,actionValuesJson)
+            const panData = {
+                key: "track 1",
+                tasks: [
+                    {
+                        key: "taskNormal",
+                        startDate: new Date(2018, 3, 1).toISOString(),
+                        endDate: new Date(2018, 6, 10).toISOString()
+                    },
+                    {
+                        key: "taskChunk",
+                        startDate: new Date(2018, 3, 1).toISOString(),
+                        endDate: new Date(2018, 6, 10).toISOString()
+                    }
+                ],
+                activities: [
+                    {
+                        key: "activityNormal",
+                        startDate: new Date(2018, 3, 1).toISOString(),
+                        endDate: new Date(2018, 6, 10).toISOString()
+                    }
+                ],
+                events: [
+                    {
+                        key: "uid_event_1",
+                        values: [new Date(2018, 3, 5).toISOString()]
+                    }
+                ],
+                actions: [
+                    {
+                        key: "uid_action_1",
+                        values: [new Date(2018, 2, 1, 6, 15).toISOString()]
+                    }
+                ]
+            };
+            gantt.loadContent(primaryContent)
+            let tasksContent = fetchAllElementsByClass(
+                ganttChartContainer,
+                styles.task
+            );
+            expect(tasksContent.length).toEqual(4);
+            let activitiesContent = fetchAllElementsByClass(
+                ganttChartContainer,
+                styles.activity
+            );
+            expect(activitiesContent.length).toEqual(2);
+            let eventsContent = fetchAllElementsByClass(
+                ganttChartContainer,
+                `${styles.currentPointsGroup}[event="true"]`
+            );
+            expect(eventsContent.length).toEqual(2);
+            let actionsContent = fetchAllElementsByClass(
+                ganttChartContainer,
+                `${styles.currentPointsGroup}[event="false"]`
+            );
+            expect(actionsContent.length).toEqual(2);
+
+            gantt.reflow(panData);
+
+            tasksContent = fetchAllElementsByClass(
+                ganttChartContainer,
+                styles.task
+            );
+            expect(tasksContent.length).toEqual(2);
+            activitiesContent = fetchAllElementsByClass(
+                ganttChartContainer,
+                styles.activity
+            );
+            expect(activitiesContent.length).toEqual(1);
+            eventsContent = fetchAllElementsByClass(
+                ganttChartContainer,
+                `${styles.currentPointsGroup}[event="true"]`
+            );
+            expect(eventsContent.length).toEqual(1);
+            actionsContent = fetchAllElementsByClass(
+                ganttChartContainer,
+                `${styles.currentPointsGroup}[event="false"]`
+            );
+            expect(actionsContent.length).toEqual(1);
+        });
+        it("Dynamic Data is not updated when key does not match", () => {
+            const primaryContent = getData(taskValuesJSON,activityValuesJSON,eventValuesJson,actionValuesJson)
+            const panData = {
+                key: "track 0",
+                tasks: [
+                    {
+                        key: "taskNormal",
+                        startDate: new Date(2018, 3, 1).toISOString(),
+                        endDate: new Date(2018, 6, 10).toISOString()
+                    },
+                    {
+                        key: "taskChunk",
+                        startDate: new Date(2018, 3, 1).toISOString(),
+                        endDate: new Date(2018, 6, 10).toISOString()
+                    }
+                ],
+                activities: [
+                    {
+                        key: "activityNormal",
+                        startDate: new Date(2018, 3, 1).toISOString(),
+                        endDate: new Date(2018, 6, 10).toISOString()
+                    }
+                ],
+                events: [
+                    {
+                        key: "uid_event_1",
+                        values: [new Date(2018, 3, 5).toISOString()]
+                    }
+                ],
+                actions: [
+                    {
+                        key: "uid_action_1",
+                        values: [new Date(2018, 2, 1, 6, 15).toISOString()]
+                    }
+                ]
+            };
+            gantt.loadContent(primaryContent)
+            let tasksContent = fetchAllElementsByClass(
+                ganttChartContainer,
+                styles.task
+            );
+            expect(tasksContent.length).toEqual(4);
+            let activitiesContent = fetchAllElementsByClass(
+                ganttChartContainer,
+                styles.activity
+            );
+            expect(activitiesContent.length).toEqual(2);
+            let eventsContent = fetchAllElementsByClass(
+                ganttChartContainer,
+                `${styles.currentPointsGroup}[event="true"]`
+            );
+            expect(eventsContent.length).toEqual(2);
+            let actionsContent = fetchAllElementsByClass(
+                ganttChartContainer,
+                `${styles.currentPointsGroup}[event="false"]`
+            );
+            expect(actionsContent.length).toEqual(2);
+
+            gantt.reflow(panData);
+
+            tasksContent = fetchAllElementsByClass(
+                ganttChartContainer,
+                styles.task
+            );
+            expect(tasksContent.length).toEqual(4);
+            activitiesContent = fetchAllElementsByClass(
+                ganttChartContainer,
+                styles.activity
+            );
+            expect(activitiesContent.length).toEqual(2);
+            eventsContent = fetchAllElementsByClass(
+                ganttChartContainer,
+                `${styles.currentPointsGroup}[event="true"]`
+            );
+            expect(eventsContent.length).toEqual(2);
+            actionsContent = fetchAllElementsByClass(
+                ganttChartContainer,
+                `${styles.currentPointsGroup}[event="false"]`
+            );
+            expect(actionsContent.length).toEqual(2);
         });
     });
     describe("When disabled", () => {

@@ -93,6 +93,34 @@ export const activityValuesJSON = [
         endDate: taskStartDate
     }
 ];
+export const eventValuesJson = [
+    {
+        key: "uid_event_1",
+        label: {
+            display: "Defect A"
+        },
+        color: Carbon.helpers.COLORS.BLUE,
+        values: [new Date(2018, 2, 5).toISOString()]
+    },
+    {
+        key: "uid_event_2",
+        label: {
+            display: "Defect B"
+        },
+        color: Carbon.helpers.COLORS.BLUE,
+        values: [new Date(2018, 5, 4).toISOString()]
+    },
+];
+export const actionValuesJson = [
+    {
+        key: "uid_action_1",
+        values: [new Date(2018, 2, 1, 6, 15).toISOString()]
+    },
+    {
+        key: "uid_action_2",
+        values: [new Date(2018, 7, 1, 6, 15).toISOString()]
+    }   
+];
 export const trackDimension = {
     dimension: {
         trackHeight: 100
