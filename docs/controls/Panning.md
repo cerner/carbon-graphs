@@ -59,6 +59,27 @@ const dataSet = {
 };
 ```
 
+```jsx
+// panData
+const dataSet = {
+    key: "uid_1", // key should already be present in the graph
+    values: [
+        {
+            x: new Date(2016, 0, 1, 10, 5).toISOString(),
+            y: 95
+        },
+        {
+            x: new Date(2016, 0, 1, 12, 15).toISOString(),
+            y: 92
+        },
+        {
+            x: new Date(2016, 0, 1, 14, 15).toISOString(),
+            y: 98
+        }
+    ]
+};
+```
+
 ```javascript
 export const renderLineWithPanning = (id) => {
     const axisData = graphConfiguration;
@@ -70,6 +91,33 @@ export const renderLineWithPanning = (id) => {
 
     const createGraph = () => {
         graph.reflow();
+    };
+
+    const graph = Carbon.api.graph(axisData);
+    graph.loadContent(Carbon.api.line(graphData));
+    // Additional data-sets to be loaded here only, like:
+    graph.loadContent(Carbon.api.line(/* Data array */));
+    axisData.axis = graph.config.axis;
+
+    createPanningControls(id, {
+        axisData,
+        creationHandler: createGraph
+    });
+    return graph;
+};
+```
+
+```javascript
+export const renderLinePanningWithDynamicData = (id) => {
+    const axisData = graphConfiguration;
+    axisData.pan = {
+        enabled: true
+    };
+    const graphData = dataSet;
+    graphData.regions = [regions[0]];
+
+    const createGraph = () => {
+        graph.reflow(panData);
     };
 
     const graph = Carbon.api.graph(axisData);
