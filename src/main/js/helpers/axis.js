@@ -191,37 +191,136 @@ const getAxesScale = (axis, scale, config) => {
         getAxisInfoOrientation(config.axis.x.orientation)
     );
 
-    // If ticksCount is undefined or greater than TICKS_MAXCOUNT
-    // AND if the Y2 is visible, then utilize a default value for
-    // the ticksCount. This is based on the ranges of the Y & Y2 axes.
+    if (hasY2Axis(config.axis)) {
+        if (!utils.isUndefined(config.axis.y.ticks.values)) {
+            axis.y = prepareYAxis(
+                scale.y,
+                config.axis.y.ticks.values,
+                config.height,
+                getAxisTickFormat(config.locale, config.axis.y.ticks.format)
+            );
+            axis.y2 = prepareY2Axis(
+                scale.y2,
+                config.axis.y2.ticks.values,
+                config.height,
+                getAxisTickFormat(config.locale, config.axis.y2.ticks.format)
+            );
+            return axis;
+        }
 
-    if (
-        (utils.isUndefined(config.ticksCount) ||
-            config.ticksCount > constants.TICKSCOUNT_MAXLIMIT) &&
-        hasY2Axis(config.axis)
-    )
-        config.ticksCount = getAverageTicksCount(
+        // If ticksCount is defined
+        if (
+            !utils.isUndefined(config.ticksCount) &&
+            config.ticksCount <= constants.TICKSCOUNT_MAXLIMIT
+        ) {
+            const yTickValues = generateYAxesTickValues(
+                config.axis.y.domain.lowerLimit,
+                config.axis.y.domain.upperLimit,
+                config.ticksCount,
+                config.allowCalibration
+            );
+
+            const y2TickValues = generateYAxesTickValues(
+                config.axis.y2.domain.lowerLimit,
+                config.axis.y2.domain.upperLimit,
+                config.ticksCount,
+                config.allowCalibration
+            );
+
+            axis.y = prepareYAxis(
+                scale.y,
+                yTickValues,
+                config.height,
+                getAxisTickFormat(config.locale, config.axis.y.ticks.format)
+            );
+
+            axis.y2 = prepareY2Axis(
+                scale.y2,
+                y2TickValues,
+                config.height,
+                getAxisTickFormat(config.locale, config.axis.y2.ticks.format)
+            );
+
+            return axis;
+        }
+
+        // If ticksCount is undefined or greater than TICKS_MAXCOUNT
+        // AND if the Y2 is visible, then utilize a default value for
+        // the ticksCount. This is based on the ranges of the Y & Y2 axes.
+
+        const ticksCount = getAverageTicksCount(
             config.axis.y.domain.upperLimit - config.axis.y.domain.lowerLimit,
             config.axis.y2.domain.upperLimit - config.axis.y2.domain.lowerLimit
         );
 
-    axis.y = prepareYAxis(
-        scale.y,
-        config.axis.y.domain,
-        config.height,
-        getAxisTickFormat(config.locale, config.axis.y.ticks.format),
-        config.ticksCount
-    );
+        const yTickValues = generateYAxesTickValues(
+            config.axis.y.domain.lowerLimit,
+            config.axis.y.domain.upperLimit,
+            ticksCount,
+            config.allowCalibration
+        );
+        const y2TickValues = generateYAxesTickValues(
+            config.axis.y2.domain.lowerLimit,
+            config.axis.y2.domain.upperLimit,
+            ticksCount,
+            config.allowCalibration
+        );
 
-    if (hasY2Axis(config.axis)) {
+        axis.y = prepareYAxis(
+            scale.y,
+            yTickValues,
+            config.height,
+            getAxisTickFormat(config.locale, config.axis.y.ticks.format)
+        );
+
         axis.y2 = prepareY2Axis(
             scale.y2,
-            config.axis.y2.domain,
+            y2TickValues,
             config.height,
-            getAxisTickFormat(config.locale, config.axis.y2.ticks.format),
-            config.ticksCount
+            getAxisTickFormat(config.locale, config.axis.y2.ticks.format)
         );
+
+        return axis;
     }
+
+    if (!utils.isUndefined(config.axis.y.ticks.values)) {
+        axis.y = prepareYAxis(
+            scale.y,
+            config.axis.y.ticks.values,
+            config.height,
+            getAxisTickFormat(config.locale, config.axis.y.ticks.format)
+        );
+        return axis;
+    }
+
+    if (
+        !utils.isUndefined(config.ticksCount) ||
+        config.ticksCount <= constants.TICKSCOUNT_MAXLIMIT
+    ) {
+        const yTickValues = generateYAxesTickValues(
+            config.axis.y.domain.lowerLimit,
+            config.axis.y.domain.upperLimit,
+            config.ticksCount,
+            config.allowCalibration
+        );
+
+        axis.y = prepareYAxis(
+            scale.y,
+            yTickValues,
+            config.height,
+            getAxisTickFormat(config.locale, config.axis.y.ticks.format)
+        );
+
+        return axis;
+    }
+
+    axis.y = prepareYAxis(
+        scale.y,
+        undefined,
+        config.height,
+        getAxisTickFormat(config.locale, config.axis.y.ticks.format)
+    );
+
     return axis;
 };
 
@@ -329,35 +428,41 @@ const getAverageTicksCount = (rangeY, rangeY2) => {
  * @param {number} lowerLimit - Lower limit of the Y or Y2 Axis
  * @param {number} upperLimit - Upper limit of the Y or Y2 Axis
  * @param {number} ticksCount - Number of ticks between the upper and lower limits
+ * @param {boolean} allowCalibration - Whether this property is true or false
  * @returns {(Array)} returns array of values to be used as tick labels
  */
 const generateYAxesTickValues = (
     lowerLimit,
     upperLimit,
-    ticksCount = constants.DEFAULT_TICKSCOUNT
+    ticksCount = constants.DEFAULT_TICKSCOUNT,
+    allowCalibration = true
 ) => {
     ticksCount = Math.abs(ticksCount);
     const tickValues = [];
 
     // use the d3,js nice function to round off the upper and lower limits
     // to multiples of 2, 5 or 10
-    const [newLowerLimit, newUpperLimit] = d3
-        .scaleLinear()
-        .domain([lowerLimit, upperLimit])
-        .nice()
-        .domain();
+    // let [newLowerLimit, newUpperLimit] = [lowerLimit, upperLimit];
 
-    tickValues.push(newLowerLimit);
-    tickValues.push(newUpperLimit);
+    if (allowCalibration) {
+        [lowerLimit, upperLimit] = d3
+            .scaleLinear()
+            .domain([lowerLimit, upperLimit])
+            .nice()
+            .domain();
+    }
 
-    if (newLowerLimit < 0) {
+    tickValues.push(lowerLimit);
+    tickValues.push(upperLimit);
+
+    if (lowerLimit < 0) {
         tickValues.push(0);
     }
 
-    const interval = (newUpperLimit - newLowerLimit) / (ticksCount + 1);
+    const interval = (upperLimit - lowerLimit) / (ticksCount + 1);
 
     for (let index = 1; index <= ticksCount; index++) {
-        tickValues.push(newLowerLimit + interval * index);
+        tickValues.push(lowerLimit + interval * index);
     }
 
     return tickValues;
@@ -456,23 +561,16 @@ const prepareHorizontalAxis = (scale, tickValues, config, orientation) =>
  *
  * @private
  * @param {object} scale - d3 scale calculated using domain and range
- * @param {number} domain -  d3 domain of the axis
+ * @param {Array} tickValues - Array of values that represent the tick values
  * @param {number} height - Height of the Y Axis to calculate the number of Y Axis ticks
  * @param {object} format - d3 locale object formatted to represent the tick.
- * @param {number} ticksCount - Number of ticks between the upper and lower limits
  * @returns {object} d3 object which forms the y-axis scale
  */
-const prepareYAxis = (scale, domain, height, format, ticksCount) =>
+const prepareYAxis = (scale, tickValues, height, format) =>
     d3
         .axisLeft(scale)
         .ticks(height / constants.DEFAULT_Y_AXIS_SPACING)
-        .tickValues(
-            generateYAxesTickValues(
-                domain.lowerLimit,
-                domain.upperLimit,
-                ticksCount
-            )
-        )
+        .tickValues(tickValues)
         .tickFormat(format);
 
 /**
@@ -480,23 +578,16 @@ const prepareYAxis = (scale, domain, height, format, ticksCount) =>
  *
  * @private
  * @param {object} scale - d3 scale calculated using domain and range
- * @param {number} domain - d3 domain of the axis
+ * @param {Array} tickValues - Array of values that represent the tick values
  * @param {number} height - Height of the Y2 Axis to calculate the number of Y2 Axis ticks
  * @param {object} format - d3 locale object formatted to represent the tick.
- * @param {number} ticksCount - Number of ticks between the upper and lower limits
  * @returns {object} d3 object which forms the y2-axis scale
  */
-const prepareY2Axis = (scale, domain, height, format, ticksCount) =>
+const prepareY2Axis = (scale, tickValues, height, format) =>
     d3
         .axisRight(scale)
         .ticks(height / constants.DEFAULT_Y_AXIS_SPACING)
-        .tickValues(
-            generateYAxesTickValues(
-                domain.lowerLimit,
-                domain.upperLimit,
-                ticksCount
-            )
-        )
+        .tickValues(tickValues)
         .tickFormat(format);
 
 /**
