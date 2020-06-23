@@ -33,19 +33,7 @@
             "release": "minor"
           },
           {
-            "tag": "Docs",
-            "release": "patch"
-          },
-          {
-            "tag": "Build",
-            "release": "patch"
-          },
-          {
             "tag": "Upgrade",
-            "release": "patch"
-          },
-          {
-            "tag": "Chore",
             "release": "patch"
           },
           {

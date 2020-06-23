@@ -99,6 +99,9 @@ Your commit message should look something like this:
 <Tag>: <Short description> (fixes #1234)
 ```
 
+**Note**:
+1234 is the Carbon [Github issue](https://github.com/cerner/carbon-graphs/issues/237) number.
+
 #### Pull Request
 
 -   Provide the PR with all necessary information to ease code review process in the `Description`, for instance:
@@ -110,6 +113,17 @@ Your commit message should look something like this:
 ### Release
 
 Release is automated, and will be performed when PR is merged to `master` branch.
+
+carbon-graphs will be released following release types based on the commit message tags
+
+|   Tag    | Release |
+| :------: | :-----: |
+| Breaking |  major  |
+|   Fix    |  patch  |
+|   New    |  minor  |
+|  Update  |  minor  |
+| Upgrade  |  patch  |
+|  Revert  |  patch  |
 
 ### Deploying the site to GitHub
 
