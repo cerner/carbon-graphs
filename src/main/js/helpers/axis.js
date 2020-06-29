@@ -192,7 +192,7 @@ const getAxesScale = (axis, scale, config) => {
     );
 
     if (hasY2Axis(config.axis)) {
-        if (!utils.isUndefined(config.axis.y.ticks.values)) {
+        if (utils.isDefined(config.axis.y.ticks.values)) {
             axis.y = prepareYAxis(
                 scale.y,
                 config.axis.y.ticks.values,
@@ -210,7 +210,7 @@ const getAxesScale = (axis, scale, config) => {
 
         // If ticksCount is defined
         if (
-            !utils.isUndefined(config.ticksCount) &&
+            utils.isDefined(config.ticksCount) &&
             config.ticksCount <= constants.TICKSCOUNT_MAXLIMIT
         ) {
             const yTickValues = generateYAxesTickValues(
@@ -283,7 +283,7 @@ const getAxesScale = (axis, scale, config) => {
         return axis;
     }
 
-    if (!utils.isUndefined(config.axis.y.ticks.values)) {
+    if (utils.isDefined(config.axis.y.ticks.values)) {
         axis.y = prepareYAxis(
             scale.y,
             config.axis.y.ticks.values,
@@ -294,7 +294,7 @@ const getAxesScale = (axis, scale, config) => {
     }
 
     if (
-        !utils.isUndefined(config.ticksCount) ||
+        utils.isDefined(config.ticksCount) ||
         config.ticksCount <= constants.TICKSCOUNT_MAXLIMIT
     ) {
         const yTickValues = generateYAxesTickValues(
