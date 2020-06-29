@@ -11,7 +11,9 @@
     "iOS >= 7",
     "Safari >= 7.1"
   ],
-  "bugs": "https://github.com/cerner/carbon-graphs/issues",
+  "bugs": {
+    "url": "https://github.com/cerner/carbon-graphs/issues"
+  },
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
@@ -45,7 +47,8 @@
     }
   },
   "dependencies": {
-    "d3": "^5.16.0"
+    "d3": "^5.16.0",
+    "wdio": "^4.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",
@@ -59,11 +62,18 @@
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
     "@semantic-release/git": "^9.0.0",
+    "@wdio/cli": "^6.1.20",
+    "@wdio/local-runner": "^6.1.20",
+    "@wdio/mocha-framework": "^6.1.19",
+    "@wdio/selenium-standalone-service": "^6.1.14",
+    "@wdio/spec-reporter": "^6.1.14",
+    "@wdio/sync": "^6.1.14",
     "autoprefixer": "^9.8.0",
     "babel-loader": "^8.1.0",
     "babel-plugin-istanbul": "^6.0.0",
     "babel-plugin-minify-replace": "^0.5.0",
     "babel-preset-minify": "^0.5.1",
+    "chromedriver": "^83.0.0",
     "commander": "^5.1.0",
     "conventional-changelog-eslint": "^3.0.8",
     "css-loader": "^3.5.3",
@@ -104,7 +114,10 @@
     "style-loader": "^1.2.1",
     "stylelint": "^13.5.0",
     "stylelint-config-standard": "^20.0.0",
+    "terra-toolkit": "^6.3.0",
     "url-loader": "^4.1.0",
+    "wdio-chromedriver-service": "^6.0.3",
+    "webdriverio": "^6.1.20",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.11.0",
@@ -173,7 +186,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/cerner/carbon-graphs.git"
+    "url": "git+https://github.com/cerner/carbon-graphs.git"
   },
   "scripts": {
     "build": "webpack --config ./build/webpack/webpack.config.js --env.TYPE=LIB",
@@ -181,7 +194,7 @@
     "build:site": "npm run docs && webpack --config ./build/webpack/site.webpack.js --env.TYPE=SITE",
     "clean": "rimraf dist lib .site .coverage",
     "dev": "node ./build/webpack/dev-server.js",
-    "docs": "node_modules/.bin/jsdoc -c jsdoc.json",
+    "docs": "jsdoc -c jsdoc.json",
     "heroku-postbuild": "npm install --only=dev && npm run build:site",
     "lint": "npm run lint:source && npm run lint:styles && npm run docs",
     "lint:fix": "eslint src --color --fix",
@@ -192,5 +205,9 @@
     "style": "prettier \"src/**/*.*\" \"dev/**/*.*\" \"docs/**/*.md*\" --write",
     "test": "karma start ./build/karma/karma.config.js --single-run --no-auto-watch",
     "test:persist": "karma start ./build/karma/karma.config.js --no-single-run"
+  },
+  "directories": {
+    "doc": "docs",
+    "lib": "lib"
   }
 }
