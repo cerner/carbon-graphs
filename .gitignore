@@ -9,3 +9,5 @@ npm-debug.log
 debug.log
 *.stackdump
 .vscode
+
+docs/diagrams/plantuml.jar

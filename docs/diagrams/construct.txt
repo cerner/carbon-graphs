@@ -1,0 +1,8 @@
+@startuml
+Graph <|-- Construct
+Construct : +generate(input)
+Construct : +loadContent(graphContent)
+Construct : +unloadContent(graphContent)
+Construct : +resize()
+Construct : +destroy()
+@enduml
