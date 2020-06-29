@@ -442,7 +442,6 @@ const generateYAxesTickValues = (
 
     // use the d3,js nice function to round off the upper and lower limits
     // to multiples of 2, 5 or 10
-    // let [newLowerLimit, newUpperLimit] = [lowerLimit, upperLimit];
 
     if (allowCalibration) {
         [lowerLimit, upperLimit] = d3
