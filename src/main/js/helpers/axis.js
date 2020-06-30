@@ -198,7 +198,9 @@ const getAxesScale = (axis, scale, config) => {
     );
 
     if (hasY2Axis(config.axis)) {
-        // Y and Y2 axes - custom tick values
+        // Y and Y2 axes - custom tick values. Takes priority
+        // and ignores ticksCount if it is set. Will not work if only
+        // Y2 ticks are provided.
         if (utils.isDefined(config.axis.y.ticks.values)) {
             axis.y = prepareYAxis(
                 scale.y,
@@ -212,8 +214,9 @@ const getAxesScale = (axis, scale, config) => {
                 config.height,
                 getAxisTickFormat(config.locale, config.axis.y2.ticks.format)
             );
+            return axis;
         }
-        // Y and Y2 axes - ticksCount
+        // Y and Y2 axes - ticksCount.
         else if (
             utils.isDefined(config.ticksCount) &&
             config.ticksCount <= constants.TICKSCOUNT_MAXLIMIT
@@ -246,7 +249,6 @@ const getAxesScale = (axis, scale, config) => {
                 getAxisTickFormat(config.locale, config.axis.y2.ticks.format)
             );
         }
-
         // Y and Y2 axes - If ticksCount is undefined or greater than
         // TICKS_MAXCOUNT AND if the Y2 is visible, then utilize a default value
         // for the ticksCount. This is based on the ranges of the Y & Y2 axes.
