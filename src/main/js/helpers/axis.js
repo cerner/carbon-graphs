@@ -2,12 +2,22 @@
 
 import * as d3 from "d3";
 import Bar from "../controls/Bar/Bar";
-import { getScale, getType } from "../core/BaseConfig";
-import constants, { AXES_ORIENTATION, AXIS_TYPE } from "../helpers/constants";
+import {
+    getScale,
+    getType
+} from "../core/BaseConfig";
+import constants, {
+    AXES_ORIENTATION,
+    AXIS_TYPE
+} from "../helpers/constants";
 import styles from "../helpers/styles";
 import utils from "../helpers/utils";
-import { DEFAULT_TICK_FORMAT } from "../locale";
-import { prepareHAxis } from "./datetimeBuckets";
+import {
+    DEFAULT_TICK_FORMAT
+} from "../locale";
+import {
+    prepareHAxis
+} from "./datetimeBuckets";
 
 /**
  * @module axis
@@ -31,9 +41,14 @@ const hasNegativeLowerBound = (scale, yAxis = constants.Y_AXIS) =>
  * @param {object} scale - d3 scale taking into account the input parameters
  * @returns {Array} x and y co-ordinate data for drawing a reference line
  */
-const getReferenceLineData = (scale) => [
-    { x: scale.x.domain()[0], y: 0 },
-    { x: scale.x.domain()[1], y: 0 }
+const getReferenceLineData = (scale) => [{
+        x: scale.x.domain()[0],
+        y: 0
+    },
+    {
+        x: scale.x.domain()[1],
+        y: 0
+    }
 ];
 /**
  * Creates a simple reference line with x and y attributes
@@ -45,9 +60,9 @@ const getReferenceLineData = (scale) => [
  */
 const createReferenceLine = (scale, yAxis) =>
     d3
-        .line()
-        .x((value) => scale.x(value.x))
-        .y((value) => scale[yAxis](value.y));
+    .line()
+    .x((value) => scale.x(value.x))
+    .y((value) => scale[yAxis](value.y));
 /**
  * Create the d3 Axes - X, Y and Y2 and append into the canvas.
  * If axis.x.show, axis.y.show or axis.y2.show is set to false:
@@ -148,13 +163,13 @@ const createAxisReferenceLine = (axis, scale, config, canvasSVG) => {
     )}, ${getYAxisYPosition(config)})`;
     const setReferenceLineAttributes = (path, style) =>
         path
-            .classed(styles.axisReferenceLine, true)
-            .attr("aria-hidden", !hasNegativeLowerBound(scale, style))
-            .attr("transform", transformAttribute)
-            .attr(
-                "d",
-                createReferenceLine(scale, style)(getReferenceLineData(scale))
-            );
+        .classed(styles.axisReferenceLine, true)
+        .attr("aria-hidden", !hasNegativeLowerBound(scale, style))
+        .attr("transform", transformAttribute)
+        .attr(
+            "d",
+            createReferenceLine(scale, style)(getReferenceLineData(scale))
+        );
     setReferenceLineAttributes(canvasSVG.append("path"), constants.Y_AXIS)
         .classed(styles.axis, true)
         .classed(styles.axisY, true);
@@ -192,6 +207,9 @@ const getAxesScale = (axis, scale, config) => {
     );
 
     if (hasY2Axis(config.axis)) {
+
+
+        // Y and Y2 axes - custom tick values
         if (utils.isDefined(config.axis.y.ticks.values)) {
             axis.y = prepareYAxis(
                 scale.y,
@@ -205,11 +223,9 @@ const getAxesScale = (axis, scale, config) => {
                 config.height,
                 getAxisTickFormat(config.locale, config.axis.y2.ticks.format)
             );
-            return axis;
         }
-
-        // If ticksCount is defined
-        if (
+        // Y and Y2 axes - ticksCount
+        else if (
             utils.isDefined(config.ticksCount) &&
             config.ticksCount <= constants.TICKSCOUNT_MAXLIMIT
         ) {
@@ -240,87 +256,90 @@ const getAxesScale = (axis, scale, config) => {
                 config.height,
                 getAxisTickFormat(config.locale, config.axis.y2.ticks.format)
             );
+        } 
 
-            return axis;
+        // Y and Y2 axes - If ticksCount is undefined or greater than 
+        // TICKS_MAXCOUNT AND if the Y2 is visible, then utilize a default value
+        // for the ticksCount. This is based on the ranges of the Y & Y2 axes.
+        else {
+            const ticksCount = getAverageTicksCount(
+                config.axis.y.domain.upperLimit - config.axis.y.domain.lowerLimit,
+                config.axis.y2.domain.upperLimit - config.axis.y2.domain.lowerLimit
+            );
+
+            const yTickValues = generateYAxesTickValues(
+                config.axis.y.domain.lowerLimit,
+                config.axis.y.domain.upperLimit,
+                ticksCount,
+                config.allowCalibration
+            );
+            const y2TickValues = generateYAxesTickValues(
+                config.axis.y2.domain.lowerLimit,
+                config.axis.y2.domain.upperLimit,
+                ticksCount,
+                config.allowCalibration
+            );
+
+            axis.y = prepareYAxis(
+                scale.y,
+                yTickValues,
+                config.height,
+                getAxisTickFormat(config.locale, config.axis.y.ticks.format)
+            );
+
+            axis.y2 = prepareY2Axis(
+                scale.y2,
+                y2TickValues,
+                config.height,
+                getAxisTickFormat(config.locale, config.axis.y2.ticks.format)
+            );
         }
-
-        // If ticksCount is undefined or greater than TICKS_MAXCOUNT
-        // AND if the Y2 is visible, then utilize a default value for
-        // the ticksCount. This is based on the ranges of the Y & Y2 axes.
-
-        const ticksCount = getAverageTicksCount(
-            config.axis.y.domain.upperLimit - config.axis.y.domain.lowerLimit,
-            config.axis.y2.domain.upperLimit - config.axis.y2.domain.lowerLimit
-        );
-
-        const yTickValues = generateYAxesTickValues(
-            config.axis.y.domain.lowerLimit,
-            config.axis.y.domain.upperLimit,
-            ticksCount,
-            config.allowCalibration
-        );
-        const y2TickValues = generateYAxesTickValues(
-            config.axis.y2.domain.lowerLimit,
-            config.axis.y2.domain.upperLimit,
-            ticksCount,
-            config.allowCalibration
-        );
-
-        axis.y = prepareYAxis(
-            scale.y,
-            yTickValues,
-            config.height,
-            getAxisTickFormat(config.locale, config.axis.y.ticks.format)
-        );
-
-        axis.y2 = prepareY2Axis(
-            scale.y2,
-            y2TickValues,
-            config.height,
-            getAxisTickFormat(config.locale, config.axis.y2.ticks.format)
-        );
-
-        return axis;
     }
+    // Only single Y axis
+    else {
 
-    if (utils.isDefined(config.axis.y.ticks.values)) {
-        axis.y = prepareYAxis(
-            scale.y,
-            config.axis.y.ticks.values,
-            config.height,
-            getAxisTickFormat(config.locale, config.axis.y.ticks.format)
-        );
-        return axis;
+        // Single Y axis - custom tick values
+        if (utils.isDefined(config.axis.y.ticks.values)) {
+            axis.y = prepareYAxis(
+                scale.y,
+                config.axis.y.ticks.values,
+                config.height,
+                getAxisTickFormat(config.locale, config.axis.y.ticks.format)
+            );
+            // return axis;
+        }
+        // Single Y axis - ticksCount is defined
+        else if (
+            utils.isDefined(config.ticksCount) ||
+            config.ticksCount <= constants.TICKSCOUNT_MAXLIMIT
+        ) {
+            const yTickValues = generateYAxesTickValues(
+                config.axis.y.domain.lowerLimit,
+                config.axis.y.domain.upperLimit,
+                config.ticksCount,
+                config.allowCalibration
+            );
+
+            axis.y = prepareYAxis(
+                scale.y,
+                yTickValues,
+                config.height,
+                getAxisTickFormat(config.locale, config.axis.y.ticks.format)
+            );
+
+        }
+        // Single Y axis - default case when 
+        // config.axis.y.ticks.values and ticksCount
+        // are not defined
+        else {
+            axis.y = prepareYAxis(
+                scale.y,
+                undefined,
+                config.height,
+                getAxisTickFormat(config.locale, config.axis.y.ticks.format)
+            );
+        }
     }
-
-    if (
-        utils.isDefined(config.ticksCount) ||
-        config.ticksCount <= constants.TICKSCOUNT_MAXLIMIT
-    ) {
-        const yTickValues = generateYAxesTickValues(
-            config.axis.y.domain.lowerLimit,
-            config.axis.y.domain.upperLimit,
-            config.ticksCount,
-            config.allowCalibration
-        );
-
-        axis.y = prepareYAxis(
-            scale.y,
-            yTickValues,
-            config.height,
-            getAxisTickFormat(config.locale, config.axis.y.ticks.format)
-        );
-
-        return axis;
-    }
-
-    axis.y = prepareYAxis(
-        scale.y,
-        undefined,
-        config.height,
-        getAxisTickFormat(config.locale, config.axis.y.ticks.format)
-    );
-
     return axis;
 };
 
@@ -343,9 +362,9 @@ const getAxisTickFormat = (locale, format, type = AXIS_TYPE.DEFAULT) => {
         return format;
     }
     const _locale =
-        type === AXIS_TYPE.TIME_SERIES
-            ? d3.timeFormatDefaultLocale(locale)
-            : d3.formatDefaultLocale(locale);
+        type === AXIS_TYPE.TIME_SERIES ?
+        d3.timeFormatDefaultLocale(locale) :
+        d3.formatDefaultLocale(locale);
 
     if (utils.isEmpty(format)) {
         return DEFAULT_TICK_FORMAT;
@@ -477,9 +496,9 @@ const generateYAxesTickValues = (
  * @returns {string} returns orientation for axis info row.
  */
 const getAxisInfoOrientation = (xAxisOrientation) =>
-    isXAxisOrientationTop(xAxisOrientation)
-        ? AXES_ORIENTATION.X.BOTTOM
-        : AXES_ORIENTATION.X.TOP;
+    isXAxisOrientationTop(xAxisOrientation) ?
+    AXES_ORIENTATION.X.BOTTOM :
+    AXES_ORIENTATION.X.TOP;
 /**
  * Creates the axis using the scale provided for X Axis using d3 svg axis.
  * If tickValues are provided then they are reserved precedence over ticks/tick counts.
@@ -567,10 +586,10 @@ const prepareHorizontalAxis = (scale, tickValues, config, orientation) =>
  */
 const prepareYAxis = (scale, tickValues, height, format) =>
     d3
-        .axisLeft(scale)
-        .ticks(height / constants.DEFAULT_Y_AXIS_SPACING)
-        .tickValues(tickValues)
-        .tickFormat(format);
+    .axisLeft(scale)
+    .ticks(height / constants.DEFAULT_Y_AXIS_SPACING)
+    .tickValues(tickValues)
+    .tickFormat(format);
 
 /**
  * Creates the axis using the scale provided for Y2 Axis using d3 svg axis
@@ -584,10 +603,10 @@ const prepareYAxis = (scale, tickValues, height, format) =>
  */
 const prepareY2Axis = (scale, tickValues, height, format) =>
     d3
-        .axisRight(scale)
-        .ticks(height / constants.DEFAULT_Y_AXIS_SPACING)
-        .tickValues(tickValues)
-        .tickFormat(format);
+    .axisRight(scale)
+    .ticks(height / constants.DEFAULT_Y_AXIS_SPACING)
+    .tickValues(tickValues)
+    .tickFormat(format);
 
 /**
  * Returns the number of degrees the rotation of axis needs to be performed based on axis
@@ -623,11 +642,11 @@ const getXAxisLabelXPosition = (config) =>
  * @returns {number} Position for the label
  */
 const getXAxisLabelYPosition = (config) =>
-    isXAxisOrientationTop(config.axis.x.orientation)
-        ? calculateVerticalPadding(config) - config.axisLabelHeights.x * 2
-        : getXAxisYPosition(config) +
-          config.axisLabelHeights.x * 2 +
-          (config.padding.bottom - config.axisInfoRowLabelHeight) * 2;
+    isXAxisOrientationTop(config.axis.x.orientation) ?
+    calculateVerticalPadding(config) - config.axisLabelHeights.x * 2 :
+    getXAxisYPosition(config) +
+    config.axisLabelHeights.x * 2 +
+    (config.padding.bottom - config.axisInfoRowLabelHeight) * 2;
 /**
  * Y Axis label's starting position vertically beside the graph
  *
@@ -735,9 +754,9 @@ const getXAxisXPosition = (config) =>
  * @returns {number} Position for the axis
  */
 const getAxisInfoRowYPosition = (config) =>
-    isXAxisOrientationTop(config.axis.x.orientation)
-        ? getYAxisHeight(config) + calculateVerticalPadding(config)
-        : calculateVerticalPadding(config);
+    isXAxisOrientationTop(config.axis.x.orientation) ?
+    getYAxisHeight(config) + calculateVerticalPadding(config) :
+    calculateVerticalPadding(config);
 /**
  * Axis Info Row's position vertically relative to the canvas
  *
@@ -746,9 +765,9 @@ const getAxisInfoRowYPosition = (config) =>
  * @returns {number} Position for the axis
  */
 const getXAxisYPosition = (config) =>
-    isXAxisOrientationTop(config.axis.x.orientation)
-        ? calculateVerticalPadding(config)
-        : getYAxisHeight(config) + calculateVerticalPadding(config);
+    isXAxisOrientationTop(config.axis.x.orientation) ?
+    calculateVerticalPadding(config) :
+    getYAxisHeight(config) + calculateVerticalPadding(config);
 /**
  * Y Axis's starting position relative to the canvas
  *
@@ -917,9 +936,9 @@ const getY2AxisWidth = (config) => {
     if (config.padding.hasCustomPadding) {
         return config.padding.right;
     }
-    return hasY2Axis(config.axis)
-        ? getYAxisWidth(constants.Y2_AXIS, config)
-        : 20;
+    return hasY2Axis(config.axis) ?
+        getYAxisWidth(constants.Y2_AXIS, config) :
+        20;
 };
 
 /**
@@ -977,9 +996,9 @@ const calculateAxesLabelSize = (config) => {
             );
         }
         if (hasY2Axis(config.axis) && config.axis.y2.label) {
-            config.axisLabelWidths.y2 = hasY2Axis(config.axis)
-                ? getAxisLabelWidth(config.axis.y2.label, constants.Y2_AXIS)
-                : 0;
+            config.axisLabelWidths.y2 = hasY2Axis(config.axis) ?
+                getAxisLabelWidth(config.axis.y2.label, constants.Y2_AXIS) :
+                0;
         }
     }
 };
@@ -1013,16 +1032,16 @@ const getLowerOutlierStretchFactorList = (config) => {
     const lowerStretchFactors = [];
     const getMinValue = (config, yAxis, axisMinValue) => {
         const dataRangeMinValue = config.axis[yAxis].dataRange.min;
-        return dataRangeMinValue < axisMinValue
-            ? dataRangeMinValue
-            : axisMinValue;
+        return dataRangeMinValue < axisMinValue ?
+            dataRangeMinValue :
+            axisMinValue;
     };
     const getLowerStretchFactor = (yAxis) => {
         const axisMinValue = config.axis[yAxis].domain.lowerLimit;
         const axisMidPoint = getMidPoint(config, yAxis);
         const lowerStretchFactor = Math.abs(
             (axisMidPoint - getMinValue(config, yAxis, axisMinValue)) /
-                (axisMidPoint - axisMinValue)
+            (axisMidPoint - axisMinValue)
         );
         return lowerStretchFactor > 1 ? lowerStretchFactor : 1;
     };
@@ -1046,16 +1065,16 @@ const getUpperOutlierStretchFactorList = (config) => {
     const upperStretchFactors = [];
     const getMaxValue = (config, yAxis, axisMaxValue) => {
         const dataRangeMaxValue = config.axis[yAxis].dataRange.max;
-        return dataRangeMaxValue > axisMaxValue
-            ? dataRangeMaxValue
-            : axisMaxValue;
+        return dataRangeMaxValue > axisMaxValue ?
+            dataRangeMaxValue :
+            axisMaxValue;
     };
     const getUpperStretchFactor = (yAxis) => {
         const axisMaxValue = config.axis[yAxis].domain.upperLimit;
         const axisMidPoint = getMidPoint(config, yAxis);
         const upperStretchFactor = Math.abs(
             (getMaxValue(config, yAxis, axisMaxValue) - axisMidPoint) /
-                (axisMaxValue - axisMidPoint)
+            (axisMaxValue - axisMidPoint)
         );
         return upperStretchFactor > 1 ? upperStretchFactor : 1;
     };
@@ -1097,10 +1116,10 @@ const determineOutlierStretchFactor = (config) => {
  */
 const buildAxisLabel = (group, label) =>
     group
-        .append("text")
-        .attr("text-anchor", "middle")
-        .append("tspan")
-        .text(label);
+    .append("text")
+    .attr("text-anchor", "middle")
+    .append("tspan")
+    .text(label);
 /**
  * Decides true if the input JSON y2.show is enabled and if y2 axis points are provided
  *
@@ -1194,13 +1213,13 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
 const translateAxisReferenceLine = (axis, scale, config, canvasSVG) => {
     const setTranslate = (path, style) =>
         path
-            .transition()
-            .call(constants.d3Transition(config.settingsDictionary.transition))
-            .attr("aria-hidden", false)
-            .attr(
-                "d",
-                createReferenceLine(scale, style)(getReferenceLineData(scale))
-            );
+        .transition()
+        .call(constants.d3Transition(config.settingsDictionary.transition))
+        .attr("aria-hidden", false)
+        .attr(
+            "d",
+            createReferenceLine(scale, style)(getReferenceLineData(scale))
+        );
     if (hasNegativeLowerBound(scale, constants.Y_AXIS)) {
         setTranslate(
             canvasSVG.select(
@@ -1288,8 +1307,7 @@ const getAxesDataRange = (
     const curRange = getCurMinMaxValueRange(input, content, axis);
     const prevMin = config.axis[axis].dataRange.oldMin;
     const prevMax = config.axis[axis].dataRange.oldMax;
-    const isRangeModified =
-        !(prevMin && prevMax) ||
+    const isRangeModified = !(prevMin && prevMax) ||
         !(prevMin <= curRange.min || prevMax >= curRange.max);
     config.axis[axis].dataRange.isRangeModified = isRangeModified;
     if (isRangeModified) {
