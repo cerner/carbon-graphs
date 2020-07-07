@@ -7,7 +7,7 @@ sudo: required
 script: skip
 branches:
     only:
-        - master
+        - main
         - /^greenkeeper/.*$/
 jobs:
     include:
@@ -36,7 +36,7 @@ jobs:
               github_token: $GITHUB_TOKEN
               local_dir: .site
               on:
-                  branch: master
+                  branch: main
 stages:
     - lint
     - test

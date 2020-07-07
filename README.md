@@ -1,15 +1,15 @@
 <p align="center">
-    <img width="128" height="128" alt="Click for demo" src="https://github.com/cerner/carbon-graphs/raw/master/build/assets/icons/Carbon_256.png">
+    <img width="128" height="128" alt="Click for demo" src="https://github.com/cerner/carbon-graphs/raw/main/build/assets/icons/Carbon_256.png">
 </p>
 
 <h1 align="center">
   Carbon (carbon-graphs)
 </h1>
 
-[![Build Status](https://travis-ci.com/cerner/carbon-graphs.svg?branch=master)](https://travis-ci.com/cerner/carbon-graphs)
+[![Build Status](https://travis-ci.com/cerner/carbon-graphs.svg?branch=main)](https://travis-ci.com/cerner/carbon-graphs)
 [![npm latest version](https://img.shields.io/npm/v/@cerner/carbon-graphs/latest.svg)](https://www.npmjs.com/package/@cerner/carbon-graphs)
 [![Cerner OSS](https://badgen.net/badge/Cerner/OSS/blue)](https://engineering.cerner.com/open_source/)
-[![License](https://badgen.net/badge/license/Apache-2.0/blue)](https://github.com/cerner/carbon-graphs/blob/master/LICENSE)
+[![License](https://badgen.net/badge/license/Apache-2.0/blue)](https://github.com/cerner/carbon-graphs/blob/main/LICENSE)
 [![dependencies Status](https://david-dm.org/cerner/carbon-graphs/status.svg)](https://david-dm.org/cerner/carbon-graphs)
 [![devDependencies Status](https://david-dm.org/cerner/carbon-graphs/dev-status.svg)](https://david-dm.org/cerner/carbon-graphs?type=dev)
 [![Bugs](https://img.shields.io/github/issues/cerner/carbon-graphs/bug.svg)](https://github.com/cerner/carbon-graphs/issues?utf8=✓&q=is%3Aissue+is%3Aopen+label%3Abug)
