@@ -108,11 +108,11 @@ Your commit message should look something like this:
     -   Screenshots of the working prototype.
     -   Files you want the reviewer to focus on.
 -   Respond to all comments.
--   Do **not** rebase with master and force push until you reach `ready to merge` status.
+-   Do **not** rebase with main and force push until you reach `ready to merge` status.
 
 ### Release
 
-Release is automated, and will be performed when PR is merged to `master` branch.
+Release is automated, and will be performed when PR is merged to `main` branch.
 
 carbon-graphs will be released following release types based on the commit message tags
 
@@ -127,7 +127,7 @@ carbon-graphs will be released following release types based on the commit messa
 
 ### Deploying the site to GitHub
 
-Deployment of site is automated, and will be performed when PR is merged to `master` branch.
+Deployment of site is automated, and will be performed when PR is merged to `main` branch.
 
 ## Breaking changes
 
