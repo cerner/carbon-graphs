@@ -73,8 +73,8 @@ For documentation on code: [**JSDocs**](https://engineering.cerner.com/carbon-gr
 
 Used via `Carbon.helpers.SHAPES.DARK`
 
-| Constant      | Rendered as                                                                                                                                                   |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Constant      | Rendered as                                                                                                                                                 |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | CIRCLE        | <img width="16px" height="16px" src="https://raw.githubusercontent.com/cerner/one-cerner-style-icons/main/src/icons/S_0001_circle.svg?sanitize=true">       |
 | CROSS         | <img width="16px" height="16px" src="https://raw.githubusercontent.com/cerner/one-cerner-style-icons/main/src/icons/S_0003_plus.svg?sanitize=true">         |
 | DIAMOND       | <img width="16px" height="16px" src="https://raw.githubusercontent.com/cerner/one-cerner-style-icons/main/src/icons/S_0008_thinDiamond.svg?sanitize=true">  |
@@ -91,8 +91,8 @@ Used via `Carbon.helpers.SHAPES.DARK`
 
 Used via `Carbon.helpers.SHAPES.LIGHT`
 
-| Constant      | Rendered as                                                                                                                                                         |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Constant      | Rendered as                                                                                                                                                       |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | CIRCLE        | <img width="16px" height="16px" src="https://raw.githubusercontent.com/cerner/one-cerner-style-icons/main/src/icons/S_0001_circle_light.svg?sanitize=true">       |
 | CROSS         | <img width="16px" height="16px" src="https://raw.githubusercontent.com/cerner/one-cerner-style-icons/main/src/icons/S_0003_plus_light.svg?sanitize=true">         |
 | DIAMOND       | <img width="16px" height="16px" src="https://raw.githubusercontent.com/cerner/one-cerner-style-icons/main/src/icons/S_0008_thinDiamond_light.svg?sanitize=true">  |
