@@ -12,6 +12,7 @@ Ticks and Grid lines representing Axes values.
             -   [Values example](#values-example)
             -   [Datetime Buckets example](#datetime-buckets-example)
                 -   [Use Case](#use-case)
+    -   [Tick Values](#tick-values)
 
 ## Overview
 
@@ -107,3 +108,25 @@ var axis = {
     }
 };
 ```
+
+## Tick Values
+
+The tick values are set one of 3 methods, in the following priority:
+
+-   **Consumer provided values**:
+
+    Consumer provided values in `axis.y.ticks.values` and `axis.y2.ticks.values` will take priority if provided.
+
+-   **ticksCount property**
+
+    If no values are provided and the ticksCount property is set, then it will be used to calculate tick values by dividing `upperLimit - lowerLimit` into `ticksCount + 1` equal divisions. 
+    
+    If ticksCount is an invalid value, such as greater than `TICKSCOUNT_MAXLIMIT`, then this property will be ignored and the default behavior will be used.
+
+    If `axis.y.ticks.values` AND `ticksCount` are both provided, then `ticksCount` will be ignored in favor of the custom values.
+
+-   **Default**
+
+    If the Y2 Axis is visible, then the default behavior will calculate and use a ticksCount value based on the ranges of Y and Y2.
+
+    If there is no Y2 axis, the Carbon will use D3.js to automatically find the tick values.

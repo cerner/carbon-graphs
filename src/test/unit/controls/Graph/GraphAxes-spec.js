@@ -315,6 +315,7 @@ describe("Graph - Axes", () => {
             fetchElementByClass(styles.axisX).getAttribute("aria-hidden")
         ).toBe("true");
     });
+
     describe("Axes ticks processing", () => {
         beforeEach(() => {
             graph.destroy();
@@ -407,6 +408,248 @@ describe("Graph - Axes", () => {
             const rangeY = 32;
             const rangeY2 = 250;
             expect(getAverageTicksCount(rangeY, rangeY2)).toEqual(5);
+        });
+    });
+
+    describe("when Y-2 axis is present", () => {
+        beforeEach(() => {
+            graph.destroy();
+        });
+        it("uses custom tick values when axis.y.ticks.values is set and ignores ticksCount", () => {
+            const localeAxisObj = utils.deepClone(axisDefault);
+            localeAxisObj.y = {
+                label: "y axis - custom ticks",
+                lowerLimit: 0,
+                upperLimit: 10,
+                ticks: {
+                    values: [2, 4, 6, 8]
+                }
+            };
+            graph = new Graph(
+                Object.assign(
+                    {
+                        ticksCount: 2
+                    },
+                    getAxes(localeAxisObj)
+                )
+            );
+            const allYAxisElements = document.querySelectorAll(
+                `.${styles.axisY}`
+            );
+            const NumberOfTicks = allYAxisElements[0].childNodes.length;
+            expect(
+                allYAxisElements[0].childNodes[1].querySelector("text")
+                    .textContent
+            ).toBe("2");
+            expect(
+                allYAxisElements[0].childNodes[NumberOfTicks - 1].querySelector(
+                    "text"
+                ).textContent
+            ).toBe("8");
+        });
+
+        it("uses ticksCount values when axis.y.ticks.values is undefined and ticksCount is set", () => {
+            const localeAxisObj = utils.deepClone(axisDefault);
+            localeAxisObj.y = {
+                label: "y axis - ticksCount ticks",
+                lowerLimit: 0,
+                upperLimit: 10
+            };
+            graph = new Graph(
+                Object.assign(
+                    {
+                        ticksCount: 2
+                    },
+                    getAxes(localeAxisObj)
+                )
+            );
+            const allYAxisElements = document.querySelectorAll(
+                `.${styles.axisY}`
+            );
+            const NumberOfTicks = allYAxisElements[0].childNodes.length;
+            expect(
+                allYAxisElements[0].childNodes[3].querySelector("text")
+                    .textContent
+            ).toBe("3");
+            expect(
+                allYAxisElements[0].childNodes[NumberOfTicks - 1].querySelector(
+                    "text"
+                ).textContent
+            ).toBe("7");
+        });
+
+        it("uses default method for Y tick values when custom ticks and ticksCount are not provided", () => {
+            const localeAxisObj = utils.deepClone(axisDefault);
+            localeAxisObj.y = {
+                label: "y axis - default method",
+                lowerLimit: 0,
+                upperLimit: 10
+            };
+            graph = new Graph(Object.assign({}, getAxes(localeAxisObj)));
+            const allYAxisElements = document.querySelectorAll(
+                `.${styles.axisY}`
+            );
+            const NumberOfTicks = allYAxisElements[0].childNodes.length;
+            expect(
+                allYAxisElements[0].childNodes[2].querySelector("text")
+                    .textContent
+            ).toBe("1");
+            expect(
+                allYAxisElements[0].childNodes[NumberOfTicks - 2].querySelector(
+                    "text"
+                ).textContent
+            ).toBe("9");
+        });
+    });
+
+    describe("when only Y axis is present", () => {
+        beforeEach(() => {
+            graph.destroy();
+        });
+        it("uses custom values for Y and Y2 tick values when custom ticks are provided", () => {
+            const localeAxisObj = utils.deepClone(axisDefault);
+            localeAxisObj.y = {
+                label: "y axis - custom tick values",
+                lowerLimit: 0,
+                upperLimit: 10,
+                ticks: {
+                    values: [2, 4, 6, 8]
+                }
+            };
+            localeAxisObj.y2 = {
+                show: true,
+                label: "y2 axis - custom tick values",
+                lowerLimit: 11,
+                upperLimit: 25,
+                ticks: {
+                    values: [12, 14, 16, 18]
+                }
+            };
+            graph = new Graph(
+                Object.assign(
+                    {
+                        ticksCount: 2
+                    },
+                    getAxes(localeAxisObj)
+                )
+            );
+            const allYAxisElements = document.querySelectorAll(
+                `.${styles.axisY}`
+            );
+            const allY2AxisElements = document.querySelectorAll(
+                `.${styles.axisY2}`
+            );
+            const NumberOfTicks = allYAxisElements[0].childNodes.length;
+            expect(
+                allYAxisElements[0].childNodes[1].querySelector("text")
+                    .textContent
+            ).toBe("2");
+            expect(
+                allYAxisElements[0].childNodes[NumberOfTicks - 1].querySelector(
+                    "text"
+                ).textContent
+            ).toBe("8");
+            expect(
+                allY2AxisElements[0].childNodes[1].querySelector("text")
+                    .textContent
+            ).toBe("12");
+            expect(
+                allY2AxisElements[0].childNodes[
+                    NumberOfTicks - 1
+                ].querySelector("text").textContent
+            ).toBe("18");
+        });
+
+        it("uses ticksCount for Y and Y2 tick values when given ticksCount and custom ticks are undefined", () => {
+            const localeAxisObj = utils.deepClone(axisDefault);
+            localeAxisObj.y = {
+                label: "y axis - ticksCount",
+                lowerLimit: 0,
+                upperLimit: 10
+            };
+            localeAxisObj.y2 = {
+                show: true,
+                label: "y2 axis - ticksCount",
+                lowerLimit: 11,
+                upperLimit: 25,
+                ticks: {
+                    values: [12, 14, 16, 18]
+                }
+            };
+            graph = new Graph(
+                Object.assign(
+                    {
+                        ticksCount: 2
+                    },
+                    getAxes(localeAxisObj)
+                )
+            );
+            const allYAxisElements = document.querySelectorAll(
+                `.${styles.axisY}`
+            );
+            const allY2AxisElements = document.querySelectorAll(
+                `.${styles.axisY2}`
+            );
+            const NumberOfTicks = allYAxisElements[0].childNodes.length;
+            expect(
+                allYAxisElements[0].childNodes[3].querySelector("text")
+                    .textContent
+            ).toBe("3");
+            expect(
+                allYAxisElements[0].childNodes[NumberOfTicks - 1].querySelector(
+                    "text"
+                ).textContent
+            ).toBe("7");
+            expect(
+                allY2AxisElements[0].childNodes[3].querySelector("text")
+                    .textContent
+            ).toBe("16");
+            expect(
+                allY2AxisElements[0].childNodes[
+                    NumberOfTicks - 1
+                ].querySelector("text").textContent
+            ).toBe("20");
+        });
+
+        it("uses default method for Y and Y2 tick values when custom ticks and ticksCount are undefined", () => {
+            const localeAxisObj = utils.deepClone(axisDefault);
+            localeAxisObj.y = {
+                label: "y axis - default ticks",
+                lowerLimit: 0,
+                upperLimit: 10
+            };
+            localeAxisObj.y2 = {
+                show: true,
+                label: "y2 axis - default ticks",
+                lowerLimit: 11,
+                upperLimit: 25
+            };
+            graph = new Graph(Object.assign({}, getAxes(localeAxisObj)));
+            const allYAxisElements = document.querySelectorAll(
+                `.${styles.axisY}`
+            );
+            const allY2AxisElements = document.querySelectorAll(
+                `.${styles.axisY2}`
+            );
+            const NumberOfTicks = allYAxisElements[0].childNodes.length;
+            expect(
+                allYAxisElements[0].childNodes[3].querySelector("text")
+                    .textContent
+            ).toBe("3");
+            expect(
+                allYAxisElements[0].childNodes[NumberOfTicks - 1].querySelector(
+                    "text"
+                ).textContent
+            ).toBe("8");
+            expect(
+                allY2AxisElements[0].childNodes[3].querySelector("text")
+                    .textContent
+            ).toBe("15");
+            expect(
+                allY2AxisElements[0].childNodes[
+                    NumberOfTicks - 1
+                ].querySelector("text").textContent
+            ).toBe("22");
         });
     });
     describe("For timeseries type", () => {
