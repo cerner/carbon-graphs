@@ -1,5 +1,9 @@
 {
-  "branch": "main",
+  "branches": [
+    {
+        name: "main"
+    }
+  ],
   "prepare": [
     "@semantic-release/npm",
     {
