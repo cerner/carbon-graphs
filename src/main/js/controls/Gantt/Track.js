@@ -15,7 +15,8 @@ import { loadActions, unloadActions } from "./helpers/actionHelpers";
 import { loadActivities, unloadActivities } from "./helpers/activityHelpers";
 import {
     createTrackContainer,
-    removeTrackContainer, scaleGraph,
+    removeTrackContainer,
+    scaleGraph,
     updateTrackProps
 } from "./helpers/creationHelpers";
 import { loadEvents, unloadEvents } from "./helpers/eventHelpers";
