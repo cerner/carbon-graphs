@@ -119,8 +119,8 @@ The tick values are set one of 3 methods, in the following priority:
 
 -   **ticksCount property**
 
-    If no values are provided and the ticksCount property is set, then it will be used to calculate tick values by dividing `upperLimit - lowerLimit` into `ticksCount + 1` equal divisions. 
-    
+    If no values are provided and the ticksCount property is set, then it will be used to calculate tick values by dividing `upperLimit - lowerLimit` into `ticksCount + 1` equal divisions.
+
     If ticksCount is an invalid value, such as greater than `TICKSCOUNT_MAXLIMIT`, then this property will be ignored and the default behavior will be used.
 
     If `axis.y.ticks.values` AND `ticksCount` are both provided, then `ticksCount` will be ignored in favor of the custom values.
