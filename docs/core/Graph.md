@@ -48,7 +48,7 @@ Graph is a set of graphs that share a common set of base visualization structure
 | showNoDataText         | boolean  | true                                           | Toggle to show no data text                                                                                                                                                             |
 | showShapes             | boolean  | true                                           | Toggle to show shapes in the line graph                                                                                                                                                 |
 | showVGrid              | boolean  | true                                           | Toggle to show vertical grid                                                                                                                                                            |
-| ticksCount             | number   | 3                                              | Number of ticks to show on the vertical axes, excluding the upper and lower limits, if not provided, the number of ticks will be calculated automatically depending on the Y & Y2 range |
+| ticksCount             | number   | 3-7 depending on the input range               | Number of ticks (0-19) to show on the vertical axes, excluding the upper and lower limits, if not provided, the number of ticks will be set to a value from 3-7, based on the Y & Y2 range.|
 | throttle               | number   | (1000/60) => time in ms                        | Delay between resize of a browser window                                                                                                                                                |
 
 ## Dimension
