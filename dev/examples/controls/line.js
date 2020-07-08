@@ -579,3 +579,23 @@ export const renderLineGraphAndLegendPaddingReduced = (id) => {
     );
     return lineTime;
 };
+export const renderLineWithSuppressedTrailingZeros = (id) => {
+    const axisData = utils.deepClone(
+        getDemoData(`#${id}`, "LINE_DECIMAL_AXES_VALUES")
+    );
+    axisData.axis.x.suppressTrailingZeros = true;
+    axisData.axis.y.suppressTrailingZeros = true;
+    axisData.axis.y2.suppressTrailingZeros = true;
+    const lineTime = Carbon.api.graph(axisData);
+    lineTime.loadContent(
+        Carbon.api.line(
+            getDemoData(`#${id}`, "LINE_DECIMAL_AXES_VALUES").data[0]
+        )
+    );
+    lineTime.loadContent(
+        Carbon.api.line(
+            getDemoData(`#${id}`, "LINE_DECIMAL_AXES_VALUES").data[1]
+        )
+    );
+    return lineTime;
+};

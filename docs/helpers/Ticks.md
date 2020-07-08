@@ -24,10 +24,10 @@ If there is only 1 axis in the graph, the tick intervals are calculated automati
 
 #### Required
 
-| Property Name | Expected | Description                                                                                                                                       |
-| ------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| values        | array    | Ticks values in the axis. Each tick will have an associated grid line. If they are not provided, optional tick values need to exist.              |
-| format        | string   | [Formatter](https://github.com/d3/d3-time-format/blob/master/README.md#locales) for tick values. `Note:` This is mandatory if values are provided |
+| Property Name | Expected | Description                                                                                                                                                                                                                                                                                                                                              |
+| ------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| values        | array    | Ticks values in the axis. Each tick will have an associated grid line. If they are not provided, optional tick values need to exist.                                                                                                                                                                                                                     |
+| format        | string   | [Formatter](https://github.com/d3/d3-time-format/blob/master/README.md#locales) for tick values. `Note:` This is mandatory if values are provided. To suppress tick values's trailing zeros, specify '~' just before the format type. `Eg: format: "~r"`. Specifying ~ in the format takes precedence over the axis object `suppressTrailingZeros` prop. |
 
 #### Optional
 
@@ -119,8 +119,8 @@ The tick values are set one of 3 methods, in the following priority:
 
 -   **ticksCount property**
 
-    If no values are provided and the ticksCount property is set, then it will be used to calculate tick values by dividing `upperLimit - lowerLimit` into `ticksCount + 1` equal divisions. 
-    
+    If no values are provided and the ticksCount property is set, then it will be used to calculate tick values by dividing `upperLimit - lowerLimit` into `ticksCount + 1` equal divisions.
+
     If ticksCount is an invalid value, such as greater than `TICKSCOUNT_MAXLIMIT`, then this property will be ignored and the default behavior will be used.
 
     If `axis.y.ticks.values` AND `ticksCount` are both provided, then `ticksCount` will be ignored in favor of the custom values.
