@@ -83,6 +83,10 @@ export const processInput = (input, config, type) => {
             axisObj[yAxis].rangeRounding,
             true
         );
+        config.axis[yAxis].suppressTrailingZeros = getDefaultValue(
+            axisObj[yAxis].suppressTrailingZeros,
+            false
+        );
         return config;
     };
     config.clipPathId = generateClipPathId();
@@ -128,6 +132,10 @@ export const processInput = (input, config, type) => {
         _axis.x.upperLimit
     );
     config.axis.x.rangeRounding = getDefaultValue(_axis.x.rangeRounding, true);
+    config.axis.x.suppressTrailingZeros = getDefaultValue(
+        _axis.x.suppressTrailingZeros,
+        false
+    );
 
     // Additional Y & Y2 Axis properties defined on top of input axis
     if (input.axis.y) {

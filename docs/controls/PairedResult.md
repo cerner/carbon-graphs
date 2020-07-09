@@ -108,16 +108,40 @@ Refer [Graph](../core/Graph.md) `Root` for more details.
 | key           | string   | Unique id which represents the data-set |
 | values        | Array    | [Values](#values)                       |
 
+#### Optional 
+
+| Property Name | Expected | Default            | Description                                                                       |
+| ------------- | -------- | ------------------ | ----------------------------------------------------------------------------------|
+| color         | string   | COLORS.BLACK       | Color for the data point                                                          |
+| label         | object   | {}                 | Display value for the data-set which the data points belong to                    |
+| legendOptions | object   | undefined          | Toggle to show shape, line and legend. Refer [LegendOptions](#legendOptions)      |
+| onClick       | Function | undefined          | Any action that can be performed when clicking on the data point                  |
+| regions       | object   | {}                 | Refer [Regions](#regions)                                                         |
+| shape         | string   | SHAPES.DARK.CIRCLE | Shape for representing the data points                                            |
+| yAxis         | string   | "y"                | Setting for using different Y based axis. For now: its either Y or Y2             |
+
+### LegendOptions
+
+Each paired result can have a legendOptions object in [Values](#values) level.
+
 #### Optional
 
-| Property Name | Expected | Default            | Description                                                           |
-| ------------- | -------- | ------------------ | --------------------------------------------------------------------- |
-| yAxis         | string   | "y"                | Setting for using different Y based axis. For now: its either Y or Y2 |
-| regions       | object   | {}                 | Refer [Regions](#regions)                                             |
-| label         | object   | {}                 | Display value for the data-set which the data points belong to        |
-| color         | string   | COLORS.BLACK       | Color for the data point                                              |
-| shape         | string   | SHAPES.DARK.CIRCLE | Shape for representing the data points                                |
-| onClick       | Function | undefined          | Any action that can be performed when clicking on the data point      |
+| Property Name | Expected | Default | Description                                           |
+| ------------- | -------- | ------- | ----------------------------------------------------- |
+| showLine      | boolean  | false   | Display Line in the legend.                           |
+| showShape     | boolean  | true    | Display Shape in the legend.                          |
+| style         | object   | {}      | Any style that can be applied. Refer [Styles](#style) |
+| showElement   | boolean  | true    | Toggle to hide legend when legend item has no data.   |
+
+##### Style
+
+Each paired result can have a style object in [Values](#values) level.
+
+###### Optional
+
+| Property Name   | Expected | Default | Description                                            |
+| --------------- | -------- | ------- | ------------------------------------------------------ |
+| strokeDashArray | string   | "0"     | Applies stroke-dasharray CSS property to the SVG line. |
 
 ### Values
 

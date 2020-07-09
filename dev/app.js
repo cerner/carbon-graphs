@@ -88,7 +88,9 @@ import {
     renderLineWithLegendOptions,
     renderLineWithShapesShownPerDataSet,
     renderDisableCalibration,
-    renderLineGraphAndLegendPaddingReduced
+    renderLineGraphAndLegendPaddingReduced,
+    renderSuppressLegend,
+    renderLineWithSuppressedTrailingZeros
 } from "./examples/controls/line";
 import {
     renderMultiPairedResultRegion,
@@ -245,6 +247,16 @@ renderSiteApp(
                         return renderLineGraphAndLegendPaddingReduced(id);
                     },
                     title: "Graph and Legend Padding Reduced"
+                },
+                {
+                    pathname: "/line/suppress-tick-values-trailing-zeros",
+                    content: renderLineWithSuppressedTrailingZeros,
+                    title: "Suppress Tick Values Trailing Zeros"
+                },
+                {
+                    pathname: "/line/Suppress-legend",
+                    content: renderSuppressLegend,
+                    title: "Suppress Legend"
                 }
             ]
         },

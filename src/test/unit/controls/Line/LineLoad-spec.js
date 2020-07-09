@@ -1226,6 +1226,87 @@ describe("Line - Load", () => {
                 done();
             });
         });
+        describe("when the legend has no data",  () => {
+            it ("should hide the legend if showElement is false", () => {
+                const input = getInput([], false, false);
+                input.legendOptions = {
+                    showElement: false
+                }
+                graphDefault.loadContent(new Line(input));
+                const legendContainer = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.legendItem
+                );
+                expect(legendContainer).not.toBeNull();
+                expect(legendContainer.tagName).toBe("LI");
+                const legendItem = document.body.querySelector(
+                    `.${styles.legendItem}`
+                );
+                expect(legendItem.getAttribute("style")).toBe("display: none; padding: 4px 8px;");
+            });
+            it ("should show the legend if showElement is true", () => {
+                const input = getInput([], false, false);
+                input.legendOptions = {
+                    showElement: true,
+                }
+                graphDefault.loadContent(new Line(input));
+                const legendContainer = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.legendItem
+                );
+                const legendItems = legendContainer.children;
+                expect(legendContainer).not.toBeNull();
+                expect(legendContainer.tagName).toBe("LI");
+                expect(legendItems.length).toBe(2);
+                const legendItem = document.body.querySelector(
+                    `.${styles.legendItem}`
+                );
+                expect(legendItem.getAttribute("aria-disabled")).toBe("true");
+                expect(legendItem.getAttribute("aria-current")).toBe("true");
+            });
+         });
+         describe("when the legend has data",  () => {
+            it ("should show the legend if showElement is false", () => {
+                const input = getInput(valuesDefault, false, false);
+                input.legendOptions = {
+                    showElement: true,
+                }
+                graphDefault.loadContent(new Line(input));
+                const legendContainer = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.legendItem
+                );
+                const legendItems = legendContainer.children;
+                expect(legendContainer).not.toBeNull();
+                expect(legendContainer.tagName).toBe("LI");
+                expect(legendItems.length).toBe(2);
+                const legendItem = document.body.querySelector(
+                    `.${styles.legendItem}`
+                );
+                expect(legendItem.getAttribute("aria-disabled")).toBe("false");
+                expect(legendItem.getAttribute("aria-current")).toBe("true");
+            });
+            it ("should show the legend if showElement is true", () => {
+                const input = getInput(valuesDefault, false, false);
+                input.legendOptions = {
+                    showElement: true,
+                }
+                graphDefault.loadContent(new Line(input));
+                const legendContainer = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.legend
+                );
+                const legendItems = legendContainer.children;
+                expect(legendContainer).not.toBeNull();
+                expect(legendContainer.tagName).toBe("UL");
+                expect(legendItems.length).toBe(1);
+                const legendItem = document.body.querySelector(
+                    `.${styles.legendItem}`
+                );
+                expect(legendItem.getAttribute("aria-disabled")).toBe("false");
+                expect(legendItem.getAttribute("aria-current")).toBe("true");
+            });
+         });
     });
     describe("Prepares to load label shape", () => {
         let graph;

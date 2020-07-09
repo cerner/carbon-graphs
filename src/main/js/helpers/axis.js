@@ -181,17 +181,45 @@ const createAxisReferenceLine = (axis, scale, config, canvasSVG) => {
  * @returns {object} - Scaled axes object
  */
 const getAxesScale = (axis, scale, config) => {
+    let tickFormatToTrimTrailingZeros;
+
+    // If suppressTrailingZeros is set to true and x axis type is set as
+    // DEFAULT (normal number based axes values) and x axis's tick format
+    // is not provided by the consumer, then invoke tickFormatter()
+    // to insert '~' just before the default d3 tick format type
+    // to suppress ticks values's trailing zeros
+    if (
+        config.axis.x.suppressTrailingZeros &&
+        config.axis.x.type === AXIS_TYPE.DEFAULT &&
+        utils.isUndefined(config.axis.x.ticks.format)
+    ) {
+        axis.x = isXAxisOrientationTop(config.axis.x.orientation)
+            ? d3.axisTop(scale.x)
+            : d3.axisBottom(scale.x);
+        tickFormatToTrimTrailingZeros = tickFormatter(axis.x);
+    }
+
     axis.x = prepareXAxis(
         scale.x,
         config.axis.x.ticks.values,
         getXAxisWidth(config),
         getAxisTickFormat(
             config.d3Locale,
-            config.axis.x.ticks.format,
+            utils.isDefined(config.axis.x.ticks.format)
+                ? config.axis.x.ticks.format
+                : tickFormatToTrimTrailingZeros,
             config.axis.x.type
         ),
         config.axis.x.orientation
     );
+
+    // Reset the tickFormatToTrimTrailingZeros to null, so that
+    // if the y axis suppressTrailingZeros is set to false and
+    // consumer has not defined its tick format,
+    // we can ensure we are not using the same x axis's tick format
+    // for y axis as well
+    tickFormatToTrimTrailingZeros = null;
+
     axis.axisInfoRow.x = prepareXAxisInfoRow(
         scale.x,
         getAxisInfoOrientation(config.axis.x.orientation)
@@ -202,17 +230,57 @@ const getAxesScale = (axis, scale, config) => {
         // and ignores ticksCount if it is set. Will not work if only
         // Y2 ticks are provided.
         if (utils.isDefined(config.axis.y.ticks.values)) {
+            // If suppressTrailingZeros is set to true and y axis's tick format
+            // is not provided by the consumer, then invoke tickFormatter()
+            // to insert '~' just before the default d3 tick format type
+            // to suppress ticks values's trailing zeros
+            if (
+                config.axis.y.suppressTrailingZeros &&
+                utils.isUndefined(config.axis.y.ticks.format)
+            ) {
+                axis.y = d3.axisLeft(scale.y);
+                tickFormatToTrimTrailingZeros = tickFormatter(axis.y);
+            }
             axis.y = prepareYAxis(
                 scale.y,
                 config.axis.y.ticks.values,
                 config.height,
-                getAxisTickFormat(config.locale, config.axis.y.ticks.format)
+                getAxisTickFormat(
+                    config.locale,
+                    utils.isDefined(config.axis.y.ticks.format)
+                        ? config.axis.y.ticks.format
+                        : tickFormatToTrimTrailingZeros
+                )
             );
+
+            // Reset the tickFormatToTrimTrailingZeros to null, so that
+            // if the y2 axis suppressTrailingZeros is set to false and
+            // consumer has not defined its tick format,
+            // we can ensure we are not using the same y axis's tick format
+            // for y2 axis as well
+            tickFormatToTrimTrailingZeros = null;
+
+            // If suppressTrailingZeros is set to true and y2 axis's tick format
+            // is not provided by the consumer, then invoke tickFormatter()
+            // to insert '~' just before the default d3 tick format type
+            // to suppress ticks values's trailing zeros
+            if (
+                config.axis.y2.suppressTrailingZeros &&
+                utils.isUndefined(config.axis.y2.ticks.format)
+            ) {
+                axis.y2 = d3.axisRight(scale.y2);
+                tickFormatToTrimTrailingZeros = tickFormatter(axis.y2);
+            }
             axis.y2 = prepareY2Axis(
                 scale.y2,
                 config.axis.y2.ticks.values,
                 config.height,
-                getAxisTickFormat(config.locale, config.axis.y2.ticks.format)
+                getAxisTickFormat(
+                    config.locale,
+                    utils.isDefined(config.axis.y2.ticks.format)
+                        ? config.axis.y2.ticks.format
+                        : tickFormatToTrimTrailingZeros
+                )
             );
             return axis;
         }
@@ -235,18 +303,43 @@ const getAxesScale = (axis, scale, config) => {
                 config.allowCalibration
             );
 
+            if (
+                config.axis.y.suppressTrailingZeros &&
+                utils.isUndefined(config.axis.y.ticks.format)
+            ) {
+                axis.y = d3.axisLeft(scale.y);
+                tickFormatToTrimTrailingZeros = tickFormatter(axis.y);
+            }
             axis.y = prepareYAxis(
                 scale.y,
                 yTickValues,
                 config.height,
-                getAxisTickFormat(config.locale, config.axis.y.ticks.format)
+                getAxisTickFormat(
+                    config.locale,
+                    utils.isDefined(config.axis.y.ticks.format)
+                        ? config.axis.y.ticks.format
+                        : tickFormatToTrimTrailingZeros
+                )
             );
+            tickFormatToTrimTrailingZeros = null;
 
+            if (
+                config.axis.y2.suppressTrailingZeros &&
+                utils.isUndefined(config.axis.y2.ticks.format)
+            ) {
+                axis.y2 = d3.axisRight(scale.y2);
+                tickFormatToTrimTrailingZeros = tickFormatter(axis.y2);
+            }
             axis.y2 = prepareY2Axis(
                 scale.y2,
                 y2TickValues,
                 config.height,
-                getAxisTickFormat(config.locale, config.axis.y2.ticks.format)
+                getAxisTickFormat(
+                    config.locale,
+                    utils.isDefined(config.axis.y2.ticks.format)
+                        ? config.axis.y2.ticks.format
+                        : tickFormatToTrimTrailingZeros
+                )
             );
         }
         // Y and Y2 axes - If ticksCount is undefined or greater than
@@ -273,18 +366,43 @@ const getAxesScale = (axis, scale, config) => {
                 config.allowCalibration
             );
 
+            if (
+                config.axis.y.suppressTrailingZeros &&
+                utils.isUndefined(config.axis.y.ticks.format)
+            ) {
+                axis.y = d3.axisLeft(scale.y);
+                tickFormatToTrimTrailingZeros = tickFormatter(axis.y);
+            }
             axis.y = prepareYAxis(
                 scale.y,
                 yTickValues,
                 config.height,
-                getAxisTickFormat(config.locale, config.axis.y.ticks.format)
+                getAxisTickFormat(
+                    config.locale,
+                    utils.isDefined(config.axis.y.ticks.format)
+                        ? config.axis.y.ticks.format
+                        : tickFormatToTrimTrailingZeros
+                )
             );
+            tickFormatToTrimTrailingZeros = null;
 
+            if (
+                config.axis.y2.suppressTrailingZeros &&
+                utils.isUndefined(config.axis.y2.ticks.format)
+            ) {
+                axis.y2 = d3.axisRight(scale.y2);
+                tickFormatToTrimTrailingZeros = tickFormatter(axis.y2);
+            }
             axis.y2 = prepareY2Axis(
                 scale.y2,
                 y2TickValues,
                 config.height,
-                getAxisTickFormat(config.locale, config.axis.y2.ticks.format)
+                getAxisTickFormat(
+                    config.locale,
+                    utils.isDefined(config.axis.y2.ticks.format)
+                        ? config.axis.y2.ticks.format
+                        : tickFormatToTrimTrailingZeros
+                )
             );
         }
     }
@@ -292,11 +410,23 @@ const getAxesScale = (axis, scale, config) => {
     else {
         // Single Y axis - custom tick values
         if (utils.isDefined(config.axis.y.ticks.values)) {
+            if (
+                config.axis.y.suppressTrailingZeros &&
+                utils.isUndefined(config.axis.y.ticks.format)
+            ) {
+                axis.y = d3.axisLeft(scale.y);
+                tickFormatToTrimTrailingZeros = tickFormatter(axis.y);
+            }
             axis.y = prepareYAxis(
                 scale.y,
                 config.axis.y.ticks.values,
                 config.height,
-                getAxisTickFormat(config.locale, config.axis.y.ticks.format)
+                getAxisTickFormat(
+                    config.locale,
+                    utils.isDefined(config.axis.y.ticks.format)
+                        ? config.axis.y.ticks.format
+                        : tickFormatToTrimTrailingZeros
+                )
             );
             // return axis;
         }
@@ -312,26 +442,69 @@ const getAxesScale = (axis, scale, config) => {
                 config.allowCalibration
             );
 
+            if (
+                config.axis.y.suppressTrailingZeros &&
+                utils.isUndefined(config.axis.y.ticks.format)
+            ) {
+                axis.y = d3.axisLeft(scale.y);
+                tickFormatToTrimTrailingZeros = tickFormatter(axis.y);
+            }
             axis.y = prepareYAxis(
                 scale.y,
                 yTickValues,
                 config.height,
-                getAxisTickFormat(config.locale, config.axis.y.ticks.format)
+                getAxisTickFormat(
+                    config.locale,
+                    utils.isDefined(config.axis.y.ticks.format)
+                        ? config.axis.y.ticks.format
+                        : tickFormatToTrimTrailingZeros
+                )
             );
         }
         // Single Y axis - default case when
         // config.axis.y.ticks.values and ticksCount
         // are not defined
         else {
+            if (
+                config.axis.y.suppressTrailingZeros &&
+                utils.isUndefined(config.axis.y.ticks.format)
+            ) {
+                axis.y = d3.axisLeft(scale.y);
+                tickFormatToTrimTrailingZeros = tickFormatter(axis.y);
+            }
             axis.y = prepareYAxis(
                 scale.y,
                 undefined,
                 config.height,
-                getAxisTickFormat(config.locale, config.axis.y.ticks.format)
+                getAxisTickFormat(
+                    config.locale,
+                    utils.isDefined(config.axis.y.ticks.format)
+                        ? config.axis.y.ticks.format
+                        : tickFormatToTrimTrailingZeros
+                )
             );
         }
     }
     return axis;
+};
+
+/**
+ * Inserts '~' just before the format type to suppress ticks values's trailing zeros when default d3 tick formatting is used
+ *
+ * @private
+ * @param {object} axis - Scaled axes object
+ * @returns {string} tick format string
+ */
+const tickFormatter = (axis) => {
+    const defaultTickFormat = axis.scale().tickFormat().toString();
+
+    // Return the default d3 tick format with the '~' character inserted just before the format type
+    // Eg: defaultTickFormat: .1f
+    // Value returned below will be: .1~f
+    return `${defaultTickFormat.slice(
+        0,
+        defaultTickFormat.length - 1
+    )}~${defaultTickFormat.slice(defaultTickFormat.length - 1)}`;
 };
 
 /**

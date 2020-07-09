@@ -45,6 +45,14 @@ const validateLegendLabel = (label) => {
  */
 const getText = (text) => utils.sanitize(text);
 /**
+ * Hide legend when legend item has no data and showElement is set to false
+ *
+ * @private
+ * @param {object} input item object processed from the input JSON
+ * @returns {string} returns "none" if legend is to be hidden otherwise returns empty string 
+ */
+const legendDisplayStyle = (input) => input.legendOptions && input.legendOptions.showElement === false && utils.isEmptyArray(input.values)? "none": "";
+/**
  * Loads the legend items. The values are taken from the Labels property of the input JSON
  * The click and the hover events are only registered when there are datapoints matching the
  * unique ids or have the isDisabled flag turned off.
@@ -78,6 +86,7 @@ const loadLegendItem = (legendSVG, t, config, eventHandlers) => {
         .classed(styles.legendItem, true)
         .attr("aria-current", shouldForceDisableLegendItem || index > -1)
         .attr("aria-disabled", shouldForceDisableLegendItem)
+        .style("display", legendDisplayStyle(t))
         .attr("role", "listitem")
         .attr("aria-labelledby", text)
         .attr("aria-describedby", t.key)
@@ -125,6 +134,7 @@ const loadLegendItem = (legendSVG, t, config, eventHandlers) => {
  */
 const processLegendOptions = (buttonPath, input) => {
     if (input.legendOptions) {
+        // Create a legend icon only if the showShape is true
         if (input.legendOptions.showShape) {
             createLegendIcon(buttonPath, input);
         }
@@ -385,8 +395,12 @@ const loadPieLegendItem = (legendSVG, dataTarget, { hoverHandler }, config) => {
 const getDefaultLegendOptions = (graphConfig, dataTarget) => {
     const legendOptions = getDefaultValue(dataTarget.legendOptions, {
         showShape: true,
-        showLine: false
+        showLine: false,
+        showElement: true
     });
+    legendOptions.showShape = getDefaultValue(legendOptions.showShape, true);
+    legendOptions.showLine = getDefaultValue(legendOptions.showLine, false);
+    legendOptions.showElement = getDefaultValue(legendOptions.showElement, true);
     legendOptions.style = getDefaultValue(legendOptions.style, {});
     legendOptions.style = {
         strokeDashArray: getStrokeDashArray(legendOptions.style)

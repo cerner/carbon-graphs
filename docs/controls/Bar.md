@@ -209,13 +209,24 @@ Refer [Graph](../core/Graph.md) `Root` for more details.
 
 | Property Name | Expected | Default      | Description                                                                    |
 | ------------- | -------- | ------------ | ------------------------------------------------------------------------------ |
-| yAxis         | string   | "y"          | Setting for using different Y based axis. For now: its either Y or Y2          |
-| regions       | array    | []           | Refer [Regions](#regions)                                                      |
-| color         | string   | COLORS.BLACK | Color for the data point and line                                              |
-| onClick       | Function | undefined    | Any action that can be performed when clicking on the data point               |
-| style         | object   | {}           | Any style that can be applied. Refer [Styles](#style)                          |
-| group         | string   | key          | Used for stacking bar content under another bar content. Refer [Group](#group) |
 | axisInfoRow   | array    | []           | Refer [Axis Info Row](#Axis-Info-Row)                                          |
+| color         | string   | COLORS.BLACK | Color for the data point and line                                              |
+| group         | string   | key          | Used for stacking bar content under another bar content. Refer [Group](#group) |
+| legendOptions | object   | undefined    | Option to show legend. Refer [LegendOptions](#legendOptions)                   |
+| onClick       | Function | undefined    | Any action that can be performed when clicking on the data point               |
+| regions       | array    | []           | Refer [Regions](#regions)                                                      |
+| style         | object   | {}           | Any style that can be applied. Refer [Styles](#style)                          |
+| yAxis         | string   | "y"          | Setting for using different Y based axis. For now: its either Y or Y2          |
+
+### LegendOptions
+
+Each bar can have a legendOptions object in [Values](#values) level.
+
+#### Optional
+
+| Property Name | Expected | Default | Description                                           |
+| ------------- | -------- | ------- | ----------------------------------------------------- |
+| showElement   | boolean  | true    | Toggle to hide legend when legend item has no data.   |
 
 ### Values
 
