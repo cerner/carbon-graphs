@@ -144,7 +144,20 @@ const DATA = [
                         y: Math.cos(i) * Math.PI * 7,
                         x: 85 + i * 10
                     }))
-                }
+                },
+                {
+                    key: "uid_8",
+                    label: {
+                        display: "Data Label 8"
+                    },
+                    shape: Carbon.helpers.SHAPES.DARK.TRIANGLE,
+                    color: Carbon.helpers.COLORS.BLUE,
+                    onClick: loadPopup,
+                    values: [],
+                    legendOptions: {
+                        showElement: false,
+                    }
+                },
             ],
             showLabel: true,
             showLegend: true,

@@ -174,16 +174,16 @@ Refer [Graph](../core/Graph.md) `Root` for more details.
 
 | Property Name | Expected | Default            | Description                                                                                    |
 | ------------- | -------- | ------------------ | ---------------------------------------------------------------------------------------------- |
-| yAxis         | string   | "y"                | Setting for using different Y based axis. For now: its either Y or Y2                          |
-| type          | string   | LINE_TYPE.LINEAR   | Nature of line that needs to be drawn (Linear or Cardinal)                                     |
-| regions       | array    | []                 | Refer [Regions](#regions)                                                                      |
-| label         | object   | {}                 | Display value for the data-set which the data points belong to                                 |
 | color         | string   | COLORS.BLACK       | Color for the data point and line                                                              |
-| shape         | string   | SHAPES.DARK.CIRCLE | Shape for representing the data points                                                         |
+| label         | object   | {}                 | Display value for the data-set which the data points belong to                                 |
+| legendOptions | object   | undefined          | Toggle to show shape, line and legend. Refer [LegendOptions](#legendOptions)                   |
 | onClick       | Function | undefined          | Any action that can be performed when clicking on the data point                               |
+| regions       | array    | []                 | Refer [Regions](#regions)                                                                      |
+| shape         | string   | SHAPES.DARK.CIRCLE | Shape for representing the data points                                                         |
 | style         | object   | {}                 | Any style that can be applied. Refer [Styles](#style)                                          |
-| legendOptions | object   | undefined          | Option to show/hide shape and/or line. Refer [LegendOptions](#legendOptions)                   |
 | showShapes    | boolean  | undefined          | Option to show/hide shapes per data set. This option overrides the graph's showShapes property |
+| type          | string   | LINE_TYPE.LINEAR   | Nature of line that needs to be drawn (Linear or Cardinal)                                     |
+| yAxis         | string   | "y"                | Setting for using different Y based axis. For now: its either Y or Y2                          |
 
 ##### Style
 
@@ -195,17 +195,18 @@ Each line can have a style object in [Values](#values) level.
 | --------------- | -------- | ------- | ------------------------------------------------------ |
 | strokeDashArray | string   | "0"     | Applies stroke-dasharray CSS property to the SVG line. |
 
-##### LegendOptions
+### LegendOptions
 
 Each line can have a legendOptions object in [Values](#values) level.
 
-###### Required
+#### Optional
 
 | Property Name | Expected | Default | Description                                           |
 | ------------- | -------- | ------- | ----------------------------------------------------- |
-| showShape     | boolean  | true    | Display Shape in the legend.                          |
 | showLine      | boolean  | false   | Display Line in the legend.                           |
+| showShape     | boolean  | true    | Display Shape in the legend.                          |
 | style         | object   | {}      | Any style that can be applied. Refer [Styles](#style) |
+| showElement   | boolean  | true    | Toggle to hide legend when legend item has no data.   |
 
 ### Values
 

@@ -579,6 +579,24 @@ export const renderLineGraphAndLegendPaddingReduced = (id) => {
     );
     return lineTime;
 };
+export const renderSuppressLegend = (id) => {
+    const lineDefault = Carbon.api.graph(getDemoData(`#${id}`, "LINE_DEFAULT"));
+    lineDefault.loadContent(
+        Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[0])
+    );
+    setTimeout(
+        () =>
+            lineDefault.graphContainer
+                ? lineDefault.loadContent(
+                      Carbon.api.line(
+                          getDemoData(`#${id}`, "LINE_DEFAULT").data[7]
+                      )
+                  )
+                : "",
+        750
+    );
+    return lineDefault;
+};
 export const renderLineWithSuppressedTrailingZeros = (id) => {
     const axisData = utils.deepClone(
         getDemoData(`#${id}`, "LINE_DECIMAL_AXES_VALUES")

@@ -89,6 +89,7 @@ import {
     renderLineWithShapesShownPerDataSet,
     renderDisableCalibration,
     renderLineGraphAndLegendPaddingReduced,
+    renderSuppressLegend,
     renderLineWithSuppressedTrailingZeros
 } from "./examples/controls/line";
 import {
@@ -251,6 +252,11 @@ renderSiteApp(
                     pathname: "/line/suppress-tick-values-trailing-zeros",
                     content: renderLineWithSuppressedTrailingZeros,
                     title: "Suppress Tick Values Trailing Zeros"
+                },
+                {
+                    pathname: "/line/Suppress-legend",
+                    content: renderSuppressLegend,
+                    title: "Suppress Legend"
                 }
             ]
         },

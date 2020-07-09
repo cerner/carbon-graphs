@@ -240,13 +240,24 @@ Refer [Graph](../core/Graph.md) `Root` for more details.
 
 | Property Name | Expected | Default      | Description                                                                               |
 | ------------- | -------- | ------------ | ----------------------------------------------------------------------------------------- |
-| yAxis         | string   | "y"          | Setting for using different Y based axis. For now: its either Y or Y2                     |
-| weight        | object   | {}           | Provide min and max or maxRadius for weight based or custom sized bubble[Weight](#Weight) |
-| hue           | object   | {}           | Provide lowerShade and upperShadefor color based bubble [Hue](#Hue)                       |
-| regions       | array    | []           | Refer [Regions](#regions)                                                                 |
-| label         | object   | {}           | Display value for the data-set which the data points belong to                            |
 | color         | string   | COLORS.BLACK | Color for the bubbles                                                                     |
 | onClick       | Function | undefined    | Any action that can be performed when clicking on the data point                          |
+| hue           | object   | {}           | Provide lowerShade and upperShadefor color based bubble [Hue](#Hue)                       |
+| label         | object   | {}           | Display value for the data-set which the data points belong to                            |
+| legendOptions | object   | undefined    | Toggle to show legend. Refer [LegendOptions](#legendOptions)                              |
+| regions       | array    | []           | Refer [Regions](#regions)                                                                 |
+| weight        | object   | {}           | Provide min and max or maxRadius for weight based or custom sized bubble[Weight](#Weight) |
+| yAxis         | string   | "y"          | Setting for using different Y based axis. For now: its either Y or Y2                     |
+
+### LegendOptions
+
+Each bubble can have a legendOptions object in [Values](#values) level.
+
+#### Optional
+
+| Property Name | Expected | Default | Description                                           |
+| ------------- | -------- | ------- | ----------------------------------------------------- |
+| showElement   | boolean  | true    | Toggle to hide legend when legend item has no data.   |
 
 ### Weight
 
