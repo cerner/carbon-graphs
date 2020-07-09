@@ -90,7 +90,8 @@ import {
     renderDisableCalibration,
     renderLineGraphAndLegendPaddingReduced,
     renderSuppressLegend,
-    renderLineWithSuppressedTrailingZeros
+    renderLineWithSuppressedTrailingZeros,
+    renderLineLabelTruncation
 } from "./examples/controls/line";
 import {
     renderMultiPairedResultRegion,
@@ -219,6 +220,11 @@ renderSiteApp(
                     pathname: "/line/no-data",
                     content: renderNoDataView,
                     title: "No Data"
+                },
+                {
+                    pathname: "/line/label-truncation",
+                    content: renderLineLabelTruncation,
+                    title: "Label Truncation"
                 },
                 {
                     pathname: "/line/dashed-line",

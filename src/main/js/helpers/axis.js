@@ -8,6 +8,7 @@ import styles from "../helpers/styles";
 import utils from "../helpers/utils";
 import { DEFAULT_TICK_FORMAT } from "../locale";
 import { prepareHAxis } from "./datetimeBuckets";
+import { shouldTruncateLabel, truncateLabel } from "./label";
 
 /**
  * @module axis
@@ -1271,19 +1272,32 @@ const determineOutlierStretchFactor = (config) => {
 };
 
 /**
+ * Checks if the Axis label needs to be truncated and returns the truncated value
+ *
+ * @param {string} label - Axis label display property
+ * @param {number} charLimit  - label character limit on axis
+ * @returns {string} if more than character limit then truncates,
+ * normal label otherwise
+ */
+const formatLabel = (label, charLimit) =>
+    shouldTruncateLabel(label, Math.abs(charLimit))
+        ? truncateLabel(label, Math.abs(charLimit))
+        : label;
+
+/**
  * Returns the d3 html element after appending axis label text
  *
- * @private
  * @param {Array} group - d3 html element
  * @param {string} label - Label text
+ * @param {number} charLimit - character limit of label with respect to axis size
  * @returns {Array} d3 html element
  */
-const buildAxisLabel = (group, label) =>
+const buildAxisLabel = (group, label, charLimit) =>
     group
         .append("text")
         .attr("text-anchor", "middle")
         .append("tspan")
-        .text(label);
+        .text(formatLabel(label, charLimit));
 /**
  * Decides true if the input JSON y2.show is enabled and if y2 axis points are provided
  *
@@ -1549,5 +1563,6 @@ export {
     isXAxisOrientationTop,
     getAxisInfoRowYPosition,
     getTicksCountFromRange,
-    getAverageTicksCount
+    getAverageTicksCount,
+    formatLabel
 };

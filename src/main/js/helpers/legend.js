@@ -49,9 +49,14 @@ const getText = (text) => utils.sanitize(text);
  *
  * @private
  * @param {object} input item object processed from the input JSON
- * @returns {string} returns "none" if legend is to be hidden otherwise returns empty string 
+ * @returns {string} returns "none" if legend is to be hidden otherwise returns empty string
  */
-const legendDisplayStyle = (input) => input.legendOptions && input.legendOptions.showElement === false && utils.isEmptyArray(input.values)? "none": "";
+const legendDisplayStyle = (input) =>
+    input.legendOptions &&
+    input.legendOptions.showElement === false &&
+    utils.isEmptyArray(input.values)
+        ? "none"
+        : "";
 /**
  * Loads the legend items. The values are taken from the Labels property of the input JSON
  * The click and the hover events are only registered when there are datapoints matching the
@@ -400,7 +405,10 @@ const getDefaultLegendOptions = (graphConfig, dataTarget) => {
     });
     legendOptions.showShape = getDefaultValue(legendOptions.showShape, true);
     legendOptions.showLine = getDefaultValue(legendOptions.showLine, false);
-    legendOptions.showElement = getDefaultValue(legendOptions.showElement, true);
+    legendOptions.showElement = getDefaultValue(
+        legendOptions.showElement,
+        true
+    );
     legendOptions.style = getDefaultValue(legendOptions.style, {});
     legendOptions.style = {
         strokeDashArray: getStrokeDashArray(legendOptions.style)

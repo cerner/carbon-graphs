@@ -7,7 +7,7 @@ import { getDemoData } from "../data";
 import {
     loadPopup,
     loadTaskPopup,
-    loadTrackLabelPopup,
+    loadXAndYAxisLabelPopup,
     loadTrackPopup
 } from "../popup";
 import { createPanningControls } from "../panHelpers";
@@ -398,7 +398,7 @@ export const renderGanttPercentage = (id) => {
         key: "track 1",
         trackLabel: {
             display: "Percentage",
-            onClick: loadTrackLabelPopup
+            onClick: loadXAndYAxisLabelPopup
         },
         tasks: [
             {
@@ -451,7 +451,7 @@ export const renderGanttPanning = (id) => {
         key: "track 0",
         trackLabel: {
             display: "Default",
-            onClick: loadTrackLabelPopup
+            onClick: loadXAndYAxisLabelPopup
         },
         tasks: tasks2[0]
     };
@@ -496,8 +496,7 @@ export const renderGanttTruncate = (id) => {
         key: "track 1",
         trackLabel: {
             display:
-                "Really really long project name that cannot be shown realistically",
-            onClick: loadTrackLabelPopup
+                "Really really long project name that cannot be shown realistically"
         }
     });
     return ganttDefault;
@@ -511,7 +510,7 @@ export const renderGanttStyle = (id) => {
         key: "track 0",
         trackLabel: {
             display: "Default",
-            onClick: loadTrackLabelPopup
+            onClick: loadXAndYAxisLabelPopup
         },
         tasks: [
             {
@@ -529,7 +528,7 @@ export const renderGanttStyle = (id) => {
         key: "track 1",
         trackLabel: {
             display: "Hollow only",
-            onClick: loadTrackLabelPopup
+            onClick: loadXAndYAxisLabelPopup
         },
         tasks: [
             {
@@ -549,8 +548,7 @@ export const renderGanttStyle = (id) => {
     ganttDefault.loadContent({
         key: "track 2",
         trackLabel: {
-            display: "Dotted, Hollow",
-            onClick: loadTrackLabelPopup
+            display: "Dotted, Hollow"
         },
         tasks: [
             {
@@ -572,7 +570,7 @@ export const renderGanttStyle = (id) => {
         key: "track 3",
         trackLabel: {
             display: "Percentage",
-            onClick: loadTrackLabelPopup
+            onClick: loadXAndYAxisLabelPopup
         },
         tasks: [
             {
@@ -591,7 +589,7 @@ export const renderGanttStyle = (id) => {
         key: "track 4",
         trackLabel: {
             display: "Task Hashed",
-            onClick: loadTrackLabelPopup
+            onClick: loadXAndYAxisLabelPopup
         },
         tasks: [
             {
@@ -612,7 +610,7 @@ export const renderGanttStyle = (id) => {
         key: "track 5",
         trackLabel: {
             display: "Activity",
-            onClick: loadTrackLabelPopup
+            onClick: loadXAndYAxisLabelPopup
         },
         activities: [
             {
@@ -629,8 +627,7 @@ export const renderGanttStyle = (id) => {
     ganttDefault.loadContent({
         key: "track 6",
         trackLabel: {
-            display: "Activity Hashed",
-            onClick: loadTrackLabelPopup
+            display: "Activity Hashed"
         },
         activities: [
             {
@@ -652,7 +649,7 @@ export const renderGanttStyle = (id) => {
         key: "track 7",
         trackLabel: {
             display: "Activity and Task",
-            onClick: loadTrackLabelPopup
+            onClick: loadXAndYAxisLabelPopup
         },
         tasks: [
             {
@@ -695,7 +692,7 @@ export const renderGanttDateTimeBuckets = (id) => {
         key: "track 1",
         trackLabel: {
             display: "Project A",
-            onClick: loadTrackLabelPopup
+            onClick: loadXAndYAxisLabelPopup
         },
         tasks: [
             {
@@ -889,7 +886,7 @@ const loadTracks = (
             onClick: isTrackSelectable ? loadTrackPopup : undefined,
             trackLabel: {
                 display: `Project ${String.fromCharCode(65 + each)}`,
-                onClick: loadTrackLabelPopup
+                onClick: loadXAndYAxisLabelPopup
             },
             tasks: tasks[each] ? tasks[each] : {},
             activities: activities[each] ? activities[each] : {},

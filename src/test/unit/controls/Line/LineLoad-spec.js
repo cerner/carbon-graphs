@@ -1226,12 +1226,12 @@ describe("Line - Load", () => {
                 done();
             });
         });
-        describe("when the legend has no data",  () => {
-            it ("should hide the legend if showElement is false", () => {
+        describe("when the legend has no data", () => {
+            it("should hide the legend if showElement is false", () => {
                 const input = getInput([], false, false);
                 input.legendOptions = {
                     showElement: false
-                }
+                };
                 graphDefault.loadContent(new Line(input));
                 const legendContainer = fetchElementByClass(
                     lineGraphContainer,
@@ -1242,13 +1242,15 @@ describe("Line - Load", () => {
                 const legendItem = document.body.querySelector(
                     `.${styles.legendItem}`
                 );
-                expect(legendItem.getAttribute("style")).toBe("display: none; padding: 4px 8px;");
+                expect(legendItem.getAttribute("style")).toBe(
+                    "display: none; padding: 4px 8px;"
+                );
             });
-            it ("should show the legend if showElement is true", () => {
+            it("should show the legend if showElement is true", () => {
                 const input = getInput([], false, false);
                 input.legendOptions = {
-                    showElement: true,
-                }
+                    showElement: true
+                };
                 graphDefault.loadContent(new Line(input));
                 const legendContainer = fetchElementByClass(
                     lineGraphContainer,
@@ -1264,13 +1266,13 @@ describe("Line - Load", () => {
                 expect(legendItem.getAttribute("aria-disabled")).toBe("true");
                 expect(legendItem.getAttribute("aria-current")).toBe("true");
             });
-         });
-         describe("when the legend has data",  () => {
-            it ("should show the legend if showElement is false", () => {
+        });
+        describe("when the legend has data", () => {
+            it("should show the legend if showElement is false", () => {
                 const input = getInput(valuesDefault, false, false);
                 input.legendOptions = {
-                    showElement: true,
-                }
+                    showElement: true
+                };
                 graphDefault.loadContent(new Line(input));
                 const legendContainer = fetchElementByClass(
                     lineGraphContainer,
@@ -1286,11 +1288,11 @@ describe("Line - Load", () => {
                 expect(legendItem.getAttribute("aria-disabled")).toBe("false");
                 expect(legendItem.getAttribute("aria-current")).toBe("true");
             });
-            it ("should show the legend if showElement is true", () => {
+            it("should show the legend if showElement is true", () => {
                 const input = getInput(valuesDefault, false, false);
                 input.legendOptions = {
-                    showElement: true,
-                }
+                    showElement: true
+                };
                 graphDefault.loadContent(new Line(input));
                 const legendContainer = fetchElementByClass(
                     lineGraphContainer,
@@ -1306,7 +1308,7 @@ describe("Line - Load", () => {
                 expect(legendItem.getAttribute("aria-disabled")).toBe("false");
                 expect(legendItem.getAttribute("aria-current")).toBe("true");
             });
-         });
+        });
     });
     describe("Prepares to load label shape", () => {
         let graph;

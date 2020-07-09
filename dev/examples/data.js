@@ -17,6 +17,9 @@ const bobRossIpsum =
     "These trees are so much fun. I get started on them and I have a hard time stopping. We'll make some happy little bushes here. " +
     "Absolutely no pressure. You are just a whisper floating across a mountain. There are no limits in this world. " +
     "A thin paint will stick to a thick paint.\n";
+const largeLabel =
+    "Project long display value which is only for testing, Project long display value which is only for testing " +
+    "Project long display value which is only for testing, Project long display value which is only for testing";
 
 const DATA = [
     {
@@ -37,7 +40,7 @@ const DATA = [
                     upperLimit: 18
                 },
                 y2: {
-                    show: false,
+                    show: true,
                     label: "Line Set B",
                     lowerLimit: 0,
                     upperLimit: 250
@@ -155,9 +158,9 @@ const DATA = [
                     onClick: loadPopup,
                     values: [],
                     legendOptions: {
-                        showElement: false,
+                        showElement: false
                     }
-                },
+                }
             ],
             showLabel: true,
             showLegend: true,
@@ -1860,6 +1863,51 @@ const DATA = [
                     color: Carbon.helpers.COLORS.BLUE,
                     onClick: loadPopup,
                     values: []
+                }
+            ],
+            showLabel: true,
+            showLegend: true,
+            showShapes: true,
+            showVGrid: true,
+            showHGrid: true
+        })
+    },
+    {
+        LABEL_TRUNCATION: (id) => ({
+            bindTo: id,
+            bindLegendTo: null,
+            axis: {
+                x: {
+                    show: true,
+                    label: largeLabel,
+                    lowerLimit: 80,
+                    upperLimit: 280
+                },
+                y: {
+                    show: true,
+                    label: largeLabel,
+                    lowerLimit: -18,
+                    upperLimit: 18
+                },
+                y2: {
+                    show: true,
+                    label: largeLabel,
+                    lowerLimit: 0,
+                    upperLimit: 250
+                }
+            },
+            data: [
+                {
+                    key: "uid_1",
+                    label: {
+                        display: "Data Label 1"
+                    },
+                    color: Carbon.helpers.COLORS.BLACK,
+                    onClick: loadPopup,
+                    values: new Array(20).fill("").map((_, i) => ({
+                        y: Math.sin(i) * Math.PI,
+                        x: 85 + i * 10
+                    }))
                 }
             ],
             showLabel: true,

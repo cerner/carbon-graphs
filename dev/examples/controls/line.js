@@ -617,3 +617,12 @@ export const renderLineWithSuppressedTrailingZeros = (id) => {
     );
     return lineTime;
 };
+export const renderLineLabelTruncation = (id) => {
+    const lineDefault = Carbon.api.graph(
+        getDemoData(`#${id}`, "LABEL_TRUNCATION")
+    );
+    lineDefault.loadContent(
+        Carbon.api.line(getDemoData(`#${id}`, "LABEL_TRUNCATION").data[0])
+    );
+    return lineDefault;
+};
