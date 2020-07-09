@@ -255,9 +255,9 @@ Each bubble can have a legendOptions object in [Values](#values) level.
 
 #### Optional
 
-| Property Name | Expected | Default | Description                                           |
-| ------------- | -------- | ------- | ----------------------------------------------------- |
-| showElement   | boolean  | true    | Toggle to hide legend when legend item has no data.   |
+| Property Name | Expected | Default | Description                                         |
+| ------------- | -------- | ------- | --------------------------------------------------- |
+| showElement   | boolean  | true    | Toggle to hide legend when legend item has no data. |
 
 ### Weight
 

@@ -6,9 +6,8 @@
  */
 import * as d3 from "d3";
 import { GraphContent } from "../../core";
-import constants from "../../helpers/constants";
 import errors from "../../helpers/errors";
-import { shouldTruncateLabel } from "../../helpers/label";
+import { loadLabelPopup, shouldTruncateLabel } from "../../helpers/label";
 import styles from "../../helpers/styles";
 import utils from "../../helpers/utils";
 import { isUniqueKey } from "./GanttConfig";
@@ -86,28 +85,24 @@ const addTrackLabelEventHandler = (canvasSVG, labelObj) =>
     canvasSVG
         .selectAll(`.${styles.axisYTrackLabel} .tick text`)
         .each(function (displayVal) {
-            if (
-                !displayVal ||
-                !utils.isFunction(labelObj.onClick) ||
-                !hasMatchingTrackLabel(this, labelObj.display)
-            ) {
-                return;
-            }
-            if (
-                shouldTruncateLabel(
-                    labelObj.display,
-                    constants.DEFAULT_LABEL_CHARACTER_LIMIT
-                )
-            ) {
-                if (utils.isEmpty(d3.select(this).attr("aria-disabled"))) {
-                    d3.select(this).attr(
-                        "aria-disabled",
-                        !utils.isFunction(labelObj.onClick)
-                    );
-                }
-                d3.select(this).on("click", () => {
-                    labelObj.onClick(labelObj.display, d3.select(this));
-                });
+            // checks if track name is same as instance of track name
+            if (!displayVal || !hasMatchingTrackLabel(this, labelObj.display)) {
+            } else {
+                shouldTruncateLabel(labelObj.display)
+                    ? d3
+                          .select(this)
+                          .style("cursor", "pointer")
+                          .on("click", () => {
+                              // If the consumer provides onclick function, it will override default onClick functionality provided by Carbon-graphs
+                              utils.isDefined(labelObj.onClick) &&
+                              utils.isFunction(labelObj.onClick)
+                                  ? labelObj.onClick(
+                                        labelObj.display,
+                                        d3.select(this)
+                                    )
+                                  : loadLabelPopup(labelObj.display, "y");
+                          })
+                    : null;
             }
         });
 
