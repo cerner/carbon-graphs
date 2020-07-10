@@ -693,4 +693,46 @@ describe("Gantt -> Track", () => {
             });
         });
     });
+    describe("check graph scale domain on resize", () => {
+        beforeEach(() => {
+            gantt.loadContent({
+                key: "track 1",
+                trackLabel: {
+                    display: "label"
+                },
+                dimension: {
+                    trackHeight: 160
+                }
+            });
+            gantt.loadContent({
+                key: "track 2",
+                trackLabel: {
+                    display: "label 2"
+                },
+                dimension: {
+                    trackHeight: 160
+                }
+            });
+        });
+        describe("before unloading track", () => {
+            it("should have correct domain length", () => {
+                gantt.resize();
+                expect(gantt.scale).not.toBeNull();
+                expect(gantt.scale.y.domain().length).toBe(2);
+            });
+        });
+        describe("before unloading track", () => {
+            it("should have correct domain length", () => {
+                gantt.unloadContent({
+                    key: "track 1",
+                    trackLabel: {
+                        display: "label"
+                    }
+                });
+                gantt.resize();
+                expect(gantt.scale).not.toBeNull();
+                expect(gantt.scale.y.domain().length).toBe(1);
+            });
+        });
+    });
 });

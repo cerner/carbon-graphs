@@ -16,6 +16,7 @@ import { loadActivities, unloadActivities } from "./helpers/activityHelpers";
 import {
     createTrackContainer,
     removeTrackContainer,
+    scaleGraph,
     updateTrackProps
 } from "./helpers/creationHelpers";
 import { loadEvents, unloadEvents } from "./helpers/eventHelpers";
@@ -215,6 +216,7 @@ class Track extends GraphContent {
      * @inheritdoc
      */
     resize(graph) {
+        scaleGraph(graph.scale, graph.config);
         if (utils.notEmpty(this.trackGroupPath)) {
             translateTrackSelector(
                 graph.scale,
