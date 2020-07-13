@@ -8,6 +8,7 @@ import styles from "../helpers/styles";
 import utils from "../helpers/utils";
 import { DEFAULT_TICK_FORMAT } from "../locale";
 import { prepareHAxis } from "./datetimeBuckets";
+import { shouldTruncateLabel, truncateLabel } from "./label";
 
 /**
  * @module axis
@@ -32,8 +33,14 @@ const hasNegativeLowerBound = (scale, yAxis = constants.Y_AXIS) =>
  * @returns {Array} x and y co-ordinate data for drawing a reference line
  */
 const getReferenceLineData = (scale) => [
-    { x: scale.x.domain()[0], y: 0 },
-    { x: scale.x.domain()[1], y: 0 }
+    {
+        x: scale.x.domain()[0],
+        y: 0
+    },
+    {
+        x: scale.x.domain()[1],
+        y: 0
+    }
 ];
 /**
  * Creates a simple reference line with x and y attributes
@@ -175,54 +182,330 @@ const createAxisReferenceLine = (axis, scale, config, canvasSVG) => {
  * @returns {object} - Scaled axes object
  */
 const getAxesScale = (axis, scale, config) => {
+    let tickFormatToTrimTrailingZeros;
+
+    // If suppressTrailingZeros is set to true and x axis type is set as
+    // DEFAULT (normal number based axes values) and x axis's tick format
+    // is not provided by the consumer, then invoke tickFormatter()
+    // to insert '~' just before the default d3 tick format type
+    // to suppress ticks values's trailing zeros
+    if (
+        config.axis.x.suppressTrailingZeros &&
+        config.axis.x.type === AXIS_TYPE.DEFAULT &&
+        utils.isUndefined(config.axis.x.ticks.format)
+    ) {
+        axis.x = isXAxisOrientationTop(config.axis.x.orientation)
+            ? d3.axisTop(scale.x)
+            : d3.axisBottom(scale.x);
+        tickFormatToTrimTrailingZeros = tickFormatter(axis.x);
+    }
+
     axis.x = prepareXAxis(
         scale.x,
         config.axis.x.ticks.values,
         getXAxisWidth(config),
         getAxisTickFormat(
             config.d3Locale,
-            config.axis.x.ticks.format,
+            utils.isDefined(config.axis.x.ticks.format)
+                ? config.axis.x.ticks.format
+                : tickFormatToTrimTrailingZeros,
             config.axis.x.type
         ),
         config.axis.x.orientation
     );
+
+    // Reset the tickFormatToTrimTrailingZeros to null, so that
+    // if the y axis suppressTrailingZeros is set to false and
+    // consumer has not defined its tick format,
+    // we can ensure we are not using the same x axis's tick format
+    // for y axis as well
+    tickFormatToTrimTrailingZeros = null;
+
     axis.axisInfoRow.x = prepareXAxisInfoRow(
         scale.x,
         getAxisInfoOrientation(config.axis.x.orientation)
     );
 
-    // If ticksCount is undefined or greater than TICKS_MAXCOUNT
-    // AND if the Y2 is visible, then utilize a default value for
-    // the ticksCount. This is based on the ranges of the Y & Y2 axes.
-
-    if (
-        (utils.isUndefined(config.ticksCount) ||
-            config.ticksCount > constants.TICKSCOUNT_MAXLIMIT) &&
-        hasY2Axis(config.axis)
-    )
-        config.ticksCount = getAverageTicksCount(
-            config.axis.y.domain.upperLimit - config.axis.y.domain.lowerLimit,
-            config.axis.y2.domain.upperLimit - config.axis.y2.domain.lowerLimit
-        );
-
-    axis.y = prepareYAxis(
-        scale.y,
-        config.axis.y.domain,
-        config.height,
-        getAxisTickFormat(config.locale, config.axis.y.ticks.format),
-        config.ticksCount
-    );
-
     if (hasY2Axis(config.axis)) {
-        axis.y2 = prepareY2Axis(
-            scale.y2,
-            config.axis.y2.domain,
-            config.height,
-            getAxisTickFormat(config.locale, config.axis.y2.ticks.format),
-            config.ticksCount
-        );
+        // Y and Y2 axes - custom tick values. Takes priority
+        // and ignores ticksCount if it is set. Will not work if only
+        // Y2 ticks are provided.
+        if (utils.isDefined(config.axis.y.ticks.values)) {
+            // If suppressTrailingZeros is set to true and y axis's tick format
+            // is not provided by the consumer, then invoke tickFormatter()
+            // to insert '~' just before the default d3 tick format type
+            // to suppress ticks values's trailing zeros
+            if (
+                config.axis.y.suppressTrailingZeros &&
+                utils.isUndefined(config.axis.y.ticks.format)
+            ) {
+                axis.y = d3.axisLeft(scale.y);
+                tickFormatToTrimTrailingZeros = tickFormatter(axis.y);
+            }
+            axis.y = prepareYAxis(
+                scale.y,
+                config.axis.y.ticks.values,
+                config.height,
+                getAxisTickFormat(
+                    config.locale,
+                    utils.isDefined(config.axis.y.ticks.format)
+                        ? config.axis.y.ticks.format
+                        : tickFormatToTrimTrailingZeros
+                )
+            );
+
+            // Reset the tickFormatToTrimTrailingZeros to null, so that
+            // if the y2 axis suppressTrailingZeros is set to false and
+            // consumer has not defined its tick format,
+            // we can ensure we are not using the same y axis's tick format
+            // for y2 axis as well
+            tickFormatToTrimTrailingZeros = null;
+
+            // If suppressTrailingZeros is set to true and y2 axis's tick format
+            // is not provided by the consumer, then invoke tickFormatter()
+            // to insert '~' just before the default d3 tick format type
+            // to suppress ticks values's trailing zeros
+            if (
+                config.axis.y2.suppressTrailingZeros &&
+                utils.isUndefined(config.axis.y2.ticks.format)
+            ) {
+                axis.y2 = d3.axisRight(scale.y2);
+                tickFormatToTrimTrailingZeros = tickFormatter(axis.y2);
+            }
+            axis.y2 = prepareY2Axis(
+                scale.y2,
+                config.axis.y2.ticks.values,
+                config.height,
+                getAxisTickFormat(
+                    config.locale,
+                    utils.isDefined(config.axis.y2.ticks.format)
+                        ? config.axis.y2.ticks.format
+                        : tickFormatToTrimTrailingZeros
+                )
+            );
+            return axis;
+        }
+        // Y and Y2 axes - ticksCount.
+        else if (
+            utils.isDefined(config.ticksCount) &&
+            config.ticksCount <= constants.TICKSCOUNT_MAXLIMIT
+        ) {
+            const yTickValues = generateYAxesTickValues(
+                config.axis.y.domain.lowerLimit,
+                config.axis.y.domain.upperLimit,
+                config.ticksCount,
+                config.allowCalibration
+            );
+
+            const y2TickValues = generateYAxesTickValues(
+                config.axis.y2.domain.lowerLimit,
+                config.axis.y2.domain.upperLimit,
+                config.ticksCount,
+                config.allowCalibration
+            );
+
+            if (
+                config.axis.y.suppressTrailingZeros &&
+                utils.isUndefined(config.axis.y.ticks.format)
+            ) {
+                axis.y = d3.axisLeft(scale.y);
+                tickFormatToTrimTrailingZeros = tickFormatter(axis.y);
+            }
+            axis.y = prepareYAxis(
+                scale.y,
+                yTickValues,
+                config.height,
+                getAxisTickFormat(
+                    config.locale,
+                    utils.isDefined(config.axis.y.ticks.format)
+                        ? config.axis.y.ticks.format
+                        : tickFormatToTrimTrailingZeros
+                )
+            );
+            tickFormatToTrimTrailingZeros = null;
+
+            if (
+                config.axis.y2.suppressTrailingZeros &&
+                utils.isUndefined(config.axis.y2.ticks.format)
+            ) {
+                axis.y2 = d3.axisRight(scale.y2);
+                tickFormatToTrimTrailingZeros = tickFormatter(axis.y2);
+            }
+            axis.y2 = prepareY2Axis(
+                scale.y2,
+                y2TickValues,
+                config.height,
+                getAxisTickFormat(
+                    config.locale,
+                    utils.isDefined(config.axis.y2.ticks.format)
+                        ? config.axis.y2.ticks.format
+                        : tickFormatToTrimTrailingZeros
+                )
+            );
+        }
+        // Y and Y2 axes - If ticksCount is undefined or greater than
+        // TICKS_MAXCOUNT AND if the Y2 is visible, then utilize a default value
+        // for the ticksCount. This is based on the ranges of the Y & Y2 axes.
+        else {
+            const ticksCount = getAverageTicksCount(
+                config.axis.y.domain.upperLimit -
+                    config.axis.y.domain.lowerLimit,
+                config.axis.y2.domain.upperLimit -
+                    config.axis.y2.domain.lowerLimit
+            );
+
+            const yTickValues = generateYAxesTickValues(
+                config.axis.y.domain.lowerLimit,
+                config.axis.y.domain.upperLimit,
+                ticksCount,
+                config.allowCalibration
+            );
+            const y2TickValues = generateYAxesTickValues(
+                config.axis.y2.domain.lowerLimit,
+                config.axis.y2.domain.upperLimit,
+                ticksCount,
+                config.allowCalibration
+            );
+
+            if (
+                config.axis.y.suppressTrailingZeros &&
+                utils.isUndefined(config.axis.y.ticks.format)
+            ) {
+                axis.y = d3.axisLeft(scale.y);
+                tickFormatToTrimTrailingZeros = tickFormatter(axis.y);
+            }
+            axis.y = prepareYAxis(
+                scale.y,
+                yTickValues,
+                config.height,
+                getAxisTickFormat(
+                    config.locale,
+                    utils.isDefined(config.axis.y.ticks.format)
+                        ? config.axis.y.ticks.format
+                        : tickFormatToTrimTrailingZeros
+                )
+            );
+            tickFormatToTrimTrailingZeros = null;
+
+            if (
+                config.axis.y2.suppressTrailingZeros &&
+                utils.isUndefined(config.axis.y2.ticks.format)
+            ) {
+                axis.y2 = d3.axisRight(scale.y2);
+                tickFormatToTrimTrailingZeros = tickFormatter(axis.y2);
+            }
+            axis.y2 = prepareY2Axis(
+                scale.y2,
+                y2TickValues,
+                config.height,
+                getAxisTickFormat(
+                    config.locale,
+                    utils.isDefined(config.axis.y2.ticks.format)
+                        ? config.axis.y2.ticks.format
+                        : tickFormatToTrimTrailingZeros
+                )
+            );
+        }
+    }
+    // Only single Y axis
+    else {
+        // Single Y axis - custom tick values
+        if (utils.isDefined(config.axis.y.ticks.values)) {
+            if (
+                config.axis.y.suppressTrailingZeros &&
+                utils.isUndefined(config.axis.y.ticks.format)
+            ) {
+                axis.y = d3.axisLeft(scale.y);
+                tickFormatToTrimTrailingZeros = tickFormatter(axis.y);
+            }
+            axis.y = prepareYAxis(
+                scale.y,
+                config.axis.y.ticks.values,
+                config.height,
+                getAxisTickFormat(
+                    config.locale,
+                    utils.isDefined(config.axis.y.ticks.format)
+                        ? config.axis.y.ticks.format
+                        : tickFormatToTrimTrailingZeros
+                )
+            );
+            // return axis;
+        }
+        // Single Y axis - ticksCount is defined
+        else if (
+            utils.isDefined(config.ticksCount) ||
+            config.ticksCount <= constants.TICKSCOUNT_MAXLIMIT
+        ) {
+            const yTickValues = generateYAxesTickValues(
+                config.axis.y.domain.lowerLimit,
+                config.axis.y.domain.upperLimit,
+                config.ticksCount,
+                config.allowCalibration
+            );
+
+            if (
+                config.axis.y.suppressTrailingZeros &&
+                utils.isUndefined(config.axis.y.ticks.format)
+            ) {
+                axis.y = d3.axisLeft(scale.y);
+                tickFormatToTrimTrailingZeros = tickFormatter(axis.y);
+            }
+            axis.y = prepareYAxis(
+                scale.y,
+                yTickValues,
+                config.height,
+                getAxisTickFormat(
+                    config.locale,
+                    utils.isDefined(config.axis.y.ticks.format)
+                        ? config.axis.y.ticks.format
+                        : tickFormatToTrimTrailingZeros
+                )
+            );
+        }
+        // Single Y axis - default case when
+        // config.axis.y.ticks.values and ticksCount
+        // are not defined
+        else {
+            if (
+                config.axis.y.suppressTrailingZeros &&
+                utils.isUndefined(config.axis.y.ticks.format)
+            ) {
+                axis.y = d3.axisLeft(scale.y);
+                tickFormatToTrimTrailingZeros = tickFormatter(axis.y);
+            }
+            axis.y = prepareYAxis(
+                scale.y,
+                undefined,
+                config.height,
+                getAxisTickFormat(
+                    config.locale,
+                    utils.isDefined(config.axis.y.ticks.format)
+                        ? config.axis.y.ticks.format
+                        : tickFormatToTrimTrailingZeros
+                )
+            );
+        }
     }
     return axis;
+};
+
+/**
+ * Inserts '~' just before the format type to suppress ticks values's trailing zeros when default d3 tick formatting is used
+ *
+ * @private
+ * @param {object} axis - Scaled axes object
+ * @returns {string} tick format string
+ */
+const tickFormatter = (axis) => {
+    const defaultTickFormat = axis.scale().tickFormat().toString();
+
+    // Return the default d3 tick format with the '~' character inserted just before the format type
+    // Eg: defaultTickFormat: .1f
+    // Value returned below will be: .1~f
+    return `${defaultTickFormat.slice(
+        0,
+        defaultTickFormat.length - 1
+    )}~${defaultTickFormat.slice(defaultTickFormat.length - 1)}`;
 };
 
 /**
@@ -329,35 +612,40 @@ const getAverageTicksCount = (rangeY, rangeY2) => {
  * @param {number} lowerLimit - Lower limit of the Y or Y2 Axis
  * @param {number} upperLimit - Upper limit of the Y or Y2 Axis
  * @param {number} ticksCount - Number of ticks between the upper and lower limits
+ * @param {boolean} allowCalibration - Whether this property is true or false
  * @returns {(Array)} returns array of values to be used as tick labels
  */
 const generateYAxesTickValues = (
     lowerLimit,
     upperLimit,
-    ticksCount = constants.DEFAULT_TICKSCOUNT
+    ticksCount = constants.DEFAULT_TICKSCOUNT,
+    allowCalibration = true
 ) => {
     ticksCount = Math.abs(ticksCount);
     const tickValues = [];
 
     // use the d3,js nice function to round off the upper and lower limits
     // to multiples of 2, 5 or 10
-    const [newLowerLimit, newUpperLimit] = d3
-        .scaleLinear()
-        .domain([lowerLimit, upperLimit])
-        .nice()
-        .domain();
 
-    tickValues.push(newLowerLimit);
-    tickValues.push(newUpperLimit);
+    if (allowCalibration) {
+        [lowerLimit, upperLimit] = d3
+            .scaleLinear()
+            .domain([lowerLimit, upperLimit])
+            .nice()
+            .domain();
+    }
 
-    if (newLowerLimit < 0) {
+    tickValues.push(lowerLimit);
+    tickValues.push(upperLimit);
+
+    if (lowerLimit < 0) {
         tickValues.push(0);
     }
 
-    const interval = (newUpperLimit - newLowerLimit) / (ticksCount + 1);
+    const interval = (upperLimit - lowerLimit) / (ticksCount + 1);
 
     for (let index = 1; index <= ticksCount; index++) {
-        tickValues.push(newLowerLimit + interval * index);
+        tickValues.push(lowerLimit + interval * index);
     }
 
     return tickValues;
@@ -456,23 +744,16 @@ const prepareHorizontalAxis = (scale, tickValues, config, orientation) =>
  *
  * @private
  * @param {object} scale - d3 scale calculated using domain and range
- * @param {number} domain -  d3 domain of the axis
+ * @param {Array} tickValues - Array of values that represent the tick values
  * @param {number} height - Height of the Y Axis to calculate the number of Y Axis ticks
  * @param {object} format - d3 locale object formatted to represent the tick.
- * @param {number} ticksCount - Number of ticks between the upper and lower limits
  * @returns {object} d3 object which forms the y-axis scale
  */
-const prepareYAxis = (scale, domain, height, format, ticksCount) =>
+const prepareYAxis = (scale, tickValues, height, format) =>
     d3
         .axisLeft(scale)
         .ticks(height / constants.DEFAULT_Y_AXIS_SPACING)
-        .tickValues(
-            generateYAxesTickValues(
-                domain.lowerLimit,
-                domain.upperLimit,
-                ticksCount
-            )
-        )
+        .tickValues(tickValues)
         .tickFormat(format);
 
 /**
@@ -480,23 +761,16 @@ const prepareYAxis = (scale, domain, height, format, ticksCount) =>
  *
  * @private
  * @param {object} scale - d3 scale calculated using domain and range
- * @param {number} domain - d3 domain of the axis
+ * @param {Array} tickValues - Array of values that represent the tick values
  * @param {number} height - Height of the Y2 Axis to calculate the number of Y2 Axis ticks
  * @param {object} format - d3 locale object formatted to represent the tick.
- * @param {number} ticksCount - Number of ticks between the upper and lower limits
  * @returns {object} d3 object which forms the y2-axis scale
  */
-const prepareY2Axis = (scale, domain, height, format, ticksCount) =>
+const prepareY2Axis = (scale, tickValues, height, format) =>
     d3
         .axisRight(scale)
         .ticks(height / constants.DEFAULT_Y_AXIS_SPACING)
-        .tickValues(
-            generateYAxesTickValues(
-                domain.lowerLimit,
-                domain.upperLimit,
-                ticksCount
-            )
-        )
+        .tickValues(tickValues)
         .tickFormat(format);
 
 /**
@@ -1011,19 +1285,32 @@ const determineOutlierStretchFactor = (config) => {
 };
 
 /**
+ * Checks if the Axis label needs to be truncated and returns the truncated value
+ *
+ * @param {string} label - Axis label display property
+ * @param {number} charLimit  - label character limit on axis
+ * @returns {string} if more than character limit then truncates,
+ * normal label otherwise
+ */
+const formatLabel = (label, charLimit) =>
+    shouldTruncateLabel(label, Math.abs(charLimit))
+        ? truncateLabel(label, Math.abs(charLimit))
+        : label;
+
+/**
  * Returns the d3 html element after appending axis label text
  *
- * @private
  * @param {Array} group - d3 html element
  * @param {string} label - Label text
+ * @param {number} charLimit - character limit of label with respect to axis size
  * @returns {Array} d3 html element
  */
-const buildAxisLabel = (group, label) =>
+const buildAxisLabel = (group, label, charLimit) =>
     group
         .append("text")
         .attr("text-anchor", "middle")
         .append("tspan")
-        .text(label);
+        .text(formatLabel(label, charLimit));
 /**
  * Decides true if the input JSON y2.show is enabled and if y2 axis points are provided
  *
@@ -1290,5 +1577,6 @@ export {
     getAxisInfoRowYPosition,
     updateXAxisDomain,
     getTicksCountFromRange,
-    getAverageTicksCount
+    getAverageTicksCount,
+    formatLabel
 };

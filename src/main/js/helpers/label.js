@@ -51,6 +51,65 @@ const truncateLabel = (
     charLimit = constants.DEFAULT_LABEL_CHARACTER_LIMIT
 ) => labelStr.substring(0, charLimit).concat("...");
 /**
+ * Create popup for the label.
+ *
+ * @param {string} axisLabel - label of axis.
+ * @param {string} axisType - type of axis.
+ * @returns {object} popup with axis label in it.
+ */
+export const loadLabelPopup = (axisLabel, axisType) => {
+    removeOldPopup();
+    const path = renderPopup(axisType);
+    return path
+        .append("g")
+        .append("g")
+        .classed("popup-item", true)
+        .append("g")
+        .classed("popup-text", true)
+        .text(axisLabel);
+};
+/**
+ * Removes old popup present for label.
+ */
+const removeOldPopup = () => {
+    // Remove old popup
+    d3.select("#overlay").remove();
+    d3.select("#tooltip").attr("style", "").selectAll("g").remove();
+};
+/**
+ * Render Popup for the label.
+ *
+ * @private
+ * @param {string} axisType - type of axis
+ * @returns {object} d3 svg path
+ */
+const renderPopup = (axisType) => {
+    const tip = document.querySelector("#tooltip");
+    const clickHandler = () => {
+        d3.select(tip).attr("style", "display:none;").selectAll("g").remove();
+        d3.select("#overlay").remove();
+        tip.removeEventListener("click", clickHandler);
+        window.removeEventListener("resize", clickHandler);
+    };
+    // Add new popup
+    d3.select("body")
+        .append("div", "#tooltip")
+        .attr("id", "overlay")
+        .classed("overlay", true)
+        .on("click", clickHandler);
+    // Position popup
+    return axisType === "y2"
+        ? // Since y2 axis will be on the right side of the page, we should make popup move a bit left when clicked on y2-axis label.
+          d3
+              .select("#tooltip")
+              .style("left", `${d3.event.pageX - 250}px`)
+              .style("top", `${d3.event.pageY + 5}px`)
+        : d3
+              .select("#tooltip")
+              .style("left", `${d3.event.pageX + 5}px`)
+              .style("top", `${d3.event.pageY + 5}px`);
+};
+/**
  * Loads a shape within a label container to be shown below Y and Y2 axes.
  *
  * @private

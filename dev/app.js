@@ -92,7 +92,10 @@ import {
     renderLineWithLegendOptions,
     renderLineWithShapesShownPerDataSet,
     renderDisableCalibration,
-    renderLineGraphAndLegendPaddingReduced
+    renderLineGraphAndLegendPaddingReduced,
+    renderSuppressLegend,
+    renderLineWithSuppressedTrailingZeros,
+    renderLineLabelTruncation
 } from "./examples/controls/line";
 import {
     renderMultiPairedResultRegion,
@@ -231,6 +234,11 @@ renderSiteApp(
                     title: "No Data"
                 },
                 {
+                    pathname: "/line/label-truncation",
+                    content: renderLineLabelTruncation,
+                    title: "Label Truncation"
+                },
+                {
                     pathname: "/line/dashed-line",
                     content: renderDashedLine,
                     title: "Dashed Line"
@@ -257,6 +265,16 @@ renderSiteApp(
                         return renderLineGraphAndLegendPaddingReduced(id);
                     },
                     title: "Graph and Legend Padding Reduced"
+                },
+                {
+                    pathname: "/line/suppress-tick-values-trailing-zeros",
+                    content: renderLineWithSuppressedTrailingZeros,
+                    title: "Suppress Tick Values Trailing Zeros"
+                },
+                {
+                    pathname: "/line/Suppress-legend",
+                    content: renderSuppressLegend,
+                    title: "Suppress Legend"
                 }
             ]
         },

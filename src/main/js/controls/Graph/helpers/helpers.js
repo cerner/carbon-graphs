@@ -22,14 +22,17 @@ import {
     isXAxisOrientationTop,
     processTickValues,
     translateAxes,
-    translateAxisReferenceLine
+    translateAxisReferenceLine,
+    formatLabel
 } from "../../../helpers/axis";
 import constants, { SHAPES } from "../../../helpers/constants";
 import { createVGrid, translateVGrid } from "../../../helpers/datetimeBuckets";
 import {
     buildY2AxisLabelShapeContainer,
     buildYAxisLabelShapeContainer,
-    translateLabelShapeContainer
+    shouldTruncateLabel,
+    translateLabelShapeContainer,
+    loadLabelPopup
 } from "../../../helpers/label";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
@@ -250,6 +253,7 @@ const translateContentContainer = (config, canvasSVG) =>
  * @returns {undefined} - returns nothing
  */
 const translateLabel = (config, canvasSVG) => {
+    const axesLabelCharLimits = getAxesLabelCharacterLimits(config);
     if (config.axis.x.label) {
         canvasSVG
             .select(`.${styles.axisLabelX}`)
@@ -263,6 +267,16 @@ const translateLabel = (config, canvasSVG) => {
                     config
                 )}) rotate(${getRotationForAxis(constants.X_AXIS)})`
             );
+        canvasSVG
+            .selectAll(`.${styles.axisLabelX} text`)
+            .each(function (displayVal) {
+                d3.select(this).text(
+                    formatLabel(
+                        config.axis.x.label,
+                        axesLabelCharLimits.xAxisLimit
+                    )
+                );
+            });
     }
 
     if (config.axis.y.label) {
@@ -278,6 +292,16 @@ const translateLabel = (config, canvasSVG) => {
                     config
                 )}) rotate(${getRotationForAxis(constants.Y_AXIS)})`
             );
+        canvasSVG
+            .selectAll(`.${styles.axisLabelY} text`)
+            .each(function (displayVal) {
+                d3.select(this).text(
+                    formatLabel(
+                        config.axis.y.label,
+                        axesLabelCharLimits.yAndY2AxisLimit
+                    )
+                );
+            });
     }
 
     if (hasY2Axis(config.axis)) {
@@ -293,6 +317,16 @@ const translateLabel = (config, canvasSVG) => {
                     config
                 )}) rotate(${getRotationForAxis(constants.Y2_AXIS)})`
             );
+        canvasSVG
+            .selectAll(`.${styles.axisLabelY2} text`)
+            .each(function (displayVal) {
+                d3.select(this).text(
+                    formatLabel(
+                        config.axis.y2.label,
+                        axesLabelCharLimits.yAndY2AxisLimit
+                    )
+                );
+            });
     }
 };
 /**
@@ -420,12 +454,62 @@ const createVGridHandler = (gridSVG, axis, style, config) => {
         .call(translateVerticalGrid(axis, config));
 };
 /**
+ * calculates the character limit of label with respect to axis length.
+ *
+ * @private
+ * @param {string} config - config object derived from input JSON
+ * @returns {object} character limit for both and y-axis
+ */
+const getAxesLabelCharacterLimits = (config) => ({
+    /*
+     *  We can fit 1 Uppercase character for every ≈7px. To fit ellipses with truncated text, we can assign 8px per character for y and y2-axis.
+     *  And if we use 8px per character, there will be some space left on x-axis. Inorder to use maximum space on x-axis,
+     *  we can assign less than 8px(22/3 i.e ≈7.3) per character in x-axis.
+     *
+     */
+    xAxisLimit: getXAxisWidth(config) / 7.33,
+    yAndY2AxisLimit: config.height / 8
+});
+/**
+ * Adds onClick event for each label in Axes.
+ * Criteria:
+ *  * Text needs to have a valid function for onClick
+ *  * Label should exceed the calculated character limit with respect to axis length
+ *
+ * @private
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
+ * @param {string} className - class name of axis
+ * @param {object} axisObj - Axis object provided by the consumer
+ * @param {number} charLimit - character limit of label in axis
+ * @param {string} axisType - type of axis
+ * @returns {object} d3 svg path
+ */
+const addLabelEventHandler = (
+    canvasSVG,
+    className,
+    axisObj,
+    charLimit,
+    axisType
+) =>
+    canvasSVG.selectAll(`.${className} text`).each(function (displayVal) {
+        shouldTruncateLabel(axisObj.label, charLimit)
+            ? d3
+                  .select(this)
+                  .style("cursor", "pointer")
+                  .on("click", () => {
+                      utils.isDefined(axisObj.onLabelClick) &&
+                      utils.isFunction(axisObj.onLabelClick)
+                          ? axisObj.onLabelClick(axisObj.label, d3.select(this))
+                          : loadLabelPopup(axisObj.label, axisType);
+                  })
+            : null;
+    });
+/**
  * Create the d3 Labels - X, Y and Y2 and append into the canvas.
  * Only if showLabel is enabled. X Axis is 0 deg rotated, Y Axis is rotated 90 deg
  * Y2 Axis is rotated -90 deg along its horizontal axis.
  *
  * @private
- * @todo Label overflow formatting, adding ellipsis?
  * @param {object} config - config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {object} control - Graph instance
@@ -433,6 +517,7 @@ const createVGridHandler = (gridSVG, axis, style, config) => {
  */
 const createLabel = (config, canvasSVG, control) => {
     if (config.showLabel) {
+        const axesLabelCharLimits = getAxesLabelCharacterLimits(config);
         if (config.axis.x.label) {
             const labelPath = canvasSVG
                 .append("g")
@@ -445,7 +530,18 @@ const createLabel = (config, canvasSVG, control) => {
                         config
                     )}) rotate(${getRotationForAxis(constants.X_AXIS)})`
                 );
-            buildAxisLabel(labelPath, utils.sanitize(config.axis.x.label));
+            buildAxisLabel(
+                labelPath,
+                utils.sanitize(config.axis.x.label),
+                axesLabelCharLimits.xAxisLimit
+            );
+            addLabelEventHandler(
+                labelPath,
+                styles.axisLabelX,
+                config.axis.x,
+                axesLabelCharLimits.xAxisLimit,
+                constants.X_AXIS
+            );
         }
         if (config.axis.y.label) {
             const labelPath = canvasSVG
@@ -459,7 +555,18 @@ const createLabel = (config, canvasSVG, control) => {
                         config
                     )}) rotate(${getRotationForAxis(constants.Y_AXIS)})`
                 );
-            buildAxisLabel(labelPath, utils.sanitize(config.axis.y.label));
+            buildAxisLabel(
+                labelPath,
+                utils.sanitize(config.axis.y.label),
+                axesLabelCharLimits.yAndY2AxisLimit
+            );
+            addLabelEventHandler(
+                labelPath,
+                styles.axisLabelY,
+                config.axis.y,
+                axesLabelCharLimits.yAndY2AxisLimit,
+                constants.Y_AXIS
+            );
         }
         if (hasY2Axis(config.axis)) {
             const labelPath = canvasSVG
@@ -473,7 +580,18 @@ const createLabel = (config, canvasSVG, control) => {
                         config
                     )}) rotate(${getRotationForAxis(constants.Y2_AXIS)})`
                 );
-            buildAxisLabel(labelPath, utils.sanitize(config.axis.y2.label));
+            buildAxisLabel(
+                labelPath,
+                utils.sanitize(config.axis.y2.label),
+                axesLabelCharLimits.yAndY2AxisLimit
+            );
+            addLabelEventHandler(
+                canvasSVG,
+                styles.axisLabelY2,
+                config.axis.y2,
+                axesLabelCharLimits.yAndY2AxisLimit,
+                constants.Y2_AXIS
+            );
             /*
              * Label shapes are only applicable when we have a Y2 Axis
              * */

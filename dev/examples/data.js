@@ -17,6 +17,9 @@ const bobRossIpsum =
     "These trees are so much fun. I get started on them and I have a hard time stopping. We'll make some happy little bushes here. " +
     "Absolutely no pressure. You are just a whisper floating across a mountain. There are no limits in this world. " +
     "A thin paint will stick to a thick paint.\n";
+const largeLabel =
+    "Project long display value which is only for testing, Project long display value which is only for testing " +
+    "Project long display value which is only for testing, Project long display value which is only for testing";
 
 const DATA = [
     {
@@ -37,7 +40,7 @@ const DATA = [
                     upperLimit: 18
                 },
                 y2: {
-                    show: false,
+                    show: true,
                     label: "Line Set B",
                     lowerLimit: 0,
                     upperLimit: 250
@@ -144,6 +147,19 @@ const DATA = [
                         y: Math.cos(i) * Math.PI * 7,
                         x: 85 + i * 10
                     }))
+                },
+                {
+                    key: "uid_8",
+                    label: {
+                        display: "Data Label 8"
+                    },
+                    shape: Carbon.helpers.SHAPES.DARK.TRIANGLE,
+                    color: Carbon.helpers.COLORS.BLUE,
+                    onClick: loadPopup,
+                    values: [],
+                    legendOptions: {
+                        showElement: false
+                    }
                 }
             ],
             showLabel: true,
@@ -550,6 +566,140 @@ const DATA = [
             showShapes: true,
             showVGrid: true,
             showHGrid: true
+        })
+    },
+    {
+        LINE_DECIMAL_AXES_VALUES: (id) => ({
+            bindTo: id,
+            axis: {
+                x: {
+                    label: "Data",
+                    lowerLimit: 20.7,
+                    upperLimit: 22.7
+                },
+                y: {
+                    label: "Line Set A",
+                    lowerLimit: 0.2,
+                    upperLimit: 3.8
+                },
+                y2: {
+                    show: true,
+                    label: "Line Set B",
+                    lowerLimit: 10.2,
+                    upperLimit: 13.8
+                }
+            },
+            data: [
+                {
+                    key: "uid_1",
+                    label: {
+                        display: "Data Label 1"
+                    },
+                    shape: Carbon.helpers.SHAPES.DARK.CIRCLE,
+                    onClick: loadPopup,
+                    values: [
+                        {
+                            x: 20.9,
+                            y: 0.2
+                        },
+                        {
+                            x: 21,
+                            y: 0.4
+                        },
+                        {
+                            x: 21.1,
+                            y: 0.6
+                        },
+                        {
+                            x: 21.2,
+                            y: 0.6
+                        },
+                        {
+                            x: 21.4,
+                            y: 0.8
+                        },
+                        {
+                            x: 21.5,
+                            y: 1.4
+                        },
+                        {
+                            x: 21.8,
+                            y: 1.6
+                        },
+                        {
+                            x: 22,
+                            y: 1.8
+                        },
+                        {
+                            x: 22.1,
+                            y: 1.4
+                        },
+                        {
+                            x: 22.2,
+                            y: 1.4
+                        },
+                        {
+                            x: 22.3,
+                            y: 3.6
+                        },
+                        {
+                            x: 22.4,
+                            y: 1.2
+                        },
+                        {
+                            x: 22.5,
+                            y: 1.4
+                        },
+                        {
+                            x: 22.6,
+                            y: 1.6
+                        }
+                    ],
+                    yAxis: "y"
+                },
+                {
+                    key: "uid_2",
+                    label: {
+                        display: "Data Label 2"
+                    },
+                    shape: Carbon.helpers.SHAPES.DARK.RHOMBUS,
+                    color: Carbon.helpers.COLORS.BLUE,
+                    onClick: loadPopup,
+                    values: [
+                        {
+                            x: 20.9,
+                            y: 10.4
+                        },
+                        {
+                            x: 21.2,
+                            y: 11
+                        },
+                        {
+                            x: 21.4,
+                            y: 12
+                        },
+                        {
+                            x: 21.6,
+                            y: 12
+                        },
+                        {
+                            x: 21.8,
+                            y: 12.5
+                        },
+                        {
+                            x: 22.2,
+                            y: 13
+                        }
+                    ],
+                    yAxis: "y2"
+                }
+            ],
+            showLabel: true,
+            showLegend: true,
+            showShapes: true,
+            showVGrid: true,
+            showHGrid: true,
+            ticksCount: 7
         })
     },
     {
@@ -1808,6 +1958,51 @@ const DATA = [
                     color: Carbon.helpers.COLORS.BLUE,
                     onClick: loadPopup,
                     values: []
+                }
+            ],
+            showLabel: true,
+            showLegend: true,
+            showShapes: true,
+            showVGrid: true,
+            showHGrid: true
+        })
+    },
+    {
+        LABEL_TRUNCATION: (id) => ({
+            bindTo: id,
+            bindLegendTo: null,
+            axis: {
+                x: {
+                    show: true,
+                    label: largeLabel,
+                    lowerLimit: 80,
+                    upperLimit: 280
+                },
+                y: {
+                    show: true,
+                    label: largeLabel,
+                    lowerLimit: -18,
+                    upperLimit: 18
+                },
+                y2: {
+                    show: true,
+                    label: largeLabel,
+                    lowerLimit: 0,
+                    upperLimit: 250
+                }
+            },
+            data: [
+                {
+                    key: "uid_1",
+                    label: {
+                        display: "Data Label 1"
+                    },
+                    color: Carbon.helpers.COLORS.BLACK,
+                    onClick: loadPopup,
+                    values: new Array(20).fill("").map((_, i) => ({
+                        y: Math.sin(i) * Math.PI,
+                        x: 85 + i * 10
+                    }))
                 }
             ],
             showLabel: true,

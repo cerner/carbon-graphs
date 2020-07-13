@@ -30,18 +30,21 @@ Any graph that inherits from `Graph` API will inherit the following `Axis` and `
 
 Each axis - X, Y and Y2 should have the following properties:
 
-| Property Name | Expected | Default           | Description                                               |
-| ------------- | -------- | ----------------- | --------------------------------------------------------- |
-| type          | string   | AXIS_TYPE.DEFAULT | Normal number value or time-based                         |
-| show          | boolean  | true              | Toggle for showing the axis                               |
-| ticks         | object   | null              | Refer [Ticks](Ticks.md)                                   |
-| rangeRounding | boolean  | true              | Toggle for range rounding                                 |
-| padDomain     | boolean  | true              | Toggle for disabling the padding (only for Y and Y2 axes) |
+| Property Name         | Expected | Default           | Description                                                                                                                                                                                                                                                         |
+| --------------------- | -------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| onLabelClick          | Function | undefined         | Any action that can be performed when clicking on label                                                                                                                                                                                                             |
+| padDomain             | boolean  | true              | Toggle for disabling the padding (only for Y and Y2 axes)                                                                                                                                                                                                           |
+| rangeRounding         | boolean  | true              | Toggle for range rounding                                                                                                                                                                                                                                           |
+| show                  | boolean  | true              | Toggle for showing the axis                                                                                                                                                                                                                                         |
+| suppressTrailingZeros | boolean  | false             | Toggle to suppress tick values's trailing zeros when default d3 tick formatting is used. For X axis, this property works only when X axis type is set to AXIS_TYPE.DEFAULT. Specifying ~ in the tick format takes precedence over `suppressTrailingZeros` property. |
+| ticks                 | object   | null              | Refer [Ticks](Ticks.md)                                                                                                                                                                                                                                             |
+| type                  | string   | AXIS_TYPE.DEFAULT | Normal number value or time-based                                                                                                                                                                                                                                   |
 
 **Note:**
 
 -   `rangeRounding` property extends the domain so that it starts and ends on nice round values. This method typically modifies the scale’s domain, and may only extend the bounds to the nearest round value
 -   `padDomain` property is only for Y and Y2 axes.
+-   `onLabelClick` property will override default onClick functionality provided by Carbon-graphs.
 
 #### Constraints
 

@@ -8,10 +8,14 @@ import styles from "../../../../main/js/helpers/styles";
 import { getSVGAnimatedTransformList } from "../../../../main/js/helpers/transformUtils";
 import utils from "../../../../main/js/helpers/utils";
 import LOCALE from "../../../../main/js/locale/index";
-import { loadCustomJasmineMatcher } from "../../helpers/commonHelpers";
+import {
+    loadCustomJasmineMatcher,
+    triggerEvent
+} from "../../helpers/commonHelpers";
 import {
     axisDefault,
     axisTimeSeries,
+    dimension,
     fetchElementByClass,
     getAxes,
     getData
@@ -21,10 +25,16 @@ import {
     getTicksCountFromRange,
     getAverageTicksCount
 } from "../../../../main/js/helpers/axis";
+import sinon from "sinon";
+import * as d3 from "d3";
 
 describe("Graph - Axes", () => {
     let graph = null;
     let graphContainer;
+    const largeLabel =
+        "Project long display value which is only for testing, Project long display value which is only for testing " +
+        "Project long display value which is only for testing, Project long display value which is only for testing";
+    const smallLabel = "hello!";
     beforeAll(() => {
         loadCustomJasmineMatcher();
     });
@@ -315,6 +325,7 @@ describe("Graph - Axes", () => {
             fetchElementByClass(styles.axisX).getAttribute("aria-hidden")
         ).toBe("true");
     });
+
     describe("Axes ticks processing", () => {
         beforeEach(() => {
             graph.destroy();
@@ -407,6 +418,248 @@ describe("Graph - Axes", () => {
             const rangeY = 32;
             const rangeY2 = 250;
             expect(getAverageTicksCount(rangeY, rangeY2)).toEqual(5);
+        });
+    });
+
+    describe("when Y-2 axis is present", () => {
+        beforeEach(() => {
+            graph.destroy();
+        });
+        it("uses custom tick values when axis.y.ticks.values is set and ignores ticksCount", () => {
+            const localeAxisObj = utils.deepClone(axisDefault);
+            localeAxisObj.y = {
+                label: "y axis - custom ticks",
+                lowerLimit: 0,
+                upperLimit: 10,
+                ticks: {
+                    values: [2, 4, 6, 8]
+                }
+            };
+            graph = new Graph(
+                Object.assign(
+                    {
+                        ticksCount: 2
+                    },
+                    getAxes(localeAxisObj)
+                )
+            );
+            const allYAxisElements = document.querySelectorAll(
+                `.${styles.axisY}`
+            );
+            const NumberOfTicks = allYAxisElements[0].childNodes.length;
+            expect(
+                allYAxisElements[0].childNodes[1].querySelector("text")
+                    .textContent
+            ).toBe("2");
+            expect(
+                allYAxisElements[0].childNodes[NumberOfTicks - 1].querySelector(
+                    "text"
+                ).textContent
+            ).toBe("8");
+        });
+
+        it("uses ticksCount values when axis.y.ticks.values is undefined and ticksCount is set", () => {
+            const localeAxisObj = utils.deepClone(axisDefault);
+            localeAxisObj.y = {
+                label: "y axis - ticksCount ticks",
+                lowerLimit: 0,
+                upperLimit: 10
+            };
+            graph = new Graph(
+                Object.assign(
+                    {
+                        ticksCount: 2
+                    },
+                    getAxes(localeAxisObj)
+                )
+            );
+            const allYAxisElements = document.querySelectorAll(
+                `.${styles.axisY}`
+            );
+            const NumberOfTicks = allYAxisElements[0].childNodes.length;
+            expect(
+                allYAxisElements[0].childNodes[3].querySelector("text")
+                    .textContent
+            ).toBe("3");
+            expect(
+                allYAxisElements[0].childNodes[NumberOfTicks - 1].querySelector(
+                    "text"
+                ).textContent
+            ).toBe("7");
+        });
+
+        it("uses default method for Y tick values when custom ticks and ticksCount are not provided", () => {
+            const localeAxisObj = utils.deepClone(axisDefault);
+            localeAxisObj.y = {
+                label: "y axis - default method",
+                lowerLimit: 0,
+                upperLimit: 10
+            };
+            graph = new Graph(Object.assign({}, getAxes(localeAxisObj)));
+            const allYAxisElements = document.querySelectorAll(
+                `.${styles.axisY}`
+            );
+            const NumberOfTicks = allYAxisElements[0].childNodes.length;
+            expect(
+                allYAxisElements[0].childNodes[2].querySelector("text")
+                    .textContent
+            ).toBe("1");
+            expect(
+                allYAxisElements[0].childNodes[NumberOfTicks - 2].querySelector(
+                    "text"
+                ).textContent
+            ).toBe("9");
+        });
+    });
+
+    describe("when only Y axis is present", () => {
+        beforeEach(() => {
+            graph.destroy();
+        });
+        it("uses custom values for Y and Y2 tick values when custom ticks are provided", () => {
+            const localeAxisObj = utils.deepClone(axisDefault);
+            localeAxisObj.y = {
+                label: "y axis - custom tick values",
+                lowerLimit: 0,
+                upperLimit: 10,
+                ticks: {
+                    values: [2, 4, 6, 8]
+                }
+            };
+            localeAxisObj.y2 = {
+                show: true,
+                label: "y2 axis - custom tick values",
+                lowerLimit: 11,
+                upperLimit: 25,
+                ticks: {
+                    values: [12, 14, 16, 18]
+                }
+            };
+            graph = new Graph(
+                Object.assign(
+                    {
+                        ticksCount: 2
+                    },
+                    getAxes(localeAxisObj)
+                )
+            );
+            const allYAxisElements = document.querySelectorAll(
+                `.${styles.axisY}`
+            );
+            const allY2AxisElements = document.querySelectorAll(
+                `.${styles.axisY2}`
+            );
+            const NumberOfTicks = allYAxisElements[0].childNodes.length;
+            expect(
+                allYAxisElements[0].childNodes[1].querySelector("text")
+                    .textContent
+            ).toBe("2");
+            expect(
+                allYAxisElements[0].childNodes[NumberOfTicks - 1].querySelector(
+                    "text"
+                ).textContent
+            ).toBe("8");
+            expect(
+                allY2AxisElements[0].childNodes[1].querySelector("text")
+                    .textContent
+            ).toBe("12");
+            expect(
+                allY2AxisElements[0].childNodes[
+                    NumberOfTicks - 1
+                ].querySelector("text").textContent
+            ).toBe("18");
+        });
+
+        it("uses ticksCount for Y and Y2 tick values when given ticksCount and custom ticks are undefined", () => {
+            const localeAxisObj = utils.deepClone(axisDefault);
+            localeAxisObj.y = {
+                label: "y axis - ticksCount",
+                lowerLimit: 0,
+                upperLimit: 10
+            };
+            localeAxisObj.y2 = {
+                show: true,
+                label: "y2 axis - ticksCount",
+                lowerLimit: 11,
+                upperLimit: 25,
+                ticks: {
+                    values: [12, 14, 16, 18]
+                }
+            };
+            graph = new Graph(
+                Object.assign(
+                    {
+                        ticksCount: 2
+                    },
+                    getAxes(localeAxisObj)
+                )
+            );
+            const allYAxisElements = document.querySelectorAll(
+                `.${styles.axisY}`
+            );
+            const allY2AxisElements = document.querySelectorAll(
+                `.${styles.axisY2}`
+            );
+            const NumberOfTicks = allYAxisElements[0].childNodes.length;
+            expect(
+                allYAxisElements[0].childNodes[3].querySelector("text")
+                    .textContent
+            ).toBe("3");
+            expect(
+                allYAxisElements[0].childNodes[NumberOfTicks - 1].querySelector(
+                    "text"
+                ).textContent
+            ).toBe("7");
+            expect(
+                allY2AxisElements[0].childNodes[3].querySelector("text")
+                    .textContent
+            ).toBe("16");
+            expect(
+                allY2AxisElements[0].childNodes[
+                    NumberOfTicks - 1
+                ].querySelector("text").textContent
+            ).toBe("20");
+        });
+
+        it("uses default method for Y and Y2 tick values when custom ticks and ticksCount are undefined", () => {
+            const localeAxisObj = utils.deepClone(axisDefault);
+            localeAxisObj.y = {
+                label: "y axis - default ticks",
+                lowerLimit: 0,
+                upperLimit: 10
+            };
+            localeAxisObj.y2 = {
+                show: true,
+                label: "y2 axis - default ticks",
+                lowerLimit: 11,
+                upperLimit: 25
+            };
+            graph = new Graph(Object.assign({}, getAxes(localeAxisObj)));
+            const allYAxisElements = document.querySelectorAll(
+                `.${styles.axisY}`
+            );
+            const allY2AxisElements = document.querySelectorAll(
+                `.${styles.axisY2}`
+            );
+            const NumberOfTicks = allYAxisElements[0].childNodes.length;
+            expect(
+                allYAxisElements[0].childNodes[3].querySelector("text")
+                    .textContent
+            ).toBe("3");
+            expect(
+                allYAxisElements[0].childNodes[NumberOfTicks - 1].querySelector(
+                    "text"
+                ).textContent
+            ).toBe("8");
+            expect(
+                allY2AxisElements[0].childNodes[3].querySelector("text")
+                    .textContent
+            ).toBe("15");
+            expect(
+                allY2AxisElements[0].childNodes[
+                    NumberOfTicks - 1
+                ].querySelector("text").textContent
+            ).toBe("22");
         });
     });
     describe("For timeseries type", () => {
@@ -682,6 +935,1065 @@ describe("Graph - Axes", () => {
             const xAxisTickTexts = xAxisElement.querySelectorAll("text");
             xAxisTickTexts.forEach((textElement) => {
                 expect(textElement.innerHTML).toBe("");
+            });
+        });
+    });
+    describe("When default d3 tick formatting for x axis is used and suppressTrailingZeros for x axis is set to true", () => {
+        it("should suppress x axis tick values's trailing zeros", () => {
+            graph.destroy();
+            const localeAxisObj = utils.deepClone(axisDefault);
+            localeAxisObj.x = {
+                label: "Some X Label",
+                lowerLimit: 0.0,
+                upperLimit: 2.0,
+                suppressTrailingZeros: true,
+                ticks: {
+                    values: [0.0, 0.5, 1.0, 1.5, 2.0]
+                }
+            };
+            graph = new Graph(
+                Object.assign(
+                    {
+                        allowCalibration: false
+                    },
+                    getAxes(localeAxisObj)
+                )
+            );
+            const allXAxisElements = document.querySelectorAll(
+                `.${styles.axisX}`
+            );
+            // The first child element is the domain itself, and second child onwards denote the ticks
+            expect(
+                allXAxisElements[0].childNodes[1].querySelector("text")
+                    .textContent
+            ).toBe("0");
+            expect(
+                allXAxisElements[0].childNodes[2].querySelector("text")
+                    .textContent
+            ).toBe("0.5");
+            expect(
+                allXAxisElements[0].childNodes[3].querySelector("text")
+                    .textContent
+            ).toBe("1");
+            expect(
+                allXAxisElements[0].childNodes[4].querySelector("text")
+                    .textContent
+            ).toBe("1.5");
+            expect(
+                allXAxisElements[0].childNodes[5].querySelector("text")
+                    .textContent
+            ).toBe("2");
+        });
+    });
+    describe("When default d3 tick formatting is used for x axis and suppressTrailingZeros for x axis is set to false", () => {
+        it("should not suppress x axis tick values's trailing zeros", () => {
+            graph.destroy();
+            const localeAxisObj = utils.deepClone(axisDefault);
+            localeAxisObj.x = {
+                label: "Some X Label",
+                lowerLimit: 0.0,
+                upperLimit: 2.0,
+                suppressTrailingZeros: false,
+                ticks: {
+                    values: [0.0, 0.5, 1.0, 1.5, 2.0]
+                }
+            };
+            graph = new Graph(
+                Object.assign(
+                    {
+                        allowCalibration: false
+                    },
+                    getAxes(localeAxisObj)
+                )
+            );
+            const allXAxisElements = document.querySelectorAll(
+                `.${styles.axisX}`
+            );
+            // The first child element is the domain itself, and second child onwards denote the ticks
+            expect(
+                allXAxisElements[0].childNodes[1].querySelector("text")
+                    .textContent
+            ).toBe("0.0");
+            expect(
+                allXAxisElements[0].childNodes[2].querySelector("text")
+                    .textContent
+            ).toBe("0.5");
+            expect(
+                allXAxisElements[0].childNodes[3].querySelector("text")
+                    .textContent
+            ).toBe("1.0");
+            expect(
+                allXAxisElements[0].childNodes[4].querySelector("text")
+                    .textContent
+            ).toBe("1.5");
+            expect(
+                allXAxisElements[0].childNodes[5].querySelector("text")
+                    .textContent
+            ).toBe("2.0");
+        });
+    });
+    describe("When default d3 tick formatting is not used for x axis and consumer specifies '~' in tick format", () => {
+        it("should suppress x axis tick values's trailing zeros", () => {
+            graph.destroy();
+            const localeAxisObj = utils.deepClone(axisDefault);
+            localeAxisObj.x = {
+                label: "Some X Label",
+                lowerLimit: 0.0,
+                upperLimit: 2.0,
+                ticks: {
+                    values: [0.0, 0.5, 1.0, 1.5, 2.0],
+                    format: ".1~f"
+                }
+            };
+            graph = new Graph(
+                Object.assign(
+                    {
+                        allowCalibration: false
+                    },
+                    getAxes(localeAxisObj)
+                )
+            );
+            const allXAxisElements = document.querySelectorAll(
+                `.${styles.axisX}`
+            );
+            // The first child element is the domain itself, and second child onwards denote the ticks
+            expect(
+                allXAxisElements[0].childNodes[1].querySelector("text")
+                    .textContent
+            ).toBe("0");
+            expect(
+                allXAxisElements[0].childNodes[2].querySelector("text")
+                    .textContent
+            ).toBe("0.5");
+            expect(
+                allXAxisElements[0].childNodes[3].querySelector("text")
+                    .textContent
+            ).toBe("1");
+            expect(
+                allXAxisElements[0].childNodes[4].querySelector("text")
+                    .textContent
+            ).toBe("1.5");
+            expect(
+                allXAxisElements[0].childNodes[5].querySelector("text")
+                    .textContent
+            ).toBe("2");
+        });
+    });
+    describe("When default d3 tick formatting is not used for x axis and consumer does not specify '~' in tick format", () => {
+        it("should not suppress x axis tick values's trailing zeros", () => {
+            graph.destroy();
+            const localeAxisObj = utils.deepClone(axisDefault);
+            localeAxisObj.x = {
+                label: "Some X Label",
+                lowerLimit: 0.0,
+                upperLimit: 2.0,
+                ticks: {
+                    values: [0.0, 0.5, 1.0, 1.5, 2.0],
+                    format: ".1f"
+                }
+            };
+            graph = new Graph(
+                Object.assign(
+                    {
+                        allowCalibration: false
+                    },
+                    getAxes(localeAxisObj)
+                )
+            );
+            const allXAxisElements = document.querySelectorAll(
+                `.${styles.axisX}`
+            );
+            // The first child element is the domain itself, and second child onwards denote the ticks
+            expect(
+                allXAxisElements[0].childNodes[1].querySelector("text")
+                    .textContent
+            ).toBe("0.0");
+            expect(
+                allXAxisElements[0].childNodes[2].querySelector("text")
+                    .textContent
+            ).toBe("0.5");
+            expect(
+                allXAxisElements[0].childNodes[3].querySelector("text")
+                    .textContent
+            ).toBe("1.0");
+            expect(
+                allXAxisElements[0].childNodes[4].querySelector("text")
+                    .textContent
+            ).toBe("1.5");
+            expect(
+                allXAxisElements[0].childNodes[5].querySelector("text")
+                    .textContent
+            ).toBe("2.0");
+        });
+    });
+    describe("When default d3 tick formatting for y axis is used and suppressTrailingZeros for y axis is set to true", () => {
+        it("should suppress y axis tick values's trailing zeros", () => {
+            graph.destroy();
+            const localeAxisObj = utils.deepClone(axisDefault);
+            localeAxisObj.y = {
+                label: "Some Y Label",
+                lowerLimit: 0.0,
+                upperLimit: 2.0,
+                suppressTrailingZeros: true
+            };
+            graph = new Graph(
+                Object.assign(
+                    {
+                        ticksCount: 3,
+                        allowCalibration: false
+                    },
+                    getAxes(localeAxisObj)
+                )
+            );
+            const allYAxisElements = document.querySelectorAll(
+                `.${styles.axisY}`
+            );
+            // The first child element is the domain itself, and second child onwards denote the ticks
+            expect(
+                allYAxisElements[0].childNodes[1].querySelector("text")
+                    .textContent
+            ).toBe("0");
+            expect(
+                allYAxisElements[0].childNodes[2].querySelector("text")
+                    .textContent
+            ).toBe("2");
+            expect(
+                allYAxisElements[0].childNodes[3].querySelector("text")
+                    .textContent
+            ).toBe("0.5");
+            expect(
+                allYAxisElements[0].childNodes[4].querySelector("text")
+                    .textContent
+            ).toBe("1");
+            expect(
+                allYAxisElements[0].childNodes[5].querySelector("text")
+                    .textContent
+            ).toBe("1.5");
+        });
+    });
+    describe("When default d3 tick formatting is used for y axis and suppressTrailingZeros for y axis is set to false", () => {
+        it("should not suppress y axis tick values's trailing zeros", () => {
+            graph.destroy();
+            const localeAxisObj = utils.deepClone(axisDefault);
+            localeAxisObj.y = {
+                label: "Some Y Label",
+                lowerLimit: 0.0,
+                upperLimit: 2.0,
+                suppressTrailingZeros: false
+            };
+            graph = new Graph(
+                Object.assign(
+                    {
+                        ticksCount: 3,
+                        allowCalibration: false
+                    },
+                    getAxes(localeAxisObj)
+                )
+            );
+            const allYAxisElements = document.querySelectorAll(
+                `.${styles.axisY}`
+            );
+            // The first child element is the domain itself, and second child onwards denote the ticks
+            expect(
+                allYAxisElements[0].childNodes[1].querySelector("text")
+                    .textContent
+            ).toBe("0.0");
+            expect(
+                allYAxisElements[0].childNodes[2].querySelector("text")
+                    .textContent
+            ).toBe("2.0");
+            expect(
+                allYAxisElements[0].childNodes[3].querySelector("text")
+                    .textContent
+            ).toBe("0.5");
+            expect(
+                allYAxisElements[0].childNodes[4].querySelector("text")
+                    .textContent
+            ).toBe("1.0");
+            expect(
+                allYAxisElements[0].childNodes[5].querySelector("text")
+                    .textContent
+            ).toBe("1.5");
+        });
+    });
+    describe("When default d3 tick formatting is not used for y axis and consumer specifies '~' in tick format", () => {
+        it("should suppress y axis tick values's trailing zeros", () => {
+            graph.destroy();
+            const localeAxisObj = utils.deepClone(axisDefault);
+            localeAxisObj.y = {
+                label: "Some Y Label",
+                lowerLimit: 0.0,
+                upperLimit: 2.0,
+                ticks: {
+                    format: ".1~f"
+                }
+            };
+            graph = new Graph(
+                Object.assign(
+                    {
+                        ticksCount: 3,
+                        allowCalibration: false
+                    },
+                    getAxes(localeAxisObj)
+                )
+            );
+            const allYAxisElements = document.querySelectorAll(
+                `.${styles.axisY}`
+            );
+            // The first child element is the domain itself, and second child onwards denote the ticks
+            expect(
+                allYAxisElements[0].childNodes[1].querySelector("text")
+                    .textContent
+            ).toBe("0");
+            expect(
+                allYAxisElements[0].childNodes[2].querySelector("text")
+                    .textContent
+            ).toBe("2");
+            expect(
+                allYAxisElements[0].childNodes[3].querySelector("text")
+                    .textContent
+            ).toBe("0.5");
+            expect(
+                allYAxisElements[0].childNodes[4].querySelector("text")
+                    .textContent
+            ).toBe("1");
+            expect(
+                allYAxisElements[0].childNodes[5].querySelector("text")
+                    .textContent
+            ).toBe("1.5");
+        });
+    });
+    describe("When default d3 tick formatting is not used for y axis and consumer does not specify '~' in tick format", () => {
+        it("should not suppress y axis tick values's trailing zeros", () => {
+            graph.destroy();
+            const localeAxisObj = utils.deepClone(axisDefault);
+            localeAxisObj.y = {
+                label: "Some Y Label",
+                lowerLimit: 0.0,
+                upperLimit: 2.0,
+                ticks: {
+                    format: ".1f"
+                }
+            };
+            graph = new Graph(
+                Object.assign(
+                    {
+                        ticksCount: 3,
+                        allowCalibration: false
+                    },
+                    getAxes(localeAxisObj)
+                )
+            );
+            const allYAxisElements = document.querySelectorAll(
+                `.${styles.axisY}`
+            );
+            // The first child element is the domain itself, and second child onwards denote the ticks
+            expect(
+                allYAxisElements[0].childNodes[1].querySelector("text")
+                    .textContent
+            ).toBe("0.0");
+            expect(
+                allYAxisElements[0].childNodes[2].querySelector("text")
+                    .textContent
+            ).toBe("2.0");
+            expect(
+                allYAxisElements[0].childNodes[3].querySelector("text")
+                    .textContent
+            ).toBe("0.5");
+            expect(
+                allYAxisElements[0].childNodes[4].querySelector("text")
+                    .textContent
+            ).toBe("1.0");
+            expect(
+                allYAxisElements[0].childNodes[5].querySelector("text")
+                    .textContent
+            ).toBe("1.5");
+        });
+    });
+    describe("When default d3 tick formatting for y2 axis is used and suppressTrailingZeros for y2 is set to true", () => {
+        it("should suppress y2 axis tick values's trailing zeros", () => {
+            graph.destroy();
+            const localeAxisObj = utils.deepClone(axisDefault);
+            localeAxisObj.y2 = {
+                show: true,
+                label: "Some Y2 Label",
+                lowerLimit: 0.0,
+                upperLimit: 2.0,
+                suppressTrailingZeros: true
+            };
+            graph = new Graph(
+                Object.assign(
+                    {
+                        ticksCount: 3,
+                        allowCalibration: false
+                    },
+                    getAxes(localeAxisObj)
+                )
+            );
+            const allY2AxisElements = document.querySelectorAll(
+                `.${styles.axisY2}`
+            );
+            // The first child element is the domain itself, and second child onwards denote the ticks
+            expect(
+                allY2AxisElements[0].childNodes[1].querySelector("text")
+                    .textContent
+            ).toBe("0");
+            expect(
+                allY2AxisElements[0].childNodes[2].querySelector("text")
+                    .textContent
+            ).toBe("2");
+            expect(
+                allY2AxisElements[0].childNodes[3].querySelector("text")
+                    .textContent
+            ).toBe("0.5");
+            expect(
+                allY2AxisElements[0].childNodes[4].querySelector("text")
+                    .textContent
+            ).toBe("1");
+            expect(
+                allY2AxisElements[0].childNodes[5].querySelector("text")
+                    .textContent
+            ).toBe("1.5");
+        });
+    });
+    describe("When default d3 tick formatting is used for y2 axis and suppressTrailingZeros for y2 is set to false", () => {
+        it("should not suppress y2 axis tick values's trailing zeros", () => {
+            graph.destroy();
+            const localeAxisObj = utils.deepClone(axisDefault);
+            localeAxisObj.y2 = {
+                show: true,
+                label: "Some Y2 Label",
+                lowerLimit: 0.0,
+                upperLimit: 2.0,
+                suppressTrailingZeros: false
+            };
+            graph = new Graph(
+                Object.assign(
+                    {
+                        ticksCount: 3,
+                        allowCalibration: false
+                    },
+                    getAxes(localeAxisObj)
+                )
+            );
+            const allY2AxisElements = document.querySelectorAll(
+                `.${styles.axisY2}`
+            );
+            // The first child element is the domain itself, and second child onwards denote the ticks
+            expect(
+                allY2AxisElements[0].childNodes[1].querySelector("text")
+                    .textContent
+            ).toBe("0.0");
+            expect(
+                allY2AxisElements[0].childNodes[2].querySelector("text")
+                    .textContent
+            ).toBe("2.0");
+            expect(
+                allY2AxisElements[0].childNodes[3].querySelector("text")
+                    .textContent
+            ).toBe("0.5");
+            expect(
+                allY2AxisElements[0].childNodes[4].querySelector("text")
+                    .textContent
+            ).toBe("1.0");
+            expect(
+                allY2AxisElements[0].childNodes[5].querySelector("text")
+                    .textContent
+            ).toBe("1.5");
+        });
+    });
+    describe("When default d3 tick formatting is not used for y2 axis and consumer specifies '~' in tick format", () => {
+        it("should suppress y2 axis tick values's trailing zeros", () => {
+            graph.destroy();
+            const localeAxisObj = utils.deepClone(axisDefault);
+            localeAxisObj.y2 = {
+                show: true,
+                label: "Some Y2 Label",
+                lowerLimit: 0.0,
+                upperLimit: 2.0,
+                ticks: {
+                    format: ".1~f"
+                }
+            };
+            graph = new Graph(
+                Object.assign(
+                    {
+                        ticksCount: 3,
+                        allowCalibration: false
+                    },
+                    getAxes(localeAxisObj)
+                )
+            );
+            const allY2AxisElements = document.querySelectorAll(
+                `.${styles.axisY2}`
+            );
+            // The first child element is the domain itself, and second child onwards denote the ticks
+            expect(
+                allY2AxisElements[0].childNodes[1].querySelector("text")
+                    .textContent
+            ).toBe("0");
+            expect(
+                allY2AxisElements[0].childNodes[2].querySelector("text")
+                    .textContent
+            ).toBe("2");
+            expect(
+                allY2AxisElements[0].childNodes[3].querySelector("text")
+                    .textContent
+            ).toBe("0.5");
+            expect(
+                allY2AxisElements[0].childNodes[4].querySelector("text")
+                    .textContent
+            ).toBe("1");
+            expect(
+                allY2AxisElements[0].childNodes[5].querySelector("text")
+                    .textContent
+            ).toBe("1.5");
+        });
+    });
+    describe("When default d3 tick formatting is not used for y2 axis and consumer does not specify '~' in tick format", () => {
+        it("should not suppress y2 axis tick values's trailing zeros", () => {
+            graph.destroy();
+            const localeAxisObj = utils.deepClone(axisDefault);
+            localeAxisObj.y2 = {
+                show: true,
+                label: "Some Y2 Label",
+                lowerLimit: 0.0,
+                upperLimit: 2.0,
+                ticks: {
+                    format: ".1f"
+                }
+            };
+            graph = new Graph(
+                Object.assign(
+                    {
+                        ticksCount: 3,
+                        allowCalibration: false
+                    },
+                    getAxes(localeAxisObj)
+                )
+            );
+            const allY2AxisElements = document.querySelectorAll(
+                `.${styles.axisY2}`
+            );
+            // The first child element is the domain itself, and second child onwards denote the ticks
+            expect(
+                allY2AxisElements[0].childNodes[1].querySelector("text")
+                    .textContent
+            ).toBe("0.0");
+            expect(
+                allY2AxisElements[0].childNodes[2].querySelector("text")
+                    .textContent
+            ).toBe("2.0");
+            expect(
+                allY2AxisElements[0].childNodes[3].querySelector("text")
+                    .textContent
+            ).toBe("0.5");
+            expect(
+                allY2AxisElements[0].childNodes[4].querySelector("text")
+                    .textContent
+            ).toBe("1.0");
+            expect(
+                allY2AxisElements[0].childNodes[5].querySelector("text")
+                    .textContent
+            ).toBe("1.5");
+        });
+    });
+    describe("If axes width is 1024px and height is 230px", () => {
+        beforeEach(() => {
+            graph.destroy();
+            axisDefault.y2 = {
+                show: true,
+                label: "Some Y2 Label",
+                lowerLimit: 0,
+                upperLimit: 20
+            };
+        });
+        afterEach(() => {
+            axisDefault.y2 = "";
+        });
+        it("Truncates if too long", (done) => {
+            const labelAxisObj = utils.deepClone(axisDefault);
+            labelAxisObj.y.label = largeLabel;
+            labelAxisObj.y2.label = largeLabel;
+            labelAxisObj.x.label = largeLabel;
+            graph = new Graph(getAxes(labelAxisObj));
+            expect(
+                fetchElementByClass(styles.axisLabelX).querySelector("text")
+                    .textContent
+            ).toBe(
+                "Project long display value which is only for testing, Project long display value which is only for testing Project lon..."
+            );
+            expect(
+                fetchElementByClass(styles.axisLabelY).querySelector("text")
+                    .textContent
+            ).toBe("Project long display value w...");
+            expect(
+                fetchElementByClass(styles.axisLabelY2).querySelector("text")
+                    .textContent
+            ).toBe("Project long display value w...");
+            done();
+        });
+        it("Does not truncate if not long", (done) => {
+            graph = new Graph(getAxes(axisDefault));
+            expect(
+                fetchElementByClass(styles.axisLabelY).querySelector("text")
+                    .textContent
+            ).toBe("Some Y Label");
+            expect(
+                fetchElementByClass(styles.axisLabelX).querySelector("text")
+                    .textContent
+            ).toBe("Some X Label");
+            expect(
+                fetchElementByClass(styles.axisLabelY2).querySelector("text")
+                    .textContent
+            ).toBe("Some Y2 Label");
+            done();
+        });
+    });
+    describe("If axes width is 50px and height is 50px", () => {
+        beforeEach(() => {
+            graph.destroy();
+            graphContainer.setAttribute("style", "width: 50px; height: 50px");
+            dimension.height = 50;
+            axisDefault.y2 = {
+                show: true,
+                label: "Some Y2 Label",
+                lowerLimit: 0,
+                upperLimit: 20
+            };
+        });
+        afterEach(() => {
+            axisDefault.y2 = "";
+        });
+        it("Truncates if too long", (done) => {
+            const labelAxisObj = utils.deepClone(axisDefault);
+            labelAxisObj.y.label = largeLabel;
+            labelAxisObj.y2.label = largeLabel;
+            labelAxisObj.x.label = largeLabel;
+            graph = new Graph(
+                Object.assign({ dimension }, getAxes(labelAxisObj), dimension)
+            );
+            expect(
+                fetchElementByClass(styles.axisLabelX).querySelector("text")
+                    .textContent
+            ).toBe("Project long d...");
+            expect(
+                fetchElementByClass(styles.axisLabelY).querySelector("text")
+                    .textContent
+            ).toBe("Projec...");
+            expect(
+                fetchElementByClass(styles.axisLabelY2).querySelector("text")
+                    .textContent
+            ).toBe("Projec...");
+            done();
+        });
+        it("Does not truncate if not long", (done) => {
+            const labelAxisObj = utils.deepClone(axisDefault);
+            labelAxisObj.y.label = smallLabel;
+            labelAxisObj.y2.label = smallLabel;
+            labelAxisObj.x.label = smallLabel;
+            graph = new Graph(
+                Object.assign({ dimension }, getAxes(labelAxisObj), dimension)
+            );
+            expect(
+                fetchElementByClass(styles.axisLabelX).querySelector("text")
+                    .textContent
+            ).toBe("hello!");
+            expect(
+                fetchElementByClass(styles.axisLabelY).querySelector("text")
+                    .textContent
+            ).toBe("hello!");
+            expect(
+                fetchElementByClass(styles.axisLabelY2).querySelector("text")
+                    .textContent
+            ).toBe("hello!");
+            done();
+        });
+    });
+    describe("If axes width is 400px and height is 400px", () => {
+        beforeEach(() => {
+            graph.destroy();
+            graphContainer.setAttribute("style", "width: 400px; height: 400px");
+            dimension.height = 400;
+            axisDefault.y2 = {
+                show: true,
+                label: "Some Y2 Label",
+                lowerLimit: 0,
+                upperLimit: 20
+            };
+        });
+        afterEach(() => {
+            axisDefault.y2 = "";
+        });
+        it("Truncates if too long", (done) => {
+            const labelAxisObj = utils.deepClone(axisDefault);
+            labelAxisObj.y.label = largeLabel;
+            labelAxisObj.y2.label = largeLabel;
+            labelAxisObj.x.label = largeLabel;
+            graph = new Graph(
+                Object.assign({ dimension }, getAxes(labelAxisObj), dimension)
+            );
+            expect(
+                fetchElementByClass(styles.axisLabelX).querySelector("text")
+                    .textContent
+            ).toBe("Project long display value which ...");
+            expect(
+                fetchElementByClass(styles.axisLabelY).querySelector("text")
+                    .textContent
+            ).toBe("Project long display value which is only for testi...");
+            expect(
+                fetchElementByClass(styles.axisLabelY2).querySelector("text")
+                    .textContent
+            ).toBe("Project long display value which is only for testi...");
+            done();
+        });
+        it("Does not truncate if not long", (done) => {
+            graph = new Graph(getAxes(axisDefault));
+            expect(
+                fetchElementByClass(styles.axisLabelX).querySelector("text")
+                    .textContent
+            ).toBe("Some X Label");
+            expect(
+                fetchElementByClass(styles.axisLabelY).querySelector("text")
+                    .textContent
+            ).toBe("Some Y Label");
+            expect(
+                fetchElementByClass(styles.axisLabelY2).querySelector("text")
+                    .textContent
+            ).toBe("Some Y2 Label");
+            done();
+        });
+    });
+    describe("If axes width is 800px and height is 800px", () => {
+        beforeEach(() => {
+            graph.destroy();
+            graphContainer.setAttribute("style", "width: 800px; height: 800px");
+            dimension.height = 800;
+            axisDefault.y2 = {
+                show: true,
+                label: "Some Y2 Label",
+                lowerLimit: 0,
+                upperLimit: 20
+            };
+        });
+        afterEach(() => {
+            axisDefault.y2 = "";
+        });
+        it("Truncates if too long", (done) => {
+            const labelAxisObj = utils.deepClone(axisDefault);
+            labelAxisObj.y.label = largeLabel;
+            labelAxisObj.y2.label = largeLabel;
+            labelAxisObj.x.label = largeLabel;
+            graph = new Graph(
+                Object.assign({ dimension }, getAxes(labelAxisObj), dimension)
+            );
+            expect(
+                fetchElementByClass(styles.axisLabelX).querySelector("text")
+                    .textContent
+            ).toBe(
+                "Project long display value which is only for testing, Project long display value which ..."
+            );
+            expect(
+                fetchElementByClass(styles.axisLabelY).querySelector("text")
+                    .textContent
+            ).toBe(
+                "Project long display value which is only for testing, Project long display value which is only for t..."
+            );
+            expect(
+                fetchElementByClass(styles.axisLabelY2).querySelector("text")
+                    .textContent
+            ).toBe(
+                "Project long display value which is only for testing, Project long display value which is only for t..."
+            );
+            done();
+        });
+        it("Does not truncate if not long", (done) => {
+            graph = new Graph(getAxes(axisDefault));
+            expect(
+                fetchElementByClass(styles.axisLabelY).querySelector("text")
+                    .textContent
+            ).toBe("Some Y Label");
+            expect(
+                fetchElementByClass(styles.axisLabelX).querySelector("text")
+                    .textContent
+            ).toBe("Some X Label");
+            expect(
+                fetchElementByClass(styles.axisLabelY2).querySelector("text")
+                    .textContent
+            ).toBe("Some Y2 Label");
+            done();
+        });
+    });
+    describe("If axes width is 1400px and height is 1400px", () => {
+        beforeEach(() => {
+            graph.destroy();
+            graphContainer.setAttribute(
+                "style",
+                "width: 1400px; height: 1400px"
+            );
+            dimension.height = 1400;
+            axisDefault.y2 = {
+                show: true,
+                label: "Some Y2 Label",
+                lowerLimit: 0,
+                upperLimit: 20
+            };
+        });
+        afterEach(() => {
+            axisDefault.y2 = "";
+        });
+        it("Truncates if too long", (done) => {
+            const labelAxisObj = utils.deepClone(axisDefault);
+            labelAxisObj.y.label = largeLabel;
+            labelAxisObj.y2.label = largeLabel;
+            labelAxisObj.x.label = largeLabel;
+            graph = new Graph(
+                Object.assign({ dimension }, getAxes(labelAxisObj), dimension)
+            );
+            expect(
+                fetchElementByClass(styles.axisLabelX).querySelector("text")
+                    .textContent
+            ).toBe(
+                "Project long display value which is only for testing, Project long display value which is only for testing Project long display value which is only for testing, Project ..."
+            );
+            expect(
+                fetchElementByClass(styles.axisLabelY).querySelector("text")
+                    .textContent
+            ).toBe(
+                "Project long display value which is only for testing, Project long display value which is only for testing Project long display value which is only for testing, Project long d..."
+            );
+            expect(
+                fetchElementByClass(styles.axisLabelY2).querySelector("text")
+                    .textContent
+            ).toBe(
+                "Project long display value which is only for testing, Project long display value which is only for testing Project long display value which is only for testing, Project long d..."
+            );
+            done();
+        });
+        it("Does not truncate if not long", (done) => {
+            graph = new Graph(getAxes(axisDefault));
+            expect(
+                fetchElementByClass(styles.axisLabelX).querySelector("text")
+                    .textContent
+            ).toBe("Some X Label");
+            expect(
+                fetchElementByClass(styles.axisLabelY).querySelector("text")
+                    .textContent
+            ).toBe("Some Y Label");
+            expect(
+                fetchElementByClass(styles.axisLabelY2).querySelector("text")
+                    .textContent
+            ).toBe("Some Y2 Label");
+            done();
+        });
+    });
+    describe("Adds clickHandler for Label", () => {
+        beforeEach(() => {
+            graph.destroy();
+            axisDefault.y2 = {
+                show: true,
+                label: "Some Y2 Label",
+                lowerLimit: 0,
+                upperLimit: 20
+            };
+        });
+        afterEach(() => {
+            axisDefault.y2 = "";
+        });
+        describe("when small label is provided and onLabelClick function is not provided", () => {
+            it("should disable click functionality for label", (done) => {
+                const onClickPrimaryFunctionSpy = sinon.spy();
+                graph = new Graph(getAxes(axisDefault));
+                triggerEvent(
+                    fetchElementByClass(`${styles.axisLabelX} text`),
+                    "click",
+                    () => {
+                        expect(
+                            onClickPrimaryFunctionSpy.calledOnce
+                        ).toBeFalsy();
+                        done();
+                    }
+                );
+                triggerEvent(
+                    fetchElementByClass(`${styles.axisLabelY} text`),
+                    "click",
+                    () => {
+                        expect(
+                            onClickPrimaryFunctionSpy.calledOnce
+                        ).toBeFalsy();
+                        done();
+                    }
+                );
+                triggerEvent(
+                    fetchElementByClass(`${styles.axisLabelY2} text`),
+                    "click",
+                    () => {
+                        expect(
+                            onClickPrimaryFunctionSpy.calledOnce
+                        ).toBeFalsy();
+                        done();
+                    }
+                );
+            });
+        });
+        describe("when small label and onLabelClick function is provided", () => {
+            it("should disable click functionality for label", (done) => {
+                const onClickPrimaryFunctionSpy = sinon.spy();
+                const onClickSecondaryFunctionSpy = sinon.spy();
+                const onClickThirdFunctionSpy = sinon.spy();
+                graph.destroy();
+                const labelAxisObj = utils.deepClone(axisDefault);
+                labelAxisObj.x.onLabelClick = onClickPrimaryFunctionSpy;
+                labelAxisObj.y.onLabelClick = onClickSecondaryFunctionSpy;
+                labelAxisObj.y2.onLabelClick = onClickThirdFunctionSpy;
+                graph = new Graph(getAxes(labelAxisObj));
+                triggerEvent(
+                    fetchElementByClass(`${styles.axisLabelX} text`),
+                    "click",
+                    () => {
+                        expect(
+                            onClickPrimaryFunctionSpy.calledOnce
+                        ).toBeFalsy();
+                        done();
+                    }
+                );
+                triggerEvent(
+                    fetchElementByClass(`${styles.axisLabelY} text`),
+                    "click",
+                    () => {
+                        expect(
+                            onClickPrimaryFunctionSpy.calledOnce
+                        ).toBeFalsy();
+                        done();
+                    }
+                );
+                triggerEvent(
+                    fetchElementByClass(`${styles.axisLabelY2} text`),
+                    "click",
+                    () => {
+                        expect(
+                            onClickPrimaryFunctionSpy.calledOnce
+                        ).toBeFalsy();
+                        done();
+                    }
+                );
+            });
+        });
+        describe("when large label and onLabelClick function is provided", (done) => {
+            it("should enable click functionality for truncated label", (done) => {
+                const onClickSecondaryFunctionSpy = sinon.spy();
+                const onClickThirdFunctionSpy = sinon.spy();
+                const onClickFourthFunctionSpy = sinon.spy();
+                graph.destroy();
+                const labelAxisObj = utils.deepClone(axisDefault);
+                labelAxisObj.y.label = largeLabel;
+                labelAxisObj.x.label = largeLabel;
+                labelAxisObj.y2.label = largeLabel;
+                labelAxisObj.x.onLabelClick = onClickSecondaryFunctionSpy;
+                labelAxisObj.y.onLabelClick = onClickFourthFunctionSpy;
+                labelAxisObj.y2.onLabelClick = onClickThirdFunctionSpy;
+                graph = new Graph(getAxes(labelAxisObj));
+                triggerEvent(
+                    fetchElementByClass(`${styles.axisLabelX} text`),
+                    "click",
+                    () => {
+                        expect(
+                            onClickSecondaryFunctionSpy.calledOnce
+                        ).toBeTruthy();
+                        expect(
+                            onClickSecondaryFunctionSpy.getCall(0).args[0]
+                        ).toBe(largeLabel);
+                        done();
+                    }
+                );
+                triggerEvent(
+                    fetchElementByClass(`${styles.axisLabelY} text`),
+                    "click",
+                    () => {
+                        expect(
+                            onClickFourthFunctionSpy.calledOnce
+                        ).toBeTruthy();
+                        expect(
+                            onClickFourthFunctionSpy.getCall(0).args[0]
+                        ).toBe(largeLabel);
+                        done();
+                    }
+                );
+                triggerEvent(
+                    fetchElementByClass(`${styles.axisLabelY2} text`),
+                    "click",
+                    () => {
+                        expect(onClickThirdFunctionSpy.calledOnce).toBeTruthy();
+                        expect(onClickThirdFunctionSpy.getCall(0).args[0]).toBe(
+                            largeLabel
+                        );
+                        done();
+                    }
+                );
+            });
+        });
+        describe("when large label is provided and onLabelClick function is not provided", (done) => {
+            it("should enable click functionality for truncated label", (done) => {
+                const onClickSecondaryFunctionSpy = sinon.spy();
+                const onClickThirdFunctionSpy = sinon.spy();
+                const onClickFourthFunctionSpy = sinon.spy();
+                graph.destroy();
+                const labelAxisObj = utils.deepClone(axisDefault);
+                labelAxisObj.y.label = largeLabel;
+                labelAxisObj.x.label = largeLabel;
+                labelAxisObj.y2.label = largeLabel;
+                graph = new Graph(getAxes(labelAxisObj));
+                d3.select(fetchElementByClass(`${styles.axisLabelX} text`)).on(
+                    "click",
+                    onClickSecondaryFunctionSpy(labelAxisObj.x.label, "x")
+                );
+                triggerEvent(
+                    fetchElementByClass(`${styles.axisLabelX} text`),
+                    "click",
+                    () => {
+                        expect(
+                            onClickSecondaryFunctionSpy.calledOnce
+                        ).toBeTruthy();
+                        expect(
+                            onClickSecondaryFunctionSpy.getCall(0).args[0]
+                        ).toBe(largeLabel);
+                        done();
+                    }
+                );
+                d3.select(fetchElementByClass(`${styles.axisLabelY} text`)).on(
+                    "click",
+                    onClickThirdFunctionSpy(labelAxisObj.y.label, "y")
+                );
+                triggerEvent(
+                    fetchElementByClass(`${styles.axisLabelY} text`),
+                    "click",
+                    () => {
+                        expect(
+                            onClickSecondaryFunctionSpy.calledOnce
+                        ).toBeTruthy();
+                        expect(
+                            onClickSecondaryFunctionSpy.getCall(0).args[0]
+                        ).toBe(largeLabel);
+                        done();
+                    }
+                );
+                d3.select(fetchElementByClass(`${styles.axisLabelY2} text`)).on(
+                    "click",
+                    onClickFourthFunctionSpy(labelAxisObj.y2.label, "y2")
+                );
+                triggerEvent(
+                    fetchElementByClass(`${styles.axisLabelY2} text`),
+                    "click",
+                    () => {
+                        expect(
+                            onClickSecondaryFunctionSpy.calledOnce
+                        ).toBeTruthy();
+                        expect(
+                            onClickSecondaryFunctionSpy.getCall(0).args[0]
+                        ).toBe(largeLabel);
+                        done();
+                    }
+                );
             });
         });
     });

@@ -55,6 +55,29 @@ const renderPopup = (fn) => {
         .style("left", `${d3.event.pageX + 5}px`)
         .style("top", `${d3.event.pageY + 5}px`);
 };
+const renderY2Popup = (fn) => {
+    const tip = document.querySelector("#tooltip");
+    const clickHandler = () => {
+        d3.select(tip).attr("style", "display:none;").selectAll("g").remove();
+        if (utils.isFunction(fn)) {
+            fn();
+        }
+        d3.select("#overlay").remove();
+        tip.removeEventListener("click", clickHandler);
+        window.removeEventListener("resize", clickHandler);
+    };
+    // Add new popup
+    d3.select("body")
+        .append("div", "#tooltip")
+        .attr("id", "overlay")
+        .classed("overlay", true)
+        .on("click", clickHandler);
+    // Position popup
+    return d3
+        .select("#tooltip")
+        .style("left", `${d3.event.pageX - 250}px`)
+        .style("top", `${d3.event.pageY + 5}px`);
+};
 const removeOldPopup = () => {
     // Remove old popup
     d3.select("#overlay").remove();
@@ -156,9 +179,19 @@ export const loadTextLabelPopup = (onCloseCB, value, index) => {
             .text(` ${value.label.secondaryDisplay}`);
     }
 };
-export const loadTrackLabelPopup = (d) => {
+export const loadXAndYAxisLabelPopup = (d) => {
     removeOldPopup();
     const path = renderPopup();
+    path.append("g")
+        .append("g")
+        .classed("popup-item", true)
+        .append("g")
+        .classed("popup-text", true)
+        .text(d);
+};
+export const loadY2AxisLabelPopup = (d) => {
+    removeOldPopup();
+    const path = renderY2Popup();
     path.append("g")
         .append("g")
         .classed("popup-item", true)
