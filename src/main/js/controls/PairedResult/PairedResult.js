@@ -245,7 +245,7 @@ class PairedResult extends GraphContent {
                     `g[aria-describedby="region_${this.dataTarget.key}"]`
                 ),
                 this.dataTarget.yAxis,
-                !!utils.notEmpty(this.dataTarget.valueRegionSubset)
+                utils.notEmpty(this.dataTarget.valueRegionSubset)
             );
         } else {
             hideAllRegions(graph.svg);

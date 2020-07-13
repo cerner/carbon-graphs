@@ -31,7 +31,7 @@ const regions = [
 export const renderLine = (id) => {
     const lineDefault = Carbon.api.graph(getDemoData(`#${id}`, "LINE_DEFAULT"));
     lineDefault.loadContent(
-        Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[2])
+        Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[0])
     );
     return lineDefault;
 };

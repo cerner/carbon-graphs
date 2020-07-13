@@ -299,6 +299,7 @@ const areRegionsIdentical = (canvasSVG) => {
     const regions = canvasSVG.selectAll(`.${styles.region}`).data();
     const compare = regions[0];
     return !regions.some((element) => {
+        // If any one of the region is value region (i.e., an array) then we consider it as non-identical.
         if (utils.isArray(compare) || utils.isArray(element)) {
             return true;
         } else {

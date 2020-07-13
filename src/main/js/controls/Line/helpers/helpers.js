@@ -291,7 +291,7 @@ const getValueRegionSubset = (dataTarget, getXDataValues) => {
                 start: value.region.start,
                 end: value.region.end
             });
-        } else if (valueRegion.values.length > 0) {
+        } else {
             valueRegionSubset.push(valueRegion);
             previousColor = undefined;
             valueRegion = {
@@ -300,23 +300,25 @@ const getValueRegionSubset = (dataTarget, getXDataValues) => {
             };
         }
     });
-    if (valueRegion.values.length > 0) {
-        valueRegionSubset.push(valueRegion);
-    }
+    valueRegionSubset.push(valueRegion);
 
-    // Add start and end of a valueRegion to new valueRegion,
-    // This is to cover the start and end data value with region.
+    // Prepare final value regions list
     valueRegionSubset.forEach((region) => {
-        valueRegions.push(region);
-        if (region.values.length > 1) {
-            valueRegions.push({
-                color: region.color,
-                values: region.values.slice(0, 1)
-            });
-            valueRegions.push({
-                color: region.color,
-                values: region.values.slice(region.values.length - 1)
-            });
+        // Consider only the regions with values
+        if (region.values.length > 0) {
+            valueRegions.push(region);
+            // Add start and end of a valueRegion to new valueRegion,
+            // This is to cover the start and end data value with region.
+            if (region.values.length > 1) {
+                valueRegions.push({
+                    color: region.color,
+                    values: region.values.slice(0, 1)
+                });
+                valueRegions.push({
+                    color: region.color,
+                    values: region.values.slice(region.values.length - 1)
+                });
+            }
         }
     });
     return valueRegions;
