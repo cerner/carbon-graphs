@@ -14,6 +14,7 @@ import constants, { AXIS_TYPE } from "../../helpers/constants";
 import errors from "../../helpers/errors";
 import { createLegend } from "../../helpers/legend";
 import { createRegionContainer } from "../../helpers/region";
+import { createTooltipDiv, destroyTooltipDiv } from "../../helpers/label";
 import styles from "../../helpers/styles";
 import GraphConfig, { processInput, validateContent } from "./GraphConfig";
 import utils from "../../helpers/utils";
@@ -110,6 +111,7 @@ const loadInput = (inputJSON) =>
  *  Binds the chart id provided in the input JSON to graph container.
  *  Calculates the axes data ranges.
  *  Updates the axes domains.
+ *  Creates tooltip for the label popup.
  *
  * @private
  * @param {Graph} control - Graph instance
@@ -119,6 +121,7 @@ const beforeInit = (control) => {
     control.graphContainer = d3.select(control.config.bindTo);
     getAxesDataRange({}, "", control.config);
     updateAxesDomain(control.config);
+    createTooltipDiv();
     return control;
 };
 
@@ -393,6 +396,7 @@ class Graph extends Construct {
      * @returns {Graph} - Graph instance
      */
     destroy() {
+        destroyTooltipDiv();
         detachEventHandlers(this);
         d3RemoveElement(this.graphContainer, `.${styles.canvas}`);
         d3RemoveElement(this.graphContainer, `.${styles.container}`);

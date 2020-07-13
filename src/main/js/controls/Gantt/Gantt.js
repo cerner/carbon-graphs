@@ -14,6 +14,7 @@ import { createLegend } from "../../helpers/legend";
 import { getElementBoxSizingParameters } from "../../helpers/paddingUtils";
 import styles from "../../helpers/styles";
 import utils from "../../helpers/utils";
+import { createTooltipDiv, destroyTooltipDiv } from "../../helpers/label";
 import GanttConfig, { processInput } from "./GanttConfig";
 import {
     prepareLegendEventHandlers,
@@ -82,7 +83,8 @@ const loadInput = (inputJSON) =>
     new GanttConfig().setInput(inputJSON).validateInput().clone().getConfig();
 /**
  * Executes the before init process checklist, needs to be called by parent control.
- *  Binds the chart id provided in the input JSON to graph container.
+ * Binds the chart id provided in the input JSON to graph container.
+ * Creates tooltip for the label popup.
  *
  * @private
  * @param {Gantt} control - Gantt instance
@@ -92,6 +94,7 @@ const beforeInit = (control) => {
     control.graphContainer = d3.select(control.config.bindTo);
     updateAxesDomain(control.config);
     control.config.height = determineHeight(control.config);
+    createTooltipDiv();
     return control;
 };
 /**
@@ -327,6 +330,7 @@ class Gantt extends Construct {
      * @returns {Gantt} - Gantt instance
      */
     destroy() {
+        destroyTooltipDiv();
         detachEventHandlers(this);
         d3RemoveElement(this.graphContainer, `.${styles.canvas}`);
         d3RemoveElement(this.graphContainer, `.${styles.container}`);

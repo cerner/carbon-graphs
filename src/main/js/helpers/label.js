@@ -73,8 +73,11 @@ export const loadLabelPopup = (axisLabel, axisType) => {
  */
 const removeOldPopup = () => {
     // Remove old popup
-    d3.select("#overlay").remove();
-    d3.select("#tooltip").attr("style", "").selectAll("g").remove();
+    d3.select(`#${styles.labelPopupOverlay}`).remove();
+    d3.select(`#${styles.labelPopupTooltip}`)
+        .attr("style", "")
+        .selectAll("g")
+        .remove();
 };
 /**
  * Render Popup for the label.
@@ -84,28 +87,28 @@ const removeOldPopup = () => {
  * @returns {object} d3 svg path
  */
 const renderPopup = (axisType) => {
-    const tip = document.querySelector("#tooltip");
+    const tip = document.querySelector(`#${styles.labelPopupTooltip}`);
     const clickHandler = () => {
         d3.select(tip).attr("style", "display:none;").selectAll("g").remove();
-        d3.select("#overlay").remove();
+        d3.select(`#${styles.labelPopupOverlay}`).remove();
         tip.removeEventListener("click", clickHandler);
         window.removeEventListener("resize", clickHandler);
     };
     // Add new popup
     d3.select("body")
-        .append("div", "#tooltip")
-        .attr("id", "overlay")
-        .classed("overlay", true)
+        .append("div", `#${styles.labelPopupTooltip}`)
+        .attr("id", styles.labelPopupOverlay)
+        .classed(styles.labelPopupOverlay, true)
         .on("click", clickHandler);
     // Position popup
     return axisType === "y2"
         ? // Since y2 axis will be on the right side of the page, we should make popup move a bit left when clicked on y2-axis label.
           d3
-              .select("#tooltip")
+              .select(`#${styles.labelPopupTooltip}`)
               .style("left", `${d3.event.pageX - 250}px`)
               .style("top", `${d3.event.pageY + 5}px`)
         : d3
-              .select("#tooltip")
+              .select(`#${styles.labelPopupTooltip}`)
               .style("left", `${d3.event.pageX + 5}px`)
               .style("top", `${d3.event.pageY + 5}px`);
 };
@@ -293,6 +296,25 @@ const translateLabelShapeContainer = (config, shapeContainerPath) => {
 };
 
 /**
+ * Creates div element for popup tooltip
+ */
+const createTooltipDiv = () => {
+    d3.select("body")
+        .append("div")
+        .attr("id", styles.labelPopupTooltip)
+        .classed(styles.labelPopupTooltip, true);
+};
+
+/**
+ * Removes popup tooltip div element
+ */
+const destroyTooltipDiv = () => {
+    if (document.querySelector(`.${styles.labelPopupTooltip}`)) {
+        document.querySelector(`.${styles.labelPopupTooltip}`).remove();
+    }
+};
+
+/**
  * @enum {Function}
  */
 export {
@@ -302,5 +324,7 @@ export {
     translateLabelShapeContainer,
     removeLabelShapeItem,
     shouldTruncateLabel,
-    truncateLabel
+    truncateLabel,
+    createTooltipDiv,
+    destroyTooltipDiv
 };
