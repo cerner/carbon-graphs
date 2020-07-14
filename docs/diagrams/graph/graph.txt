@@ -1,0 +1,65 @@
+@startuml
+package "Graph.js" {
+    package "class Graph" {
+        [constructor()_Graph]
+        [generate()] 
+        [loadContent()]
+        [unloadContent()]
+        [unload()] 
+        [destroy()]
+    }
+
+    [setCanvasWidth]
+    [setCanvasHeight]
+    [isRangeModified]
+    [loadInput]
+    [beforeInit]
+    [initConfig]
+}
+
+package "GraphConfig.js" {
+
+    package "GraphConfig" {
+        [GraphConfig.constructor()]
+        [getConfig()]
+        [setInput()]
+        [validateInput]
+        [clone]
+    }
+
+    [getpadding]
+    [processInput]
+    [isUniqueKey]
+    [validateContent]
+    [settingsDictionary]
+    
+}
+
+package "helpers.js"{
+    [translateAxes]
+    [translateVerticalGrid]
+    [translateContentContainer]
+    [translateDefs]
+    [translateLabel]
+    [translateGrid]
+    [translateCanvas]
+    [updateAxesDomain]
+    [createDefs]
+    [createGrid]
+    [createLabel]
+    [createContentContainer]
+    [scaleGraph]
+    [translateGraph]
+    [padDomain]
+    [determineHeight]
+    [getShapeForTarget]
+    [getColorForTarget]
+    [attachEventHandlers]
+    [detachEventHandlers]
+    [d3RemoveElement]
+    [setAxisPadding]
+    [getAxisInfoRowLabelHeight]
+    [removeNoDataView]
+    [drawNoDataView]
+}
+@enduml

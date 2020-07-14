@@ -1,0 +1,15 @@
+@startuml
+carbon.js -> core.js
+carbon.js -> api.js
+
+api.js -> Bar
+api.js -> Gantt
+api.js -> Graph
+api.js -> Line
+api.js -> PairedResult
+api.js -> Pie
+api.js -> Timeline
+api.js -> Scatter
+api.js -> Bubble
+
+@enduml

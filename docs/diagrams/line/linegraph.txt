@@ -1,0 +1,46 @@
+@startuml
+package "Line.js" {
+    package "class Line" {
+        [constructor()_Line]
+        [load()] -> [draw()]
+        [load()] -> [prepareLegendItems]
+        [load()] -> [prepareLabelShapeItem]
+        [unload()] -> clear
+        [resize()]
+        [redraw()]
+    }
+    [calculateValuesRange] --> [constructor() Line]
+    [loadInput]
+}
+
+package "LineConfig.js"{
+
+    package "class LineConfig" {
+        [constructor()_LineConfig]
+        [getConfig()]
+        [setInput()] --> [load()]
+        [validateInput()]
+        [clone()]
+    }
+}
+
+package "Helpers.js" {
+    [createLine]
+    [transformPoint]
+    [translateLines]
+    [translatePoints]
+    [toggleDataPointSelection]
+    [dataPointActionHandler]
+    [translateLineGraph]
+    [draw]
+    [processDataPoints]
+    [getDataPointValues]
+    [drawDataLines]
+    [drawDataPoints]
+    [drawDataLines]
+    [helpers.clear()]
+    [prepareLegendItems]
+}
+
+@enduml
+

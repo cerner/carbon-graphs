@@ -1,0 +1,24 @@
+@startmindmap
+* Carbon
+** api
+*** bar
+*** gantt
+*** graph
+*** line
+*** pairedresult
+*** pairedresult
+*** timeline
+*** scatter
+*** bubble
+
+** core
+*** baseconfig
+*** graphcontent
+*** shape
+
+** helpers
+
+** locale
+
+
+@endmindmap
