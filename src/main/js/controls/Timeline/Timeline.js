@@ -290,15 +290,15 @@ class Timeline extends Construct {
      * @param {Array} graphData - Input array that holds updated values and key
      */
     reflow(graphData) {
-        updateXAxisDomain(this.config); // We need to update the domain as this refers to new lowerLimit and upperLimit of xAxis ticks to be displayed on the graph.
+        updateXAxisDomain(this.config);
         scaleGraph(this.scale, this.config);
         translateAxes(this.axis, this.scale, this.config, this.svg);
         let position;
-        if(graphData && graphData.values && this.content.includes(graphData.key)) { // Its a check whether graphData exists and the key is also present or not.
+        if(graphData && graphData.values && this.content.includes(graphData.key)) {
             this.contentConfig.forEach((config, index) => {
                 if (config.config.key === graphData.key) position = index;
             });
-            this.contentConfig[position].reflow(this, graphData); // We call reflow on the position for that specific content whose key matches to new data.
+            this.contentConfig[position].reflow(this, graphData);
         }
         this.resize();
         return this;

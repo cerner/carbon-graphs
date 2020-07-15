@@ -593,7 +593,7 @@ export const renderGanttPanningWithDynamicData = (id) => {
         key: "track 0",
         trackLabel: {
             display: "Default",
-            onClick: loadTrackLabelPopup
+            onClick: loadXAndYAxisLabelPopup
         },
         tasks: tasks[5],
         actions: actions[2],

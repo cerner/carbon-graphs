@@ -225,22 +225,22 @@ class Bar extends GraphContent {
      * @inheritdoc
      */
     reflow(graph, graphData) {
-        this.config.values = graphData.values; // Update the old Bar config values with the new provided values
-        this.dataTarget = processDataPoints(graph.config, this.config); // Update the dataTarget
+        this.config.values = graphData.values;
+        this.dataTarget = processDataPoints(graph.config, this.config);
         const position = graph.config.shownTargets.lastIndexOf(graphData.key);
         if (position > -1) {
-            graph.config.shownTargets.splice(position, 1); // This is done to remove duplicate keys due to processDataPoints
+            graph.config.shownTargets.splice(position, 1);
         }
-        const tickValues = graph.config.axis.x.ticks.values.map((d) => ( // consolidating data into an object
+        const tickValues = graph.config.axis.x.ticks.values.map((d) => (
             {
             x: d,
             valueSubsetArray: []
         }));
 
         scaleBandAxis(this.bandScale, graph.config, graph.content);
-        const barSelectionGroup = graph.svg.select(`.${styles.barSelectionGroup}`) // Updating Bars Selection Group starts here.
+        const barSelectionGroup = graph.svg.select(`.${styles.barSelectionGroup}`)
                                     .selectAll(`.${styles.taskBarSelection}`)
-                                    .data(tickValues); // comparing new data to old data and creating enter and exit states.
+                                    .data(tickValues);
         barSelectionGroup
             .enter()
             .append("rect")
@@ -258,23 +258,23 @@ class Bar extends GraphContent {
             .call(constants.d3Transition(graph.config.settingsDictionary.transition))
             .remove();
         
-        updateSelectionBars( this.dataTarget.internalValuesSubset, // Updating Bars Selection Group ends here.
+        updateSelectionBars( this.dataTarget.internalValuesSubset,
             graph.svg,
             graph.config
         );
 
-        const currentBarsPath = graph.svg // Updating Bars starts here.
+        const currentBarsPath = graph.svg
                                 .select(`g[aria-describedby="${graphData.key}"]`)
                                 .select(`[class="${styles.currentBarsGroup}"]`)
-                                .data([this.dataTarget]); // comparing new data to old data and creating enter and exit states.
+                                .data([this.dataTarget]);
         const bars = currentBarsPath
                         .selectAll(`.${styles.bar}`)
-                        .data(this.dataTarget.internalValuesSubset); // Comparing to get old bars to be removed
-        bars.exit().remove(); // Removing old bars
+                        .data(this.dataTarget.internalValuesSubset);
+        bars.exit().remove();
         const barsContent = currentBarsPath
                     .selectAll(`.${styles.bar} > rect`)
-                    .data(this.dataTarget.internalValuesSubset); // comparing new data to old data and creating enter and exit states.
-        drawDataBars( // Passing the enter state for Bars to be drawn
+                    .data(this.dataTarget.internalValuesSubset);
+        drawDataBars(
             graph.scale,
             this.bandScale,
             graph.config,
@@ -282,9 +282,9 @@ class Bar extends GraphContent {
             barsContent.enter(),
             this.dataTarget.regions,
             this.dataTarget.axisInfoRow
-        );  // Updating Bars ends here.
+        );
         this.resize(graph);
-        this.valuesRange = calculateValuesRange( // updating valuesRanges for Y axis
+        this.valuesRange = calculateValuesRange(
             this.config.values,
             this.config.yAxis
         );

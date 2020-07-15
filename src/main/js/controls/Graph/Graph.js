@@ -402,19 +402,19 @@ class Graph extends Construct {
                 if (key === graphData.key) position = index;
             });
             if (position >= 0) {
-                if(this.content[position].type === "Bar") { // This is only required for Bar graph as ticks value must be provided for it.
+                if(this.content[position].type === "Bar") {
                     this.config.axis.x.ticks.values = [];
                     graphData.values.forEach((v) => this.config.axis.x.ticks.values.push(v.x));
                 }
             }
         }
 
-        updateXAxisDomain(this.config); // We need to update the domain as this refers to new lowerLimit and upperLimit of xAxis ticks to be displayed on the graph.
+        updateXAxisDomain(this.config);
         scaleGraph(this.scale, this.config);
         translateAxes(this.axis, this.scale, this.config, this.svg);
 
-        if (graphData && graphData.values && this.contentKeys.includes(graphData.key)) { // Its a check whether graphData exists and the key is also present or not.
-            this.content[position].reflow(this, graphData); // We call reflow on the position for that specific content whose key matches to new data.
+        if (graphData && graphData.values && this.contentKeys.includes(graphData.key)) {
+            this.content[position].reflow(this, graphData);
             setAxisPadding(this.config.axisPadding, this.content[position]);
             getAxesDataRange(
                 this.content[position],
@@ -429,7 +429,7 @@ class Graph extends Construct {
                     this.content[position].config.yAxis
                 )
             ) {
-                updateAxesDomain(this.config, this.content[position]); // This is done for y axis. 
+                updateAxesDomain(this.config, this.content[position]);
             }
         }
         this.resize();

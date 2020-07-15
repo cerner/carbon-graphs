@@ -248,16 +248,16 @@ class PairedResult extends GraphContent {
      * @inheritdoc
      */
     reflow(graph, graphData) {
-        this.config.values = graphData.values; // Update the old Paired Result config values with the new provided values
-        this.dataTarget = processDataPoints(graph.config, this.config, true); // update the datatarget
+        this.config.values = graphData.values;
+        this.dataTarget = processDataPoints(graph.config, this.config, true);
         const drawBox = (boxPath) => {
             drawSelectionIndicator(graph.scale, graph.config, boxPath);
             drawLine(graph.scale, graph.config, boxPath);
             drawPoints(graph.scale, graph.config, boxPath);
         };
         const internalValuesSubset = getDataPointValues(this.dataTarget);
-        graph.svg.select(`g[aria-describedby="${graphData.key}"]`).selectAll(`.${styles.pairedBox}`).remove(); // Due to Data complexity remove all the old Data
-        const pairedBoxSVG = graph.svg // loading new data starts here
+        graph.svg.select(`g[aria-describedby="${graphData.key}"]`).selectAll(`.${styles.pairedBox}`).remove();
+        const pairedBoxSVG = graph.svg
             .select(`g[aria-describedby="${graphData.key}"]`)
             .selectAll(`.${styles.pairedBox}`)
             .data(internalValuesSubset);
@@ -275,9 +275,9 @@ class PairedResult extends GraphContent {
             .call(drawBox);
         pairedBoxSVG
             .exit()
-            .remove(); // loading new data ends here
+            .remove();
 
-        this.valuesRange = calculateValuesRange( // updating valuesRanges for Y axis
+        this.valuesRange = calculateValuesRange(
             this.config.values,
             this.config.yAxis
         );

@@ -203,13 +203,13 @@ class TimelineContent extends GraphContent {
      * @inheritdoc
      */
     reflow(graph, graphData) {
-        this.config.values = graphData.values; // Update the old Scatter config values with the new provided values
-        this.dataTarget = processDataPoints(graph.config, this.config); // Update the dataTarget
+        this.config.values = graphData.values;
+        this.dataTarget = processDataPoints(graph.config, this.config);
         const position = graph.config.shownTargets.lastIndexOf(graphData.key);
         if (position > -1) {
-            graph.config.shownTargets.splice(position, 1); // This is done to remove duplicate keys due to processDataPoints
+            graph.config.shownTargets.splice(position, 1);
         }
-        const currentPointsPath = graph.svg // updating content starts here
+        const currentPointsPath = graph.svg
             .select(`g[aria-describedby="${graphData.key}"]`)
             .selectAll(`.${styles.pointGroup}`)
             .data(this.dataTarget);
@@ -218,7 +218,7 @@ class TimelineContent extends GraphContent {
             .select(`g[aria-describedby="${graphData.key}"]`)
             .selectAll(`[class*="${styles.point}"]`)
             .data(this.dataTarget.internalValuesSubset);
-        createPoints(graph.scale, graph.config, pointPath.enter()); // Passing the enter state to be drawn
+        createPoints(graph.scale, graph.config, pointPath.enter());
         pointPath
             .exit()
             .transition()
@@ -227,7 +227,7 @@ class TimelineContent extends GraphContent {
                     graph.config.settingsDictionary.transition
                 )
             )
-            .remove(); // updating shapes ends here and data in exit state is removed
+            .remove();
         this.resize(graph);
     }
 

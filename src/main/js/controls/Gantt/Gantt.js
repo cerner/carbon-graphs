@@ -331,17 +331,17 @@ class Gantt extends Construct {
      *  @returns {Gantt} - Gantt instance
      */
     reflow(graphData) {
-        updateXAxisDomain(this.config); // We need to update the domain as this refers to new lowerLimit and upperLimit of xAxis ticks to be displayed on the graph.
+        updateXAxisDomain(this.config);
         scaleGraph(this.scale, this.config);
         
         translateAxes(this.axis, this.scale, this.config, this.svg); 
 
         let position;
-        if(graphData && this.tracks.includes(graphData.key)) { // Its a check whether graphData exists and the key is also present or not.
+        if(graphData && this.tracks.includes(graphData.key)) {
             this.trackConfig.forEach((track, index) => {
                 if (track.config.key === graphData.key) position = index;
             });
-            this.trackConfig[position].reflow(this, graphData); // We call reflow on the position for that specific content whose key matches to new data.
+            this.trackConfig[position].reflow(this, graphData);
         }
         this.config.height = determineHeight(this.config);
         setCanvasHeight(this.config);
