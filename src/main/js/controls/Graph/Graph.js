@@ -396,8 +396,8 @@ class Graph extends Construct {
      * @returns {Graph} - Graph instance
      */
     destroy() {
-        destroyTooltipDiv();
         detachEventHandlers(this);
+        destroyTooltipDiv();
         d3RemoveElement(this.graphContainer, `.${styles.canvas}`);
         d3RemoveElement(this.graphContainer, `.${styles.container}`);
         initConfig(this);
