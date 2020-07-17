@@ -50,7 +50,6 @@ export const renderTimelineCustomContainerPadding = (id) => {
     return timelineDefault;
 };
 export const renderTimelinePanning = (id) => {
-    let graph;
     const axisData = utils.deepClone(getDemoData(`#${id}`, "TIMELINE"));
     axisData.axis.x.lowerLimit = new Date(2016, 0, 1, 0).toISOString();
     axisData.axis.x.upperLimit = new Date(2016, 0, 2, 0).toISOString();
@@ -60,18 +59,44 @@ export const renderTimelinePanning = (id) => {
     const graphData = utils.deepClone(
         getDemoData(`#${id}`, "TIMELINE").data[1]
     );
-    const createGraph = (axis, values) => {
-        if (graph) {
-            graph.destroy();
-        }
-        graph = Carbon.api.timeline(axis);
-        graph.loadContent(values);
-        return graph;
+    const createGraph = () => {
+        graph.reflow();
     };
-    graph = createGraph(axisData, graphData);
+
+    const graph = Carbon.api.timeline(axisData);
+    graph.loadContent(graphData);
+    axisData.axis = graph.config.axis;
+
     createPanningControls(id, {
         axisData,
-        graphData,
+        creationHandler: createGraph
+    });
+    return graph;
+};
+
+export const renderTimelinePanningWithDynamicData = (id) => {
+    const axisData = utils.deepClone(getDemoData(`#${id}`, "TIMELINE"));
+    axisData.axis.x.lowerLimit = new Date(2016, 0, 1, 0).toISOString();
+    axisData.axis.x.upperLimit = new Date(2016, 0, 2, 0).toISOString();
+    axisData.pan = {
+        enabled: true
+    };
+    const graphData = utils.deepClone(
+        getDemoData(`#${id}`, "TIMELINE").data[0]
+    );
+    const panData = utils.deepClone(
+        getDemoData(`#${id}`, "TIMELINE").data[2]
+    );
+    const createGraph = () => {
+        graph.reflow(panData);
+    };
+
+    const graph = Carbon.api.timeline(axisData);
+    graph.loadContent(graphData);
+    axisData.axis = graph.config.axis;
+
+    createPanningControls(id, {
+        axisData,
         creationHandler: createGraph
     });
     return graph;

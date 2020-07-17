@@ -293,8 +293,8 @@ const drawBubbles = (scale, config, pointGroupPath, dataTarget) => {
             .attr("transform", transformPoint(scale)(value))
             .attr("aria-describedby", `${value.key}`)
             .attr("aria-selected", false)
-            .attr("aria-hidden", false)
-            .on("click", function () {
+            .attr("aria-hidden", document.querySelector(`.${styles.legendItem}[aria-describedby="${value.key}"]`)?.getAttribute('aria-current')==="false")
+            .on("click", function() {
                 dataPointActionHandler(value, index, this);
             });
 
@@ -513,5 +513,6 @@ export {
     prepareLegendItems,
     processDataPoints,
     getDataPointValues,
-    clear
+    clear,
+    drawBubbles
 };

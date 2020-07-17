@@ -139,4 +139,4 @@ const translateTimelineGraph = (control) => {
     translateLabel(control.config, control.svg);
 };
 
-export { translateTimelineGraph, transformPoint, translatePoints };
+export { translateTimelineGraph, transformPoint, translatePoints, translateAxes };

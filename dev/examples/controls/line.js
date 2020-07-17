@@ -493,7 +493,62 @@ export const renderLineCustomContainerPadding = (id) => {
     return lineDefault;
 };
 export const renderLineWithPanning = (id) => {
-    let graph;
+    const axisData = utils.deepClone(
+        getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE")
+    );
+    axisData.pan = {
+        enabled: true
+    };
+    const graphDataY = utils.deepClone(
+        getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE").data[0]
+    );
+    graphDataY.regions = [regions[0]];
+    const createGraph = () => {
+        graph.reflow();
+    };
+
+    const graph = Carbon.api.graph(axisData);
+    graph.loadContent(Carbon.api.line(graphDataY));
+    axisData.axis = graph.config.axis;
+
+    createPanningControls(id, {
+        axisData,
+        creationHandler: createGraph
+    });
+    return graph;
+};
+
+export const renderLineY2AxisWithPanning = (id) => {
+    const axisData = utils.deepClone(
+        getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE")
+    );
+    axisData.pan = {
+        enabled: true
+    };
+    const graphDataY = utils.deepClone(
+        getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE").data[0]
+    );
+    graphDataY.regions = [regions[0]];
+    axisData.axis.y2.show = true;
+    const graphDataY2 = utils.deepClone(
+        getDemoData(`#${id}`, "LINE_TIMESERIES").data[1]
+    );
+    const createGraph = () => {
+        graph.reflow();
+    };
+
+    const graph = Carbon.api.graph(axisData);
+    graph.loadContent(Carbon.api.line(graphDataY));
+    graph.loadContent(Carbon.api.line(graphDataY2));
+    axisData.axis = graph.config.axis;
+
+    createPanningControls(id, {
+        axisData,
+        creationHandler: createGraph
+    });
+    return graph;
+};
+export const renderLinePanningWithDynamicData = (id) => {
     const axisData = utils.deepClone(
         getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE")
     );
@@ -504,18 +559,19 @@ export const renderLineWithPanning = (id) => {
         getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE").data[0]
     );
     graphData.regions = [regions[0]];
-    const createGraph = (axis, values) => {
-        if (graph) {
-            graph.destroy();
-        }
-        graph = Carbon.api.graph(axis);
-        graph.loadContent(Carbon.api.line(values));
-        return graph;
+    const createGraph = () => {
+        const graphDataY = utils.deepClone(
+            getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE").data[1]
+        );
+        graph.reflow(graphDataY);
     };
-    graph = createGraph(axisData, graphData);
+
+    const graph = Carbon.api.graph(axisData);
+    graph.loadContent(Carbon.api.line(graphData));
+    axisData.axis = graph.config.axis;
+
     createPanningControls(id, {
         axisData,
-        graphData,
         creationHandler: createGraph
     });
     return graph;

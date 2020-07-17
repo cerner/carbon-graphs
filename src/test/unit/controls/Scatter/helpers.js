@@ -124,3 +124,12 @@ export const inputTertiary = {
  */
 export const fetchElementByClass = (id, cls) => id.querySelector(`.${cls}`);
 export const fetchElementById = (id) => id;
+/**
+ * Returns the DOM element queried by Class
+ *
+ * @param {HTMLElement} id - Id attribute name
+ * @param {string} cls - Class attribute name
+ * @returns {HTMLElement} - Array of DOM element
+ */
+export const fetchAllElementsByClass = (id, cls) => id.querySelectorAll(`.${cls}`);
+

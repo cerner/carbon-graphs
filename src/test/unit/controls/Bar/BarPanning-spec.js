@@ -14,7 +14,8 @@ import {
     getAxes,
     getInput,
     valuesTimeSeries,
-    axisTimeSeries
+    axisTimeSeries,
+    fetchAllElementsByClass
 } from "./helpers";
 import { getSVGAnimatedTransformList } from "../../../../main/js/helpers/transformUtils";
 import { COLORS, SHAPES } from "../../../../main/js/helpers/constants";
@@ -72,6 +73,58 @@ describe("Bar - Panning", () => {
                 expect(toNumber(translate[1], 10)).toBeCloseTo(PADDING_BOTTOM);
                 done();
             });
+        });
+        it("Dynamic Data is updated correctly when key matches", () => {
+            const panData = {
+                key: 'uid_1',
+                values: [
+                    {
+                        x: "2016-03-03T12:00:00Z",
+                        y: 2
+                    },
+                    {
+                        x: "2016-04-03T12:00:00Z",
+                        y: 20
+                    }
+                ]
+            };
+            let barContent = fetchAllElementsByClass(
+                barGraphContainer,
+                styles.bar
+            );
+            expect(barContent.length).toEqual(3);
+            graphDefault.reflow(panData);
+            barContent = fetchAllElementsByClass(
+                barGraphContainer,
+                styles.bar
+            );
+            expect(barContent.length).toEqual(2);
+        });
+        it("Dynamic Data is not updated when key does not match", () => {
+            const panData = {
+                key: 'uid_2',
+                values: [
+                    {
+                        x: "2016-03-03T12:00:00Z",
+                        y: 2
+                    },
+                    {
+                        x: "2016-04-03T12:00:00Z",
+                        y: 20
+                    }
+                ]
+            };
+            let barContent = fetchAllElementsByClass(
+                barGraphContainer,
+                styles.bar
+            );
+            expect(barContent.length).toEqual(3);
+            graphDefault.reflow(panData);
+            barContent = fetchAllElementsByClass(
+                barGraphContainer,
+                styles.bar
+            );
+            expect(barContent.length).toEqual(3);
         });
     });
     describe("When disabled", () => {
