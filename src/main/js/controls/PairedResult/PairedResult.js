@@ -19,7 +19,10 @@ import {
     clear,
     clickHandler,
     draw,
+    drawLine,
+    drawPoints,
     getValue,
+    getDataPointValues,
     hoverHandler,
     iterateOnPairType,
     prepareLegendItems,
@@ -28,7 +31,14 @@ import {
     isRegionMappedToAllValues,
     translatePairedResultGraph
 } from "./helpers/helpers";
+import {
+    drawSelectionIndicator
+} from "./helpers/selectionIndicatorHelpers";
 import PairedResultConfig from "./PairedResultConfig";
+import {
+    calculateVerticalPadding,
+    getXAxisXPosition,
+} from "../../helpers/axis";
 
 /**
  * @typedef {object} PairedResult
@@ -114,6 +124,7 @@ class PairedResult extends GraphContent {
     constructor(input) {
         super();
         this.config = loadInput(input);
+        this.type = "PairedResult";
         this.config.yAxis = getDefaultValue(
             this.config.yAxis,
             constants.Y_AXIS
@@ -231,6 +242,46 @@ class PairedResult extends GraphContent {
 
         translatePairedResultGraph(graph.scale, graph.svg, graph.config);
         return this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    reflow(graph, graphData) {
+        this.config.values = graphData.values;
+        this.dataTarget = processDataPoints(graph.config, this.config, true);
+        const drawBox = (boxPath) => {
+            drawSelectionIndicator(graph.scale, graph.config, boxPath);
+            drawLine(graph.scale, graph.config, boxPath);
+            drawPoints(graph.scale, graph.config, boxPath);
+        };
+        const internalValuesSubset = getDataPointValues(this.dataTarget);
+        graph.svg.select(`g[aria-describedby="${graphData.key}"]`).selectAll(`.${styles.pairedBox}`).remove();
+        const pairedBoxSVG = graph.svg
+            .select(`g[aria-describedby="${graphData.key}"]`)
+            .selectAll(`.${styles.pairedBox}`)
+            .data(internalValuesSubset);
+        pairedBoxSVG
+            .enter()
+            .append('g')
+            .classed(styles.pairedBox, true)
+            .attr("aria-selected", false)
+            .attr(
+                "transform",
+                `translate(${getXAxisXPosition(graph.config)},${calculateVerticalPadding(
+                    graph.config
+                )})`
+            )
+            .call(drawBox);
+        pairedBoxSVG
+            .exit()
+            .remove();
+
+        this.valuesRange = calculateValuesRange(
+            this.config.values,
+            this.config.yAxis
+        );
+        this.resize(graph);
     }
 
     /**

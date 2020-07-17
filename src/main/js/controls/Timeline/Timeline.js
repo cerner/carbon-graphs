@@ -1,7 +1,10 @@
 "use strict";
 import * as d3 from "d3";
 import Construct from "../../core/Construct";
-import { getYAxisHeight } from "../../helpers/axis";
+import { 
+    getYAxisHeight,
+    updateXAxisDomain
+} from "../../helpers/axis";
 import constants from "../../helpers/constants";
 import errors from "../../helpers/errors";
 import { createLegend } from "../../helpers/legend";
@@ -20,7 +23,7 @@ import {
     determineHeight,
     scaleGraph
 } from "./helpers/creationHelpers";
-import { translateTimelineGraph } from "./helpers/translateHelpers";
+import { translateTimelineGraph, translateAxes } from "./helpers/translateHelpers";
 import TimelineConfig, { processInput } from "./TimelineConfig";
 import TimelineContent from "./TimelineContent";
 
@@ -165,7 +168,7 @@ class Timeline extends Construct {
      * Draw function that is called by the parent control. This draws the x-axis, legend and
      * X Axis label for the chart construct.
      *
-     * @description Since we dont have the concept of z-index in visualization,
+     * @description Since we don't have the concept of z-index in visualization,
      * the order of rendering should be following:
      *  * SVG container
      *  * X-Axis
@@ -276,6 +279,27 @@ class Timeline extends Construct {
         this.contentConfig[index].unload(this);
         this.content.splice(index, 1);
         this.contentConfig.splice(index, 1);
+        this.resize();
+        return this;
+    }
+
+    /**
+     * Updates the graph axisData and content.
+     *
+     *  @returns {Timeline} - Timeline instance
+     * @param {Array} graphData - Input array that holds updated values and key
+     */
+    reflow(graphData) {
+        updateXAxisDomain(this.config);
+        scaleGraph(this.scale, this.config);
+        translateAxes(this.axis, this.scale, this.config, this.svg);
+        let position;
+        if(graphData && graphData.values && this.content.includes(graphData.key)) {
+            this.contentConfig.forEach((config, index) => {
+                if (config.config.key === graphData.key) position = index;
+            });
+            this.contentConfig[position].reflow(this, graphData);
+        }
         this.resize();
         return this;
     }

@@ -1,5 +1,6 @@
 import Carbon from "../../../src/main/js/carbon";
 import { loadPopup, loadBubblePopup } from "../popup";
+import { createPanningControls } from "../panHelpers";
 
 const simpleAxisData = (id) => ({
     bindTo: id,
@@ -283,6 +284,29 @@ const data6 = {
     yAxis: "y"
 };
 
+const panData = {
+    key: "uid_5",
+    values: [
+        {
+            x: new Date(2016, 0, 1, 9, 0).toISOString(),
+            y: 80
+        },
+        {
+            x: new Date(2016, 0, 1, 10, 0).toISOString(),
+            y: 50
+        },
+        {
+            x: new Date(2016, 0, 1, 12, 0).toISOString(),
+            y: 100
+        },
+        {
+            x: new Date(2016, 0, 1, 15, 0).toISOString(),
+            y: 200
+        }
+    ],
+    yAxis: "y"
+};
+
 export const renderSimpleBubble = (id) => {
     const bubbleGraph = Carbon.api.graph(simpleAxisData(`#${id}`));
     bubbleGraph.loadContent(Carbon.api.bubble(data));
@@ -311,6 +335,49 @@ export const renderCustomBubbleSize = (id) => {
     const bubbleGraph = Carbon.api.graph(simpleAxisData(`#${id}`));
     bubbleGraph.loadContent(Carbon.api.bubble(data5));
     return bubbleGraph;
+};
+
+export const renderBubbleWithPanning = (id) => {
+    const axisData = simpleAxisData(`#${id}`)
+    axisData.pan = {
+        enabled: true
+    };
+    const graphDataY = data5;
+    const createGraph = () => {
+        graph.reflow();
+    };
+
+    const graph = Carbon.api.graph(axisData);
+    graph.loadContent(Carbon.api.bubble(graphDataY));
+    axisData.axis = graph.config.axis;
+
+    createPanningControls(id, {
+        axisData,
+        creationHandler: createGraph
+    });
+    return graph;
+};
+
+export const renderBubblePanningWithDynamicData = (id) => {
+    const axisData = simpleAxisData(`#${id}`)
+    axisData.pan = {
+        enabled: true
+    };
+    const graphDataY = data5;
+    const createGraph = () => {
+        const graphData = panData;
+        graph.reflow(graphData);
+    };
+
+    const graph = Carbon.api.graph(axisData);
+    graph.loadContent(Carbon.api.bubble(graphDataY));
+    axisData.axis = graph.config.axis;
+
+    createPanningControls(id, {
+        axisData,
+        creationHandler: createGraph
+    });
+    return graph;
 };
 
 export const renderBubbleGraphAndLegendPaddingReduced = (id) => {

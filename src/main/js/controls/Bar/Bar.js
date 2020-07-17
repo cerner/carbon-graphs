@@ -16,7 +16,8 @@ import {
     draw,
     prepareLegendItems,
     processDataPoints,
-    setGroupName
+    setGroupName,
+    drawDataBars
 } from "./helpers/creationHelpers";
 import { processGoalLines, translateRegion } from "./helpers/goalLineHelpers";
 import { clickHandler, hoverHandler } from "./helpers/legendHelpers";
@@ -99,6 +100,7 @@ class Bar extends GraphContent {
         super();
         initConfig(this);
         this.config = loadInput(input);
+        this.type = "Bar";
         this.config.yAxis = getDefaultValue(
             this.config.yAxis,
             constants.Y_AXIS
@@ -217,6 +219,76 @@ class Bar extends GraphContent {
             );
         }
         return this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    reflow(graph, graphData) {
+        this.config.values = graphData.values;
+        this.dataTarget = processDataPoints(graph.config, this.config);
+        const position = graph.config.shownTargets.lastIndexOf(graphData.key);
+        if (position > -1) {
+            graph.config.shownTargets.splice(position, 1);
+        }
+        const tickValues = graph.config.axis.x.ticks.values.map((d) => (
+            {
+            x: d,
+            valueSubsetArray: []
+        }));
+
+        scaleBandAxis(this.bandScale, graph.config, graph.content);
+        const barSelectionGroup = graph.svg.select(`.${styles.barSelectionGroup}`)
+                                    .selectAll(`.${styles.taskBarSelection}`)
+                                    .data(tickValues);
+        barSelectionGroup
+            .enter()
+            .append("rect")
+            .attr("aria-hidden", true)
+            .classed(styles.taskBarSelection, true)
+            .attr(
+                "aria-describedby",
+                (value) => `bar-selector-${tickValues.indexOf(value)}`
+            )
+            .attr("rx", 3)
+            .attr("ry", 3);
+        barSelectionGroup
+            .exit()
+            .transition()
+            .call(constants.d3Transition(graph.config.settingsDictionary.transition))
+            .remove();
+        
+        updateSelectionBars( this.dataTarget.internalValuesSubset,
+            graph.svg,
+            graph.config
+        );
+
+        const currentBarsPath = graph.svg
+                                .select(`g[aria-describedby="${graphData.key}"]`)
+                                .select(`[class="${styles.currentBarsGroup}"]`)
+                                .data([this.dataTarget]);
+        const bars = currentBarsPath
+                        .selectAll(`.${styles.bar}`)
+                        .data(this.dataTarget.internalValuesSubset);
+        bars.exit().remove();
+        const barsContent = currentBarsPath
+                    .selectAll(`.${styles.bar} > rect`)
+                    .data(this.dataTarget.internalValuesSubset);
+        drawDataBars(
+            graph.scale,
+            this.bandScale,
+            graph.config,
+            graph.svg,
+            barsContent.enter(),
+            this.dataTarget.regions,
+            this.dataTarget.axisInfoRow
+        );
+        this.resize(graph);
+        this.valuesRange = calculateValuesRange(
+            this.config.values,
+            this.config.yAxis
+        );
+        this.resize(graph);
     }
 
     /**

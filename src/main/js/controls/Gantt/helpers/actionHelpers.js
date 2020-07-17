@@ -228,7 +228,10 @@ const renderDataPointPath = (scale, config, path, dataPoint, index) =>
                     dataPointActionHandler(dataPoint, index, this);
                 },
                 a11yAttributes: {
-                    "aria-hidden": false,
+                    "aria-hidden": 
+                    document.querySelector(`li[aria-describedby="${dataPoint.key}"]`) ?
+                        document.querySelector(`li[aria-describedby="${dataPoint.key}"]`).getAttribute('aria-current') === "false" :
+                        false,
                     "aria-describedby": dataPoint.key,
                     "aria-disabled": !utils.isFunction(dataPoint.onClick)
                 },
@@ -267,11 +270,11 @@ const drawActionDataPoints = (scale, config, canvasSVG) =>
  * @param {object} graphContext - Gantt instance
  * @param {object} trackPathSVG - Track container element
  * @param {object} trackLabel - Track label
- * @param {object} actions - input JSON for creating an action
+ * @param {object} gantt - input config for creating an action
  * @returns {undefined} - returns nothing
  */
-export const loadActions = (graphContext, trackPathSVG, trackLabel, actions) =>
-    actions.forEach((a) => {
+const loadActions = (graphContext, trackPathSVG, trackLabel, gantt) =>
+    gantt.actions.forEach((a,i) => {
         drawDataPoints(
             graphContext.scale,
             graphContext.config,
@@ -281,9 +284,51 @@ export const loadActions = (graphContext, trackPathSVG, trackLabel, actions) =>
                 trackLabel,
                 loadActionInput(a)
             ),
-            drawActionDataPoints
+            drawActionDataPoints,
+            false
         );
+    gantt.actionKeys.splice(i, 0, a.key);
     });
+
+/**
+ * Update activities for the track.
+ *
+ * @private
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} gantt - Graph config object for the content.
+ * @param {object} trackGroupPath - Container for the track
+ * @returns {undefined} - returns nothing
+ */
+const reflowActions = (
+        config,
+        scale,
+        gantt,
+        trackGroupPath
+    ) => {
+        gantt.config.actions.forEach((action) => {
+            validateActionContent(action);
+        });
+        trackGroupPath
+            .selectAll(`.${styles.currentPointsGroup}[event="false"]`)
+            .remove();
+        gantt.config.actions.forEach((action) => {
+            drawDataPoints(
+                scale,
+                config,
+                trackGroupPath,
+                processActionItems(
+                    config,
+                    gantt.config.trackLabel,
+                    loadActionInput(action)
+                ),
+                drawActionDataPoints,
+                false
+            );
+        });
+    
+    }
+
 /**
  * Selects all the data point groups from the track and removes them
  *
@@ -292,5 +337,7 @@ export const loadActions = (graphContext, trackPathSVG, trackLabel, actions) =>
  * @param {object} trackPathSVG - Track container element
  * @returns {Selection} - track container element
  */
-export const unloadActions = (graphContext, trackPathSVG) =>
+const unloadActions = (graphContext, trackPathSVG) =>
     trackPathSVG.selectAll(`g.${styles.currentPointsGroup}`).remove();
+
+export { loadActions, unloadActions, reflowActions };

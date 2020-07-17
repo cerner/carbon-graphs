@@ -17,6 +17,7 @@ import {
     renderStackedBarAxisInfoTextLabels,
     renderBarTimeSeriesWithEventline,
     renderBarWithPanning,
+    renderBarPanningWithDynamicData,
     renderBarGraphAndLegendPaddingReduced
 } from "./examples/controls/bar";
 import { renderColorsExample } from "./examples/controls/colors";
@@ -47,6 +48,7 @@ import {
     renderGanttTrackSelection,
     renderGanttTruncate,
     renderGanttPanning,
+    renderGanttPanningWithDynamicData,
     renderGanttEventline,
     renderGanttGraphAndLegendPaddingReduced
 } from "./examples/controls/gantt";
@@ -83,6 +85,8 @@ import {
     renderLineCustomContainerPadding,
     renderLineCustomContentPadding,
     renderLineWithPanning,
+    renderLineY2AxisWithPanning,
+    renderLinePanningWithDynamicData,
     renderLineWithEventline,
     renderDashedLine,
     renderLineWithLegendOptions,
@@ -113,6 +117,8 @@ import {
     renderPairedResultY2Axis,
     renderPairedResultYHidden,
     renderPairedResultWithPanning,
+    renderPairedResultY2AxisWithPanning,
+    renderPairedResultPanningWithDynamicData,
     renderPairedResultTimeseriesEventline,
     renderPairedResultWithLegendOptions,
     renderPairedResultGraphAndLegendPaddingReduced
@@ -135,18 +141,22 @@ import {
     renderTimelineCustomContainerPadding,
     renderTimelineCustomContentPadding,
     renderTimelinePanning,
+    renderTimelinePanningWithDynamicData,
     renderTimelineNoXAxisTickLabel,
     renderTimelineGraphAndLegendPaddingReduced
 } from "./examples/controls/timeline";
 import { createElementLegendBindTo } from "./examples/helpers";
 import {
     renderScatter,
+    renderScatterY2Axis,
     renderScatterTimeSeries,
     renderScatterWithDateline,
     renderScatterXHidden,
     renderScatterYHidden,
     renderScatterWithPanning,
+    renderScatterY2AxisWithPanning,
     renderScatterWithEventline,
+    renderScatterPanningWithDynamicData,
     renderScatterGraphAndLegendPaddingReduced
 } from "./examples/controls/scatter";
 import {
@@ -155,6 +165,8 @@ import {
     renderColorBasedBubbleGraph,
     renderWeightColorCombination,
     renderCustomBubbleSize,
+    renderBubbleWithPanning,
+    renderBubblePanningWithDynamicData,
     renderBubbleGraphAndLegendPaddingReduced
 } from "./examples/controls/bubble";
 
@@ -415,6 +427,11 @@ renderSiteApp(
                     title: "Simple"
                 },
                 {
+                    pathname: "/scatter/y2-axis",
+                    content: renderScatterY2Axis,
+                    title: "Y2 Axis"
+                },
+                {
                     pathname: "/scatter/timeseries",
                     content: renderScatterTimeSeries,
                     title: "Timeseries"
@@ -592,6 +609,16 @@ renderSiteApp(
                             pathname: "/panning/line/simple",
                             content: renderLineWithPanning,
                             title: "Simple"
+                        },
+                        {
+                            pathname: "/panning/line/y2-axis",
+                            content: renderLineY2AxisWithPanning,
+                            title: "Y2 Axis"
+                        },
+                        {
+                            pathname: "/panning/line/dynamic-data",
+                            content: renderLinePanningWithDynamicData,
+                            title: "Dynamic Data"
                         }
                     ]
                 },
@@ -602,6 +629,11 @@ renderSiteApp(
                             pathname: "/panning/gantt/simple",
                             content: renderGanttPanning,
                             title: "Simple"
+                        },
+                        {
+                            pathname: "/panning/gantt/dynamic-data",
+                            content: renderGanttPanningWithDynamicData,
+                            title: "Dynamic Data"
                         }
                     ]
                 },
@@ -612,6 +644,11 @@ renderSiteApp(
                             pathname: "/panning/timeline/simple",
                             content: renderTimelinePanning,
                             title: "Simple"
+                        },
+                        {
+                            pathname: "/panning/timeline/dynamic-data",
+                            content: renderTimelinePanningWithDynamicData,
+                            title: "Dynamic Data"
                         }
                     ]
                 },
@@ -622,6 +659,11 @@ renderSiteApp(
                             pathname: "/panning/bar/simple",
                             content: renderBarWithPanning,
                             title: "Simple"
+                        },
+                        {
+                            pathname: "/panning/bar/dynamic-data",
+                            content: renderBarPanningWithDynamicData,
+                            title: "Dynamic Data"
                         }
                     ]
                 },
@@ -632,6 +674,16 @@ renderSiteApp(
                             pathname: "/panning/paired-result/simple",
                             content: renderPairedResultWithPanning,
                             title: "Simple"
+                        },
+                        {
+                            pathname: "/panning/paired-result/y2-axis",
+                            content: renderPairedResultY2AxisWithPanning,
+                            title: "Y2 Axis"
+                        },
+                        {
+                            pathname: "/panning/paired-result/dynamic-data",
+                            content: renderPairedResultPanningWithDynamicData,
+                            title: "Dynamic Data"
                         }
                     ]
                 },
@@ -642,9 +694,34 @@ renderSiteApp(
                             pathname: "/panning/scatter/simple",
                             content: renderScatterWithPanning,
                             title: "Simple"
+                        },
+                        {
+                            pathname: "/panning/scatter/y2-axis",
+                            content: renderScatterY2AxisWithPanning,
+                            title: "Y2 Axis"
+                        },
+                        {
+                            pathname: "/panning/scatter/dynamic-data",
+                            content: renderScatterPanningWithDynamicData,
+                            title: "Dynamic Data"
                         }
                     ]
-                }
+                },
+                {
+                    pathname: "/panning/bubble",
+                    children: [
+                        {
+                            pathname: "/panning/bubble/simple",
+                            content: renderBubbleWithPanning,
+                            title: "Simple"
+                        },
+                        {
+                            pathname: "/panning/bubble/dynamic-data",
+                            content: renderBubblePanningWithDynamicData,
+                            title: "Dynamic Data"
+                        }
+                    ]
+                },
             ]
         },
         {

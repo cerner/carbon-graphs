@@ -1,7 +1,10 @@
 "use strict";
 import * as d3 from "d3";
 import Construct from "../../core/Construct";
-import { getYAxisHeight } from "../../helpers/axis";
+import { 
+    getYAxisHeight,
+    updateXAxisDomain
+} from "../../helpers/axis";
 import constants from "../../helpers/constants";
 import {
     contentLoadHandler,
@@ -34,9 +37,9 @@ import {
     determineHeight,
     prepareLoadAtIndex,
     scaleGraph,
-    updateAxesDomain
+    updateAxesDomain,
 } from "./helpers/creationHelpers";
-import { translateGraph, translateLabelText } from "./helpers/translateHelpers";
+import { translateGraph, translateLabelText, translateAxes } from "./helpers/translateHelpers";
 
 /**
  * @typedef {object} Gantt
@@ -318,6 +321,32 @@ class Gantt extends Construct {
         this.config.height = determineHeight(this.config);
         setCanvasHeight(this.config);
         this.resize();
+        return this;
+    }
+
+    /**
+     * Updates the graph axisData and content.
+     *
+     * @param {object} graphData - Input array that holds updated values and key
+     *  @returns {Gantt} - Gantt instance
+     */
+    reflow(graphData) {
+        updateXAxisDomain(this.config);
+        scaleGraph(this.scale, this.config);
+        
+        translateAxes(this.axis, this.scale, this.config, this.svg); 
+
+        let position;
+        if(graphData && this.tracks.includes(graphData.key)) {
+            this.trackConfig.forEach((track, index) => {
+                if (track.config.key === graphData.key) position = index;
+            });
+            this.trackConfig[position].reflow(this, graphData);
+        }
+        this.config.height = determineHeight(this.config);
+        setCanvasHeight(this.config);
+        this.resize();
+        this.trackConfig.forEach((control) => control.redraw(this));
         return this;
     }
 

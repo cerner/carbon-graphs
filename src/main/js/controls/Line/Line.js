@@ -20,6 +20,9 @@ import {
     clear,
     clickHandler,
     draw,
+    getDataPointValues,
+    drawDataPoints,
+    drawDataLines,
     hoverHandler,
     prepareLegendItems,
     processDataPoints,
@@ -85,6 +88,7 @@ class Line extends GraphContent {
     constructor(input) {
         super();
         this.config = loadInput(input);
+        this.type = "Line";
         this.config.yAxis = getDefaultValue(
             this.config.yAxis,
             constants.Y_AXIS
@@ -178,6 +182,51 @@ class Line extends GraphContent {
         );
         translateLineGraph(graph.scale, graph.svg, graph.config);
         return this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    reflow(graph, graphData) {
+        this.config.values = graphData.values;
+        this.dataTarget = processDataPoints(graph.config, this.config);
+        const position = graph.config.shownTargets.lastIndexOf(graphData.key);
+        if (position > -1) {
+            graph.config.shownTargets.splice(position, 1);
+        }
+        const lineSVG = graph.svg
+            .select(`g[aria-describedby="${graphData.key}"]`)
+            .selectAll(`.${styles.line}`)
+            .data([this.dataTarget]);
+        drawDataLines(graph.scale, graph.config, lineSVG.enter());
+        lineSVG.exit().remove();
+
+        if (graph.config.showShapes) {
+            const currentPointsPath = graph.svg
+                .select(`g[aria-describedby="${graphData.key}"]`)
+                .selectAll(`.${styles.pointGroup}`)
+                .data(this.dataTarget);
+            currentPointsPath.exit().remove();
+            const pointPath = graph.svg
+                .select(`g[aria-describedby="${graphData.key}"]`)
+                .select(`.${styles.currentPointsGroup}`)
+                .selectAll(`[class*="${styles.point}"]`)
+                .data(getDataPointValues(this.dataTarget));
+            drawDataPoints(graph.scale, graph.config, pointPath.enter());
+            pointPath
+                .exit()
+                .transition()
+                .call(
+                    constants.d3Transition(
+                        graph.config.settingsDictionary.transition
+                    )
+                )
+                .remove();
+        }
+        this.valuesRange = calculateValuesRange(
+            this.config.values,
+            this.config.yAxis
+        );
     }
 
     /**

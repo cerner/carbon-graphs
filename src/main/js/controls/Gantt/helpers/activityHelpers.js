@@ -176,10 +176,10 @@ const drawActivities = (
  * @param {object} graphContext - Gantt instance
  * @param {object} trackPathSVG - Track container element
  * @param {object} trackLabel - Track label
- * @param {Array} activities - input JSON for creating activities
+ * @param {Array} gantt - input config for creating activities
  * @returns {undefined} - returns nothing
  */
-const loadActivities = (graphContext, trackPathSVG, trackLabel, activities) => {
+const loadActivities = (graphContext, trackPathSVG, trackLabel, gantt) => {
     const activityGroupPath = trackPathSVG
         .append("g")
         .classed(styles.activityGroup, true)
@@ -189,8 +189,9 @@ const loadActivities = (graphContext, trackPathSVG, trackLabel, activities) => {
                 graphContext.config
             )},${getXAxisYPosition(graphContext.config)})`
         );
-    activities.forEach((a) => {
+    gantt.activities.forEach((a, i) => {
         validateActivity(a);
+        gantt.activityKeys.splice(i, 0, a.key);
     });
     drawActivities(
         graphContext.svg,
@@ -198,7 +199,7 @@ const loadActivities = (graphContext, trackPathSVG, trackLabel, activities) => {
         graphContext.config,
         trackLabel,
         activityGroupPath,
-        activities
+        gantt.activities
     );
 };
 
@@ -308,4 +309,31 @@ const getActivityChunk = (path, x, y, width, height, style) => {
 const unloadActivities = (graphContext, trackPathSVG) =>
     trackPathSVG.select(`g.${styles.activityGroup}`).remove();
 
-export { loadActivities, unloadActivities };
+/**
+ * Update activities for the track.
+ *
+ * @private
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} gantt - Graph config object for the content.
+ * @param {object} trackGroupPath - Container for the track
+ * @returns {undefined} - returns nothing
+ */
+const reflowActivities = (canvasSVG, config, scale, gantt, trackGroupPath) => {
+    gantt.config.activities.forEach((a) => {
+        validateActivity(a);
+    });
+    const activityPath = trackGroupPath.selectAll(`.${styles.activityGroup}`);
+    activityPath.selectAll("g").remove();
+    drawActivities(
+        canvasSVG,
+        scale,
+        config,
+        gantt.config.trackLabel,
+        activityPath,
+        gantt.config.activities
+    );
+}
+
+export { loadActivities, unloadActivities, reflowActivities };

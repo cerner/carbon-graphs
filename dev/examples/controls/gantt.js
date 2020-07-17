@@ -184,6 +184,26 @@ const tasks = [
                 isHashed: true
             }
         }
+    ],
+    [
+        {
+            key: "task10",
+            onClick: loadTaskPopup,
+            label: {
+                display: "Story Apex"
+            },
+            startDate: new Date(2016, 0, 1, 8).toISOString(),
+            endDate: new Date(2016, 0, 1, 12).toISOString()
+        },
+        {
+            key: "task11",
+            onClick: loadTaskPopup,
+            label: {
+                display: "Story Broccoli"
+            },
+            startDate: new Date(2016, 0, 1, 15).toISOString(),
+            endDate: new Date(2016, 0, 1, 23).toISOString()
+        }
     ]
 ];
 
@@ -271,6 +291,22 @@ const activities = [
                 isHollow: false
             }
         }
+    ],
+    [
+        {
+            key: "activity5",
+            label: {
+                display: "activity5"
+            },
+            onClick: () => {},
+            color: "#FFDF00",
+            startDate: new Date(2016, 0, 1, 12).toISOString(),
+            endDate: new Date(2016, 0, 1, 15).toISOString(),
+            style: {
+                isDotted: false,
+                isHollow: false
+            }
+        }
     ]
 ];
 const events = [
@@ -302,6 +338,18 @@ const events = [
             shape: alert,
             values: [new Date(2018, 3, 30).toISOString()]
         }
+    ],
+    [
+        {
+            key: "uid_event_4",
+            label: {
+                display: "Defect A"
+            },
+            onClick: loadPopup,
+            shape: scheduled,
+            color: Carbon.helpers.COLORS.BLACK,
+            values: [new Date(2016, 0, 1, 5, 15).toISOString()]
+        },
     ]
 ];
 const actions = [
@@ -329,10 +377,63 @@ const actions = [
         {
             key: "uid_action_2",
             onClick: loadPopup,
-            values: [new Date(2018, 7, 1, 6, 15).toISOString()]
+            values: [new Date(2016, 0, 1, 9, 15).toISOString()]
         }
-    ]
+    ],
+    [
+        {
+            key: "uid_action_1",
+            onClick: loadPopup,
+            values: [new Date(2016, 0, 1, 6, 15).toISOString()]
+        },
+        {
+            key: "uid_action_2",
+            onClick: loadPopup,
+            values: [new Date(2016, 0, 1, 7, 15).toISOString()]
+        }
+    ],
 ];
+const panData = {
+    actions: [
+        {
+            key: "uid_action_1",
+            values: [
+                new Date(2016, 0, 1, 7, 15).toISOString(),
+                new Date(2016, 0, 1, 8, 15).toISOString()
+            ]
+        },
+        {
+            key: "uid_action_2",
+            values: [new Date(2016, 0, 1, 9, 15).toISOString()]
+        }
+    ],
+    tasks: [
+        {
+            key: "task10",
+            startDate: new Date(2016, 0, 1, 9).toISOString(),
+            endDate: new Date(2016, 0, 1, 12).toISOString()
+        },
+        {
+            key: "task11",
+            startDate: new Date(2016, 0, 1, 15).toISOString(),
+            endDate: new Date(2016, 0, 1, 20).toISOString()
+        }
+    ],
+    events: [
+        {
+            key: "uid_event_4",
+            shape: scheduled,
+            values: [new Date(2016, 0, 1, 2, 15).toISOString()]
+        },
+    ],
+    activities: [
+        {
+            key: "activity5",
+            startDate: new Date(2016, 0, 1, 3).toISOString(),
+            endDate: new Date(2016, 0, 1, 6).toISOString(),
+        },
+    ]
+}
 const lowerStepTickValues = [
     new Date(2018, 1, 2, 6).toISOString(),
     new Date(2018, 1, 2, 12).toISOString(),
@@ -428,7 +529,6 @@ export const renderGanttPercentage = (id) => {
     return ganttDefault;
 };
 export const renderGanttPanning = (id) => {
-    let graph;
     const axisData = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
     axisData.showActionLegend = false;
     axisData.axis.x.lowerLimit = new Date(2016, 0, 1, 0).toISOString();
@@ -455,18 +555,68 @@ export const renderGanttPanning = (id) => {
         },
         tasks: tasks2[0]
     };
-    const createGraph = (axis, values) => {
-        if (graph) {
-            graph.destroy();
-        }
-        graph = Carbon.api.gantt(axis);
-        graph.loadContent(values);
-        return graph;
+    const createGraph = () => {
+        graph.reflow();
     };
-    graph = createGraph(axisData, graphData);
+
+    const graph = Carbon.api.gantt(axisData);
+    graph.loadContent(graphData);
+    axisData.axis = graph.config.axis;
+
     createPanningControls(id, {
         axisData,
-        graphData,
+        creationHandler: createGraph
+    });
+    return graph;
+};
+
+export const renderGanttPanningWithDynamicData = (id) => {
+    const axisData = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
+    axisData.showActionLegend = true;
+    axisData.axis.x.lowerLimit = new Date(2016, 0, 1, 0).toISOString();
+    axisData.axis.x.upperLimit = new Date(2016, 0, 2, 0).toISOString();
+    axisData.dateline = [
+        {
+            showDatelineIndicator: true,
+            label: {
+                display: "Release A"
+            },
+            color: Carbon.helpers.COLORS.GREEN,
+            shape: Carbon.helpers.SHAPES.SQUARE,
+            value: new Date(2016, 0, 1, 9).toISOString()
+        }
+    ];
+    axisData.pan = {
+        enabled: true
+    };
+    const graphData = {
+        key: "track 0",
+        trackLabel: {
+            display: "Default",
+            onClick: loadXAndYAxisLabelPopup
+        },
+        tasks: tasks[5],
+        actions: actions[2],
+        events: events[1],
+        activities: activities[3]
+    };
+    const graphDataY = {
+        key: "track 0",
+        actions: panData.actions,
+        tasks: panData.tasks,
+        events: panData.events,
+        activities: panData.activities
+    };
+    const createGraph = () => {
+        graph.reflow(graphDataY);
+    };
+
+    const graph = Carbon.api.gantt(axisData);
+    graph.loadContent(graphData);
+    axisData.axis = graph.config.axis;
+
+    createPanningControls(id, {
+        axisData,
         creationHandler: createGraph
     });
     return graph;
@@ -866,7 +1016,7 @@ export const renderGanttTrackSelection = (id) => {
  * @param {Array} tasks - gantt tasks that needs to be loaded
  * @param {Array} activities - gantt activities that needs to be loaded
  * @param {Array} events - gantt events that needs to be loaded
- * @param {Array} actions - gannt actions that needs to be loaded
+ * @param {Array} actions - gantt actions that needs to be loaded
  * @param {number} totalTracks - total required number of tracks
  * @param {boolean} isTrackSelectable - indicator to specify if track is selectable or not.
  * @returns {undefined} - returns nothing

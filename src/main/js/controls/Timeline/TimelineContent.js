@@ -202,6 +202,38 @@ class TimelineContent extends GraphContent {
     /**
      * @inheritdoc
      */
+    reflow(graph, graphData) {
+        this.config.values = graphData.values;
+        this.dataTarget = processDataPoints(graph.config, this.config);
+        const position = graph.config.shownTargets.lastIndexOf(graphData.key);
+        if (position > -1) {
+            graph.config.shownTargets.splice(position, 1);
+        }
+        const currentPointsPath = graph.svg
+            .select(`g[aria-describedby="${graphData.key}"]`)
+            .selectAll(`.${styles.pointGroup}`)
+            .data(this.dataTarget);
+        currentPointsPath.exit().remove();
+        const pointPath = graph.svg
+            .select(`g[aria-describedby="${graphData.key}"]`)
+            .selectAll(`[class*="${styles.point}"]`)
+            .data(this.dataTarget.internalValuesSubset);
+        createPoints(graph.scale, graph.config, pointPath.enter());
+        pointPath
+            .exit()
+            .transition()
+            .call(
+                constants.d3Transition(
+                    graph.config.settingsDictionary.transition
+                )
+            )
+            .remove();
+        this.resize(graph);
+    }
+
+    /**
+     * @inheritdoc
+     */
     redraw(graph) {
         clear(graph.svg, this.dataTarget);
         draw(

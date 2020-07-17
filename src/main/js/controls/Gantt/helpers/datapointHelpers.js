@@ -20,6 +20,7 @@ import { transformPoint } from "./translateHelpers";
  * @param {object} ganttContentContainerPath - Container for gantt chart's contents (Tracks)
  * @param {object} dataTarget - Data point values and their properties for each action item
  * @param {Function} drawDataPointsHandler - call back function to draw points with options.
+ * @param {boolean} event - Data point is an event or not.
  * @returns {undefined} - returns nothing
  */
 export const drawDataPoints = (
@@ -27,7 +28,8 @@ export const drawDataPoints = (
     config,
     ganttContentContainerPath,
     dataTarget,
-    drawDataPointsHandler
+    drawDataPointsHandler,
+    event
 ) => {
     const allPointsPath = ganttContentContainerPath
         .append("g")
@@ -37,7 +39,8 @@ export const drawDataPoints = (
             `translate(${getXAxisXPosition(config)}, ${getXAxisYPosition(
                 config
             )})`
-        );
+        )
+        .attr("event", event);
     const pointPath = allPointsPath
         .selectAll(`.${styles.point}`)
         .data(dataTarget);

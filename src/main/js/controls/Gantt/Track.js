@@ -11,16 +11,28 @@ import { loadLabelPopup, shouldTruncateLabel } from "../../helpers/label";
 import styles from "../../helpers/styles";
 import utils from "../../helpers/utils";
 import { isUniqueKey } from "./GanttConfig";
-import { loadActions, unloadActions } from "./helpers/actionHelpers";
-import { loadActivities, unloadActivities } from "./helpers/activityHelpers";
+import { loadActions, unloadActions, reflowActions } from "./helpers/actionHelpers";
+import {
+    loadActivities,
+    unloadActivities,
+    reflowActivities
+} from "./helpers/activityHelpers";
 import {
     createTrackContainer,
     removeTrackContainer,
     scaleGraph,
     updateTrackProps
 } from "./helpers/creationHelpers";
-import { loadEvents, unloadEvents } from "./helpers/eventHelpers";
-import { loadTasks, unloadTasks } from "./helpers/taskHelpers";
+import { 
+    loadEvents,
+    unloadEvents,
+    reflowEvents 
+} from "./helpers/eventHelpers";
+import { 
+    loadTasks,
+    unloadTasks,
+    reflowTasks
+} from "./helpers/taskHelpers";
 import {
     loadGanttTrackSelector,
     unloadGanttTrackSelector
@@ -131,6 +143,10 @@ class Track extends GraphContent {
     constructor(input) {
         super();
         this.config = loadInput(input);
+        this.config.actionKeys = [];
+        this.config.eventKeys = [];
+        this.config.activityKeys = [];
+        this.config.taskKeys = [];
         this.trackGroupPath = null;
     }
 
@@ -159,7 +175,7 @@ class Track extends GraphContent {
                 graph,
                 this.trackGroupPath,
                 this.config.trackLabel,
-                this.config.activities
+                this.config
             );
         }
         if (utils.notEmpty(this.config.tasks)) {
@@ -167,7 +183,7 @@ class Track extends GraphContent {
                 graph,
                 this.trackGroupPath,
                 this.config.trackLabel,
-                this.config.tasks
+                this.config
             );
         }
         if (utils.notEmpty(this.config.events)) {
@@ -175,7 +191,7 @@ class Track extends GraphContent {
                 graph,
                 this.trackGroupPath,
                 this.config.trackLabel,
-                this.config.events
+                this.config
             );
         }
         if (utils.notEmpty(this.config.actions)) {
@@ -183,7 +199,7 @@ class Track extends GraphContent {
                 graph,
                 this.trackGroupPath,
                 this.config.trackLabel,
-                this.config.actions
+                this.config
             );
         }
         return this;
@@ -238,6 +254,92 @@ class Track extends GraphContent {
             translateDataPoints(graph.scale, graph.config, this.trackGroupPath);
         }
         return this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    reflow(graph, graphData) {
+        if (utils.notEmpty(graphData.activities)&& utils.notEmpty(this.config.activities)) {
+            graphData.activityKeys=[];
+            graphData.activities.forEach((activity) => {
+                graphData.activityKeys.push(activity.key);
+                if(this.config.activityKeys.includes(activity.key)) {
+                    const position = this.config.activityKeys.indexOf(activity.key);
+                    this.config.activities[position].startDate = activity.startDate;
+                    this.config.activities[position].endDate = activity.endDate;
+                }
+            });
+            this.config.activityKeys.slice(0).forEach((key, i) => {
+                if (!graphData.activityKeys.includes(key)) {
+                    const position = this.config.activityKeys.indexOf(key);
+                    this.config.activityKeys.splice(position, 1);
+                    this.config.activities.splice(position, 1);
+                }
+            });
+            const trackGroupPath = graph.svg.selectAll(`.${styles.trackGroup}[aria-describedby="${this.config.key}"]`);
+            reflowActivities(graph.svg, graph.config, graph.scale, this, trackGroupPath);
+        }
+        if (utils.notEmpty(graphData.tasks) && utils.notEmpty(this.config.tasks)) {
+            graphData.taskKeys=[];
+            graphData.tasks.forEach((task) => {
+                graphData.taskKeys.push(task.key);
+                if(this.config.taskKeys.includes(task.key)) {
+                    const position = this.config.taskKeys.indexOf(task.key);
+                    this.config.tasks[position].startDate = task.startDate;
+                    this.config.tasks[position].endDate = task.endDate;
+                }
+            });
+            this.config.taskKeys.slice(0).forEach((key, i) => {
+                if (!graphData.taskKeys.includes(key)) {
+                    const position = this.config.taskKeys.indexOf(key);
+                    this.config.taskKeys.splice(position, 1);
+                    this.config.tasks.splice(position, 1);
+                }
+            });
+            const trackGroupPath = graph.svg.selectAll(`.${styles.trackGroup}[aria-describedby="${this.config.key}"]`);
+            reflowTasks(graph.svg, graph.config, graph.scale, this, trackGroupPath);
+        }
+        if (utils.notEmpty(graphData.events) && utils.notEmpty(this.config.events)) {
+            graphData.eventKeys=[];
+            graphData.events.forEach((event) => {
+                graphData.eventKeys.push(event.key);
+                if(this.config.eventKeys.includes(event.key)) {
+                    const position = this.config.eventKeys.indexOf(event.key);
+                    this.config.events[position].values = event.values;
+                }
+            });
+            this.config.eventKeys.slice(0).forEach((key) => {
+                if (!graphData.eventKeys.includes(key)) {
+                    const position = this.config.eventKeys.indexOf(key);
+                    this.config.eventKeys.splice(position, 1);
+                    this.config.events.splice(position, 1);
+                }
+            });
+        const trackGroupPath = graph.svg.selectAll(`.${styles.trackGroup}[aria-describedby="${this.config.key}"]`);
+        reflowEvents(graph.config, graph.scale, this, trackGroupPath);
+        }
+        if (utils.notEmpty(graphData.actions) && utils.notEmpty(this.config.actions)) {
+            graphData.actionKeys=[];
+            graphData.actions.forEach((action) => {
+                graphData.actionKeys.push(action.key);
+                if(this.config.actionKeys.includes(action.key)) {
+                    const position = this.config.actionKeys.indexOf(action.key);
+                    this.config.actions[position].values = action.values;
+                }
+            });
+            this.config.actionKeys.slice(0).forEach((key) => {
+                if (!graphData.actionKeys.includes(key)) {
+                    const position = this.config.actionKeys.indexOf(key);
+                    this.config.actionKeys.splice(position, 1);
+                    this.config.actions.splice(position, 1);
+                }
+            })
+        const trackGroupPath = graph.svg.selectAll(`.${styles.trackGroup}[aria-describedby="${this.config.key}"]`);
+        reflowActions(graph.config, graph.scale, this, trackGroupPath);
+        }
+
+        this.resize(graph);
     }
 
     /**

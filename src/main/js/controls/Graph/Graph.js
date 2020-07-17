@@ -8,7 +8,9 @@ import {
     createAxisReferenceLine,
     createXAxisInfoRow,
     getAxesDataRange,
-    getYAxisHeight
+    getYAxisHeight,
+    updateXAxisDomain,
+    translateAxes,
 } from "../../helpers/axis";
 import constants, { AXIS_TYPE } from "../../helpers/constants";
 import errors from "../../helpers/errors";
@@ -62,7 +64,7 @@ const setCanvasWidth = (container, config) => {
 
 /**
  * Sets the canvas width. Canvas rests within a container.
- * On resize, the canvas is subjected to resizing but its sibling: Legend isnt.
+ * On resize, the canvas is subjected to resizing but its sibling: Legend isn't.
  *
  * @private
  * @param {object} config - config object derived from input JSON
@@ -215,7 +217,7 @@ class Graph extends Construct {
      * Draw function that is called by the parent control. This draws the Axes, grid, legend and
      * labels for the chart construct.
      *
-     * @description Since we dont have the concept of z-index in visualization,
+     * @description Since we don't have the concept of z-index in visualization,
      * the order of rendering should be following:
      *  * SVG container
      *  * Reference ranges
@@ -382,6 +384,53 @@ class Graph extends Construct {
             )
         ) {
             drawNoDataView(this.config, this.svg);
+        }
+        this.resize();
+        return this;
+    }
+
+    /**
+     * Updates the graph axisData and content.
+     *
+     * @param {Array} graphData - Input array that holds updated values and key
+     * @returns {Graph} - Graph instance
+     */
+    reflow(graphData) {
+        let position;
+        if(graphData && graphData.values) {
+            this.contentKeys.forEach((key, index) => {
+                if (key === graphData.key) position = index;
+            });
+            if (position >= 0) {
+                if(this.content[position].type === "Bar") {
+                    this.config.axis.x.ticks.values = [];
+                    graphData.values.forEach((v) => this.config.axis.x.ticks.values.push(v.x));
+                }
+            }
+        }
+
+        updateXAxisDomain(this.config);
+        scaleGraph(this.scale, this.config);
+        translateAxes(this.axis, this.scale, this.config, this.svg);
+
+        if (graphData && graphData.values && this.contentKeys.includes(graphData.key)) {
+            this.content[position].reflow(this, graphData);
+            setAxisPadding(this.config.axisPadding, this.content[position]);
+            getAxesDataRange(
+                this.content[position],
+                this.content[position].config.yAxis,
+                this.config,
+                this.content
+            );
+            if (
+                this.config.allowCalibration &&
+                isRangeModified(
+                    this.config,
+                    this.content[position].config.yAxis
+                )
+            ) {
+                updateAxesDomain(this.config, this.content[position]);
+            }
         }
         this.resize();
         return this;
