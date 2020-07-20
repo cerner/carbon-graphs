@@ -255,7 +255,7 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
  * Extracts regions inside value and prepare a list of value region
  *
  * @param {object} dataTarget - Data points object
- * @param {Function} getXDataValues - checks if the value is valid and etract value for x-axis
+ * @param {Function} getXDataValues - checks if the value is valid and extract value for x-axis
  *
  * @returns {Array} value region subset
  */
@@ -278,7 +278,6 @@ const getValueRegionSubset = (dataTarget, getXDataValues) => {
                 if (valueRegion.values.length > 0) {
                     valueRegionSubset.push(valueRegion);
                 }
-                previousColor = value.region.color;
                 valueRegion = {
                     color: value.region.color,
                     values: []

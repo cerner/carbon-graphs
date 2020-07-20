@@ -226,9 +226,10 @@ Each line can have a legendOptions object in [Values](#values) level.
 
 ### Regions
 
-Each data-set can have 1 or more regions.
-Each value can have a region object.
-`start` and `end` is necessary for rendering a horizontal area.
+-   Each data-set can have 1 or more regions.
+-   Each value can have a region object.
+-   `start` and `end` is necessary for rendering an area.
+-   If at least one region is defined for a value in the element, it will take precedence over the element's region and the element's region will not be displayed.
 
 #### Required
 

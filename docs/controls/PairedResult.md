@@ -174,7 +174,8 @@ Draws a Horizontal area along the X-Axis
 
 -   Each data-set can have 1 or more regions for `high`, `low` and/or `mid`,
 -   Each value can have a region object for `high`, `low` and/or `mid`,
--   Each pair type mentioned above needs to have a `start` and `end`
+-   Each pair type mentioned above needs to have a `start` and `end`,
+-   If at least one region is defined for a value in the element, it will take precedence over the element's region and the element's region will not be displayed.
 
 #### Required
 

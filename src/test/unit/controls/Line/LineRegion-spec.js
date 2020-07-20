@@ -84,7 +84,7 @@ describe("Line - Region", () => {
                 );
             });
         });
-        describe("Creates value region", () => {
+        describe("Value region", () => {
             let values;
             beforeEach(() => {
                 values = utils.deepClone(valuesDefault);
@@ -94,7 +94,7 @@ describe("Line - Region", () => {
                     color: "#f4f4f4"
                 };
             });
-            it("When the values contain region object", () => {
+            it("Creates value region, when the values contain region object", () => {
                 values[1].region = {
                     start: 0,
                     end: 10,
@@ -117,7 +117,7 @@ describe("Line - Region", () => {
                 );
                 expect(regionElement.getAttribute("aria-hidden")).toBe("false");
             });
-            it("Over legend level regions", () => {
+            it("Precedence over legend level regions", () => {
                 data = utils.deepClone(getInput(values, false, false));
                 data.regions = [
                     {
@@ -142,9 +142,7 @@ describe("Line - Region", () => {
                 expect(regionElement.getAttribute("class")).toContain(
                     styles.region
                 );
-            });
-            describe("Splits region", () => {
-                it("If there is a value without region in between", () => {
+                it("Splits to multiple area if there is a value without region in between", () => {
                     values[1].region = undefined;
                     values[2].region = {
                         start: 0,
@@ -159,7 +157,7 @@ describe("Line - Region", () => {
                     );
                     expect(regionGroupElement.childNodes.length).toBe(2);
                 });
-                it("If there is a region with different color", () => {
+                it("Splits to multiple area if there is a region with different color", () => {
                     values[1].region = {
                         start: 0,
                         end: 10,
