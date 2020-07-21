@@ -14,14 +14,17 @@ module.exports = function(config) {
         coverageReporter: {
             dir: "../../.coverage",
             reporters: [
-                {
+                 {
                     type: "html",
                     subdir: "html"
                 },
                 {
                     type: "cobertura",
                     subdir: "."
-                }
+                },
+                {
+                type : 'text-summary'
+                },
             ]
         },
         singleRun: true,
