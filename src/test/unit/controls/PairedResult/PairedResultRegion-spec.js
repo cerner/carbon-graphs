@@ -174,7 +174,7 @@ describe("Paired Result - Region", () => {
             expect(regionGroupElement.childNodes.length).toBe(0);
             expect(regionElement).toBeNull();
         });
-        describe("Creates value region", () => {
+        describe("Value region", () => {
             let values;
             beforeEach(() => {
                 values = utils.deepClone(valuesDefault);
@@ -188,7 +188,7 @@ describe("Paired Result - Region", () => {
                     end: 70
                 };
             });
-            it("If value contains region object", () => {
+            it("Creates value region, when the values contain region object", () => {
                 values[1].high.region = {
                     start: 140,
                     end: 220,
@@ -219,7 +219,7 @@ describe("Paired Result - Region", () => {
                 expect(pairedResultGroupElement.childNodes.length).toBe(6);
                 expect(regionElement.nodeName).toBe("path");
             });
-            it("Over legend level regions", () => {
+            it("Precedence over legend level regions", () => {
                 data = utils.deepClone(getInput(values, false, false));
                 data.regions = multiRegion;
                 pairedResultPrimaryContent = new PairedResult(data);
