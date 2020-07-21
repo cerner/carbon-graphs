@@ -735,21 +735,19 @@ describe("Gantt -> Track", () => {
             });
         });
     });
-    describe("Gantt chart div element for the label popup tooltip ", () => {
-        describe("when chart is loaded", () => {
-            it("add div element for the popup tooltip", () => {
-                expect(
-                    fetchElementByClass(styles.labelPopupTooltip)
-                ).not.toBeNull();
-            });
+    describe("when chart is loaded", () => {
+        it("should add div element for the popup tooltip", () => {
+            expect(
+                fetchElementByClass(styles.labelPopupTooltip)
+            ).not.toBeNull();
         });
-        describe("when chart is destroyed", () => {
-            it("remove div element for the popup tooltip", () => {
-                gantt.destroy();
-                expect(
-                    fetchElementByClass(styles.labelPopupTooltip)
-                ).toBeNull();
-            });
+    });
+    describe("when chart is destroyed", () => {
+        it("should remove div element for the popup tooltip", () => {
+            gantt.destroy();
+            expect(
+                fetchElementByClass(styles.labelPopupTooltip)
+            ).toBeNull();
         });
     });
 });
