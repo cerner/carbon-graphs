@@ -577,5 +577,6 @@ export {
     translateDataPoints,
     translateTasks,
     translateActivities,
-    translateTrackSelector
+    translateTrackSelector,
+    translateAxes
 };

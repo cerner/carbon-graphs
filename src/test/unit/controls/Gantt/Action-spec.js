@@ -786,6 +786,30 @@ describe("Gantt -> Track -> Action", () => {
                     .length
             ).toBe(0);
         });
+        it("Set action y co-ordinate position correctly", () => {
+            gantt.loadContent({
+                key: "track 2",
+                trackLabel: {
+                    display: "Project B"
+                },
+                actions: [
+                    {
+                        key: "uid_action_1",
+                        onClick: sinon.spy(),
+                        values: [xVal]
+                    }
+                ]
+            });
+            gantt.unloadContent({
+                key: "track 2",
+                trackLabel: {
+                    display: "Project B"
+                }
+            });
+            expect(
+                getTranslate(fetchElementByClass(styles.point).firstChild)[1]
+            ).toBe(20.5);
+        });
     });
     describe("On Resize", () => {
         beforeEach(() => {
