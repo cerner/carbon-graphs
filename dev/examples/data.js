@@ -40,7 +40,7 @@ const DATA = [
                     upperLimit: 18
                 },
                 y2: {
-                    show: true,
+                    show: false,
                     label: "Line Set B",
                     lowerLimit: 0,
                     upperLimit: 250

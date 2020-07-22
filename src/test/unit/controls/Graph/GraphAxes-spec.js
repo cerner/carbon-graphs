@@ -1997,4 +1997,19 @@ describe("Graph - Axes", () => {
             });
         });
     });
+    describe("when graph is loaded", () => {
+        it("should add div element for the popup tooltip", () => {
+            expect(
+                fetchElementByClass(styles.labelPopupTooltip)
+            ).not.toBeNull();
+        });
+    });
+    describe("when graph is destroyed", () => {
+        it("should remove div element for the popup tooltip", () => {
+            graph.destroy();
+            expect(
+                fetchElementByClass(styles.labelPopupTooltip)
+            ).toBeNull();
+        });
+    });
 });
