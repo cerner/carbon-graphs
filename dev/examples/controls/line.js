@@ -399,7 +399,7 @@ export const renderLineValueRegion = (id) => {
         getDemoData(`#${id}`, "LINE_TIMESERIES")
     );
     lineDefault.loadContent(
-        Carbon.api.line(getDemoData(`#${id}`, "LINE_TIMESERIES").data[3])
+        Carbon.api.line(getDemoData(`#${id}`, "LINE_TIMESERIES").data[4])
     );
     return lineDefault;
 };

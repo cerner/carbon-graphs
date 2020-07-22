@@ -28,7 +28,7 @@ export const renderSplineLineRegion = (id) => {
                 {
                     type: Carbon.helpers.LINE_TYPE.SPLINE
                 },
-                getDemoData(`#${id}`, "LINE_TIMESERIES").data[3]
+                getDemoData(`#${id}`, "LINE_TIMESERIES").data[4]
             )
         )
     );
