@@ -91,6 +91,7 @@ export default {
     region: "carbon-region",
     regionHighlight: "carbon-region-highlight",
     regionBlur: "carbon-region-blur",
+    valueRegion: "carbon-value-region",
     /**
      * Criticality
      */

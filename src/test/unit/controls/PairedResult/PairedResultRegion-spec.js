@@ -174,6 +174,95 @@ describe("Paired Result - Region", () => {
             expect(regionGroupElement.childNodes.length).toBe(0);
             expect(regionElement).toBeNull();
         });
+        describe("Value region", () => {
+            let values;
+            beforeEach(() => {
+                values = utils.deepClone(valuesDefault);
+                values[0].high.region = {
+                    start: 140,
+                    end: 220,
+                    color: "#c8cacb"
+                };
+                values[0].low.region = {
+                    start: 20,
+                    end: 70
+                };
+            });
+            it("Creates value region, when the values contain region object", () => {
+                values[1].high.region = {
+                    start: 140,
+                    end: 220,
+                    color: "#c8cacb"
+                };
+                values[1].low.region = {
+                    start: 20,
+                    end: 70
+                };
+
+                pairedResultPrimaryContent = new PairedResult(
+                    getInput(values, false, false)
+                );
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                const regionGroupElement = fetchElementByClass(
+                    pairedResultGraphContainer,
+                    styles.regionGroup
+                );
+                const pairedResultGroupElement = fetchElementByClass(
+                    pairedResultGraphContainer,
+                    styles.regionPairGroup
+                );
+                const regionElement = fetchElementByClass(
+                    pairedResultGroupElement,
+                    styles.region
+                );
+                expect(regionGroupElement.childNodes.length).toBe(1);
+                expect(pairedResultGroupElement.childNodes.length).toBe(6);
+                expect(regionElement.nodeName).toBe("path");
+            });
+            it("Precedence over legend level regions", () => {
+                data = utils.deepClone(getInput(values, false, false));
+                data.regions = multiRegion;
+                pairedResultPrimaryContent = new PairedResult(data);
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                const regionGroupElement = fetchElementByClass(
+                    pairedResultGraphContainer,
+                    styles.regionGroup
+                );
+                const regionElement = fetchElementByClass(
+                    pairedResultGraphContainer,
+                    styles.region
+                );
+                expect(regionGroupElement.childNodes.length).toBe(1);
+                expect(regionElement.nodeName).toBe("path");
+            });
+            it("Splits value region if the colors are different", () => {
+                values[1].high.region = {
+                    start: 140,
+                    end: 220,
+                    color: "#a8a8a8"
+                };
+                values[1].low.region = {
+                    start: 20,
+                    end: 70,
+                    color: "#f3f3f3"
+                };
+
+                pairedResultPrimaryContent = new PairedResult(
+                    getInput(values, false, false)
+                );
+                graphDefault.loadContent(pairedResultPrimaryContent);
+                const regionGroupElement = fetchElementByClass(
+                    pairedResultGraphContainer,
+                    styles.regionGroup
+                );
+                const pairedResultGroupElement = fetchElementByClass(
+                    pairedResultGraphContainer,
+                    styles.regionPairGroup
+                );
+                expect(regionGroupElement.childNodes.length).toBe(1);
+                expect(pairedResultGroupElement.childNodes.length).toBe(4);
+            });
+        });
         describe("Creates region when there are multiple regions", () => {
             beforeEach(() => {
                 data = utils.deepClone(getInput(valuesDefault, false, false));

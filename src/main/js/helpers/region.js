@@ -6,7 +6,7 @@ import {
     getXAxisWidth,
     getXAxisXPosition
 } from "./axis";
-import constants from "./constants";
+import constants, { LINE_TYPE } from "./constants";
 import errors from "./errors";
 import styles from "./styles";
 import { round2Decimals } from "./transformUtils";
@@ -127,6 +127,69 @@ const createRegion = (
             });
     });
 };
+/**
+ * Creates a d3 svg area
+ *
+ * @private
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {string} targetAxis - Axis for which region needs to be shown
+ * @param {object} interpolationType Interpolation type property from line type or "linear"
+ * @returns {object} d3 area object
+ */
+const createArea = (scale, targetAxis, interpolationType) =>
+    d3
+        .area()
+        .curve(interpolationType)
+        .x((value) => scale.x(value.x))
+        .y0((value) => scale[targetAxis](value.start))
+        .y1((value) => scale[targetAxis](value.end));
+
+/**
+ * Creates regions based on region object provided in the value of the input object.
+ * Regions are rendered based on the content.
+ *
+ * @private
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
+ * @param {object} regionGroupSVG - d3 object of region group svg
+ * @param {Array} regionList - List of regions to be shown within graph
+ * @param {string} uniqueKey - unique id of the content loaded in graph
+ * @param {string} targetAxis - Axis for which region needs to be shown
+ * @param {object} interpolationType Interpolation type property from line type or "linear"
+ *
+ * @returns {undefined} - returns nothing
+ */
+const createValueRegion = (
+    scale,
+    config,
+    regionGroupSVG,
+    regionList,
+    uniqueKey,
+    targetAxis = constants.Y_AXIS,
+    interpolationType = LINE_TYPE.LINEAR
+) =>
+    regionList.forEach((region) =>
+        regionGroupSVG
+            .append("g")
+            .attr(
+                "transform",
+                `translate(${getXAxisXPosition(
+                    config
+                )},${calculateVerticalPadding(config)})`
+            )
+            .append("path")
+            .attr("aria-describedby", uniqueKey)
+            .attr("aria-hidden", false)
+            .classed(styles.region, true)
+            .classed(styles.valueRegion, region.values.length === 1)
+            .datum(region.values)
+            .attr(
+                "style",
+                `fill: ${region.color}; 
+                stroke: ${region.color};`
+            )
+            .attr("d", createArea(scale, targetAxis, interpolationType))
+    );
 
 /**
  * Returns the region axis or "y" as default
@@ -181,20 +244,41 @@ const getRegionHeight = (regionPath, bounds, scale, config) => {
  * @private
  * @param {object} scale - d3 scale taking into account the input parameters
  * @param {object} config - config object derived from input JSON
- * @param {object} regionGroupSVG - d3 object of region group svg
+ * @param {object} regionGroupSVG - d3 object of region group
+ * @param {string} targetAxis - Axis for which region needs to be shown
+ * @param {boolean} isValueRegion - specify if it is a value region or not
+ * @param {object} interpolationType Interpolation type property from line type or "linear"
+ *
  * @returns {object} d3 svg path
  */
-const translateRegion = (scale, config, regionGroupSVG) =>
-    regionGroupSVG
-        .selectAll(`.${styles.region}`)
-        .attr(constants.X_AXIS, getXAxisXPosition(config))
-        .attr(constants.Y_AXIS, getYAxisRangePosition(scale, config))
-        .transition()
-        .call(constants.d3Transition(config.settingsDictionary.transition))
-        .attr("width", getXAxisWidth(config))
-        .attr("height", function (d) {
-            return getRegionHeight(d3.select(this), d, scale, config);
-        });
+const translateRegion = (
+    scale,
+    config,
+    regionGroupSVG,
+    targetAxis = constants.Y_AXIS,
+    isValueRegion,
+    interpolationType = LINE_TYPE.LINEAR
+) => {
+    if (isValueRegion) {
+        return regionGroupSVG
+            .selectAll(`.${styles.region}`)
+            .transition()
+            .call(constants.d3Transition(config.settingsDictionary.transition))
+            .attr("d", createArea(scale, targetAxis, interpolationType));
+    } else {
+        return regionGroupSVG
+            .selectAll(`.${styles.region}`)
+            .attr(constants.X_AXIS, getXAxisXPosition(config))
+            .attr(constants.Y_AXIS, getYAxisRangePosition(scale, config))
+            .transition()
+            .call(constants.d3Transition(config.settingsDictionary.transition))
+            .attr("width", getXAxisWidth(config))
+            .attr("height", function (d) {
+                return getRegionHeight(d3.select(this), d, scale, config);
+            });
+    }
+};
+
 /**
  * Checks if only 1 content item is present in the graph
  *
@@ -214,12 +298,18 @@ const isSingleTargetDisplayed = (graphTargets) => graphTargets.length === 1;
 const areRegionsIdentical = (canvasSVG) => {
     const regions = canvasSVG.selectAll(`.${styles.region}`).data();
     const compare = regions[0];
-    return !regions.some(
-        (element) =>
-            compare.start !== element.start ||
-            compare.end !== element.end ||
-            compare.axis !== element.axis
-    );
+    return !regions.some((element) => {
+        // If any one of the region is value region (i.e., an array) then we consider it as non-identical.
+        if (utils.isArray(compare) || utils.isArray(element)) {
+            return true;
+        } else {
+            return (
+                compare.start !== element.start ||
+                compare.end !== element.end ||
+                compare.axis !== element.axis
+            );
+        }
+    });
 };
 /**
  * Hides all the regions within a graph
@@ -326,5 +416,6 @@ export {
     removeRegion,
     regionLegendHoverHandler,
     translateRegion,
-    validateRegion
+    validateRegion,
+    createValueRegion
 };

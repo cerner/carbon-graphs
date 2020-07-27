@@ -250,6 +250,78 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
             .remove();
     }
 };
+
+/**
+ * Extracts regions inside value and prepare a list of value region
+ *
+ * @param {object} dataTarget - Data points object
+ * @param {Function} getXDataValues - checks if the value is valid and extract value for x-axis
+ *
+ * @returns {Array} value region subset
+ */
+const getValueRegionSubset = (dataTarget, getXDataValues) => {
+    const valueRegionSubset = [];
+    const valueRegions = [];
+    let valueRegion = {
+        color: undefined,
+        values: []
+    };
+    let previousColor;
+    dataTarget.values.forEach((value) => {
+        if (
+            !utils.isEmpty(value.region) &&
+            !utils.isEmpty(value.region.start) &&
+            !utils.isEmpty(value.region.end)
+        ) {
+            // If the color is different, then move it to new region set
+            if (previousColor !== value.region.color) {
+                if (valueRegion.values.length > 0) {
+                    valueRegionSubset.push(valueRegion);
+                }
+                valueRegion = {
+                    color: value.region.color,
+                    values: []
+                };
+            }
+            previousColor = value.region.color;
+            valueRegion.color = value.region.color;
+            valueRegion.values.push({
+                x: getXDataValues(value.x),
+                start: value.region.start,
+                end: value.region.end
+            });
+        } else {
+            valueRegionSubset.push(valueRegion);
+            previousColor = undefined;
+            valueRegion = {
+                color: undefined,
+                values: []
+            };
+        }
+    });
+    valueRegionSubset.push(valueRegion);
+
+    // Prepare final value regions list
+    valueRegionSubset.forEach((region) => {
+        // Consider only the regions with values
+        if (region.values.length > 0) {
+            valueRegions.push(region);
+            // Add start and end of a valueRegion to new valueRegion,
+            // This is to cover the start and end data value with region.
+            if (region.values.length > 1) {
+                valueRegions.push({
+                    color: region.color,
+                    values: region.values.slice(0, 1)
+                });
+                valueRegions.push({
+                    color: region.color,
+                    values: region.values.slice(region.values.length - 1)
+                });
+            }
+        }
+    });
+    return valueRegions;
+};
 /**
  * Processes the input JSON and adds the shapes, colors, labels etc. to each data points so that we
  * can use them when rendering the data point.
@@ -292,6 +364,11 @@ const processDataPoints = (graphConfig, dataTarget) => {
         yAxis: dataTarget.yAxis || constants.Y_AXIS,
         key: dataTarget.key
     }));
+
+    dataTarget.valueRegionSubset = getValueRegionSubset(
+        dataTarget,
+        getXDataValues
+    );
     return dataTarget;
 };
 /**

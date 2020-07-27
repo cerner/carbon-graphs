@@ -142,7 +142,10 @@ class PairedResult extends GraphContent {
     load(graph) {
         this.dataTarget = processDataPoints(graph.config, this.config);
         draw(graph.scale, graph.config, graph.svg, this.dataTarget);
-        if (utils.notEmpty(this.dataTarget.regions)) {
+        if (
+            utils.notEmpty(this.dataTarget.regions) ||
+            utils.notEmpty(this.dataTarget.valueRegionSubset)
+        ) {
             renderRegion(graph.scale, graph.config, graph.svg, this.dataTarget);
         }
         prepareLegendItems(
@@ -207,13 +210,20 @@ class PairedResult extends GraphContent {
      * @inheritdoc
      */
     resize(graph) {
-        if (utils.notEmpty(this.dataTarget.regions)) {
+        if (
+            utils.notEmpty(this.dataTarget.regions) ||
+            utils.notEmpty(this.dataTarget.valueRegionSubset)
+        ) {
             const values = this.dataTarget.values;
             // If graph has more than 1 content, we compare the regions if they are identical show and hide if even atleast one of them is not.
             if (graph.content.length > 1) {
                 // check if paired Data is proper i.e - region for each key(high, mid and low) in value should be there
                 const isPairedDataProper = values.every((value) =>
-                    isRegionMappedToAllValues(value, this.dataTarget.regions)
+                    isRegionMappedToAllValues(
+                        value,
+                        this.dataTarget.regions ||
+                            this.dataTarget.valueRegionSubset
+                    )
                 );
 
                 if (
@@ -233,7 +243,9 @@ class PairedResult extends GraphContent {
                 graph.config,
                 graph.svg.select(
                     `g[aria-describedby="region_${this.dataTarget.key}"]`
-                )
+                ),
+                this.dataTarget.yAxis,
+                utils.notEmpty(this.dataTarget.valueRegionSubset)
             );
         } else {
             hideAllRegions(graph.svg);

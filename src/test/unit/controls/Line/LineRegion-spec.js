@@ -84,6 +84,95 @@ describe("Line - Region", () => {
                 );
             });
         });
+        describe("Value region", () => {
+            let values;
+            beforeEach(() => {
+                values = utils.deepClone(valuesDefault);
+                values[0].region = {
+                    start: 0,
+                    end: 10,
+                    color: "#f4f4f4"
+                };
+            });
+            it("Creates value region, when the values contain region object", () => {
+                values[1].region = {
+                    start: 0,
+                    end: 10,
+                    color: "#f4f4f4"
+                };
+                line = new Line(getInput(values, false, false));
+                graphDefault.loadContent(line);
+                const regionGroupElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.regionGroup
+                );
+                const regionElement = fetchElementByClass(
+                    regionGroupElement,
+                    styles.region
+                );
+                expect(regionGroupElement.childNodes.length).toBe(3);
+                expect(regionElement.nodeName).toBe("path");
+                expect(regionElement.getAttribute("class")).toContain(
+                    styles.region
+                );
+                expect(regionElement.getAttribute("aria-hidden")).toBe("false");
+            });
+            it("Precedence over legend level regions", () => {
+                data = utils.deepClone(getInput(values, false, false));
+                data.regions = [
+                    {
+                        axis: constants.Y_AXIS,
+                        start: 5,
+                        end: 15,
+                        color: "#f4f4f4"
+                    }
+                ];
+                line = new Line(data);
+                graphDefault.loadContent(line);
+                const regionGroupElement = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.regionGroup
+                );
+                const regionElement = fetchElementByClass(
+                    regionGroupElement,
+                    styles.region
+                );
+                expect(regionGroupElement.childNodes.length).toBe(1);
+                expect(regionElement.nodeName).toBe("path");
+                expect(regionElement.getAttribute("class")).toContain(
+                    styles.region
+                );
+                it("Splits to multiple area if there is a value without region in between", () => {
+                    values[1].region = undefined;
+                    values[2].region = {
+                        start: 0,
+                        end: 10,
+                        color: "#f4f4f4"
+                    };
+                    line = new Line(getInput(values, false, false));
+                    graphDefault.loadContent(line);
+                    const regionGroupElement = fetchElementByClass(
+                        lineGraphContainer,
+                        styles.regionGroup
+                    );
+                    expect(regionGroupElement.childNodes.length).toBe(2);
+                });
+                it("Splits to multiple area if there is a region with different color", () => {
+                    values[1].region = {
+                        start: 0,
+                        end: 10,
+                        color: "#a7aaab"
+                    };
+                    line = new Line(getInput(values, false, false));
+                    graphDefault.loadContent(line);
+                    const regionGroupElement = fetchElementByClass(
+                        lineGraphContainer,
+                        styles.regionGroup
+                    );
+                    expect(regionGroupElement.childNodes.length).toBe(2);
+                });
+            });
+        });
         it("Creates region only if present", () => {
             data = utils.deepClone(getInput(valuesDefault, false, false));
             data.regions = null;
@@ -381,6 +470,54 @@ describe("Line - Region", () => {
             expect(
                 regionGroupElement.childNodes[0].getAttribute("aria-hidden")
             ).toBe("true");
+            expect(
+                regionGroupElement.childNodes[1].getAttribute("aria-hidden")
+            ).toBe("true");
+            graphDefault.unloadContent(lineContent);
+        });
+        it("Hides all the regions if graph has 1 or more value level and legend level region", () => {
+            const values = utils.deepClone(valuesDefault);
+            values[0].region = {
+                start: 0,
+                end: 10,
+                color: "#f4f4f4"
+            };
+            const inputSecondary = {
+                key: `uid_2`,
+                label: {
+                    display: "Data Label B"
+                },
+                values
+            };
+            data = utils.deepClone(getInput(valuesDefault));
+            data.regions = [
+                {
+                    start: 1,
+                    end: 5
+                }
+            ];
+            line = new Line(data);
+            const lineContent = new Line(inputSecondary);
+            graphDefault.loadContent(lineContent);
+            graphDefault.loadContent(line);
+            const regionGroupElement = fetchElementByClass(
+                lineGraphContainer,
+                styles.regionGroup
+            );
+            const firstRegion = fetchElementByClass(
+                regionGroupElement,
+                styles.valueRegion
+            );
+            expect(regionGroupElement.childNodes.length).toBe(2);
+            expect(firstRegion.getAttribute("aria-describedby")).toBe(
+                `region_${inputSecondary.key}`
+            );
+            expect(
+                regionGroupElement.childNodes[1].getAttribute(
+                    "aria-describedby"
+                )
+            ).toBe(`region_${data.key}`);
+            expect(firstRegion.getAttribute("aria-hidden")).toBe("true");
             expect(
                 regionGroupElement.childNodes[1].getAttribute("aria-hidden")
             ).toBe("true");

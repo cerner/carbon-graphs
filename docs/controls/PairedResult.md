@@ -76,7 +76,12 @@ var data = {
             high: {
                 x: 200,
                 y: 150,
-                isCritical: true
+                isCritical: true,
+                region: {
+                    start: 120,
+                    end: 170,
+                    color: "#c8cacb"
+                }
             },
             low: {
                 x: 200,
@@ -147,16 +152,16 @@ Each paired result can have a style object in [Values](#values) level.
 
 #### Required
 
-| Property Name | Expected | Value                                | Description                    |
-| ------------- | -------- | ------------------------------------ | ------------------------------ |
-| high          | object   | _{x: "", y: "", isCritical: `true`}_ | Data point co-ordinate x and y |
-| low           | object   | _{x: "", y: "", isCritical: `true`}_ | Data point co-ordinate x and y |
+| Property Name | Expected | Value                                            | Description                                               |
+| ------------- | -------- | ------------------------------------------------ | --------------------------------------------------------- |
+| high          | object   | _{x: "", y: "", isCritical: `true`, region: {}}_ | Data point co-ordinate x and y, Refer [Regions](#regions) |
+| low           | object   | _{x: "", y: "", isCritical: `true`, region: {}}_ | Data point co-ordinate x and y, Refer [Regions](#regions) |
 
 #### Optional
 
-| Property Name | Expected | Value                                | Description                    |
-| ------------- | -------- | ------------------------------------ | ------------------------------ |
-| mid           | object   | _{x: "", y: "", isCritical: `true`}_ | Data point co-ordinate x and y |
+| Property Name | Expected | Value                                            | Description                                               |
+| ------------- | -------- | ------------------------------------------------ | --------------------------------------------------------- |
+| mid           | object   | _{x: "", y: "", isCritical: `true`, region: {}}_ | Data point co-ordinate x and y, Refer [Regions](#regions) |
 
 `Note:`
 
@@ -167,8 +172,10 @@ Each paired result can have a style object in [Values](#values) level.
 
 Draws a Horizontal area along the X-Axis
 
--   Each data-set can have 1 or more regions for `high`, `low` and/or `mid`
--   Each pair type mentioned above needs to have a `start` and `end`
+-   Each data-set can have 1 or more regions for `high`, `low` and/or `mid`,
+-   Each value can have a region object for `high`, `low` and/or `mid`,
+-   Each pair type mentioned above needs to have a `start` and `end`,
+-   If at least one region is defined for a value in the element, it will take precedence over the element's region and the element's region will not be displayed.
 
 #### Required
 
