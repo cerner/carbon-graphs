@@ -408,7 +408,6 @@ const DATA = [
                         display: "Data Label 4"
                     },
                     shape: Carbon.helpers.SHAPES.DARK.CIRCLE,
-                    color: Carbon.helpers.COLORS.BLUE,
                     onClick: loadPopup,
                     values: [
                         {
