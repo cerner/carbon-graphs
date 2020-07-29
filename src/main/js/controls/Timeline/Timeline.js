@@ -1,10 +1,7 @@
 "use strict";
 import * as d3 from "d3";
 import Construct from "../../core/Construct";
-import { 
-    getYAxisHeight,
-    updateXAxisDomain
-} from "../../helpers/axis";
+import { getYAxisHeight, updateXAxisDomain } from "../../helpers/axis";
 import constants from "../../helpers/constants";
 import errors from "../../helpers/errors";
 import { createLegend } from "../../helpers/legend";
@@ -23,7 +20,10 @@ import {
     determineHeight,
     scaleGraph
 } from "./helpers/creationHelpers";
-import { translateTimelineGraph, translateAxes } from "./helpers/translateHelpers";
+import {
+    translateTimelineGraph,
+    translateAxes
+} from "./helpers/translateHelpers";
 import TimelineConfig, { processInput } from "./TimelineConfig";
 import TimelineContent from "./TimelineContent";
 
@@ -294,7 +294,11 @@ class Timeline extends Construct {
         scaleGraph(this.scale, this.config);
         translateAxes(this.axis, this.scale, this.config, this.svg);
         let position;
-        if(graphData && graphData.values && this.content.includes(graphData.key)) {
+        if (
+            graphData &&
+            graphData.values &&
+            this.content.includes(graphData.key)
+        ) {
             this.contentConfig.forEach((config, index) => {
                 if (config.config.key === graphData.key) position = index;
             });

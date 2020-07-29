@@ -294,7 +294,7 @@ const drawTasks = (
         .classed(styles.task, true)
         .attr("aria-selected", false)
         .attr("aria-describedby", (d) => d.key)
-        .each(function(d, i) {
+        .each(function (d, i) {
             // Create Selection indicator for Task
             const _args = generatorArgs(scale, d, this);
             renderSelectionIndicator(_args);
@@ -324,18 +324,11 @@ const drawTasks = (
  * @param {object} trackGroupPath - Container for the track
  * @returns {undefined} - returns nothing
  */
-const reflowTasks = (
-    canvasSVG,
-    config,
-    scale,
-    gantt,
-    trackGroupPath
-) => {
+const reflowTasks = (canvasSVG, config, scale, gantt, trackGroupPath) => {
     gantt.config.tasks.forEach((a) => {
         validateTask(a);
     });
-    const taskPath = trackGroupPath
-        .selectAll(`.${styles.taskGroup}`);
+    const taskPath = trackGroupPath.selectAll(`.${styles.taskGroup}`);
     taskPath.selectAll("g").remove();
     drawTasks(
         canvasSVG,
@@ -345,7 +338,7 @@ const reflowTasks = (
         taskPath,
         gantt.config.tasks
     );
-}
+};
 
 /**
  * Creates an element container with data points from the input JSON property: tasks
@@ -391,7 +384,7 @@ const loadTasks = (graphContext, trackPathSVG, trackLabel, gantt) => {
 const unloadTasks = (graphContext, trackPathSVG) =>
     trackPathSVG.select(`g.${styles.taskGroup}`).remove();
 
-export { 
+export {
     loadTasks,
     unloadTasks,
     processTask,

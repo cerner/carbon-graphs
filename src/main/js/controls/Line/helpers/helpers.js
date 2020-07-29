@@ -429,7 +429,12 @@ const drawDataPoints = (scale, config, pointGroupPath) => {
                         dataPointActionHandler(value, index, this);
                     },
                     a11yAttributes: {
-                        "aria-hidden": document.querySelector(`.${styles.legendItem}[aria-describedby="${value.key}"]`)?.getAttribute('aria-current')==="false",
+                        "aria-hidden":
+                            document
+                                .querySelector(
+                                    `.${styles.legendItem}[aria-describedby="${value.key}"]`
+                                )
+                                ?.getAttribute("aria-current") === "false",
                         "aria-describedby": value.key,
                         "aria-disabled": !utils.isFunction(value.onClick)
                     }
@@ -468,7 +473,12 @@ const drawDataPoints = (scale, config, pointGroupPath) => {
                         dataPointActionHandler(value, index, this);
                     },
                     a11yAttributes: {
-                        "aria-hidden": document.querySelector(`.${styles.legendItem}[aria-describedby="${value.key}"]`)?.getAttribute('aria-current')==="false",
+                        "aria-hidden":
+                            document
+                                .querySelector(
+                                    `.${styles.legendItem}[aria-describedby="${value.key}"]`
+                                )
+                                ?.getAttribute("aria-current") === "false",
                         "aria-describedby": value.key,
                         "aria-disabled": !utils.isFunction(value.onClick)
                     }

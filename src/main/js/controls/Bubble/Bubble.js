@@ -185,7 +185,7 @@ class Bubble extends GraphContent {
     /**
      * @inheritdoc
      */
-    reflow(graph,graphData) {
+    reflow(graph, graphData) {
         this.config.values = graphData.values;
         this.dataTarget = processDataPoints(graph.config, this.config);
         const position = graph.config.shownTargets.lastIndexOf(graphData.key);
@@ -207,7 +207,12 @@ class Bubble extends GraphContent {
             .select(`.${styles.currentPointsGroup}`)
             .selectAll(`[class="${styles.point}"]`)
             .data(getDataPointValues(this.dataTarget));
-        drawBubbles(graph.scale, graph.config, pointPath.enter(), this.dataTarget);
+        drawBubbles(
+            graph.scale,
+            graph.config,
+            pointPath.enter(),
+            this.dataTarget
+        );
         pointPath
             .exit()
             .transition()

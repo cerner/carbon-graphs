@@ -77,7 +77,7 @@ describe("PairedResult", () => {
         });
         it("Dynamic Data is updated correctly when key matches", () => {
             const panData = {
-                key: 'uid_1',
+                key: "uid_1",
                 values: [
                     {
                         high: {
@@ -109,7 +109,7 @@ describe("PairedResult", () => {
         });
         it("Dynamic Data is not updated when key does not match", () => {
             const panData = {
-                key: 'uid_2',
+                key: "uid_2",
                 values: [
                     {
                         high: {

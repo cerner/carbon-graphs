@@ -206,7 +206,7 @@ const draw = (scale, config, canvasSVG, dataTarget) => {
  * @param {boolean} reflow - flag to check if reflow function called it
  * @returns {object} dataTarget - Updated data target object
  */
-const processDataPoints = (graphConfig, dataTarget, reflow=false) => {
+const processDataPoints = (graphConfig, dataTarget, reflow = false) => {
     const type = graphConfig.axis.x.type;
     const getXDataValues = (x) => {
         if (!isValidAxisType(x, type)) {
@@ -253,7 +253,11 @@ const processDataPoints = (graphConfig, dataTarget, reflow=false) => {
                     key: `${dataTarget.key}_${type}`
                 };
                 if (
-                    !utils.hasValue(graphConfig.shownTargets, subset[type].key) && !reflow
+                    !utils.hasValue(
+                        graphConfig.shownTargets,
+                        subset[type].key
+                    ) &&
+                    !reflow
                 ) {
                     graphConfig.shownTargets.push(subset[type].key);
                 }
@@ -404,7 +408,14 @@ const drawPoints = (scale, config, canvasSVG) => {
                         );
                     },
                     a11yAttributes: {
-                        "aria-hidden": document.querySelector(`.${styles.legendItem}[aria-describedby="${getValue(value, type).key}"]`)?.getAttribute('aria-current') === "false",
+                        "aria-hidden":
+                            document
+                                .querySelector(
+                                    `.${styles.legendItem}[aria-describedby="${
+                                        getValue(value, type).key
+                                    }"]`
+                                )
+                                ?.getAttribute("aria-current") === "false",
                         "aria-describedby": getValue(value, type).key,
                         "aria-disabled": !utils.isFunction(value.onClick)
                     }
@@ -451,9 +462,16 @@ const showLine = (config, boxPath) =>
             d.low &&
             utils.hasValue(config.shownTargets, d.high.key) &&
             utils.hasValue(config.shownTargets, d.low.key) &&
-            (document.querySelector(`.${styles.legendItem}[aria-describedby="${d.high.key}"]`) ?.getAttribute("aria-current") === "true") 
-            &&
-            (document.querySelector(`.${styles.legendItem}[aria-describedby="${d.low.key}"]`) ?.getAttribute("aria-current") === "true");
+            document
+                .querySelector(
+                    `.${styles.legendItem}[aria-describedby="${d.high.key}"]`
+                )
+                ?.getAttribute("aria-current") === "true" &&
+            document
+                .querySelector(
+                    `.${styles.legendItem}[aria-describedby="${d.low.key}"]`
+                )
+                ?.getAttribute("aria-current") === "true";
         return d3
             .select(this)
             .select(`.${styles.pairedLine}`)
@@ -495,7 +513,14 @@ const drawCriticalityPoints = (
                         );
                     },
                     a11yAttributes: {
-                        "aria-hidden": document.querySelector(`.${styles.legendItem}[aria-describedby="${getValue(value, type).key}"]`)?.getAttribute('aria-current') === "false",
+                        "aria-hidden":
+                            document
+                                .querySelector(
+                                    `.${styles.legendItem}[aria-describedby="${
+                                        getValue(value, type).key
+                                    }"]`
+                                )
+                                ?.getAttribute("aria-current") === "false",
                         "aria-describedby": getValue(value, type).key,
                         "aria-disabled": !utils.isFunction(value.onClick)
                     }

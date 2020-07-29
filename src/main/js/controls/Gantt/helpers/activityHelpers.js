@@ -334,6 +334,6 @@ const reflowActivities = (canvasSVG, config, scale, gantt, trackGroupPath) => {
         activityPath,
         gantt.config.activities
     );
-}
+};
 
 export { loadActivities, unloadActivities, reflowActivities };

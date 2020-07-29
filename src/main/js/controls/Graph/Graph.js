@@ -10,7 +10,7 @@ import {
     getAxesDataRange,
     getYAxisHeight,
     updateXAxisDomain,
-    translateAxes,
+    translateAxes
 } from "../../helpers/axis";
 import constants, { AXIS_TYPE } from "../../helpers/constants";
 import errors from "../../helpers/errors";
@@ -400,14 +400,16 @@ class Graph extends Construct {
      */
     reflow(graphData) {
         let position;
-        if(graphData && graphData.values) {
+        if (graphData && graphData.values) {
             this.contentKeys.forEach((key, index) => {
                 if (key === graphData.key) position = index;
             });
             if (position >= 0) {
-                if(this.content[position].type === "Bar") {
+                if (this.content[position].type === "Bar") {
                     this.config.axis.x.ticks.values = [];
-                    graphData.values.forEach((v) => this.config.axis.x.ticks.values.push(v.x));
+                    graphData.values.forEach((v) =>
+                        this.config.axis.x.ticks.values.push(v.x)
+                    );
                 }
             }
         }
@@ -416,7 +418,11 @@ class Graph extends Construct {
         scaleGraph(this.scale, this.config);
         translateAxes(this.axis, this.scale, this.config, this.svg);
 
-        if (graphData && graphData.values && this.contentKeys.includes(graphData.key)) {
+        if (
+            graphData &&
+            graphData.values &&
+            this.contentKeys.includes(graphData.key)
+        ) {
             this.content[position].reflow(this, graphData);
             setAxisPadding(this.config.axisPadding, this.content[position]);
             getAxesDataRange(

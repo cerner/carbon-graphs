@@ -338,7 +338,7 @@ export const renderCustomBubbleSize = (id) => {
 };
 
 export const renderBubbleWithPanning = (id) => {
-    const axisData = simpleAxisData(`#${id}`)
+    const axisData = simpleAxisData(`#${id}`);
     axisData.pan = {
         enabled: true
     };
@@ -359,7 +359,7 @@ export const renderBubbleWithPanning = (id) => {
 };
 
 export const renderBubblePanningWithDynamicData = (id) => {
-    const axisData = simpleAxisData(`#${id}`)
+    const axisData = simpleAxisData(`#${id}`);
     axisData.pan = {
         enabled: true
     };

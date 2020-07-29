@@ -139,12 +139,7 @@ const loadEventInput = (inputJSON) => {
  * @param {object} trackGroupPath - Container for the track
  * @returns {undefined} - returns nothing
  */
-const reflowEvents = (
-    config,
-    scale,
-    gantt,
-    trackGroupPath
-) => {
+const reflowEvents = (config, scale, gantt, trackGroupPath) => {
     gantt.config.events.forEach((event) => {
         validateEvent(event);
     });
@@ -152,21 +147,20 @@ const reflowEvents = (
         .selectAll(`.${styles.currentPointsGroup}[event="true"]`)
         .remove();
     gantt.config.events.forEach((event) => {
-    drawDataPoints(
-        scale,
-        config,
-        trackGroupPath,
-        processEvents(
+        drawDataPoints(
+            scale,
             config,
-            gantt.config.trackLabel,
-            loadEventInput(event)
-        ),
-        drawEventDataPoints,
-        true
-    );
+            trackGroupPath,
+            processEvents(
+                config,
+                gantt.config.trackLabel,
+                loadEventInput(event)
+            ),
+            drawEventDataPoints,
+            true
+        );
     });
-    
-}
+};
 
 /**
  * Creates an element container with data points from the input JSON property: events

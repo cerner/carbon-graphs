@@ -130,4 +130,5 @@ export const fetchElementByClass = (id, cls) => id.querySelector(`.${cls}`);
  * @param {string} cls - Class attribute name
  * @returns {HTMLElement} - Array of DOM element
  */
-export const fetchAllElementsByClass = (id, cls) => id.querySelectorAll(`.${cls}`);
+export const fetchAllElementsByClass = (id, cls) =>
+    id.querySelectorAll(`.${cls}`);

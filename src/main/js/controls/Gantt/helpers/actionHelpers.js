@@ -228,10 +228,15 @@ const renderDataPointPath = (scale, config, path, dataPoint, index) =>
                     dataPointActionHandler(dataPoint, index, this);
                 },
                 a11yAttributes: {
-                    "aria-hidden": 
-                    document.querySelector(`li[aria-describedby="${dataPoint.key}"]`) ?
-                        document.querySelector(`li[aria-describedby="${dataPoint.key}"]`).getAttribute('aria-current') === "false" :
-                        false,
+                    "aria-hidden": document.querySelector(
+                        `li[aria-describedby="${dataPoint.key}"]`
+                    )
+                        ? document
+                              .querySelector(
+                                  `li[aria-describedby="${dataPoint.key}"]`
+                              )
+                              .getAttribute("aria-current") === "false"
+                        : false,
                     "aria-describedby": dataPoint.key,
                     "aria-disabled": !utils.isFunction(dataPoint.onClick)
                 },
@@ -274,7 +279,7 @@ const drawActionDataPoints = (scale, config, canvasSVG) =>
  * @returns {undefined} - returns nothing
  */
 const loadActions = (graphContext, trackPathSVG, trackLabel, gantt) =>
-    gantt.actions.forEach((a,i) => {
+    gantt.actions.forEach((a, i) => {
         drawDataPoints(
             graphContext.scale,
             graphContext.config,
@@ -287,7 +292,7 @@ const loadActions = (graphContext, trackPathSVG, trackLabel, gantt) =>
             drawActionDataPoints,
             false
         );
-    gantt.actionKeys.splice(i, 0, a.key);
+        gantt.actionKeys.splice(i, 0, a.key);
     });
 
 /**
@@ -300,34 +305,28 @@ const loadActions = (graphContext, trackPathSVG, trackLabel, gantt) =>
  * @param {object} trackGroupPath - Container for the track
  * @returns {undefined} - returns nothing
  */
-const reflowActions = (
-        config,
-        scale,
-        gantt,
-        trackGroupPath
-    ) => {
-        gantt.config.actions.forEach((action) => {
-            validateActionContent(action);
-        });
-        trackGroupPath
-            .selectAll(`.${styles.currentPointsGroup}[event="false"]`)
-            .remove();
-        gantt.config.actions.forEach((action) => {
-            drawDataPoints(
-                scale,
+const reflowActions = (config, scale, gantt, trackGroupPath) => {
+    gantt.config.actions.forEach((action) => {
+        validateActionContent(action);
+    });
+    trackGroupPath
+        .selectAll(`.${styles.currentPointsGroup}[event="false"]`)
+        .remove();
+    gantt.config.actions.forEach((action) => {
+        drawDataPoints(
+            scale,
+            config,
+            trackGroupPath,
+            processActionItems(
                 config,
-                trackGroupPath,
-                processActionItems(
-                    config,
-                    gantt.config.trackLabel,
-                    loadActionInput(action)
-                ),
-                drawActionDataPoints,
-                false
-            );
-        });
-    
-    }
+                gantt.config.trackLabel,
+                loadActionInput(action)
+            ),
+            drawActionDataPoints,
+            false
+        );
+    });
+};
 
 /**
  * Selects all the data point groups from the track and removes them

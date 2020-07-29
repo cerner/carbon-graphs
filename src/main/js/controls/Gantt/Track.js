@@ -11,7 +11,11 @@ import { loadLabelPopup, shouldTruncateLabel } from "../../helpers/label";
 import styles from "../../helpers/styles";
 import utils from "../../helpers/utils";
 import { isUniqueKey } from "./GanttConfig";
-import { loadActions, unloadActions, reflowActions } from "./helpers/actionHelpers";
+import {
+    loadActions,
+    unloadActions,
+    reflowActions
+} from "./helpers/actionHelpers";
 import {
     loadActivities,
     unloadActivities,
@@ -23,16 +27,8 @@ import {
     scaleGraph,
     updateTrackProps
 } from "./helpers/creationHelpers";
-import { 
-    loadEvents,
-    unloadEvents,
-    reflowEvents 
-} from "./helpers/eventHelpers";
-import { 
-    loadTasks,
-    unloadTasks,
-    reflowTasks
-} from "./helpers/taskHelpers";
+import { loadEvents, unloadEvents, reflowEvents } from "./helpers/eventHelpers";
+import { loadTasks, unloadTasks, reflowTasks } from "./helpers/taskHelpers";
 import {
     loadGanttTrackSelector,
     unloadGanttTrackSelector
@@ -260,13 +256,19 @@ class Track extends GraphContent {
      * @inheritdoc
      */
     reflow(graph, graphData) {
-        if (utils.notEmpty(graphData.activities)&& utils.notEmpty(this.config.activities)) {
-            graphData.activityKeys=[];
+        if (
+            utils.notEmpty(graphData.activities) &&
+            utils.notEmpty(this.config.activities)
+        ) {
+            graphData.activityKeys = [];
             graphData.activities.forEach((activity) => {
                 graphData.activityKeys.push(activity.key);
-                if(this.config.activityKeys.includes(activity.key)) {
-                    const position = this.config.activityKeys.indexOf(activity.key);
-                    this.config.activities[position].startDate = activity.startDate;
+                if (this.config.activityKeys.includes(activity.key)) {
+                    const position = this.config.activityKeys.indexOf(
+                        activity.key
+                    );
+                    this.config.activities[position].startDate =
+                        activity.startDate;
                     this.config.activities[position].endDate = activity.endDate;
                 }
             });
@@ -277,14 +279,25 @@ class Track extends GraphContent {
                     this.config.activities.splice(position, 1);
                 }
             });
-            const trackGroupPath = graph.svg.selectAll(`.${styles.trackGroup}[aria-describedby="${this.config.key}"]`);
-            reflowActivities(graph.svg, graph.config, graph.scale, this, trackGroupPath);
+            const trackGroupPath = graph.svg.selectAll(
+                `.${styles.trackGroup}[aria-describedby="${this.config.key}"]`
+            );
+            reflowActivities(
+                graph.svg,
+                graph.config,
+                graph.scale,
+                this,
+                trackGroupPath
+            );
         }
-        if (utils.notEmpty(graphData.tasks) && utils.notEmpty(this.config.tasks)) {
-            graphData.taskKeys=[];
+        if (
+            utils.notEmpty(graphData.tasks) &&
+            utils.notEmpty(this.config.tasks)
+        ) {
+            graphData.taskKeys = [];
             graphData.tasks.forEach((task) => {
                 graphData.taskKeys.push(task.key);
-                if(this.config.taskKeys.includes(task.key)) {
+                if (this.config.taskKeys.includes(task.key)) {
                     const position = this.config.taskKeys.indexOf(task.key);
                     this.config.tasks[position].startDate = task.startDate;
                     this.config.tasks[position].endDate = task.endDate;
@@ -297,14 +310,25 @@ class Track extends GraphContent {
                     this.config.tasks.splice(position, 1);
                 }
             });
-            const trackGroupPath = graph.svg.selectAll(`.${styles.trackGroup}[aria-describedby="${this.config.key}"]`);
-            reflowTasks(graph.svg, graph.config, graph.scale, this, trackGroupPath);
+            const trackGroupPath = graph.svg.selectAll(
+                `.${styles.trackGroup}[aria-describedby="${this.config.key}"]`
+            );
+            reflowTasks(
+                graph.svg,
+                graph.config,
+                graph.scale,
+                this,
+                trackGroupPath
+            );
         }
-        if (utils.notEmpty(graphData.events) && utils.notEmpty(this.config.events)) {
-            graphData.eventKeys=[];
+        if (
+            utils.notEmpty(graphData.events) &&
+            utils.notEmpty(this.config.events)
+        ) {
+            graphData.eventKeys = [];
             graphData.events.forEach((event) => {
                 graphData.eventKeys.push(event.key);
-                if(this.config.eventKeys.includes(event.key)) {
+                if (this.config.eventKeys.includes(event.key)) {
                     const position = this.config.eventKeys.indexOf(event.key);
                     this.config.events[position].values = event.values;
                 }
@@ -316,14 +340,19 @@ class Track extends GraphContent {
                     this.config.events.splice(position, 1);
                 }
             });
-        const trackGroupPath = graph.svg.selectAll(`.${styles.trackGroup}[aria-describedby="${this.config.key}"]`);
-        reflowEvents(graph.config, graph.scale, this, trackGroupPath);
+            const trackGroupPath = graph.svg.selectAll(
+                `.${styles.trackGroup}[aria-describedby="${this.config.key}"]`
+            );
+            reflowEvents(graph.config, graph.scale, this, trackGroupPath);
         }
-        if (utils.notEmpty(graphData.actions) && utils.notEmpty(this.config.actions)) {
-            graphData.actionKeys=[];
+        if (
+            utils.notEmpty(graphData.actions) &&
+            utils.notEmpty(this.config.actions)
+        ) {
+            graphData.actionKeys = [];
             graphData.actions.forEach((action) => {
                 graphData.actionKeys.push(action.key);
-                if(this.config.actionKeys.includes(action.key)) {
+                if (this.config.actionKeys.includes(action.key)) {
                     const position = this.config.actionKeys.indexOf(action.key);
                     this.config.actions[position].values = action.values;
                 }
@@ -334,9 +363,11 @@ class Track extends GraphContent {
                     this.config.actionKeys.splice(position, 1);
                     this.config.actions.splice(position, 1);
                 }
-            })
-        const trackGroupPath = graph.svg.selectAll(`.${styles.trackGroup}[aria-describedby="${this.config.key}"]`);
-        reflowActions(graph.config, graph.scale, this, trackGroupPath);
+            });
+            const trackGroupPath = graph.svg.selectAll(
+                `.${styles.trackGroup}[aria-describedby="${this.config.key}"]`
+            );
+            reflowActions(graph.config, graph.scale, this, trackGroupPath);
         }
 
         this.resize(graph);

@@ -31,13 +31,11 @@ import {
     isRegionMappedToAllValues,
     translatePairedResultGraph
 } from "./helpers/helpers";
-import {
-    drawSelectionIndicator
-} from "./helpers/selectionIndicatorHelpers";
+import { drawSelectionIndicator } from "./helpers/selectionIndicatorHelpers";
 import PairedResultConfig from "./PairedResultConfig";
 import {
     calculateVerticalPadding,
-    getXAxisXPosition,
+    getXAxisXPosition
 } from "../../helpers/axis";
 
 /**
@@ -268,26 +266,27 @@ class PairedResult extends GraphContent {
             drawPoints(graph.scale, graph.config, boxPath);
         };
         const internalValuesSubset = getDataPointValues(this.dataTarget);
-        graph.svg.select(`g[aria-describedby="${graphData.key}"]`).selectAll(`.${styles.pairedBox}`).remove();
+        graph.svg
+            .select(`g[aria-describedby="${graphData.key}"]`)
+            .selectAll(`.${styles.pairedBox}`)
+            .remove();
         const pairedBoxSVG = graph.svg
             .select(`g[aria-describedby="${graphData.key}"]`)
             .selectAll(`.${styles.pairedBox}`)
             .data(internalValuesSubset);
         pairedBoxSVG
             .enter()
-            .append('g')
+            .append("g")
             .classed(styles.pairedBox, true)
             .attr("aria-selected", false)
             .attr(
                 "transform",
-                `translate(${getXAxisXPosition(graph.config)},${calculateVerticalPadding(
+                `translate(${getXAxisXPosition(
                     graph.config
-                )})`
+                )},${calculateVerticalPadding(graph.config)})`
             )
             .call(drawBox);
-        pairedBoxSVG
-            .exit()
-            .remove();
+        pairedBoxSVG.exit().remove();
 
         this.valuesRange = calculateValuesRange(
             this.config.values,

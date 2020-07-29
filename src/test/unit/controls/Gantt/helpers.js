@@ -109,7 +109,7 @@ export const eventValuesJson = [
         },
         color: Carbon.helpers.COLORS.BLUE,
         values: [new Date(2018, 5, 4).toISOString()]
-    },
+    }
 ];
 export const actionValuesJson = [
     {
@@ -119,7 +119,7 @@ export const actionValuesJson = [
     {
         key: "uid_action_2",
         values: [new Date(2018, 7, 1, 6, 15).toISOString()]
-    }   
+    }
 ];
 export const trackDimension = {
     dimension: {

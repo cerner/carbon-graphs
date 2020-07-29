@@ -84,9 +84,7 @@ export const renderTimelinePanningWithDynamicData = (id) => {
     const graphData = utils.deepClone(
         getDemoData(`#${id}`, "TIMELINE").data[0]
     );
-    const panData = utils.deepClone(
-        getDemoData(`#${id}`, "TIMELINE").data[2]
-    );
+    const panData = utils.deepClone(getDemoData(`#${id}`, "TIMELINE").data[2]);
     const createGraph = () => {
         graph.reflow(panData);
     };

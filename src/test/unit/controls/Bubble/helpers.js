@@ -160,7 +160,8 @@ export const fetchElementByClass = (id, cls) => id.querySelector(`.${cls}`);
  * @param {string} tagName - tag attribute name
  * @returns {HTMLElement} - DOM element
  */
-export const fetchElementByTag = (id, tagName) => id.querySelector(`${tagName}`);
+export const fetchElementByTag = (id, tagName) =>
+    id.querySelector(`${tagName}`);
 
 /**
  * Returns the DOM element queried by Class
@@ -169,4 +170,5 @@ export const fetchElementByTag = (id, tagName) => id.querySelector(`${tagName}`)
  * @param {string} cls - Class attribute name
  * @returns {HTMLElement} - DOM element
  */
-export const fetchAllElementsByClass = (id, cls) => id.querySelectorAll(`.${cls}`);
+export const fetchAllElementsByClass = (id, cls) =>
+    id.querySelectorAll(`.${cls}`);

@@ -349,7 +349,7 @@ const events = [
             shape: scheduled,
             color: Carbon.helpers.COLORS.BLACK,
             values: [new Date(2016, 0, 1, 5, 15).toISOString()]
-        },
+        }
     ]
 ];
 const actions = [
@@ -391,7 +391,7 @@ const actions = [
             onClick: loadPopup,
             values: [new Date(2016, 0, 1, 7, 15).toISOString()]
         }
-    ],
+    ]
 ];
 const panData = {
     actions: [
@@ -424,16 +424,16 @@ const panData = {
             key: "uid_event_4",
             shape: scheduled,
             values: [new Date(2016, 0, 1, 2, 15).toISOString()]
-        },
+        }
     ],
     activities: [
         {
             key: "activity5",
             startDate: new Date(2016, 0, 1, 3).toISOString(),
-            endDate: new Date(2016, 0, 1, 6).toISOString(),
-        },
+            endDate: new Date(2016, 0, 1, 6).toISOString()
+        }
     ]
-}
+};
 const lowerStepTickValues = [
     new Date(2018, 1, 2, 6).toISOString(),
     new Date(2018, 1, 2, 12).toISOString(),

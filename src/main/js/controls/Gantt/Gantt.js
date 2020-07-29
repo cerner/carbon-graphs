@@ -1,10 +1,7 @@
 "use strict";
 import * as d3 from "d3";
 import Construct from "../../core/Construct";
-import { 
-    getYAxisHeight,
-    updateXAxisDomain
-} from "../../helpers/axis";
+import { getYAxisHeight, updateXAxisDomain } from "../../helpers/axis";
 import constants from "../../helpers/constants";
 import {
     contentLoadHandler,
@@ -38,9 +35,13 @@ import {
     determineHeight,
     prepareLoadAtIndex,
     scaleGraph,
-    updateAxesDomain,
+    updateAxesDomain
 } from "./helpers/creationHelpers";
-import { translateGraph, translateLabelText, translateAxes } from "./helpers/translateHelpers";
+import {
+    translateGraph,
+    translateLabelText,
+    translateAxes
+} from "./helpers/translateHelpers";
 
 /**
  * @typedef {object} Gantt
@@ -336,11 +337,11 @@ class Gantt extends Construct {
     reflow(graphData) {
         updateXAxisDomain(this.config);
         scaleGraph(this.scale, this.config);
-        
-        translateAxes(this.axis, this.scale, this.config, this.svg); 
+
+        translateAxes(this.axis, this.scale, this.config, this.svg);
 
         let position;
-        if(graphData && this.tracks.includes(graphData.key)) {
+        if (graphData && this.tracks.includes(graphData.key)) {
             this.trackConfig.forEach((track, index) => {
                 if (track.config.key === graphData.key) position = index;
             });

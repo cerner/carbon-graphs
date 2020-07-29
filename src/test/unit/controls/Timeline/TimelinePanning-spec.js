@@ -57,12 +57,12 @@ describe("Panning", () => {
         });
         it("Dynamic Data is updated correctly when key matches", () => {
             const panData = {
-                key: 'uid_1',
+                key: "uid_1",
                 values: [
                     {
                         x: new Date(2018, 2, 1).toISOString(),
                         content: "This is custom value of another unit"
-                    },
+                    }
                 ]
             };
             let timelineContent = fetchAllElementsByClass(styles.pointGroup);
@@ -73,12 +73,12 @@ describe("Panning", () => {
         });
         it("Dynamic Data is not updated when key does not match", () => {
             const panData = {
-                key: 'uid_2',
+                key: "uid_2",
                 values: [
                     {
                         x: new Date(2018, 2, 1).toISOString(),
                         content: "This is custom value of another unit"
-                    },
+                    }
                 ]
             };
             let timelineContent = fetchAllElementsByClass(styles.pointGroup);

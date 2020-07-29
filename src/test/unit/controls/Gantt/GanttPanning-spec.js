@@ -92,7 +92,12 @@ describe("Panning", () => {
             });
         });
         it("Dynamic Data is updated correctly when key matches", () => {
-            const primaryContent = getData(taskValuesJSON,activityValuesJSON,eventValuesJson,actionValuesJson)
+            const primaryContent = getData(
+                taskValuesJSON,
+                activityValuesJSON,
+                eventValuesJson,
+                actionValuesJson
+            );
             const panData = {
                 key: "track 1",
                 tasks: [
@@ -127,7 +132,7 @@ describe("Panning", () => {
                     }
                 ]
             };
-            gantt.loadContent(primaryContent)
+            gantt.loadContent(primaryContent);
             let tasksContent = fetchAllElementsByClass(
                 ganttChartContainer,
                 styles.task
@@ -173,7 +178,12 @@ describe("Panning", () => {
             expect(actionsContent.length).toEqual(1);
         });
         it("Dynamic Data is not updated when key does not match", () => {
-            const primaryContent = getData(taskValuesJSON,activityValuesJSON,eventValuesJson,actionValuesJson)
+            const primaryContent = getData(
+                taskValuesJSON,
+                activityValuesJSON,
+                eventValuesJson,
+                actionValuesJson
+            );
             const panData = {
                 key: "track 0",
                 tasks: [
@@ -208,7 +218,7 @@ describe("Panning", () => {
                     }
                 ]
             };
-            gantt.loadContent(primaryContent)
+            gantt.loadContent(primaryContent);
             let tasksContent = fetchAllElementsByClass(
                 ganttChartContainer,
                 styles.task

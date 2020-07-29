@@ -231,16 +231,16 @@ class Bar extends GraphContent {
         if (position > -1) {
             graph.config.shownTargets.splice(position, 1);
         }
-        const tickValues = graph.config.axis.x.ticks.values.map((d) => (
-            {
+        const tickValues = graph.config.axis.x.ticks.values.map((d) => ({
             x: d,
             valueSubsetArray: []
         }));
 
         scaleBandAxis(this.bandScale, graph.config, graph.content);
-        const barSelectionGroup = graph.svg.select(`.${styles.barSelectionGroup}`)
-                                    .selectAll(`.${styles.taskBarSelection}`)
-                                    .data(tickValues);
+        const barSelectionGroup = graph.svg
+            .select(`.${styles.barSelectionGroup}`)
+            .selectAll(`.${styles.taskBarSelection}`)
+            .data(tickValues);
         barSelectionGroup
             .enter()
             .append("rect")
@@ -255,25 +255,30 @@ class Bar extends GraphContent {
         barSelectionGroup
             .exit()
             .transition()
-            .call(constants.d3Transition(graph.config.settingsDictionary.transition))
+            .call(
+                constants.d3Transition(
+                    graph.config.settingsDictionary.transition
+                )
+            )
             .remove();
-        
-        updateSelectionBars( this.dataTarget.internalValuesSubset,
+
+        updateSelectionBars(
+            this.dataTarget.internalValuesSubset,
             graph.svg,
             graph.config
         );
 
         const currentBarsPath = graph.svg
-                                .select(`g[aria-describedby="${graphData.key}"]`)
-                                .select(`[class="${styles.currentBarsGroup}"]`)
-                                .data([this.dataTarget]);
+            .select(`g[aria-describedby="${graphData.key}"]`)
+            .select(`[class="${styles.currentBarsGroup}"]`)
+            .data([this.dataTarget]);
         const bars = currentBarsPath
-                        .selectAll(`.${styles.bar}`)
-                        .data(this.dataTarget.internalValuesSubset);
+            .selectAll(`.${styles.bar}`)
+            .data(this.dataTarget.internalValuesSubset);
         bars.exit().remove();
         const barsContent = currentBarsPath
-                    .selectAll(`.${styles.bar} > rect`)
-                    .data(this.dataTarget.internalValuesSubset);
+            .selectAll(`.${styles.bar} > rect`)
+            .data(this.dataTarget.internalValuesSubset);
         drawDataBars(
             graph.scale,
             this.bandScale,

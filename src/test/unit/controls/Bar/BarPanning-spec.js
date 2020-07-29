@@ -76,7 +76,7 @@ describe("Bar - Panning", () => {
         });
         it("Dynamic Data is updated correctly when key matches", () => {
             const panData = {
-                key: 'uid_1',
+                key: "uid_1",
                 values: [
                     {
                         x: "2016-03-03T12:00:00Z",
@@ -94,15 +94,12 @@ describe("Bar - Panning", () => {
             );
             expect(barContent.length).toEqual(3);
             graphDefault.reflow(panData);
-            barContent = fetchAllElementsByClass(
-                barGraphContainer,
-                styles.bar
-            );
+            barContent = fetchAllElementsByClass(barGraphContainer, styles.bar);
             expect(barContent.length).toEqual(2);
         });
         it("Dynamic Data is not updated when key does not match", () => {
             const panData = {
-                key: 'uid_2',
+                key: "uid_2",
                 values: [
                     {
                         x: "2016-03-03T12:00:00Z",
@@ -120,10 +117,7 @@ describe("Bar - Panning", () => {
             );
             expect(barContent.length).toEqual(3);
             graphDefault.reflow(panData);
-            barContent = fetchAllElementsByClass(
-                barGraphContainer,
-                styles.bar
-            );
+            barContent = fetchAllElementsByClass(barGraphContainer, styles.bar);
             expect(barContent.length).toEqual(3);
         });
     });

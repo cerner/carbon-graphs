@@ -212,7 +212,7 @@ const graphData = [
                 y: 15
             }
         ]
-    }, 
+    },
     {
         key: "uid_bar_t1",
         values: [
@@ -238,7 +238,7 @@ const graphData = [
             }
         ]
     }
-] 
+];
 
 export const renderBarDefault = (id) => {
     const axisData = utils.deepClone(getDemoData(`#${id}`, "BAR_DEFAULT"));

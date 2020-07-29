@@ -726,7 +726,7 @@ renderSiteApp(
                             title: "Dynamic Data"
                         }
                     ]
-                },
+                }
             ]
         },
         {

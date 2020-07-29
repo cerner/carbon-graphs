@@ -745,9 +745,7 @@ describe("Gantt -> Track", () => {
     describe("when chart is destroyed", () => {
         it("should remove div element for the popup tooltip", () => {
             gantt.destroy();
-            expect(
-                fetchElementByClass(styles.labelPopupTooltip)
-            ).toBeNull();
+            expect(fetchElementByClass(styles.labelPopupTooltip)).toBeNull();
         });
     });
 });

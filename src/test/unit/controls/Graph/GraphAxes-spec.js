@@ -2007,9 +2007,7 @@ describe("Graph - Axes", () => {
     describe("when graph is destroyed", () => {
         it("should remove div element for the popup tooltip", () => {
             graph.destroy();
-            expect(
-                fetchElementByClass(styles.labelPopupTooltip)
-            ).toBeNull();
+            expect(fetchElementByClass(styles.labelPopupTooltip)).toBeNull();
         });
     });
 });
