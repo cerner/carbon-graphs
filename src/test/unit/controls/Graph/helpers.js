@@ -156,6 +156,17 @@ export const axisDefaultWithoutPanning = {
         enabled: false
     }
 };
+export const axisDefaultWithoutXAxisLabel = {
+    x: {
+        lowerLimit: 0,
+        upperLimit: 100
+    },
+    y: {
+        label: "Some Y Label",
+        lowerLimit: 0,
+        upperLimit: 20
+    }
+};
 /**
  * Returns the DOM element queried by Class
  *

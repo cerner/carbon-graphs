@@ -16,7 +16,8 @@ import {
     fetchElementByClass,
     getAxes,
     getData,
-    valuesDefault
+    valuesDefault,
+    axisDefaultWithoutXAxisLabel
 } from "./helpers";
 
 describe("Graph - Resize", () => {
@@ -476,10 +477,27 @@ describe("Graph - Resize", () => {
             );
         });
     });
-    describe("When x-axis show is set to true and showLabel is set to false", () => {
+    describe("When x-axis show is set to true and showLabel is set to false and x-axis label is specified", () => {
         it("Sets canvas height correctly", () => {
             graph.destroy();
-            const axisObj = utils.deepClone(axisDefault);
+            const axisObj = utils.deepClone(axisDefaultWithoutXAxisLabel);
+            axisObj.x.show = true;
+            axisObj.x.label = "Data";
+            graph = new Graph(
+                Object.assign(
+                    {
+                        showLabel: false
+                    },
+                    getAxes(axisObj)
+                )
+            );
+            expect(graph.config.canvasHeight).toBe(270);
+        });
+    });
+    describe("When x-axis show is set to true and showLabel is set to false and x-axis label is not specified", () => {
+        it("Sets canvas height correctly", () => {
+            graph.destroy();
+            const axisObj = utils.deepClone(axisDefaultWithoutXAxisLabel);
             axisObj.x.show = true;
             graph = new Graph(
                 Object.assign(
@@ -492,10 +510,27 @@ describe("Graph - Resize", () => {
             expect(graph.config.canvasHeight).toBe(270);
         });
     });
-    describe("When x-axis show is set to false and showLabel is set to true", () => {
+    describe("When x-axis show is set to false and showLabel is set to true and x-axis label is specified", () => {
         it("Sets canvas height correctly", () => {
             graph.destroy();
-            const axisObj = utils.deepClone(axisDefault);
+            const axisObj = utils.deepClone(axisDefaultWithoutXAxisLabel);
+            axisObj.x.show = false;
+            axisObj.x.label = "Data";
+            graph = new Graph(
+                Object.assign(
+                    {
+                        showLabel: true
+                    },
+                    getAxes(axisObj)
+                )
+            );
+            expect(graph.config.canvasHeight).toBeCloserTo(306);
+        });
+    });
+    describe("When x-axis show is set to false and showLabel is set to true and x-axis label is not specified", () => {
+        it("Reduces the extra pixels added to canvas height", () => {
+            graph.destroy();
+            const axisObj = utils.deepClone(axisDefaultWithoutXAxisLabel);
             axisObj.x.show = false;
             graph = new Graph(
                 Object.assign(
@@ -505,14 +540,15 @@ describe("Graph - Resize", () => {
                     getAxes(axisObj)
                 )
             );
-            expect(graph.config.canvasHeight).toBeCloserTo(306);
+            expect(graph.config.canvasHeight).toBeCloserTo(250);
         });
     });
-    describe("When  both x-axis show and showLabel properties are set to true", () => {
+    describe("When both x-axis show and showLabel properties are set to true and x-axis label is specified", () => {
         it("Sets canvas height correctly", () => {
             graph.destroy();
-            const axisObj = utils.deepClone(axisDefault);
+            const axisObj = utils.deepClone(axisDefaultWithoutXAxisLabel);
             axisObj.x.show = true;
+            axisObj.x.label = "Data";
             graph = new Graph(
                 Object.assign(
                     {
@@ -524,10 +560,43 @@ describe("Graph - Resize", () => {
             expect(graph.config.canvasHeight).toBeCloserTo(306);
         });
     });
-    describe("When  both x-axis show and showLabel properties are set to false", () => {
+    describe("When both x-axis show and showLabel properties are set to true and x-axis label is not specified", () => {
+        it("Sets canvas height correctly", () => {
+            graph.destroy();
+            const axisObj = utils.deepClone(axisDefaultWithoutXAxisLabel);
+            axisObj.x.show = true;
+            graph = new Graph(
+                Object.assign(
+                    {
+                        showLabel: true
+                    },
+                    getAxes(axisObj)
+                )
+            );
+            expect(graph.config.canvasHeight).toBeCloserTo(270);
+        });
+    });
+    describe("When both x-axis show and showLabel properties are set to false and x-axis label is specified", () => {
         it("Reduces the extra pixels added to canvas height", () => {
             graph.destroy();
-            const axisObj = utils.deepClone(axisDefault);
+            const axisObj = utils.deepClone(axisDefaultWithoutXAxisLabel);
+            axisObj.x.show = false;
+            axisObj.x.label = "Data";
+            graph = new Graph(
+                Object.assign(
+                    {
+                        showLabel: false
+                    },
+                    getAxes(axisObj)
+                )
+            );
+            expect(graph.config.canvasHeight).toBe(250);
+        });
+    });
+    describe("When both x-axis show and showLabel properties are set to false and x-axis label is not specified", () => {
+        it("Reduces the extra pixels added to canvas height", () => {
+            graph.destroy();
+            const axisObj = utils.deepClone(axisDefaultWithoutXAxisLabel);
             axisObj.x.show = false;
             graph = new Graph(
                 Object.assign(
