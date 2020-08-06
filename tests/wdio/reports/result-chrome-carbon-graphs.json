@@ -1,0 +1,43 @@
+{
+  "startDate": "8/6/2020, 9:23:21 AM",
+  "locale": "",
+  "theme": "",
+  "formFactor": "",
+  "output": [
+    [
+      "------------------------------------------------------------------",
+      "[chrome #0-0] Session ID: aa673f2d0006ffdb010a53a4f54bded1",
+      "[chrome #0-0] Spec: /Users/GitProjects/testFolder/test-terra-toolkit/carbon-graphs/tests/wdio/specs/line-spec.js",
+      "[chrome #0-0] Running: chrome",
+      "[chrome #0-0]",
+      "[chrome #0-0] [medium]",
+      "[chrome #0-0]",
+      "[chrome #0-0]     Case Details Container",
+      "[chrome #0-0]",
+      "[chrome #0-0]         Reports List",
+      "[chrome #0-0]",
+      "[chrome #0-0]             Loading",
+      "[chrome #0-0]               1) Other Reports should expand",
+      "[chrome #0-0]               ✓ Other Reports should expand",
+      "[chrome #0-0]               2) Other Reports should expand",
+      "[chrome #0-0]",
+      "[chrome #0-0]",
+      "[chrome #0-0] 1 passing (1m, 18s)",
+      "[chrome #0-0] 2 failing",
+      "[chrome #0-0]",
+      "[chrome #0-0] 1) Loading Other Reports should expand:",
+      "[chrome #0-0] expected 'http://10.188.185.245:8080/#/line/simple' to equal 'http://192.168.1.250:8080/#/line/simple'",
+      "[chrome #0-0] AssertionError: expected 'http://10.188.185.245:8080/#/line/simple' to equal 'http://192.168.1.250:8080/#/line/simple'",
+      "[chrome #0-0]     at Context.it (/Users/GitProjects/testFolder/test-terra-toolkit/carbon-graphs/tests/wdio/specs/line-spec.js:8:45)",
+      "[chrome #0-0]     at new Promise (<anonymous>)",
+      "[chrome #0-0]     at new F (/Users/GitProjects/testFolder/test-terra-toolkit/carbon-graphs/node_modules/core-js/library/modules/_export.js:36:28)",
+      "[chrome #0-0]",
+      "[chrome #0-0] 2) Loading Other Reports should expand:",
+      "[chrome #0-0] An element could not be located on the page using the given search parameters (\"#root\").",
+      "[chrome #0-0] Error: An element could not be located on the page using the given search parameters (\"#root\").",
+      "[chrome #0-0]     at getText() - index.js:312:3",
+      "[chrome #0-0]"
+    ]
+  ],
+  "endDate": "8/6/2020, 9:24:45 AM"
+}

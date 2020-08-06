@@ -2,7 +2,7 @@ const WebpackDevServer = require("webpack-dev-server");
 const path = require("path");
 const webpack = require("webpack");
 const { jsOptions, cssOptions } = require("./helpers/rules");
-const port = Number(process.argv[2] || 9991);
+const port = Number(process.argv[2] || 8080);
 const compiler = webpack({
     mode: "development",
     devtool: "inline-source-map",
