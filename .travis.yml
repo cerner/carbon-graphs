@@ -15,6 +15,7 @@ jobs:
           script: npm run lint
         - stage: test
           script: npm run test
+        - script: USE_SELENIUM_GRID=true WDIO_EXTERNAL_HOST=$(ifconfig | awk '/inet 10/{i++}i==1' | cut -d' ' -f2) npm run wdio
         - stage: build
           script: npm run build
         - script: npm run build:dist
