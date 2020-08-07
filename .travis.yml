@@ -5,6 +5,15 @@ notifications:
     email: false
 sudo: required
 script: skip
+services:
+    - docker
+cache:
+    directories:
+        - $HOME/docker
+env:
+    global:
+        - DOCKER_IMAGE='ashishmotanam/carbon-graphs'
+        - TAG="${TRAVIS_PULL_REQUEST_SHA:=latest}"
 branches:
     only:
         - main
