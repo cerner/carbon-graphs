@@ -4,12 +4,7 @@
   "version": "2.11.1",
   "author": "Cerner Corporation",
   "browserslist": [
-    "Android >= 4",
-    "Chrome >= 35",
-    "Firefox >= 31",
-    "Explorer >= 10",
-    "iOS >= 7",
-    "Safari >= 7.1"
+    "extends browserslist-config-terra"
   ],
   "bugs": "https://github.com/cerner/carbon-graphs/issues",
   "commitlint": {
@@ -66,6 +61,7 @@
     "babel-plugin-istanbul": "^6.0.0",
     "babel-plugin-minify-replace": "^0.5.0",
     "babel-preset-minify": "^0.5.1",
+    "browserslist-config-terra": "^2.0.0",
     "commander": "^5.1.0",
     "conventional-changelog-eslint": "^3.0.8",
     "css-loader": "^3.6.0",
@@ -195,6 +191,6 @@
     "test:persist": "karma start ./build/karma/karma.config.js --no-single-run",
     "start": "tt-serve --config ./build/webpack/site.webpack.js --env.TYPE=SITE",
     "wdio": "npx wdio ./wdio.conf.js",
-    "test:wdio:local": "tt-wdio --browsers ['chrome', 'ie'] --formFactors ['medium'] --locales ['en-US']"
+    "test:wdio:local": "tt-wdio ./wdio.conf.js --browsers ['chrome', 'firefox'] --formFactors ['medium'] --locales ['en-US']"
   }
 }

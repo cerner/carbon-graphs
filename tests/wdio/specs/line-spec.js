@@ -1,6 +1,7 @@
 Terra.describeViewports('Case Details Container', ['medium'], () => {
     describe('Reports List', () => {
         describe('Loading', () => {
+            const viewports = Terra.viewports('tiny', 'huge');
             before(() => {
                 browser.url('#/line/simple');
             });
@@ -8,7 +9,8 @@ Terra.describeViewports('Case Details Container', ['medium'], () => {
                 console.log("url"+browser.getUrl());
             });
             it('Other Reports should expand', () => {
-                browser.saveScreenshot("./src/sample.png");
+                const screenshots = browser.checkElement('.carbon-graph-container', { viewports });
+                expect(screenshots).to.matchReference();
             });
             it('Other Reports should expand', () => {
                 //expect($('.carbon-graph-container')).to.exist();
@@ -16,6 +18,8 @@ Terra.describeViewports('Case Details Container', ['medium'], () => {
                     "Data Label 1"
                 );
             });
+
+
         });
     });
 });

@@ -1,12 +1,12 @@
 {
-  "startDate": "8/6/2020, 3:56:53 PM",
+  "startDate": "8/7/2020, 1:05:46 PM",
   "locale": "en-US",
   "theme": "",
   "formFactor": "medium",
   "output": [
     [
       "------------------------------------------------------------------",
-      "[chrome #0-0] Session ID: 99e2ae7e9709fe632903ef17bd919b09",
+      "[chrome #0-0] Session ID: d3ebddb5f93d215156119e80467e1430",
       "[chrome #0-0] Spec: /Users/GitProjects/testFolder/test-terra-toolkit/carbon-graphs/tests/wdio/specs/line-spec.js",
       "[chrome #0-0] Running: chrome",
       "[chrome #0-0]",
@@ -22,9 +22,31 @@
       "[chrome #0-0]               ✓ Other Reports should expand",
       "[chrome #0-0]",
       "[chrome #0-0]",
-      "[chrome #0-0] 3 passing (2s)",
+      "[chrome #0-0] 3 passing (6s)",
       "[chrome #0-0]"
-    ]
+    ],
+    [
+      "------------------------------------------------------------------",
+      "[firefox #1-0] Session ID: b95197a3-52ea-413a-9f3d-e7e32d072226",
+      "[firefox #1-0] Spec: /Users/GitProjects/testFolder/test-terra-toolkit/carbon-graphs/tests/wdio/specs/line-spec.js",
+      "[firefox #1-0] Running: firefox",
+      "[firefox #1-0]",
+      "[firefox #1-0] [medium]",
+      "[firefox #1-0]",
+      "[firefox #1-0]     Case Details Container",
+      "[firefox #1-0]",
+      "[firefox #1-0]         Reports List",
+      "[firefox #1-0]",
+      "[firefox #1-0]             Loading",
+      "[firefox #1-0]               ✓ Other Reports should expand",
+      "[firefox #1-0]               ✓ Other Reports should expand",
+      "[firefox #1-0]               ✓ Other Reports should expand",
+      "[firefox #1-0]",
+      "[firefox #1-0]",
+      "[firefox #1-0] 3 passing (11s)",
+      "[firefox #1-0]"
+    ],
+    []
   ],
-  "endDate": "8/6/2020, 3:57:13 PM"
+  "endDate": "8/7/2020, 1:06:22 PM"
 }
