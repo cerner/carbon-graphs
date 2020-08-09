@@ -21,8 +21,11 @@ branches:
 jobs:
     include:
         - stage: test
-          script: npm run test
-        - script: USE_SELENIUM_GRID=true WDIO_EXTERNAL_HOST=$(ifconfig | awk '/inet 10/{i++}i==1' | cut -d' ' -f2) npm run wdio
+          script:
+              - npm run test
+        - script:
+              - travis_wait docker-compose --verbose pull standalone-chrome
+              - USE_SELENIUM_GRID=true WDIO_EXTERNAL_HOST=$(ifconfig | awk '/inet 10/{i++}i==1' | cut -d' ' -f2) npm run wdio
         - stage: lint
           script: npm run lint
         - stage: build
