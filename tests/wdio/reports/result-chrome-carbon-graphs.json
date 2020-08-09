@@ -1,12 +1,12 @@
 {
-  "startDate": "8/7/2020, 12:37:37 PM",
+  "startDate": "8/9/2020, 6:06:24 PM",
   "locale": "",
   "theme": "",
   "formFactor": "",
   "output": [
     [
       "------------------------------------------------------------------",
-      "[chrome #0-0] Session ID: 88ff35d91327f37dc91205b4f5d26d24",
+      "[chrome #0-0] Session ID: 71d1c8d38dce869ad63af0a78e4a9b00",
       "[chrome #0-0] Spec: /Users/GitProjects/testFolder/test-terra-toolkit/carbon-graphs/tests/wdio/specs/line-spec.js",
       "[chrome #0-0] Running: chrome",
       "[chrome #0-0]",
@@ -22,9 +22,11 @@
       "[chrome #0-0]               ✓ Other Reports should expand",
       "[chrome #0-0]",
       "[chrome #0-0]",
-      "[chrome #0-0] 3 passing (6s)",
+      "[chrome #0-0] 3 passing (7s)",
       "[chrome #0-0]"
-    ]
+    ],
+    [],
+    []
   ],
-  "endDate": "8/7/2020, 12:38:03 PM"
+  "endDate": "8/9/2020, 6:06:48 PM"
 }

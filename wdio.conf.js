@@ -33,22 +33,22 @@ const config = {
                     'dom.disable_beforeunload': false,
                 },
             },
-        },
+        }]
+        /*,
         {
             browserName: 'internet explorer',
             maxInstances: 1,
-            /** IE Driver custom capabilities must be passed as a sub-object specified under 'se:ieOptions' key for
+            /!** IE Driver custom capabilities must be passed as a sub-object specified under 'se:ieOptions' key for
              * version ^3.3.0.1. and Webdriver.io does not pass these as a sub-options.
              * See https://github.com/SeleniumHQ/selenium/blob/master/cpp/iedriverserver/CHANGELOG#L782.
-             */
+             *!/
             'se:ieOptions': {
                 javascriptEnabled: true,
                 locationContextEnabled: true,
                 handlesAlerts: true,
                 rotatable: true,
             },
-        }],
-    services: ['selenium-standalone']
+        }],*/
 };
 
 exports.config = config;
