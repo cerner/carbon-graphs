@@ -48,7 +48,7 @@ const config = {
                 rotatable: true,
             },
         }],
-
+    services: ['selenium-standalone']
 };
 
 exports.config = config;
