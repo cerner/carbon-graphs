@@ -22,6 +22,7 @@ jobs:
           script:
               - npm run test
         - script:
+              - docker-compose up -d standalone-chrome-travis
               - USE_SELENIUM_GRID=true npm run wdio
         - stage: lint
           script: npm run lint
