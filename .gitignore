@@ -9,3 +9,6 @@ npm-debug.log
 debug.log
 *.stackdump
 .vscode
+errorScreenshots
+aggregated-translations
+tests/wdio/reports

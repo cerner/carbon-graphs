@@ -1,4 +1,3 @@
-FROM docker.cernerrepos.net/ion/ion-node:3
-
+FROM cerner/terra-node-ci:1
 # run the server
 CMD ["npm", "run", "start-static"]

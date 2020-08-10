@@ -5,6 +5,26 @@ const wdioConfig = wdioConf.config;
 
 const travis = process.env.TRAVIS;
 
+
+const config = {
+    if (travis) {
+        wdioConfig.host = 'localhost';
+    },
+    ...wdioConf.config,
+    webpackConfig,
+    seleniumDocker: {
+// Disable if running in CI pipeline
+        enabled: !process.env.CI,
+    }
+}
+
+exports.config = config;
+/*const webpackConfig = require('./build/webpack/site.webpack.js');
+
+const wdioConfig = wdioConf.config;
+
+const travis = process.env.TRAVIS;
+
 if (travis) {
     wdioConfig.host = 'localhost';
 }
@@ -12,10 +32,10 @@ if (travis) {
 const config = {
     ...wdioConf.config,
     webpackConfig,
-/*    seleniumDocker: {
+/!*    seleniumDocker: {
         // Disable if running in CI pipeline
         enabled: !process.env.CI,
-    },*/
+    },*!/
     capabilities : [{
         browserName: 'chrome',
         maxInstances: 1,
@@ -23,10 +43,10 @@ const config = {
             performance: 'ALL',
         },
         'goog:chromeOptions': {
-            /** Run in headless mode since Chrome 69 cannot reach the tiny viewport size due to a omnibox size changexx
+            /!** Run in headless mode since Chrome 69 cannot reach the tiny viewport size due to a omnibox size changexx
              * made by the chrome team. See https://bugs.chromium.org/p/chromedriver/issues/detail?id=2626#c1 &&
              * https://bugs.chromium.org/p/chromium/issues/detail?id=849784.
-             */
+             *!/
             args: ['headless', 'disable-gpu'],
             perfLoggingPrefs: {
                 traceCategories: 'blink.console, devtools.timeline, toplevel, disabled-by-default-devtools.timeline, disabled-by-default-devtools.timeline.frame',
@@ -42,7 +62,7 @@ const config = {
                 },
             },
         }]
-        /*,
+        /!*,
         {
             browserName: 'internet explorer',
             maxInstances: 1,
@@ -56,7 +76,6 @@ const config = {
                 handlesAlerts: true,
                 rotatable: true,
             },
-        }],*/
-};
+        }],*!/
+};*/
 
-exports.config = config;

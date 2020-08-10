@@ -1,8 +1,25 @@
-version: '3'
+standalone-chrome:
+    image: 'selenium/standalone-chrome:3.14.0-helium'
+    ports:
+        - '4444'
+    # Necessary due to some issues with chrome in docker.  See https://github.com/SeleniumHQ/docker-selenium#running-the-images
+    volumes:
+        - '/dev/shm:/dev/shm'
+    # Necessary to lock down screen sizes for our screen shot comparisons.
+    environment:
+        TZ: 'America/Chicago'
 
-services:
+    dev:
+        image: cerner/terra-node-dev:1
+        ports:
+            - 8080:8080
+        depends_on:
+            - standalone-chrome
+        volumes:
+            - .:/opt/module
+
     standalone-chrome-travis:
-        image: selenium/standalone-chrome:latest
+        image: selenium/standalone-chrome:3.14.0-helium
         ports:
             - 4444:4444
         # Necessary due to some issues with chrome in docker.  See https://github.com/SeleniumHQ/docker-selenium#running-the-images
@@ -10,6 +27,3 @@ services:
             - '/dev/shm:/dev/shm'
         environment:
             TZ: 'America/Chicago'
-
-volumes:
-    zsh_history:
