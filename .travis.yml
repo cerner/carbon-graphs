@@ -31,6 +31,7 @@ jobs:
               - npm run test
         - script:
               - docker-compose up -d standalone-chrome-travis
+              - npm run start
               - npm run wdio
         - stage: lint
           script: npm run lint
