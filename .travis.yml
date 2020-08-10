@@ -19,7 +19,7 @@ addons:
             - google-chrome-stable
 env:
     global:
-        - DOCKER_IMAGE='ashishmotanam/carbon-graphs'
+        - DOCKER_IMAGE='docker-integration.cernerrepos.net/cerner/carbon-graphs'
         - TAG="${TRAVIS_PULL_REQUEST_SHA:=latest}"
 branches:
     only:
