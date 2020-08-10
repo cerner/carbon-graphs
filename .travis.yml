@@ -7,6 +7,8 @@ sudo: required
 script: skip
 services:
     - docker
+before_install:
+    - sudo chown -R travis:travis $HOME/docker
 cache:
     directories:
         - $HOME/docker
@@ -26,10 +28,10 @@ branches:
 jobs:
     include:
         - stage: test
+          before_install: true
           script:
               - npm run test
         - script:
-              - docker build .
               - USE_SELENIUM_GRID=true WDIO_EXTERNAL_HOST=$(ifconfig | awk '/inet 10/{i++}i==1' | cut -d' ' -f2) npm run wdio
         - stage: lint
           script: npm run lint
