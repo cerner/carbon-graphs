@@ -191,6 +191,6 @@
     "test:persist": "karma start ./build/karma/karma.config.js --no-single-run",
     "start": "tt-serve --config ./build/webpack/site.webpack.js --env.TYPE=SITE",
     "wdio": "npx wdio ./wdio.conf.js",
-    "test:wdio:local": "tt-wdio ./wdio.conf.js --browsers ['chrome', 'firefox'] --formFactors ['medium'] --locales ['en-US']"
+    "test:wdio:local": "tt-wdio ./wdio.conf.js --browsers ['chrome','firefox','ie'] --formFactors ['medium'] --locales ['en-US']"
   }
 }

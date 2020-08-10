@@ -4,12 +4,11 @@ const webpackConfig = require('./build/webpack/site.webpack.js');
 const wdioConfig = wdioConf.config;
 
 const travis = process.env.TRAVIS;
-
-
+if (travis) {
+    wdioConfig.host = 'localhost';
+}
 const config = {
-    if (travis) {
-        wdioConfig.host = 'localhost';
-    },
+
     ...wdioConf.config,
     webpackConfig,
     seleniumDocker: {
