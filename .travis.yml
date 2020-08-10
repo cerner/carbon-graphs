@@ -31,7 +31,7 @@ jobs:
               - npm run test
         - script:
               - docker-compose up -d standalone-chrome-travis
-              -  SITE=$TRAVIS_BUILD_DIR/travis-build/default-locale LOCALE=de npm run wdio
+              - npm run wdio
         - stage: lint
           script: npm run lint
         - stage: build
