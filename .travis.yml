@@ -8,7 +8,9 @@ script: skip
 services:
     - docker
     - xvfb
-
+cache:
+    directories:
+        - travis-build
 addons:
     apt:
         packages:
@@ -29,7 +31,7 @@ jobs:
               - npm run test
         - script:
               - docker-compose up -d standalone-chrome-travis
-              - USE_SELENIUM_GRID=true WDIO_EXTERNAL_HOST=$(ifconfig | awk '/inet 10/{i++}i==1' | cut -d' ' -f2) npm run test:wdio:local
+              -  SITE=$TRAVIS_BUILD_DIR/travis-build/default-locale LOCALE=de npm run wdio
         - stage: lint
           script: npm run lint
         - stage: build
