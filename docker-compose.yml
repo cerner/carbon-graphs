@@ -1,13 +1,4 @@
 standalone-chrome:
-    dev:
-        image: cerner/terra-node-dev:1
-        ports:
-            - 8080:8080
-        depends_on:
-            - standalone-chrome
-        volumes:
-            - .:/opt/module
-
     standalone-chrome-travis:
         image: selenium/standalone-chrome:3.14.0-helium
         ports:
