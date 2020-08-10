@@ -1,13 +1,13 @@
 const wdioConf = require('terra-toolkit/config/wdio/wdio.conf.js');
 const webpackConfig = require('./build/webpack/site.webpack.js');
 
-//const wdioConfig = wdioConf.config;
+const wdioConfig = wdioConf.config;
 
-/*const travis = process.env.TRAVIS;
+const travis = process.env.TRAVIS;
 
 if (travis) {
     wdioConfig.host = 'localhost';
-}*/
+}
 
 const config = {
     ...wdioConf.config,
