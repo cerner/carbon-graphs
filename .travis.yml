@@ -7,20 +7,11 @@ sudo: required
 script: skip
 services:
     - docker
-before_install:
-    - sudo chown -R travis:travis $HOME/docker
-cache:
-    directories:
-        - $HOME/docker
 
 addons:
     apt:
         packages:
             - google-chrome-stable
-env:
-    global:
-        - DOCKER_IMAGE='docker-integration.cernerrepos.net/cerner/carbon-graphs'
-        - TAG="${TRAVIS_PULL_REQUEST_SHA:=latest}"
 branches:
     only:
         - main
@@ -28,7 +19,6 @@ branches:
 jobs:
     include:
         - stage: test
-          before_install: true
           script:
               - npm run test
         - script:
