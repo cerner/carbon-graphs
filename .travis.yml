@@ -7,11 +7,6 @@ sudo: required
 script: skip
 services:
     - docker
-
-addons:
-    apt:
-        packages:
-            - google-chrome-stable
 branches:
     only:
         - main
