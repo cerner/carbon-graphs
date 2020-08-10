@@ -8,14 +8,15 @@ script: skip
 services:
     - docker
 
-addons:
-    apt:
-        packages:
-            - google-chrome-stable
 branches:
     only:
         - main
         - /^greenkeeper/.*$/
+
+cache:
+    directories:
+        - travis-build
+
 jobs:
     include:
         - stage: test
@@ -23,7 +24,7 @@ jobs:
               - npm run test
         - script:
               - docker-compose up -d standalone-chrome-travis
-              - USE_SELENIUM_GRID=true npm run wdio
+              - - SITE=$TRAVIS_BUILD_DIR/travis-build/default  npm run wdio
         - stage: lint
           script: npm run lint
         - stage: build
