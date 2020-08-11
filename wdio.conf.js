@@ -13,7 +13,7 @@ const config = {
     webpackConfig,
     seleniumDocker: {
 // Disable if running in CI pipeline
-        enabled: !process.env.CI,
+        enabled: !process.env.CI
     }
 }
 
