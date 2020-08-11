@@ -18,8 +18,7 @@ jobs:
           script:
               - npm run test
         - script:
-              - docker-compose up -d standalone-chrome-travis
-              - docker-compose up -d standalone-firefox-travis
+              - docker-compose up -d
               - npm run test:wdio-locally
         - stage: lint
           script: npm run lint
