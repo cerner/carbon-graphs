@@ -11,7 +11,9 @@ branches:
     only:
         - main
         - /^greenkeeper/.*$/
-
+cache:
+    directories:
+        - travis-build
 jobs:
     include:
         - stage: test
@@ -19,7 +21,7 @@ jobs:
               - npm run test
         - script:
               - docker-compose up -d
-              - npm run test:wdio-locally
+              - SITE=$TRAVIS_BUILD_DIR/travis-build/default npm run test:wdio-locally
         - stage: lint
           script: npm run lint
         - stage: build
