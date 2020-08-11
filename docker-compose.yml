@@ -16,13 +16,3 @@ services:
             HUB_PORT: 4444
         deploy:
             replicas: 1
-
-    standalone-firefox-travis:
-        image: selenium/standalone-firefox:3.14.0-helium
-        volumes:
-            - '/dev/shm:/dev/shm'
-        environment:
-            HUB_HOST: hub
-            HUB_PORT: 4444
-        deploy:
-            replicas: 1
