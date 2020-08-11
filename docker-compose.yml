@@ -15,7 +15,7 @@ services:
                 - HUB_PORT_4444_TCP_PORT=4444
             volumes:
                 - /app:/app
-            command: /bin/bash -c "cd app; npm test"
+            command: /bin/bash -c "cd app; npm run test:wdio-locally"
 
     hub:
         image: selenium/hub
