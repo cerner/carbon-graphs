@@ -2,12 +2,12 @@ version: '3'
 
 services:
     hub:
-        image: selenium/hub:3.14.0-helium
+        image: selenium/hub
         ports:
             - 4444:4444
 
     firefox:
-        image: selenium/standalone-firefox:3.14.0-helium
+        image: selenium/standalone-firefox
         ports:
             - 5900
         environment:
@@ -17,7 +17,7 @@ services:
             - hub
 
     chrome:
-        image: selenium/standalone-chrome:3.14.0-helium
+        image: selenium/standalone-chrome
         ports:
             - 5900
         environment:
