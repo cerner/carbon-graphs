@@ -3,19 +3,20 @@ version: '3'
 services:
     webdriverio:
         network_mode: host
-            image: ashishmotanam/carbon-graphs
-            build:
-                dockerfile: ./Dockerfile
-            depends_on:
-                - "standalone-chrome-travis"
-                - "standalone-firefox-travis"
-                - "hub"
-            environment:
-                - HUB_PORT_4444_TCP_ADDR=hub
-                - HUB_PORT_4444_TCP_PORT=4444
-            volumes:
-                - /app:/app
-            command: /bin/bash -c "cd app; npm run test:wdio-locally"
+        image: ashishmotanam/carbon-graphs
+        build:
+            dockerfile: ./Dockerfile
+        depends_on:
+            - "standalone-chrome-travis"
+            - "standalone-firefox-travis"
+            - "hub"
+        environment:
+            - HUB_PORT_4444_TCP_ADDR=hub
+            - HUB_PORT_4444_TCP_PORT=4444
+        volumes:
+            - /app:/app
+        command: /bin/bash -c "cd app; npm run test:wdio-locally"
+
 
     hub:
         image: selenium/hub
