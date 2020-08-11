@@ -1,54 +1,22 @@
-version: '3'
+version: '3.7'
 
 services:
-    webdriverio:
-        network_mode: host
-        image: ashishmotanam/carbon-graphs
-        build:
-            dockerfile: ./Dockerfile
-        depends_on:
-            - "standalone-chrome-travis"
-            - "standalone-firefox-travis"
-            - "hub"
-        environment:
-            - HUB_PORT_4444_TCP_ADDR=hub
-            - HUB_PORT_4444_TCP_PORT=4444
-        volumes:
-            - .:/app
-        command: /bin/bash -c "cd app; npm run test:wdio-locally"
-
-
-    hub:
-        image: selenium/hub
+    standalone-chrome-travis:
+        image: selenium/standalone-chrome:3.14.0-helium
         ports:
             - 4444:4444
-
-    standalone-chrome-travis:
-        image: selenium/standalone-chrome
-        ports:
-            - 5900
-        environment:
-            - HUB_PORT_4444_TCP_ADDR=hub
-            - HUB_PORT_4444_TCP_PORT=4444
-        depends_on:
-            - hub
         # Necessary due to some issues with chrome in docker.  See https://github.com/SeleniumHQ/docker-selenium#running-the-images
         volumes:
             - '/dev/shm:/dev/shm'
+        environment:
+            TZ: 'America/Chicago'
 
     standalone-firefox-travis:
-        image: selenium/standalone-firefox
+        image: selenium/standalone-firefox:latest
         ports:
-            - 5900
-        environment:
-            - HUB_PORT_4444_TCP_ADDR=hub
-            - HUB_PORT_4444_TCP_PORT=4444
-        depends_on:
-            - hub
+            - 4444:4444
         # Necessary due to some issues with chrome in docker.  See https://github.com/SeleniumHQ/docker-selenium#running-the-images
         volumes:
             - '/dev/shm:/dev/shm'
-
-
-
-
+        environment:
+            TZ: 'America/Chicago'
