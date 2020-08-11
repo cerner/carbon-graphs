@@ -1,13 +1,12 @@
 version: '3.7'
 
 services:
-
     standalone-selenium-hub-travis:
-        image: selenium/hub:3.14.0-helium
+        image: selenium/hub:latest
         ports:
             - "4444:4444"
     standalone-chrome-travis:
-        image: selenium/standalone-chrome:3.14.0-helium
+        image: selenium/standalone-chrome:latest
         # Necessary due to some issues with chrome in docker.  See https://github.com/SeleniumHQ/docker-selenium#running-the-images
         volumes:
             - '/dev/shm:/dev/shm'
@@ -18,7 +17,7 @@ services:
             replicas: 1
 
     standalone-firefox-travis:
-        image: selenium/standalone-firefox:3.14.0-helium
+        image: selenium/standalone-firefox:latest
         volumes:
             - '/dev/shm:/dev/shm'
         environment:
