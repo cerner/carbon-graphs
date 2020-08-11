@@ -1,24 +1,28 @@
 version: '3'
 
 services:
+
     standalone-selenium-hub-travis:
-        image: selenium/hub:3.14.0-helium
-    standalone-chrome-travis:
-        image: selenium/standalone-chrome:3.14.0-helium
+        image: selenium/hub:${TERRA_SELENIUM_DOCKER_VERSION}
         ports:
-            - 4444:4444
+            - "4444:4444"
+    standalone-chrome-travis:
+        image: selenium/node-chrome:${TERRA_SELENIUM_DOCKER_VERSION}
         # Necessary due to some issues with chrome in docker.  See https://github.com/SeleniumHQ/docker-selenium#running-the-images
         volumes:
             - '/dev/shm:/dev/shm'
         environment:
-            TZ: 'America/Chicago'
+            HUB_HOST: hub
+            HUB_PORT: 4444
+        deploy:
+            replicas: 1
 
     standalone-firefox-travis:
-        image: selenium/standalone-firefox:3.14.0-helium
-        ports:
-            - 4445:4444
-        # Necessary due to some issues with chrome in docker.  See https://github.com/SeleniumHQ/docker-selenium#running-the-images
+        image: selenium/node-firefox:${TERRA_SELENIUM_DOCKER_VERSION}
         volumes:
             - '/dev/shm:/dev/shm'
         environment:
-            TZ: 'America/Chicago'
+            HUB_HOST: hub
+            HUB_PORT: 4444
+        deploy:
+            replicas: 1
