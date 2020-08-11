@@ -193,6 +193,6 @@
     "wdio": "npx wdio ./wdio.conf.js",
     "test:wdio:local": "tt-wdio ./wdio.conf.js --browsers ['chrome','firefox','internet explorer'] --formFactors ['medium'] --locales ['en-US']",
     "pack": "webpack --config ./build/webpack/site.webpack.js -p --env.TYPE=SITE",
-    "test:wdio-locally": "npm run pack; tt-wdio --config ./wdio.conf.js --locales ['en','es'] --browsers ['firefox']"
+    "test:wdio-locally": "npm run pack; tt-wdio --config ./wdio.conf.js --locales ['en','es'] --browsers ['firefox','chrome']"
   }
 }
