@@ -20,8 +20,8 @@ jobs:
           script:
               - npm run test
         - script:
-              - docker-compose up -d
-              - SITE=$TRAVIS_BUILD_DIR/travis-build/default npm run test:wdio-locally
+          - docker-compose up -d standalone-chrome-travis
+          -  npm run test:wdio-locally
         - stage: lint
           script: npm run lint
         - stage: build
