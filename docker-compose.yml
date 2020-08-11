@@ -5,27 +5,14 @@ services:
         image: selenium/hub
         ports:
             - 4444:4444
-    standalone-firefox-travis:
-        image: selenium/node-firefox
-        ports:
-            - 5900
-        environment:
-            - HUB_PORT_4444_TCP_ADDR=hub
-            - HUB_PORT_4444_TCP_PORT=4444
-            -   TZ: 'America/Chicago'
-        depends_on:
-            - hub
-        volumes:
-            - '/dev/shm:/dev/shm'
 
     standalone-chrome-travis:
-        image: selenium/standalone-chrome`
+        image: selenium/standalone-chrome
         ports:
             - 5900
         environment:
             - HUB_PORT_4444_TCP_ADDR=hub
             - HUB_PORT_4444_TCP_PORT=4444
-            - TZ: 'America/Chicago'
         depends_on:
             - hub
         # Necessary due to some issues with chrome in docker.  See https://github.com/SeleniumHQ/docker-selenium#running-the-images
