@@ -7,23 +7,11 @@ sudo: required
 script: skip
 services:
     - docker
-    - xvfb
-cache:
-    directories:
-        - travis-build
-addons:
-    apt:
-        packages:
-            - google-chrome-stable
 branches:
     only:
         - main
         - /^greenkeeper/.*$/
 
-dist: xenial
-before_install:
-    # starting a GUI to run tests, per https://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-a-GUI
-    - export DISPLAY=:99.0
 jobs:
     include:
         - stage: test
