@@ -196,6 +196,5 @@
     "test:wdio-locally": "npm run pack; tt-wdio --config ./wdio.conf.js --locales ['en-US'] --formFactors ['medium'] --browsers ['chrome','firefox']",
     "test:wdio-chrome-ci": "npm run pack; tt-wdio --config ./wdio.conf.js --locales ['en-US'] --browsers ['chrome']",
     "test:wdio-firefox-ci": "npm run pack; tt-wdio --config ./wdio.conf.js --locales ['en-US'] --browsers ['firefox']"
-
   }
 }
