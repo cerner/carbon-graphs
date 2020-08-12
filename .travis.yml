@@ -21,10 +21,10 @@ jobs:
               - npm run test
         - script:
           - docker-compose up -d standalone-chrome-travis
-          - npm run test:wdio-locally
+          - npm run test:wdio-chrome-ci
         - script:
-          - docker-compose up -d standalone-chrome-travis
-          - npm run test:wdio-locally
+          - docker-compose up -d standalone-firefox-travis
+          - npm run test:wdio-firefox-ci
         - stage: lint
           script: npm run lint
         - stage: build
