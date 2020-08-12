@@ -12,7 +12,7 @@ services:
             TZ: 'America/Chicago'
 
     standalone-firefox-travis:
-        image: selenium/standalone-firefox:3.14.0-helium
+        image: selenium/standalone-firefox:latest
         ports:
             - 4444:4444
         # Necessary due to some issues with chrome in docker.  See https://github.com/SeleniumHQ/docker-selenium#running-the-images
