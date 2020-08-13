@@ -65,6 +65,7 @@ Terra.describeViewports('Case Details Container', ['medium'], () => {
                         .getAttribute("aria-hidden")
                 ).to.equal("true");
             });
+
         });
     });
 });
