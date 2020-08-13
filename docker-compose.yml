@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3'
 
 services:
     standalone-chrome-travis:
@@ -18,5 +18,16 @@ services:
         # Necessary due to some issues with chrome in docker.  See https://github.com/SeleniumHQ/docker-selenium#running-the-images
         volumes:
             - '/dev/shm:/dev/shm'
+        environment:
+            TZ: 'America/Chicago'
+
+    standalone-firefox-dev:
+        image: 'selenium/standalone-firefox:3.141.59-titanium'
+        ports:
+            - '4444'
+        # Necessary due to some issues with chrome in docker.  See https://github.com/SeleniumHQ/docker-selenium#running-the-images
+        volumes:
+            - '/dev/shm:/dev/shm'
+        # Necessary to lock down screen sizes for our screen shot comparisons.
         environment:
             TZ: 'America/Chicago'

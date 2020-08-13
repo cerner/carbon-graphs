@@ -18,8 +18,6 @@ Terra.describeViewports('Case Details Container', ['medium'], () => {
                     "Data Label 1"
                 );
             });
-
-
         });
     });
 });
