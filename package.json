@@ -197,6 +197,5 @@
     "test:wdio-chrome-ci": "npm run pack; tt-wdio --config ./wdio.conf.js --locales ['en-US'] --browsers ['chrome']",
     "test:wdio-firefox-ci": "npm run pack; tt-wdio --config ./wdio.conf.js --locales ['en-US'] --browsers ['firefox']",
     "test:wdio-local": "USE_SELENIUM_GRID=true WDIO_EXTERNAL_HOST=$(ifconfig | awk '/inet 10/{i++}i==1' | cut -d' ' -f2) tt-wdio --config ./wdio.conf.js --browsers ['chrome','firefox']"
-
   }
 }
