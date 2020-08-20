@@ -23,6 +23,7 @@ import {
     valuesDefault,
     valuesTimeSeries
 } from "./helpers";
+import { rgb } from "d3";
 
 describe("Graph", () => {
     let graph = null;
@@ -739,6 +740,33 @@ describe("Graph", () => {
             expect(graph.contentKeys).toEqual([]);
             expect(graph.content).toEqual([]);
             expect(graph.contentConfig).toEqual([]);
+        });
+    });
+    describe("When generate is called", () => {
+        it("sets background as white when opaqueBackground is set to true", () => {
+            const input = getAxes(axisDefault);
+            input.opaqueBackground = true;
+            new Graph(input);
+            expect(
+                fetchElementByClass(
+                    styles.container
+                ).style.backgroundColor.toString()
+            ).toEqual(rgb(255, 255, 255).toString());
+        });
+        it("sets background as transparent when opaqueBackground is set to false", () => {
+            const input = getAxes(axisDefault);
+            input.opaqueBackground = false;
+            new Graph(input);
+            expect(
+                fetchElementByClass(styles.container).style.backgroundColor
+            ).toEqual("");
+        });
+        it("sets background as transparent when opaqueBackground is set to undefined", () => {
+            const input = getAxes(axisDefault);
+            new Graph(input);
+            expect(
+                fetchElementByClass(styles.container).style.backgroundColor
+            ).toEqual("");
         });
     });
     describe("When x axis orientation is TOP", () => {

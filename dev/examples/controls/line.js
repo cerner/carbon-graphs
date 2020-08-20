@@ -1,11 +1,17 @@
 import Carbon from "../../../src/main/js/carbon";
 import utils from "../../../src/main/js/helpers/utils";
-import { getDemoData } from "../data";
+import * as d3 from "d3";
+// import { COLORS } from "../../../src/main/js/helpers/constants";
+import {
+    getDemoData
+} from "../data";
 import {
     CUSTOM_CONTAINER_STYLE,
     CUSTOM_CONTAINER_LEGEND_STYLE
 } from "../helpers";
-import { createPanningControls } from "../panHelpers";
+import {
+    createPanningControls
+} from "../panHelpers";
 
 const tickValues = [
     new Date(2016, 0, 1, 1, 0).toISOString(),
@@ -14,8 +20,7 @@ const tickValues = [
     new Date(2016, 0, 1, 15, 0).toISOString(),
     new Date(2016, 0, 1, 20, 0).toISOString()
 ];
-const regions = [
-    {
+const regions = [{
         axis: "y",
         start: 2,
         end: 10,
@@ -79,8 +84,7 @@ export const renderLineWithDateline = (id) => {
 
 export const renderLineWithEventline = (id) => {
     const data = utils.deepClone(getDemoData(`#${id}`, "LINE_TIMESERIES"));
-    data.eventline = [
-        {
+    data.eventline = [{
             color: Carbon.helpers.COLORS.GREY,
             style: {
                 strokeDashArray: "4,4"
@@ -203,68 +207,68 @@ export const renderMultiLine = (id) => {
     );
     setTimeout(
         () =>
-            lineDefault.graphContainer
-                ? lineDefault.loadContent(
-                      Carbon.api.line(
-                          getDemoData(`#${id}`, "LINE_DEFAULT").data[1]
-                      )
-                  )
-                : "",
+        lineDefault.graphContainer ?
+        lineDefault.loadContent(
+            Carbon.api.line(
+                getDemoData(`#${id}`, "LINE_DEFAULT").data[1]
+            )
+        ) :
+        "",
         750
     );
     setTimeout(
         () =>
-            lineDefault.graphContainer
-                ? lineDefault.loadContent(
-                      Carbon.api.line(
-                          getDemoData(`#${id}`, "LINE_DEFAULT").data[2]
-                      )
-                  )
-                : "",
+        lineDefault.graphContainer ?
+        lineDefault.loadContent(
+            Carbon.api.line(
+                getDemoData(`#${id}`, "LINE_DEFAULT").data[2]
+            )
+        ) :
+        "",
         750 * 2
     );
     setTimeout(
         () =>
-            lineDefault.graphContainer
-                ? lineDefault.loadContent(
-                      Carbon.api.line(
-                          getDemoData(`#${id}`, "LINE_DEFAULT").data[3]
-                      )
-                  )
-                : "",
+        lineDefault.graphContainer ?
+        lineDefault.loadContent(
+            Carbon.api.line(
+                getDemoData(`#${id}`, "LINE_DEFAULT").data[3]
+            )
+        ) :
+        "",
         750 * 3
     );
     setTimeout(
         () =>
-            lineDefault.graphContainer
-                ? lineDefault.loadContent(
-                      Carbon.api.line(
-                          getDemoData(`#${id}`, "LINE_DEFAULT").data[4]
-                      )
-                  )
-                : "",
+        lineDefault.graphContainer ?
+        lineDefault.loadContent(
+            Carbon.api.line(
+                getDemoData(`#${id}`, "LINE_DEFAULT").data[4]
+            )
+        ) :
+        "",
         750 * 4
     );
     setTimeout(
         () =>
-            lineDefault.graphContainer
-                ? lineDefault.loadContent(
-                      Carbon.api.line(
-                          getDemoData(`#${id}`, "LINE_DEFAULT").data[5]
-                      )
-                  )
-                : "",
+        lineDefault.graphContainer ?
+        lineDefault.loadContent(
+            Carbon.api.line(
+                getDemoData(`#${id}`, "LINE_DEFAULT").data[5]
+            )
+        ) :
+        "",
         750 * 5
     );
     setTimeout(
         () =>
-            lineDefault.graphContainer
-                ? lineDefault.loadContent(
-                      Carbon.api.line(
-                          getDemoData(`#${id}`, "LINE_DEFAULT").data[6]
-                      )
-                  )
-                : "",
+        lineDefault.graphContainer ?
+        lineDefault.loadContent(
+            Carbon.api.line(
+                getDemoData(`#${id}`, "LINE_DEFAULT").data[6]
+            )
+        ) :
+        "",
         750 * 6
     );
     return lineDefault;
@@ -293,22 +297,18 @@ export const renderLineRegionMultiple = (id) => {
 export const renderLineRegionNoLower = (id) => {
     const lineDefault = Carbon.api.graph(getDemoData(`#${id}`, "LINE_DEFAULT"));
     const data = utils.deepClone(getDemoData(`#${id}`, "LINE_DEFAULT").data[0]);
-    data.regions = [
-        {
-            end: 10
-        }
-    ];
+    data.regions = [{
+        end: 10
+    }];
     lineDefault.loadContent(Carbon.api.line(data));
     return lineDefault;
 };
 export const renderLineRegionNoUpper = (id) => {
     const lineDefault = Carbon.api.graph(getDemoData(`#${id}`, "LINE_DEFAULT"));
     const data = utils.deepClone(getDemoData(`#${id}`, "LINE_DEFAULT").data[0]);
-    data.regions = [
-        {
-            start: 2
-        }
-    ];
+    data.regions = [{
+        start: 2
+    }];
     lineDefault.loadContent(Carbon.api.line(data));
     return lineDefault;
 };
@@ -318,13 +318,11 @@ export const renderLineRegionY2 = (id) => {
         getDemoData(`#${id}`, "LINE_TIMESERIES").data[1]
     );
     axisData.axis.y2.show = true;
-    dataValueObject.regions = [
-        {
-            axis: "y2",
-            start: 50,
-            end: 150
-        }
-    ];
+    dataValueObject.regions = [{
+        axis: "y2",
+        start: 50,
+        end: 150
+    }];
     const lineTime = Carbon.api.graph(axisData);
     lineTime.loadContent(
         Carbon.api.line(getDemoData(`#${id}`, "LINE_TIMESERIES").data[0])
@@ -338,17 +336,13 @@ export const renderMultiLineRegion = (id) => {
     const dataAlt = utils.deepClone(
         getDemoData(`#${id}`, "LINE_DEFAULT").data[2]
     );
-    data.regions = [
-        {
-            start: 2
-        }
-    ];
-    dataAlt.regions = [
-        {
-            start: 2,
-            end: 14
-        }
-    ];
+    data.regions = [{
+        start: 2
+    }];
+    dataAlt.regions = [{
+        start: 2,
+        end: 14
+    }];
     lineDefault.loadContent(Carbon.api.line(data));
     lineDefault.loadContent(Carbon.api.line(dataAlt));
     lineDefault.loadContent(
@@ -365,18 +359,14 @@ export const renderMultiLineIdenticalDatasetRegion = (id) => {
     const dataAlt = utils.deepClone(
         getDemoData(`#${id}`, "LINE_DEFAULT").data[2]
     );
-    data.regions = [
-        {
-            start: 2,
-            end: 14
-        }
-    ];
-    dataAlt.regions = [
-        {
-            start: 2,
-            end: 14
-        }
-    ];
+    data.regions = [{
+        start: 2,
+        end: 14
+    }];
+    dataAlt.regions = [{
+        start: 2,
+        end: 14
+    }];
     lineDefault.loadContent(Carbon.api.line(data));
     lineDefault.loadContent(Carbon.api.line(dataAlt));
     return lineDefault;
@@ -384,13 +374,11 @@ export const renderMultiLineIdenticalDatasetRegion = (id) => {
 export const renderRegionLine = (id) => {
     const lineDefault = Carbon.api.graph(getDemoData(`#${id}`, "LINE_DEFAULT"));
     const data = utils.deepClone(getDemoData(`#${id}`, "LINE_DEFAULT").data[5]);
-    data.regions = [
-        {
-            start: 15,
-            end: 15,
-            color: "#bcbfc0"
-        }
-    ];
+    data.regions = [{
+        start: 15,
+        end: 15,
+        color: "#bcbfc0"
+    }];
     lineDefault.loadContent(Carbon.api.line(data));
     return lineDefault;
 };
@@ -654,13 +642,13 @@ export const renderSuppressLegend = (id) => {
     );
     setTimeout(
         () =>
-            lineDefault.graphContainer
-                ? lineDefault.loadContent(
-                      Carbon.api.line(
-                          getDemoData(`#${id}`, "LINE_DEFAULT").data[7]
-                      )
-                  )
-                : "",
+        lineDefault.graphContainer ?
+        lineDefault.loadContent(
+            Carbon.api.line(
+                getDemoData(`#${id}`, "LINE_DEFAULT").data[7]
+            )
+        ) :
+        "",
         750
     );
     return lineDefault;
@@ -692,5 +680,21 @@ export const renderLineLabelTruncation = (id) => {
     lineDefault.loadContent(
         Carbon.api.line(getDemoData(`#${id}`, "LABEL_TRUNCATION").data[0])
     );
+    return lineDefault;
+};
+export const renderBackgroundColor = (id) => {
+    const colorData = utils.deepClone(getDemoData(`#${id}`, "LINE_DEFAULT"));
+    colorData.opaqueBackground = true;
+    const lineDefault = Carbon.api.graph(colorData);
+    lineDefault.loadContent(
+        Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[0])
+    );
+    const lineDefault2 = Carbon.api.graph(
+        getDemoData(`#${id}`, "LINE_DEFAULT")
+    );
+    lineDefault2.loadContent(
+        Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[0])
+    );
+    d3.selectAll('#carbon_id_C1Db2xvcg').style("background-color", "#176ba0");
     return lineDefault;
 };
