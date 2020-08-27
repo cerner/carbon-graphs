@@ -12,7 +12,7 @@ import {
     updateXAxisDomain,
     translateAxes
 } from "../../helpers/axis";
-import constants, { AXIS_TYPE } from "../../helpers/constants";
+import constants, { AXIS_TYPE, COLORS } from "../../helpers/constants";
 import errors from "../../helpers/errors";
 import { createLegend } from "../../helpers/legend";
 import { createRegionContainer } from "../../helpers/region";
@@ -258,6 +258,17 @@ class Graph extends Construct {
                     ? this.config.canvasWidth
                     : this.config.canvasWidth - BASE_CANVAS_WIDTH_PADDING
             );
+        if (utils.isUndefined(this.config.opaqueBackground)) {
+            this.config.opaqueBackground = false;
+        }
+
+        if (this.config.opaqueBackground) {
+            d3.select(`.${styles.container}`).style(
+                "background-color",
+                COLORS.WHITE
+            );
+        }
+
         createDefs(this.config, this.svg);
         createRegionContainer(this.config, this.svg);
         createGrid(this.axis, this.scale, this.config, this.svg);

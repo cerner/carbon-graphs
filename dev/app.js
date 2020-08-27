@@ -96,6 +96,7 @@ import {
     renderSuppressLegend,
     renderLineWithSuppressedTrailingZeros,
     renderLineLabelTruncation,
+    renderBackgroundColor,
     renderLineValueRegion
 } from "./examples/controls/line";
 import {
@@ -280,6 +281,11 @@ renderSiteApp(
                     pathname: "/line/Suppress-legend",
                     content: renderSuppressLegend,
                     title: "Suppress Legend"
+                },
+                {
+                    pathname: "/line/Background-Color",
+                    content: renderBackgroundColor,
+                    title: "Background Color"
                 }
             ]
         },
