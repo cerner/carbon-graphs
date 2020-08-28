@@ -3,6 +3,16 @@ name: Bug report
 about: Create a report to help us improve
 ---
 
+**What part of Carbon does this bug correlate to?**
+* [ ]  All graphs (axes, legends etc)
+* [ ]  Bar graph
+* [ ]  Bubble graph
+* [ ]  Gantt chart
+* [ ]  Line graph
+* [ ]  Pie chart
+* [ ]  Scatter plot
+* [ ]  Timeline
+
 **Describe the bug**
 A clear and concise description of what the bug is.
 
