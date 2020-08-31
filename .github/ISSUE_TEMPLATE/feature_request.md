@@ -4,7 +4,15 @@ about: Suggest an idea for this project
 
 ---
 **What part of Carbon does this feature request correlate to?**
+
+General graph logic:
+
 * [ ]  All graphs (axes, legends etc)
+* [ ]  Graph attributes
+* [ ]  Other (please specify): 
+
+Specific graph logic:
+
 * [ ]  Bar graph
 * [ ]  Bubble graph
 * [ ]  Gantt chart
@@ -13,6 +21,9 @@ about: Suggest an idea for this project
 * [ ]  Pie chart
 * [ ]  Scatter plot
 * [ ]  Timeline
+
+
+
 
 **Is your feature request related to a problem? Please describe.**
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]

@@ -4,7 +4,14 @@ about: Create a report to help us improve
 ---
 
 **What part of Carbon does this bug correlate to?**
+General graph logic:
+
 * [ ]  All graphs (axes, legends etc)
+* [ ]  Graph attributes
+* [ ]  Other (please specify): 
+
+Specific graph logic:
+
 * [ ]  Bar graph
 * [ ]  Bubble graph
 * [ ]  Gantt chart
@@ -13,6 +20,7 @@ about: Create a report to help us improve
 * [ ]  Pie chart
 * [ ]  Scatter plot
 * [ ]  Timeline
+
 
 **Describe the bug**
 A clear and concise description of what the bug is.
