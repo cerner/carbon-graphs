@@ -139,6 +139,30 @@ describe("PairedResult", () => {
             );
             expect(pairedContent.length).toEqual(2);
         });
+        describe("when there is no data", () => {
+           it("should update the dynamic data and disable the legend", () => {
+                const panData = {
+                    key: "uid_1",
+                    values: []
+                };
+                let pairedContent = fetchAllElementsByClass(
+                    pairedResultGraphContainer,
+                    styles.pairedBox
+                );
+                const legendItem = document.body.querySelector(
+                    `.${styles.legendItem}`
+                );
+                expect(pairedContent.length).toEqual(2);
+                graphDefault.reflow(panData);
+                pairedContent = fetchAllElementsByClass(
+                    pairedResultGraphContainer,
+                    styles.pairedBox
+                );
+                expect(pairedContent.length).toEqual(0);
+                expect(legendItem.getAttribute("aria-disabled")).toBe("true");
+                expect(legendItem.getAttribute("aria-current")).toBe("true");
+           });
+       });
     });
     describe("When pan is disabled", () => {
         beforeEach(() => {
@@ -173,6 +197,67 @@ describe("PairedResult", () => {
                 expect(toNumber(translate[0], 10)).toBeCloserTo(80);
                 expect(toNumber(translate[1], 10)).toBeCloseTo(PADDING_BOTTOM);
                 done();
+            });
+        });
+    });
+    describe("On click of panning button", () => {
+        beforeEach(() => {
+            const axisData = utils.deepClone(getAxes(axisTimeSeries));
+            axisData.dateline = [
+                {
+                    showDatelineIndicator: true,
+                    label: {
+                        display: "Release A"
+                    },
+                    color: COLORS.GREEN,
+                    shape: SHAPES.SQUARE,
+                    value: "2016-06-03T12:00:00Z"
+                }
+            ];
+            axisData.pan = { enabled: true };
+            const input = getInput([], false, false);
+            graphDefault = new Graph(axisData);
+            graphDefault.loadContent(new PairedResult(input));
+        });
+        describe("when legend hold values", () => {
+            it("should remove the No Data Views", () => {
+                const panData = {
+                    key: "uid_1",
+                    values: [
+                        {
+                            high: {
+                                x: "2016-09-17T12:00:00Z",
+                                y: 110
+                            },
+                            mid: {
+                                x: "2016-09-18T12:00:00Z",
+                                y: 70
+                            },
+                            low: {
+                                x: "2016-09-19T02:00:00Z",
+                                y: 30
+                            }
+                        }
+                    ]
+                };
+                let pairedContent = fetchAllElementsByClass(
+                    pairedResultGraphContainer,
+                    styles.pairedBox
+                );
+                const legendItem = document.body.querySelector(
+                    `.${styles.legendItem}`
+                );
+                expect(legendItem.getAttribute("aria-disabled")).toBe("true");
+                expect(legendItem.getAttribute("aria-current")).toBe("true");
+                expect(pairedContent.length).toEqual(0);
+                graphDefault.reflow(panData);
+                pairedContent = fetchAllElementsByClass(
+                    pairedResultGraphContainer,
+                    styles.pairedBox
+                );
+                expect(pairedContent.length).toEqual(1);
+                expect(legendItem.getAttribute("aria-disabled")).toBe("false");
+                expect(legendItem.getAttribute("aria-current")).toBe("true");
             });
         });
     });

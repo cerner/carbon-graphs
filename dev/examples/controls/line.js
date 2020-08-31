@@ -576,6 +576,44 @@ export const renderLinePanningWithDynamicData = (id) => {
     });
     return graph;
 };
+export const renderLinePanningWithUpdatedLegend = (id) => {
+    const axisData = utils.deepClone(
+        getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE")
+    );
+    axisData.pan = {
+        enabled: true
+    };
+    let graphData = utils.deepClone(
+        getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE").data[0]
+    );
+    const graphDataH = {
+        ...graphData,
+        values: []
+    };
+    graphData.regions = [regions[0]];
+    const createGraph = () => {
+        const graphDataY = utils.deepClone(
+            getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE").data[1]
+        );
+        if (graphDataH.values === graphData.values) {
+            graph.reflow(graphDataY);
+            graphData = graphDataY;
+        } else {
+            graph.reflow(graphDataH);
+            graphData = graphDataH;
+        }
+    };
+
+    const graph = Carbon.api.graph(axisData);
+    graph.loadContent(Carbon.api.line(graphData));
+    axisData.axis = graph.config.axis;
+
+    createPanningControls(id, {
+        axisData,
+        creationHandler: createGraph
+    });
+    return graph;
+};
 export const renderDashedLine = (id) => {
     const axisData = utils.deepClone(getDemoData(`#${id}`, "LINE_DEFAULT"));
     const lineDefault = Carbon.api.graph(axisData);

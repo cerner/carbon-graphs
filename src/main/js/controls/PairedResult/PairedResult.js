@@ -6,7 +6,7 @@ import {
     prepareLabelShapeItem,
     removeLabelShapeItem
 } from "../../helpers/label";
-import { removeLegendItem } from "../../helpers/legend";
+import { removeLegendItem, reflowLegend } from "../../helpers/legend";
 import {
     hideAllRegions,
     removeRegion,
@@ -258,13 +258,43 @@ class PairedResult extends GraphContent {
      * @inheritdoc
      */
     reflow(graph, graphData) {
+        const eventHandlers = {
+            clickHandler: clickHandler(graph, this, graph.config, graph.svg),
+            hoverHandler: hoverHandler(graph.config, graph.svg)
+        };
+        const constructLegendLabels = (d, type) =>
+            Object.assign(
+                {},
+                {
+                    shape: getValue(d.shape, type),
+                    color: getValue(d.color, type),
+                    label: getValue(d.label, type),
+                    key: `${d.key}_${type}`,
+                    values: d.values,
+                    legendOptions: d.legendOptions,
+                    type
+                }
+            );
+        const reflow = !!this.config.values.length;
         this.config.values = graphData.values;
-        this.dataTarget = processDataPoints(graph.config, this.config, true);
+        this.dataTarget = processDataPoints(graph.config, this.config, reflow);
         const drawBox = (boxPath) => {
             drawSelectionIndicator(graph.scale, graph.config, boxPath);
             drawLine(graph.scale, graph.config, boxPath);
             drawPoints(graph.scale, graph.config, boxPath);
         };
+        const types = ["high", "mid", "low"];
+        types.forEach((type) => {
+            const label = getValue(graph.contentConfig[0].label, type);
+            if (label && label.display) {
+                reflowLegend(
+                    graph.legendSVG,
+                    constructLegendLabels(graph.contentConfig[0], type),
+                    graph,
+                    eventHandlers
+                );
+            }
+        });
         const internalValuesSubset = getDataPointValues(this.dataTarget);
         graph.svg
             .select(`g[aria-describedby="${graphData.key}"]`)
