@@ -9,6 +9,7 @@ about: Suggest an idea for this project
 * [ ]  Bubble graph
 * [ ]  Gantt chart
 * [ ]  Line graph
+* [ ]  Paired result
 * [ ]  Pie chart
 * [ ]  Scatter plot
 * [ ]  Timeline

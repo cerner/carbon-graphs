@@ -9,6 +9,7 @@ about: Create a report to help us improve
 * [ ]  Bubble graph
 * [ ]  Gantt chart
 * [ ]  Line graph
+* [ ]  Paired result
 * [ ]  Pie chart
 * [ ]  Scatter plot
 * [ ]  Timeline
