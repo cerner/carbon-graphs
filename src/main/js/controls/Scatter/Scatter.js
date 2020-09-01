@@ -199,7 +199,9 @@ class Scatter extends GraphContent {
         }
         reflowLegend(
             graph.legendSVG,
-            graph.content.filter((scatter) => scatter.config.key === graphData.key)[0].config,
+            graph.content.filter(
+                (scatter) => scatter.config.key === graphData.key
+            )[0].config,
             graph,
             eventHandlers
         );
