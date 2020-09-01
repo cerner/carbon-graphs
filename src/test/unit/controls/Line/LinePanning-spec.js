@@ -126,6 +126,31 @@ describe("Line - Panning", () => {
             );
             expect(lineContent.length).toEqual(3);
         });
+        describe("when there is no data", () => {
+            it("should update the dynamic data and disable the legend", () => {
+                const panData = {
+                    key: "uid_1",
+                    values: []
+                };
+                let lineContent = fetchAllElementsByClass(
+                    lineGraphContainer,
+                    styles.pointGroup
+                );
+                const legendItem = document.body.querySelector(
+                    `.${styles.legendItem}`
+                );
+                expect(lineContent.length).toEqual(3);
+    
+                graphDefault.reflow(panData);
+                lineContent = fetchAllElementsByClass(
+                    lineGraphContainer,
+                    styles.pointGroup
+                );
+                expect(lineContent.length).toEqual(0);
+                expect(legendItem.getAttribute("aria-disabled")).toBe("true");
+                expect(legendItem.getAttribute("aria-current")).toBe("true");
+           });
+       });
     });
     describe("When pan is disabled", () => {
         beforeEach(() => {
@@ -160,6 +185,61 @@ describe("Line - Panning", () => {
                 expect(toNumber(translate[0], 10)).toBeCloserTo(67);
                 expect(toNumber(translate[1], 10)).toBeCloserTo(PADDING_BOTTOM);
                 done();
+            });
+        });
+    });
+    describe("On click of panning button", () => {
+        beforeEach(() => {
+            const axisData = utils.deepClone(getAxes(axisTimeSeries));
+            axisData.dateline = [
+                {
+                    showDatelineIndicator: true,
+                    label: {
+                        display: "Release A"
+                    },
+                    color: COLORS.GREEN,
+                    shape: SHAPES.SQUARE,
+                    value: "2016-06-03T12:00:00Z"
+                }
+            ];
+            axisData.pan = { enabled: true };
+            const input = getInput([], false, false);
+            graphDefault = new Graph(axisData);
+            graphDefault.loadContent(new Line(input));
+        });
+        describe("when legend hold values", () => {
+            it("should remove the No Data Views", () => {
+                const panData = {
+                    key: "uid_1",
+                    values: [
+                        {
+                            x: "2016-03-03T12:00:00Z",
+                            y: 2
+                        },
+                        {
+                            x: "2016-04-03T12:00:00Z",
+                            y: 20
+                        }
+                    ]
+                };
+                let lineContent = fetchAllElementsByClass(
+                    lineGraphContainer,
+                    styles.pointGroup
+                );
+                const legendItem = document.body.querySelector(
+                    `.${styles.legendItem}`
+                );
+                expect(lineContent.length).toEqual(0);
+                expect(legendItem.getAttribute("aria-disabled")).toBe("true");
+                expect(legendItem.getAttribute("aria-current")).toBe("true");
+                graphDefault.reflow(panData);
+                lineContent = fetchAllElementsByClass(
+                    lineGraphContainer,
+                    styles.pointGroup
+                );
+                expect(lineContent.length).toEqual(2);
+                expect(legendItem.getAttribute("aria-disabled")).toBe("false");
+                expect(legendItem.getAttribute("aria-current")).toBe("true");
             });
         });
     });

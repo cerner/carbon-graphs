@@ -10,7 +10,7 @@ import {
 import { createDateline } from "../../helpers/dateline";
 import errors from "../../helpers/errors";
 import { createEventline } from "../../helpers/eventline";
-import { createLegend } from "../../helpers/legend";
+import { createLegend, reflowLegend } from "../../helpers/legend";
 import { getElementBoxSizingParameters } from "../../helpers/paddingUtils";
 import styles from "../../helpers/styles";
 import utils from "../../helpers/utils";
@@ -20,6 +20,7 @@ import {
     prepareLegendEventHandlers,
     renderLegendItems
 } from "./helpers/actionHelpers";
+
 import {
     attachEventHandlers,
     calculateAxesLabelSize,
@@ -337,7 +338,12 @@ class Gantt extends Construct {
     reflow(graphData) {
         updateXAxisDomain(this.config);
         scaleGraph(this.scale, this.config);
-
+        const eventHandlers = prepareLegendEventHandlers(
+            this,
+            this.config,
+            this.svg,
+            this.config.shownTargets
+        );
         translateAxes(this.axis, this.scale, this.config, this.svg);
 
         let position;
@@ -346,6 +352,12 @@ class Gantt extends Construct {
                 if (track.config.key === graphData.key) position = index;
             });
             this.trackConfig[position].reflow(this, graphData);
+            reflowLegend(
+                this.legendSVG,
+                this.config.actionLegend[position],
+                this,
+                eventHandlers
+            );
         }
         this.config.height = determineHeight(this.config);
         setCanvasHeight(this.config);
