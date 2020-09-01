@@ -1,5 +1,7 @@
 import Carbon from "../../../src/main/js/carbon";
 import utils from "../../../src/main/js/helpers/utils";
+import * as d3 from "d3";
+// import { COLORS } from "../../../src/main/js/helpers/constants";
 import { getDemoData } from "../data";
 import {
     CUSTOM_CONTAINER_STYLE,
@@ -588,6 +590,44 @@ export const renderLinePanningWithDynamicData = (id) => {
     });
     return graph;
 };
+export const renderLinePanningWithUpdatedLegend = (id) => {
+    const axisData = utils.deepClone(
+        getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE")
+    );
+    axisData.pan = {
+        enabled: true
+    };
+    let graphData = utils.deepClone(
+        getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE").data[0]
+    );
+    const graphDataH = {
+        ...graphData,
+        values: []
+    };
+    graphData.regions = [regions[0]];
+    const createGraph = () => {
+        const graphDataY = utils.deepClone(
+            getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE").data[1]
+        );
+        if (graphDataH.values === graphData.values) {
+            graph.reflow(graphDataY);
+            graphData = graphDataY;
+        } else {
+            graph.reflow(graphDataH);
+            graphData = graphDataH;
+        }
+    };
+
+    const graph = Carbon.api.graph(axisData);
+    graph.loadContent(Carbon.api.line(graphData));
+    axisData.axis = graph.config.axis;
+
+    createPanningControls(id, {
+        axisData,
+        creationHandler: createGraph
+    });
+    return graph;
+};
 export const renderDashedLine = (id) => {
     const axisData = utils.deepClone(getDemoData(`#${id}`, "LINE_DEFAULT"));
     const lineDefault = Carbon.api.graph(axisData);
@@ -692,5 +732,21 @@ export const renderLineLabelTruncation = (id) => {
     lineDefault.loadContent(
         Carbon.api.line(getDemoData(`#${id}`, "LABEL_TRUNCATION").data[0])
     );
+    return lineDefault;
+};
+export const renderBackgroundColor = (id) => {
+    const colorData = utils.deepClone(getDemoData(`#${id}`, "LINE_DEFAULT"));
+    colorData.opaqueBackground = true;
+    const lineDefault = Carbon.api.graph(colorData);
+    lineDefault.loadContent(
+        Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[0])
+    );
+    const lineDefault2 = Carbon.api.graph(
+        getDemoData(`#${id}`, "LINE_DEFAULT")
+    );
+    lineDefault2.loadContent(
+        Carbon.api.line(getDemoData(`#${id}`, "LINE_DEFAULT").data[0])
+    );
+    d3.selectAll("#carbon_id_C1Db2xvcg").style("background-color", "#176ba0");
     return lineDefault;
 };

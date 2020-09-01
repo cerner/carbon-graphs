@@ -96,7 +96,9 @@ import {
     renderSuppressLegend,
     renderLineWithSuppressedTrailingZeros,
     renderLineLabelTruncation,
-    renderLineValueRegion
+    renderBackgroundColor,
+    renderLineValueRegion,
+    renderLinePanningWithUpdatedLegend
 } from "./examples/controls/line";
 import {
     renderMultiPairedResultRegion,
@@ -280,6 +282,11 @@ renderSiteApp(
                     pathname: "/line/Suppress-legend",
                     content: renderSuppressLegend,
                     title: "Suppress Legend"
+                },
+                {
+                    pathname: "/line/Background-Color",
+                    content: renderBackgroundColor,
+                    title: "Background Color"
                 }
             ]
         },
@@ -624,6 +631,11 @@ renderSiteApp(
                             pathname: "/panning/line/dynamic-data",
                             content: renderLinePanningWithDynamicData,
                             title: "Dynamic Data"
+                        },
+                        {
+                            pathname: "/panning/line/dynamic-data/updated-legend",
+                            content: renderLinePanningWithUpdatedLegend,
+                            title: "Legend Updated"
                         }
                     ]
                 },
