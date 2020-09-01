@@ -507,9 +507,38 @@ describe("Graph - Generate", () => {
                 axisDefault.x.label
             );
         });
-        it("Creates label y axis when text is present", () => {
+        it("Creates label y axis when y2-axis is false and when text is present", () => {
             graph.destroy();
             graph = new Graph(getAxes(axisDefault));
+
+            const yLabelElement = fetchElementByClass(styles.axisLabelY);
+            const translate = getSVGAnimatedTransformList(
+                yLabelElement.getAttribute("transform")
+            ).translate;
+            expect(yLabelElement.nodeName).toBe("g");
+            expect(yLabelElement.querySelector("tspan").textContent).toBe(
+                axisDefault.y.label
+            );
+            expect(yLabelElement.getAttribute("transform")).toContain(
+                "rotate(-90)"
+            );
+            expect(toNumber(translate[0], 10)).toBeCloserTo(20);
+            expect(toNumber(translate[1], 10)).toBeCloserTo(115);
+        });
+        it("Creates label y axis when y2-axis is true and text is present", () => {
+            graph.destroy();
+            graph = new Graph(
+                getAxes({
+                    x: axisDefault.x,
+                    y: axisDefault.y,
+                    y2: {
+                        show: true,
+                        lowerLimit: 0,
+                        upperLimit: 200,
+                        label: "Some Y2 label"
+                    }
+                })
+            );
 
             const yLabelElement = fetchElementByClass(styles.axisLabelY);
             const translate = getSVGAnimatedTransformList(
@@ -535,7 +564,7 @@ describe("Graph - Generate", () => {
             const translate = getSVGAnimatedTransformList(
                 yLabelElement.getAttribute("transform")
             ).translate;
-            expect(toNumber(translate[0], 10)).toBeCloserTo(12);
+            expect(toNumber(translate[0], 10)).toBeCloserTo(20);
             expect(toNumber(translate[1], 10)).toBeCloserTo(47);
             expect(toNumber(translate[1], 10)).not.toBe(120);
         });
