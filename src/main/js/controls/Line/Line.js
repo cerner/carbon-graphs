@@ -6,7 +6,7 @@ import {
     prepareLabelShapeItem,
     removeLabelShapeItem
 } from "../../helpers/label";
-import { removeLegendItem } from "../../helpers/legend";
+import { removeLegendItem, reflowLegend } from "../../helpers/legend";
 import {
     createRegion,
     hideAllRegions,
@@ -211,10 +211,20 @@ class Line extends GraphContent {
     reflow(graph, graphData) {
         this.config.values = graphData.values;
         this.dataTarget = processDataPoints(graph.config, this.config);
+        const eventHandlers = {
+            clickHandler: clickHandler(graph, this, graph.config, graph.svg),
+            hoverHandler: hoverHandler(graph.config.shownTargets, graph.svg)
+        };
         const position = graph.config.shownTargets.lastIndexOf(graphData.key);
         if (position > -1) {
             graph.config.shownTargets.splice(position, 1);
         }
+        reflowLegend(
+            graph.legendSVG,
+            graph.content[0].config,
+            graph,
+            eventHandlers
+        );
         const lineSVG = graph.svg
             .select(`g[aria-describedby="${graphData.key}"]`)
             .selectAll(`.${styles.line}`)
