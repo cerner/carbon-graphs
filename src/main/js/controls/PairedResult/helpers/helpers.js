@@ -362,7 +362,17 @@ const drawLine = (scale, config, boxPath) =>
             d.high &&
             d.low &&
             utils.hasValue(config.shownTargets, d.high.key) &&
-            utils.hasValue(config.shownTargets, d.low.key);
+            utils.hasValue(config.shownTargets, d.low.key) &&
+            document
+                .querySelector(
+                    `.${styles.legendItem}[aria-describedby="${d.high.key}"]`
+                )
+                ?.getAttribute("aria-current") !== false &&
+            document
+                .querySelector(
+                    `.${styles.legendItem}[aria-describedby="${d.low.key}"]`
+                )
+                ?.getAttribute("aria-current") !== false;
         return d3
             .select(this)
             .append("path")

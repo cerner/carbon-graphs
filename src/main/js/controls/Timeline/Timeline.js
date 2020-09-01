@@ -4,7 +4,7 @@ import Construct from "../../core/Construct";
 import { getYAxisHeight, updateXAxisDomain } from "../../helpers/axis";
 import constants from "../../helpers/constants";
 import errors from "../../helpers/errors";
-import { createLegend } from "../../helpers/legend";
+import { createLegend, reflowLegend } from "../../helpers/legend";
 import styles from "../../helpers/styles";
 import { d3RemoveElement } from "../Graph/helpers/helpers";
 import { getElementBoxSizingParameters } from "../../helpers/paddingUtils";
@@ -18,7 +18,9 @@ import {
     createTimelineContent,
     detachEventHandlers,
     determineHeight,
-    scaleGraph
+    scaleGraph,
+    clickHandler,
+    hoverHandler
 } from "./helpers/creationHelpers";
 import {
     translateTimelineGraph,
@@ -290,6 +292,10 @@ class Timeline extends Construct {
      * @param {Array} graphData - Input array that holds updated values and key
      */
     reflow(graphData) {
+        const eventHandlers = {
+            clickHandler: clickHandler(this, this, this.config, this.svg),
+            hoverHandler: hoverHandler(this.config.shownTargets, this.svg)
+        };
         updateXAxisDomain(this.config);
         scaleGraph(this.scale, this.config);
         translateAxes(this.axis, this.scale, this.config, this.svg);
@@ -304,6 +310,12 @@ class Timeline extends Construct {
             });
             this.contentConfig[position].reflow(this, graphData);
         }
+        reflowLegend(
+            this.legendSVG,
+            this.contentConfig[0].config,
+            this,
+            eventHandlers
+        );
         this.resize();
         return this;
     }

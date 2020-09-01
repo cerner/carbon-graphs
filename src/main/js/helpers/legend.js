@@ -62,7 +62,6 @@ const legendDisplayStyle = (input) =>
  * The click and the hover events are only registered when there are datapoints matching the
  * unique ids or have the isDisabled flag turned off.
  *
- * @private
  * @param {object} legendSVG - d3 element path of the legend from the parent control
  * @param {object} t - input item object processed from the input JSON
  * @param {object} config - Graph config object derived from input JSON
@@ -210,7 +209,6 @@ const createLegendLine = (buttonPath, t) => {
 /**
  * Removes the legend item from legend SVG in the graph
  *
- * @private
  * @param {object} legendSVG - d3 svg object
  * @param {object} dataTarget - Data points object
  * @returns {object} - d3 svg object
@@ -223,7 +221,6 @@ const removeLegendItem = (legendSVG, dataTarget) =>
  * their respective shapes.
  * Only if showLegend is enabled.
  *
- * @private
  * @param {object} config - Graph config object derived from input JSON
  * @param {object} container - d3 Container svg
  * @returns {object} - d3 svg object
@@ -237,7 +234,6 @@ const createLegend = (config, container) =>
 /**
  * Returns a boolean after checking the attribute `aria-current`.
  *
- * @private
  * @param {HTMLElement} target - d3 svg object
  * @returns {boolean} - returns boolean
  */
@@ -247,7 +243,6 @@ const isLegendSelected = (target) => target.attr("aria-current") !== "true";
  * with any other operations that will be need to taken care of by the parent
  * control.
  *
- * @private
  * @param {HTMLElement} element - d3 element of the legend item clicked
  * @returns {object} - d3 svg object
  */
@@ -258,7 +253,6 @@ const legendClickHandler = (element) => {
 /**
  * Hover handler for legend items.
  *
- * @private
  * @param {Array} shownTargets - Targets/data sets that are currently displayed in graph
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @param {string} key - Data points set unique key
@@ -345,7 +339,6 @@ const getPieLegendText = (display, value, format) => {
  * Pie chart legend items are non-clickable and they react only to hover or click
  * performed on any of a slice in pie chart itself or hovered over a legend item.
  *
- * @private
  * @param {object} legendSVG - d3 element path of the legend from the parent control
  * @param {object} dataTarget - input item object processed from the input JSON
  * @param {Function} hoverHandler - Callback function to be called when hovered over the legend item
@@ -392,7 +385,6 @@ const loadPieLegendItem = (legendSVG, dataTarget, { hoverHandler }, config) => {
 /**
  * Validate and return the legendOptions property
  *
- * @private
  * @param {object} graphConfig - config object of Graph API
  * @param {object} dataTarget - Data points object
  * @returns {object} legendOptions - legendOptions for the legend
@@ -419,7 +411,6 @@ const getDefaultLegendOptions = (graphConfig, dataTarget) => {
 /**
  * Helper function to set the right legend padding values based on input JSON.
  *
- * @private
  * @param {object} config - config which needs to be updated
  * @param {object} inputLegendPadding - input legend padding provided via input JSON.
  * @returns {object} - padding for Legend
@@ -458,6 +449,49 @@ const getLegendPadding = (config, inputLegendPadding) => {
 };
 
 /**
+ * Updates the legend during reflow.
+ *
+ * @private
+ * @param {object} legendSVG - d3 element path of the legend from the parent control
+ * @param {object} legend - input item object processed from the input JSON
+ * @param {object} graph - Graph object derived from input JSON
+ * @param {object} eventHandlers - Callback function object executed when legend item is clicked or hovered.
+ * Contains click and hover handlers as object property
+ * @returns {object} returns the d3 element path for the legend
+ */
+const reflowLegend = (legendSVG, legend, graph, eventHandlers) => {
+    const index = graph.config.shownTargets.indexOf(legend.key);
+    const shouldForceDisableLegendItem =
+        !!legend.label.isDisabled || utils.isEmptyArray(legend.values);
+    const itemPath = legendSVG
+        .select(`li[aria-describedby="${legend.key}"]`)
+        .attr("aria-current", shouldForceDisableLegendItem || index > -1)
+        .attr("aria-disabled", shouldForceDisableLegendItem)
+        .style("display", legendDisplayStyle(legend));
+
+    if (!shouldForceDisableLegendItem) {
+        // set the click and hover handler, when legend have values
+        itemPath
+            .on("click", function () {
+                return eventHandlers.clickHandler(this, legend);
+            })
+            .on("mouseenter", () =>
+                eventHandlers.hoverHandler(legend, constants.HOVER_EVENT.MOUSE_ENTER)
+            )
+            .on("mouseleave", () =>
+                eventHandlers.hoverHandler(legend, constants.HOVER_EVENT.MOUSE_EXIT)
+            );
+    } else {
+        // set the click and hover handler to null, when legend doesnot have any value
+        itemPath
+            .on("click", () => null)
+            .on("mouseenter", () => null)
+            .on("mouseleave", () => null);
+    }
+    return legendSVG;
+};
+
+/**
  * @enum {Function}
  */
 export {
@@ -469,5 +503,6 @@ export {
     legendHoverHandler,
     isLegendSelected,
     getDefaultLegendOptions,
-    getLegendPadding
+    getLegendPadding,
+    reflowLegend
 };

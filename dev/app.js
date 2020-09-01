@@ -97,7 +97,8 @@ import {
     renderLineWithSuppressedTrailingZeros,
     renderLineLabelTruncation,
     renderBackgroundColor,
-    renderLineValueRegion
+    renderLineValueRegion,
+    renderLinePanningWithUpdatedLegend
 } from "./examples/controls/line";
 import {
     renderMultiPairedResultRegion,
@@ -630,6 +631,11 @@ renderSiteApp(
                             pathname: "/panning/line/dynamic-data",
                             content: renderLinePanningWithDynamicData,
                             title: "Dynamic Data"
+                        },
+                        {
+                            pathname: "/panning/line/dynamic-data/updated-legend",
+                            content: renderLinePanningWithUpdatedLegend,
+                            title: "Legend Updated"
                         }
                     ]
                 },

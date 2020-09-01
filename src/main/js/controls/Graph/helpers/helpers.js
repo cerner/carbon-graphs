@@ -865,6 +865,7 @@ const removeNoDataView = (svg) => {
  * @returns {d3.selection} d3 selection node of svg.
  */
 const drawNoDataView = (config, svg) => {
+    removeNoDataView(svg);
     const noDataViewHeight =
         getYAxisHeight(config) / constants.NO_DATA_VIEW_PROPORTION;
 
