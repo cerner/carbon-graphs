@@ -819,8 +819,14 @@ const getXAxisLabelYPosition = (config) =>
  * @param {object} config - config object derived from input JSON
  * @returns {number} Position for the label
  */
-const getYAxisLabelXPosition = (config) =>
-    config.padding.left - config.axisLabelWidths.y;
+const getYAxisLabelXPosition = (config) => {
+    // If y2-axis is true, y-axis label should move close to svg container else move closer to y-axis.
+    if (hasY2Axis(config.axis)) {
+        return config.padding.left - config.axisLabelWidths.y;
+    } else {
+        return config.padding.left;
+    }
+};
 /**
  * Y Axis label's position distance away from the graph
  *
