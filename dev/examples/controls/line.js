@@ -547,8 +547,14 @@ export const renderLineY2AxisWithPanning = (id) => {
     const graphDataY2 = utils.deepClone(
         getDemoData(`#${id}`, "LINE_TIMESERIES").data[1]
     );
+    const graphDataY3 = {
+        ...graphDataY2,
+        xLabel: "xLabel",
+        yLabel: "yLabel",
+        y2Label: "y2Label"
+    };
     const createGraph = () => {
-        graph.reflow();
+        graph.reflow(graphDataY3);
     };
 
     const graph = Carbon.api.graph(axisData);
