@@ -289,7 +289,7 @@ class PairedResult extends GraphContent {
             if (label && label.display) {
                 reflowLegend(
                     graph.legendSVG,
-                    constructLegendLabels(graph.contentConfig[0], type),
+                    constructLegendLabels(graph.contentConfig.filter((pairedResult) => pairedResult.key === graphData.key)[0], type),
                     graph,
                     eventHandlers
                 );

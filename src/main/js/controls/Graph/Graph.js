@@ -408,7 +408,7 @@ class Graph extends Construct {
     /**
      * Updates the graph axisData and content.
      *
-     * @param {Array} graphData - Input array that holds updated values and key
+     * @param {Array} graphData - Input array that holds updated values, key and labels
      * @returns {Graph} - Graph instance
      */
     reflow(graphData) {
@@ -465,6 +465,14 @@ class Graph extends Construct {
                 // Removes exisitng No Data View, when legend hold values
                 removeNoDataView(this.svg);
             }
+        }
+        if (graphData && this.config.showLabel) {
+            this.config.axis.x.label =
+                utils.sanitize(graphData.xLabel) || this.config.axis.x.label;
+            this.config.axis.y.label =
+                utils.sanitize(graphData.yLabel) || this.config.axis.y.label;
+            this.config.axis.y2.label =
+                utils.sanitize(graphData.y2Label) || this.config.axis.y2.label;
         }
         this.resize();
         return this;

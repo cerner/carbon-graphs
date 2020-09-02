@@ -4,12 +4,12 @@ import Scatter from "../../../../main/js/controls/Scatter";
 import styles from "../../../../main/js/helpers/styles";
 import utils from "../../../../main/js/helpers/utils";
 import {
-    axisDefault,
     axisTimeSeries,
     getAxes,
     getInput,
     valuesTimeSeries,
-    fetchAllElementsByClass
+    fetchAllElementsByClass,
+    fetchElementByClass
 } from "./helpers";
 import { toNumber, delay, PADDING_BOTTOM } from "../../helpers/commonHelpers";
 import { COLORS, SHAPES } from "../../../../main/js/helpers/constants";
@@ -26,7 +26,6 @@ describe("Scatter - Panning", () => {
             "width: 1024px; height: 400px;"
         );
         document.body.appendChild(scatterGraphContainer);
-        graphDefault = new Graph(getAxes(axisDefault));
     });
     afterEach(() => {
         document.body.innerHTML = "";
@@ -66,31 +65,68 @@ describe("Scatter - Panning", () => {
                 done();
             });
         });
-        it("Dynamic Data is updated correctly when key matches", () => {
-            const panData = {
-                key: "uid_1",
-                values: [
-                    {
-                        x: "2016-03-03T12:00:00Z",
-                        y: 2
-                    },
-                    {
-                        x: "2016-04-03T12:00:00Z",
-                        y: 20
-                    }
-                ]
-            };
-            let ScatterContent = fetchAllElementsByClass(
-                scatterGraphContainer,
-                styles.pointGroup
-            );
-            expect(ScatterContent.length).toEqual(3);
-            graphDefault.reflow(panData);
-            ScatterContent = fetchAllElementsByClass(
-                scatterGraphContainer,
-                styles.pointGroup
-            );
-            expect(ScatterContent.length).toEqual(2);
+        describe("when key matches", () => {
+            describe("label is not passed", () => {
+                 it("should update dynamic data and retain label", () => {
+                    const panData = {
+                        key: "uid_1",
+                        values: [
+                            {
+                                x: "2016-03-03T12:00:00Z",
+                                y: 2
+                            },
+                            {
+                                x: "2016-04-03T12:00:00Z",
+                                y: 20
+                            }
+                        ]
+                    };
+                    let ScatterContent = fetchAllElementsByClass(
+                        scatterGraphContainer,
+                        styles.pointGroup
+                    );
+                    expect(ScatterContent.length).toEqual(3);
+                    graphDefault.reflow(panData);
+                    ScatterContent = fetchAllElementsByClass(
+                        scatterGraphContainer,
+                        styles.pointGroup
+                    );
+                    expect(ScatterContent.length).toEqual(2);
+                    const axisLabelX = fetchElementByClass(scatterGraphContainer, styles.axisLabelX);
+                    const axisLabelY = fetchElementByClass(scatterGraphContainer, styles.axisLabelY);
+                    const axisLabelY2 = fetchElementByClass(scatterGraphContainer, styles.axisLabelY2);
+                    expect(axisLabelX.querySelector("text").textContent).toBe("X Label");
+                    expect(axisLabelY.querySelector("text").textContent).toBe("Y Label");
+                    expect(axisLabelY2.querySelector("text").textContent).toBe("Y2 Label");
+                });
+             });
+             describe("when label is passed", () => {
+                it("should update the label during reflow", () => {
+                    const panData = {
+                        key: "uid_1",
+                        values: [
+                            {
+                                x: "2016-03-03T12:00:00Z",
+                                y: 2
+                            },
+                            {
+                                x: "2016-04-03T12:00:00Z",
+                                y: 20
+                            }
+                        ],
+                        xLabel: "updated xLabel",
+                        yLabel: "updated yLabel",
+                        y2Label: "updated y2Label"
+                    };
+                    graphDefault.reflow(panData);
+                    const axisLabelX = fetchElementByClass(scatterGraphContainer, styles.axisLabelX);
+                    const axisLabelY = fetchElementByClass(scatterGraphContainer, styles.axisLabelY);
+                    const axisLabelY2 = fetchElementByClass(scatterGraphContainer, styles.axisLabelY2);
+                    expect(axisLabelX.querySelector("text").textContent).toBe("updated xLabel");
+                    expect(axisLabelY.querySelector("text").textContent).toBe("updated yLabel");
+                    expect(axisLabelY2.querySelector("text").textContent).toBe("updated y2Label");
+                });
+             })
         });
         it("Dynamic Data is not updated when key does not match", () => {
             const panData = {

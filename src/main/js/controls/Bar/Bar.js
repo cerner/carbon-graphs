@@ -237,7 +237,7 @@ class Bar extends GraphContent {
         }
         reflowLegend(
             graph.legendSVG,
-            graph.content[0].config,
+            graph.content.filter((bar) => bar.config.key === graphData.key)[0].config,
             graph,
             eventHandlers
         );
