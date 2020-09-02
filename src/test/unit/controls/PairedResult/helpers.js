@@ -69,6 +69,12 @@ export const axisTimeSeries = {
         label: "Y Label",
         lowerLimit: 0,
         upperLimit: 200
+    },
+    y2: {
+        show: true,
+        label: "Y2 Label",
+        lowerLimit: 0,
+        upperLimit: 200
     }
 };
 export const valuesTimeSeries = [
