@@ -10,12 +10,12 @@ import {
     delay
 } from "../../helpers/commonHelpers";
 import {
-    axisDefault,
     getAxes,
     getInput,
     valuesTimeSeries,
     axisTimeSeries,
-    fetchAllElementsByClass
+    fetchAllElementsByClass,
+    fetchElementByClass
 } from "./helpers";
 import { getSVGAnimatedTransformList } from "../../../../main/js/helpers/transformUtils";
 import { COLORS, SHAPES } from "../../../../main/js/helpers/constants";
@@ -34,7 +34,6 @@ describe("Bar - Panning", () => {
             "width: 1024px; height: 400px;"
         );
         document.body.appendChild(barGraphContainer);
-        graphDefault = new Graph(getAxes(axisDefault));
     });
     afterEach(() => {
         document.body.innerHTML = "";
@@ -74,28 +73,65 @@ describe("Bar - Panning", () => {
                 done();
             });
         });
-        it("Dynamic Data is updated correctly when key matches", () => {
-            const panData = {
-                key: "uid_1",
-                values: [
-                    {
-                        x: "2016-03-03T12:00:00Z",
-                        y: 2
-                    },
-                    {
-                        x: "2016-04-03T12:00:00Z",
-                        y: 20
-                    }
-                ]
-            };
-            let barContent = fetchAllElementsByClass(
-                barGraphContainer,
-                styles.bar
-            );
-            expect(barContent.length).toEqual(3);
-            graphDefault.reflow(panData);
-            barContent = fetchAllElementsByClass(barGraphContainer, styles.bar);
-            expect(barContent.length).toEqual(2);
+        describe("when key matches", () => {
+            describe("label is not passed", () => {
+                 it("should update dynamic data and retain label", () => {
+                    const panData = {
+                        key: "uid_1",
+                        values: [
+                            {
+                                x: "2016-03-03T12:00:00Z",
+                                y: 2
+                            },
+                            {
+                                x: "2016-04-03T12:00:00Z",
+                                y: 20
+                            }
+                        ]
+                    };
+                    let barContent = fetchAllElementsByClass(
+                        barGraphContainer,
+                        styles.bar
+                    );
+                    expect(barContent.length).toEqual(3);
+                    graphDefault.reflow(panData);
+                    barContent = fetchAllElementsByClass(barGraphContainer, styles.bar);
+                    expect(barContent.length).toEqual(2);
+                    const axisLabelX = fetchElementByClass(barGraphContainer, styles.axisLabelX);
+                    const axisLabelY = fetchElementByClass(barGraphContainer, styles.axisLabelY);
+                    const axisLabelY2 = fetchElementByClass(barGraphContainer, styles.axisLabelY2);
+                    expect(axisLabelX.querySelector("text").textContent).toBe("X Label");
+                    expect(axisLabelY.querySelector("text").textContent).toBe("Y Label");
+                    expect(axisLabelY2.querySelector("text").textContent).toBe("Y2 Label");
+                 });
+             });
+             describe("when label is passed", () => {
+                it("should update the label during reflow", () => {
+                    const panData = {
+                        key: "uid_1",
+                        values: [
+                            {
+                                x: "2016-03-03T12:00:00Z",
+                                y: 2
+                            },
+                            {
+                                x: "2016-04-03T12:00:00Z",
+                                y: 20
+                            }
+                        ],
+                        xLabel: "updated xLabel",
+                        yLabel: "updated yLabel",
+                        y2Label: "updated y2Label"
+                    };
+                    graphDefault.reflow(panData);
+                    const axisLabelX = fetchElementByClass(barGraphContainer, styles.axisLabelX);
+                    const axisLabelY = fetchElementByClass(barGraphContainer, styles.axisLabelY);
+                    const axisLabelY2 = fetchElementByClass(barGraphContainer, styles.axisLabelY2);
+                    expect(axisLabelX.querySelector("text").textContent).toBe("updated xLabel");
+                    expect(axisLabelY.querySelector("text").textContent).toBe("updated yLabel");
+                    expect(axisLabelY2.querySelector("text").textContent).toBe("updated y2Label");
+                });
+             })
         });
         it("Dynamic Data is not updated when key does not match", () => {
             const panData = {
