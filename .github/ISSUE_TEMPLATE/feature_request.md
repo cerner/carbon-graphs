@@ -7,7 +7,7 @@ about: Suggest an idea for this project
 
 General graph logic:
 
-* [ ]  Graph attributes
+* [ ]  Graph attributes (axes, legends, regions...etc.)
 * [ ]  Other (please specify): 
 
 Specific graph logic:
