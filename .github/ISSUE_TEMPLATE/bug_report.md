@@ -6,7 +6,6 @@ about: Create a report to help us improve
 **What part of Carbon does this bug correlate to?**
 General graph logic:
 
-* [ ]  All graphs (axes, legends etc)
 * [ ]  Graph attributes
 * [ ]  Other (please specify): 
 
