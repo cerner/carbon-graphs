@@ -6,7 +6,7 @@ about: Create a report to help us improve
 **What part of Carbon does this bug correlate to?**
 General graph logic:
 
-* [ ]  Graph attributes
+* [ ]  Graph attributes (axes, legends, regions...etc.)
 * [ ]  Other (please specify): 
 
 Specific graph logic:
