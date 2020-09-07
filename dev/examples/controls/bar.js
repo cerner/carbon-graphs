@@ -71,6 +71,32 @@ const regions2 = [
         end: 30
     }
 ];
+const regions3 = [
+    {
+        axis: "y2",
+        x: 1,
+        start: 7,
+        end: 7
+    },
+    {
+        axis: "y2",
+        x: 2,
+        start: 13,
+        end: 13
+    },
+    {
+        axis: "y2",
+        x: 3,
+        start: 17,
+        end: 17
+    },
+    {
+        axis: "y2",
+        x: 4,
+        start: 4,
+        end: 4
+    }
+];
 const axisInfoRow = [
     {
         axis: "x",
@@ -394,7 +420,7 @@ export const renderBarGroupWithGoal = (id) => {
         Carbon.api.bar(getDemoData(`#${id}`, "BAR_DEFAULT").data[0])
     );
     const data = utils.deepClone(getDemoData(`#${id}`, "BAR_DEFAULT").data[1]);
-    data.regions = regions;
+    data.regions = regions3;
     barGroup.loadContent(Carbon.api.bar(data));
     const data2 = utils.deepClone(getDemoData(`#${id}`, "BAR_DEFAULT").data[2]);
     data2.regions = regions;

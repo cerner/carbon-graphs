@@ -47,16 +47,55 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
             shownTargets.push(item.key);
         }
     };
+    if (config.shownTargets.length === 0) {
+        graphContext.contentKeys.forEach((i) => {
+            canvasSVG
+                .selectAll(`.${styles.taskBar}[aria-describedby="${i}"]`)
+                .attr("aria-hidden", isLegendSelected(d3.select(element)));
+        });
+    }
     legendClickHandler(element);
     updateShownTarget(config.shownTargets, item);
-    canvasSVG
-        .selectAll(`g[aria-describedby="${item.key}"]`)
-        .attr("aria-hidden", isLegendSelected(d3.select(element)));
-    setSelectionIndicatorAttributes(
-        canvasSVG.selectAll(`.${styles.taskBarSelection}`),
-        false
-    );
-    window.requestAnimationFrame(onAnimationHandler(graphContext));
+    if (config.shownTargets.length >= 1) {
+        canvasSVG
+            .selectAll(`g[aria-describedby="${item.key}"]`)
+            .attr("aria-hidden", isLegendSelected(d3.select(element)));
+        canvasSVG
+            .selectAll(`.${styles.taskBar}[aria-describedby="${item.key}"]`)
+            .attr("aria-hidden", isLegendSelected(d3.select(element)));
+        canvasSVG
+            .selectAll(
+                `.${styles.region}[aria-describedby="region_${item.key}"]`
+            )
+            .attr("aria-hidden", function () {
+                return !(d3.select(this).attr("aria-hidden") === "true");
+            });
+        setSelectionIndicatorAttributes(
+            canvasSVG.selectAll(`.${styles.taskBarSelection}`),
+            false
+        );
+        setSelectionIndicatorAttributes(
+            canvasSVG.selectAll(`.${styles.taskBarSelection}`),
+            false
+        );
+        window.requestAnimationFrame(onAnimationHandler(graphContext));
+    } else {
+        canvasSVG
+            .selectAll(
+                `.${styles.region}[aria-describedby="region_${item.key}"]`
+            )
+            .attr("aria-hidden", function () {
+                return !(d3.select(this).attr("aria-hidden") === "true");
+            });
+        canvasSVG
+            .selectAll(`g[aria-describedby="${item.key}"]`)
+            .attr("aria-hidden", isLegendSelected(d3.select(element)));
+        setSelectionIndicatorAttributes(
+            canvasSVG.selectAll(`.${styles.taskBarSelection}`),
+            false
+        );
+        window.requestAnimationFrame(onAnimationHandler(graphContext));
+    }
 };
 /**
  * Hover handler for legend item. Highlights current bar and blurs the rest of the targets in Graph
