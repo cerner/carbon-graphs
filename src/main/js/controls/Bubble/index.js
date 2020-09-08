@@ -1,3 +1,6 @@
 import Bubble from "./Bubble";
+import BubbleSingleDataset from "./BubbleSingleDataset";
+import BubbleMultipleDataset from "./BubbleMultipleDataset";
 
-export { Bubble as default };
+// export default {Bubble};
+export { Bubble, BubbleSingleDataset, BubbleMultipleDataset };

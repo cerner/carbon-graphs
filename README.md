@@ -68,6 +68,9 @@ npm i @cerner/carbon-graphs --save-dev
 -   [Gantt](./docs/controls/Gantt.md#usage)
 -   [Scatter](./docs/controls/Scatter.md#usage)
 -   [Bubble](./docs/controls/Bubble.md#usage)
+    -   [Bubble Single Dataset](./docs/controls/BubbleSingleDataset.md)
+    -   [Bubble Multiple Dataset](./docs/controls/BubbleMultipleDataset.md)
+
 
 ### Graph Settings/Toggles
 

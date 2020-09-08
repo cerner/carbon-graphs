@@ -1,5 +1,7 @@
 # Bubble
 
+**Note: Bubble will be deprecated in a future release. Use [BubbleSingleDataset](./BubbleSingleDataset.md) or [BubbleMultipleDataset](./BubbleMultipleDataset.md).**
+
 A native bubble graph using D3 based on standard design patterns.
 
 -   [Bubble](#bubble)

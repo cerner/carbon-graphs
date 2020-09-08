@@ -8,7 +8,11 @@ import Pie from "../../../../main/js/controls/Pie";
 import Timeline from "../../../../main/js/controls/Timeline";
 import Shape from "../../../../main/js/core/Shape/Shape";
 import Scatter from "../../../../main/js/controls/Scatter";
-import Bubble from "../../../../main/js/controls/Bubble";
+import {
+    Bubble,
+    BubbleSingleDataset,
+    BubbleMultipleDataset
+} from "../../../../main/js/controls/Bubble";
 
 import {
     ganttInput,
@@ -154,7 +158,7 @@ describe("Carbon", () => {
         expect(Carbon.api.scatter).toEqual(jasmine.any(Function));
         expect(scatter instanceof Scatter).toBeTruthy();
     });
-    it("register Bubble", () => {
+    it("registers Bubble", () => {
         const data = {
             key: "uid_12",
             label: {
@@ -171,5 +175,43 @@ describe("Carbon", () => {
         const bubble = Carbon.api.bubble(data);
         expect(Carbon.api.bubble).toEqual(jasmine.any(Function));
         expect(bubble instanceof Bubble).toBeTruthy();
+    });
+    it("registers BubbleSingleDataset", () => {
+        const data = {
+            key: "uid_12",
+            label: {
+                display: "Data Label 1"
+            },
+            values: [
+                {
+                    x: 35,
+                    y: 4
+                }
+            ]
+        };
+
+        const bubbleSingleDataset = Carbon.api.bubbleSingleDataset(data);
+        expect(Carbon.api.bubbleSingleDataset).toEqual(jasmine.any(Function));
+        expect(bubbleSingleDataset instanceof BubbleSingleDataset).toBeTruthy();
+    });
+    it("registers BubbleMultipleDataset", () => {
+        const data = {
+            key: "uid_12",
+            label: {
+                display: "Data Label 1"
+            },
+            values: [
+                {
+                    x: 35,
+                    y: 4
+                }
+            ]
+        };
+
+        const bubbleMultipleDataset = Carbon.api.bubbleMultipleDataset(data);
+        expect(Carbon.api.bubbleMultipleDataset).toEqual(jasmine.any(Function));
+        expect(
+            bubbleMultipleDataset instanceof BubbleMultipleDataset
+        ).toBeTruthy();
     });
 });

@@ -1,8 +1,8 @@
 "use strict";
-import Graph from "../../../../main/js/controls/Graph/Graph";
-import Bubble from "../../../../main/js/controls/Bubble";
-import constants from "../../../../main/js/helpers/constants";
-import styles from "../../../../main/js/helpers/styles";
+import Graph from "../../../../../main/js/controls/Graph/Graph";
+import { Bubble } from "../../../../../main/js/controls/Bubble";
+import constants from "../../../../../main/js/helpers/constants";
+import styles from "../../../../../main/js/helpers/styles";
 import {
     axisDefault,
     fetchElementByClass,
@@ -10,11 +10,22 @@ import {
     getInput,
     inputSecondary,
     valuesDefault
-} from "./helpers";
+} from "../helpers";
 
 describe("Bubble - Unload", () => {
     let graphDefault = null;
     let bubbleGraphContainer;
+    let consolewarn;
+
+    beforeAll(() => {
+        // to supress warnings
+        consolewarn = console.warn;
+        console.warn = () => {};
+    });
+    afterAll(() => {
+        console.warn = consolewarn;
+    });
+
     beforeEach(() => {
         bubbleGraphContainer = document.createElement("div");
         bubbleGraphContainer.id = "testBubble_carbon";

@@ -1,7 +1,8 @@
 "use strict";
 import * as d3 from "d3";
-import constants from "../../../helpers/constants";
+import constants, { BUBBLE } from "../../../helpers/constants";
 import utils from "../../../helpers/utils";
+import Bubble from "../Bubble";
 
 /**
  * Gives bubble scale for given weight range in min and max
@@ -41,6 +42,55 @@ export const generateColor = (dataTarget) => {
         .scaleLinear()
         .domain(d3.extent(radiusData))
         .range([lowerShade, upperShade]);
+
+    return huePaletteList;
+};
+
+/**
+ * Generates color range for the given color for a single dataset
+ *
+ * @private
+ * @param {object} dataTarget - data for the bubble graph
+ * @returns {d3.scale} - returns function to get color for specific bubble
+ */
+export const generateColor_singleDataset = (dataTarget) => {
+    let radiusData;
+
+    if (utils.isUndefined(dataTarget.weight)) {
+        radiusData = dataTarget.values.map((element) => element.y);
+    } else {
+        radiusData = dataTarget.values.map((element) =>
+            bubbleScale(dataTarget)(element.weight)
+        );
+    }
+
+    let color = [];
+
+    if (utils.isDefined(dataTarget.palette)) {
+        color = dataTarget.palette;
+        switch (dataTarget.values.length) {
+            case 4:
+                if (color.length == 3) {
+                    color.unshift(BUBBLE.PALETTE.GRAY);
+                }
+                break;
+            case 2:
+                if (color.length == 1) {
+                    color.splice(1, 1);
+                }
+                break;
+            case 1:
+                if (color.length == 1) {
+                    color.splice(1, 2);
+                }
+                break;
+        }
+    }
+
+    const huePaletteList = d3
+        .scaleQuantile()
+        .domain(d3.extent(radiusData))
+        .range(color);
 
     return huePaletteList;
 };

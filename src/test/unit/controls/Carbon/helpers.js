@@ -9,7 +9,9 @@ export const LIBRARY_LIST = [
     "bar",
     "pie",
     "scatter",
-    "bubble"
+    "bubble",
+    "bubbleSingleDataset",
+    "bubbleMultipleDataset"
 ];
 export const TOOLS_LIST = ["shape", "defaultSVGProps"];
 export const nativeInput = {

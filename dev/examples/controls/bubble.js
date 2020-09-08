@@ -1,6 +1,7 @@
 import Carbon from "../../../src/main/js/carbon";
 import { loadPopup, loadBubblePopup } from "../popup";
 import { createPanningControls } from "../panHelpers";
+import { BUBBLE } from "../../../src/main/js/helpers/constants";
 
 const simpleAxisData = (id) => ({
     bindTo: id,
@@ -385,5 +386,27 @@ export const renderBubbleGraphAndLegendPaddingReduced = (id) => {
         dataToReduceGraphAndLegendPadding(`#${id}`)
     );
     bubbleGraph.loadContent(Carbon.api.bubble(data6));
+    return bubbleGraph;
+};
+
+export const renderBubbleSingleDataset = (id) => {
+    const bubbleGraph = Carbon.api.graph(axisData(`#${id}`));
+    data2.palette = BUBBLE.PALETTE.ORANGE;
+    data2.color = undefined;
+    bubbleGraph.loadContent(Carbon.api.bubbleSingleDataset(data2));
+
+    const bubbleGraph2 = Carbon.api.graph(temperatureAxisData(`#${id}`));
+    data3.color = Carbon.helpers.COLORS.GREEN;
+    bubbleGraph2.loadContent(Carbon.api.bubbleSingleDataset(data3));
+
+    return bubbleGraph;
+};
+
+export const renderBubbleMultipleDataset = (id) => {
+    const bubbleGraph = Carbon.api.graph(axisData(`#${id}`));
+    data2.palette = BUBBLE.PALETTE.ORANGE;
+    bubbleGraph.loadContent(Carbon.api.bubbleMultipleDataset(data2));
+    bubbleGraph.loadContent(Carbon.api.bubbleMultipleDataset(data6));
+
     return bubbleGraph;
 };

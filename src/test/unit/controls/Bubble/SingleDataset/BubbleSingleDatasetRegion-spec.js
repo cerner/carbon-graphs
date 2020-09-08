@@ -1,32 +1,39 @@
 "use strict";
-import Graph from "../../../../main/js/controls/Graph/Graph";
-import Bubble from "../../../../main/js/controls/Bubble";
+import Graph from "../../../../../main/js/controls/Graph/Graph";
+import { BubbleSingleDataset } from "../../../../../main/js/controls/Bubble";
 import {
     getXAxisWidth,
     getXAxisXPosition
-} from "../../../../main/js/helpers/axis";
-import constants from "../../../../main/js/helpers/constants";
-import errors from "../../../../main/js/helpers/errors";
-import styles from "../../../../main/js/helpers/styles";
-import utils from "../../../../main/js/helpers/utils";
+} from "../../../../../main/js/helpers/axis";
+import constants from "../../../../../main/js/helpers/constants";
+import errors from "../../../../../main/js/helpers/errors";
+import styles from "../../../../../main/js/helpers/styles";
+import utils from "../../../../../main/js/helpers/utils";
 import {
     loadCustomJasmineMatcher,
     toNumber,
     triggerEvent
-} from "../../helpers/commonHelpers";
+} from "../../../helpers/commonHelpers";
 import {
     axisDefault,
     fetchElementByClass,
     getAxes,
     getInput,
     inputSecondary,
-    valuesDefault,
-    inputTertiary
-} from "./helpers";
+    valuesDefault
+} from "../helpers";
 
-describe("Bubble - Region", () => {
+describe("Bubble Single Dataset - Region", () => {
+    let consolewarn;
+
     beforeAll(() => {
         loadCustomJasmineMatcher();
+        // to supress warnings
+        consolewarn = console.warn;
+        console.warn = () => {};
+    });
+    afterAll(() => {
+        console.warn = consolewarn;
     });
     let bubble = null;
     let data = null;
@@ -57,7 +64,7 @@ describe("Bubble - Region", () => {
                         color: "#f4f4f4"
                     }
                 ];
-                bubble = new Bubble(data);
+                bubble = new BubbleSingleDataset(data);
                 graphDefault.loadContent(bubble);
             });
             it("Creates region when present", () => {
@@ -90,7 +97,7 @@ describe("Bubble - Region", () => {
         it("Creates region only if present", () => {
             data = utils.deepClone(getInput(valuesDefault, false, false));
             data.regions = null;
-            bubble = new Bubble(data);
+            bubble = new BubbleSingleDataset(data);
             graphDefault.loadContent(bubble);
             const regionGroupElement = fetchElementByClass(
                 bubbleGraphContainer,
@@ -118,7 +125,7 @@ describe("Bubble - Region", () => {
                         end: 15
                     }
                 ];
-                bubble = new Bubble(data);
+                bubble = new BubbleSingleDataset(data);
                 graphDefault.loadContent(bubble);
             });
             it("Correctly renders", () => {
@@ -161,7 +168,7 @@ describe("Bubble - Region", () => {
             });
             it("Throws error when empty", () => {
                 data.regions = [{}];
-                bubble = new Bubble(data);
+                bubble = new BubbleSingleDataset(data);
                 expect(() => {
                     graphDefault.loadContent(bubble);
                 }).toThrowError(errors.THROW_MSG_REGION_EMPTY);
@@ -173,7 +180,7 @@ describe("Bubble - Region", () => {
                         end: null
                     }
                 ];
-                bubble = new Bubble(data);
+                bubble = new BubbleSingleDataset(data);
                 expect(() => {
                     graphDefault.loadContent(bubble);
                 }).toThrowError(errors.THROW_MSG_REGION_START_END_MISSING);
@@ -186,7 +193,7 @@ describe("Bubble - Region", () => {
                         end: 20
                     }
                 ];
-                bubble = new Bubble(data);
+                bubble = new BubbleSingleDataset(data);
                 expect(() => {
                     graphDefault.loadContent(bubble);
                 }).toThrowError(errors.THROW_MSG_REGION_INVALID_AXIS_PROVIDED);
@@ -202,7 +209,7 @@ describe("Bubble - Region", () => {
                         end: 20
                     }
                 ];
-                bubble = new Bubble(data);
+                bubble = new BubbleSingleDataset(data);
                 expect(() => {
                     graphDefault.loadContent(bubble);
                 }).toThrowError(errors.THROW_MSG_REGION_INVALID_AXIS_PROVIDED);
@@ -216,7 +223,7 @@ describe("Bubble - Region", () => {
                         end: 20
                     }
                 ];
-                bubble = new Bubble(data);
+                bubble = new BubbleSingleDataset(data);
                 expect(() => {
                     graphDefault.loadContent(bubble);
                 }).toThrowError(errors.THROW_MSG_REGION_INVALID_AXIS_PROVIDED);
@@ -229,7 +236,7 @@ describe("Bubble - Region", () => {
                         end: 20
                     }
                 ];
-                bubble = new Bubble(data);
+                bubble = new BubbleSingleDataset(data);
                 expect(() => {
                     graphDefault.loadContent(bubble);
                 }).toThrowError(errors.THROW_MSG_REGION_INVALID_AXIS_PROVIDED);
@@ -242,7 +249,7 @@ describe("Bubble - Region", () => {
                         end: 20
                     }
                 ];
-                bubble = new Bubble(data);
+                bubble = new BubbleSingleDataset(data);
                 expect(() => {
                     graphDefault.loadContent(bubble);
                 }).toThrowError(
@@ -257,7 +264,7 @@ describe("Bubble - Region", () => {
                         end: "20"
                     }
                 ];
-                bubble = new Bubble(data);
+                bubble = new BubbleSingleDataset(data);
                 expect(() => {
                     graphDefault.loadContent(bubble);
                 }).toThrowError(
@@ -272,7 +279,7 @@ describe("Bubble - Region", () => {
                         end: 10
                     }
                 ];
-                bubble = new Bubble(data);
+                bubble = new BubbleSingleDataset(data);
                 expect(() => {
                     graphDefault.loadContent(bubble);
                 }).toThrowError(errors.THROW_MSG_REGION_START_MORE_END);
@@ -285,7 +292,7 @@ describe("Bubble - Region", () => {
                         end: 15
                     }
                 ];
-                bubble = new Bubble(data);
+                bubble = new BubbleSingleDataset(data);
                 expect(() => {
                     graphDefault.loadContent(bubble);
                 }).not.toThrow();
@@ -300,7 +307,7 @@ describe("Bubble - Region", () => {
                     end: 15
                 }
             ];
-            bubble = new Bubble(data);
+            bubble = new BubbleSingleDataset(data);
             graphDefault.loadContent(bubble);
             const regionElement = fetchElementByClass(
                 bubbleGraphContainer,
@@ -323,7 +330,7 @@ describe("Bubble - Region", () => {
                     end: 5
                 }
             ];
-            bubble = new Bubble(data);
+            bubble = new BubbleSingleDataset(data);
             graphDefault.loadContent(bubble);
             const regionGroupElement = fetchElementByClass(
                 bubbleGraphContainer,
@@ -358,8 +365,8 @@ describe("Bubble - Region", () => {
                     end: 15
                 }
             ];
-            bubble = new Bubble(data);
-            const bubbleContent = new Bubble(inputSecondary);
+            bubble = new BubbleSingleDataset(data);
+            const bubbleContent = new BubbleSingleDataset(inputSecondary);
             graphDefault.loadContent(bubble);
             graphDefault.loadContent(bubbleContent);
             const regionGroupElement = fetchElementByClass(
@@ -394,7 +401,7 @@ describe("Bubble - Region", () => {
                     end: 15
                 }
             ];
-            bubble = new Bubble(data);
+            bubble = new BubbleSingleDataset(data);
             graphDefault.loadContent(bubble);
             const regionElement = fetchElementByClass(
                 bubbleGraphContainer,
@@ -413,7 +420,7 @@ describe("Bubble - Region", () => {
                     end: 15
                 }
             ];
-            bubble = new Bubble(data);
+            bubble = new BubbleSingleDataset(data);
             graphDefault.loadContent(bubble);
             const regionElement = fetchElementByClass(
                 bubbleGraphContainer,
@@ -432,7 +439,7 @@ describe("Bubble - Region", () => {
                     end: 15
                 }
             ];
-            bubble = new Bubble(data);
+            bubble = new BubbleSingleDataset(data);
             graphDefault.loadContent(bubble);
             const regionElement = fetchElementByClass(
                 bubbleGraphContainer,
@@ -449,7 +456,7 @@ describe("Bubble - Region", () => {
                     end: 15
                 }
             ];
-            bubble = new Bubble(data);
+            bubble = new BubbleSingleDataset(data);
             graphDefault.loadContent(bubble);
             const regionElement = fetchElementByClass(
                 bubbleGraphContainer,
@@ -472,7 +479,7 @@ describe("Bubble - Region", () => {
                     start: 15
                 }
             ];
-            bubble = new Bubble(data);
+            bubble = new BubbleSingleDataset(data);
             graphDefault.loadContent(bubble);
             const regionElement = fetchElementByClass(
                 bubbleGraphContainer,
@@ -494,7 +501,7 @@ describe("Bubble - Region", () => {
                     end: 15
                 }
             ];
-            bubble = new Bubble(data);
+            bubble = new BubbleSingleDataset(data);
             graphDefault.loadContent(bubble);
             const regionElement = fetchElementByClass(
                 bubbleGraphContainer,
@@ -518,7 +525,7 @@ describe("Bubble - Region", () => {
                     color: "#f44444"
                 }
             ];
-            bubble = new Bubble(data);
+            bubble = new BubbleSingleDataset(data);
             graphDefault.loadContent(bubble);
             const regionElement = fetchElementByClass(
                 bubbleGraphContainer,
@@ -536,7 +543,7 @@ describe("Bubble - Region", () => {
                     end: 15
                 }
             ];
-            bubble = new Bubble(data);
+            bubble = new BubbleSingleDataset(data);
             graphDefault.loadContent(bubble);
             graphDefault.unloadContent(bubble);
             const regionGroupElement = fetchElementByClass(
@@ -557,7 +564,7 @@ describe("Bubble - Region", () => {
                     end: 15
                 }
             ];
-            bubble = new Bubble(data);
+            bubble = new BubbleSingleDataset(data);
             graphDefault.loadContent(bubble);
             graphDefault.unloadContent(bubble);
             const regionGroupElement = fetchElementByClass(
@@ -580,8 +587,8 @@ describe("Bubble - Region", () => {
                         end: 5
                     }
                 ];
-                bubblePrimary = new Bubble(inputPrimary);
-                bubbleSecondary = new Bubble(inputSecondary);
+                bubblePrimary = new BubbleSingleDataset(inputPrimary);
+                bubbleSecondary = new BubbleSingleDataset(inputSecondary);
                 graphDefault.loadContent(bubblePrimary);
                 graphDefault.loadContent(bubbleSecondary);
             });
@@ -643,8 +650,8 @@ describe("Bubble - Region", () => {
                         end: 15
                     }
                 ];
-                bubblePrimary = new Bubble(inputPrimary);
-                bubbleSecondary = new Bubble(inputSecondary);
+                bubblePrimary = new BubbleSingleDataset(inputPrimary);
+                bubbleSecondary = new BubbleSingleDataset(inputSecondary);
                 graphDefault.loadContent(bubblePrimary);
                 graphDefault.loadContent(bubbleSecondary);
             });
@@ -696,106 +703,9 @@ describe("Bubble - Region", () => {
             });
         });
     });
-    describe("Check if region same for multibubble with same dataset", () => {
-        let inputPrimary = null;
-        let bubblePrimary = null;
-        let bubbleSecondary = null;
-        let bubbleThird = null;
-        beforeEach(() => {
-            inputPrimary = getInput(valuesDefault, false, false);
-            inputPrimary.regions = [
-                {
-                    start: 1,
-                    end: 5
-                }
-            ];
-            inputSecondary.regions = [
-                {
-                    start: 1,
-                    end: 5
-                }
-            ];
-            bubblePrimary = new Bubble(inputPrimary);
-            bubbleSecondary = new Bubble(inputSecondary);
-            graphDefault.loadContent(bubblePrimary);
-            graphDefault.loadContent(bubbleSecondary);
-        });
-        it("Correctly renders", () => {
-            const regionGroupElement = fetchElementByClass(
-                bubbleGraphContainer,
-                styles.regionGroup
-            );
-            const regionElement = fetchElementByClass(
-                regionGroupElement,
-                styles.region
-            );
-            expect(regionGroupElement.childNodes.length).toBe(2);
-            expect(regionElement.nodeName).toBe("rect");
-        });
-        it("Hides region if one or more is missing", () => {
-            inputTertiary.regions = null;
-            bubbleThird = new Bubble(inputTertiary);
-            graphDefault.loadContent(bubbleThird);
-            const regionsElement = document.querySelectorAll(
-                `.${styles.region}`
-            );
-            expect(regionsElement.length).toBe(2);
-            regionsElement.forEach((element) => {
-                expect(element.getAttribute("aria-hidden")).toBe("true");
-            });
-            expect(regionsElement[0].getAttribute("aria-describedby")).toBe(
-                `region_${inputPrimary.key}`
-            );
-            expect(regionsElement[1].getAttribute("aria-describedby")).toBe(
-                `region_${inputSecondary.key}`
-            );
-        });
-        it("Shows region if one or more are identical", () => {
-            const regionsElement = document.querySelectorAll(
-                `.${styles.region}`
-            );
-            expect(regionsElement.length).toBe(2);
-            regionsElement.forEach((element) => {
-                expect(element.getAttribute("aria-hidden")).toBe("false");
-            });
-            expect(regionsElement[0].getAttribute("aria-describedby")).toBe(
-                `region_${inputPrimary.key}`
-            );
-            expect(regionsElement[1].getAttribute("aria-describedby")).toBe(
-                `region_${inputSecondary.key}`
-            );
-        });
-        it("Hides region if one or more are not identical", () => {
-            inputTertiary.regions = [
-                {
-                    start: 1,
-                    end: 10
-                }
-            ];
-            bubbleThird = new Bubble(inputTertiary);
-            graphDefault.loadContent(bubbleThird);
-            const regionsElement = document.querySelectorAll(
-                `.${styles.region}`
-            );
-            expect(regionsElement.length).toBe(3);
-            regionsElement.forEach((element) => {
-                expect(element.getAttribute("aria-hidden")).toBe("true");
-            });
-            expect(regionsElement[0].getAttribute("aria-describedby")).toBe(
-                `region_${inputPrimary.key}`
-            );
-            expect(regionsElement[1].getAttribute("aria-describedby")).toBe(
-                `region_${inputSecondary.key}`
-            );
-            expect(regionsElement[2].getAttribute("aria-describedby")).toBe(
-                `region_${inputTertiary.key}`
-            );
-        });
-    });
     describe("On legend item click", () => {
         let inputPrimary = null;
         let bubblePrimary = null;
-        let bubbleSecondary = null;
         beforeEach(() => {
             inputPrimary = getInput(valuesDefault);
             inputPrimary.regions = [
@@ -808,7 +718,7 @@ describe("Bubble - Region", () => {
                     end: 15
                 }
             ];
-            bubblePrimary = new Bubble(inputPrimary);
+            bubblePrimary = new BubbleSingleDataset(inputPrimary);
             graphDefault.loadContent(bubblePrimary);
         });
         describe("When single-bubble", () => {
@@ -868,26 +778,6 @@ describe("Bubble - Region", () => {
                         },
                         200
                     );
-                });
-            });
-        });
-        describe("When multi-bubbles", () => {
-            it("Shows when data-sets shown === 1", (done) => {
-                bubbleSecondary = new Bubble(inputSecondary);
-                graphDefault.loadContent(bubbleSecondary);
-                const legendItem = bubbleGraphContainer.querySelectorAll(
-                    `.${styles.legendItem}`
-                );
-                triggerEvent(legendItem[1], "click", () => {
-                    expect(
-                        document
-                            .querySelector(
-                                `rect[aria-describedby="region_${inputPrimary.key}"]`
-                            )
-                            .getAttribute("aria-hidden")
-                    ).toBe("false");
-                    graphDefault.unloadContent(bubbleSecondary);
-                    done();
                 });
             });
         });
