@@ -13,7 +13,8 @@ import {
     removeRegion,
     translateRegion,
     areRegionsIdentical,
-    createValueRegion
+    createValueRegion,
+    isSingleTargetDisplayed
 } from "../../helpers/region";
 import styles from "../../helpers/styles";
 import utils from "../../helpers/utils";
@@ -107,26 +108,29 @@ class Line extends GraphContent {
     load(graph) {
         this.dataTarget = processDataPoints(graph.config, this.config);
         draw(graph.scale, graph.config, graph.svg, this.dataTarget);
-        if (!utils.isEmptyArray(this.dataTarget.valueRegionSubset)) {
-            createValueRegion(
-                graph.scale,
-                graph.config,
-                graph.svg.select(`.${styles.regionGroup}`),
-                this.dataTarget.valueRegionSubset,
-                `region_${this.dataTarget.key}`,
-                this.config.yAxis,
-                this.dataTarget.interpolationType
-            );
-        } else if (utils.notEmpty(this.dataTarget.regions)) {
-            createRegion(
-                graph.scale,
-                graph.config,
-                graph.svg.select(`.${styles.regionGroup}`),
-                this.dataTarget.regions,
-                `region_${this.dataTarget.key}`,
-                this.config.yAxis
-            );
+        if (!utils.isEmptyArray(this.dataTarget.values)) {
+            if (!utils.isEmptyArray(this.dataTarget.valueRegionSubset)) {
+                createValueRegion(
+                    graph.scale,
+                    graph.config,
+                    graph.svg.select(`.${styles.regionGroup}`),
+                    this.dataTarget.valueRegionSubset,
+                    `region_${this.dataTarget.key}`,
+                    this.config.yAxis,
+                    this.dataTarget.interpolationType
+                );
+            } else if (utils.notEmpty(this.dataTarget.regions)) {
+                createRegion(
+                    graph.scale,
+                    graph.config,
+                    graph.svg.select(`.${styles.regionGroup}`),
+                    this.dataTarget.regions,
+                    `region_${this.dataTarget.key}`,
+                    this.config.yAxis
+                );
+            }
         }
+        
         prepareLegendItems(
             graph.config,
             {
@@ -173,7 +177,9 @@ class Line extends GraphContent {
      * @inheritdoc
      */
     resize(graph) {
-        if (
+        if (isSingleTargetDisplayed(graph.config.shownTargets)) {
+            graph.config.shouldHideAllRegion = false;
+        } else if (
             utils.notEmpty(this.dataTarget.regions) ||
             !utils.isEmptyArray(this.dataTarget.valueRegionSubset)
         ) {

@@ -877,5 +877,6 @@ export {
     prepareLegendItems,
     renderRegion,
     isRegionMappedToAllValues,
-    clear
+    clear,
+    isSinglePairedResultTargetDisplayed
 };

@@ -352,7 +352,9 @@ const processDataPoints = (graphConfig, dataTarget) => {
         graphConfig.showShapes
     );
 
-    graphConfig.shownTargets.push(dataTarget.key);
+    if (!utils.isEmptyArray(dataTarget.values)) {
+        graphConfig.shownTargets.push(dataTarget.key);
+    }
     dataTarget.internalValuesSubset = dataTarget.values.map((value) => ({
         onClick: dataTarget.onClick,
         isCritical: value.isCritical || false,
