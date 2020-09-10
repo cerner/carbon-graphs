@@ -331,7 +331,6 @@ export const RIGHT_CHEVRON = {
 /**
  * The S_0013_line.svg SVG file as an object.
  *
- * @private
  * @type {{path: {d: string}, options: {x: number, y: number, scale: number}}}
  */
 export const LINE = {
@@ -342,7 +341,6 @@ export const LINE = {
 /**
  * The S_0014_dashed_line.svg SVG file as an object.
  *
- * @private
  * @type {{path: {d: string}, options: {x: number, y: number, scale: number}}}
  */
 export const LINE_DASHED = {

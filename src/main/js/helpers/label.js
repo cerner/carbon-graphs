@@ -122,8 +122,7 @@ const renderPopup = (axisType) => {
  * @returns {Selection} d3 path for label shape container
  */
 const loadLabelShape = (shapeContainerPath, dataTarget) => {
-    if (dataTarget.values.length === 0) {
-    } else {
+    if (dataTarget.values.length > 0) {
         if (dataTarget.showShapes || dataTarget.showShapes === undefined) {
             return shapeContainerPath.append(() =>
                 new Shape(dataTarget.shape || SHAPES.CIRCLE).getShapeElement(

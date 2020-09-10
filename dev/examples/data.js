@@ -40,7 +40,7 @@ const DATA = [
                     upperLimit: 18
                 },
                 y2: {
-                    show: false,
+                    show: true,
                     label: "Line Set B",
                     lowerLimit: 0,
                     upperLimit: 250
@@ -57,7 +57,8 @@ const DATA = [
                     values: new Array(20).fill("").map((_, i) => ({
                         y: Math.sin(i) * Math.PI,
                         x: 85 + i * 10
-                    }))
+                    })),
+                    showShapes: false,
                 },
                 {
                     key: "uid_2",
@@ -189,7 +190,7 @@ const DATA = [
                     upperLimit: 30
                 },
                 y2: {
-                    show: false,
+                    show: true,
                     label: "Line Set B",
                     lowerLimit: 0,
                     upperLimit: 250
@@ -203,6 +204,7 @@ const DATA = [
                     },
                     shape: Carbon.helpers.SHAPES.DARK.CIRCLE,
                     onClick: loadPopup,
+                    showShapes: false,
                     values: [
                         {
                             x: new Date(2016, 0, 1, 1, 5).toISOString(),
@@ -271,7 +273,12 @@ const DATA = [
                     },
                     shape: Carbon.helpers.SHAPES.DARK.RHOMBUS,
                     color: Carbon.helpers.COLORS.BLUE,
+                    style:{
+                        strokeDashArray : "2,2",
+                    },
+                    showShapes: false,
                     onClick: loadPopup,
+                    showShpaes : false,
                     values: [
                         {
                             x: new Date(2016, 0, 1, 1, 5).toISOString(),
@@ -2247,7 +2254,7 @@ const DATA = [
                     upperLimit: 20
                 },
                 y2: {
-                    show: false,
+                    show: true,
                     label: "Line Set B",
                     lowerLimit: 0,
                     upperLimit: 250
