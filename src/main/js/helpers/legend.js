@@ -407,22 +407,20 @@ const getDefaultLegendOptions = (graphConfig, dataTarget) => {
         true
     );
     legendOptions.style = getDefaultValue(legendOptions.style, {});
+
+
     if (legendOptions.style.strokeDashArray) {
         legendOptions.style = {
             strokeDashArray: getStrokeDashArray(legendOptions.style)
         };
-    } else if (
-        dataTarget.showShapes === false &&
-        legendOptions.style.strokeDashArray === undefined
-    ) {
-        legendOptions.style.strokeDashArray = dataTarget.style.strokeDashArray;
-    } else if (
-        dataTarget.showShapes === true &&
-        legendOptions.style.strokeDashArray === undefined
-    ) {
-        legendOptions.style = {
-            strokeDashArray: getStrokeDashArray(legendOptions.style)
-        };
+    } else {
+        if (dataTarget.showShapes === false) {
+            legendOptions.style.strokeDashArray = dataTarget.style.strokeDashArray;
+        } else {
+            legendOptions.style = {
+                strokeDashArray: getStrokeDashArray(legendOptions.style)
+            };
+        }
     }
 
     return legendOptions;
