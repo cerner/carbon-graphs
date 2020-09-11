@@ -74,10 +74,10 @@ describe("PairedResult", () => {
                 done();
             });
         });
-        
+
         describe("when key matches", () => {
             describe("label is not passed", () => {
-                 it("should update dynamic data and retain label", () => {
+                it("should update dynamic data and retain label", () => {
                     const panData = {
                         key: "uid_1",
                         values: [
@@ -108,15 +108,30 @@ describe("PairedResult", () => {
                         styles.pairedBox
                     );
                     expect(pairedContent.length).toEqual(1);
-                    const axisLabelX = fetchElementByClass(pairedResultGraphContainer, styles.axisLabelX);
-                    const axisLabelY = fetchElementByClass(pairedResultGraphContainer, styles.axisLabelY);
-                    const axisLabelY2 = fetchElementByClass(pairedResultGraphContainer, styles.axisLabelY2);
-                    expect(axisLabelX.querySelector("text").textContent).toBe("X Label");
-                    expect(axisLabelY.querySelector("text").textContent).toBe("Y Label");
-                    expect(axisLabelY2.querySelector("text").textContent).toBe("Y2 Label");
+                    const axisLabelX = fetchElementByClass(
+                        pairedResultGraphContainer,
+                        styles.axisLabelX
+                    );
+                    const axisLabelY = fetchElementByClass(
+                        pairedResultGraphContainer,
+                        styles.axisLabelY
+                    );
+                    const axisLabelY2 = fetchElementByClass(
+                        pairedResultGraphContainer,
+                        styles.axisLabelY2
+                    );
+                    expect(axisLabelX.querySelector("text").textContent).toBe(
+                        "X Label"
+                    );
+                    expect(axisLabelY.querySelector("text").textContent).toBe(
+                        "Y Label"
+                    );
+                    expect(axisLabelY2.querySelector("text").textContent).toBe(
+                        "Y2 Label"
+                    );
                 });
-             });
-             describe("when label is passed", () => {
+            });
+            describe("when label is passed", () => {
                 it("should update the label during reflow", () => {
                     const panData = {
                         key: "uid_1",
@@ -141,14 +156,29 @@ describe("PairedResult", () => {
                         y2Label: "updated y2Label"
                     };
                     graphDefault.reflow(panData);
-                    const axisLabelX = fetchElementByClass(pairedResultGraphContainer, styles.axisLabelX);
-                    const axisLabelY = fetchElementByClass(pairedResultGraphContainer, styles.axisLabelY);
-                    const axisLabelY2 = fetchElementByClass(pairedResultGraphContainer, styles.axisLabelY2);
-                    expect(axisLabelX.querySelector("text").textContent).toBe("updated xLabel");
-                    expect(axisLabelY.querySelector("text").textContent).toBe("updated yLabel");
-                    expect(axisLabelY2.querySelector("text").textContent).toBe("updated y2Label");
+                    const axisLabelX = fetchElementByClass(
+                        pairedResultGraphContainer,
+                        styles.axisLabelX
+                    );
+                    const axisLabelY = fetchElementByClass(
+                        pairedResultGraphContainer,
+                        styles.axisLabelY
+                    );
+                    const axisLabelY2 = fetchElementByClass(
+                        pairedResultGraphContainer,
+                        styles.axisLabelY2
+                    );
+                    expect(axisLabelX.querySelector("text").textContent).toBe(
+                        "updated xLabel"
+                    );
+                    expect(axisLabelY.querySelector("text").textContent).toBe(
+                        "updated yLabel"
+                    );
+                    expect(axisLabelY2.querySelector("text").textContent).toBe(
+                        "updated y2Label"
+                    );
                 });
-             })
+            });
         });
         it("Dynamic Data is not updated when key does not match", () => {
             const panData = {
@@ -183,7 +213,7 @@ describe("PairedResult", () => {
             expect(pairedContent.length).toEqual(2);
         });
         describe("when there is no data", () => {
-           it("should update the dynamic data and disable the legend", () => {
+            it("should update the dynamic data and disable the legend", () => {
                 const panData = {
                     key: "uid_1",
                     values: []
@@ -204,8 +234,8 @@ describe("PairedResult", () => {
                 expect(pairedContent.length).toEqual(0);
                 expect(legendItem.getAttribute("aria-disabled")).toBe("true");
                 expect(legendItem.getAttribute("aria-current")).toBe("true");
-           });
-       });
+            });
+        });
     });
     describe("When pan is disabled", () => {
         beforeEach(() => {

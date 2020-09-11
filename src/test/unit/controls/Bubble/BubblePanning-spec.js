@@ -75,7 +75,7 @@ describe("Bubble - Panning", () => {
         });
         describe("when key matches", () => {
             describe("label is not passed", () => {
-                 it("should update dynamic data and retain label", () => {
+                it("should update dynamic data and retain label", () => {
                     const panData = {
                         key: "uid_1",
                         values: [
@@ -100,15 +100,30 @@ describe("Bubble - Panning", () => {
                         styles.pointGroup
                     );
                     expect(bubbleContent.length).toEqual(2);
-                    const axisLabelX = fetchElementByClass(bubbleGraphContainer, styles.axisLabelX);
-                    const axisLabelY = fetchElementByClass(bubbleGraphContainer, styles.axisLabelY);
-                    const axisLabelY2 = fetchElementByClass(bubbleGraphContainer, styles.axisLabelY2);
-                    expect(axisLabelX.querySelector("text").textContent).toBe("X Label");
-                    expect(axisLabelY.querySelector("text").textContent).toBe("Y Label");
-                    expect(axisLabelY2.querySelector("text").textContent).toBe("Y2 Label");
-                 });
-             });
-             describe("when label is passed", () => {
+                    const axisLabelX = fetchElementByClass(
+                        bubbleGraphContainer,
+                        styles.axisLabelX
+                    );
+                    const axisLabelY = fetchElementByClass(
+                        bubbleGraphContainer,
+                        styles.axisLabelY
+                    );
+                    const axisLabelY2 = fetchElementByClass(
+                        bubbleGraphContainer,
+                        styles.axisLabelY2
+                    );
+                    expect(axisLabelX.querySelector("text").textContent).toBe(
+                        "X Label"
+                    );
+                    expect(axisLabelY.querySelector("text").textContent).toBe(
+                        "Y Label"
+                    );
+                    expect(axisLabelY2.querySelector("text").textContent).toBe(
+                        "Y2 Label"
+                    );
+                });
+            });
+            describe("when label is passed", () => {
                 it("should update the label during reflow", () => {
                     const panData = {
                         key: "uid_1",
@@ -127,15 +142,29 @@ describe("Bubble - Panning", () => {
                         y2Label: "updated y2Label"
                     };
                     graphDefault.reflow(panData);
-                    const axisLabelX = fetchElementByClass(bubbleGraphContainer, styles.axisLabelX);
-                    const axisLabelY = fetchElementByClass(bubbleGraphContainer, styles.axisLabelY);
-                    const axisLabelY2 = fetchElementByClass(bubbleGraphContainer, styles.axisLabelY2);
-                    expect(axisLabelX.querySelector("text").textContent).toBe("updated xLabel");
-                    expect(axisLabelY.querySelector("text").textContent).toBe("updated yLabel");
-                    expect(axisLabelY2.querySelector("text").textContent).toBe("updated y2Label");
-                    
+                    const axisLabelX = fetchElementByClass(
+                        bubbleGraphContainer,
+                        styles.axisLabelX
+                    );
+                    const axisLabelY = fetchElementByClass(
+                        bubbleGraphContainer,
+                        styles.axisLabelY
+                    );
+                    const axisLabelY2 = fetchElementByClass(
+                        bubbleGraphContainer,
+                        styles.axisLabelY2
+                    );
+                    expect(axisLabelX.querySelector("text").textContent).toBe(
+                        "updated xLabel"
+                    );
+                    expect(axisLabelY.querySelector("text").textContent).toBe(
+                        "updated yLabel"
+                    );
+                    expect(axisLabelY2.querySelector("text").textContent).toBe(
+                        "updated y2Label"
+                    );
                 });
-             });
+            });
         });
         it("Dynamic Data is not updated when key does not match", () => {
             const panData = {
@@ -185,8 +214,8 @@ describe("Bubble - Panning", () => {
                 expect(bubbleContent.length).toEqual(0);
                 expect(legendItem.getAttribute("aria-disabled")).toBe("true");
                 expect(legendItem.getAttribute("aria-current")).toBe("true");
-           });
-       });
+            });
+        });
     });
     describe("When pan is disabled", () => {
         beforeEach(() => {

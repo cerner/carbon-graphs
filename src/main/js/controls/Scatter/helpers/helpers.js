@@ -209,7 +209,7 @@ const processDataPoints = (graphConfig, dataTarget) => {
     };
     // Update the interpolation type
     dataTarget.interpolationType = getInterpolationType(dataTarget.type);
-
+    dataTarget.showShapes = true;
     graphConfig.shownTargets.push(dataTarget.key);
     dataTarget.internalValuesSubset = dataTarget.values.map((value) => ({
         onClick: dataTarget.onClick,

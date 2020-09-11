@@ -168,7 +168,8 @@ class PairedResult extends GraphContent {
                         key: `${this.dataTarget.key}_${type}`,
                         label: getValue(this.dataTarget.label, type),
                         color: getValue(this.dataTarget.color, type),
-                        shape: getValue(this.dataTarget.shape, type)
+                        shape: getValue(this.dataTarget.shape, type),
+                        values: this.dataTarget.values
                     },
                     graph.axesLabelShapeGroup[this.config.yAxis]
                 );
@@ -289,7 +290,12 @@ class PairedResult extends GraphContent {
             if (label && label.display) {
                 reflowLegend(
                     graph.legendSVG,
-                    constructLegendLabels(graph.contentConfig.filter((pairedResult) => pairedResult.key === graphData.key)[0], type),
+                    constructLegendLabels(
+                        graph.contentConfig.filter(
+                            (pairedResult) => pairedResult.key === graphData.key
+                        )[0],
+                        type
+                    ),
                     graph,
                     eventHandlers
                 );

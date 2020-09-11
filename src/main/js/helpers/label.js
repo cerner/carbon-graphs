@@ -24,6 +24,7 @@ import {
 import constants, { SHAPES } from "./constants";
 import styles from "./styles";
 import utils from "./utils";
+import { LINE, LINE_DASHED } from "../core/Shape/shapeDefinitions";
 
 /**
  * Informs if a label needs truncation or otherwise
@@ -120,18 +121,44 @@ const renderPopup = (axisType) => {
  * @param {Array} dataTarget - Data points
  * @returns {Selection} d3 path for label shape container
  */
-const loadLabelShape = (shapeContainerPath, dataTarget) =>
-    shapeContainerPath.append(() =>
-        new Shape(dataTarget.shape || SHAPES.CIRCLE).getShapeElement(
-            getDefaultSVGProps({
-                svgStyles: `fill: ${getColorForTarget(dataTarget)};`,
-                transformFn: (scale) => `scale(${scale})`,
-                a11yAttributes: {
-                    "aria-describedby": dataTarget.key
-                }
-            })
-        )
-    );
+const loadLabelShape = (shapeContainerPath, dataTarget) => {
+    if (dataTarget.values.length > 0) {
+        if (dataTarget.showShapes || dataTarget.showShapes === undefined) {
+            return shapeContainerPath.append(() =>
+                new Shape(dataTarget.shape || SHAPES.CIRCLE).getShapeElement(
+                    getDefaultSVGProps({
+                        svgStyles: `fill: ${getColorForTarget(dataTarget)};`,
+                        transformFn: (scale) => `scale(${scale})`,
+                        a11yAttributes: {
+                            "aria-describedby": dataTarget.key
+                        }
+                    })
+                )
+            );
+        } else {
+            shapeContainerPath.append(() =>
+                new Shape(
+                    dataTarget.style.strokeDashArray === "0"
+                        ? LINE
+                        : LINE_DASHED
+                ).getShapeElement(
+                    getDefaultSVGProps({
+                        svgStyles: `fill: ${getColorForTarget(
+                            dataTarget
+                        )}; stroke-dasharray: "${
+                            dataTarget.style.strokeDashArray
+                        }"`,
+                        transformFn: (scale) => `scale(${scale})`,
+                        a11yAttributes: {
+                            "aria-describedby": dataTarget.key
+                        }
+                    })
+                )
+            );
+            return shapeContainerPath;
+        }
+    }
+};
 /**
  * Returns the amount of shapes within a shape container
  *
