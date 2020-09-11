@@ -327,4 +327,34 @@ export const RIGHT_CHEVRON = {
     path: { d: "M37.7 24L14.2 48l-3.9-3.8L30 24 10.3 3.8 14.2 0z" },
     options: { x: -6, y: -6, scale: 0.25 }
 };
+
+/**
+ * The S_0013_line.svg SVG file as an object.
+ *
+ * @type {{path: {d: string}, options: {x: number, y: number, scale: number}}}
+ */
+export const LINE = {
+    path: { d: "M15 0h48v5H10V0" },
+    options: { x: -1, y: -1, scale: 0.25 }
+};
+
+/**
+ * The S_0014_dashed_line.svg SVG file as an object.
+ *
+ * @type {{path: {d: string}, options: {x: number, y: number, scale: number}}}
+ */
+export const LINE_DASHED = {
+    path: [
+        {
+            d: "M-22 0h48v7H8V0"
+        },
+        {
+            d: "M-28 0h80v7H35V0"
+        },
+        {
+            d: "M-18 0h80v7H80V0"
+        }
+    ],
+    options: { x: -1, y: -1, scale: 0.2 }
+};
 /* eslint-enable max-len */

@@ -346,11 +346,11 @@ const processDataPoints = (graphConfig, dataTarget) => {
     dataTarget.style = {
         strokeDashArray: getStrokeDashArray(dataTarget.style)
     };
-    dataTarget.legendOptions = getDefaultLegendOptions(graphConfig, dataTarget);
     dataTarget.showShapes = getDefaultValue(
         dataTarget.showShapes,
         graphConfig.showShapes
     );
+    dataTarget.legendOptions = getDefaultLegendOptions(graphConfig, dataTarget);
 
     graphConfig.shownTargets.push(dataTarget.key);
     dataTarget.internalValuesSubset = dataTarget.values.map((value) => ({

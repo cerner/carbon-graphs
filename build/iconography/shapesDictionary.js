@@ -22,6 +22,8 @@ const CARBON_SHAPES = {
     "S_0010_triangleDown_light.svg": "TRIANGLE_DOWN_LIGHT",
     "S_0011_x_light.svg": "X_LIGHT",
     "S_0012_circleLines.svg": "CIRCLE_HASHED",
+    "S_0013_line.svg": "LINE",
+    "S_0014_dashed_line.svg": "LINE_DASHED",
     "0026_chevronLeft_a.svg": "LEFT_CHEVRON",
     "0026_chevronRight_a.svg": "RIGHT_CHEVRON"
 };
