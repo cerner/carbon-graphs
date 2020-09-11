@@ -1,8 +1,7 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-labels: ":construction: blocked: accessibility input needed, :construction: blocked: engineering input needed, :construction: blocked: functional input needed,
-:construction: blocked: overlapping issue, :construction: blocked: reporter input needed, :construction: blocked: ux input needed"
+labels: ":construction: blocked: accessibility input needed, :construction: blocked: engineering input needed, :construction: blocked: functional input needed, :construction: blocked: reporter input needed, :construction: blocked: ux input needed"
 ---
 
 **What part of Carbon does this bug correlate to?**
