@@ -82,6 +82,11 @@ const createAxes = (axis, scale, config, canvasSVG) => {
             )})`
         )
         .call(axis.x)
+        .selectAll("text")
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", "rotate(-45)")
         .call(resetD3FontSize);
     canvasSVG
         .append("g")
