@@ -408,14 +408,14 @@ const getDefaultLegendOptions = (graphConfig, dataTarget) => {
     );
     legendOptions.style = getDefaultValue(legendOptions.style, {});
 
-
     if (legendOptions.style.strokeDashArray) {
         legendOptions.style = {
             strokeDashArray: getStrokeDashArray(legendOptions.style)
         };
     } else {
         if (dataTarget.showShapes === false) {
-            legendOptions.style.strokeDashArray = dataTarget.style.strokeDashArray;
+            legendOptions.style.strokeDashArray =
+                dataTarget.style.strokeDashArray;
         } else {
             legendOptions.style = {
                 strokeDashArray: getStrokeDashArray(legendOptions.style)
