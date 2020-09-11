@@ -139,8 +139,10 @@ const loadLegendItem = (legendSVG, t, config, eventHandlers) => {
 const processLegendOptions = (buttonPath, input) => {
     if (input.legendOptions) {
         // Create a legend icon only if the showShape is true
-        if (input.legendOptions.showShape) {
-            createLegendIcon(buttonPath, input);
+        if (input.showShapes || input.showShapes === undefined) {
+            if (input.legendOptions.showShape) {
+                createLegendIcon(buttonPath, input);
+            }
         }
         if (input.legendOptions.showLine) {
             createLegendLine(buttonPath, input);
@@ -392,19 +394,34 @@ const loadPieLegendItem = (legendSVG, dataTarget, { hoverHandler }, config) => {
 const getDefaultLegendOptions = (graphConfig, dataTarget) => {
     const legendOptions = getDefaultValue(dataTarget.legendOptions, {
         showShape: true,
-        showLine: false,
+        showLine: dataTarget.showShapes === false,
         showElement: true
     });
-    legendOptions.showShape = getDefaultValue(legendOptions.showShape, true);
+    legendOptions.showShape =
+        dataTarget.showShapes !== false
+            ? getDefaultValue(legendOptions.showShape, true)
+            : false;
     legendOptions.showLine = getDefaultValue(legendOptions.showLine, false);
     legendOptions.showElement = getDefaultValue(
         legendOptions.showElement,
         true
     );
     legendOptions.style = getDefaultValue(legendOptions.style, {});
-    legendOptions.style = {
-        strokeDashArray: getStrokeDashArray(legendOptions.style)
-    };
+
+    if (legendOptions.style.strokeDashArray) {
+        legendOptions.style = {
+            strokeDashArray: getStrokeDashArray(legendOptions.style)
+        };
+    } else {
+        if (dataTarget.showShapes === false) {
+            legendOptions.style.strokeDashArray =
+                dataTarget.style.strokeDashArray;
+        } else {
+            legendOptions.style = {
+                strokeDashArray: getStrokeDashArray(legendOptions.style)
+            };
+        }
+    }
 
     return legendOptions;
 };
@@ -476,10 +493,16 @@ const reflowLegend = (legendSVG, legend, graph, eventHandlers) => {
                 return eventHandlers.clickHandler(this, legend);
             })
             .on("mouseenter", () =>
-                eventHandlers.hoverHandler(legend, constants.HOVER_EVENT.MOUSE_ENTER)
+                eventHandlers.hoverHandler(
+                    legend,
+                    constants.HOVER_EVENT.MOUSE_ENTER
+                )
             )
             .on("mouseleave", () =>
-                eventHandlers.hoverHandler(legend, constants.HOVER_EVENT.MOUSE_EXIT)
+                eventHandlers.hoverHandler(
+                    legend,
+                    constants.HOVER_EVENT.MOUSE_EXIT
+                )
             );
     } else {
         // set the click and hover handler to null, when legend doesnot have any value

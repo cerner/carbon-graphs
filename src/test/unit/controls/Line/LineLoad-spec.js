@@ -16,11 +16,16 @@ import {
     axisDefault,
     axisTimeSeries,
     fetchElementByClass,
+    fetchAllElementsByClass,
     getAxes,
     getInput,
     valuesDefault,
     valuesTimeSeries
 } from "./helpers";
+import {
+    LINE,
+    LINE_DASHED
+} from "../../../../main/js/core/Shape/shapeDefinitions";
 
 describe("Line - Load", () => {
     let graphDefault = null;
@@ -927,6 +932,222 @@ describe("Line - Load", () => {
             expect(iconSVG.classList).toContain(styles.legendItemIcon);
             expect(iconPath).not.toBeNull();
             expect(iconPath.getAttribute("d")).not.toBeNull();
+        });
+        describe("when showShapes is true", () => {
+            it("loads  shape and line if user sets showLine to be true  and showShape to be true", () => {
+                const input = getInput(valuesDefault, false, false);
+                input.legendOptions = {
+                    showShape: true,
+                    showLine: true
+                };
+                graphDefault.loadContent(new Line(input));
+                const legendItem = fetchAllElementsByClass(
+                    lineGraphContainer,
+                    styles.legendItem
+                );
+                const SVGElements = legendItem[0].querySelectorAll("svg");
+                const iconPath = legendItem[0].querySelector("path");
+                const iconSVG = SVGElements[0];
+                expect(SVGElements.length).toBe(2);
+
+                expect(iconSVG).not.toBeNull();
+                expect(iconSVG.classList).toContain(styles.legendItemIcon);
+                expect(iconPath).not.toBeNull();
+                expect(iconPath.getAttribute("d")).not.toBeNull();
+
+                const lineSVG = SVGElements[1];
+                expect(lineSVG).not.toBeNull();
+                expect(lineSVG.classList).toContain(
+                    styles.legendItemLineWithIcon
+                );
+                expect(
+                    lineSVG.children[1].attributes.getNamedItem("style").value
+                ).toContain(`stroke-dasharray: 0;`);
+            });
+            it("loads line with legendOptions style, when legend options style is provided", () => {
+                const input = getInput(valuesDefault, false, false);
+                input.legendOptions = {
+                    showShape: true,
+                    showLine: true,
+                    style: {
+                        strokeDashArray: "2,2"
+                    }
+                };
+                graphDefault.loadContent(new Line(input));
+                const legendItem = fetchAllElementsByClass(
+                    lineGraphContainer,
+                    styles.legendItem
+                );
+                const SVGElements = legendItem[0].querySelectorAll("svg");
+                const iconPath = legendItem[0].querySelector("path");
+                const iconSVG = SVGElements[0];
+                expect(SVGElements.length).toBe(2);
+
+                expect(iconSVG).not.toBeNull();
+                expect(iconSVG.classList).toContain(styles.legendItemIcon);
+                expect(iconPath).not.toBeNull();
+                expect(iconPath.getAttribute("d")).not.toBeNull();
+
+                const lineSVG = SVGElements[1];
+                expect(lineSVG).not.toBeNull();
+                expect(lineSVG.classList).toContain(
+                    styles.legendItemLineWithIcon
+                );
+                expect(
+                    lineSVG.children[1].attributes.getNamedItem("style").value
+                ).toContain(`stroke-dasharray: 2,2;`);
+            });
+            it("loads correct shape on axis", () => {
+                const input = getInput(valuesDefault, false, false);
+                input.showShapes = true;
+                graphDefault.loadContent(new Line(input));
+                const axisLabelShapeItem = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.axisLabelYShapeContainer
+                );
+                expect(
+                    axisLabelShapeItem.querySelector("path").getAttribute("d")
+                ).toBe(SHAPES.RHOMBUS.path.d);
+            });
+        });
+        describe("when showShapes is false", () => {
+            it("loads line as default when no legend options are provided", () => {
+                const input = getInput(valuesDefault, false, false);
+                input.showShapes = false;
+                graphDefault.loadContent(new Line(input));
+                const legendItem = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.legendItem
+                );
+                const svgElements = legendItem.querySelectorAll("svg");
+                const lineSVG = svgElements[0];
+                expect(lineSVG).not.toBeNull();
+                expect(lineSVG.classList).toContain(styles.legendItemLine);
+                expect(
+                    lineSVG.children[1].attributes.getNamedItem("style").value
+                ).toContain(`stroke-dasharray: 0;`);
+            });
+            it("loads line as default even though showShape in legend options set to be true ", () => {
+                const input = getInput(valuesDefault, false, false);
+                input.legendOptions = {
+                    showShape: true,
+                    showLine: true
+                };
+                input.showShapes = false;
+                graphDefault.loadContent(new Line(input));
+                const legendItem = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.legendItem
+                );
+                const svgElements = legendItem.querySelectorAll("svg");
+                const lineSVG = svgElements[0];
+                expect(lineSVG).not.toBeNull();
+                expect(lineSVG.classList).toContain(styles.legendItemLine);
+                expect(lineSVG.classList).not.toContain(styles.legendItemIcon);
+                expect(
+                    lineSVG.children[1].attributes.getNamedItem("style").value
+                ).toContain(`stroke-dasharray: 0;`);
+            });
+            it("loads nothing when showShape and showLine in legend options set to be false ", () => {
+                const input = getInput(valuesDefault, false, false);
+                input.legendOptions = {
+                    showShape: false,
+                    showLine: false
+                };
+                input.showShapes = false;
+                graphDefault.loadContent(new Line(input));
+                const legendItem = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.legendItem
+                );
+                const svgElements = legendItem.querySelectorAll("svg");
+                expect(svgElements[0]).not.toBeDefined();
+            });
+            it("loads line with legendOptions style, when legend options style is provided", () => {
+                const input = getInput(valuesDefault, false, false);
+                input.showShapes = false;
+                input.legendOptions = {
+                    showShape: true,
+                    showLine: true,
+                    style: {
+                        strokeDashArray: "2,2"
+                    }
+                };
+                graphDefault.loadContent(new Line(input));
+                const legendItem = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.legendItem
+                );
+                const svgElements = legendItem.querySelectorAll("svg");
+                const lineSVG = svgElements[0];
+                expect(lineSVG).not.toBeNull();
+                expect(lineSVG.classList).toContain(styles.legendItemLine);
+                expect(
+                    lineSVG.children[1].attributes.getNamedItem("style").value
+                ).toContain(`stroke-dasharray: 2,2;`);
+            });
+            it("loads line with line style , when legend options style is not provided", () => {
+                const input = getInput(valuesDefault, false, false);
+                input.showShapes = false;
+                input.style = {
+                    strokeDashArray: "2,2"
+                };
+                input.legendOptions = {
+                    showShape: true,
+                    showLine: true
+                };
+                graphDefault.loadContent(new Line(input));
+                const legendItem = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.legendItem
+                );
+                const svgElements = legendItem.querySelectorAll("svg");
+                const lineSVG = svgElements[0];
+                expect(lineSVG).not.toBeNull();
+                expect(lineSVG.classList).toContain(styles.legendItemLine);
+                expect(
+                    lineSVG.children[1].attributes.getNamedItem("style").value
+                ).toContain(`stroke-dasharray: 2,2;`);
+            });
+            it("loads correct shape on axis", () => {
+                const input = getInput(valuesDefault, false, false);
+                input.showShapes = false;
+                graphDefault.loadContent(new Line(input));
+                const axisLabelShapeItem = fetchElementByClass(
+                    lineGraphContainer,
+                    styles.axisLabelYShapeContainer
+                );
+                expect(
+                    axisLabelShapeItem.querySelector("path").getAttribute("d")
+                ).toBe(LINE.path.d);
+            });
+            it("loads correct shape on axis when stroke dash array is present", () => {
+                const input = getInput(valuesDefault, false, false);
+                input.style = {
+                    strokeDashArray: "2,2"
+                };
+                input.showShapes = false;
+                graphDefault.loadContent(new Line(input));
+                const axisLabelShapeItem = fetchAllElementsByClass(
+                    lineGraphContainer,
+                    styles.axisLabelYShapeContainer
+                );
+                expect(
+                    axisLabelShapeItem[0]
+                        .querySelectorAll("path")[0]
+                        .getAttribute("d")
+                ).toBe(LINE_DASHED.path[0].d);
+                expect(
+                    axisLabelShapeItem[0]
+                        .querySelectorAll("path")[1]
+                        .getAttribute("d")
+                ).toBe(LINE_DASHED.path[1].d);
+                expect(
+                    axisLabelShapeItem[0]
+                        .querySelectorAll("path")[2]
+                        .getAttribute("d")
+                ).toBe(LINE_DASHED.path[2].d);
+            });
         });
         it("loads the line with provided stroke dashArray", () => {
             const input = getInput(valuesDefault, false, false);
