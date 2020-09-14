@@ -21,7 +21,7 @@ export const CIRCLE = {
  */
 export const RHOMBUS = {
     path: { d: "M24 0l24 24-24 24L0 24 24 0z" },
-    options: { x: -6, y: -6, scale: 0.25 }
+    options: { x: -6.2, y: -6, scale: 0.25 }
 };
 /**
  * The S_0003_plus.svg SVG file as an object.
@@ -31,7 +31,7 @@ export const RHOMBUS = {
  */
 export const CROSS = {
     path: { d: "M0 16h16V0h16v16h16v16H32v16H16V32H0V16z" },
-    options: { x: -6, y: -6, scale: 0.25 }
+    options: { x: -6.2, y: -6, scale: 0.25 }
 };
 /**
  * The S_0004_rectangle.svg SVG file as an object.
@@ -41,7 +41,7 @@ export const CROSS = {
  */
 export const VERTICAL_BAR = {
     path: { d: "M14 0h20v48H14V0" },
-    options: { x: -6, y: -6, scale: 0.25 }
+    options: { x: -6.2, y: -6, scale: 0.25 }
 };
 /**
  * The S_0005_square.svg SVG file as an object.
@@ -64,7 +64,7 @@ export const TEAR_DROP = {
         d:
             "M24 0s4.8 5.9 14.5 17.6c6.4 8.1 5.1 19.9-2.9 26.3s-19.6 5.1-26-3c-5.4-6.8-5.4-16.5 0-23.4C19.2 5.9 24 0 24 0z"
     },
-    options: { x: -6, y: -6, scale: 0.25 }
+    options: { x: -6.1, y: -6, scale: 0.24 }
 };
 /**
  * The S_0007_teardropUp.svg SVG file as an object.
@@ -77,7 +77,7 @@ export const TEAR_ALT = {
         d:
             "M24 48s-4.8-5.9-14.5-17.6c-6.4-8.1-5.1-19.9 2.9-26.3s19.6-5.1 26 3c5.4 6.8 5.4 16.5 0 23.4C28.8 42.1 24 48 24 48z"
     },
-    options: { x: -6, y: -6, scale: 0.25 }
+    options: { x: -6.1, y: -6, scale: 0.24 }
 };
 /**
  * The S_0008_thinDiamond.svg SVG file as an object.
@@ -87,7 +87,7 @@ export const TEAR_ALT = {
  */
 export const DIAMOND = {
     path: { d: "M24 0l12 24-12 24-12-24L24 0z" },
-    options: { x: -8, y: -8, scale: 0.34 }
+    options: { x: -8.2, y: -8, scale: 0.33 }
 };
 /**
  * The S_0009_triangle.svg SVG file as an object.
@@ -97,7 +97,7 @@ export const DIAMOND = {
  */
 export const TRIANGLE = {
     path: { d: "M24 4l24 40H0L24 4z" },
-    options: { x: -6, y: -6, scale: 0.25 }
+    options: { x: -6.3, y: -6, scale: 0.25 }
 };
 /**
  * The S_0010_triangleDown.svg SVG file as an object.
@@ -107,7 +107,7 @@ export const TRIANGLE = {
  */
 export const TRIANGLE_DOWN = {
     path: { d: "M24 44L0 4h48L24 44z" },
-    options: { x: -6, y: -6, scale: 0.25 }
+    options: { x: -6.2, y: -6, scale: 0.25 }
 };
 /**
  * The S_0011_x.svg SVG file as an object.
@@ -120,7 +120,7 @@ export const X = {
         d:
             "M0 12L12 0l12 12L36 0l12 12-12 12 12 12-12 12-12-12-12 12L0 36l12-12L0 12z"
     },
-    options: { x: -6, y: -6, scale: 0.25 }
+    options: { x: -6.2, y: -6, scale: 0.25 }
 };
 /**
  * The S_0001_circle_light.svg SVG file as an object.
@@ -137,7 +137,7 @@ export const CIRCLE_LIGHT = {
     options: { x: -5, y: -5, scale: 0.2 }
 };
 /**
- * The S_0002_diamond_light.svg SVG file as an object.
+ * The S_0002_rhombus_light.svg SVG file as an object.
  *
  * @private
  * @type {{path: {d: string}, options: {x: number, y: number, scale: number}}}
@@ -150,7 +150,7 @@ export const RHOMBUS_LIGHT = {
                 "M24 0L0 24l24 24 24-24L24 0zm19.8 24L24 43.8 4.2 24 24 4.2 43.8 24z"
         }
     ],
-    options: { x: -6, y: -6, scale: 0.25 }
+    options: { x: -6.2, y: -6, scale: 0.25 }
 };
 /**
  * The S_0003_plus_light.svg SVG file as an object.
@@ -166,7 +166,7 @@ export const CROSS_LIGHT = {
                 "M32 16V0H16v16H0v16h16v16h16V32h16V16H32zm13 13H29v16H19V29H3V19h16V3h10v16h16v10z"
         }
     ],
-    options: { x: -6, y: -6, scale: 0.25 }
+    options: { x: -6.2, y: -6, scale: 0.25 }
 };
 /**
  * The S_0004_rectangle_light.svg SVG file as an object.
@@ -179,7 +179,7 @@ export const VERTICAL_BAR_LIGHT = {
         { fill: "#FFF", d: "M17 3h14v42H17z" },
         { d: "M14 0v48h20V0H14zm17 45H17V3h14v42z" }
     ],
-    options: { x: -6, y: -6, scale: 0.25 }
+    options: { x: -6.2, y: -6, scale: 0.25 }
 };
 /**
  * The S_0005_square_light.svg SVG file as an object.
@@ -212,7 +212,7 @@ export const TEAR_DROP_LIGHT = {
                 "M38.4 17.6C28.7 5.9 23.9 0 23.9 0S19.1 5.9 9.5 17.5c-5.4 6.9-5.4 16.5 0 23.4 6.3 8 17.8 9.4 25.8 3.2.1 0 .1-.1.2-.2 8-6.5 9.3-18.2 2.9-26.3zM12 39.2c0-.1-.1-.1-.1-.2-4.6-5.8-4.6-13.9 0-19.7 5.7-6.8 9.7-11.7 12-14.5 2.3 2.8 6.4 7.8 12.2 14.7 5.4 6.8 4.3 16.6-2.4 22.1-6.7 5.3-16.3 4.3-21.7-2.4z"
         }
     ],
-    options: { x: -6, y: -6, scale: 0.25 }
+    options: { x: -6.2, y: -6, scale: 0.25 }
 };
 /**
  * The S_0007_teardropUp_light.svg SVG file as an object.
@@ -232,7 +232,7 @@ export const TEAR_ALT_LIGHT = {
                 "M38.5 7.1C35 2.6 29.6 0 24 0c-4.2 0-8.2 1.4-11.5 4.1-8 6.5-9.3 18.2-2.9 26.3C19.3 42.1 24.1 48 24.1 48s4.8-5.9 14.4-17.5c5.4-6.9 5.4-16.5 0-23.4zM11.8 28.5c-5.4-6.8-4.3-16.6 2.4-22.1C17.1 4.2 20.5 3 24 3c4.7 0 9.2 2.2 12.1 5.9 4.6 5.8 4.6 13.9 0 19.7-5.7 6.9-9.7 11.8-12.1 14.6-2.3-2.8-6.4-7.8-12.2-14.7z"
         }
     ],
-    options: { x: -6, y: -6, scale: 0.25 }
+    options: { x: -6.2, y: -6, scale: 0.25 }
 };
 /**
  * The S_0008_thinDiamond_light.svg SVG file as an object.
@@ -245,7 +245,7 @@ export const DIAMOND_LIGHT = {
         { fill: "#FFF", d: "M34.5 24L24 42 13.5 24 24 6z" },
         { d: "M24 0L10 24l14 24 14-24L24 0zm0 6l10.5 18L24 42 13.5 24 24 6z" }
     ],
-    options: { x: -8, y: -8, scale: 0.34 }
+    options: { x: -8.2, y: -8, scale: 0.33 }
 };
 /**
  * The S_0009_triangle_light.svg SVG file as an object.
@@ -258,7 +258,7 @@ export const TRIANGLE_LIGHT = {
         { fill: "#FFF", d: "M42.7 41H5.3L24 9.8z" },
         { d: "M24 4L0 44h48L24 4zm0 5.8L42.7 41H5.3L24 9.8z" }
     ],
-    options: { x: -6, y: -6, scale: 0.25 }
+    options: { x: -6.3, y: -6, scale: 0.25 }
 };
 /**
  * The S_0010_triangleDown_light.svg SVG file as an object.
@@ -271,7 +271,7 @@ export const TRIANGLE_DOWN_LIGHT = {
         { fill: "#FFF", d: "M42.7 7L24 38.2 5.3 7z" },
         { d: "M0 4l24 40L48 4H0zm42.7 3L24 38.2 5.3 7h37.4z" }
     ],
-    options: { x: -6, y: -6, scale: 0.25 }
+    options: { x: -6.2, y: -6, scale: 0.25 }
 };
 /**
  * The S_0011_x_light.svg SVG file as an object.
@@ -291,7 +291,7 @@ export const X_LIGHT = {
                 "M48 12L36 0 24 12 12 0 0 12l12 12L0 36l12 12 12-12 12 12 12-12-12-12 12-12zM36 43.8l-9.9-9.9-2.1-2.1-2.1 2.1-9.9 9.9L4.2 36l9.9-9.9 2.1-2.1-2.1-2.1L4.2 12 12 4.2l9.9 9.9 2.1 2.1 2.1-2.1L36 4.2l7.8 7.8-9.9 9.9-2.1 2.1 2.1 2.1 9.9 9.9-7.8 7.8z"
         }
     ],
-    options: { x: -6, y: -6, scale: 0.25 }
+    options: { x: -6.2, y: -6, scale: 0.25 }
 };
 /**
  * The S_0012_circleLines.svg SVG file as an object.
