@@ -554,7 +554,7 @@ const DATA = [
                     upperLimit: 30
                 },
                 y2: {
-                    show: false,
+                    show: true,
                     label: "Line Set B",
                     lowerLimit: 0,
                     upperLimit: 250
@@ -690,6 +690,10 @@ const DATA = [
                             y: 13
                         }
                     ]
+                },
+                {
+                    key: "uid_3",
+                    values: []
                 }
             ],
             showLabel: true,
@@ -1243,7 +1247,7 @@ const DATA = [
                     upperLimit: 200
                 },
                 y2: {
-                    show: false,
+                    show: true,
                     label: "Paired Set B",
                     lowerLimit: 100,
                     upperLimit: 350
@@ -2162,7 +2166,7 @@ const DATA = [
                     upperLimit: 20
                 },
                 y2: {
-                    show: false,
+                    show: true,
                     label: "Line Set B",
                     lowerLimit: 0,
                     upperLimit: 20

@@ -189,6 +189,72 @@ describe("Bar - Panning", () => {
             barContent = fetchAllElementsByClass(barGraphContainer, styles.bar);
             expect(barContent.length).toEqual(3);
         });
+        describe("when there is no data", () => {
+            it("should update the dynamic data and disable the legend", () => {
+                const panData = {
+                    key: "uid_1",
+                    values: []
+                };
+                const legendItem = document.body.querySelector(
+                    `.${styles.legendItem}`
+                );
+                expect(legendItem.getAttribute("aria-disabled")).toBe("false");
+                graphDefault.reflow(panData);
+                expect(legendItem.getAttribute("aria-disabled")).toBe("true");
+            });
+            it("should update the dynamic data and remove shape from y-axis", () => {
+                const panData = {
+                    key: "uid_1",
+                    values: []
+                };
+                let barContent = fetchAllElementsByClass(
+                    barGraphContainer,
+                    styles.axisLabelYShapeContainer
+                );
+                expect(barContent[0].querySelectorAll("svg").length).toBe(1);
+                barContent = fetchAllElementsByClass(
+                    barGraphContainer,
+                    styles.axisLabelYShapeContainer
+                );
+                graphDefault.reflow(panData);
+                expect(barContent[0].querySelectorAll("svg").length).toBe(0);
+            });
+            it("should update the dynamic data and remove shape from y2-axis", () => {
+                graphDefault.destroy();
+                const axisData = utils.deepClone(getAxes(axisTimeSeries));
+                axisData.dateline = [
+                    {
+                        showDatelineIndicator: true,
+                        label: {
+                            display: "Release A"
+                        },
+                        color: COLORS.GREEN,
+                        shape: SHAPES.SQUARE,
+                        value: "2016-06-03T12:00:00Z"
+                    }
+                ];
+                axisData.pan = { enabled: true };
+                const input = getInput(valuesTimeSeries, false, false);
+                input.yAxis = "y2";
+                graphDefault = new Graph(axisData);
+                graphDefault.loadContent(new Bar(input));
+                const panData = {
+                    key: "uid_1",
+                    values: []
+                };
+                let barContent = fetchAllElementsByClass(
+                    barGraphContainer,
+                    styles.axisLabelY2ShapeContainer
+                );
+                expect(barContent[0].querySelectorAll("svg").length).toBe(1);
+                barContent = fetchAllElementsByClass(
+                    barGraphContainer,
+                    styles.axisLabelY2ShapeContainer
+                );
+                graphDefault.reflow(panData);
+                expect(barContent[0].querySelectorAll("svg").length).toBe(0);
+            });
+        });
     });
     describe("When disabled", () => {
         beforeEach(() => {

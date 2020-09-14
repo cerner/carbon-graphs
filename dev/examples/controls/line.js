@@ -547,19 +547,29 @@ export const renderLineY2AxisWithPanning = (id) => {
     const graphDataY2 = utils.deepClone(
         getDemoData(`#${id}`, "LINE_TIMESERIES").data[1]
     );
+    const graphDataY4 = utils.deepClone(
+        getDemoData(`#${id}`, "LINE_TIMESERIES").data[2]
+    );
     const graphDataY3 = {
+        ...graphDataY4,
+        values: []
+    };
+    const graphDataY5 = {
         ...graphDataY2,
         xLabel: "xLabel",
         yLabel: "yLabel",
         y2Label: "y2Label"
     };
+
     const createGraph = () => {
         graph.reflow(graphDataY3);
+        graph.reflow(graphDataY5);
     };
 
     const graph = Carbon.api.graph(axisData);
     graph.loadContent(Carbon.api.line(graphDataY));
     graph.loadContent(Carbon.api.line(graphDataY2));
+    graph.loadContent(Carbon.api.line(graphDataY4));
     axisData.axis = graph.config.axis;
 
     createPanningControls(id, {
@@ -613,7 +623,7 @@ export const renderLinePanningWithUpdatedLegend = (id) => {
     graphData.regions = [regions[0]];
     const createGraph = () => {
         const graphDataY = utils.deepClone(
-            getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE").data[1]
+            getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE").data[2]
         );
         if (graphDataH.values === graphData.values) {
             graph.reflow(graphDataY);

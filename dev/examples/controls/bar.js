@@ -507,8 +507,12 @@ export const renderBarPanningWithDynamicData = (id) => {
         ],
         format: "%H"
     };
+    const graphDataY3 = {
+        ...graphData[1],
+        values: []
+    };
     const createGraph = () => {
-        graph.reflow(graphData[1]);
+        graph.reflow(graphDataY3);
     };
 
     const graph = Carbon.api.graph(axisData);
