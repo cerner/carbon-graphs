@@ -133,7 +133,7 @@ describe("Stacked Bar", () => {
             );
             expect(barsContainer.length).toEqual(0);
         });
-        it("Hide Bar content on single click", (done) => {
+        it("Hides Bar content on single click", (done) => {
             const legendItem = fetchAllElementsByClass(
                 barGraphContainer,
                 styles.legendItem
@@ -159,7 +159,7 @@ describe("Stacked Bar", () => {
                 done();
             });
         });
-        it("Dispaly Bar content on double click", (done) => {
+        it("Displays Bar content on double click", (done) => {
             const legendItem = fetchAllElementsByClass(
                 barGraphContainer,
                 styles.legendItem
