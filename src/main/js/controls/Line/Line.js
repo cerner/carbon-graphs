@@ -130,7 +130,7 @@ class Line extends GraphContent {
                 );
             }
         }
-        
+
         prepareLegendItems(
             graph.config,
             {
@@ -177,7 +177,10 @@ class Line extends GraphContent {
      * @inheritdoc
      */
     resize(graph) {
-        if (!utils.isEmptyArray(this.dataTarget.values) && graph.config.shownTargets.indexOf(this.dataTarget.key) > -1) {
+        if (
+            !utils.isEmptyArray(this.dataTarget.values) &&
+            graph.config.shownTargets.indexOf(this.dataTarget.key) > -1
+        ) {
             if (
                 utils.notEmpty(this.dataTarget.regions) ||
                 !utils.isEmptyArray(this.dataTarget.valueRegionSubset)
@@ -190,7 +193,9 @@ class Line extends GraphContent {
                 ) {
                     graph.config.shouldHideAllRegion = false;
                 } else {
-                    graph.config.shouldHideAllRegion = !areRegionsIdentical(graph.svg);
+                    graph.config.shouldHideAllRegion = !areRegionsIdentical(
+                        graph.svg
+                    );
                 }
             } else {
                 graph.config.shouldHideAllRegion = true;

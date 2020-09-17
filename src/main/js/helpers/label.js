@@ -329,6 +329,7 @@ const createTooltipDiv = () => {
     d3.select("body")
         .append("div")
         .attr("id", styles.labelPopupTooltip)
+        .style("display", "none")
         .classed(styles.labelPopupTooltip, true);
 };
 
