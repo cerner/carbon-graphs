@@ -284,9 +284,20 @@ const translateRegion = (
  *
  * @private
  * @param {Array} graphTargets - List of all the items in the Graph
+ * @param {Array} content - graph content
  * @returns {boolean} true if displayed targets is equal to 1, false otherwise
  */
-const isSingleTargetDisplayed = (graphTargets) => graphTargets.length === 1;
+const isSingleTargetDisplayed = (graphTargets, content) => {
+    let contentCount = 0;
+    content.forEach((element) => {
+        contentCount +=
+            graphTargets.includes(element.dataTarget.key) &&
+            !utils.isEmptyArray(element.dataTarget.values)
+                ? 1
+                : 0;
+    });
+    return contentCount === 1;
+};
 
 /**
  * Check all the regions within a graph are same or not
@@ -338,30 +349,38 @@ const showHideRegion = (canvasSVG, key, shouldShow) =>
  *
  * @private
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
- * @param {string} key - Data points set unique key
+ * @param {Array} keys - Data points set unique key
  * @returns {object} d3 svg path
  */
-const toggleRegion = (canvasSVG, key) =>
-    canvasSVG
-        .selectAll(`.${styles.region}[aria-describedby="region_${key}"]`)
-        .attr("aria-hidden", function () {
-            return !(d3.select(this).attr("aria-hidden") === "true");
-        });
+const toggleRegion = (canvasSVG, keys) =>
+    keys.forEach((key) =>
+        canvasSVG
+            .selectAll(`.${styles.region}[aria-describedby="region_${key}"]`)
+            .attr("aria-hidden", function () {
+                return !(d3.select(this).attr("aria-hidden") === "true");
+            })
+    );
 /**
  * Show/hide regions based on the following criteria:
  * * If more than 1 target is displayed -> Hide regions
  * * If only 1 target is displayed -> show the region using unique data set key
  *
  * @private
+ * @param {object} graphContext - graph instance
+ * @param {Array} graphContext.content - content
  * @param {object} config - Graph config object derived from input JSON
  * @param { Array } config.shownTargets - List of all the items in the Graph
  * @param { boolean } config.shouldHideAllRegion - returns true or false to hide or show regions
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {undefined} - returns nothing
  */
-const processRegions = ({ shownTargets, shouldHideAllRegion }, canvasSVG) => {
-    isSingleTargetDisplayed(shownTargets)
-        ? toggleRegion(canvasSVG, ...shownTargets)
+const processRegions = (
+    { content },
+    { shownTargets, shouldHideAllRegion },
+    canvasSVG
+) => {
+    isSingleTargetDisplayed(shownTargets, content)
+        ? toggleRegion(canvasSVG, shownTargets)
         : checkAllRegions({ shownTargets, shouldHideAllRegion }, canvasSVG);
 };
 /**
