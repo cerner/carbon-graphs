@@ -20,56 +20,84 @@ const numberedTicks = {
     format: ".0f"
 };
 const regions = [
-    {
-        axis: "y",
-        x: 1,
-        start: 7,
-        end: 7
-    },
-    {
-        axis: "y",
-        x: 2,
-        start: 13,
-        end: 13
-    },
-    {
-        axis: "y",
-        x: 3,
-        start: 17,
-        end: 17
-    },
-    {
-        axis: "y",
-        x: 4,
-        start: 4,
-        end: 4
-    }
-];
-const regions2 = [
-    {
-        axis: "y",
-        x: 1,
-        start: 10,
-        end: 10
-    },
-    {
-        axis: "y",
-        x: 2,
-        start: 40,
-        end: 40
-    },
-    {
-        axis: "y",
-        x: 3,
-        start: 55,
-        end: 55
-    },
-    {
-        axis: "y",
-        x: 4,
-        start: 30,
-        end: 30
-    }
+    [
+        {
+            axis: "y",
+            x: 1,
+            start: 7,
+            end: 7
+        },
+        {
+            axis: "y",
+            x: 2,
+            start: 13,
+            end: 13
+        },
+        {
+            axis: "y",
+            x: 3,
+            start: 17,
+            end: 17
+        },
+        {
+            axis: "y",
+            x: 4,
+            start: 4,
+            end: 4
+        }
+    ],
+    [
+        {
+            axis: "y",
+            x: 1,
+            start: 10,
+            end: 10
+        },
+        {
+            axis: "y",
+            x: 2,
+            start: 40,
+            end: 40
+        },
+        {
+            axis: "y",
+            x: 3,
+            start: 55,
+            end: 55
+        },
+        {
+            axis: "y",
+            x: 4,
+            start: 30,
+            end: 30
+        }
+    ],
+    [
+        {
+            axis: "y2",
+            x: 1,
+            start: 7,
+            end: 7
+        },
+        {
+            axis: "y2",
+            x: 2,
+            start: 13,
+            end: 13
+        },
+        {
+            axis: "y2",
+            x: 3,
+            start: 17,
+            end: 17
+        },
+        {
+            axis: "y2",
+            x: 4,
+            start: 4,
+            end: 4
+        }
+    ]
 ];
 const axisInfoRow = [
     {
@@ -380,7 +408,7 @@ export const renderBarDefaultWithGoal = (id) => {
 
     const barSimple = Carbon.api.graph(axisData);
     const data = utils.deepClone(getDemoData(`#${id}`, "BAR_DEFAULT").data[0]);
-    data.regions = regions;
+    data.regions = regions[0];
     barSimple.loadContent(Carbon.api.bar(data));
     return barSimple;
 };
@@ -394,10 +422,10 @@ export const renderBarGroupWithGoal = (id) => {
         Carbon.api.bar(getDemoData(`#${id}`, "BAR_DEFAULT").data[0])
     );
     const data = utils.deepClone(getDemoData(`#${id}`, "BAR_DEFAULT").data[1]);
-    data.regions = regions;
+    data.regions = regions[2];
     barGroup.loadContent(Carbon.api.bar(data));
     const data2 = utils.deepClone(getDemoData(`#${id}`, "BAR_DEFAULT").data[2]);
-    data2.regions = regions;
+    data2.regions = regions[0];
     barGroup.loadContent(Carbon.api.bar(data2));
     return barGroup;
 };
@@ -408,13 +436,13 @@ export const renderBarStackedWithGoal = (id) => {
     const barStacked = Carbon.api.graph(axisData);
 
     const data2 = utils.deepClone(getDemoData(`#${id}`, "BAR_DEFAULT").data[0]);
-    data2.regions = regions2;
+    data2.regions = regions[1];
     barStacked.loadContent(Carbon.api.bar(data2));
     const data = utils.deepClone(getDemoData(`#${id}`, "BAR_DEFAULT").data[3]);
-    data.regions = regions2;
+    data.regions = regions[1];
     barStacked.loadContent(Carbon.api.bar(data));
     const data3 = utils.deepClone(getDemoData(`#${id}`, "BAR_DEFAULT").data[4]);
-    data3.regions = regions2;
+    data3.regions = regions[1];
     barStacked.loadContent(Carbon.api.bar(data3));
     return barStacked;
 };
