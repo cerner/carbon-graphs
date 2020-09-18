@@ -10,7 +10,8 @@ import {
 import utils from "../../../../main/js/helpers/utils";
 import {
     loadCustomJasmineMatcher,
-    toNumber
+    toNumber,
+    triggerEvent
 } from "../../helpers/commonHelpers";
 import {
     axisDefault,
@@ -128,6 +129,52 @@ describe("Grouped Bar", () => {
                 styles.taskBar
             );
             expect(barsContainer.length).toEqual(0);
+        });
+        it("Hides Bar content on single click", (done) => {
+            const legendItem = fetchAllElementsByClass(
+                barGraphContainer,
+                styles.legendItem
+            );
+            const barsContainer = fetchAllElementsByClass(
+                barGraphContainer,
+                styles.barGraphContent
+            );
+            triggerEvent(legendItem[0], "click", () => {
+                barsContainer;
+                expect(
+                    barsContainer[1]
+                        .querySelector(`.${styles.taskBar}`)
+                        .getAttribute("aria-hidden")
+                ).toBe("true");
+                done();
+            });
+            triggerEvent(legendItem[1], "click", () => {
+                barsContainer;
+                expect(barsContainer[0].getAttribute("aria-hidden")).toBe(
+                    "true"
+                );
+                done();
+            });
+        });
+        it("Displays Bar content on double click", (done) => {
+            const legendItem = fetchAllElementsByClass(
+                barGraphContainer,
+                styles.legendItem
+            );
+            triggerEvent(legendItem[0], "click", () => {
+                triggerEvent(legendItem[0], "click", () => {
+                    const barsContainer = fetchAllElementsByClass(
+                        barGraphContainer,
+                        styles.barGraphContent
+                    );
+                    expect(
+                        barsContainer[1]
+                            .querySelector(`.${styles.taskBar}`)
+                            .getAttribute("aria-hidden")
+                    ).toBe("false");
+                    done();
+                });
+            });
         });
     });
     describe("when graph is loaded with 2 inputs with negative values", () => {
