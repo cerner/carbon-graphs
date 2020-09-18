@@ -48,9 +48,9 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
         }
     };
     if (config.shownTargets.length === 0) {
-        graphContext.contentKeys.forEach((i) => {
+        graphContext.contentKeys.forEach((key) => {
             canvasSVG
-                .selectAll(`.${styles.taskBar}[aria-describedby="${i}"]`)
+                .selectAll(`.${styles.taskBar}[aria-describedby="${key}"]`)
                 .attr("aria-hidden", isLegendSelected(d3.select(element)));
         });
     }
@@ -70,10 +70,6 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
             .attr("aria-hidden", function () {
                 return !(d3.select(this).attr("aria-hidden") === "true");
             });
-        setSelectionIndicatorAttributes(
-            canvasSVG.selectAll(`.${styles.taskBarSelection}`),
-            false
-        );
         setSelectionIndicatorAttributes(
             canvasSVG.selectAll(`.${styles.taskBarSelection}`),
             false

@@ -590,7 +590,7 @@ describe("Bar - Region", () => {
                     });
                 });
             });
-            it("Hide region on single legend click", (done) => {
+            it("Hides region on single legend click", (done) => {
                 const legendItem = fetchAllElementsByClass(
                     barGraphContainer,
                     styles.legendItem
