@@ -589,12 +589,8 @@ export const renderPairedResultPanningWithDynamicData = (id) => {
     axisData.axis.x.ticks = {};
     axisData.axis.y.rangeRounding = false;
 
-    const graphDataY = {
-        ...graphData[0],
-        values: []
-    };
     const createGraph = () => {
-        graph.reflow(graphDataY);
+        graph.reflow(graphData[2]);
     };
 
     const graph = Carbon.api.graph(axisData);

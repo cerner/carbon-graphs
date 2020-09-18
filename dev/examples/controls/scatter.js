@@ -206,10 +206,9 @@ export const renderScatterPanningWithDynamicData = (id) => {
     graphData.regions = [regions[0]];
 
     const createGraph = () => {
-        const graphDataY = {
-            ...graphData,
-            values: []
-        };
+        const graphDataY = utils.deepClone(
+            getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE").data[1]
+        );
         graph.reflow(graphDataY);
     };
 
