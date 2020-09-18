@@ -418,7 +418,10 @@ class Graph extends Construct {
                 if (key === graphData.key) position = index;
             });
             if (position >= 0) {
-                if (this.content[position].type === "Bar") {
+                if (
+                    this.content[position].type === "Bar" &&
+                    graphData.values.length > 0
+                ) {
                     this.config.axis.x.ticks.values = [];
                     graphData.values.forEach((v) =>
                         this.config.axis.x.ticks.values.push(v.x)

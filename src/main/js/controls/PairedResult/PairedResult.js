@@ -305,6 +305,18 @@ class PairedResult extends GraphContent {
                 );
             }
         });
+        if (utils.isEmpty(graphData.values)) {
+            iterateOnPairType((type) => {
+                const key = `${this.dataTarget.key}_${type}`;
+                removeLabelShapeItem(
+                    graph.axesLabelShapeGroup[this.config.yAxis],
+                    {
+                        key
+                    },
+                    graph.config
+                );
+            });
+        }
         const internalValuesSubset = getDataPointValues(this.dataTarget);
         graph.svg
             .select(`g[aria-describedby="${graphData.key}"]`)
