@@ -321,6 +321,57 @@ describe("Paired Result - Region", () => {
                 ).toBe("false");
             });
         });
+        it("Shows region if only one paired result shows face-up", () => {
+            const inputSecondary = {
+                key: `uid_2`,
+                label: {
+                    high: {
+                        display: "Data Label 2 High"
+                    },
+                    mid: {
+                        display: "Data Label 2 Median"
+                    },
+                    low: {
+                        display: "Data Label 2 Low"
+                    }
+                },
+                regions: multiRegion,
+                values: []
+            };
+            data = utils.deepClone(getInput(valuesDefault));
+            data.regions = simpleRegion;
+            pairedResultPrimaryContent = new PairedResult(data);
+            const pairedResultSecondaryContent = new PairedResult(
+                inputSecondary
+            );
+            graphDefault.loadContent(pairedResultPrimaryContent);
+            graphDefault.loadContent(pairedResultSecondaryContent);
+            const regionGroupElements = pairedResultGraphContainer.querySelectorAll(
+                `.${styles.regionPairGroup}`
+            );
+
+            expect(regionGroupElements.length).toBe(1);
+            expect(regionGroupElements[0].childNodes.length).toBe(2); // Regions from primary
+
+            expect(
+                regionGroupElements[0].childNodes[0].getAttribute(
+                    "aria-describedby"
+                )
+            ).toBe(`region_${data.key}_high`);
+            expect(
+                regionGroupElements[0].childNodes[1].getAttribute(
+                    "aria-describedby"
+                )
+            ).toBe(`region_${data.key}_low`);
+
+            expect(
+                regionGroupElements[0].childNodes[0].getAttribute("aria-hidden")
+            ).toBe("false");
+            expect(
+                regionGroupElements[0].childNodes[1].getAttribute("aria-hidden")
+            ).toBe("false");
+            graphDefault.unloadContent(pairedResultSecondaryContent);
+        });
         describe("Validates each region", () => {
             beforeEach(() => {
                 data = utils.deepClone(getInput(valuesDefault, false, false));
