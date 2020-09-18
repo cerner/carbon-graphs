@@ -409,12 +409,13 @@ const decideColor = (dataTarget, value) => {
  * Handler for Request animation frame, executes on resize shows/hides the regions.
  *
  * @private
+ * @param {object} graphContext - Graph instance
  * @param {object} config - Graph config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {function()} callback function handler for RAF
  */
-const onAnimationHandler = (config, canvasSVG) => () => {
-    processRegions(config, canvasSVG);
+const onAnimationHandler = (graphContext, config, canvasSVG) => () => {
+    processRegions(graphContext, config, canvasSVG);
 };
 /**
  * Click handler for legend item. Removes the bubble from the graph
@@ -449,7 +450,9 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
     canvasSVG
         .selectAll(`.${styles.point}[aria-describedby="${item.key}"]`)
         .attr("aria-hidden", isSelected);
-    window.requestAnimationFrame(onAnimationHandler(config, canvasSVG));
+    window.requestAnimationFrame(
+        onAnimationHandler(graphContext, config, canvasSVG)
+    );
 };
 /**
  * Hover handler for legend item. Highlights current bubble and blurs the rest of the targets in Graph

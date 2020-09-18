@@ -523,6 +523,46 @@ describe("Line - Region", () => {
             ).toBe("true");
             graphDefault.unloadContent(lineContent);
         });
+        it("Shows region if only one line shows face-up", () => {
+            const inputSecondary = {
+                key: `uid_2`,
+                label: {
+                    display: "Data Label B"
+                },
+                regions: [
+                    {
+                        start: 1,
+                        end: 5
+                    }
+                ],
+                values: []
+            };
+            data = utils.deepClone(getInput(valuesDefault));
+            data.regions = [
+                {
+                    start: 1,
+                    end: 5
+                },
+                {
+                    start: 10,
+                    end: 15
+                }
+            ];
+            line = new Line(data);
+            const lineContent = new Line(inputSecondary);
+            graphDefault.loadContent(line);
+            graphDefault.loadContent(lineContent);
+            const regionsElement = document.querySelectorAll(
+                `.${styles.region}`
+            );
+            expect(regionsElement.length).toBe(2);
+            regionsElement.forEach((element) => {
+                expect(element.getAttribute("aria-hidden")).toBe("false");
+            });
+            expect(regionsElement[0].getAttribute("aria-describedby")).toBe(
+                `region_${data.key}`
+            );
+        });
         it("Sets the width correctly", () => {
             data = utils.deepClone(getInput(valuesDefault));
             data.regions = [

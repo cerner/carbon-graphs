@@ -339,16 +339,17 @@ const drawDataPoints = (scale, config, pointGroupPath) => {
 };
 /**
  * Handler for Request animation frame, executes on resize.
- *  * Order of execution
- *      * Shows/hides the regions
+ * * Order of execution
+ * * Shows/hides the regions
  *
  * @private
+ * @param {object} graphContext - graph object
  * @param {object} config - Graph config object derived from input JSON
  * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
  * @returns {function()} callback function handler for RAF
  */
-const onAnimationHandler = (config, canvasSVG) => () => {
-    processRegions(config, canvasSVG);
+const onAnimationHandler = (graphContext, config, canvasSVG) => () => {
+    processRegions(graphContext, config, canvasSVG);
 };
 /**
  * Click handler for legend item. Removes the data points from scatter graph when clicked
@@ -386,7 +387,9 @@ const clickHandler = (graphContext, control, config, canvasSVG) => (
     canvasSVG
         .selectAll(`.${styles.point}[aria-describedby="${item.key}"]`)
         .attr("aria-hidden", legendSelected);
-    window.requestAnimationFrame(onAnimationHandler(config, canvasSVG));
+    window.requestAnimationFrame(
+        onAnimationHandler(graphContext, config, canvasSVG)
+    );
 };
 /**
  * Hover handler for legend item. Highlights current scatter data points and blurs the rest of the targets in Graph

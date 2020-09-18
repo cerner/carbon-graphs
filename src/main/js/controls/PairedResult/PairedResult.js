@@ -29,7 +29,8 @@ import {
     processDataPoints,
     renderRegion,
     isRegionMappedToAllValues,
-    translatePairedResultGraph
+    translatePairedResultGraph,
+    isSinglePairedResultTargetDisplayed
 } from "./helpers/helpers";
 import { drawSelectionIndicator } from "./helpers/selectionIndicatorHelpers";
 import PairedResultConfig from "./PairedResultConfig";
@@ -141,8 +142,9 @@ class PairedResult extends GraphContent {
         this.dataTarget = processDataPoints(graph.config, this.config);
         draw(graph.scale, graph.config, graph.svg, this.dataTarget);
         if (
-            utils.notEmpty(this.dataTarget.regions) ||
-            utils.notEmpty(this.dataTarget.valueRegionSubset)
+            !utils.isEmptyArray(this.dataTarget.values) &&
+            (utils.notEmpty(this.dataTarget.regions) ||
+                utils.notEmpty(this.dataTarget.valueRegionSubset))
         ) {
             renderRegion(graph.scale, graph.config, graph.svg, this.dataTarget);
         }
@@ -209,46 +211,48 @@ class PairedResult extends GraphContent {
      * @inheritdoc
      */
     resize(graph) {
-        if (
-            utils.notEmpty(this.dataTarget.regions) ||
-            utils.notEmpty(this.dataTarget.valueRegionSubset)
-        ) {
-            const values = this.dataTarget.values;
-            // If graph has more than 1 content, we compare the regions if they are identical show and hide if even atleast one of them is not.
-            if (graph.content.length > 1) {
-                // check if paired Data is proper i.e - region for each key(high, mid and low) in value should be there
-                const isPairedDataProper = values.every((value) =>
-                    isRegionMappedToAllValues(
-                        value,
-                        this.dataTarget.regions ||
-                            this.dataTarget.valueRegionSubset
-                    )
-                );
-
-                if (
-                    isPairedDataProper &&
-                    !graph.config.shouldHideAllRegion &&
-                    areRegionsIdentical(graph.svg)
-                ) {
-                    graph.config.shouldHideAllRegion = false;
-                } else {
-                    hideAllRegions(graph.svg);
-                    graph.config.shouldHideAllRegion = true;
-                }
-            }
-
-            translateRegion(
-                graph.scale,
-                graph.config,
-                graph.svg.select(
-                    `g[aria-describedby="region_${this.dataTarget.key}"]`
-                ),
-                this.dataTarget.yAxis,
+        if (utils.notEmpty(this.dataTarget.values)) {
+            if (
+                utils.notEmpty(this.dataTarget.regions) ||
                 utils.notEmpty(this.dataTarget.valueRegionSubset)
-            );
-        } else {
-            hideAllRegions(graph.svg);
-            graph.config.shouldHideAllRegion = true;
+            ) {
+                const values = this.dataTarget.values;
+                if (isSinglePairedResultTargetDisplayed(graph.config, graph)) {
+                    graph.config.shouldHideAllRegion = false;
+                } else if (graph.content.length > 1) {
+                    // If graph has more than 1 content, we compare the regions if they are identical show and hide if even atleast one of them is not.
+                    // check if paired Data is proper i.e - region for each key(high, mid and low) in value should be there
+                    const isPairedDataProper = values.every((value) =>
+                        isRegionMappedToAllValues(
+                            value,
+                            this.dataTarget.regions ||
+                                this.dataTarget.valueRegionSubset
+                        )
+                    );
+
+                    graph.config.shouldHideAllRegion = (
+                        !isPairedDataProper ||
+                        graph.config.shouldHideAllRegion ||
+                        !areRegionsIdentical(graph.svg)
+                    );
+                }
+
+                translateRegion(
+                    graph.scale,
+                    graph.config,
+                    graph.svg.select(
+                        `g[aria-describedby="region_${this.dataTarget.key}"]`
+                    ),
+                    this.dataTarget.yAxis,
+                    utils.notEmpty(this.dataTarget.valueRegionSubset)
+                );
+            } else {
+                
+                graph.config.shouldHideAllRegion = true;
+            }
+            if (graph.config.shouldHideAllRegion) {
+                hideAllRegions(graph.svg);
+            }
         }
 
         translatePairedResultGraph(graph.scale, graph.svg, graph.config);
