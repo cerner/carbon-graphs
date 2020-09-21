@@ -590,6 +590,46 @@ describe("Bar - Region", () => {
                     });
                 });
             });
+            it("Hides region on single legend click", (done) => {
+                const legendItem = fetchAllElementsByClass(
+                    barGraphContainer,
+                    styles.legendItem
+                );
+                triggerEvent(legendItem[0], "click", () => {
+                    const regionElements = fetchAllElementsByClass(
+                        barGraphContainer,
+                        styles.region
+                    );
+                    expect(regionElements[0].getAttribute("aria-hidden")).toBe(
+                        "true"
+                    );
+                    expect(regionElements[1].getAttribute("aria-hidden")).toBe(
+                        "false"
+                    );
+                    done();
+                });
+            });
+            it("Display region on legend Double click", (done) => {
+                const legendItem = fetchAllElementsByClass(
+                    barGraphContainer,
+                    styles.legendItem
+                );
+                triggerEvent(legendItem[0], "click", () => {
+                    triggerEvent(legendItem[0], "click", () => {
+                        const regionElements = fetchAllElementsByClass(
+                            barGraphContainer,
+                            styles.region
+                        );
+                        expect(
+                            regionElements[0].getAttribute("aria-hidden")
+                        ).toBe("false");
+                        expect(
+                            regionElements[1].getAttribute("aria-hidden")
+                        ).toBe("false");
+                        done();
+                    });
+                });
+            });
         });
     });
 });

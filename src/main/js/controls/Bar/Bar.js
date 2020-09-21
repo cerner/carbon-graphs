@@ -246,7 +246,13 @@ class Bar extends GraphContent {
             x: d,
             valueSubsetArray: []
         }));
-
+        if (utils.isEmpty(graphData.values)) {
+            removeLabelShapeItem(
+                graph.axesLabelShapeGroup[this.config.yAxis],
+                this.dataTarget,
+                graph.config
+            );
+        }
         scaleBandAxis(this.bandScale, graph.config, graph.content);
         const barSelectionGroup = graph.svg
             .select(`.${styles.barSelectionGroup}`)

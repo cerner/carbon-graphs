@@ -242,6 +242,14 @@ class Line extends GraphContent {
         drawDataLines(graph.scale, graph.config, lineSVG.enter());
         lineSVG.exit().remove();
 
+        if (utils.isEmpty(graphData.values)) {
+            removeLabelShapeItem(
+                graph.axesLabelShapeGroup[this.config.yAxis],
+                this.dataTarget,
+                graph.config
+            );
+        }
+
         if (graph.config.showShapes) {
             const currentPointsPath = graph.svg
                 .select(`g[aria-describedby="${graphData.key}"]`)

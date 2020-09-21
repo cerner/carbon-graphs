@@ -225,7 +225,13 @@ class Scatter extends GraphContent {
                 )
             )
             .remove();
-
+        if (utils.isEmpty(graphData.values)) {
+            removeLabelShapeItem(
+                graph.axesLabelShapeGroup[this.config.yAxis],
+                this.dataTarget,
+                graph.config
+            );
+        }
         this.valuesRange = calculateValuesRange(
             this.config.values,
             this.config.yAxis

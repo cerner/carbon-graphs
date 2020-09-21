@@ -217,6 +217,69 @@ describe("Line - Panning", () => {
                 expect(legendItem.getAttribute("aria-disabled")).toBe("true");
                 expect(legendItem.getAttribute("aria-current")).toBe("true");
             });
+            it("should update the dynamic data and remove  shape in y-axis", () => {
+                const panData = {
+                    key: "uid_1",
+                    values: []
+                };
+                let lineShapeContent = fetchAllElementsByClass(
+                    lineGraphContainer,
+                    styles.axisLabelYShapeContainer
+                );
+                expect(
+                    lineShapeContent[0].querySelectorAll("svg").length
+                ).toEqual(1);
+
+                graphDefault.reflow(panData);
+                lineShapeContent = fetchAllElementsByClass(
+                    lineGraphContainer,
+                    styles.axisLabelYShapeContainer
+                );
+                expect(
+                    lineShapeContent[0].querySelectorAll("svg").length
+                ).toEqual(0);
+            });
+            it("should update the dynamic data and remove the shape in y2-axis", () => {
+                graphDefault.destroy();
+                const axisData = utils.deepClone(getAxes(axisTimeSeries));
+                axisData.dateline = [
+                    {
+                        showDatelineIndicator: true,
+                        label: {
+                            display: "Release A"
+                        },
+                        color: COLORS.GREEN,
+                        shape: SHAPES.SQUARE,
+                        value: "2016-06-03T12:00:00Z"
+                    }
+                ];
+                axisData.pan = { enabled: true };
+                axisData.showLabel = true;
+                const input = getInput(valuesTimeSeries, false, false);
+                input.yAxis = "y2";
+                graphDefault = new Graph(axisData);
+                graphDefault.loadContent(new Line(input));
+                const panData = {
+                    key: "uid_1",
+                    values: []
+                };
+                let lineShapeContent = fetchAllElementsByClass(
+                    lineGraphContainer,
+                    styles.axisLabelY2ShapeContainer
+                );
+                expect(
+                    lineShapeContent[0].querySelectorAll("svg").length
+                ).toEqual(1);
+
+                graphDefault.reflow(panData);
+                lineShapeContent = fetchAllElementsByClass(
+                    lineGraphContainer,
+                    styles.axisLabelY2ShapeContainer
+                );
+                expect(
+                    lineShapeContent[0].querySelectorAll("svg").length
+                ).toEqual(0);
+            });
         });
     });
     describe("When pan is disabled", () => {
