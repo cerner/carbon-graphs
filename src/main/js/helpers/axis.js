@@ -1048,6 +1048,8 @@ const getAxisLabelWidth = (label, axis, config) => {
         .append("g")
         .attr("transform", `rotate(${getRotationForAxis(axis)})`);
     buildAxisLabel(grouper, label);
+
+    // To avoid overlapping, (for y-axis shape and y-axis) we are setting default width, when space is passed as y-axis label.
     if (
         utils.isDefined(config) &&
         hasY2Axis(config.axis) &&
