@@ -386,6 +386,24 @@ describe("Bar - Region", () => {
                 toNumber(regionElement.getAttribute("height"))
             ).toBeGreaterThan(constants.PADDING.top);
         });
+        it("Sets region height correctly, when start and end are same", () => {
+            data = utils.deepClone(getInput(valuesDefault));
+            data.regions = [
+                {
+                    axis: constants.Y_AXIS,
+                    start: 10,
+                    end: 10,
+                    x: 2
+                }
+            ];
+            bar = new Bar(data);
+            graphDefault.loadContent(bar);
+            const regionElement = fetchElementByClass(
+                barGraphContainer,
+                styles.region
+            );
+            expect(toNumber(regionElement.getAttribute("height"))).toBe(5);
+        });
         it("Creates a goal bar when start and end are same", () => {
             data = utils.deepClone(getInput(valuesDefault));
             data.regions = [

@@ -182,7 +182,9 @@ const getYAxisRangePosition = (scale) => (bounds) =>
  * @returns {number} Height of the region for Y axes
  */
 const getRegionHeight = (regionPath, bounds, scale, config) => {
-    const upperBound = utils.getNumber(regionPath.attr(constants.Y_AXIS));
+    const upperBound = bounds.end
+        ? round2Decimals(scale[getRegionAxis(bounds)](bounds.end))
+        : 0;
     const lowerBound = bounds.start
         ? round2Decimals(scale[getRegionAxis(bounds)](bounds.start)) +
           constants.DEFAULT_GOAL_LINE_STROKE_WIDTH
