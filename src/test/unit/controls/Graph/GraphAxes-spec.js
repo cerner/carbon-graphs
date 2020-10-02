@@ -510,6 +510,47 @@ describe("Graph - Axes", () => {
                 ).textContent
             ).toBe("9");
         });
+        describe("when space is passed as label", () => {
+            beforeEach(() => {
+                graph.destroy();
+            });
+            it("check transform position of y-axis when y2-axis is true", () => {
+                const axisObj = utils.deepClone(axisDefault);
+                axisObj.y.label = " ";
+                axisObj.y2 = {
+                    show: true,
+                    label: "y2 axis",
+                    lowerLimit: 11,
+                    upperLimit: 25
+                };
+                graph = new Graph(Object.assign({}, getAxes(axisObj)));
+                expect(
+                    getSVGAnimatedTransformList(
+                        fetchElementByClass(styles.axisY).getAttribute(
+                            "transform"
+                        )
+                    ).translate[0]
+                ).toBe(67.125);
+            });
+            it("check transform position of y-axis when y2-axis is false", () => {
+                const axisObj = utils.deepClone(axisDefault);
+                axisObj.y.label = " ";
+                axisObj.y2 = {
+                    show: false,
+                    label: "y2 axis",
+                    lowerLimit: 11,
+                    upperLimit: 25
+                };
+                graph = new Graph(Object.assign({}, getAxes(axisObj)));
+                expect(
+                    getSVGAnimatedTransformList(
+                        fetchElementByClass(styles.axisY).getAttribute(
+                            "transform"
+                        )
+                    ).translate[0]
+                ).toBe(50.625);
+            });
+        });
     });
 
     describe("when only Y axis is present", () => {
@@ -1998,6 +2039,12 @@ describe("Graph - Axes", () => {
         });
     });
     describe("when graph is loaded", () => {
+        it("should add div element with display as none for the popup tooltip", () => {
+            const tooltipElement = fetchElementByClass(
+                styles.labelPopupTooltip
+            );
+            expect(tooltipElement.style.display).toBe("none");
+        });
         it("should add div element for the popup tooltip", () => {
             expect(
                 fetchElementByClass(styles.labelPopupTooltip)
