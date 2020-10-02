@@ -258,7 +258,7 @@ export const renderPairedResultTimeseriesDateline = (id) => {
             label: {
                 display: "Action Date"
             },
-            color: "#FFDF00",
+            color: "#C97318",
             shape: Carbon.helpers.SHAPES.SQUARE,
             onClick: loadDatelinePopup,
             value: new Date(2017, 10, 1).toISOString()

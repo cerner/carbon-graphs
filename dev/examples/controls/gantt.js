@@ -539,7 +539,7 @@ export const renderGanttPanning = (id) => {
             label: {
                 display: "Release A"
             },
-            color: Carbon.helpers.COLORS.GREEN,
+            color: "#C97318",
             shape: Carbon.helpers.SHAPES.SQUARE,
             value: new Date(2016, 0, 1, 9).toISOString()
         }
@@ -581,7 +581,7 @@ export const renderGanttPanningWithDynamicData = (id) => {
             label: {
                 display: "Release A"
             },
-            color: Carbon.helpers.COLORS.GREEN,
+            color: "#C97318",
             shape: Carbon.helpers.SHAPES.SQUARE,
             value: new Date(2016, 0, 1, 9).toISOString()
         }
@@ -903,8 +903,8 @@ export const renderGanttTrackSelection = (id) => {
             label: {
                 display: "DST Start"
             },
-            color: "#D3D4D5",
-            shape: Carbon.helpers.SHAPES.TRIANGLE,
+            color: "#405978",
+            shape: Carbon.helpers.SHAPES.DIAMOND,
             value: new Date(2018, 2, 10).toISOString()
         },
         {
@@ -912,7 +912,7 @@ export const renderGanttTrackSelection = (id) => {
             label: {
                 display: "Current Date"
             },
-            color: "#FFDF00",
+            color: "#C97318",
             shape: Carbon.helpers.SHAPES.SQUARE,
             value: new Date(2018, 8, 5).toISOString()
         }

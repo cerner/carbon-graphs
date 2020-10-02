@@ -566,7 +566,7 @@ const DATA = [
                     label: {
                         display: "Current Date"
                     },
-                    color: "#FFDF00",
+                    color: "#C97318",
                     shape: Carbon.helpers.SHAPES.DARK.SQUARE,
                     onClick: loadDatelinePopup,
                     value: new Date(2016, 0, 1, 6).toISOString()
@@ -1762,8 +1762,8 @@ const DATA = [
                     label: {
                         display: "DST Start"
                     },
-                    color: "#D3D4D5",
-                    shape: Carbon.helpers.SHAPES.DARK.TRIANGLE,
+                    color: "#405978",
+                    shape: Carbon.helpers.SHAPES.DARK.DIAMOND,
                     onClick: loadDatelinePopup,
                     value: new Date(2018, 2, 10).toISOString()
                 },
@@ -1772,7 +1772,7 @@ const DATA = [
                     label: {
                         display: "Current Date"
                     },
-                    color: "#FFDF00",
+                    color: "#C97318",
                     shape: Carbon.helpers.SHAPES.DARK.SQUARE,
                     onClick: loadDatelinePopup,
                     value: new Date(2018, 8, 5).toISOString()
@@ -1782,8 +1782,8 @@ const DATA = [
                     label: {
                         display: "DST End"
                     },
-                    color: "#D3D4D5",
-                    shape: Carbon.helpers.SHAPES.DARK.TRIANGLE,
+                    color: "#405978",
+                    shape: Carbon.helpers.SHAPES.DARK.DIAMOND,
                     onClick: loadDatelinePopup,
                     value: new Date(2018, 10, 3).toISOString()
                 }

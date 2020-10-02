@@ -303,7 +303,7 @@ export const renderBarTimeSeriesWithDateline = (id) => {
             label: {
                 display: "Action Date"
             },
-            color: "#FFDF00",
+            color: "#C97318",
             shape: Carbon.helpers.SHAPES.SQUARE,
             onClick: loadDatelinePopup,
             value: new Date(2017, 12, 2).toISOString()

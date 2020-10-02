@@ -177,15 +177,24 @@ describe("Graph - Dateline", () => {
                     display: "Release B"
                 },
                 color: COLORS.ORANGE,
-                shape: SHAPES.SQUARE,
+                shape: SHAPES.DIAMOND,
                 value: new Date(2016, 8, 1).toISOString()
             }
         ];
         graph = new Graph(input);
         const datelines = document.querySelectorAll(`.${styles.dateline}`);
+        const datelineShapePath = document.querySelectorAll(
+            `.${styles.datelinePoint} g path`
+        );
         expect(datelines.length).toBe(2);
         expect(datelines[0].getAttribute("pointer-events")).toBe("auto");
         expect(datelines[1].getAttribute("pointer-events")).toBe("auto");
+        expect(datelines[0].style.fill).toBe("rgb(167, 170, 171)");
+        expect(datelines[1].style.fill).toBe("rgb(181, 73, 0)");
+        expect(datelineShapePath[0].getAttribute("d")).toBe("M0 0h48v48H0V0z");
+        expect(datelineShapePath[1].getAttribute("d")).toBe(
+            "M24 0l12 24-12 24-12-24L24 0z"
+        );
     });
     it("Creates dateline point correctly", () => {
         const input = utils.deepClone(getAxes(axisTimeSeries));
