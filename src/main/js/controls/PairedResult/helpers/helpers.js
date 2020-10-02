@@ -625,7 +625,10 @@ const isSinglePairedResultTargetDisplayed = (config, graphContext) => {
         });
     });
 
-    return isSingleTargetDisplayed(displayedPairedResults, graphContext.content);
+    return isSingleTargetDisplayed(
+        displayedPairedResults,
+        graphContext.content
+    );
 };
 /**
  * Checks the region data of Paired Result so that if one of regions for Paired Result data pairs are not provided,
