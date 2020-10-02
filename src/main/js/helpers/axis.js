@@ -1037,16 +1037,28 @@ const getYAxisRange = (config) => [getYAxisHeight(config), 0];
  * @private
  * @param {string} label - Label text
  * @param {string} axis - x, y or y2
+ * @param {object} config - config object derived from input JSON
  * @returns {number} label width
  */
-const getAxisLabelWidth = (label, axis) => {
+const getAxisLabelWidth = (label, axis, config) => {
+    let width;
     const dummy = d3.select("body").append("div");
     const svg = dummy.append("svg");
     const grouper = svg
         .append("g")
         .attr("transform", `rotate(${getRotationForAxis(axis)})`);
     buildAxisLabel(grouper, label);
-    const width = grouper.node().getBoundingClientRect().width;
+
+    // To avoid overlapping, (for y-axis shape and y-axis) we are setting default width, when space is passed as y-axis label.
+    if (
+        utils.isDefined(config) &&
+        hasY2Axis(config.axis) &&
+        label.trim().length === 0
+    ) {
+        width = constants.DEFAULT_CHARACTER_SVG_ELEMENT_WIDTH;
+    } else {
+        width = grouper.node().getBoundingClientRect().width;
+    }
     dummy.remove();
     return width;
 };
@@ -1163,12 +1175,17 @@ const calculateAxesLabelSize = (config) => {
         if (config.axis.y.label) {
             config.axisLabelWidths.y = getAxisLabelWidth(
                 config.axis.y.label,
-                constants.Y_AXIS
+                constants.Y_AXIS,
+                config
             );
         }
         if (hasY2Axis(config.axis) && config.axis.y2.label) {
             config.axisLabelWidths.y2 = hasY2Axis(config.axis)
-                ? getAxisLabelWidth(config.axis.y2.label, constants.Y2_AXIS)
+                ? getAxisLabelWidth(
+                      config.axis.y2.label,
+                      constants.Y2_AXIS,
+                      config
+                  )
                 : 0;
         }
     }

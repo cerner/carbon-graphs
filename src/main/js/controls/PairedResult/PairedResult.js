@@ -230,11 +230,10 @@ class PairedResult extends GraphContent {
                         )
                     );
 
-                    graph.config.shouldHideAllRegion = (
+                    graph.config.shouldHideAllRegion =
                         !isPairedDataProper ||
                         graph.config.shouldHideAllRegion ||
-                        !areRegionsIdentical(graph.svg)
-                    );
+                        !areRegionsIdentical(graph.svg);
                 }
 
                 translateRegion(
@@ -247,7 +246,6 @@ class PairedResult extends GraphContent {
                     utils.notEmpty(this.dataTarget.valueRegionSubset)
                 );
             } else {
-                
                 graph.config.shouldHideAllRegion = true;
             }
             if (graph.config.shouldHideAllRegion) {
