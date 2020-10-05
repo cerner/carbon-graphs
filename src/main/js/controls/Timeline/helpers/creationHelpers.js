@@ -9,6 +9,7 @@ import {
     getRotationForAxis,
     getXAxisHeight,
     getYAxisHeight,
+    getYAxisYPosition,
     prepareXAxis
 } from "../../../helpers/axis";
 import constants, { SHAPES } from "../../../helpers/constants";
@@ -29,6 +30,12 @@ import {
     getShapeForTarget
 } from "../../Graph/helpers/helpers";
 import { transformPoint } from "./translateHelpers";
+import {
+    getDatelineIndicatorHeight,
+    translateDateline
+} from "../../../helpers/dateline";
+import { translateHorizontalGrid } from "../../Gantt/helpers/translateHelpers";
+// import { createVGrid } from "../../../helpers/datetimeBuckets";
 
 /**
  * @typedef TimelineContent
@@ -567,6 +574,86 @@ const hoverHandler = (graphTargets, canvasSVG) => (item, state) => {
 const clear = (canvasSVG, dataTarget) =>
     d3RemoveElement(canvasSVG, `g[aria-describedby="${dataTarget.key}"]`);
 
+const createDateline = (scale, config, canvasSVG) => {
+    // let datelineContent;
+    /*    if (config.settingsDictionary.shouldCreateDatelineDefs) {
+        datelineContent = canvasSVG
+            .append("g")
+            .classed(styles.datelineContent, true)
+            .attr("clip-path", `url(#${config.datelineClipPathId})`);
+    } else { */
+    const datelineContent = canvasSVG
+        .append("g")
+        .classed(styles.datelineContent, true);
+    // }
+    config.dateline.forEach((dateline) => {
+        const datelineGroup = datelineContent
+            .append("g")
+            .classed(styles.datelineGroup, true)
+            .datum(dateline)
+            .attr("style", (val) => `fill: ${val.color}; stroke: ${val.color};`)
+            .attr("aria-selected", false);
+
+        const graphConfigClickPassThrough = utils.isDefined(
+            config.clickPassThrough
+        )
+            ? config.clickPassThrough.datelines
+            : false;
+        datelineGroup
+            .append("line")
+            .classed(styles.dateline, true)
+            .attr("style", (d) => `fill: ${d.color}; stroke: ${d.color}`)
+            .attr(
+                "pointer-events",
+                graphConfigClickPassThrough ? "none" : "auto"
+            );
+        datelineGroup.append((d) =>
+            new Shape(getShapeForTarget(d)).getShapeElement(
+                getDefaultSVGProps({
+                    svgClassNames: styles.datelinePoint,
+                    svgStyles: `fill: ${d.color}; stroke: ${d.color}`,
+                    transformFn: (scale) => `scale(${scale})`,
+                    a11yAttributes: {
+                        "aria-hidden": !dateline.showDatelineIndicator,
+                        "aria-disabled": !utils.isFunction(dateline.onClick)
+                    }
+                })
+            )
+        );
+    });
+    translateDateline(scale, config, canvasSVG, getYAxisYPosition);
+
+    if (
+        config.settingsDictionary.shouldCreateDatelineDefs &&
+        config.dateline.length > 0
+    ) {
+        const datelineIndicatorHeight = Math.floor(
+            getDatelineIndicatorHeight() / 2
+        );
+        canvasSVG
+            .select(`clipPath#${config.datelineClipPathId}`)
+            .selectAll("rect")
+            .attr("height", getYAxisHeight(config) + datelineIndicatorHeight)
+            .attr(
+                constants.Y_AXIS,
+                getYAxisYPosition(config) - datelineIndicatorHeight
+            );
+    }
+};
+
+const createGrid = (axis, scale, config, canvasSVG) => {
+    getAxesScale(axis, scale, config);
+    const gridSVG = canvasSVG
+        .append("g")
+        .classed(styles.grid, true)
+        .attr("transform", `translate(${30},${50})`);
+    gridSVG
+        .append("g")
+        .classed(styles.gridH, true)
+        .call(translateHorizontalGrid(axis, config))
+        .call(axis.x);
+};
+
 export {
     calculateAxesLabelSize,
     getXAxisWidth,
@@ -591,5 +678,7 @@ export {
     getColorForTarget,
     attachEventHandlers,
     detachEventHandlers,
-    clear
+    clear,
+    createDateline,
+    createGrid
 };

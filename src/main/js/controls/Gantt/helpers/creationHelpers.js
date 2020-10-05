@@ -202,11 +202,7 @@ const getYAxisWidth = (config) => {
  * @param {object} config - config object derived from input JSON
  * @returns {number} X Axis width
  */
-const getXAxisWidth = (config) =>
-    config.canvasWidth -
-    config.axisSizes.y -
-    config.axisLabelWidths.y -
-    getXAxisYPosition(config);
+const getXAxisWidth = (config) => 13;
 /**
  * X Axis's position vertically relative to the canvas
  *

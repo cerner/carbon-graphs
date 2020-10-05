@@ -20,7 +20,10 @@ import {
     determineHeight,
     scaleGraph,
     clickHandler,
-    hoverHandler
+    hoverHandler,
+    // createDateline,
+    createGrid
+    // createRectangularBox
 } from "./helpers/creationHelpers";
 import {
     translateTimelineGraph,
@@ -100,6 +103,7 @@ const initConfig = (control) => {
         axis: {
             x: {}
         },
+        eventline: [],
         shownTargets: {},
         pan: {}
     };
@@ -219,6 +223,11 @@ class Timeline extends Construct {
             createAxes(this.axis, this.scale, this.config, this.svg);
         }
         createTimelineContent(this.config, this.svg);
+        if (this.config.eventline) {
+            createGrid(this.axis, this.scale, this.config, this.svg);
+            // createDateline(this.scale, this.config, this.svg);
+            // createRectangularBox(this.axis, this.config, this.svg);
+        }
         createLabel(this.config, this.svg);
         if (this.config.showLegend) {
             this.legendSVG = createLegend(

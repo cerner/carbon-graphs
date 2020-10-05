@@ -235,7 +235,7 @@ const translateVerticalGrid = (axis, config) => {
  * @returns {object} d3 svg path
  */
 const translateHorizontalGrid = (axis, config) =>
-    axis.y.tickSize(getXAxisWidth(config) * -1, 0, 0).tickFormat("");
+    axis.x.tickSize(getXAxisWidth(config) * -1, 0, 0).tickFormat("");
 /**
  * Updates the horizontal and vertical grid sizes/positions on resize
  *

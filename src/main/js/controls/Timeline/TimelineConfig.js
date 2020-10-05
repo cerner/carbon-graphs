@@ -2,6 +2,7 @@
 import BaseConfig, { getDefaultValue, getDomain } from "../../core/BaseConfig";
 import {
     generateClipPathId,
+    generateDatelineClipPathId,
     isPanningModeEnabled
 } from "../../core/BaseConfig/helper";
 import constants, { AXIS_TYPE } from "../../helpers/constants";
@@ -53,6 +54,7 @@ const getPadding = (config, inputPadding) => {
 export const processInput = (input, config) => {
     const _axis = utils.deepClone(input.axis);
     config.clipPathId = generateClipPathId();
+    config.datelineClipPathId = generateDatelineClipPathId();
     config.bindTo = input.bindTo;
     config.bindLegendTo = input.bindLegendTo;
     config.padding = getPadding(config, input.padding);
@@ -81,6 +83,8 @@ export const processInput = (input, config) => {
         rangeRounding: getDefaultValue(_axis.x.rangeRounding, true)
     });
     config.shownTargets = [];
+    config.eventline = getDefaultValue(input.showEventLine, false);
+    config.dateline = getDefaultValue(utils.deepClone(input.data), []);
     return config;
 };
 
