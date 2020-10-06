@@ -5,6 +5,7 @@ A native bubble graph for multiple datasets using D3 based on standard design pa
 -   [Bubble](#bubble)
     -   [Usage](#usage)
         -   [Structure](#structure)
+            -   [Colored Bubbles](#colored-bubbles)
             -   [Weight Based Bubble](#weight-based-bubble)
             -   [Custom Size Based Bubble](#custom-size-based-bubble)
     -   [JSON Properties](#json-properties)

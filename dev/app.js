@@ -508,7 +508,7 @@ renderSiteApp(
                 {
                     pathname: "/bubble/multiple-dataset-api",
                     content: renderBubbleMultipleDataset,
-                    title: "multiple Dataset API"
+                    title: "Multiple Dataset API"
                 }
             ]
         },

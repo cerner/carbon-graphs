@@ -186,7 +186,6 @@ describe("Bubble Single Dataset - Load", () => {
             const data = utils.deepClone(valuesDefault);
             data[0].y = null;
             input = getInput(data);
-            console.log(data);
             graph.loadContent(new BubbleSingleDataset(input));
             const pointsGroups = bubbleGraphContainer.querySelectorAll(
                 `.${styles.point}`
