@@ -339,7 +339,9 @@ const createTooltipDiv = () => {
 const destroyTooltipDiv = () => {
     if (document.querySelector(`.${styles.labelPopupTooltip}`)) {
         const element = document.querySelector(`.${styles.labelPopupTooltip}`);
-        element.parentNode && element.parentNode.removeChild(element);
+        if(element.parentNode) {
+            element.parentNode.removeChild(element);
+        }
     }
 };
 
