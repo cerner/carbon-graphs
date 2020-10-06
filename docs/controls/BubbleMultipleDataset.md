@@ -1,4 +1,4 @@
-# Bubble
+# Bubble Multiple Dataset
 
 A native bubble graph for multiple datasets using D3 based on standard design patterns.
 

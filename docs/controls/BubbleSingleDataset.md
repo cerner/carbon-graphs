@@ -1,4 +1,4 @@
-# Bubble
+# Bubble Single Dataset
 
 A native bubble graph using D3 based on standard design patterns.
 
