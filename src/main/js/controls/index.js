@@ -16,7 +16,9 @@ import { Bubble, BubbleSingleDataset, BubbleMultipleDataset } from "./Bubble";
  * @property {object} bar Bar graph based on Graph
  * @property {object} pairedResult Paired Result graph based on Graph
  * @property {object} timeline Timeline graph based on Construct
- * @property {obj ect} bubble Bubble graph based on Graph
+ * @property {object} bubble Bubble graph based on Graph
+ * @property {object} bubbleSingleDataset Bubble graph based on Graph for single datasets
+ * @property {object} bubbleMultipleDataset Bubble graph based on Graph for multiple datasets
  * @enum {object}
  */
 export default {

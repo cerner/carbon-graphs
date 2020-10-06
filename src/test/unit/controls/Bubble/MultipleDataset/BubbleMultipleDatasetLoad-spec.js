@@ -25,7 +25,6 @@ import {
     valuesTimeSeries,
     fetchElementByTag
 } from "../helpers";
-import { generateColor } from "../../../../../main/js/controls/Bubble/helpers/colorGradient";
 
 describe("Bubble Multiple Dataset - Load", () => {
     let graphDefault = null;
@@ -1143,11 +1142,6 @@ describe("Bubble Multiple Dataset - Load", () => {
             graph.loadContent(new BubbleMultipleDataset(input7));
             graph.loadContent(new BubbleMultipleDataset(input8));
 
-            // input.values.push({ x: 20,y: 8});
-            // input.values.push({ x: 30,y: 15});
-            // input.values.push({ x: 40,y: 7});
-            // input.palette = BUBBLE.PALETTE.BLUE;
-            // input.color = undefined;
             const graphContent = document.body.querySelectorAll(
                 `.${styles.bubbleGraphContent}`
             );

@@ -393,10 +393,13 @@ export const renderBubbleSingleDataset = (id) => {
     const bubbleGraph = Carbon.api.graph(axisData(`#${id}`));
     data2.palette = BUBBLE.PALETTE.ORANGE;
     data2.color = undefined;
+    data2.label.display = "dataset with palette";
+
     bubbleGraph.loadContent(Carbon.api.bubbleSingleDataset(data2));
 
     const bubbleGraph2 = Carbon.api.graph(temperatureAxisData(`#${id}`));
     data3.color = Carbon.helpers.COLORS.GREEN;
+    data3.label.display = "dataset with single color";
     bubbleGraph2.loadContent(Carbon.api.bubbleSingleDataset(data3));
 
     return bubbleGraph;
@@ -404,7 +407,9 @@ export const renderBubbleSingleDataset = (id) => {
 
 export const renderBubbleMultipleDataset = (id) => {
     const bubbleGraph = Carbon.api.graph(axisData(`#${id}`));
-    data2.palette = BUBBLE.PALETTE.ORANGE;
+    data2.color = Carbon.helpers.COLORS.GREEN;
+    data2.label.display = "Bubble Set A";
+    data6.label.display = "Bubble Set B";
     bubbleGraph.loadContent(Carbon.api.bubbleMultipleDataset(data2));
     bubbleGraph.loadContent(Carbon.api.bubbleMultipleDataset(data6));
 

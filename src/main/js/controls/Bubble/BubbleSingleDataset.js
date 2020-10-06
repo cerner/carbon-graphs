@@ -19,8 +19,7 @@ import {
     processDataPoints,
     translateBubbleGraph,
     getDataPointValues,
-    calculateValuesRange,
-    loadInput
+    calculateValuesRange
 } from "./helpers/helpers";
 import { draw, drawBubbles } from "./helpers/helpersSingleDataset";
 import Bubble from "./Bubble";

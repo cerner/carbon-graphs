@@ -7,7 +7,7 @@ import {
 import constants from "../../../helpers/constants";
 import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
-import { generateColor_singleDataset, bubbleScale } from "./colorGradient";
+import { generateColorSingleDataset, bubbleScale } from "./colorGradient";
 import {
     transformPoint,
     dataPointActionHandler,
@@ -157,11 +157,11 @@ const decideColor = (dataTarget, value) => {
     }
     if (utils.isDefined(dataTarget.palette)) {
         if (areWeightsDefined(dataTarget)) {
-            return generateColor_singleDataset(dataTarget)(
+            return generateColorSingleDataset(dataTarget)(
                 bubbleScale(dataTarget)(value.weight)
             );
         }
-        return generateColor_singleDataset(dataTarget)(value.y);
+        return generateColorSingleDataset(dataTarget)(value.y);
     }
 };
 

@@ -408,27 +408,6 @@ const decideColor = (dataTarget, value) => {
 };
 
 /**
- * Decides the color for each bubble
- *
- * @private
- * @param {object} dataTarget - data for the bubble graph
- * @param {number} value - data point whose color has to be decided
- * @returns {string} - returns color string for each bubble
- */
-const decideColor_singleDataset = (dataTarget, value) => {
-    if (isHueDefined(dataTarget.hue) && areWeightsDefined(dataTarget)) {
-        return generateColor(dataTarget)(bubbleScale(dataTarget)(value.weight));
-    } else if (
-        isHueDefined(dataTarget.hue) &&
-        areWeightsDefined(dataTarget) === false
-    ) {
-        return generateColor(dataTarget)(value.y);
-    } else {
-        return dataTarget.color;
-    }
-};
-
-/**
  * Handler for Request animation frame, executes on resize shows/hides the regions.
  *
  * @private

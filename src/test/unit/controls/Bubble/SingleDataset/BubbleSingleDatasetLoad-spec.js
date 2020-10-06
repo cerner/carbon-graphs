@@ -23,7 +23,7 @@ import {
     valuesTimeSeries,
     fetchElementByTag
 } from "../helpers";
-import { generateColor_singleDataset } from "../../../../../main/js/controls/Bubble/helpers/colorGradient";
+import { generateColorSingleDataset } from "../../../../../main/js/controls/Bubble/helpers/colorGradient";
 
 describe("Bubble Single Dataset - Load", () => {
     let graphDefault = null;
@@ -339,7 +339,7 @@ describe("Bubble Single Dataset - Load", () => {
                     const colorEachBubble =
                         point.firstChild.attributes.fill.value;
                     expect(
-                        generateColor_singleDataset(input)(radiusValue)
+                        generateColorSingleDataset(input)(radiusValue)
                     ).toEqual(colorEachBubble);
                 });
             });
@@ -359,7 +359,7 @@ describe("Bubble Single Dataset - Load", () => {
                     const yValue = points.__data__.y;
                     const colorEachBubble =
                         points.firstChild.attributes.fill.value;
-                    expect(generateColor_singleDataset(input)(yValue)).toEqual(
+                    expect(generateColorSingleDataset(input)(yValue)).toEqual(
                         colorEachBubble
                     );
                 });
@@ -1081,7 +1081,7 @@ describe("Bubble Single Dataset - Load", () => {
                     10
                 );
                 const colorEachBubble = point.firstChild.attributes.fill.value;
-                expect(generateColor_singleDataset(input)(radiusValue)).toEqual(
+                expect(generateColorSingleDataset(input)(radiusValue)).toEqual(
                     colorEachBubble
                 );
             });
@@ -1107,7 +1107,7 @@ describe("Bubble Single Dataset - Load", () => {
                     10
                 );
                 const colorEachBubble = point.firstChild.attributes.fill.value;
-                expect(generateColor_singleDataset(input)(radiusValue)).toEqual(
+                expect(generateColorSingleDataset(input)(radiusValue)).toEqual(
                     colorEachBubble
                 );
             });
@@ -1133,7 +1133,7 @@ describe("Bubble Single Dataset - Load", () => {
                     10
                 );
                 const colorEachBubble = point.firstChild.attributes.fill.value;
-                expect(generateColor_singleDataset(input)(radiusValue)).toEqual(
+                expect(generateColorSingleDataset(input)(radiusValue)).toEqual(
                     colorEachBubble
                 );
             });
@@ -1159,7 +1159,7 @@ describe("Bubble Single Dataset - Load", () => {
                     10
                 );
                 const colorEachBubble = point.firstChild.attributes.fill.value;
-                expect(generateColor_singleDataset(input)(radiusValue)).toEqual(
+                expect(generateColorSingleDataset(input)(radiusValue)).toEqual(
                     colorEachBubble
                 );
             });
