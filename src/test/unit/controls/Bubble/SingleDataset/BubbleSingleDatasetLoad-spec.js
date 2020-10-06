@@ -42,11 +42,12 @@ describe("Bubble Single Dataset - Load", () => {
     });
     afterEach(() => {
         document.body.innerHTML = "";
+        graphDefault.destroy();
     });
     beforeAll(() => {
         // to supress warnings
         consolewarn = console.warn;
-        // console.warn = ()=>{};
+        console.warn = () => {};
     });
     afterAll(() => {
         console.warn = consolewarn;
@@ -178,12 +179,14 @@ describe("Bubble Single Dataset - Load", () => {
             expect(bubbleGroup.tagName).toBe("g");
             expect(bubbleGroup.getAttribute("transform")).not.toBeNull();
         });
+
         it("does not show data point if data point is null", () => {
             graphDefault.destroy();
             const graph = new Graph(getAxes(axisDefault));
             const data = utils.deepClone(valuesDefault);
             data[0].y = null;
             input = getInput(data);
+            console.log(data);
             graph.loadContent(new BubbleSingleDataset(input));
             const pointsGroups = bubbleGraphContainer.querySelectorAll(
                 `.${styles.point}`
@@ -610,46 +613,6 @@ describe("Bubble Single Dataset - Load", () => {
                     expect(graph.config.axis.y.domain.upperLimit).toBe(200);
                 });
             });
-            describe("In Y2 Axis", () => {
-                it("Displays graph properly", () => {
-                    graphDefault.destroy();
-                    const graph = new Graph(getAxes(axis));
-                    const input = getInput(values, true, true, true);
-                    graph.loadContent(new BubbleSingleDataset(input));
-                    graph.resize();
-                    const bubbleGroup = bubbleGraphContainer.querySelectorAll(
-                        `.${styles.bubbleGraphContent}`
-                    );
-                    expect(bubbleGroup.length).toBe(1);
-                    expect(
-                        bubbleGraphContainer.querySelectorAll(
-                            `.${styles.point}`
-                        ).length
-                    ).toBe(4);
-                    expect(graph.config.axis.y2.domain.lowerLimit).toBe(11);
-                    expect(graph.config.axis.y2.domain.upperLimit).toBe(209);
-                });
-                it("Displays graph properly without domain padding", () => {
-                    graphDefault.destroy();
-                    const data = getAxes(axis);
-                    data.axis.y2.padDomain = false;
-                    const graph = new Graph(data);
-                    const input = getInput(values, true, true, true);
-                    graph.loadContent(new BubbleSingleDataset(input));
-                    graph.resize();
-                    const bubbleGroup = bubbleGraphContainer.querySelectorAll(
-                        `.${styles.bubbleGraphContent}`
-                    );
-                    expect(bubbleGroup.length).toBe(1);
-                    expect(
-                        bubbleGraphContainer.querySelectorAll(
-                            `.${styles.point}`
-                        ).length
-                    ).toBe(4);
-                    expect(graph.config.axis.y2.domain.lowerLimit).toBe(20);
-                    expect(graph.config.axis.y2.domain.upperLimit).toBe(200);
-                });
-            });
         });
     });
     describe("prepares to load legend item", () => {
@@ -1029,32 +992,33 @@ describe("Bubble Single Dataset - Load", () => {
         });
 
         it("does not plot more than four bubbles if shades are provided", () => {
-            input.values.push({ x: 20, y: 8 });
-            input.values.push({ x: 30, y: 15 });
-            input.values.push({ x: 40, y: 7 });
-            input.palette = BUBBLE.PALETTE.BLUE;
-            input.color = undefined;
-            graph.loadContent(new BubbleSingleDataset(input));
+            const data = utils.deepClone(input);
+            data.values.push({ x: 20, y: 8 });
+            data.values.push({ x: 30, y: 15 });
+            data.values.push({ x: 40, y: 7 });
+            data.palette = BUBBLE.PALETTE.BLUE;
+            data.color = undefined;
+            graph.loadContent(new BubbleSingleDataset(data));
             const graphContent = document.body.querySelectorAll(
                 `.${styles.bubbleGraphContent}`
             );
             expect(graphContent.length).toBe(0);
         });
-        it("ignores the palette property if input is defined", () => {
-            input.values.push({ x: 20, y: 8 });
-            input.values.push({ x: 30, y: 15 });
-            input.values.push({ x: 40, y: 7 });
-            input.palette = BUBBLE.PALETTE.BLUE;
-            input.color = COLORS.GREEN;
-            graph.loadContent(new BubbleSingleDataset(input));
+        it("ignores the palette property if color is defined", () => {
+            const data = utils.deepClone(input);
+            data.palette = BUBBLE.PALETTE.BLUE;
+            data.color = COLORS.GREEN;
+            graph.loadContent(new BubbleSingleDataset(data));
             const graphContent = document.body.querySelectorAll(
                 `.${styles.bubbleGraphContent}`
             );
             expect(graphContent.length).toBe(1);
         });
         it("ignores all datasets after the first one", () => {
+            const priInput = utils.deepClone(input);
             const secInput = utils.deepClone(input);
             secInput.key = "uid_2";
+            graphDefault.loadContent(new BubbleSingleDataset(priInput));
             graphDefault.loadContent(new BubbleSingleDataset(secInput));
             const graphContent = document.body.querySelectorAll(
                 `.${styles.bubbleGraphContent}`
