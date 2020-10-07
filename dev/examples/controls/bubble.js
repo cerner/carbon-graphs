@@ -389,7 +389,7 @@ export const renderBubbleGraphAndLegendPaddingReduced = (id) => {
     return bubbleGraph;
 };
 
-export const renderBubbleSingleDataset = (id) => {
+export const renderGraphBubbleSingleDataset = (id) => {
     const bubbleGraph = Carbon.api.graph(axisData(`#${id}`));
     data2.palette = BUBBLE.PALETTE.ORANGE;
     data2.color = undefined;
@@ -404,7 +404,7 @@ export const renderBubbleSingleDataset = (id) => {
     return bubbleGraph;
 };
 
-export const renderBubbleMultipleDataset = (id) => {
+export const renderGraphBubbleMultipleDataset = (id) => {
     const bubbleGraph = Carbon.api.graph(axisData(`#${id}`));
     data2.color = Carbon.helpers.COLORS.GREEN;
     data2.label.display = "Bubble Set A";

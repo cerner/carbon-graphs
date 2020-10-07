@@ -175,8 +175,8 @@ import {
     renderBubbleWithPanning,
     renderBubblePanningWithDynamicData,
     renderBubbleGraphAndLegendPaddingReduced,
-    renderBubbleSingleDataset,
-    renderBubbleMultipleDataset
+    renderGraphBubbleSingleDataset,
+    renderGraphBubbleMultipleDataset
 } from "./examples/controls/bubble";
 
 renderSiteApp(
@@ -502,12 +502,12 @@ renderSiteApp(
                 },
                 {
                     pathname: "/bubble/single-dataset-api",
-                    content: renderBubbleSingleDataset,
+                    content: renderGraphBubbleSingleDataset,
                     title: "Single Dataset API"
                 },
                 {
                     pathname: "/bubble/multiple-dataset-api",
-                    content: renderBubbleMultipleDataset,
+                    content: renderGraphBubbleMultipleDataset,
                     title: "Multiple Dataset API"
                 }
             ]
