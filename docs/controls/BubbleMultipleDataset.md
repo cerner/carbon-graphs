@@ -200,7 +200,6 @@ Refer [Graph](../core/Graph.md) `Root` for more details.
 | ------------- | -------- | ------------ | ----------------------------------------------------------------------------------------- |
 | color         | string   | COLORS.BLACK | Color for the bubbles                                                                     |
 | onClick       | Function | undefined    | Any action that can be performed when clicking on the data point                          |
-| hue           | object   | {}           | Provide lowerShade and upperShadefor color based bubble [Hue](#Hue)                       |
 | label         | object   | {}           | Display value for the data-set which the data points belong to                            |
 | legendOptions | object   | undefined    | Toggle to show legend. Refer [LegendOptions](#legendOptions)                              |
 | regions       | array    | []           | Refer [Regions](#regions)                                                                 |

@@ -142,7 +142,7 @@ bubbleColorBased.loadContent(Carbon.api.bubbleSingleDataset(colorBasedData));
 
 #### Weight Color Based Bubble
 
-For a Weight and Color Based Bubble Graph, provide hue with lowerShade and upperShade, also provide weight with min and max also pass weight(thrid parameter)in the values as below content:
+For a Weight and Color Based Bubble Graph, provide `palette` with a color shades reference [see valid values](###palette) and a weight object with a min and max value:
 
 ```javascript
 var weightColorBasedData = {
@@ -231,7 +231,6 @@ BubbleSingleDataset is limited to 1 dataset. All subsequent datasets are ignored
 | Property Name | Expected | Default      | Description                                                                                 |
 | ------------- | -------- | ------------ | ------------------------------------------------------------------------------------------- |
 | color         | string   | COLORS.BLACK | Single color for the bubbles. Overrides `palette` when both are provided.                   |
-| hue           | object   | {}           | Provide lowerShade and upperShadefor color based bubble [Hue](#Hue)                         |
 | label         | object   | {}           | Display value for the data-set which the data points belong to                              |
 | legendOptions | object   | undefined    | Toggle to show legend. Refer [LegendOptions](#legendOptions)                                |
 | onClick       | Function | undefined    | Any action that can be performed when clicking on the data point                            |
