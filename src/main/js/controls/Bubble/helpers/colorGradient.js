@@ -54,6 +54,8 @@ export const generateColor = (dataTarget) => {
  */
 export const generateColorSingleDataset = (dataTarget) => {
     let radiusData;
+    let color = [];
+    const huePaletteList = null;
 
     if (utils.isUndefined(dataTarget.weight)) {
         radiusData = dataTarget.values.map((element) => element.y);
@@ -62,8 +64,6 @@ export const generateColorSingleDataset = (dataTarget) => {
             bubbleScale(dataTarget)(element.weight)
         );
     }
-
-    let color = [];
 
     if (utils.isDefined(dataTarget.palette)) {
         color = dataTarget.palette;
@@ -86,7 +86,7 @@ export const generateColorSingleDataset = (dataTarget) => {
         }
     }
 
-    const huePaletteList = d3
+   huePaletteList = d3
         .scaleQuantile()
         .domain(d3.extent(radiusData))
         .range(color);
