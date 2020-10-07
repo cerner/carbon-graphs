@@ -55,7 +55,7 @@ export const generateColor = (dataTarget) => {
 export const generateColorSingleDataset = (dataTarget) => {
     let radiusData;
     let color = [];
-    const huePaletteList = null;
+    let huePaletteList = null;
 
     if (utils.isUndefined(dataTarget.weight)) {
         radiusData = dataTarget.values.map((element) => element.y);
