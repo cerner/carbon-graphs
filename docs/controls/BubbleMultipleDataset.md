@@ -228,13 +228,6 @@ weight: {
 }
 ```
 
-#### Required
-
-| Property Name | Expected | Default   | Description                        |
-| ------------- | -------- | --------- | ---------------------------------- |
-| lowerShade    | string   | undefined | Lower shade for color based bubble |
-| upperShade    | string   | undefined | Upper shade for color based bubble |
-
 ### Values
 
 #### Required
