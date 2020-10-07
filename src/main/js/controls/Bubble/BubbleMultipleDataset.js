@@ -1,5 +1,5 @@
 "use strict";
-import constants from "../../helpers/constants";
+import constants, { BUBBLE } from "../../helpers/constants";
 import { prepareLabelShapeItem } from "../../helpers/label";
 import { reflowLegend } from "../../helpers/legend";
 import { createRegion } from "../../helpers/region";
@@ -35,7 +35,7 @@ class BubbleMultipleDataset extends Bubble {
      * @public
      */
     load(graph) {
-        if (graph.content.length > 7) {
+        if (graph.content.length > BUBBLE.MAX_DATASETS_MULTIPLE_API) {
             console.warn(
                 "BubbleSingleDataset is limited to a maximum of 7 datasets"
             );

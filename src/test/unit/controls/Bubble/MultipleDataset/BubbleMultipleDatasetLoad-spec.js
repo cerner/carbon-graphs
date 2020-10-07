@@ -7,6 +7,7 @@ import {
 } from "../../../../../main/js/controls/Bubble";
 import constants, {
     AXIS_TYPE,
+    BUBBLE,
     COLORS
 } from "../../../../../main/js/helpers/constants";
 import errors from "../../../../../main/js/helpers/errors";
@@ -1145,7 +1146,7 @@ describe("Bubble Multiple Dataset - Load", () => {
             const graphContent = document.body.querySelectorAll(
                 `.${styles.bubbleGraphContent}`
             );
-            expect(graphContent.length).toBe(7);
+            expect(graphContent.length).toBe(BUBBLE.MAX_DATASETS_MULTIPLE_API);
         });
     });
 });
