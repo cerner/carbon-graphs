@@ -236,7 +236,8 @@ const getDataPointValues = (target) => target.internalValuesSubset;
  * @returns {undefined} - returns nothing
  */
 const enforceBubbleBlur = (target) => {
-    d3.selectAll(`.${styles.point}`)
+    d3.select(target.viewportElement)
+        .selectAll(`.${styles.point}`)
         .select("circle")
         .attr("fill-opacity", constants.DEFAULT_BUBBLE_BLUR_OPACITY)
         .attr("stroke-opacity", constants.DEFAULT_BUBBLE_BLUR_STROKE_OPACITY);
