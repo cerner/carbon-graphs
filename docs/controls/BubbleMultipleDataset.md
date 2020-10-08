@@ -5,8 +5,8 @@ A native bubble graph for multiple datasets using D3 based on standard design pa
 -   [Bubble](#bubble)
     -   [Usage](#usage)
         -   [Structure](#structure)
-            -   [Colored Bubbles](#colored-bubbles)
             -   [Weight Based Bubble](#weight-based-bubble)
+            -   [Colored Bubbles](#colored-bubbles)
             -   [Custom Size Based Bubble](#custom-size-based-bubble)
     -   [JSON Properties](#json-properties)
         -   [Root](#root)
@@ -149,7 +149,7 @@ bubbleColorBased.loadContent(Carbon.api.bubbleMultipleDataset(colorBasedData));
 
 #### Custom Size Based Bubble
 
-For a custom size bubble, provide `maxRadius` in weight as given below between (min and max) and maxRadius maxRadius is given precedence.
+For a custom size bubble, provide `maxRadius` in weight as given below between (min and max) and maxRadius is given precedence.
 
 ```javascript
 var customSizeBasedData = {
