@@ -29,7 +29,6 @@ import {
     calculateValuesRange,
     loadInput
 } from "./helpers/helpers";
-import BubbleConfig from "./BubbleConfig";
 
 /**
  * A Bubble graph is a graph used to represent a collection of data
