@@ -81,7 +81,7 @@ bubbleDefault.loadContent(Carbon.api.bubbleMultipleDataset(data));
 
 #### Weight Based Bubble
 
-For weight based bubble Graph, provide weight with min and max and also pass weight as third paramter in the values and the weight(third parameter) should be in the range of min and max provide in the weight.
+For weight based bubble Graph, provide a weight object with `min` and `max` values. For the individual bubbles in the values array, include `weight` along with its `x` and `y` coordinates.
 
 ```javascript
 
