@@ -29,6 +29,7 @@ import {
     getShapeForTarget
 } from "../../Graph/helpers/helpers";
 import { transformPoint } from "./translateHelpers";
+import { getDefaultValue } from "../../../core/BaseConfig";
 
 /**
  * @typedef TimelineContent
@@ -119,10 +120,28 @@ const getXAxisLabelXPosition = (config) =>
  * @param {object} config - config object derived from input JSON
  * @returns {number} Position for the label
  */
-const getXAxisLabelYPosition = (config) =>
-    getXAxisYPosition(config) +
-    config.axisLabelHeights.x * 2 +
-    config.padding.bottom * 4;
+const getXAxisLabelYPosition = (config) => {
+    const defaultLabelPosition =
+        getXAxisYPosition(config) +
+        config.axisLabelHeights.x * 2 +
+        config.padding.bottom * 4;
+    if (
+        utils.isUndefined(config.axisYPosition) ||
+        defaultLabelPosition >
+            getXAxisYPosition(config) +
+                config.axisLabelHeights.x * 2 +
+                config.axisYPosition
+    ) {
+        return defaultLabelPosition;
+    } else {
+        return (
+            getXAxisYPosition(config) +
+            config.axisLabelHeights.x * 2 +
+            config.axisYPosition +
+            config.padding.bottom * 3
+        );
+    }
+};
 /**
  * Prepares X,Y and Y2 Axes according to their scale and available container width and height
  *
@@ -211,8 +230,9 @@ const createAxes = (axis, scale, config, canvasSVG) => {
         .attr("aria-hidden", false)
         .attr(
             "transform",
-            `translate(${getXAxisXPosition(config)}, ${getXAxisYPosition(
-                config
+            `translate(${getXAxisXPosition(config)}, ${getDefaultValue(
+                config.axisYPosition,
+                getXAxisYPosition(config)
             )})`
         )
         .call(axis.x);

@@ -81,6 +81,7 @@ export const processInput = (input, config) => {
         rangeRounding: getDefaultValue(_axis.x.rangeRounding, true)
     });
     config.shownTargets = [];
+    config.axisYPosition = input.axisYPosition;
     return config;
 };
 
@@ -169,6 +170,14 @@ class TimelineConfig extends BaseConfig {
             !utils.isDate(this.input.axis.x.upperLimit)
         ) {
             throw new Error(errors.THROW_MSG_INVALID_AXIS_TYPE_VALUES);
+        }
+        if (
+            utils.isDefined(this.input.axisYPosition) &&
+            this.input.axisYPosition < 0
+        ) {
+            throw new Error(
+                errors.THROW_MSG_AXIS_Y_POSITION_CANNOT_BE_NEGATIVE
+            );
         }
         return this;
     }

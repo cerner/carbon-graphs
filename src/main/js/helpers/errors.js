@@ -48,6 +48,8 @@ export default {
     THROW_MSG_UNIQUE_LABEL_NOT_PROVIDED:
         "Invalid input format, unique label must be provided.",
     THROW_MSG_NO_CONTENT_DATA_LOADED: "Content data needs to be loaded.",
+    THROW_MSG_AXIS_Y_POSITION_CANNOT_BE_NEGATIVE:
+        "Axis Y position cannot be negative.",
     /**
      * @description Axes
      */

@@ -100,6 +100,7 @@ timelineDefault.loadContent(/* Data array D */);
 | showLabel              | boolean  | true                                           | Toggle to show X axis label                                                          |
 | showLegend             | boolean  | true                                           | Toggle to show graph legend                                                          |
 | throttle               | number   | (1000/60) => time in ms                        | Delay between resize of a browser window                                             |
+| axisYPosition          | number   | undefined                                      | Sets the position of axis in y direction                                             |
 
 ### Axis
 

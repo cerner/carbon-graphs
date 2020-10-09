@@ -55,9 +55,13 @@ const setCanvasWidth = (container, config) => {
  * @returns {undefined} - returns nothing
  */
 const setCanvasHeight = (config) => {
-    config.canvasHeight =
-        getYAxisHeight(config) +
-        (config.padding.bottom * 2 + config.padding.top) * 2;
+    config.canvasHeight = config.axisYPosition
+        ? getYAxisHeight(config) +
+          (config.padding.bottom * 2 + config.padding.top) * 2 +
+          config.axisYPosition
+        : getYAxisHeight(config) +
+          (config.padding.bottom * 2 + config.padding.top) * 2;
+    return config.canvasHeight;
 };
 /**
  * Data point sets can be loaded using this function.

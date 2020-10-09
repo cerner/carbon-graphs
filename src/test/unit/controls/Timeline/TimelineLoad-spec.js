@@ -27,6 +27,7 @@ import {
     secondaryValuesJSON,
     valuesJSON
 } from "./helpers";
+import { getSVGAnimatedTransformList } from "../../../../main/js/helpers/transformUtils";
 
 describe("Timeline - Load", () => {
     let input;
@@ -127,6 +128,20 @@ describe("Timeline - Load", () => {
                 timeline.loadContent(getData(valuesJSON));
             }).toThrowError(errors.THROW_MSG_UNIQUE_KEY_NOT_PROVIDED);
         });
+        it("Throws error for when axisYPosition value is less than 0", () => {
+            expect(() => {
+                timeline = new Timeline(
+                    Object.assign(
+                        {
+                            axisYPosition: -1
+                        },
+                        getAxes(axisJSON)
+                    )
+                );
+            }).toThrowError(
+                errors.THROW_MSG_AXIS_Y_POSITION_CANNOT_BE_NEGATIVE
+            );
+        });
     });
     it("Clones the input object correctly", () => {
         expect(timeline.contentConfig[0].config.key).toBe(input.key);
@@ -212,6 +227,80 @@ describe("Timeline - Load", () => {
         expect(getXAxisYPosition(timeline.config)).toEqual(
             (config.padding.top + config.padding.bottom) * 2
         );
+    });
+    describe("When axisYPosition is provided", () => {
+        beforeEach(() => {
+            timeline.destroy();
+            input = getData(valuesJSON);
+            const config = getAxes(axisJSON);
+            timeline = new Timeline(
+                Object.assign(
+                    {
+                        axisYPosition: 10
+                    },
+                    config
+                )
+            );
+            timeline.loadContent(input);
+        });
+        it("check  position of axis in container", () => {
+            const axisGroup = document.querySelector(`.${styles.axisX}`);
+            const translate = getSVGAnimatedTransformList(
+                axisGroup.getAttribute("transform")
+            ).translate;
+            expect(translate[1]).toEqual(timeline.config.axisYPosition);
+        });
+        it("check height of graph container", () => {
+            const canvas = d3.select(`.${styles.canvas}`);
+            const canvasHeight =
+                getYAxisHeight(timeline.config) +
+                (timeline.config.padding.bottom * 2 +
+                    timeline.config.padding.top) *
+                    2 +
+                timeline.config.axisYPosition;
+            expect(toNumber(canvas.attr("height"))).toEqual(canvasHeight);
+        });
+        describe("check position of label", () => {
+            it(" when axisYPosition is small", () => {
+                const labelGroup = document.querySelector(
+                    `.${styles.axisLabelX}`
+                );
+                const translate = getSVGAnimatedTransformList(
+                    labelGroup.getAttribute("transform")
+                ).translate;
+                expect(translate[1]).toEqual(
+                    getXAxisYPosition(timeline.config) +
+                        timeline.config.axisLabelHeights.x * 2 +
+                        timeline.config.padding.bottom * 4
+                );
+            });
+            it(" when axisYPosition is large", () => {
+                timeline.destroy();
+                input = getData(valuesJSON);
+                const config = getAxes(axisJSON);
+                timeline = new Timeline(
+                    Object.assign(
+                        {
+                            axisYPosition: 100
+                        },
+                        config
+                    )
+                );
+                timeline.loadContent(input);
+                const labelGroup = document.querySelector(
+                    `.${styles.axisLabelX}`
+                );
+                const translate = getSVGAnimatedTransformList(
+                    labelGroup.getAttribute("transform")
+                ).translate;
+                expect(translate[1]).toEqual(
+                    getXAxisYPosition(timeline.config) +
+                        timeline.config.axisLabelHeights.x * 2 +
+                        timeline.config.padding.bottom * 3 +
+                        timeline.config.axisYPosition
+                );
+            });
+        });
     });
     describe("Draws the graph", () => {
         let input = null;
