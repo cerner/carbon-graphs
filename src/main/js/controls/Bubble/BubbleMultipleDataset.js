@@ -37,7 +37,7 @@ class BubbleMultipleDataset extends Bubble {
     load(graph) {
         if (graph.content.length > BUBBLE.MAX_DATASETS_MULTIPLE_API) {
             console.warn(
-                "BubbleSingleDataset is limited to a maximum of 7 datasets"
+                "BubbleMultipleDataset is limited to a maximum of 7 datasets"
             );
             return this;
         }

@@ -286,7 +286,6 @@ Palette: BUBBLE.PALETTE.ORANGE
 | ORANGE        |
 | PINK          |
 | PURPLE        |
-| GRAY          |
 
 ### Values
 
