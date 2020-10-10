@@ -86,7 +86,7 @@ export const generateColorSingleDataset = (dataTarget) => {
         }
     }
 
-   huePaletteList = d3
+    huePaletteList = d3
         .scaleQuantile()
         .domain(d3.extent(radiusData))
         .range(color);

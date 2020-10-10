@@ -46,7 +46,7 @@ import {
 class Bubble extends GraphContent {
     /**
      * @class
-     * @param {BubbleConfig} input - Input JSON instance created using GraphConfig
+     * @param {object} input - Input JSON instance created using GraphConfig
      */
     constructor(input) {
         super();
