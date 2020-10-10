@@ -316,7 +316,7 @@ hue: {
 
 ### Regions
 
-Each data-set can have 1 or more regions. `start` and `end` is necessary for rendering a horizontal area.
+Each dataset can have 1 or more regions. `start` and `end` is necessary for rendering a horizontal area.
 
 #### Required
 
@@ -334,4 +334,4 @@ Each data-set can have 1 or more regions. `start` and `end` is necessary for ren
 
 ### Constraints
 
--   If data-set `label` display is not provided then the legend item will not be shown as well
+-   If the dataset's `label` property is undefined, then it will not be shown in the legend.
