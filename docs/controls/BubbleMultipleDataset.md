@@ -218,13 +218,12 @@ Each bubble can have a legendOptions object in [Values](#values) level.
 
 ### Weight
 
-For weight based bubble provide weight with `min` and `max`, each bubble can have a weight object in [Values](#values) level.
+For a weight based bubble, provide weight with `min` and `max`, with each bubble having a weight property among their [values](#values).
 
 ```
 weight: {
     min: 10,
-    max: 30,
-    maxRadius: 30
+    max: 30
 }
 ```
 
