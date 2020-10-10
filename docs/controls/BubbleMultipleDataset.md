@@ -149,7 +149,7 @@ bubbleColorBased.loadContent(Carbon.api.bubbleMultipleDataset(colorBasedData));
 
 #### Custom Size Based Bubble
 
-For a custom size bubble, provide `maxRadius` in weight as given below between (min and max) and maxRadius is given precedence.
+For a custom size bubble, provide `maxRadius` in the weight object. `maxRadius` takes priority over the `min` and `max` properties if they are provided.
 
 ```javascript
 var customSizeBasedData = {
