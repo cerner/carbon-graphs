@@ -6,8 +6,7 @@ import { reflowLegend } from "../../helpers/legend";
 import {
     createRegion,
     hideAllRegions,
-    translateRegion,
-    areRegionsIdentical
+    translateRegion
 } from "../../helpers/region";
 import styles from "../../helpers/styles";
 import utils from "../../helpers/utils";
@@ -106,16 +105,7 @@ class BubbleSingleDataset extends Bubble {
      * @inheritdoc
      */
     resize(graph) {
-        if (utils.notEmpty(this.dataTarget.regions)) {
-            if (graph.content.length > 1 && !graph.config.shouldHideAllRegion) {
-                if (areRegionsIdentical(graph.svg)) {
-                    graph.config.shouldHideAllRegion = false;
-                } else {
-                    hideAllRegions(graph.svg);
-                    graph.config.shouldHideAllRegion = true;
-                }
-            }
-        } else {
+        if (utils.isEmpty(this.dataTarget.regions)) {
             hideAllRegions(graph.svg);
             graph.config.shouldHideAllRegion = true;
         }
