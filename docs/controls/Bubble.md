@@ -263,23 +263,28 @@ Each bubble can have a legendOptions object in [Values](#values) level.
 
 ### Weight
 
-For a weight based bubble, provide weight with `min` and `max`, with each bubble having a weight property among their [values](#values).
+For a weight based bubble, provide weight with `min` and `max`, with each bubble having a weight property among their [values](#values). For custom sized bubbles across the dataset, provide `maxRadius` instead.
 
-```
+```javascript
 weight: {
     min: 10,
     max: 30,
+}
+
+// OR
+
+weight: {
     maxRadius: 30
 }
 ```
 
 #### Optional
 
-| Property Name | Expected | Default   | Description                              |
-| ------------- | -------- | --------- | ---------------------------------------- |
-| min           | number   | undefined | Min value for the weight based bubble    |
-| max           | number   | undefined | Max value for the weight based bubble    |
-| maxRadius     | number   | 30        | For custom size bubble provide maxRadius |
+| Property Name | Expected | Default   | Description                                                                              |
+| ------------- | -------- | --------- | ---------------------------------------------------------------------------------------- |
+| min           | number   | undefined | Min value for the weight based bubble                                                    |
+| max           | number   | undefined | Max value for the weight based bubble                                                    |
+| maxRadius     | number   | 30        | Used to set a single weight for all bubbles in the dataset and overrides `max` and `min` |
 
 ### Hue
 
