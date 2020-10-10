@@ -119,7 +119,7 @@ bubbleWeight.loadContent(Carbon.api.bubbleMultipleDataset(dataWeightBased));
 
 #### Colored Bubbles
 
-For colored Bubbles, provide `color`:
+Provide a `color` from the [single color palette](../../README.md#colors) to apply to all bubbles:
 
 ```javascript
 var colorBasedData = {
@@ -127,7 +127,7 @@ var colorBasedData = {
     label: {
         display: "Data Label 2"
     },
-    color: BUBBLE.PALETTE.ORANGE,
+    color: Carbon.helpers.COLORS.GREEN,
     values: [
         {
             x: "2016-03-01T12:00:00Z",
