@@ -12,13 +12,8 @@ import {
     transformPoint,
     dataPointActionHandler,
     getDataPointValues,
-    decideRadius,
     areWeightsDefined
 } from "./helpers";
-
-/**
- * @typedef Bubble
- */
 
 /**
  * Draws the bubble graph on the canvas element. This calls the Graph API to render the following first
@@ -165,4 +160,17 @@ const decideColor = (dataTarget, value) => {
     }
 };
 
-export { draw, drawBubbles };
+const decideRadius = (dataTarget, value) => {
+    if (
+        areWeightsDefined(dataTarget) &&
+        utils.isUndefined(dataTarget.weight.fixedRadius)
+    ) {
+        return bubbleScale(dataTarget)(value.weight);
+    } else if (utils.isUndefined(dataTarget.weight)) {
+        return constants.DEFAULT_BUBBLE_RADIUS_MAX;
+    } else {
+        return dataTarget.weight.fixedRadius;
+    }
+};
+
+export { draw, drawBubbles, decideRadius };

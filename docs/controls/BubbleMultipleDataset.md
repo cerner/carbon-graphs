@@ -7,7 +7,7 @@ A native bubble graph for multiple datasets using D3 based on standard design pa
         -   [Structure](#structure)
             -   [Weight Based Bubble](#weight-based-bubble)
             -   [Colored Bubbles](#colored-bubbles)
-            -   [Custom Size Based Bubble](#custom-size-based-bubble)
+            -   [Custom Size Based Bubble](#custom-sized-bubble)
     -   [JSON Properties](#json-properties)
         -   [Root](#root)
         -   [Data](#data)
@@ -147,9 +147,11 @@ bubbleColorBased = Carbon.api.graph(root);
 bubbleColorBased.loadContent(Carbon.api.bubbleMultipleDataset(colorBasedData));
 ```
 
-#### Custom Size Based Bubble
+#### Custom Sized Bubble
 
-For a custom size bubble, provide `maxRadius` in the weight object. `maxRadius` takes priority over the `min` and `max` properties if they are provided.
+For a custom size bubble, provide `fixedRadius` in the weight object. `fixedRadius` takes priority over the `min` and `max` properties if they are provided.
+
+_Note: this property was formerly known as `maxRadius` in the [old Bubble API](./Bubble.md)_
 
 ```javascript
 var customSizeBasedData = {
@@ -158,7 +160,7 @@ var customSizeBasedData = {
         display: "Data Label 2"
     },
     weight: {
-        maxRadius: 10
+        fixedRadius: 10
     }
     values: [
         {
@@ -196,15 +198,15 @@ Refer [Graph](../core/Graph.md) `Root` for more details.
 
 #### Optional
 
-| Property Name | Expected | Default      | Description                                                                               |
-| ------------- | -------- | ------------ | ----------------------------------------------------------------------------------------- |
-| color         | string   | COLORS.BLACK | Color for the bubbles                                                                     |
-| onClick       | Function | undefined    | Any action that can be performed when clicking on the data point                          |
-| label         | object   | {}           | Display value for the data-set which the data points belong to                            |
-| legendOptions | object   | undefined    | Toggle to show legend. Refer [LegendOptions](#legendOptions)                              |
-| regions       | array    | []           | Refer [Regions](#regions)                                                                 |
-| weight        | object   | {}           | Provide min and max or maxRadius for weight based or custom sized bubble[Weight](#Weight) |
-| yAxis         | string   | "y"          | Setting for using different Y based axis. For now: its either Y or Y2                     |
+| Property Name | Expected | Default      | Description                                                                                                     |
+| ------------- | -------- | ------------ | --------------------------------------------------------------------------------------------------------------- |
+| color         | string   | COLORS.BLACK | Color for the bubbles                                                                                           |
+| onClick       | Function | undefined    | Any action that can be performed when clicking on the data point                                                |
+| label         | object   | {}           | Display value for the data-set which the data points belong to                                                  |
+| legendOptions | object   | undefined    | Toggle to show legend. Refer to [LegendOptions](#legendOptions)                                                 |
+| regions       | array    | []           | Refer to [Regions](#regions)                                                                                    |
+| weight        | object   | {}           | Provide `min` and `max` for weight based or `fixedRadius` for a custom sized bubble. Refer to [Weight](#Weight) |
+| yAxis         | string   | "y"          | Setting for using different Y based axis. For now: its either Y or Y2                                           |
 
 ### LegendOptions
 
@@ -218,7 +220,9 @@ Each bubble can have a legendOptions object in [Values](#values) level.
 
 ### Weight
 
-For a weight based bubble, provide weight with `min` and `max`, with each bubble having a weight property among their [values](#values). For custom sized bubbles across the dataset, provide `maxRadius` instead.
+For a weight based bubble, provide weight with `min` and `max`, with each bubble having a weight property among their [values](#values). For custom sized bubbles across the dataset, provide `fixedRadius` instead.
+
+_Note: this property was formerly known as `maxRadius` in the [old Bubble API](./Bubble.md)_
 
 ```javascript
 weight: {
@@ -229,7 +233,7 @@ weight: {
 // OR
 
 weight: {
-    maxRadius: 30
+    fixedRadius: 30
 }
 ```
 
@@ -239,7 +243,7 @@ weight: {
 | ------------- | -------- | --------- | ---------------------------------------------------------------------------------------- |
 | min           | number   | undefined | Min value for the weight based bubble                                                    |
 | max           | number   | undefined | Max value for the weight based bubble                                                    |
-| maxRadius     | number   | 30        | Used to set a single weight for all bubbles in the dataset and overrides `max` and `min` |
+| fixedRadius   | number   | 30        | Used to set a single weight for all bubbles in the dataset and overrides `max` and `min` |
 
 ### Values
 

@@ -296,7 +296,7 @@ describe("Bubble Multiple Dataset - Load", () => {
                 graphDefault = new Graph(getAxes(axisDefault));
                 input = getInput(valuesDefault, false, false);
                 input.weight = {
-                    maxRadius: 12
+                    fixedRadius: 12
                 };
                 const bubble = new BubbleMultipleDataset(input);
                 graphDefault.loadContent(bubble);

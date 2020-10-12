@@ -88,7 +88,7 @@ const data = {
     values: [
         {
             x: new Date(2016, 0, 1, 12, 0).toISOString(),
-            y: 50
+            y: 70
         },
         {
             x: new Date(2016, 0, 1, 15, 45).toISOString(),
@@ -96,7 +96,7 @@ const data = {
         },
         {
             x: new Date(2016, 0, 1, 10, 30).toISOString(),
-            y: 130
+            y: 160
         },
         {
             x: new Date(2016, 0, 1, 18, 0).toISOString(),
@@ -233,7 +233,7 @@ const data5 = {
     color: Carbon.helpers.COLORS.LIGHT_BLUE,
     onClick: loadPopup,
     weight: {
-        // when providing maxRadius maxRadius will be given preference
+        // when providing maxRadius, it will be given preference
         maxRadius: 12
     },
     values: [
@@ -405,12 +405,13 @@ export const renderGraphBubbleSingleDataset = (id) => {
 };
 
 export const renderGraphBubbleMultipleDataset = (id) => {
-    const bubbleGraph = Carbon.api.graph(axisData(`#${id}`));
-    data2.color = Carbon.helpers.COLORS.GREEN;
-    data2.label.display = "Bubble Set A";
-    data6.label.display = "Bubble Set B";
-    bubbleGraph.loadContent(Carbon.api.bubbleMultipleDataset(data2));
-    bubbleGraph.loadContent(Carbon.api.bubbleMultipleDataset(data6));
+    const bubbleGraph = Carbon.api.graph(temperatureAxisData(`#${id}`));
+    data.color = Carbon.helpers.COLORS.PURPLE;
+    data3.color = Carbon.helpers.COLORS.BLUE;
+    data.label.display = "Bubble Set A";
+    data3.label.display = "Bubble Set B";
+    bubbleGraph.loadContent(Carbon.api.bubbleMultipleDataset(data));
+    bubbleGraph.loadContent(Carbon.api.bubbleMultipleDataset(data3));
 
     return bubbleGraph;
 };

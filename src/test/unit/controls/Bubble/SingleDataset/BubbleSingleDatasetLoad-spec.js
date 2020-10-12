@@ -278,7 +278,7 @@ describe("Bubble Single Dataset - Load", () => {
                 graphDefault = new Graph(getAxes(axisDefault));
                 input = getInput(valuesDefault, false, false);
                 input.weight = {
-                    maxRadius: 12
+                    fixedRadius: 12
                 };
                 const bubble = new BubbleSingleDataset(input);
                 graphDefault.loadContent(bubble);
