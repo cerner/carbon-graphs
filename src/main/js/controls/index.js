@@ -6,7 +6,7 @@ import PairedResult from "./PairedResult";
 import Pie from "./Pie";
 import Timeline from "./Timeline";
 import Scatter from "./Scatter";
-import Bubble from "./Bubble";
+import { Bubble, BubbleSingleDataset, BubbleMultipleDataset } from "./Bubble";
 
 /**
  * @module api
@@ -17,6 +17,8 @@ import Bubble from "./Bubble";
  * @property {object} pairedResult Paired Result graph based on Graph
  * @property {object} timeline Timeline graph based on Construct
  * @property {object} bubble Bubble graph based on Graph
+ * @property {object} bubbleSingleDataset Bubble graph based on Graph for single datasets
+ * @property {object} bubbleMultipleDataset Bubble graph based on Graph for multiple datasets
  * @enum {object}
  */
 export default {
@@ -28,5 +30,7 @@ export default {
     pie: (input) => new Pie(input),
     bar: (input) => new Bar(input),
     scatter: (input) => new Scatter(input),
-    bubble: (input) => new Bubble(input)
+    bubble: (input) => new Bubble(input),
+    bubbleSingleDataset: (input) => new BubbleSingleDataset(input),
+    bubbleMultipleDataset: (input) => new BubbleMultipleDataset(input)
 };

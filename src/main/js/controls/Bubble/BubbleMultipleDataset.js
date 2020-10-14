@@ -1,34 +1,20 @@
 "use strict";
-import { GraphContent } from "../../core";
-import { getDefaultValue } from "../../core/BaseConfig";
-import constants from "../../helpers/constants";
-import {
-    prepareLabelShapeItem,
-    removeLabelShapeItem
-} from "../../helpers/label";
-import { removeLegendItem, reflowLegend } from "../../helpers/legend";
-import {
-    createRegion,
-    hideAllRegions,
-    removeRegion,
-    translateRegion,
-    areRegionsIdentical
-} from "../../helpers/region";
+import constants, { BUBBLE } from "../../helpers/constants";
+import { prepareLabelShapeItem } from "../../helpers/label";
+import { reflowLegend } from "../../helpers/legend";
+import { createRegion } from "../../helpers/region";
 import styles from "../../helpers/styles";
 import utils from "../../helpers/utils";
 import {
-    clear,
     clickHandler,
-    draw,
     hoverHandler,
     prepareLegendItems,
     processDataPoints,
-    translateBubbleGraph,
     getDataPointValues,
-    drawBubbles,
-    calculateValuesRange,
-    loadInput
+    calculateValuesRange
 } from "./helpers/helpers";
+import { draw, drawBubbles } from "./helpers/helpersMultipleDataset";
+import Bubble from "./Bubble";
 
 /**
  * A Bubble graph is a graph used to represent a collection of data
@@ -41,34 +27,20 @@ import {
  *  * Destroy
  *
  * @module Bubble
- * @class Bubble
+ * @class BubbleMultipleDataset
  */
-class Bubble extends GraphContent {
-    /**
-     * @class
-     * @param {object} input - Input JSON instance created using GraphConfig
-     */
-    constructor(input) {
-        super();
-        this.config = loadInput(input);
-        this.config.yAxis = getDefaultValue(
-            this.config.yAxis,
-            constants.Y_AXIS
-        );
-        this.valuesRange = calculateValuesRange(
-            this.config.values,
-            this.config.yAxis
-        );
-        this.dataTarget = {};
-    }
-
+class BubbleMultipleDataset extends Bubble {
     /**
      * @inheritdoc
+     * @public
      */
     load(graph) {
-        console.warn(
-            "Bubble will be deprecated in a future release. Please use BubbleSingleDataset or BubbleMultipleDataset"
-        );
+        if (graph.content.length > BUBBLE.MAX_DATASETS_MULTIPLE_API) {
+            console.warn(
+                "BubbleMultipleDataset is limited to a maximum of 7 datasets"
+            );
+            return this;
+        }
 
         this.dataTarget = processDataPoints(graph.config, this.config);
         draw(graph.scale, graph.config, graph.svg, this.dataTarget);
@@ -104,51 +76,17 @@ class Bubble extends GraphContent {
         return this;
     }
 
-    /**
-     * @inheritdoc
-     */
-    unload(graph) {
-        clear(graph.svg, this.dataTarget);
-        removeRegion(
-            graph.svg.select(`.${styles.regionGroup}`),
-            this.dataTarget
-        );
-        removeLegendItem(graph.legendSVG, this.dataTarget);
-        removeLabelShapeItem(
-            graph.axesLabelShapeGroup[this.config.yAxis],
-            this.dataTarget,
-            graph.config
-        );
-        this.dataTarget = {};
-        this.config = {};
-        return this;
-    }
+    // /**
+    //  * @inheritdoc
+    //  */
+    // unload(graph) { ... }
+    //  inherited from class Bubble
 
-    /**
-     * @inheritdoc
-     */
-    resize(graph) {
-        if (utils.notEmpty(this.dataTarget.regions)) {
-            if (graph.content.length > 1 && !graph.config.shouldHideAllRegion) {
-                if (areRegionsIdentical(graph.svg)) {
-                    graph.config.shouldHideAllRegion = false;
-                } else {
-                    hideAllRegions(graph.svg);
-                    graph.config.shouldHideAllRegion = true;
-                }
-            }
-        } else {
-            hideAllRegions(graph.svg);
-            graph.config.shouldHideAllRegion = true;
-        }
-        translateRegion(
-            graph.scale,
-            graph.config,
-            graph.svg.select(`.${styles.regionGroup}`)
-        );
-        translateBubbleGraph(graph.scale, graph.svg, graph.config);
-        return this;
-    }
+    // /**
+    //  * @inheritdoc
+    //  */
+    // resize(graph) { ... }
+    //  inherited from class Bubble
 
     /**
      * @inheritdoc
@@ -209,14 +147,11 @@ class Bubble extends GraphContent {
         );
     }
 
-    /**
-     * @inheritdoc
-     */
-    redraw(graph) {
-        clear(graph.svg, this.dataTarget);
-        draw(graph.scale, graph.config, graph.svg, this.dataTarget);
-        return this;
-    }
+    // /**
+    //  * @inheritdoc
+    //  */
+    // redraw(graph) { ... }
+    //  inherited from class Bubble
 }
 
-export default Bubble;
+export default BubbleMultipleDataset;

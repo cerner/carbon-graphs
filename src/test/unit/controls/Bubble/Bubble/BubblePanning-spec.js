@@ -1,16 +1,16 @@
 "use strict";
-import Bubble from "../../../../main/js/controls/Bubble";
-import Graph from "../../../../main/js/controls/Graph/Graph";
-import { COLORS, SHAPES } from "../../../../main/js/helpers/constants";
-import styles from "../../../../main/js/helpers/styles";
-import { getSVGAnimatedTransformList } from "../../../../main/js/helpers/transformUtils";
-import utils from "../../../../main/js/helpers/utils";
+import { Bubble } from "../../../../../main/js/controls/Bubble";
+import Graph from "../../../../../main/js/controls/Graph/Graph";
+import { COLORS, SHAPES } from "../../../../../main/js/helpers/constants";
+import styles from "../../../../../main/js/helpers/styles";
+import { getSVGAnimatedTransformList } from "../../../../../main/js/helpers/transformUtils";
+import utils from "../../../../../main/js/helpers/utils";
 import {
     delay,
     loadCustomJasmineMatcher,
     PADDING_BOTTOM,
     toNumber
-} from "../../helpers/commonHelpers";
+} from "../../../helpers/commonHelpers";
 import {
     axisTimeSeries,
     getAxes,
@@ -18,13 +18,21 @@ import {
     valuesTimeSeries,
     fetchAllElementsByClass,
     fetchElementByClass
-} from "./helpers";
+} from "../helpers";
 
 describe("Bubble - Panning", () => {
     let graphDefault = null;
     let bubbleGraphContainer;
+    let consolewarn;
+
     beforeAll(() => {
         loadCustomJasmineMatcher();
+        // to supress warnings
+        consolewarn = console.warn;
+        console.warn = () => {};
+    });
+    afterAll(() => {
+        console.warn = consolewarn;
     });
     beforeEach(() => {
         bubbleGraphContainer = document.createElement("div");

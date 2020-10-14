@@ -1,6 +1,4 @@
-# Bubble
-
-**Note: Bubble will be deprecated in a future release. Use [BubbleSingleDataset](./BubbleSingleDataset.md) or [BubbleMultipleDataset](./BubbleMultipleDataset.md).**
+# Bubble Single Dataset
 
 A native bubble graph using D3 based on standard design patterns.
 
@@ -10,7 +8,7 @@ A native bubble graph using D3 based on standard design patterns.
             -   [Weight Based Bubble](#weight-based-bubble)
             -   [Color Based Bubble](#color-based-bubble)
             -   [Weight Color Based Bubble](#weight-color-based-bubble)
-            -   [Custom Size Based Bubble](#custom-size-based-bubble)
+            -   [Custom Size Based Bubble](#custom-sized-bubble)
     -   [JSON Properties](#json-properties)
         -   [Root](#root)
         -   [Data](#data)
@@ -45,12 +43,6 @@ var root = {
             label: "Some Y Label",
             lowerLimit: 0,
             upperLimit: 20
-        },
-        y2: {
-            show: false,
-            label: "Some Y2 Label",
-            lowerLimit: 0,
-            upperLimit: 250
         }
     }
 };
@@ -115,12 +107,12 @@ var dataWeightBased = {
     ]
 };
 var bubbleWeight = Carbon.api.graph(root);
-bubbleWeight.loadContent(Carbon.api.bubble(dataWeightBased));
+bubbleWeight.loadContent(Carbon.api.bubbleSingleDataset(dataWeightBased));
 ```
 
 #### Color Based Bubble
 
-For a Color Based Bubble Graph, provide hue with lowerShade and upperShade, load the following content:
+For a Color Based Bubble Graph, provide `palette` and load the following content:
 
 ```javascript
 var colorBasedData = {
@@ -128,10 +120,7 @@ var colorBasedData = {
     label: {
         display: "Data Label 2"
     },
-    hue: {
-        lowerShade: "#ffff00",
-        upperShade: "#ff0000"
-    }
+    palette: BUBBLE.PALETTE.ORANGE,
     values: [
         {
             x: "2016-03-01T12:00:00Z",
@@ -148,12 +137,12 @@ var colorBasedData = {
     ]
 };
 bubbleColorBased = Carbon.api.graph(root);
-bubbleColorBased.loadContent(Carbon.api.bubble(colorBasedData));
+bubbleColorBased.loadContent(Carbon.api.bubbleSingleDataset(colorBasedData));
 ```
 
 #### Weight Color Based Bubble
 
-For a Weight and Color Based Bubble Graph, provide hue with lowerShade and upperShade, also provide weight with min and max also pass weight(thrid parameter)in the values as below content:
+For a Weight and Color Based Bubble Graph, provide `palette` with a color shades reference [see valid values](###palette) and a weight object with a `min` and `max` value:
 
 ```javascript
 var weightColorBasedData = {
@@ -165,10 +154,7 @@ var weightColorBasedData = {
         min: 10,
         max: 50
     }
-    hue: {
-        lowerShade: "#ffff00",
-        upperShade: "#ff0000"
-    }
+    palette: BUBBLE.PALETTE.ORANGE,
     values: [
         {
             x: "2016-03-01T12:00:00Z",
@@ -188,12 +174,14 @@ var weightColorBasedData = {
     ]
 };
 bubbleWeightColorBased = Carbon.api.graph(root);
-bubbleWeightColorBased.loadContent(Carbon.api.bubble(weightColorBasedData));
+bubbleWeightColorBased.loadContent(Carbon.api.bubbleSingleDataset(weightColorBasedData));
 ```
 
-#### Custom Size Based Bubble
+#### Custom Sized Bubble
 
-For a custom size bubble, provide `maxRadius` in the weight object. `maxRadius` takes priority over the `min` and `max` properties if they are provided.
+For a custom size bubble, provide `fixedRadius` in the weight object. `fixedRadius` takes priority over the `min` and `max` properties if they are provided.
+
+_Note: this property was formerly known as `maxRadius` in the [old Bubble API](./Bubble.md)_
 
 ```javascript
 var customSizeBasedData = {
@@ -202,7 +190,7 @@ var customSizeBasedData = {
         display: "Data Label 2"
     },
     weight: {
-        maxRadius: 10
+        fixedRadius: 10
     }
     values: [
         {
@@ -220,7 +208,7 @@ var customSizeBasedData = {
     ]
 };
 bubbleGraph = Carbon.api.graph(root);
-bubbleGraph.loadContent(Carbon.api.bubble(customSizeBasedData));
+bubbleGraph.loadContent(Carbon.api.bubbleSingleDataset(customSizeBasedData));
 ```
 
 ## JSON Properties
@@ -231,6 +219,8 @@ Refer [Graph](../core/Graph.md) `Root` for more details.
 
 ### Data
 
+BubbleSingleDataset is limited to 1 dataset. All subsequent datasets are ignored.
+
 #### Required
 
 | Property Name | Expected | Description                             |
@@ -240,16 +230,16 @@ Refer [Graph](../core/Graph.md) `Root` for more details.
 
 #### Optional
 
-| Property Name | Expected | Default      | Description                                                                               |
-| ------------- | -------- | ------------ | ----------------------------------------------------------------------------------------- |
-| color         | string   | COLORS.BLACK | Color for the bubbles                                                                     |
-| onClick       | Function | undefined    | Any action that can be performed when clicking on the data point                          |
-| hue           | object   | {}           | Provide lowerShade and upperShadefor color based bubble [Hue](#Hue)                       |
-| label         | object   | {}           | Display value for the data-set which the data points belong to                            |
-| legendOptions | object   | undefined    | Toggle to show legend. Refer [LegendOptions](#legendOptions)                              |
-| regions       | array    | []           | Refer [Regions](#regions)                                                                 |
-| weight        | object   | {}           | Provide min and max or maxRadius for weight based or custom sized bubble[Weight](#Weight) |
-| yAxis         | string   | "y"          | Setting for using different Y based axis. For now: its either Y or Y2                     |
+| Property Name | Expected | Default      | Description                                                                                                     |
+| ------------- | -------- | ------------ | --------------------------------------------------------------------------------------------------------------- |
+| color         | string   | COLORS.BLACK | Single color for the bubbles. Overrides `palette` when both are provided.                                       |
+| label         | object   | {}           | Display value for the data-set which the data points belong to                                                  |
+| legendOptions | object   | undefined    | Toggle to show legend. Refer to [LegendOptions](#legendOptions)                                                 |
+| onClick       | Function | undefined    | Any action that can be performed when clicking on the data point                                                |
+| palette       | Function | undefined    | Set of shades to be used for color based bubbles. Only works for datasets of <=4 datapoints                     |
+| regions       | array    | []           | Refer to [Regions](#regions)                                                                                    |
+| weight        | object   | {}           | Provide `min` and `max` for weight based or `fixedRadius` for a custom sized bubble. Refer to [Weight](#Weight) |
+| yAxis         | string   | "y"          | Setting for using different Y based axis. For now: its either Y or Y2                                           |
 
 ### LegendOptions
 
@@ -263,7 +253,9 @@ Each bubble can have a legendOptions object in [Values](#values) level.
 
 ### Weight
 
-For a weight based bubble, provide weight with `min` and `max`, with each bubble having a weight property among their [values](#values). For custom sized bubbles across the dataset, provide `maxRadius` instead.
+For a weight based bubble, provide weight with `min` and `max`, with each bubble having a weight property among their [values](#values). For custom sized bubbles across the dataset, provide `fixedRadius` instead.
+
+_Note: this property was formerly known as `maxRadius` in the [old Bubble API](./Bubble.md)_
 
 ```javascript
 weight: {
@@ -274,7 +266,7 @@ weight: {
 // OR
 
 weight: {
-    maxRadius: 30
+    fixedRadius: 30
 }
 ```
 
@@ -284,25 +276,25 @@ weight: {
 | ------------- | -------- | --------- | ---------------------------------------------------------------------------------------- |
 | min           | number   | undefined | Min value for the weight based bubble                                                    |
 | max           | number   | undefined | Max value for the weight based bubble                                                    |
-| maxRadius     | number   | 30        | Used to set a single weight for all bubbles in the dataset and overrides `max` and `min` |
+| fixedRadius   | number   | 30        | Used to set a single weight for all bubbles in the dataset and overrides `max` and `min` |
 
-### Hue
+### Palette
 
-For color based bubble provide `lowerShade` and `upperShade` inside hue it's necessary.
+For color based bubble provide a color constant for the shades. Only works if datapoints are <= 4 and if `color` is undefined
 
 ```
-hue: {
-    lowerShade: "#ffff00",
-    upperShade: "#ff0000"
-}
+Palette: BUBBLE.PALETTE.ORANGE
 ```
 
-#### Required
+#### Acceptable values
 
-| Property Name | Expected | Default   | Description                        |
-| ------------- | -------- | --------- | ---------------------------------- |
-| lowerShade    | string   | undefined | Lower shade for color based bubble |
-| upperShade    | string   | undefined | Upper shade for color based bubble |
+| Property Name |
+| ------------- |
+| BLUE          |
+| GREEN         |
+| ORANGE        |
+| PINK          |
+| PURPLE        |
 
 ### Values
 

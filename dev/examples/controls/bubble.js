@@ -1,6 +1,7 @@
 import Carbon from "../../../src/main/js/carbon";
 import { loadPopup, loadBubblePopup } from "../popup";
 import { createPanningControls } from "../panHelpers";
+import { BUBBLE } from "../../../src/main/js/helpers/constants";
 
 const simpleAxisData = (id) => ({
     bindTo: id,
@@ -87,7 +88,7 @@ const data = {
     values: [
         {
             x: new Date(2016, 0, 1, 12, 0).toISOString(),
-            y: 50
+            y: 70
         },
         {
             x: new Date(2016, 0, 1, 15, 45).toISOString(),
@@ -95,7 +96,7 @@ const data = {
         },
         {
             x: new Date(2016, 0, 1, 10, 30).toISOString(),
-            y: 130
+            y: 160
         },
         {
             x: new Date(2016, 0, 1, 18, 0).toISOString(),
@@ -232,7 +233,7 @@ const data5 = {
     color: Carbon.helpers.COLORS.LIGHT_BLUE,
     onClick: loadPopup,
     weight: {
-        // when providing maxRadius maxRadius will be given preference
+        // when providing maxRadius, it will be given preference
         maxRadius: 12
     },
     values: [
@@ -385,5 +386,32 @@ export const renderBubbleGraphAndLegendPaddingReduced = (id) => {
         dataToReduceGraphAndLegendPadding(`#${id}`)
     );
     bubbleGraph.loadContent(Carbon.api.bubble(data6));
+    return bubbleGraph;
+};
+
+export const renderGraphBubbleSingleDataset = (id) => {
+    const bubbleGraph = Carbon.api.graph(axisData(`#${id}`));
+    data2.palette = BUBBLE.PALETTE.ORANGE;
+    data2.color = undefined;
+    data2.label.display = "dataset with palette";
+    bubbleGraph.loadContent(Carbon.api.bubbleSingleDataset(data2));
+
+    const bubbleGraph2 = Carbon.api.graph(temperatureAxisData(`#${id}`));
+    data3.color = Carbon.helpers.COLORS.GREEN;
+    data3.label.display = "dataset with single color";
+    bubbleGraph2.loadContent(Carbon.api.bubbleSingleDataset(data3));
+
+    return bubbleGraph;
+};
+
+export const renderGraphBubbleMultipleDataset = (id) => {
+    const bubbleGraph = Carbon.api.graph(temperatureAxisData(`#${id}`));
+    data.color = Carbon.helpers.COLORS.PURPLE;
+    data3.color = Carbon.helpers.COLORS.BLUE;
+    data.label.display = "Bubble Set A";
+    data3.label.display = "Bubble Set B";
+    bubbleGraph.loadContent(Carbon.api.bubbleMultipleDataset(data));
+    bubbleGraph.loadContent(Carbon.api.bubbleMultipleDataset(data3));
+
     return bubbleGraph;
 };

@@ -15,6 +15,18 @@
 [![Bugs](https://img.shields.io/github/issues/cerner/carbon-graphs/bug.svg)](https://github.com/cerner/carbon-graphs/issues?utf8=✓&q=is%3Aissue+is%3Aopen+label%3Abug)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
+<br>
+<hr>
+<br>
+<h2 align="left">
+  Notice
+</h2>
+
+Carbon is currently under a code freeze as the library is being moved to [Terra Graphs](https://github.com/cerner/terra-graphs). During this time, contributions will not be accepted.  Once the migration is complete, this repository will be archived.
+
+<br>
+<hr>
+<br>
 Carbon is a graphing library built using D3 visualization library. It provides an API for generating native graphs such as Line and Paired Result graphs based on design standards.
 
 -   [Install](#install)
@@ -68,6 +80,9 @@ npm i @cerner/carbon-graphs --save-dev
 -   [Gantt](./docs/controls/Gantt.md#usage)
 -   [Scatter](./docs/controls/Scatter.md#usage)
 -   [Bubble](./docs/controls/Bubble.md#usage)
+    -   [Bubble Single Dataset](./docs/controls/BubbleSingleDataset.md)
+    -   [Bubble Multiple Dataset](./docs/controls/BubbleMultipleDataset.md)
+
 
 ### Graph Settings/Toggles
 

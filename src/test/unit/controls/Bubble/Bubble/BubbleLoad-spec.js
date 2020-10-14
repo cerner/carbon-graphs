@@ -1,15 +1,15 @@
 "use strict";
 import sinon from "sinon";
-import Graph from "../../../../main/js/controls/Graph/Graph";
-import Bubble from "../../../../main/js/controls/Bubble";
+import Graph from "../../../../../main/js/controls/Graph/Graph";
+import { Bubble } from "../../../../../main/js/controls/Bubble";
 import constants, {
     AXIS_TYPE,
     COLORS
-} from "../../../../main/js/helpers/constants";
-import errors from "../../../../main/js/helpers/errors";
-import styles from "../../../../main/js/helpers/styles";
-import utils from "../../../../main/js/helpers/utils";
-import { triggerEvent } from "../../helpers/commonHelpers";
+} from "../../../../../main/js/helpers/constants";
+import errors from "../../../../../main/js/helpers/errors";
+import styles from "../../../../../main/js/helpers/styles";
+import utils from "../../../../../main/js/helpers/utils";
+import { triggerEvent } from "../../../helpers/commonHelpers";
 import {
     axisDefault,
     axisTimeSeries,
@@ -21,12 +21,14 @@ import {
     valuesDefaultWeightBased,
     valuesTimeSeries,
     fetchElementByTag
-} from "./helpers";
-import { generateColor } from "../../../../main/js/controls/Bubble/helpers/colorGradient";
+} from "../helpers";
+import { generateColor } from "../../../../../main/js/controls/Bubble/helpers/colorGradient";
 
 describe("Bubble - Load", () => {
     let graphDefault = null;
     let bubbleGraphContainer;
+    let consolewarn;
+
     beforeEach(() => {
         bubbleGraphContainer = document.createElement("div");
         bubbleGraphContainer.id = "testBubble_carbon";
@@ -39,6 +41,14 @@ describe("Bubble - Load", () => {
     });
     afterEach(() => {
         document.body.innerHTML = "";
+    });
+    beforeAll(() => {
+        // to supress warnings
+        consolewarn = console.warn;
+        console.warn = () => {};
+    });
+    afterAll(() => {
+        console.warn = consolewarn;
     });
     it("returns the graph instance", () => {
         const loadedBubble = new Bubble(getInput(valuesDefault, false));

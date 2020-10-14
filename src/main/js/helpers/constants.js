@@ -53,6 +53,25 @@ export const COLORS = {
     LAVENDER: "#8374c2",
     WHITE: "#ffffff"
 };
+/**
+ *
+ * @public
+ * @property {number} MAX_BUBBLES_SINGLE_DATASET "max number of bubbles allowed in a Bubble Single Dataset API if using shades"
+ * @property {number} MAX_DATASETS_MULTIPLE_API "max number of datassets allowed in Bubble Multiple Dataset API"
+ * @property {object} PALETTE "array of shades to be used for color-based bubbles in Bubble Single Dataset API"
+ */
+export const BUBBLE = {
+    MAX_BUBBLES_SINGLE_DATASET: 4,
+    MAX_DATASETS_MULTIPLE_API: 7,
+    PALETTE: {
+        BLUE: ["#008fe0", "#044e7b", "#001624"],
+        GREEN: ["#4b9b1c", "#2c5e12", "#122702"],
+        ORANGE: ["#e46511", "#883e10", "#371a06"],
+        PINK: ["#ade868", "#6d0a48", "#32062a"],
+        PURPLE: ["#9c19a3", "#5c1060", "#240425"],
+        GRAY: "#949494"
+    }
+};
 
 /**
  * Consumers can pick a shape from this default list

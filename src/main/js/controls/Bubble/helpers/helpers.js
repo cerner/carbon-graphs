@@ -22,6 +22,7 @@ import styles from "../../../helpers/styles";
 import utils from "../../../helpers/utils";
 import { d3RemoveElement } from "../../Graph/helpers/helpers";
 import { generateColor, bubbleScale } from "./colorGradient";
+import BubbleConfig from "../BubbleConfig";
 
 /**
  * @typedef Bubble
@@ -235,7 +236,8 @@ const getDataPointValues = (target) => target.internalValuesSubset;
  * @returns {undefined} - returns nothing
  */
 const enforceBubbleBlur = (target) => {
-    d3.selectAll(`.${styles.point}`)
+    d3.select(target.viewportElement)
+        .selectAll(`.${styles.point}`)
         .select("circle")
         .attr("fill-opacity", constants.DEFAULT_BUBBLE_BLUR_OPACITY)
         .attr("stroke-opacity", constants.DEFAULT_BUBBLE_BLUR_STROKE_OPACITY);
@@ -405,6 +407,7 @@ const decideColor = (dataTarget, value) => {
         return dataTarget.color;
     }
 };
+
 /**
  * Handler for Request animation frame, executes on resize shows/hides the regions.
  *
@@ -502,6 +505,7 @@ const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
         loadLegendItem(legendSVG, dataTarget, config, eventHandlers);
     }
 };
+
 /**
  * Clear the graph data points currently rendered
  *
@@ -513,16 +517,55 @@ const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
 const clear = (canvasSVG, dataTarget) =>
     d3RemoveElement(canvasSVG, `g[aria-describedby="${dataTarget.key}"]`);
 
+/**
+ * Calculates the min and max values for Y Axis or Y2 Axis.
+ * First we filter out values that are `null`, this is a result of
+ * datapoint being part of being in a non-contiguous series and then we
+ * get the min and max values for the Y or Y2 axis domain.
+ *
+ * @private
+ * @param {Array} values - Datapoint values
+ * @param {string} axis - y or y2
+ * @returns {object} - Contains min and max values for the data points for Y and Y2 axis
+ */
+const calculateValuesRange = (values, axis = constants.Y_AXIS) => {
+    const yAxisValuesList = values.filter((i) => i.y !== null).map((i) => i.y);
+    return {
+        [axis]: {
+            min: Math.min(...yAxisValuesList),
+            max: Math.max(...yAxisValuesList)
+        }
+    };
+};
+
+/**
+ * Data point sets can be loaded using this function.
+ * Load function validates, clones and stores the input onto a config object.
+ *
+ * @private
+ * @param {object} inputJSON - Input JSON provided by the consumer
+ * @returns {object} BubbleConfig config object containing consumer data
+ */
+const loadInput = (inputJSON) =>
+    new BubbleConfig().setInput(inputJSON).validateInput().clone().getConfig();
+
 export {
-    toggleDataPointSelection,
-    draw,
-    translateBubbleGraph,
+    areWeightsDefined,
+    calculateValuesRange,
+    clear,
     clickHandler,
+    dataPointActionHandler,
+    draw,
+    drawBubbles,
+    decideRadius,
+    getDataPointValues,
     hoverHandler,
-    transformPoint,
+    isHueDefined,
+    loadInput,
     prepareLegendItems,
     processDataPoints,
-    getDataPointValues,
-    clear,
-    drawBubbles
+    translateBubbleGraph,
+    transformPoint,
+    translatePoints,
+    toggleDataPointSelection
 };

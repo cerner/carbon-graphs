@@ -174,7 +174,9 @@ import {
     renderCustomBubbleSize,
     renderBubbleWithPanning,
     renderBubblePanningWithDynamicData,
-    renderBubbleGraphAndLegendPaddingReduced
+    renderBubbleGraphAndLegendPaddingReduced,
+    renderGraphBubbleSingleDataset,
+    renderGraphBubbleMultipleDataset
 } from "./examples/controls/bubble";
 
 renderSiteApp(
@@ -497,6 +499,16 @@ renderSiteApp(
                     pathname: "/bubble/graph-and-legend-padding-reduced",
                     content: renderBubbleGraphAndLegendPaddingReduced,
                     title: "Graph and Legend Padding Reduced"
+                },
+                {
+                    pathname: "/bubble/single-dataset-api",
+                    content: renderGraphBubbleSingleDataset,
+                    title: "Single Dataset API"
+                },
+                {
+                    pathname: "/bubble/multiple-dataset-api",
+                    content: renderGraphBubbleMultipleDataset,
+                    title: "Multiple Dataset API"
                 }
             ]
         },

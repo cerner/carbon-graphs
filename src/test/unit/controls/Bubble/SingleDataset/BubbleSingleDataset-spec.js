@@ -1,9 +1,9 @@
 "use strict";
-import Graph from "../../../../main/js/controls/Graph/Graph";
-import Bubble from "../../../../main/js/controls/Bubble";
-import errors from "../../../../main/js/helpers/errors";
-import styles from "../../../../main/js/helpers/styles";
-import utils from "../../../../main/js/helpers/utils";
+import Graph from "../../../../../main/js/controls/Graph/Graph";
+import { BubbleSingleDataset } from "../../../../../main/js/controls/Bubble";
+import errors from "../../../../../main/js/helpers/errors";
+import styles from "../../../../../main/js/helpers/styles";
+import utils from "../../../../../main/js/helpers/utils";
 import {
     axisDefault,
     axisTimeSeries,
@@ -11,11 +11,13 @@ import {
     getAxes,
     getInput,
     valuesDefault
-} from "./helpers";
+} from "../helpers";
 
-describe("Bubble", () => {
+describe("Bubble Single Dataset", () => {
     let graphDefault = null;
     let bubbleGraphContainer;
+    let consolewarn;
+
     beforeEach(() => {
         bubbleGraphContainer = document.createElement("div");
         bubbleGraphContainer.id = "testBubble_carbon";
@@ -29,33 +31,43 @@ describe("Bubble", () => {
     afterEach(() => {
         document.body.innerHTML = "";
     });
+    beforeAll(() => {
+        // to supress warnings
+        consolewarn = console.warn;
+        console.warn = () => {};
+    });
+    afterAll(() => {
+        console.warn = consolewarn;
+    });
     describe("When constructed", () => {
         it("initializes properly", () => {
-            const bubble = new Bubble(getInput(valuesDefault));
+            const bubble = new BubbleSingleDataset(getInput(valuesDefault));
             expect(bubble.config).not.toBeNull();
             expect(bubble.valuesRange).not.toBeNull();
             expect(bubble.dataTarget).toEqual({});
         });
         it("throws error when no input is provided", () => {
             expect(() => {
-                graphDefault.loadContent(new Bubble());
+                graphDefault.loadContent(new BubbleSingleDataset());
             }).toThrowError(errors.THROW_MSG_NO_CONTENT_DATA_LOADED);
         });
         it("throws error when invalid input is provided", () => {
             expect(() => {
-                graphDefault.loadContent(new Bubble({ dummy: "dummy" }));
+                graphDefault.loadContent(
+                    new BubbleSingleDataset({ dummy: "dummy" })
+                );
             }).toThrowError(errors.THROW_MSG_UNIQUE_KEY_NOT_PROVIDED);
         });
         it("throws error when no values are provided", () => {
             expect(() => {
                 graphDefault.loadContent(
-                    new Bubble(getInput(undefined, false, false))
+                    new BubbleSingleDataset(getInput(undefined, false, false))
                 );
             }).toThrowError(errors.THROW_MSG_NO_DATA_POINTS);
         });
         it("display the legend when values are provided", () => {
             const input = getInput(valuesDefault);
-            graphDefault.loadContent(new Bubble(input));
+            graphDefault.loadContent(new BubbleSingleDataset(input));
             const legendContainer = fetchElementByClass(
                 bubbleGraphContainer,
                 styles.legend
@@ -73,14 +85,14 @@ describe("Bubble", () => {
             const input = utils.deepClone(getInput(valuesDefault));
             input.values = [];
             expect(() => {
-                graphDefault.loadContent(new Bubble(input));
+                graphDefault.loadContent(new BubbleSingleDataset(input));
             }).not.toThrow();
         });
         it("does not throw error when datetime values have milliseconds", () => {
             expect(() => {
                 const graphTimeSeries = new Graph(getAxes(axisTimeSeries));
                 graphTimeSeries.loadContent(
-                    new Bubble(
+                    new BubbleSingleDataset(
                         getInput(
                             [
                                 {
@@ -97,7 +109,7 @@ describe("Bubble", () => {
             expect(() => {
                 const graphTimeSeries = new Graph(getAxes(axisTimeSeries));
                 graphTimeSeries.loadContent(
-                    new Bubble(
+                    new BubbleSingleDataset(
                         getInput(
                             [
                                 {
@@ -114,7 +126,7 @@ describe("Bubble", () => {
             expect(() => {
                 const graphTimeSeries = new Graph(getAxes(axisTimeSeries));
                 graphTimeSeries.loadContent(
-                    new Bubble(
+                    new BubbleSingleDataset(
                         getInput(
                             [
                                 {
@@ -134,7 +146,7 @@ describe("Bubble", () => {
                 expect(() => {
                     const graphTimeSeries = new Graph(getAxes(axisTimeSeries));
                     graphTimeSeries.loadContent(
-                        new Bubble(
+                        new BubbleSingleDataset(
                             getInput(
                                 [
                                     {
@@ -153,7 +165,7 @@ describe("Bubble", () => {
                 expect(() => {
                     const graphTimeSeries = new Graph(getAxes(axisTimeSeries));
                     graphTimeSeries.loadContent(
-                        new Bubble(
+                        new BubbleSingleDataset(
                             getInput(
                                 [
                                     {
@@ -172,7 +184,7 @@ describe("Bubble", () => {
                 expect(() => {
                     const graphTimeSeries = new Graph(getAxes(axisTimeSeries));
                     graphTimeSeries.loadContent(
-                        new Bubble(
+                        new BubbleSingleDataset(
                             getInput(
                                 [
                                     {
@@ -191,7 +203,7 @@ describe("Bubble", () => {
                 expect(() => {
                     const graphTimeSeries = new Graph(getAxes(axisTimeSeries));
                     graphTimeSeries.loadContent(
-                        new Bubble(
+                        new BubbleSingleDataset(
                             getInput(
                                 [
                                     {
@@ -210,7 +222,7 @@ describe("Bubble", () => {
                 expect(() => {
                     const graphTimeSeries = new Graph(getAxes(axisTimeSeries));
                     graphTimeSeries.loadContent(
-                        new Bubble(
+                        new BubbleSingleDataset(
                             getInput(
                                 [
                                     {
@@ -226,9 +238,10 @@ describe("Bubble", () => {
                 }).toThrow();
             });
         });
+
         it("clones the input object correctly", () => {
             const input = getInput(valuesDefault, false, false);
-            const bubble = new Bubble(input);
+            const bubble = new BubbleSingleDataset(input);
             expect(bubble.config.key).toBe(input.key);
             expect(bubble.config.color).toBe(input.color);
             expect(bubble.config.label).toEqual(input.label);
@@ -247,7 +260,7 @@ describe("Bubble", () => {
         });
         it("any changes to input object doesn't affect the config", () => {
             const input = getInput(valuesDefault, false, false);
-            const bubble = new Bubble(input);
+            const bubble = new BubbleSingleDataset(input);
             input.key = "";
             input.color = "";
             input.onClick = null;
@@ -263,7 +276,7 @@ describe("Bubble", () => {
         });
         it("calculates min and max values correctly for y axis", () => {
             const input = getInput(valuesDefault, false, false);
-            const bubble = new Bubble(input);
+            const bubble = new BubbleSingleDataset(input);
             expect(bubble.valuesRange.y.min).toBe(4);
             expect(bubble.valuesRange.y.max).toBe(35);
             expect(bubble.valuesRange.y2).toBeUndefined();
@@ -271,7 +284,7 @@ describe("Bubble", () => {
         });
         it("calculates min and max values correctly for y2 axis", () => {
             const input = getInput(valuesDefault, false, true);
-            const bubble = new Bubble(input);
+            const bubble = new BubbleSingleDataset(input);
             expect(bubble.valuesRange.y).toBeUndefined();
             expect(bubble.valuesRange.y).toBeUndefined();
             expect(bubble.valuesRange.y2.min).toBe(4);
