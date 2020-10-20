@@ -222,6 +222,49 @@ export const renderScatterPanningWithDynamicData = (id) => {
     });
     return graph;
 };
+export const renderScatterPanningWithDynamicEventline = (id) => {
+    const axisData = utils.deepClone(
+        getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE")
+    );
+    axisData.pan = {
+        enabled: true
+    };
+    axisData.eventline = [
+        {
+            color: Carbon.helpers.COLORS.GREY,
+            style: {
+                strokeDashArray: "4,4"
+            },
+            value: new Date(2016, 0, 1, 8).toISOString()
+        }
+    ];
+    const graphData = utils.deepClone(
+        getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE").data[0]
+    );
+    graphData.regions = [regions[0]];
+
+    const createGraph = () => {
+        graphData.eventline = [
+            {
+                color: Carbon.helpers.COLORS.BLACK,
+                style: {
+                    strokeDashArray: "2,2"
+                },
+                value: new Date(2016, 0, 1, 12).toISOString()
+            }
+        ]
+        graph.reflow(graphData);
+    };
+
+    const graph = Carbon.api.graph(axisData);
+    graph.loadContent(Carbon.api.scatter(graphData));
+    axisData.axis = graph.config.axis;
+
+    createPanningControls(id, {
+        axisData,
+        creationHandler: createGraph
+    });
+};
 export const renderScatterGraphAndLegendPaddingReduced = (id) => {
     const axisData = utils.deepClone(getDemoData(`#${id}`, "LINE_DEFAULT"));
     axisData.removeContainerPadding = true;

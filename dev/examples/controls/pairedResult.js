@@ -96,29 +96,29 @@ const graphData = [
         values: [
             {
                 high: {
-                    x: "2016-01-01T23:30:00.000Z",
+                    x: "2016-01-01T00:30:00.000Z",
                     y: 150
                 },
                 mid: {
-                    x: "2016-01-01T23:30:00.000Z",
+                    x: "2016-01-01T00:30:00.000Z",
                     y: 40
                 },
                 low: {
-                    x: "2016-01-01T23:30:00.000Z",
+                    x: "2016-01-01T00:30:00.000Z",
                     y: 10
                 }
             },
             {
                 high: {
-                    x: "2016-01-01T22:30:00.000Z",
+                    x: "2016-01-01T05:30:00.000Z",
                     y: 110
                 },
                 mid: {
-                    x: "2016-01-01T22:30:00.000Z",
+                    x: "2016-01-01T05:30:00.000Z",
                     y: 70
                 },
                 low: {
-                    x: "2016-01-01T22:30:00.000Z",
+                    x: "2016-01-01T05:30:00.000Z",
                     y: 30
                 }
             }
@@ -603,6 +603,52 @@ export const renderPairedResultPanningWithDynamicData = (id) => {
     });
     return graph;
 };
+
+export const renderPairedResultPanningWithDynamicEventline = (id) => {
+    const axisData = utils.deepClone(
+        getDemoData(`#${id}`, "PAIRED_TIMESERIES")
+    );
+    axisData.axis.x.lowerLimit = new Date(2016, 0, 1, 0).toISOString();
+    axisData.axis.x.upperLimit = new Date(2016, 0, 2, 0).toISOString();
+    axisData.pan = {
+        enabled: true
+    };
+    axisData.axis.x.ticks = {};
+    axisData.axis.y.rangeRounding = false;
+    axisData.eventline = [
+        {
+            color: Carbon.helpers.COLORS.GREY,
+            style: {
+                strokeDashArray: "4,4"
+            },
+            value: new Date(2016, 0, 1, 8).toISOString()
+        }
+    ];
+
+    const createGraph = () => {
+        graphData[0].eventline = [
+            {
+                color: Carbon.helpers.COLORS.BLACK,
+                style: {
+                    strokeDashArray: "2,2"
+                },
+                value: new Date(2016, 0, 1, 12).toISOString()
+            }
+        ];
+        graph.reflow(graphData[0]);
+    };
+
+    const graph = Carbon.api.graph(axisData);
+    graph.loadContent(Carbon.api.pairedResult(graphData[0]));
+    axisData.axis = graph.config.axis;
+
+    createPanningControls(id, {
+        axisData,
+        creationHandler: createGraph
+    });
+    return graph;
+};
+
 export const renderPairedResultWithLegendOptions = (id) => {
     const pairedDefault = Carbon.api.graph(
         getDemoData(`#${id}`, "PAIRED_DEFAULT")

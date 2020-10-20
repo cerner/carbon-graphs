@@ -327,7 +327,7 @@ export const renderBarTimeSeriesWithEventline = (id) => {
         values: tickValues,
         format: "%a %b %e"
     };
-    (axisData.eventline = [
+    axisData.eventline = [
         {
             color: Carbon.helpers.COLORS.GREY,
             style: {
@@ -342,11 +342,11 @@ export const renderBarTimeSeriesWithEventline = (id) => {
             },
             value: new Date(2017, 12, 3).toISOString()
         }
-    ]),
-        (axisData.clickPassThrough = {
+    ],
+    axisData.clickPassThrough = {
             dateline: false
-        }),
-        (axisData.showVGrid = false);
+    },
+    axisData.showVGrid = false;
 
     const barTimeDateline = Carbon.api.graph(axisData);
     barTimeDateline.loadContent(
@@ -537,6 +537,55 @@ export const renderBarPanningWithDynamicData = (id) => {
     };
     const createGraph = () => {
         graph.reflow(graphData[1]);
+    };
+
+    const graph = Carbon.api.graph(axisData);
+    graph.loadContent(Carbon.api.bar(graphData[0]));
+    axisData.axis = graph.config.axis;
+
+    createPanningControls(id, {
+        axisData,
+        creationHandler: createGraph
+    });
+    return graph;
+};
+export const renderBarPanningWithDynamicEventline = (id) => {
+    const axisData = utils.deepClone(getDemoData(`#${id}`, "BAR_TIMESERIES"));
+    axisData.pan = {
+        enabled: true
+    };
+    axisData.eventline = [
+        {
+            color: Carbon.helpers.COLORS.GREY,
+            style: {
+                strokeDashArray: "4,4"
+            },
+            value: new Date(2016, 0, 1, 4, 30).toISOString()
+        }
+    ],
+    axisData.axis.x.lowerLimit = new Date(2016, 0, 1, 0).toISOString();
+    axisData.axis.x.upperLimit = new Date(2016, 0, 2, 0).toISOString();
+    axisData.axis.x.ticks = {
+        values: [
+            new Date(2016, 0, 1, 3).toISOString(),
+            new Date(2016, 0, 1, 6).toISOString(),
+            new Date(2016, 0, 1, 9).toISOString(),
+            new Date(2016, 0, 1, 12).toISOString(),
+            new Date(2016, 0, 1, 15).toISOString()
+        ],
+        format: "%H"
+    };
+    const createGraph = () => {
+        graphData[0].eventline = [
+            {
+                color: Carbon.helpers.COLORS.BLACK,
+                style: {
+                    strokeDashArray: "2,2"
+                },
+                value: new Date(2016, 0, 1, 7, 30).toISOString()
+            }
+        ]
+        graph.reflow(graphData[0]);
     };
 
     const graph = Carbon.api.graph(axisData);

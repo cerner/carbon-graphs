@@ -18,6 +18,7 @@ import {
     renderBarTimeSeriesWithEventline,
     renderBarWithPanning,
     renderBarPanningWithDynamicData,
+    renderBarPanningWithDynamicEventline,
     renderBarGraphAndLegendPaddingReduced
 } from "./examples/controls/bar";
 import { renderColorsExample } from "./examples/controls/colors";
@@ -49,6 +50,7 @@ import {
     renderGanttTruncate,
     renderGanttPanning,
     renderGanttPanningWithDynamicData,
+    renderGanttPanningWithDynamicEventline,
     renderGanttEventline,
     renderGanttGraphAndLegendPaddingReduced
 } from "./examples/controls/gantt";
@@ -87,6 +89,7 @@ import {
     renderLineWithPanning,
     renderLineY2AxisWithPanning,
     renderLinePanningWithDynamicData,
+    renderLinePanningWithDynamicEventline,
     renderLineWithEventline,
     renderDashedLine,
     renderLineWithLegendOptions,
@@ -122,10 +125,11 @@ import {
     renderPairedResultWithPanning,
     renderPairedResultY2AxisWithPanning,
     renderPairedResultPanningWithDynamicData,
+    renderPairedResultPanningWithDynamicEventline,
     renderPairedResultTimeseriesEventline,
     renderPairedResultWithLegendOptions,
     renderPairedResultGraphAndLegendPaddingReduced,
-    renderPairedResultValueRegion
+    renderPairedResultValueRegion,
 } from "./examples/controls/pairedResult";
 import {
     renderPieLegendTo,
@@ -164,6 +168,7 @@ import {
     renderScatterY2AxisWithPanning,
     renderScatterWithEventline,
     renderScatterPanningWithDynamicData,
+    renderScatterPanningWithDynamicEventline,
     renderScatterGraphAndLegendPaddingReduced
 } from "./examples/controls/scatter";
 import {
@@ -645,6 +650,11 @@ renderSiteApp(
                             title: "Dynamic Data"
                         },
                         {
+                            pathname: "/panning/line/dynamic-eventline",
+                            content: renderLinePanningWithDynamicEventline,
+                            title: "Dynamic Eventline"
+                        },
+                        {
                             pathname:
                                 "/panning/line/dynamic-data/updated-legend",
                             content: renderLinePanningWithUpdatedLegend,
@@ -664,6 +674,11 @@ renderSiteApp(
                             pathname: "/panning/gantt/dynamic-data",
                             content: renderGanttPanningWithDynamicData,
                             title: "Dynamic Data"
+                        },
+                        {
+                            pathname: "/panning/gantt/dynamic-eventline",
+                            content: renderGanttPanningWithDynamicEventline,
+                            title: "Dynamic Eventline"
                         }
                     ]
                 },
@@ -694,6 +709,11 @@ renderSiteApp(
                             pathname: "/panning/bar/dynamic-data",
                             content: renderBarPanningWithDynamicData,
                             title: "Dynamic Data"
+                        },
+                        {
+                            pathname: "/panning/bar/dynamic-eventline",
+                            content: renderBarPanningWithDynamicEventline,
+                            title: "Dynamic Eventline"
                         }
                     ]
                 },
@@ -714,6 +734,11 @@ renderSiteApp(
                             pathname: "/panning/paired-result/dynamic-data",
                             content: renderPairedResultPanningWithDynamicData,
                             title: "Dynamic Data"
+                        },
+                        {
+                            pathname: "/panning/paired-result/dynamic-eventline",
+                            content: renderPairedResultPanningWithDynamicEventline,
+                            title: "Dynamic Eventline"
                         }
                     ]
                 },
@@ -734,6 +759,11 @@ renderSiteApp(
                             pathname: "/panning/scatter/dynamic-data",
                             content: renderScatterPanningWithDynamicData,
                             title: "Dynamic Data"
+                        },
+                        {
+                            pathname: "/panning/scatter/dynamic-eventline",
+                            content: renderScatterPanningWithDynamicEventline,
+                            title: "Dynamic Eventline"
                         }
                     ]
                 },

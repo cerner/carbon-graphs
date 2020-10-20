@@ -644,7 +644,7 @@ export const renderGanttPanningWithDynamicEventline = (id) => {
             style: {
                 strokeDashArray: "4,4"
             },
-            value: new Date(2016, 0, 1, 11).toISOString()
+            value: new Date(2016, 0, 1, 4).toISOString()
         }
     ];
     axisData.pan = {
@@ -661,24 +661,17 @@ export const renderGanttPanningWithDynamicEventline = (id) => {
         events: events[1],
         activities: activities[3]
     };
-    const graphDataY = {
-        key: "track 0",
-        actions: panData.actions,
-        tasks: panData.tasks,
-        events: panData.events,
-        activities: panData.activities,
-        eventline: [
+    const createGraph = () => {
+        graphData.eventline = [
             {
                 color: Carbon.helpers.COLORS.BLACK,
                 style: {
                     strokeDashArray: "2,2"
                 },
-                value: new Date(2016, 0, 1, 15).toISOString()
+                value: new Date(2016, 0, 1, 16).toISOString()
             }
-        ],
-    };
-    const createGraph = () => {
-        graph.reflow(graphDataY);
+        ];
+        graph.reflow(graphData);
     };
 
     const graph = Carbon.api.gantt(axisData);
