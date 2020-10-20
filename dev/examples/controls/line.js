@@ -616,7 +616,7 @@ export const renderLinePanningWithDynamicData = (id) => {
 };
 export const renderLinePanningWithDynamicEventline = (id) => {
     const axisData = utils.deepClone(
-        getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE")
+        getDemoData(`#${id}`, "LINE_TIMESERIES")
     );
     axisData.eventline = [
         {
@@ -631,7 +631,7 @@ export const renderLinePanningWithDynamicEventline = (id) => {
         enabled: true
     };
     const graphData = utils.deepClone(
-        getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE").data[0]
+        getDemoData(`#${id}`, "LINE_TIMESERIES").data[0]
     );
     graphData.regions = [regions[0]];
     const createGraph = () => {

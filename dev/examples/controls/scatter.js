@@ -224,7 +224,7 @@ export const renderScatterPanningWithDynamicData = (id) => {
 };
 export const renderScatterPanningWithDynamicEventline = (id) => {
     const axisData = utils.deepClone(
-        getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE")
+        getDemoData(`#${id}`, "LINE_TIMESERIES")
     );
     axisData.pan = {
         enabled: true
@@ -239,7 +239,7 @@ export const renderScatterPanningWithDynamicEventline = (id) => {
         }
     ];
     const graphData = utils.deepClone(
-        getDemoData(`#${id}`, "LINE_TIMESERIES_DATELINE").data[0]
+        getDemoData(`#${id}`, "LINE_TIMESERIES").data[0]
     );
     graphData.regions = [regions[0]];
 

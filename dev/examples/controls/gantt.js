@@ -627,17 +627,6 @@ export const renderGanttPanningWithDynamicEventline = (id) => {
     axisData.showActionLegend = true;
     axisData.axis.x.lowerLimit = new Date(2016, 0, 1, 0).toISOString();
     axisData.axis.x.upperLimit = new Date(2016, 0, 2, 0).toISOString();
-    axisData.dateline = [
-        {
-            showDatelineIndicator: true,
-            label: {
-                display: "Release A"
-            },
-            color: "#C97318",
-            shape: Carbon.helpers.SHAPES.SQUARE,
-            value: new Date(2016, 0, 1, 9).toISOString()
-        }
-    ];
     axisData.eventline = [
         {
             color: Carbon.helpers.COLORS.GREY,
@@ -668,7 +657,7 @@ export const renderGanttPanningWithDynamicEventline = (id) => {
                 style: {
                     strokeDashArray: "2,2"
                 },
-                value: new Date(2016, 0, 1, 16).toISOString()
+                value: new Date(2016, 0, 1, 6, 30).toISOString()
             }
         ];
         graph.reflow(graphData);
