@@ -129,7 +129,7 @@ import {
     renderPairedResultTimeseriesEventline,
     renderPairedResultWithLegendOptions,
     renderPairedResultGraphAndLegendPaddingReduced,
-    renderPairedResultValueRegion,
+    renderPairedResultValueRegion
 } from "./examples/controls/pairedResult";
 import {
     renderPieLegendTo,
