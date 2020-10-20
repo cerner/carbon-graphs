@@ -96,9 +96,9 @@ describe("Graph - Panning", () => {
                 if(graph) {
                     graph.destroy();
                 }
-            });
-            it("When eventline is present initially", () => {
                 graph = new Graph(axisTimeseriesWithEventline);
+            });
+            it("When eventline is present, when creating the graph", () => {
                 let eventlines = document.querySelectorAll(`.${styles.eventline}`);
                 expect(eventlines.length).toBe(1);
                 const panData = {
@@ -124,7 +124,6 @@ describe("Graph - Panning", () => {
                 expect(eventlines.length).toBe(2);
             });
             it("Removes the eventline when empty dataset is passed", () => {
-                graph = new Graph(axisTimeseriesWithEventline);
                 let eventlines = document.querySelectorAll(`.${styles.eventline}`);
                 expect(eventlines.length).toBe(1);
                 const panData = {
@@ -141,16 +140,18 @@ describe("Graph - Panning", () => {
                     graph.destroy();
                 }
             });
-            it ("When eventline attribute is not passed or passed as null to reflow", () => {
+            it ("When eventline attribute is not passed or passed as null to reflow data", () => {
                 graph = new Graph(axisTimeseriesWithEventline);
                 let eventlines = document.querySelectorAll(`.${styles.eventline}`);
                 expect(eventlines.length).toBe(1);
-                const panData = {};
+                const panData = {
+                    eventline: null
+                };
                 graph.reflow(panData);
                 eventlines = document.querySelectorAll(`.${styles.eventline}`);
                 expect(eventlines.length).toBe(1);
             });
-            it("When eventline is not present initially", () => {
+            it("When eventline is not present, when creating the graph", () => {
                 graph = new Graph(axisTimeseriesWithDateline);
                 let eventlines = document.querySelectorAll(`.${styles.eventline}`);
                 expect(eventlines.length).toBe(0);

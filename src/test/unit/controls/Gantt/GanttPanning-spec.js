@@ -5,6 +5,7 @@ import styles from "../../../../main/js/helpers/styles";
 import { getSVGAnimatedTransformList } from "../../../../main/js/helpers/transformUtils";
 import {
     axisJSON,
+    eventlineJSON,
     fetchElementByClass,
     getAxes,
     getData,
@@ -19,6 +20,9 @@ import {
 } from "./helpers";
 import utils from "../../../../main/js/helpers/utils";
 import { delay, toNumber, PADDING_BOTTOM } from "../../helpers/commonHelpers";
+import {
+    COLORS,
+} from "../../../../main/js/helpers/constants";
 
 describe("Panning", () => {
     let gantt = null;
@@ -262,6 +266,114 @@ describe("Panning", () => {
                 `${styles.currentPointsGroup}[event="false"]`
             );
             expect(actionsContent.length).toEqual(2);
+        });
+        it("EventlineGroup translates properly when panning is enabled", (done) => {
+            if(gantt) {
+                gantt.destroy();
+            }
+            const axisObj = utils.deepClone(getAxes(axisJSON));
+            axisObj.eventline = utils.deepClone(eventlineJSON);
+            gantt = new Gantt(axisObj);
+            const eventlineGroup = fetchElementByClass(styles.eventlineGroup);
+            delay(() => {
+                const translate = getSVGAnimatedTransformList(
+                    eventlineGroup.getAttribute("transform")
+                ).translate;
+                expect(toNumber(translate[0], 10)).toBeCloseTo(106);
+                expect(toNumber(translate[1], 10)).toBeCloseTo(PADDING_BOTTOM);
+                done();
+            });
+        });
+        describe("Should update the eventline", () => {
+            beforeEach(() => {
+                if(gantt) {
+                    gantt.destroy();
+                }
+                const axisObj = utils.deepClone(getAxes(axisJSON));
+                axisObj.eventline = utils.deepClone(eventlineJSON);
+                gantt = new Gantt(axisObj);
+            });
+            it("When eventline is present, when creating the gantt chart", () => {
+                let eventlines = document.querySelectorAll(`.${styles.eventline}`);
+                expect(eventlines.length).toBe(1);
+                const panData = {
+                    eventline: [
+                        {
+                            color: COLORS.GREY,
+                            style: {
+                                strokeDashArray: "4,4"
+                            },
+                            value: new Date(2018, 9, 28).toISOString()
+                        },
+                        {
+                            color: COLORS.GREY,
+                            style: {
+                                strokeDashArray: "4,4"
+                            },
+                            value: new Date(2018, 10, 28).toISOString()
+                        }
+                    ]
+                };
+                gantt.reflow(panData);
+                eventlines = document.querySelectorAll(`.${styles.eventline}`);
+                expect(eventlines.length).toBe(2);
+            });
+            it("Removes the eventline when empty dataset is passed", () => {
+                let eventlines = document.querySelectorAll(`.${styles.eventline}`);
+                expect(eventlines.length).toBe(1);
+                const panData = {
+                    eventline: []
+                };
+                gantt.reflow(panData);
+                eventlines = document.querySelectorAll(`.${styles.eventline}`);
+                expect(eventlines.length).toBe(0);
+            });
+        });
+        describe("Should not update the eventline", () => {
+            beforeEach(() => {
+                if(gantt) {
+                    gantt.destroy();
+                }
+            });
+            it ("When eventline attribute is not passed or passed as null to reflow data", () => {
+                const axisObj = utils.deepClone(getAxes(axisJSON));
+                axisObj.eventline = utils.deepClone(eventlineJSON);
+                gantt = new Gantt(axisObj);
+                let eventlines = document.querySelectorAll(`.${styles.eventline}`);
+                expect(eventlines.length).toBe(1);
+                const panData = {
+                    eventline: null
+                };
+                gantt.reflow(panData);
+                eventlines = document.querySelectorAll(`.${styles.eventline}`);
+                expect(eventlines.length).toBe(1);
+            });
+            it("When eventline is not present, when creating the gantt chart", () => {
+                gantt = new Gantt(utils.deepClone(getAxes(axisJSON)));
+                let eventlines = document.querySelectorAll(`.${styles.eventline}`);
+                expect(eventlines.length).toBe(0);
+                const panData = {
+                    eventline: [
+                        {
+                            color: COLORS.GREY,
+                            style: {
+                                strokeDashArray: "4,4"
+                            },
+                            value: new Date(2016, 9, 28).toISOString()
+                        },
+                        {
+                            color: COLORS.GREY,
+                            style: {
+                                strokeDashArray: "4,4"
+                            },
+                            value: new Date(2016, 10, 28).toISOString()
+                        }
+                    ]
+                };
+                gantt.reflow(panData);
+                eventlines = document.querySelectorAll(`.${styles.eventline}`);
+                expect(eventlines.length).toBe(0);
+            });
         });
     });
     describe("When disabled", () => {
