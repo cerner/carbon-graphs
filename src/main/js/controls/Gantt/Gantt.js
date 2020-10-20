@@ -9,7 +9,10 @@ import {
 } from "../../helpers/constructUtils";
 import { createDateline } from "../../helpers/dateline";
 import errors from "../../helpers/errors";
-import { createEventline } from "../../helpers/eventline";
+import {
+    createEventline,
+    redrawEventlineContent 
+} from "../../helpers/eventline";
 import { createLegend, reflowLegend } from "../../helpers/legend";
 import { getElementBoxSizingParameters } from "../../helpers/paddingUtils";
 import styles from "../../helpers/styles";
@@ -358,6 +361,11 @@ class Gantt extends Construct {
                 this,
                 eventHandlers
             );
+        }
+
+        if (graphData && graphData.eventline) {
+            this.config.eventline = graphData.eventline;
+            redrawEventlineContent(this.scale, this.config, this.svg);
         }
         this.config.height = determineHeight(this.config);
         setCanvasHeight(this.config);
