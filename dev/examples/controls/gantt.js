@@ -622,6 +622,76 @@ export const renderGanttPanningWithDynamicData = (id) => {
     return graph;
 };
 
+export const renderGanttPanningWithDynamicEventline = (id) => {
+    const axisData = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
+    axisData.showActionLegend = true;
+    axisData.axis.x.lowerLimit = new Date(2016, 0, 1, 0).toISOString();
+    axisData.axis.x.upperLimit = new Date(2016, 0, 2, 0).toISOString();
+    axisData.dateline = [
+        {
+            showDatelineIndicator: true,
+            label: {
+                display: "Release A"
+            },
+            color: "#C97318",
+            shape: Carbon.helpers.SHAPES.SQUARE,
+            value: new Date(2016, 0, 1, 9).toISOString()
+        }
+    ];
+    axisData.eventline = [
+        {
+            color: Carbon.helpers.COLORS.GREY,
+            style: {
+                strokeDashArray: "4,4"
+            },
+            value: new Date(2016, 0, 1, 11).toISOString()
+        }
+    ];
+    axisData.pan = {
+        enabled: true
+    };
+    const graphData = {
+        key: "track 0",
+        trackLabel: {
+            display: "Default",
+            onClick: loadXAndYAxisLabelPopup
+        },
+        tasks: tasks[5],
+        actions: actions[2],
+        events: events[1],
+        activities: activities[3]
+    };
+    const graphDataY = {
+        key: "track 0",
+        actions: panData.actions,
+        tasks: panData.tasks,
+        events: panData.events,
+        activities: panData.activities,
+        eventline: [
+            {
+                color: Carbon.helpers.COLORS.BLACK,
+                style: {
+                    strokeDashArray: "2,2"
+                },
+                value: new Date(2016, 0, 1, 15).toISOString()
+            }
+        ],
+    };
+    const createGraph = () => {
+        graph.reflow(graphDataY);
+    };
+
+    const graph = Carbon.api.gantt(axisData);
+    graph.loadContent(graphData);
+    axisData.axis = graph.config.axis;
+
+    createPanningControls(id, {
+        axisData,
+        creationHandler: createGraph
+    });
+    return graph;
+};
+
 export const renderGanttAction = (id) => {
     const data = utils.deepClone(getDemoData(`#${id}`, "GANTT"));
     data.dateline = [];

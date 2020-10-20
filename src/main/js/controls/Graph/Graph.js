@@ -434,6 +434,11 @@ class Graph extends Construct {
         scaleGraph(this.scale, this.config);
         translateAxes(this.axis, this.scale, this.config, this.svg);
 
+        if (graphData && graphData.eventline){
+            this.config.eventline=graphData.eventline;
+            redrawEventlineContent(this.scale, this.config, this.svg);
+        }
+
         if (
             graphData &&
             graphData.values &&
