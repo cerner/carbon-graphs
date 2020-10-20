@@ -562,7 +562,7 @@ export const renderBarPanningWithDynamicEventline = (id) => {
             },
             value: new Date(2016, 0, 1, 4, 30).toISOString()
         }
-    ],
+    ];
     axisData.axis.x.lowerLimit = new Date(2016, 0, 1, 0).toISOString();
     axisData.axis.x.upperLimit = new Date(2016, 0, 2, 0).toISOString();
     axisData.axis.x.ticks = {

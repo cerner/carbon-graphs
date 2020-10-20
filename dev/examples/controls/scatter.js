@@ -252,7 +252,7 @@ export const renderScatterPanningWithDynamicEventline = (id) => {
                 },
                 value: new Date(2016, 0, 1, 12).toISOString()
             }
-        ]
+        ];
         graph.reflow(graphData);
     };
 

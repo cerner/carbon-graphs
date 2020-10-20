@@ -217,7 +217,7 @@ describe("Line - Panning", () => {
                 expect(legendItem.getAttribute("aria-disabled")).toBe("true");
                 expect(legendItem.getAttribute("aria-current")).toBe("true");
             });
-            it("should update the dynamic data and remove  shape in y-axis", () => {
+            it("should update the dynamic data and remove shape in y-axis", () => {
                 const panData = {
                     key: "uid_1",
                     values: []
