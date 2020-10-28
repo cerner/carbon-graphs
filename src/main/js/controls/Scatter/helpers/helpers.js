@@ -243,9 +243,10 @@ const getDataPointValues = (target) => target.internalValuesSubset;
  * @param {object} scale - d3 scale for Graph
  * @param {object} config - Graph config object derived from input JSON
  * @param {Array} pointGroupPath - d3 html element of the points group
+ * @param {object} legendSVG - d3 element path of the legend from the parent control
  * @returns {undefined} - returns nothing
  */
-const drawDataPoints = (scale, config, pointGroupPath) => {
+const drawDataPoints = (scale, config, pointGroupPath, legendSVG) => {
     const renderDataPointPath = (path, value, index) =>
         path.append(() =>
             new Shape(getShapeForTarget(value)).getShapeElement(
@@ -257,12 +258,7 @@ const drawDataPoints = (scale, config, pointGroupPath) => {
                         dataPointActionHandler(value, index, this);
                     },
                     a11yAttributes: {
-                        "aria-hidden":
-                            document
-                                .querySelector(
-                                    `.${styles.legendItem}[aria-describedby="${value.key}"]`
-                                )
-                                ?.getAttribute("aria-current") === "false",
+                        "aria-hidden": legendSVG && legendSVG.select(`.${styles.legendItem}[aria-describedby="${value.key}"]`)?.attr("aria-current") === "false",
                         "aria-describedby": value.key,
                         "aria-disabled": !utils.isFunction(value.onClick)
                     }

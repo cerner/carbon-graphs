@@ -266,7 +266,7 @@ class Line extends GraphContent {
                 .select(`.${styles.currentPointsGroup}`)
                 .selectAll(`[class*="${styles.point}"]`)
                 .data(getDataPointValues(this.dataTarget));
-            drawDataPoints(graph.scale, graph.config, pointPath.enter());
+            drawDataPoints(graph.scale, graph.config, pointPath.enter(), graph.legendSVG);
             pointPath
                 .exit()
                 .transition()
