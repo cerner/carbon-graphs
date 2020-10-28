@@ -284,9 +284,10 @@ const blurActionHandler = (target) => {
  * @param {object} config - Graph config object derived from input JSON
  * @param {Array} pointGroupPath - d3 html element of the points group
  * @param {object} dataTarget - data for the bubble graph
+ * @param {object} legendSVG - d3 element path of the legend from the parent control
  * @returns {undefined} - returns nothing
  */
-const drawBubbles = (scale, config, pointGroupPath, dataTarget) => {
+const drawBubbles = (scale, config, pointGroupPath, dataTarget, legendSVG) => {
     const renderDataPoint = (path, value, index) => {
         const bubblePoint = path
             .append("g")
@@ -296,12 +297,7 @@ const drawBubbles = (scale, config, pointGroupPath, dataTarget) => {
             .attr("aria-describedby", `${value.key}`)
             .attr("aria-selected", false)
             .attr(
-                "aria-hidden",
-                document
-                    .querySelector(
-                        `.${styles.legendItem}[aria-describedby="${value.key}"]`
-                    )
-                    ?.getAttribute("aria-current") === "false"
+                "aria-hidden", legendSVG && legendSVG.select(`.${styles.legendItem}[aria-describedby="${value.key}"]`)?.attr("aria-current") === "false",
             )
             .on("click", function () {
                 dataPointActionHandler(value, index, this);
