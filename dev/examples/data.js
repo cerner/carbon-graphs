@@ -1795,6 +1795,7 @@ const DATA = [
         TIMELINE: (id) => ({
             bindTo: id,
             bindLegendTo: null,
+            axisPadding: 200,
             axis: {
                 x: {
                     label: "Datetime",

@@ -55,10 +55,10 @@ const setCanvasWidth = (container, config) => {
  * @returns {undefined} - returns nothing
  */
 const setCanvasHeight = (config) => {
-    config.canvasHeight = config.axisYPosition
+    config.canvasHeight = config.axisPadding
         ? getYAxisHeight(config) +
           (config.padding.bottom * 2 + config.padding.top) * 2 +
-          config.axisYPosition
+          config.axisPadding
         : getYAxisHeight(config) +
           (config.padding.bottom * 2 + config.padding.top) * 2;
     return config.canvasHeight;

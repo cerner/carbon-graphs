@@ -13,7 +13,6 @@ import {
     getXAxisXPosition,
     getXAxisYPosition
 } from "./creationHelpers";
-import { getDefaultValue } from "../../../core/BaseConfig";
 
 /**
  * Updates clipPath rectangle width and height on resize.
@@ -49,9 +48,8 @@ const translateAxes = (axis, scale, config, canvasSVG) => {
         .call(constants.d3Transition(config.settingsDictionary.transition))
         .attr(
             "transform",
-            `translate(${getXAxisXPosition(config)},${getDefaultValue(
-                config.axisYPosition,
-                getXAxisYPosition(config)
+            `translate(${getXAxisXPosition(config)},${getXAxisYPosition(
+                config
             )})`
         )
         .call(axis.x);

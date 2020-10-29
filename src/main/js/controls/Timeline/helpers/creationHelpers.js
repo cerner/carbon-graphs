@@ -29,7 +29,6 @@ import {
     getShapeForTarget
 } from "../../Graph/helpers/helpers";
 import { transformPoint } from "./translateHelpers";
-import { getDefaultValue } from "../../../core/BaseConfig";
 
 /**
  * @typedef TimelineContent
@@ -126,18 +125,18 @@ const getXAxisLabelYPosition = (config) => {
         config.axisLabelHeights.x * 2 +
         config.padding.bottom * 4;
     if (
-        utils.isUndefined(config.axisYPosition) ||
+        utils.isUndefined(config.axisPadding) ||
         defaultLabelPosition >
             getXAxisYPosition(config) +
                 config.axisLabelHeights.x * 2 +
-                config.axisYPosition
+                config.axisPadding
     ) {
         return defaultLabelPosition;
     } else {
         return (
             getXAxisYPosition(config) +
             config.axisLabelHeights.x * 2 +
-            config.axisYPosition +
+            config.axisPadding +
             config.padding.bottom * 3
         );
     }
@@ -230,9 +229,8 @@ const createAxes = (axis, scale, config, canvasSVG) => {
         .attr("aria-hidden", false)
         .attr(
             "transform",
-            `translate(${getXAxisXPosition(config)}, ${getDefaultValue(
-                config.axisYPosition,
-                getXAxisYPosition(config)
+            `translate(${getXAxisXPosition(config)}, ${getXAxisYPosition(
+                config
             )})`
         )
         .call(axis.x);
