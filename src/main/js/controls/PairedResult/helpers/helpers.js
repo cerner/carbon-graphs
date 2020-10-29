@@ -396,7 +396,7 @@ const drawLine = (scale, config, boxPath) =>
  * @param {d3.selection} canvasSVG - d3 html element of the canvas
  * @returns {undefined} - returns nothing
  */
-const drawPoints = (scale, config, canvasSVG) => {
+const drawPoints = (scale, config, canvasSVG, legendSVG) => {
     const getDataPointPath = (path, type, value, index) =>
         path.append(() =>
             new Shape(getShapeForTarget(getValue(value, type))).getShapeElement(
@@ -418,14 +418,7 @@ const drawPoints = (scale, config, canvasSVG) => {
                         );
                     },
                     a11yAttributes: {
-                        "aria-hidden":
-                            document
-                                .querySelector(
-                                    `.${styles.legendItem}[aria-describedby="${
-                                        getValue(value, type).key
-                                    }"]`
-                                )
-                                ?.getAttribute("aria-current") === "false",
+                        "aria-hidden": legendSVG && legendSVG.select(`.${styles.legendItem}[aria-describedby="${getValue(value, type).key}"]`)?.getAttribute("aria-current") === "false",
                         "aria-describedby": getValue(value, type).key,
                         "aria-disabled": !utils.isFunction(value.onClick)
                     }
