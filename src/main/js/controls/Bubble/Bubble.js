@@ -186,7 +186,7 @@ class Bubble extends GraphContent {
             .select(`g[aria-describedby="${graphData.key}"]`)
             .select(`.${styles.currentPointsGroup}`)
             .selectAll(`[class="${styles.point}"]`)
-            .data(getDataPointValues(this.dataTarget));
+            .data(getDataPointValues(this.dataTarget).filter((d) => d.y !== null));
         drawBubbles(
             graph.scale,
             graph.config,

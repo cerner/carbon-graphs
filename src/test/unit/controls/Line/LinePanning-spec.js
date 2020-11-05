@@ -282,6 +282,36 @@ describe("Line - Panning", () => {
             });
         });
     });
+    describe("When null is passed as y value", () => {
+        beforeEach(() => {
+            const axisData = utils.deepClone(getAxes(axisTimeSeries));
+            axisData.pan = { enabled: true };
+            const input = getInput([], false, false);
+            graphDefault = new Graph(axisData);
+            graphDefault.loadContent(new Line(input));
+        });
+        it("should remove datapoint with y value as null", () => {
+            const panData = {
+                key: "uid_1",
+                values: [
+                    {
+                        x: "2016-03-03T12:00:00Z",
+                        y: null
+                    },
+                    {
+                        x: "2016-04-03T12:00:00Z",
+                        y: 20
+                    }
+                ]
+            };
+            graphDefault.reflow(panData);
+            let lineContent = fetchAllElementsByClass(
+                lineGraphContainer,
+                styles.pointGroup
+            );
+            expect(lineContent.length).toEqual(1);
+        });
+    });
     describe("When pan is disabled", () => {
         beforeEach(() => {
             const axisData = utils.deepClone(getAxes(axisTimeSeries));

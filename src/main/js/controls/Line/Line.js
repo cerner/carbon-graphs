@@ -265,7 +265,7 @@ class Line extends GraphContent {
                 .select(`g[aria-describedby="${graphData.key}"]`)
                 .select(`.${styles.currentPointsGroup}`)
                 .selectAll(`[class*="${styles.point}"]`)
-                .data(getDataPointValues(this.dataTarget));
+                .data(getDataPointValues(this.dataTarget).filter((d) => d.y !== null));
             drawDataPoints(graph.scale, graph.config, pointPath.enter());
             pointPath
                 .exit()

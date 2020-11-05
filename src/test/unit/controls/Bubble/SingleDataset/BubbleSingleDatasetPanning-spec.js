@@ -1,6 +1,6 @@
 "use strict";
 import Graph from "../../../../../main/js/controls/Graph/Graph";
-import { BubbleSingleDataset } from "../../../../../main/js/controls/Bubble";
+import { BubbleMultipleDataset, BubbleSingleDataset } from "../../../../../main/js/controls/Bubble";
 import { COLORS, SHAPES } from "../../../../../main/js/helpers/constants";
 import styles from "../../../../../main/js/helpers/styles";
 import { getSVGAnimatedTransformList } from "../../../../../main/js/helpers/transformUtils";
@@ -316,6 +316,38 @@ describe("Bubble Single Dataset - Panning", () => {
                 expect(legendItem.getAttribute("aria-disabled")).toBe("false");
                 expect(legendItem.getAttribute("aria-current")).toBe("true");
             });
+        });
+    });
+    describe("When null is passed as y value", () => {
+        beforeEach(() => {
+            const axisData = utils.deepClone(getAxes(axisTimeSeries));
+            axisData.pan = { enabled: true };
+            const input = getInput([], false, false);
+            graphDefault = null;
+            graphDefault = new Graph(axisData);
+            graphDefault.loadContent(new BubbleSingleDataset(input));
+        });
+        it("should remove datapoint with y value as null", () => {
+            const panData = {
+                key: "uid_1",
+                values: [
+                    {
+                        x: "2016-03-03T12:00:00Z",
+                        y: null
+                    },
+                    {
+                        x: "2016-04-03T12:00:00Z",
+                        y: 20
+                    }
+                ]
+            };
+
+            graphDefault.reflow(panData);
+            let bubbleContent = fetchAllElementsByClass(
+                bubbleGraphContainer,
+                styles.pointGroup
+            );
+            expect(bubbleContent.length).toEqual(2);
         });
     });
 });

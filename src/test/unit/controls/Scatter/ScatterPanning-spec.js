@@ -14,6 +14,7 @@ import {
 import { toNumber, delay, PADDING_BOTTOM } from "../../helpers/commonHelpers";
 import { COLORS, SHAPES } from "../../../../main/js/helpers/constants";
 import { getSVGAnimatedTransformList } from "../../../../main/js/helpers/transformUtils";
+import Line from "../../../../main/js/controls/Line";
 
 describe("Scatter - Panning", () => {
     let graphDefault = null;
@@ -358,6 +359,36 @@ describe("Scatter - Panning", () => {
                 expect(legendItem.getAttribute("aria-disabled")).toBe("false");
                 expect(legendItem.getAttribute("aria-current")).toBe("true");
             });
+        });
+    });
+    describe("When null is passed as y value", () => {
+        beforeEach(() => {
+            const axisData = utils.deepClone(getAxes(axisTimeSeries));
+            axisData.pan = { enabled: true };
+            const input = getInput([], false, false);
+            graphDefault = new Graph(axisData);
+            graphDefault.loadContent(new Line(input));
+        });
+        it("should remove datapoint with y value as null", () => {
+            const panData = {
+                key: "uid_1",
+                values: [
+                    {
+                        x: "2016-03-03T12:00:00Z",
+                        y: null
+                    },
+                    {
+                        x: "2016-04-03T12:00:00Z",
+                        y: 20
+                    }
+                ]
+            };
+            graphDefault.reflow(panData);
+            let lineContent = fetchAllElementsByClass(
+                scatterGraphContainer,
+                styles.pointGroup
+            );
+            expect(lineContent.length).toEqual(1);
         });
     });
 });
