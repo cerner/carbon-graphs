@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>controls/Timeline/helpers/creationHelpers.js - Carbon</title>
+    
+    <meta name="description" content="A graphing library built using d3 based on Cerner design standards" />
+    
+        <meta name="keywords" content="carbon" />
+        <meta name="keyword" content="carbon" />
+    
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Bar.html">Bar</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Bar.html#load">load</a></li><li data-type='method' style='display: none;'><a href="Bar.html#redraw">redraw</a></li><li data-type='method' style='display: none;'><a href="Bar.html#reflow">reflow</a></li><li data-type='method' style='display: none;'><a href="Bar.html#resize">resize</a></li><li data-type='method' style='display: none;'><a href="Bar.html#unload">unload</a></li></ul></li><li></li><li><a href="BarConfig.html">BarConfig</a><ul class='methods'><li data-type='method' style='display: none;'><a href="BarConfig.html#clone">clone</a></li><li data-type='method' style='display: none;'><a href="BarConfig.html#getConfig">getConfig</a></li><li data-type='method' style='display: none;'><a href="BarConfig.html#setInput">setInput</a></li><li data-type='method' style='display: none;'><a href="BarConfig.html#validateInput">validateInput</a></li></ul></li><li></li><li><a href="BaseConfig.html">BaseConfig</a><ul class='methods'><li data-type='method' style='display: none;'><a href="BaseConfig.html#clone">clone</a></li><li data-type='method' style='display: none;'><a href="BaseConfig.html#getConfig">getConfig</a></li><li data-type='method' style='display: none;'><a href="BaseConfig.html#setInput">setInput</a></li><li data-type='method' style='display: none;'><a href="BaseConfig.html#validateInput">validateInput</a></li></ul></li><li><a href="global.html#Bubble">Bubble</a><ul class='methods'><li data-type='method' style='display: none;'><a href="global.html#Bubble#load">load</a></li><li data-type='method' style='display: none;'><a href="global.html#Bubble#redraw">redraw</a></li><li data-type='method' style='display: none;'><a href="global.html#Bubble#reflow">reflow</a></li><li data-type='method' style='display: none;'><a href="global.html#Bubble#resize">resize</a></li><li data-type='method' style='display: none;'><a href="global.html#Bubble#unload">unload</a></li></ul></li><li></li><li><a href="BubbleConfig.html">BubbleConfig</a><ul class='methods'><li data-type='method' style='display: none;'><a href="BubbleConfig.html#clone">clone</a></li><li data-type='method' style='display: none;'><a href="BubbleConfig.html#getConfig">getConfig</a></li><li data-type='method' style='display: none;'><a href="BubbleConfig.html#setInput">setInput</a></li><li data-type='method' style='display: none;'><a href="BubbleConfig.html#validateInput">validateInput</a></li></ul></li><li></li><li><a href="BubbleMultipleDataset.html">BubbleMultipleDataset</a><ul class='methods'><li data-type='method' style='display: none;'><a href="BubbleMultipleDataset.html#load">load</a></li><li data-type='method' style='display: none;'><a href="BubbleMultipleDataset.html#reflow">reflow</a></li></ul></li><li><a href="BubbleSingleDataset.html">BubbleSingleDataset</a><ul class='methods'><li data-type='method' style='display: none;'><a href="BubbleSingleDataset.html#load">load</a></li><li data-type='method' style='display: none;'><a href="BubbleSingleDataset.html#redraw">redraw</a></li><li data-type='method' style='display: none;'><a href="BubbleSingleDataset.html#reflow">reflow</a></li><li data-type='method' style='display: none;'><a href="BubbleSingleDataset.html#resize">resize</a></li></ul></li><li><a href="Construct.html">Construct</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Construct.html#destroy">destroy</a></li><li data-type='method' style='display: none;'><a href="Construct.html#generate">generate</a></li><li data-type='method' style='display: none;'><a href="Construct.html#loadContent">loadContent</a></li><li data-type='method' style='display: none;'><a href="Construct.html#resize">resize</a></li><li data-type='method' style='display: none;'><a href="Construct.html#unloadContent">unloadContent</a></li></ul></li><li><a href="global.html#Gantt">Gantt</a><ul class='methods'><li data-type='method' style='display: none;'><a href="global.html#Gantt#destroy">destroy</a></li><li data-type='method' style='display: none;'><a href="global.html#Gantt#generate">generate</a></li><li data-type='method' style='display: none;'><a href="global.html#Gantt#loadContent">loadContent</a></li><li data-type='method' style='display: none;'><a href="global.html#Gantt#reflow">reflow</a></li><li data-type='method' style='display: none;'><a href="global.html#Gantt#resize">resize</a></li><li data-type='method' style='display: none;'><a href="global.html#Gantt#unloadContent">unloadContent</a></li></ul></li><li></li><li><a href="global.html#GanttConfig">GanttConfig</a><ul class='methods'><li data-type='method' style='display: none;'><a href="global.html#GanttConfig#clone">clone</a></li><li data-type='method' style='display: none;'><a href="global.html#GanttConfig#getConfig">getConfig</a></li><li data-type='method' style='display: none;'><a href="global.html#GanttConfig#setInput">setInput</a></li><li data-type='method' style='display: none;'><a href="global.html#GanttConfig#validateInput">validateInput</a></li></ul></li><li></li><li><a href="Graph.html">Graph</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Graph.html#destroy">destroy</a></li><li data-type='method' style='display: none;'><a href="Graph.html#generate">generate</a></li><li data-type='method' style='display: none;'><a href="Graph.html#loadContent">loadContent</a></li><li data-type='method' style='display: none;'><a href="Graph.html#reflow">reflow</a></li><li data-type='method' style='display: none;'><a href="Graph.html#resize">resize</a></li><li data-type='method' style='display: none;'><a href="Graph.html#unloadContent">unloadContent</a></li></ul></li><li></li><li><a href="global.html#GraphConfig">GraphConfig</a><ul class='methods'><li data-type='method' style='display: none;'><a href="global.html#GraphConfig#clone">clone</a></li><li data-type='method' style='display: none;'><a href="global.html#GraphConfig#getConfig">getConfig</a></li><li data-type='method' style='display: none;'><a href="global.html#GraphConfig#setInput">setInput</a></li><li data-type='method' style='display: none;'><a href="global.html#GraphConfig#validateInput">validateInput</a></li></ul></li><li></li><li><a href="GraphContent.html">GraphContent</a><ul class='methods'><li data-type='method' style='display: none;'><a href="GraphContent.html#load">load</a></li><li data-type='method' style='display: none;'><a href="GraphContent.html#redraw">redraw</a></li><li data-type='method' style='display: none;'><a href="GraphContent.html#resize">resize</a></li><li data-type='method' style='display: none;'><a href="GraphContent.html#unload">unload</a></li></ul></li><li><a href="global.html#Line">Line</a><ul class='methods'><li data-type='method' style='display: none;'><a href="global.html#Line#load">load</a></li><li data-type='method' style='display: none;'><a href="global.html#Line#redraw">redraw</a></li><li data-type='method' style='display: none;'><a href="global.html#Line#reflow">reflow</a></li><li data-type='method' style='display: none;'><a href="global.html#Line#resize">resize</a></li><li data-type='method' style='display: none;'><a href="global.html#Line#unload">unload</a></li></ul></li><li></li><li><a href="global.html#LineConfig">LineConfig</a><ul class='methods'><li data-type='method' style='display: none;'><a href="global.html#LineConfig#clone">clone</a></li><li data-type='method' style='display: none;'><a href="global.html#LineConfig#getConfig">getConfig</a></li><li data-type='method' style='display: none;'><a href="global.html#LineConfig#setInput">setInput</a></li><li data-type='method' style='display: none;'><a href="global.html#LineConfig#validateInput">validateInput</a></li></ul></li><li></li><li><a href="global.html#PairedResult">PairedResult</a><ul class='methods'><li data-type='method' style='display: none;'><a href="global.html#PairedResult#load">load</a></li><li data-type='method' style='display: none;'><a href="global.html#PairedResult#redraw">redraw</a></li><li data-type='method' style='display: none;'><a href="global.html#PairedResult#reflow">reflow</a></li><li data-type='method' style='display: none;'><a href="global.html#PairedResult#resize">resize</a></li><li data-type='method' style='display: none;'><a href="global.html#PairedResult#unload">unload</a></li></ul></li><li></li><li><a href="global.html#PairedResultConfig">PairedResultConfig</a><ul class='methods'><li data-type='method' style='display: none;'><a href="global.html#PairedResultConfig#clone">clone</a></li><li data-type='method' style='display: none;'><a href="global.html#PairedResultConfig#getConfig">getConfig</a></li><li data-type='method' style='display: none;'><a href="global.html#PairedResultConfig#setInput">setInput</a></li><li data-type='method' style='display: none;'><a href="global.html#PairedResultConfig#validateInput">validateInput</a></li></ul></li><li></li><li><a href="Pie.html">Pie</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Pie.html#destroy">destroy</a></li><li data-type='method' style='display: none;'><a href="Pie.html#generate">generate</a></li><li data-type='method' style='display: none;'><a href="Pie.html#loadContent">loadContent</a></li><li data-type='method' style='display: none;'><a href="Pie.html#resize">resize</a></li><li data-type='method' style='display: none;'><a href="Pie.html#unloadContent">unloadContent</a></li></ul></li><li></li><li><a href="global.html#PieConfig">PieConfig</a><ul class='methods'><li data-type='method' style='display: none;'><a href="global.html#PieConfig#clone">clone</a></li><li data-type='method' style='display: none;'><a href="global.html#PieConfig#getConfig">getConfig</a></li><li data-type='method' style='display: none;'><a href="global.html#PieConfig#setInput">setInput</a></li><li data-type='method' style='display: none;'><a href="global.html#PieConfig#validateInput">validateInput</a></li></ul></li><li></li><li><a href="PieContent.html">PieContent</a><ul class='methods'><li data-type='method' style='display: none;'><a href="PieContent.html#load">load</a></li><li data-type='method' style='display: none;'><a href="PieContent.html#redraw">redraw</a></li><li data-type='method' style='display: none;'><a href="PieContent.html#resize">resize</a></li><li data-type='method' style='display: none;'><a href="PieContent.html#unload">unload</a></li></ul></li><li></li><li><a href="global.html#Scatter">Scatter</a><ul class='methods'><li data-type='method' style='display: none;'><a href="global.html#Scatter#load">load</a></li><li data-type='method' style='display: none;'><a href="global.html#Scatter#redraw">redraw</a></li><li data-type='method' style='display: none;'><a href="global.html#Scatter#reflow">reflow</a></li><li data-type='method' style='display: none;'><a href="global.html#Scatter#resize">resize</a></li><li data-type='method' style='display: none;'><a href="global.html#Scatter#unload">unload</a></li></ul></li><li></li><li><a href="global.html#ScatterConfig">ScatterConfig</a><ul class='methods'><li data-type='method' style='display: none;'><a href="global.html#ScatterConfig#clone">clone</a></li><li data-type='method' style='display: none;'><a href="global.html#ScatterConfig#getConfig">getConfig</a></li><li data-type='method' style='display: none;'><a href="global.html#ScatterConfig#setInput">setInput</a></li><li data-type='method' style='display: none;'><a href="global.html#ScatterConfig#validateInput">validateInput</a></li></ul></li><li></li><li><a href="Shape.html">Shape</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Shape.html#getShapeElement">getShapeElement</a></li></ul></li><li><a href="Timeline.html">Timeline</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Timeline.html#destroy">destroy</a></li><li data-type='method' style='display: none;'><a href="Timeline.html#generate">generate</a></li><li data-type='method' style='display: none;'><a href="Timeline.html#loadContent">loadContent</a></li><li data-type='method' style='display: none;'><a href="Timeline.html#reflow">reflow</a></li><li data-type='method' style='display: none;'><a href="Timeline.html#resize">resize</a></li><li data-type='method' style='display: none;'><a href="Timeline.html#unloadContent">unloadContent</a></li></ul></li><li></li><li><a href="global.html#TimelineConfig">TimelineConfig</a><ul class='methods'><li data-type='method' style='display: none;'><a href="global.html#TimelineConfig#clone">clone</a></li><li data-type='method' style='display: none;'><a href="global.html#TimelineConfig#getConfig">getConfig</a></li><li data-type='method' style='display: none;'><a href="global.html#TimelineConfig#setInput">setInput</a></li><li data-type='method' style='display: none;'><a href="global.html#TimelineConfig#validateInput">validateInput</a></li></ul></li><li></li><li><a href="global.html#TimelineContent">TimelineContent</a><ul class='methods'><li data-type='method' style='display: none;'><a href="global.html#TimelineContent#load">load</a></li><li data-type='method' style='display: none;'><a href="global.html#TimelineContent#redraw">redraw</a></li><li data-type='method' style='display: none;'><a href="global.html#TimelineContent#reflow">reflow</a></li><li data-type='method' style='display: none;'><a href="global.html#TimelineContent#resize">resize</a></li><li data-type='method' style='display: none;'><a href="global.html#TimelineContent#unload">unload</a></li></ul></li><li></li><li><a href="Track.html">Track</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Track.html#load">load</a></li><li data-type='method' style='display: none;'><a href="Track.html#redraw">redraw</a></li><li data-type='method' style='display: none;'><a href="Track.html#reflow">reflow</a></li><li data-type='method' style='display: none;'><a href="Track.html#resize">resize</a></li><li data-type='method' style='display: none;'><a href="Track.html#unload">unload</a></li></ul></li><li></li></ul><h3>Modules</h3><ul><li><a href="module-api.html">api</a></li><li><a href="module-axis.html">axis</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-axis.html#~buildAxisLabel">buildAxisLabel</a></li><li data-type='method' style='display: none;'><a href="module-axis.html#~formatLabel">formatLabel</a></li><li data-type='method' style='display: none;'><a href="module-axis.html#~isValidAxisType">isValidAxisType</a></li><li data-type='method' style='display: none;'><a href="module-axis.html#~prepareHorizontalAxis">prepareHorizontalAxis</a></li></ul></li><li><a href="module-barType.html">barType</a></li><li><a href="module-Carbon.html">Carbon</a></li><li><a href="module-constants.html">constants</a><ul class='members'><li data-type='member' style='display: none;'><a href="module-constants.html#.AXES_ORIENTATION">AXES_ORIENTATION</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.AXIS_TYPE">AXIS_TYPE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.AXISRANGE_FOUR">AXISRANGE_FOUR</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.AXISRANGE_ONE">AXISRANGE_ONE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.AXISRANGE_THREE">AXISRANGE_THREE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.AXISRANGE_TWO">AXISRANGE_TWO</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.BASE_CANVAS_WIDTH_PADDING">BASE_CANVAS_WIDTH_PADDING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.BASE_LABEL_ICON_HEIGHT_PADDING">BASE_LABEL_ICON_HEIGHT_PADDING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.BASE_LABEL_ICON_SPACING">BASE_LABEL_ICON_SPACING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.BASE_LABEL_ICON_WIDTH_PADDING">BASE_LABEL_ICON_WIDTH_PADDING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.BUBBLE">BUBBLE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.COLORS">COLORS</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.D3_TRANSITION_PROPERTIES_DISABLED">D3_TRANSITION_PROPERTIES_DISABLED</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.D3_TRANSITION_PROPERTIES_ENABLED">D3_TRANSITION_PROPERTIES_ENABLED</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_ACTIVITY_BAR_HASH_COLOR">DEFAULT_ACTIVITY_BAR_HASH_COLOR</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_BAR_COLOR">DEFAULT_BAR_COLOR</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_BAR_GRAPH_PADDING_ATTRIBUTES">DEFAULT_BAR_GRAPH_PADDING_ATTRIBUTES</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_BAR_HASH_COLOR">DEFAULT_BAR_HASH_COLOR</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_BAR_REGION_COLOR">DEFAULT_BAR_REGION_COLOR</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_BAR_SELECTION_PADDING">DEFAULT_BAR_SELECTION_PADDING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_BAR_STRIPE_COLOR">DEFAULT_BAR_STRIPE_COLOR</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_BUBBLE_BLUR_OPACITY">DEFAULT_BUBBLE_BLUR_OPACITY</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_BUBBLE_BLUR_STROKE_OPACITY">DEFAULT_BUBBLE_BLUR_STROKE_OPACITY</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_BUBBLE_OPACITY">DEFAULT_BUBBLE_OPACITY</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_BUBBLE_RADIUS_MAX">DEFAULT_BUBBLE_RADIUS_MAX</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_BUBBLE_RADIUS_MIN">DEFAULT_BUBBLE_RADIUS_MIN</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_BUBBLE_SELECTOR_RADIUS">DEFAULT_BUBBLE_SELECTOR_RADIUS</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_BUBBLE_STROKE_OPACITY">DEFAULT_BUBBLE_STROKE_OPACITY</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_CHARACTER_SVG_ELEMENT_WIDTH">DEFAULT_CHARACTER_SVG_ELEMENT_WIDTH</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_COLOR">DEFAULT_COLOR</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GANTT_ACTIVITY_CHUNK_WIDTH">DEFAULT_GANTT_ACTIVITY_CHUNK_WIDTH</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GANTT_ACTIVITY_HEIGHT">DEFAULT_GANTT_ACTIVITY_HEIGHT</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GANTT_ACTIVITY_OPACITY">DEFAULT_GANTT_ACTIVITY_OPACITY</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GANTT_ACTIVITY_PADDING">DEFAULT_GANTT_ACTIVITY_PADDING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GANTT_ACTIVITY_STRIPE_DISTANCE">DEFAULT_GANTT_ACTIVITY_STRIPE_DISTANCE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GANTT_ACTIVITY_STRIPE_WIDTH">DEFAULT_GANTT_ACTIVITY_STRIPE_WIDTH</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GANTT_TASK_CHUNK_WIDTH">DEFAULT_GANTT_TASK_CHUNK_WIDTH</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GANTT_TASK_HEIGHT">DEFAULT_GANTT_TASK_HEIGHT</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GANTT_TASK_PADDING">DEFAULT_GANTT_TASK_PADDING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GANTT_TASK_SELECTION_PADDING">DEFAULT_GANTT_TASK_SELECTION_PADDING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GANTT_TASK_STRIPE_DISTANCE">DEFAULT_GANTT_TASK_STRIPE_DISTANCE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GANTT_TASK_STRIPE_WIDTH">DEFAULT_GANTT_TASK_STRIPE_WIDTH</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GANTT_TRACK_HEIGHT">DEFAULT_GANTT_TRACK_HEIGHT</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GANTT_TRACK_SELECTION">DEFAULT_GANTT_TRACK_SELECTION</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GOAL_LINE_STROKE_WIDTH">DEFAULT_GOAL_LINE_STROKE_WIDTH</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_HEIGHT">DEFAULT_HEIGHT</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_INTERPOLATION">DEFAULT_INTERPOLATION</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_LABEL_CHARACTER_LIMIT">DEFAULT_LABEL_CHARACTER_LIMIT</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_LEGEND_LINE_WIDTH">DEFAULT_LEGEND_LINE_WIDTH</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_LEGEND_LINE_WIDTH_WITH_SYMBOL">DEFAULT_LEGEND_LINE_WIDTH_WITH_SYMBOL</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_PIE_COLOR">DEFAULT_PIE_COLOR</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_PIE_INNER_RADIUS">DEFAULT_PIE_INNER_RADIUS</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_PIE_LEGEND_SHAPE">DEFAULT_PIE_LEGEND_SHAPE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_PIE_PAD_ANGLE">DEFAULT_PIE_PAD_ANGLE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_PLOT_SCALE">DEFAULT_PLOT_SCALE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_PLOT_SELECTION_SCALE">DEFAULT_PLOT_SELECTION_SCALE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_PLOT_SELECTION_SCALE_FOR_EVENTS">DEFAULT_PLOT_SELECTION_SCALE_FOR_EVENTS</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_REGION_LINE_STROKE_WIDTH">DEFAULT_REGION_LINE_STROKE_WIDTH</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_TASK_BAR_HASH_COLOR">DEFAULT_TASK_BAR_HASH_COLOR</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_TICKSCOUNT">DEFAULT_TICKSCOUNT</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_TIMELINE_PLOT_SELECTION_SCALE">DEFAULT_TIMELINE_PLOT_SELECTION_SCALE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_TIMELINE_SCALE">DEFAULT_TIMELINE_SCALE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_TIMELINE_TICK_LENGTH">DEFAULT_TIMELINE_TICK_LENGTH</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_Y_AXIS_SPACING">DEFAULT_Y_AXIS_SPACING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.HOVER_EVENT">HOVER_EVENT</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.ISO8601_DATE_TIME_MILLI">ISO8601_DATE_TIME_MILLI</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.LEGEND_LINE_POSITION">LEGEND_LINE_POSITION</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.LEGEND_PADDING">LEGEND_PADDING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.LINE_TYPE">LINE_TYPE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.MAX_TICK_VARIANCE">MAX_TICK_VARIANCE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.MIN_TICKS">MIN_TICKS</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.NO_DATA_LABEL_PADDING">NO_DATA_LABEL_PADDING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.NO_DATA_VIEW_PROPORTION">NO_DATA_VIEW_PROPORTION</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.PADDING">PADDING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.PAIR_ITEM_TYPES">PAIR_ITEM_TYPES</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.PIE_CHART_DEFAULT_HEIGHT">PIE_CHART_DEFAULT_HEIGHT</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.PIE_LEGEND_PADDING">PIE_LEGEND_PADDING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.RESIZE_THROTTLE">RESIZE_THROTTLE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.SELECTION_INDICATOR_X_POSITION">SELECTION_INDICATOR_X_POSITION</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.SELECTION_INDICATOR_Y_POSITION">SELECTION_INDICATOR_Y_POSITION</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.SHAPES">SHAPES</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.SHAPES_LIGHT">SHAPES_LIGHT</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.TEXT_LABEL_ICON_HEIGHT_PADDING">TEXT_LABEL_ICON_HEIGHT_PADDING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.TEXT_LABEL_ICON_WIDTH_PADDING">TEXT_LABEL_ICON_WIDTH_PADDING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.TEXT_LABEL_VERTICAL_POSITION">TEXT_LABEL_VERTICAL_POSITION</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.TICK_ORIENTATION">TICK_ORIENTATION</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.TICKSCOUNT_MAXLIMIT">TICKSCOUNT_MAXLIMIT</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.TIMELINE_HEIGHT">TIMELINE_HEIGHT</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.VIEW_BOX_SIZE">VIEW_BOX_SIZE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.X_AXIS">X_AXIS</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.Y2_AXIS">Y2_AXIS</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.Y_AXIS">Y_AXIS</a></li></ul><ul class='methods'><li data-type='method' style='display: none;'><a href="module-constants.html#.d3Transition">d3Transition</a></li></ul></li><li><a href="module-constructUtils.html">constructUtils</a></li><li><a href="module-errors.html">errors</a><ul class='members'><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_ACTIVITIES_DURATION_NOT_FUNCTION">THROW_MSG_ACTIVITIES_DURATION_NOT_FUNCTION</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_ACTIVITIES_DURATION_NOT_PROVIDED">THROW_MSG_ACTIVITIES_DURATION_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_ACTIVITIES_DURATION_NOT_VALID">THROW_MSG_ACTIVITIES_DURATION_NOT_VALID</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_ACTIVITIES_NOT_PROVIDED">THROW_MSG_ACTIVITIES_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_ACTIVITIES_START_AND_END_NOT_PROVIDED">THROW_MSG_ACTIVITIES_START_AND_END_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_ACTIVITIES_START_AND_END_TYPE_NOT_VALID">THROW_MSG_ACTIVITIES_START_AND_END_TYPE_NOT_VALID</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_ACTIVITIES_START_MORE_END">THROW_MSG_ACTIVITIES_START_MORE_END</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_ACTIVITIES_UNIQUE_KEY_NOT_PROVIDED">THROW_MSG_ACTIVITIES_UNIQUE_KEY_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_AXIS_INFO_ROW_EMPTY_TICK_VALUES">THROW_MSG_AXIS_INFO_ROW_EMPTY_TICK_VALUES</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_AXIS_INFO_ROW_INVALID_TICK_VALUES">THROW_MSG_AXIS_INFO_ROW_INVALID_TICK_VALUES</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_AXIS_INFO_ROW_LABEL_DISPLAY_NOT_PROVIDED">THROW_MSG_AXIS_INFO_ROW_LABEL_DISPLAY_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_AXIS_INFO_ROW_VALUE_NOT_PROVIDED">THROW_MSG_AXIS_INFO_ROW_VALUE_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_BAR_REGION_EMPTY_X_VALUE">THROW_MSG_BAR_REGION_EMPTY_X_VALUE</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_CONFIG_CLONE_INPUT_NOT_IMPLEMENTED">THROW_MSG_CONFIG_CLONE_INPUT_NOT_IMPLEMENTED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_CONFIG_GET_CONFIG_NOT_IMPLEMENTED">THROW_MSG_CONFIG_GET_CONFIG_NOT_IMPLEMENTED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_CONFIG_SET_INPUT_NOT_IMPLEMENTED">THROW_MSG_CONFIG_SET_INPUT_NOT_IMPLEMENTED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_CONFIG_VALIDATE_INPUT_NOT_IMPLEMENTED">THROW_MSG_CONFIG_VALIDATE_INPUT_NOT_IMPLEMENTED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_CONSTRUCT_DESTROY_NOT_IMPLEMENTED">THROW_MSG_CONSTRUCT_DESTROY_NOT_IMPLEMENTED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_CONSTRUCT_GENERATE_NOT_IMPLEMENTED">THROW_MSG_CONSTRUCT_GENERATE_NOT_IMPLEMENTED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_CONSTRUCT_LOAD_NOT_IMPLEMENTED">THROW_MSG_CONSTRUCT_LOAD_NOT_IMPLEMENTED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_CONSTRUCT_RESIZE_NOT_IMPLEMENTED">THROW_MSG_CONSTRUCT_RESIZE_NOT_IMPLEMENTED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_CONSTRUCT_UNLOAD_NOT_IMPLEMENTED">THROW_MSG_CONSTRUCT_UNLOAD_NOT_IMPLEMENTED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_CONTENT_LOAD_NOT_IMPLEMENTED">THROW_MSG_CONTENT_LOAD_NOT_IMPLEMENTED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_CONTENT_REDRAW_NOT_IMPLEMENTED">THROW_MSG_CONTENT_REDRAW_NOT_IMPLEMENTED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_CONTENT_RESIZE_NOT_IMPLEMENTED">THROW_MSG_CONTENT_RESIZE_NOT_IMPLEMENTED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_CONTENT_UNLOAD_NOT_IMPLEMENTED">THROW_MSG_CONTENT_UNLOAD_NOT_IMPLEMENTED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_DATELINE_COLOR_NOT_PROVIDED">THROW_MSG_DATELINE_COLOR_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_DATELINE_NOT_PROVIDED">THROW_MSG_DATELINE_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_DATELINE_OBJECT_NOT_PROVIDED">THROW_MSG_DATELINE_OBJECT_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_DATELINE_SHAPE_NOT_PROVIDED">THROW_MSG_DATELINE_SHAPE_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_DATELINE_TYPE_NOT_VALID">THROW_MSG_DATELINE_TYPE_NOT_VALID</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_EMPTY_X_AXIS_TICK_VALUES">THROW_MSG_EMPTY_X_AXIS_TICK_VALUES</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_EVENTLINE_COLOR_NOT_PROVIDED">THROW_MSG_EVENTLINE_COLOR_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_EVENTLINE_NOT_PROVIDED">THROW_MSG_EVENTLINE_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_EVENTLINE_OBJECT_NOT_PROVIDED">THROW_MSG_EVENTLINE_OBJECT_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_EVENTLINE_TYPE_NOT_VALID">THROW_MSG_EVENTLINE_TYPE_NOT_VALID</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_INVALID_AXIS_TYPE_VALUES">THROW_MSG_INVALID_AXIS_TYPE_VALUES</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_INVALID_CALLBACK_FUNCTION">THROW_MSG_INVALID_CALLBACK_FUNCTION</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_INVALID_DATA_PROPERTY">THROW_MSG_INVALID_DATA_PROPERTY</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_INVALID_FORMAT_TYPE">THROW_MSG_INVALID_FORMAT_TYPE</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_INVALID_INPUT">THROW_MSG_INVALID_INPUT</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_INVALID_LOAD_CONTENT_AT_INDEX">THROW_MSG_INVALID_LOAD_CONTENT_AT_INDEX</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_INVALID_OBJECT_PROVIDED">THROW_MSG_INVALID_OBJECT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_INVALID_REGION_X_AXIS_TICK">THROW_MSG_INVALID_REGION_X_AXIS_TICK</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_INVALID_TYPE">THROW_MSG_INVALID_TYPE</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_INVALID_X_AXIS_TICK_VALUES">THROW_MSG_INVALID_X_AXIS_TICK_VALUES</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_LEGEND_LABEL_FORMAT_NOT_PROVIDED">THROW_MSG_LEGEND_LABEL_FORMAT_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_LEGEND_LABEL_NOT_PROVIDED">THROW_MSG_LEGEND_LABEL_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_NO_AXES_DATA_LOADED">THROW_MSG_NO_AXES_DATA_LOADED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_NO_AXIS_INFO">THROW_MSG_NO_AXIS_INFO</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_NO_AXIS_LABEL_INFO">THROW_MSG_NO_AXIS_LABEL_INFO</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_NO_AXIS_LIMIT_INFO">THROW_MSG_NO_AXIS_LIMIT_INFO</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_NO_BIND">THROW_MSG_NO_BIND</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_NO_CONTENT_DATA_LOADED">THROW_MSG_NO_CONTENT_DATA_LOADED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_NO_DATA_LOADED">THROW_MSG_NO_DATA_LOADED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_NO_DATA_POINTS">THROW_MSG_NO_DATA_POINTS</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_NON_UNIQUE_PROPERTY">THROW_MSG_NON_UNIQUE_PROPERTY</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_REGION_EMPTY">THROW_MSG_REGION_EMPTY</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_REGION_INVALID_AXIS_PROVIDED">THROW_MSG_REGION_INVALID_AXIS_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_REGION_INVALID_FORMAT">THROW_MSG_REGION_INVALID_FORMAT</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_REGION_INVALID_VALUE_TYPE_PROVIDED">THROW_MSG_REGION_INVALID_VALUE_TYPE_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_REGION_START_END_MISSING">THROW_MSG_REGION_START_END_MISSING</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_REGION_START_MORE_END">THROW_MSG_REGION_START_MORE_END</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_SHAPE_OPTIONS_EMPTY">THROW_MSG_SHAPE_OPTIONS_EMPTY</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_SHAPE_OPTIONS_PROPERTY_INVALID">THROW_MSG_SHAPE_OPTIONS_PROPERTY_INVALID</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_SHAPE_PATH_EMPTY">THROW_MSG_SHAPE_PATH_EMPTY</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_TASKS_DURATION_NOT_FUNCTION">THROW_MSG_TASKS_DURATION_NOT_FUNCTION</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_TASKS_DURATION_NOT_PROVIDED">THROW_MSG_TASKS_DURATION_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_TASKS_DURATION_NOT_VALID">THROW_MSG_TASKS_DURATION_NOT_VALID</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_TASKS_NOT_PROVIDED">THROW_MSG_TASKS_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_TASKS_START_AND_END_NOT_PROVIDED">THROW_MSG_TASKS_START_AND_END_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_TASKS_START_AND_END_TYPE_NOT_VALID">THROW_MSG_TASKS_START_AND_END_TYPE_NOT_VALID</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_TASKS_START_MORE_END">THROW_MSG_TASKS_START_MORE_END</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_TASKS_UNIQUE_KEY_NOT_PROVIDED">THROW_MSG_TASKS_UNIQUE_KEY_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_UNIQUE_ACTION_KEY_NOT_PROVIDED">THROW_MSG_UNIQUE_ACTION_KEY_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_UNIQUE_KEY_NOT_PROVIDED">THROW_MSG_UNIQUE_KEY_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_UNIQUE_LABEL_NOT_PROVIDED">THROW_MSG_UNIQUE_LABEL_NOT_PROVIDED</a></li></ul></li><li><a href="module-label.html">label</a><ul class='members'><li data-type='member' style='display: none;'><a href="module-label.html#.loadLabelPopup">loadLabelPopup</a></li></ul><ul class='methods'><li data-type='method' style='display: none;'><a href="module-label.html#~createTooltipDiv">createTooltipDiv</a></li><li data-type='method' style='display: none;'><a href="module-label.html#~destroyTooltipDiv">destroyTooltipDiv</a></li><li data-type='method' style='display: none;'><a href="module-label.html#~removeOldPopup">removeOldPopup</a></li></ul></li><li><a href="module-legend.html">legend</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-legend.html#~createLegend">createLegend</a></li><li data-type='method' style='display: none;'><a href="module-legend.html#~getDefaultLegendOptions">getDefaultLegendOptions</a></li><li data-type='method' style='display: none;'><a href="module-legend.html#~getLegendPadding">getLegendPadding</a></li><li data-type='method' style='display: none;'><a href="module-legend.html#~isLegendSelected">isLegendSelected</a></li><li data-type='method' style='display: none;'><a href="module-legend.html#~legendClickHandler">legendClickHandler</a></li><li data-type='method' style='display: none;'><a href="module-legend.html#~legendHoverHandler">legendHoverHandler</a></li><li data-type='method' style='display: none;'><a href="module-legend.html#~loadLegendItem">loadLegendItem</a></li><li data-type='method' style='display: none;'><a href="module-legend.html#~loadPieLegendItem">loadPieLegendItem</a></li><li data-type='method' style='display: none;'><a href="module-legend.html#~removeLegendItem">removeLegendItem</a></li></ul></li><li><a href="module-paddingUtils.html">paddingUtils</a></li><li><a href="module-region.html">region</a></li><li><a href="module-styles.html">styles</a><ul class='members'><li data-type='member' style='display: none;'><a href="module-styles.html#.activity">activity</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.activityBar">activityBar</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.activityGroup">activityGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axis">axis</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisInfoRow">axisInfoRow</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisInfoRowDisplay">axisInfoRowDisplay</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisInfoRowIcon">axisInfoRowIcon</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisInfoRowItem">axisInfoRowItem</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisInfoRowSecondaryDisplay">axisInfoRowSecondaryDisplay</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisLabel">axisLabel</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisLabelRow">axisLabelRow</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisLabelX">axisLabelX</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisLabelY">axisLabelY</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisLabelY2">axisLabelY2</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisLabelY2ShapeContainer">axisLabelY2ShapeContainer</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisLabelYShapeContainer">axisLabelYShapeContainer</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisReferenceLine">axisReferenceLine</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisX">axisX</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisY">axisY</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisY2">axisY2</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisYTrackLabel">axisYTrackLabel</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.bar">bar</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.barGoalLine">barGoalLine</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.barGraphContent">barGraphContent</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.barHashedRect">barHashedRect</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.barSelectionGroup">barSelectionGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.blur">blur</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.bubbleBlur">bubbleBlur</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.bubbleGraphContent">bubbleGraphContent</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.canvas">canvas</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.canvasXAxis">canvasXAxis</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.container">container</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.contentContainer">contentContainer</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.criticalityInnerPoint">criticalityInnerPoint</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.criticalityOuterPoint">criticalityOuterPoint</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.criticalityTimelineInnerPoint">criticalityTimelineInnerPoint</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.criticalityTimelineOuterPoint">criticalityTimelineOuterPoint</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.currentBarsGroup">currentBarsGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.currentLinesGroup">currentLinesGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.currentPointsGroup">currentPointsGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.dataPointDisplayEnable">dataPointDisplayEnable</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.dataPointSelection">dataPointSelection</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.dateline">dateline</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.datelineContent">datelineContent</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.datelineGroup">datelineGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.datelinePoint">datelinePoint</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.eventline">eventline</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.eventlineContent">eventlineContent</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.eventlineGroup">eventlineGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.ganttChartContent">ganttChartContent</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.ganttTrackBarSelection">ganttTrackBarSelection</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.ganttTrackSelectorGroup">ganttTrackSelectorGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.grid">grid</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.gridH">gridH</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.gridLowerStep">gridLowerStep</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.gridMidpoint">gridMidpoint</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.gridUpperStep">gridUpperStep</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.gridV">gridV</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.high">high</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.highlight">highlight</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.labelPopupOverlay">labelPopupOverlay</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.labelPopupTooltip">labelPopupTooltip</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.legend">legend</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.legendItem">legendItem</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.legendItemBtn">legendItemBtn</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.legendItemIcon">legendItemIcon</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.legendItemLine">legendItemLine</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.legendItemLineWithIcon">legendItemLineWithIcon</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.legendItemSpan">legendItemSpan</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.legendItemText">legendItemText</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.legendItemWhiteLine">legendItemWhiteLine</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.line">line</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.lineGraphContent">lineGraphContent</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.low">low</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.mid">mid</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.noDataContainer">noDataContainer</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.noDataLabel">noDataLabel</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.noDataOverlay">noDataOverlay</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.pairedBox">pairedBox</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.pairedBoxGroup">pairedBoxGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.pairedLine">pairedLine</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.pairedPoint">pairedPoint</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.pieChartCanvas">pieChartCanvas</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.pieChartContent">pieChartContent</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.pieContentGroup">pieContentGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.pieContentSlice">pieContentSlice</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.pieLegendItem">pieLegendItem</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.pieLegendItemIcon">pieLegendItemIcon</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.pieLegendItemSliceHover">pieLegendItemSliceHover</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.point">point</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.pointGroup">pointGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.region">region</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.regionBlur">regionBlur</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.regionGroup">regionGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.regionHighlight">regionHighlight</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.regionPairGroup">regionPairGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.scatterGraphContent">scatterGraphContent</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.svgIcon">svgIcon</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.task">task</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.taskBar">taskBar</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.taskBarCompletion">taskBarCompletion</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.taskBarSelection">taskBarSelection</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.taskGroup">taskGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.timelineContentGroup">timelineContentGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.timelineGraphContent">timelineGraphContent</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.trackGroup">trackGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.valueRegion">valueRegion</a></li></ul></li><li><a href="module-utils.html">utils</a><ul class='members'><li data-type='member' style='display: none;'><a href="module-utils.html#.deepClone">deepClone</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.getNumber">getNumber</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.getTime">getTime</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.hasValue">hasValue</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.isArray">isArray</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.isBoolean">isBoolean</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.isDate">isDate</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.isDateInstance">isDateInstance</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.isDefined">isDefined</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.isEmpty">isEmpty</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.isEmptyArray">isEmptyArray</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.isEqual">isEqual</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.isFunction">isFunction</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.isNumber">isNumber</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.isUndefined">isUndefined</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.notEmpty">notEmpty</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.parseDateTime">parseDateTime</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.sanitize">sanitize</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#d3">d3</a></li><li><a href="global.html#getDefaultSVGProps">getDefaultSVGProps</a></li><li><a href="global.html#getSVGObject">getSVGObject</a></li><li><a href="global.html#getSVGObjectForEvent">getSVGObjectForEvent</a></li><li><a href="global.html#getValueRegionSubset">getValueRegionSubset</a></li><li><a href="global.html#helpers">helpers</a></li><li><a href="global.html#LINE">LINE</a></li><li><a href="global.html#LINE_DASHED">LINE_DASHED</a></li><li><a href="global.html#LOCALE">LOCALE</a></li><li><a href="global.html#renderSelectionPathForEvents">renderSelectionPathForEvents</a></li><li><a href="global.html#tools">tools</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">controls/Timeline/helpers/creationHelpers.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict";
+import * as d3 from "d3";
+import { Shape } from "../../../core";
+import { getDefaultSVGProps } from "../../../core/Shape";
+import {
+    buildAxisLabel,
+    getAxisLabelHeight,
+    getAxisTickFormat,
+    getRotationForAxis,
+    getXAxisHeight,
+    getYAxisHeight,
+    prepareXAxis
+} from "../../../helpers/axis";
+import constants, { SHAPES } from "../../../helpers/constants";
+import {
+    legendClickHandler,
+    legendHoverHandler,
+    loadLegendItem,
+    isLegendSelected
+} from "../../../helpers/legend";
+import { getSVGObject } from "../../../helpers/shapeSVG";
+import styles from "../../../helpers/styles";
+import utils from "../../../helpers/utils";
+import {
+    attachEventHandlers,
+    d3RemoveElement,
+    detachEventHandlers,
+    getColorForTarget,
+    getShapeForTarget
+} from "../../Graph/helpers/helpers";
+import { transformPoint } from "./translateHelpers";
+
+/**
+ * @typedef TimelineContent
+ */
+
+const DEFAULT_HEIGHT = constants.TIMELINE_HEIGHT;
+
+/**
+ * Calculates the height for graph
+ *
+ * @private
+ * @param {object} config - config object derived from input JSON
+ * @returns {number} Height for the axes
+ */
+const determineHeight = (config) =>
+    DEFAULT_HEIGHT + config.padding.top - config.padding.bottom;
+/**
+ * Calculates axes label sizes, specifically:
+ *  X Axis Label: Height
+ *
+ *  @private
+ *  @param {object} config - config object derived from input JSON
+ *  @returns {undefined} - returns nothing
+ */
+const calculateAxesLabelSize = (config) => {
+    config.axisLabelHeights = {};
+    config.axisLabelHeights.x = 0;
+    if (config.showLabel) {
+        if (config.axis.x.label) {
+            config.axisLabelHeights.x = getAxisLabelHeight(config.axis.x.label);
+        }
+    }
+};
+/**
+ * Calculates axes sizes, specifically:
+ *  X Axis: Height
+ *  Padding is provided enough to accommodate around 15 characters.
+ *  Beyond which we would need to apply truncation (ellipsis)
+ *
+ *  @private
+ *  @param {object} config - config object derived from input JSON
+ *  @returns {undefined} - returns nothing
+ */
+const calculateAxesSize = (config) => {
+    config.axisSizes = {};
+    config.axisSizes.x = getXAxisHeight(config);
+};
+/**
+ * X Axis's starting position within the canvas
+ *
+ * @private
+ * @param {object} config - config object derived from input JSON
+ * @returns {number} Position for the axis
+ */
+const getXAxisXPosition = (config) => config.padding.left;
+/**
+ * X Axis's position vertically relative to the canvas
+ *
+ * @private
+ * @param {object} config - config object derived from input JSON
+ * @returns {number} Position for the axis
+ */
+const getXAxisYPosition = (config) =>
+    config.padding.top * 1.5 + config.padding.bottom;
+
+/**
+ * X Axis's width that will hold equally spaced ticks
+ *
+ * @private
+ * @param {object} config - config object derived from input JSON
+ * @returns {number} X Axis width
+ */
+const getXAxisWidth = (config) =>
+    config.canvasWidth - config.padding.left - config.padding.right;
+/**
+ * X Axis label's starting position below the graph
+ *
+ * @private
+ * @param {object} config - config object derived from input JSON
+ * @returns {number} Position for the label
+ */
+const getXAxisLabelXPosition = (config) =>
+    getXAxisXPosition(config) + getXAxisWidth(config) / 2;
+/**
+ * X Axis label's position vertically below the graph
+ *
+ * @private
+ * @param {object} config - config object derived from input JSON
+ * @returns {number} Position for the label
+ */
+const getXAxisLabelYPosition = (config) =>
+    getXAxisYPosition(config) +
+    config.axisLabelHeights.x * 2 +
+    config.padding.bottom * 4;
+/**
+ * Prepares X,Y and Y2 Axes according to their scale and available container width and height
+ *
+ * @private
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
+ * @returns {object} - Scaled axes object
+ */
+const getAxesScale = (axis, scale, config) => {
+    axis.x = prepareXAxis(
+        scale.x,
+        config.axis.x.ticks.values,
+        getXAxisWidth(config),
+        getAxisTickFormat(
+            config.d3Locale,
+            config.axis.x.ticks.format,
+            config.axis.x.type
+        )
+    ).tickSize(constants.DEFAULT_TIMELINE_TICK_LENGTH);
+    return axis;
+};
+/**
+ * Creates and sets the d3 scale for the Graph. Once the scale is created
+ * we can create the axes. To create a d3 scale, we need domain and range.
+ * To create an axis we need scale, orientation and tick values, if needed
+ *
+ * The scale function uses d3.linear.nice which rounds the values in the axes.
+ * i.e. [0.20147987687960267, 0.996679553296417] will get translated to [0.2, 1]
+ *
+ * The scale function uses d3.linear.clamp which "clamps" the scale so that any
+ * input provided will clamp between the domain.
+ * i.e. Before, If you have domain 0 to 20 (input lower and upper bounds) and range 0 to 100 (Width in px).
+ * When input 20 is provided then the scale returns the px positioning as 200, which would put the point outside the graph.
+ * Instead we clamp it within the graph as an upper bound using clamp. Now, it will return 100px.
+ *
+ * @private
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
+ * @returns {undefined} - returns nothing
+ */
+const scaleGraph = (scale, config) => {
+    scale.x = d3
+        .scaleTime()
+        .domain(config.axis.x.domain)
+        .range([0, getXAxisWidth(config)])
+        .clamp(config.settingsDictionary.shouldClamp);
+    if (config.axis.x.rangeRounding) {
+        scale.x.nice();
+    }
+};
+/**
+ * Added defs element for the canvas. This currently holds the clip paths for the entire chart.
+ *
+ * @private
+ * @param {object} config - config object derived from input JSON
+ * @param {d3.Selection} canvasSVG - d3 selection node of canvas svg
+ * @returns {object} d3 svg path
+ */
+const createDefs = (config, canvasSVG) =>
+    canvasSVG
+        .append("defs")
+        .append("clipPath")
+        .attr("id", config.clipPathId)
+        .append("rect")
+        .attr(constants.X_AXIS, getXAxisXPosition(config))
+        .attr(constants.Y_AXIS, getXAxisYPosition(config) / 2)
+        .attr("width", getXAxisWidth(config))
+        .attr("height", getYAxisHeight(config));
+/**
+ * Create the d3 Axis - X and append into the canvas.
+ *
+ * @private
+ * @param {object} axis - Axis scaled according to input parameters
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
+ * @returns {undefined} - returns nothing
+ */
+const createAxes = (axis, scale, config, canvasSVG) => {
+    getAxesScale(axis, scale, config);
+    canvasSVG
+        .append("g")
+        .classed(styles.axis, true)
+        .classed(styles.axisX, true)
+        .attr("aria-hidden", false)
+        .attr(
+            "transform",
+            `translate(${getXAxisXPosition(config)}, ${getXAxisYPosition(
+                config
+            )})`
+        )
+        .call(axis.x);
+};
+/**
+ * Create the d3 Labels - X and append into the canvas.
+ * Only if showLabel is enabled. X Axis is 0 deg rotated
+ *
+ * @private
+ * @todo Label overflow formatting, adding ellipsis?
+ * @param {object} config - config object derived from input JSON
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
+ * @returns {undefined} - returns nothing
+ */
+const createLabel = (config, canvasSVG) => {
+    if (config.showLabel) {
+        if (config.axis.x.label) {
+            const labelPath = canvasSVG
+                .append("g")
+                .classed(styles.axisLabelX, true)
+                .attr(
+                    "transform",
+                    `translate(${getXAxisLabelXPosition(
+                        config
+                    )},${getXAxisLabelYPosition(
+                        config
+                    )}) rotate(${getRotationForAxis(constants.X_AXIS)})`
+                );
+            buildAxisLabel(labelPath, utils.sanitize(config.axis.x.label));
+        }
+    }
+};
+/**
+ * Creates a container for timeline graph
+ *
+ * @private
+ * @param {object} config - config object derived from input JSON
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
+ * @returns {object} d3 svg path
+ */
+const createTimelineContent = (config, canvasSVG) =>
+    canvasSVG
+        .append("g")
+        .classed(styles.timelineGraphContent, true)
+        .attr("clip-path", `url(#${config.clipPathId})`);
+/**
+ * Creates a group for each timeline content loaded
+ *
+ * @private
+ * @param {object} config - config object derived from input JSON
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
+ * @param {object} contentConfig - content config object
+ * @returns {object} d3 svg path
+ */
+const createTimelineContentGroup = (config, canvasSVG, contentConfig) =>
+    canvasSVG
+        .append("g")
+        .classed(styles.timelineContentGroup, true)
+        .attr("transform", `translate(${getXAxisXPosition(config)},0)`)
+        .attr("aria-labelledby", contentConfig.label.display)
+        .attr("aria-describedby", contentConfig.key);
+/**
+ * Toggles the selection of a dateline indicator, executes on click of a data point.
+ *
+ * @private
+ * @param {object} target - DOM element of the data point clicked
+ * @returns {Array} d3 html element of the selected point
+ */
+const toggleDataPointSelection = (target) => {
+    const selectedPointNode = d3
+        .select(target.parentNode)
+        .select(`.${styles.dataPointSelection}`);
+    selectedPointNode.attr(
+        "aria-hidden",
+        !(selectedPointNode.attr("aria-hidden") === "true")
+    );
+    return selectedPointNode;
+};
+/**
+ * Handler for the data point on click. If the content property is present for the data point
+ * then the callback is executed other wise it is NOP.
+ * If the callback is present, the selected data point is toggled and the element is passed as an argument to the
+ * consumer in the callback, to execute once the popup is closed.
+ *  Callback arguments:
+ *      Post close callback function
+ *      value [x and y data point values]
+ *      Selected data point target [d3 target]
+ *  On close of popup, call -> the provided callback
+ *
+ * @private
+ * @param {object} value - data point object
+ * @param {number} index - data point index for the set
+ * @param {object} target - DOM object of the clicked point
+ * @returns {undefined} - returns nothing
+ */
+const dataPointActionHandler = (value, index, target) => {
+    if (utils.isEmpty(value.onClick)) {
+        return;
+    }
+    toggleDataPointSelection(target).call((selectedTarget) =>
+        value.onClick(
+            () => {
+                selectedTarget.attr("aria-hidden", true);
+            },
+            value.key,
+            index,
+            value,
+            selectedTarget
+        )
+    );
+};
+/**
+ * Draws the points with options opted in the input JSON by the consumer.
+ *  Render the point with appropriate color, shape, x and y co-ordinates, label etc.
+ *
+ * @private
+ * @param {object} pathProperties - holds SVG path element, data point object, data point index
+ * @param {object} dataPointProperties - holds object scale, config for aria-hidden attribute,
+ *    fill style, shape style, SVG class name
+ * @param {object} graphProperties - holds d3 scale for Graph, Graph config derived from input
+ *    JSON, and class attribute name
+ * @returns {undefined} - returns nothing
+ */
+const renderPointPath = (
+    pathProperties,
+    dataPointProperties,
+    graphProperties
+) => {
+    const { path, value, index } = pathProperties;
+    const {
+        objectScale,
+        hiddenConfig,
+        fillStyle,
+        shapeStyle,
+        pointStyle
+    } = dataPointProperties;
+    const { scale, config, cls } = graphProperties;
+    path.append(() =>
+        new Shape(getSVGObject(shapeStyle, objectScale)).getShapeElement(
+            getDefaultSVGProps({
+                svgClassNames: `${pointStyle} ${cls}`,
+                svgStyles: `fill: ${fillStyle};`,
+                transformFn: transformPoint(scale, config)(value),
+                onClickFn() {
+                    dataPointActionHandler(value, index, this);
+                },
+                a11yAttributes: {
+                    "aria-describedby": value.key,
+                    "aria-hidden": hiddenConfig,
+                    "aria-disabled": !utils.isFunction(value.onClick)
+                }
+            })
+        )
+    );
+};
+/**
+ * Draws the points with options opted in the input JSON by the consumer for each data set.
+ *  Render the point with appropriate color, shape, x and y co-ordinates, label etc.
+ *  On click content callback function is called.
+ *
+ * @private
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {d3.selection} canvasSVG - d3 html element of the canvas
+ * @returns {undefined} - returns nothing
+ */
+const createPoints = (scale, config, canvasSVG) => {
+    const renderDataPointPath = (path, value, index) => {
+        let cls;
+        const objectScale = constants.DEFAULT_TIMELINE_SCALE;
+        const hiddenConfig =
+            document
+                .querySelector(
+                    `.${styles.legendItem}[aria-describedby="${value.key}"]`
+                )
+                ?.getAttribute("aria-current") === "false";
+        const fillStyle = getColorForTarget(value);
+        const shapeStyle = getShapeForTarget(value);
+        const pointStyle = styles.point;
+
+        const pathProperties = { path, value, index };
+        const dataPointProperties = {
+            objectScale,
+            hiddenConfig,
+            fillStyle,
+            shapeStyle,
+            pointStyle
+        };
+        const graphProperties = { scale, config, cls };
+        renderPointPath(pathProperties, dataPointProperties, graphProperties);
+    };
+    const renderSelectionPath = (path, value, index) => {
+        let fillStyle, pointStyle;
+        const objectScale = constants.DEFAULT_TIMELINE_PLOT_SELECTION_SCALE;
+        const hiddenConfig = true;
+        const shapeStyle = SHAPES.CIRCLE;
+        const cls = styles.dataPointSelection;
+
+        const pathProperties = { path, value, index };
+        const dataPointProperties = {
+            objectScale,
+            hiddenConfig,
+            fillStyle,
+            shapeStyle,
+            pointStyle
+        };
+        const graphProperties = { scale, config, cls };
+        renderPointPath(pathProperties, dataPointProperties, graphProperties);
+    };
+    const renderCriticalityPath = (path, value, index, cls, config) => {
+        let fillStyle;
+        const objectScale = constants.DEFAULT_TIMELINE_SCALE;
+        const hiddenConfig =
+            document
+                .querySelector(
+                    `.${styles.legendItem}[aria-describedby="${value.key}"]`
+                )
+                ?.getAttribute("aria-current") === "false";
+        const shapeStyle = getShapeForTarget(value);
+        const pointStyle = styles.point;
+
+        const pathProperties = { path, value, index };
+        const dataPointProperties = {
+            objectScale,
+            hiddenConfig,
+            fillStyle,
+            shapeStyle,
+            pointStyle
+        };
+        const graphProperties = { scale, config, cls };
+        renderPointPath(pathProperties, dataPointProperties, graphProperties);
+    };
+    canvasSVG
+        .append("g")
+        .classed(styles.pointGroup, true)
+        .each(function (d, i) {
+            const dataPointSVG = d3.select(this);
+            renderSelectionPath(dataPointSVG, d, i);
+            if (d.isCritical) {
+                renderCriticalityPath(
+                    dataPointSVG,
+                    d,
+                    i,
+                    styles.criticalityTimelineOuterPoint,
+                    config
+                );
+                renderCriticalityPath(
+                    dataPointSVG,
+                    d,
+                    i,
+                    styles.criticalityTimelineInnerPoint,
+                    config
+                );
+            }
+            renderDataPointPath(dataPointSVG, d, i);
+        });
+};
+/**
+ * A callback that will be sent to Graph class so that when graph is
+ * created the Graph API will execute this callback function and the legend
+ * items are loaded.
+ *
+ * @private
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {object} eventHandlers - Object containing click and hover event handlers for legend item
+ * @param {object} dataTarget - Data points object
+ * @param {object} legendSVG - d3 element that will be need to render the legend
+ * items into.
+ * @returns {undefined} - returns nothing
+ */
+const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
+    if (dataTarget.label &amp;&amp; dataTarget.label.display &amp;&amp; legendSVG) {
+        loadLegendItem(legendSVG, dataTarget, config, eventHandlers);
+    }
+};
+/**
+ * Handler for Request animation frame, executes on resize.
+ *  * Order of execution
+ *      * Redraws the content
+ *      * Shows/hides the regions
+ *
+ * @private
+ * @param {object} graphContext - Graph instance
+ * @param {TimelineContent} control - TimelineContent instance
+ * @returns {function()} callback function handler for RAF
+ */
+const onAnimationHandler = (graphContext, control) => () => {
+    // control.redraw(graphContext);
+};
+/**
+ * Click handler for legend item. Removes the line from graph when clicked and calls redraw
+ *
+ * @private
+ * @param {object} graphContext - Graph instance
+ * @param {TimelineContent} control - TimelineContent instance
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
+ * @returns {Function} - returns callback function that handles click action on legend item
+ */
+const clickHandler = (graphContext, control, config, canvasSVG) => (
+    element,
+    item
+) => {
+    const updateShownTarget = (shownTargets, item) => {
+        const index = shownTargets.indexOf(item.key);
+        if (index > -1) {
+            shownTargets.splice(index, 1);
+        } else {
+            shownTargets.push(item.key);
+        }
+    };
+    legendClickHandler(element);
+    updateShownTarget(config.shownTargets, item);
+    canvasSVG
+        .selectAll(`.${styles.point}[aria-describedby="${item.key}"]`)
+        .attr("aria-hidden", isLegendSelected(d3.select(element)));
+    window.requestAnimationFrame(onAnimationHandler(graphContext, control));
+};
+/**
+ * Hover handler for legend item. Highlights current line and blurs the rest of the targets in Graph
+ * if present.
+ *
+ * @private
+ * @param {Array} graphTargets - List of all the items in the Graph
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
+ * @returns {Function} - returns callback function that handles hover action on legend item
+ */
+const hoverHandler = (graphTargets, canvasSVG) => (item, state) => {
+    const additionalHoverHandler = (
+        shownTargets,
+        canvasSVG,
+        currentKey,
+        hoverState,
+        k
+    ) => {
+        canvasSVG
+            .selectAll(`.${styles.point}[aria-describedby="${k}"]`)
+            .classed(styles.blur, state === constants.HOVER_EVENT.MOUSE_ENTER);
+    };
+    legendHoverHandler(graphTargets, canvasSVG, item.key, state, [
+        additionalHoverHandler
+    ]);
+};
+/**
+ * CLear the graph data points and lines currently rendered
+ *
+ * @private
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
+ * @param {object} dataTarget - Data points object
+ * @returns {object} - d3 select object
+ */
+const clear = (canvasSVG, dataTarget) =>
+    d3RemoveElement(canvasSVG, `g[aria-describedby="${dataTarget.key}"]`);
+
+export {
+    calculateAxesLabelSize,
+    getXAxisWidth,
+    getXAxisXPosition,
+    getXAxisYPosition,
+    getXAxisLabelXPosition,
+    getXAxisLabelYPosition,
+    getAxesScale,
+    calculateAxesSize,
+    createAxes,
+    createDefs,
+    createLabel,
+    createTimelineContent,
+    createTimelineContentGroup,
+    createPoints,
+    hoverHandler,
+    clickHandler,
+    prepareLegendItems,
+    scaleGraph,
+    determineHeight,
+    getShapeForTarget,
+    getColorForTarget,
+    attachEventHandlers,
+    detachEventHandlers,
+    clear
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/search.js" defer></script>
+
+
+<script src="scripts/collapse.js" defer></script>
+
+
+</body>
+</html>

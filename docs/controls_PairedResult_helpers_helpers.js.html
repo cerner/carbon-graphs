@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>controls/PairedResult/helpers/helpers.js - Carbon</title>
+    
+    <meta name="description" content="A graphing library built using d3 based on Cerner design standards" />
+    
+        <meta name="keywords" content="carbon" />
+        <meta name="keyword" content="carbon" />
+    
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Bar.html">Bar</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Bar.html#load">load</a></li><li data-type='method' style='display: none;'><a href="Bar.html#redraw">redraw</a></li><li data-type='method' style='display: none;'><a href="Bar.html#reflow">reflow</a></li><li data-type='method' style='display: none;'><a href="Bar.html#resize">resize</a></li><li data-type='method' style='display: none;'><a href="Bar.html#unload">unload</a></li></ul></li><li></li><li><a href="BarConfig.html">BarConfig</a><ul class='methods'><li data-type='method' style='display: none;'><a href="BarConfig.html#clone">clone</a></li><li data-type='method' style='display: none;'><a href="BarConfig.html#getConfig">getConfig</a></li><li data-type='method' style='display: none;'><a href="BarConfig.html#setInput">setInput</a></li><li data-type='method' style='display: none;'><a href="BarConfig.html#validateInput">validateInput</a></li></ul></li><li></li><li><a href="BaseConfig.html">BaseConfig</a><ul class='methods'><li data-type='method' style='display: none;'><a href="BaseConfig.html#clone">clone</a></li><li data-type='method' style='display: none;'><a href="BaseConfig.html#getConfig">getConfig</a></li><li data-type='method' style='display: none;'><a href="BaseConfig.html#setInput">setInput</a></li><li data-type='method' style='display: none;'><a href="BaseConfig.html#validateInput">validateInput</a></li></ul></li><li><a href="global.html#Bubble">Bubble</a><ul class='methods'><li data-type='method' style='display: none;'><a href="global.html#Bubble#load">load</a></li><li data-type='method' style='display: none;'><a href="global.html#Bubble#redraw">redraw</a></li><li data-type='method' style='display: none;'><a href="global.html#Bubble#reflow">reflow</a></li><li data-type='method' style='display: none;'><a href="global.html#Bubble#resize">resize</a></li><li data-type='method' style='display: none;'><a href="global.html#Bubble#unload">unload</a></li></ul></li><li></li><li><a href="BubbleConfig.html">BubbleConfig</a><ul class='methods'><li data-type='method' style='display: none;'><a href="BubbleConfig.html#clone">clone</a></li><li data-type='method' style='display: none;'><a href="BubbleConfig.html#getConfig">getConfig</a></li><li data-type='method' style='display: none;'><a href="BubbleConfig.html#setInput">setInput</a></li><li data-type='method' style='display: none;'><a href="BubbleConfig.html#validateInput">validateInput</a></li></ul></li><li></li><li><a href="BubbleMultipleDataset.html">BubbleMultipleDataset</a><ul class='methods'><li data-type='method' style='display: none;'><a href="BubbleMultipleDataset.html#load">load</a></li><li data-type='method' style='display: none;'><a href="BubbleMultipleDataset.html#reflow">reflow</a></li></ul></li><li><a href="BubbleSingleDataset.html">BubbleSingleDataset</a><ul class='methods'><li data-type='method' style='display: none;'><a href="BubbleSingleDataset.html#load">load</a></li><li data-type='method' style='display: none;'><a href="BubbleSingleDataset.html#redraw">redraw</a></li><li data-type='method' style='display: none;'><a href="BubbleSingleDataset.html#reflow">reflow</a></li><li data-type='method' style='display: none;'><a href="BubbleSingleDataset.html#resize">resize</a></li></ul></li><li><a href="Construct.html">Construct</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Construct.html#destroy">destroy</a></li><li data-type='method' style='display: none;'><a href="Construct.html#generate">generate</a></li><li data-type='method' style='display: none;'><a href="Construct.html#loadContent">loadContent</a></li><li data-type='method' style='display: none;'><a href="Construct.html#resize">resize</a></li><li data-type='method' style='display: none;'><a href="Construct.html#unloadContent">unloadContent</a></li></ul></li><li><a href="global.html#Gantt">Gantt</a><ul class='methods'><li data-type='method' style='display: none;'><a href="global.html#Gantt#destroy">destroy</a></li><li data-type='method' style='display: none;'><a href="global.html#Gantt#generate">generate</a></li><li data-type='method' style='display: none;'><a href="global.html#Gantt#loadContent">loadContent</a></li><li data-type='method' style='display: none;'><a href="global.html#Gantt#reflow">reflow</a></li><li data-type='method' style='display: none;'><a href="global.html#Gantt#resize">resize</a></li><li data-type='method' style='display: none;'><a href="global.html#Gantt#unloadContent">unloadContent</a></li></ul></li><li></li><li><a href="global.html#GanttConfig">GanttConfig</a><ul class='methods'><li data-type='method' style='display: none;'><a href="global.html#GanttConfig#clone">clone</a></li><li data-type='method' style='display: none;'><a href="global.html#GanttConfig#getConfig">getConfig</a></li><li data-type='method' style='display: none;'><a href="global.html#GanttConfig#setInput">setInput</a></li><li data-type='method' style='display: none;'><a href="global.html#GanttConfig#validateInput">validateInput</a></li></ul></li><li></li><li><a href="Graph.html">Graph</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Graph.html#destroy">destroy</a></li><li data-type='method' style='display: none;'><a href="Graph.html#generate">generate</a></li><li data-type='method' style='display: none;'><a href="Graph.html#loadContent">loadContent</a></li><li data-type='method' style='display: none;'><a href="Graph.html#reflow">reflow</a></li><li data-type='method' style='display: none;'><a href="Graph.html#resize">resize</a></li><li data-type='method' style='display: none;'><a href="Graph.html#unloadContent">unloadContent</a></li></ul></li><li></li><li><a href="global.html#GraphConfig">GraphConfig</a><ul class='methods'><li data-type='method' style='display: none;'><a href="global.html#GraphConfig#clone">clone</a></li><li data-type='method' style='display: none;'><a href="global.html#GraphConfig#getConfig">getConfig</a></li><li data-type='method' style='display: none;'><a href="global.html#GraphConfig#setInput">setInput</a></li><li data-type='method' style='display: none;'><a href="global.html#GraphConfig#validateInput">validateInput</a></li></ul></li><li></li><li><a href="GraphContent.html">GraphContent</a><ul class='methods'><li data-type='method' style='display: none;'><a href="GraphContent.html#load">load</a></li><li data-type='method' style='display: none;'><a href="GraphContent.html#redraw">redraw</a></li><li data-type='method' style='display: none;'><a href="GraphContent.html#resize">resize</a></li><li data-type='method' style='display: none;'><a href="GraphContent.html#unload">unload</a></li></ul></li><li><a href="global.html#Line">Line</a><ul class='methods'><li data-type='method' style='display: none;'><a href="global.html#Line#load">load</a></li><li data-type='method' style='display: none;'><a href="global.html#Line#redraw">redraw</a></li><li data-type='method' style='display: none;'><a href="global.html#Line#reflow">reflow</a></li><li data-type='method' style='display: none;'><a href="global.html#Line#resize">resize</a></li><li data-type='method' style='display: none;'><a href="global.html#Line#unload">unload</a></li></ul></li><li></li><li><a href="global.html#LineConfig">LineConfig</a><ul class='methods'><li data-type='method' style='display: none;'><a href="global.html#LineConfig#clone">clone</a></li><li data-type='method' style='display: none;'><a href="global.html#LineConfig#getConfig">getConfig</a></li><li data-type='method' style='display: none;'><a href="global.html#LineConfig#setInput">setInput</a></li><li data-type='method' style='display: none;'><a href="global.html#LineConfig#validateInput">validateInput</a></li></ul></li><li></li><li><a href="global.html#PairedResult">PairedResult</a><ul class='methods'><li data-type='method' style='display: none;'><a href="global.html#PairedResult#load">load</a></li><li data-type='method' style='display: none;'><a href="global.html#PairedResult#redraw">redraw</a></li><li data-type='method' style='display: none;'><a href="global.html#PairedResult#reflow">reflow</a></li><li data-type='method' style='display: none;'><a href="global.html#PairedResult#resize">resize</a></li><li data-type='method' style='display: none;'><a href="global.html#PairedResult#unload">unload</a></li></ul></li><li></li><li><a href="global.html#PairedResultConfig">PairedResultConfig</a><ul class='methods'><li data-type='method' style='display: none;'><a href="global.html#PairedResultConfig#clone">clone</a></li><li data-type='method' style='display: none;'><a href="global.html#PairedResultConfig#getConfig">getConfig</a></li><li data-type='method' style='display: none;'><a href="global.html#PairedResultConfig#setInput">setInput</a></li><li data-type='method' style='display: none;'><a href="global.html#PairedResultConfig#validateInput">validateInput</a></li></ul></li><li></li><li><a href="Pie.html">Pie</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Pie.html#destroy">destroy</a></li><li data-type='method' style='display: none;'><a href="Pie.html#generate">generate</a></li><li data-type='method' style='display: none;'><a href="Pie.html#loadContent">loadContent</a></li><li data-type='method' style='display: none;'><a href="Pie.html#resize">resize</a></li><li data-type='method' style='display: none;'><a href="Pie.html#unloadContent">unloadContent</a></li></ul></li><li></li><li><a href="global.html#PieConfig">PieConfig</a><ul class='methods'><li data-type='method' style='display: none;'><a href="global.html#PieConfig#clone">clone</a></li><li data-type='method' style='display: none;'><a href="global.html#PieConfig#getConfig">getConfig</a></li><li data-type='method' style='display: none;'><a href="global.html#PieConfig#setInput">setInput</a></li><li data-type='method' style='display: none;'><a href="global.html#PieConfig#validateInput">validateInput</a></li></ul></li><li></li><li><a href="PieContent.html">PieContent</a><ul class='methods'><li data-type='method' style='display: none;'><a href="PieContent.html#load">load</a></li><li data-type='method' style='display: none;'><a href="PieContent.html#redraw">redraw</a></li><li data-type='method' style='display: none;'><a href="PieContent.html#resize">resize</a></li><li data-type='method' style='display: none;'><a href="PieContent.html#unload">unload</a></li></ul></li><li></li><li><a href="global.html#Scatter">Scatter</a><ul class='methods'><li data-type='method' style='display: none;'><a href="global.html#Scatter#load">load</a></li><li data-type='method' style='display: none;'><a href="global.html#Scatter#redraw">redraw</a></li><li data-type='method' style='display: none;'><a href="global.html#Scatter#reflow">reflow</a></li><li data-type='method' style='display: none;'><a href="global.html#Scatter#resize">resize</a></li><li data-type='method' style='display: none;'><a href="global.html#Scatter#unload">unload</a></li></ul></li><li></li><li><a href="global.html#ScatterConfig">ScatterConfig</a><ul class='methods'><li data-type='method' style='display: none;'><a href="global.html#ScatterConfig#clone">clone</a></li><li data-type='method' style='display: none;'><a href="global.html#ScatterConfig#getConfig">getConfig</a></li><li data-type='method' style='display: none;'><a href="global.html#ScatterConfig#setInput">setInput</a></li><li data-type='method' style='display: none;'><a href="global.html#ScatterConfig#validateInput">validateInput</a></li></ul></li><li></li><li><a href="Shape.html">Shape</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Shape.html#getShapeElement">getShapeElement</a></li></ul></li><li><a href="Timeline.html">Timeline</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Timeline.html#destroy">destroy</a></li><li data-type='method' style='display: none;'><a href="Timeline.html#generate">generate</a></li><li data-type='method' style='display: none;'><a href="Timeline.html#loadContent">loadContent</a></li><li data-type='method' style='display: none;'><a href="Timeline.html#reflow">reflow</a></li><li data-type='method' style='display: none;'><a href="Timeline.html#resize">resize</a></li><li data-type='method' style='display: none;'><a href="Timeline.html#unloadContent">unloadContent</a></li></ul></li><li></li><li><a href="global.html#TimelineConfig">TimelineConfig</a><ul class='methods'><li data-type='method' style='display: none;'><a href="global.html#TimelineConfig#clone">clone</a></li><li data-type='method' style='display: none;'><a href="global.html#TimelineConfig#getConfig">getConfig</a></li><li data-type='method' style='display: none;'><a href="global.html#TimelineConfig#setInput">setInput</a></li><li data-type='method' style='display: none;'><a href="global.html#TimelineConfig#validateInput">validateInput</a></li></ul></li><li></li><li><a href="global.html#TimelineContent">TimelineContent</a><ul class='methods'><li data-type='method' style='display: none;'><a href="global.html#TimelineContent#load">load</a></li><li data-type='method' style='display: none;'><a href="global.html#TimelineContent#redraw">redraw</a></li><li data-type='method' style='display: none;'><a href="global.html#TimelineContent#reflow">reflow</a></li><li data-type='method' style='display: none;'><a href="global.html#TimelineContent#resize">resize</a></li><li data-type='method' style='display: none;'><a href="global.html#TimelineContent#unload">unload</a></li></ul></li><li></li><li><a href="Track.html">Track</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Track.html#load">load</a></li><li data-type='method' style='display: none;'><a href="Track.html#redraw">redraw</a></li><li data-type='method' style='display: none;'><a href="Track.html#reflow">reflow</a></li><li data-type='method' style='display: none;'><a href="Track.html#resize">resize</a></li><li data-type='method' style='display: none;'><a href="Track.html#unload">unload</a></li></ul></li><li></li></ul><h3>Modules</h3><ul><li><a href="module-api.html">api</a></li><li><a href="module-axis.html">axis</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-axis.html#~buildAxisLabel">buildAxisLabel</a></li><li data-type='method' style='display: none;'><a href="module-axis.html#~formatLabel">formatLabel</a></li><li data-type='method' style='display: none;'><a href="module-axis.html#~isValidAxisType">isValidAxisType</a></li><li data-type='method' style='display: none;'><a href="module-axis.html#~prepareHorizontalAxis">prepareHorizontalAxis</a></li></ul></li><li><a href="module-barType.html">barType</a></li><li><a href="module-Carbon.html">Carbon</a></li><li><a href="module-constants.html">constants</a><ul class='members'><li data-type='member' style='display: none;'><a href="module-constants.html#.AXES_ORIENTATION">AXES_ORIENTATION</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.AXIS_TYPE">AXIS_TYPE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.AXISRANGE_FOUR">AXISRANGE_FOUR</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.AXISRANGE_ONE">AXISRANGE_ONE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.AXISRANGE_THREE">AXISRANGE_THREE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.AXISRANGE_TWO">AXISRANGE_TWO</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.BASE_CANVAS_WIDTH_PADDING">BASE_CANVAS_WIDTH_PADDING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.BASE_LABEL_ICON_HEIGHT_PADDING">BASE_LABEL_ICON_HEIGHT_PADDING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.BASE_LABEL_ICON_SPACING">BASE_LABEL_ICON_SPACING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.BASE_LABEL_ICON_WIDTH_PADDING">BASE_LABEL_ICON_WIDTH_PADDING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.BUBBLE">BUBBLE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.COLORS">COLORS</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.D3_TRANSITION_PROPERTIES_DISABLED">D3_TRANSITION_PROPERTIES_DISABLED</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.D3_TRANSITION_PROPERTIES_ENABLED">D3_TRANSITION_PROPERTIES_ENABLED</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_ACTIVITY_BAR_HASH_COLOR">DEFAULT_ACTIVITY_BAR_HASH_COLOR</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_BAR_COLOR">DEFAULT_BAR_COLOR</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_BAR_GRAPH_PADDING_ATTRIBUTES">DEFAULT_BAR_GRAPH_PADDING_ATTRIBUTES</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_BAR_HASH_COLOR">DEFAULT_BAR_HASH_COLOR</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_BAR_REGION_COLOR">DEFAULT_BAR_REGION_COLOR</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_BAR_SELECTION_PADDING">DEFAULT_BAR_SELECTION_PADDING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_BAR_STRIPE_COLOR">DEFAULT_BAR_STRIPE_COLOR</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_BUBBLE_BLUR_OPACITY">DEFAULT_BUBBLE_BLUR_OPACITY</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_BUBBLE_BLUR_STROKE_OPACITY">DEFAULT_BUBBLE_BLUR_STROKE_OPACITY</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_BUBBLE_OPACITY">DEFAULT_BUBBLE_OPACITY</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_BUBBLE_RADIUS_MAX">DEFAULT_BUBBLE_RADIUS_MAX</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_BUBBLE_RADIUS_MIN">DEFAULT_BUBBLE_RADIUS_MIN</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_BUBBLE_SELECTOR_RADIUS">DEFAULT_BUBBLE_SELECTOR_RADIUS</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_BUBBLE_STROKE_OPACITY">DEFAULT_BUBBLE_STROKE_OPACITY</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_CHARACTER_SVG_ELEMENT_WIDTH">DEFAULT_CHARACTER_SVG_ELEMENT_WIDTH</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_COLOR">DEFAULT_COLOR</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GANTT_ACTIVITY_CHUNK_WIDTH">DEFAULT_GANTT_ACTIVITY_CHUNK_WIDTH</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GANTT_ACTIVITY_HEIGHT">DEFAULT_GANTT_ACTIVITY_HEIGHT</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GANTT_ACTIVITY_OPACITY">DEFAULT_GANTT_ACTIVITY_OPACITY</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GANTT_ACTIVITY_PADDING">DEFAULT_GANTT_ACTIVITY_PADDING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GANTT_ACTIVITY_STRIPE_DISTANCE">DEFAULT_GANTT_ACTIVITY_STRIPE_DISTANCE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GANTT_ACTIVITY_STRIPE_WIDTH">DEFAULT_GANTT_ACTIVITY_STRIPE_WIDTH</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GANTT_TASK_CHUNK_WIDTH">DEFAULT_GANTT_TASK_CHUNK_WIDTH</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GANTT_TASK_HEIGHT">DEFAULT_GANTT_TASK_HEIGHT</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GANTT_TASK_PADDING">DEFAULT_GANTT_TASK_PADDING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GANTT_TASK_SELECTION_PADDING">DEFAULT_GANTT_TASK_SELECTION_PADDING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GANTT_TASK_STRIPE_DISTANCE">DEFAULT_GANTT_TASK_STRIPE_DISTANCE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GANTT_TASK_STRIPE_WIDTH">DEFAULT_GANTT_TASK_STRIPE_WIDTH</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GANTT_TRACK_HEIGHT">DEFAULT_GANTT_TRACK_HEIGHT</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GANTT_TRACK_SELECTION">DEFAULT_GANTT_TRACK_SELECTION</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_GOAL_LINE_STROKE_WIDTH">DEFAULT_GOAL_LINE_STROKE_WIDTH</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_HEIGHT">DEFAULT_HEIGHT</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_INTERPOLATION">DEFAULT_INTERPOLATION</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_LABEL_CHARACTER_LIMIT">DEFAULT_LABEL_CHARACTER_LIMIT</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_LEGEND_LINE_WIDTH">DEFAULT_LEGEND_LINE_WIDTH</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_LEGEND_LINE_WIDTH_WITH_SYMBOL">DEFAULT_LEGEND_LINE_WIDTH_WITH_SYMBOL</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_PIE_COLOR">DEFAULT_PIE_COLOR</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_PIE_INNER_RADIUS">DEFAULT_PIE_INNER_RADIUS</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_PIE_LEGEND_SHAPE">DEFAULT_PIE_LEGEND_SHAPE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_PIE_PAD_ANGLE">DEFAULT_PIE_PAD_ANGLE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_PLOT_SCALE">DEFAULT_PLOT_SCALE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_PLOT_SELECTION_SCALE">DEFAULT_PLOT_SELECTION_SCALE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_PLOT_SELECTION_SCALE_FOR_EVENTS">DEFAULT_PLOT_SELECTION_SCALE_FOR_EVENTS</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_REGION_LINE_STROKE_WIDTH">DEFAULT_REGION_LINE_STROKE_WIDTH</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_TASK_BAR_HASH_COLOR">DEFAULT_TASK_BAR_HASH_COLOR</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_TICKSCOUNT">DEFAULT_TICKSCOUNT</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_TIMELINE_PLOT_SELECTION_SCALE">DEFAULT_TIMELINE_PLOT_SELECTION_SCALE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_TIMELINE_SCALE">DEFAULT_TIMELINE_SCALE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_TIMELINE_TICK_LENGTH">DEFAULT_TIMELINE_TICK_LENGTH</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.DEFAULT_Y_AXIS_SPACING">DEFAULT_Y_AXIS_SPACING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.HOVER_EVENT">HOVER_EVENT</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.ISO8601_DATE_TIME_MILLI">ISO8601_DATE_TIME_MILLI</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.LEGEND_LINE_POSITION">LEGEND_LINE_POSITION</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.LEGEND_PADDING">LEGEND_PADDING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.LINE_TYPE">LINE_TYPE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.MAX_TICK_VARIANCE">MAX_TICK_VARIANCE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.MIN_TICKS">MIN_TICKS</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.NO_DATA_LABEL_PADDING">NO_DATA_LABEL_PADDING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.NO_DATA_VIEW_PROPORTION">NO_DATA_VIEW_PROPORTION</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.PADDING">PADDING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.PAIR_ITEM_TYPES">PAIR_ITEM_TYPES</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.PIE_CHART_DEFAULT_HEIGHT">PIE_CHART_DEFAULT_HEIGHT</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.PIE_LEGEND_PADDING">PIE_LEGEND_PADDING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.RESIZE_THROTTLE">RESIZE_THROTTLE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.SELECTION_INDICATOR_X_POSITION">SELECTION_INDICATOR_X_POSITION</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.SELECTION_INDICATOR_Y_POSITION">SELECTION_INDICATOR_Y_POSITION</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.SHAPES">SHAPES</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.SHAPES_LIGHT">SHAPES_LIGHT</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.TEXT_LABEL_ICON_HEIGHT_PADDING">TEXT_LABEL_ICON_HEIGHT_PADDING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.TEXT_LABEL_ICON_WIDTH_PADDING">TEXT_LABEL_ICON_WIDTH_PADDING</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.TEXT_LABEL_VERTICAL_POSITION">TEXT_LABEL_VERTICAL_POSITION</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.TICK_ORIENTATION">TICK_ORIENTATION</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.TICKSCOUNT_MAXLIMIT">TICKSCOUNT_MAXLIMIT</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.TIMELINE_HEIGHT">TIMELINE_HEIGHT</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.VIEW_BOX_SIZE">VIEW_BOX_SIZE</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.X_AXIS">X_AXIS</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.Y2_AXIS">Y2_AXIS</a></li><li data-type='member' style='display: none;'><a href="module-constants.html#.Y_AXIS">Y_AXIS</a></li></ul><ul class='methods'><li data-type='method' style='display: none;'><a href="module-constants.html#.d3Transition">d3Transition</a></li></ul></li><li><a href="module-constructUtils.html">constructUtils</a></li><li><a href="module-errors.html">errors</a><ul class='members'><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_ACTIVITIES_DURATION_NOT_FUNCTION">THROW_MSG_ACTIVITIES_DURATION_NOT_FUNCTION</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_ACTIVITIES_DURATION_NOT_PROVIDED">THROW_MSG_ACTIVITIES_DURATION_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_ACTIVITIES_DURATION_NOT_VALID">THROW_MSG_ACTIVITIES_DURATION_NOT_VALID</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_ACTIVITIES_NOT_PROVIDED">THROW_MSG_ACTIVITIES_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_ACTIVITIES_START_AND_END_NOT_PROVIDED">THROW_MSG_ACTIVITIES_START_AND_END_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_ACTIVITIES_START_AND_END_TYPE_NOT_VALID">THROW_MSG_ACTIVITIES_START_AND_END_TYPE_NOT_VALID</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_ACTIVITIES_START_MORE_END">THROW_MSG_ACTIVITIES_START_MORE_END</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_ACTIVITIES_UNIQUE_KEY_NOT_PROVIDED">THROW_MSG_ACTIVITIES_UNIQUE_KEY_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_AXIS_INFO_ROW_EMPTY_TICK_VALUES">THROW_MSG_AXIS_INFO_ROW_EMPTY_TICK_VALUES</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_AXIS_INFO_ROW_INVALID_TICK_VALUES">THROW_MSG_AXIS_INFO_ROW_INVALID_TICK_VALUES</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_AXIS_INFO_ROW_LABEL_DISPLAY_NOT_PROVIDED">THROW_MSG_AXIS_INFO_ROW_LABEL_DISPLAY_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_AXIS_INFO_ROW_VALUE_NOT_PROVIDED">THROW_MSG_AXIS_INFO_ROW_VALUE_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_BAR_REGION_EMPTY_X_VALUE">THROW_MSG_BAR_REGION_EMPTY_X_VALUE</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_CONFIG_CLONE_INPUT_NOT_IMPLEMENTED">THROW_MSG_CONFIG_CLONE_INPUT_NOT_IMPLEMENTED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_CONFIG_GET_CONFIG_NOT_IMPLEMENTED">THROW_MSG_CONFIG_GET_CONFIG_NOT_IMPLEMENTED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_CONFIG_SET_INPUT_NOT_IMPLEMENTED">THROW_MSG_CONFIG_SET_INPUT_NOT_IMPLEMENTED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_CONFIG_VALIDATE_INPUT_NOT_IMPLEMENTED">THROW_MSG_CONFIG_VALIDATE_INPUT_NOT_IMPLEMENTED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_CONSTRUCT_DESTROY_NOT_IMPLEMENTED">THROW_MSG_CONSTRUCT_DESTROY_NOT_IMPLEMENTED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_CONSTRUCT_GENERATE_NOT_IMPLEMENTED">THROW_MSG_CONSTRUCT_GENERATE_NOT_IMPLEMENTED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_CONSTRUCT_LOAD_NOT_IMPLEMENTED">THROW_MSG_CONSTRUCT_LOAD_NOT_IMPLEMENTED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_CONSTRUCT_RESIZE_NOT_IMPLEMENTED">THROW_MSG_CONSTRUCT_RESIZE_NOT_IMPLEMENTED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_CONSTRUCT_UNLOAD_NOT_IMPLEMENTED">THROW_MSG_CONSTRUCT_UNLOAD_NOT_IMPLEMENTED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_CONTENT_LOAD_NOT_IMPLEMENTED">THROW_MSG_CONTENT_LOAD_NOT_IMPLEMENTED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_CONTENT_REDRAW_NOT_IMPLEMENTED">THROW_MSG_CONTENT_REDRAW_NOT_IMPLEMENTED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_CONTENT_RESIZE_NOT_IMPLEMENTED">THROW_MSG_CONTENT_RESIZE_NOT_IMPLEMENTED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_CONTENT_UNLOAD_NOT_IMPLEMENTED">THROW_MSG_CONTENT_UNLOAD_NOT_IMPLEMENTED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_DATELINE_COLOR_NOT_PROVIDED">THROW_MSG_DATELINE_COLOR_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_DATELINE_NOT_PROVIDED">THROW_MSG_DATELINE_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_DATELINE_OBJECT_NOT_PROVIDED">THROW_MSG_DATELINE_OBJECT_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_DATELINE_SHAPE_NOT_PROVIDED">THROW_MSG_DATELINE_SHAPE_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_DATELINE_TYPE_NOT_VALID">THROW_MSG_DATELINE_TYPE_NOT_VALID</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_EMPTY_X_AXIS_TICK_VALUES">THROW_MSG_EMPTY_X_AXIS_TICK_VALUES</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_EVENTLINE_COLOR_NOT_PROVIDED">THROW_MSG_EVENTLINE_COLOR_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_EVENTLINE_NOT_PROVIDED">THROW_MSG_EVENTLINE_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_EVENTLINE_OBJECT_NOT_PROVIDED">THROW_MSG_EVENTLINE_OBJECT_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_EVENTLINE_TYPE_NOT_VALID">THROW_MSG_EVENTLINE_TYPE_NOT_VALID</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_INVALID_AXIS_TYPE_VALUES">THROW_MSG_INVALID_AXIS_TYPE_VALUES</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_INVALID_CALLBACK_FUNCTION">THROW_MSG_INVALID_CALLBACK_FUNCTION</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_INVALID_DATA_PROPERTY">THROW_MSG_INVALID_DATA_PROPERTY</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_INVALID_FORMAT_TYPE">THROW_MSG_INVALID_FORMAT_TYPE</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_INVALID_INPUT">THROW_MSG_INVALID_INPUT</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_INVALID_LOAD_CONTENT_AT_INDEX">THROW_MSG_INVALID_LOAD_CONTENT_AT_INDEX</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_INVALID_OBJECT_PROVIDED">THROW_MSG_INVALID_OBJECT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_INVALID_REGION_X_AXIS_TICK">THROW_MSG_INVALID_REGION_X_AXIS_TICK</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_INVALID_TYPE">THROW_MSG_INVALID_TYPE</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_INVALID_X_AXIS_TICK_VALUES">THROW_MSG_INVALID_X_AXIS_TICK_VALUES</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_LEGEND_LABEL_FORMAT_NOT_PROVIDED">THROW_MSG_LEGEND_LABEL_FORMAT_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_LEGEND_LABEL_NOT_PROVIDED">THROW_MSG_LEGEND_LABEL_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_NO_AXES_DATA_LOADED">THROW_MSG_NO_AXES_DATA_LOADED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_NO_AXIS_INFO">THROW_MSG_NO_AXIS_INFO</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_NO_AXIS_LABEL_INFO">THROW_MSG_NO_AXIS_LABEL_INFO</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_NO_AXIS_LIMIT_INFO">THROW_MSG_NO_AXIS_LIMIT_INFO</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_NO_BIND">THROW_MSG_NO_BIND</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_NO_CONTENT_DATA_LOADED">THROW_MSG_NO_CONTENT_DATA_LOADED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_NO_DATA_LOADED">THROW_MSG_NO_DATA_LOADED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_NO_DATA_POINTS">THROW_MSG_NO_DATA_POINTS</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_NON_UNIQUE_PROPERTY">THROW_MSG_NON_UNIQUE_PROPERTY</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_REGION_EMPTY">THROW_MSG_REGION_EMPTY</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_REGION_INVALID_AXIS_PROVIDED">THROW_MSG_REGION_INVALID_AXIS_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_REGION_INVALID_FORMAT">THROW_MSG_REGION_INVALID_FORMAT</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_REGION_INVALID_VALUE_TYPE_PROVIDED">THROW_MSG_REGION_INVALID_VALUE_TYPE_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_REGION_START_END_MISSING">THROW_MSG_REGION_START_END_MISSING</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_REGION_START_MORE_END">THROW_MSG_REGION_START_MORE_END</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_SHAPE_OPTIONS_EMPTY">THROW_MSG_SHAPE_OPTIONS_EMPTY</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_SHAPE_OPTIONS_PROPERTY_INVALID">THROW_MSG_SHAPE_OPTIONS_PROPERTY_INVALID</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_SHAPE_PATH_EMPTY">THROW_MSG_SHAPE_PATH_EMPTY</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_TASKS_DURATION_NOT_FUNCTION">THROW_MSG_TASKS_DURATION_NOT_FUNCTION</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_TASKS_DURATION_NOT_PROVIDED">THROW_MSG_TASKS_DURATION_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_TASKS_DURATION_NOT_VALID">THROW_MSG_TASKS_DURATION_NOT_VALID</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_TASKS_NOT_PROVIDED">THROW_MSG_TASKS_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_TASKS_START_AND_END_NOT_PROVIDED">THROW_MSG_TASKS_START_AND_END_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_TASKS_START_AND_END_TYPE_NOT_VALID">THROW_MSG_TASKS_START_AND_END_TYPE_NOT_VALID</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_TASKS_START_MORE_END">THROW_MSG_TASKS_START_MORE_END</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_TASKS_UNIQUE_KEY_NOT_PROVIDED">THROW_MSG_TASKS_UNIQUE_KEY_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_UNIQUE_ACTION_KEY_NOT_PROVIDED">THROW_MSG_UNIQUE_ACTION_KEY_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_UNIQUE_KEY_NOT_PROVIDED">THROW_MSG_UNIQUE_KEY_NOT_PROVIDED</a></li><li data-type='member' style='display: none;'><a href="module-errors.html#.THROW_MSG_UNIQUE_LABEL_NOT_PROVIDED">THROW_MSG_UNIQUE_LABEL_NOT_PROVIDED</a></li></ul></li><li><a href="module-label.html">label</a><ul class='members'><li data-type='member' style='display: none;'><a href="module-label.html#.loadLabelPopup">loadLabelPopup</a></li></ul><ul class='methods'><li data-type='method' style='display: none;'><a href="module-label.html#~createTooltipDiv">createTooltipDiv</a></li><li data-type='method' style='display: none;'><a href="module-label.html#~destroyTooltipDiv">destroyTooltipDiv</a></li><li data-type='method' style='display: none;'><a href="module-label.html#~removeOldPopup">removeOldPopup</a></li></ul></li><li><a href="module-legend.html">legend</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-legend.html#~createLegend">createLegend</a></li><li data-type='method' style='display: none;'><a href="module-legend.html#~getDefaultLegendOptions">getDefaultLegendOptions</a></li><li data-type='method' style='display: none;'><a href="module-legend.html#~getLegendPadding">getLegendPadding</a></li><li data-type='method' style='display: none;'><a href="module-legend.html#~isLegendSelected">isLegendSelected</a></li><li data-type='method' style='display: none;'><a href="module-legend.html#~legendClickHandler">legendClickHandler</a></li><li data-type='method' style='display: none;'><a href="module-legend.html#~legendHoverHandler">legendHoverHandler</a></li><li data-type='method' style='display: none;'><a href="module-legend.html#~loadLegendItem">loadLegendItem</a></li><li data-type='method' style='display: none;'><a href="module-legend.html#~loadPieLegendItem">loadPieLegendItem</a></li><li data-type='method' style='display: none;'><a href="module-legend.html#~removeLegendItem">removeLegendItem</a></li></ul></li><li><a href="module-paddingUtils.html">paddingUtils</a></li><li><a href="module-region.html">region</a></li><li><a href="module-styles.html">styles</a><ul class='members'><li data-type='member' style='display: none;'><a href="module-styles.html#.activity">activity</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.activityBar">activityBar</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.activityGroup">activityGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axis">axis</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisInfoRow">axisInfoRow</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisInfoRowDisplay">axisInfoRowDisplay</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisInfoRowIcon">axisInfoRowIcon</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisInfoRowItem">axisInfoRowItem</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisInfoRowSecondaryDisplay">axisInfoRowSecondaryDisplay</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisLabel">axisLabel</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisLabelRow">axisLabelRow</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisLabelX">axisLabelX</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisLabelY">axisLabelY</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisLabelY2">axisLabelY2</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisLabelY2ShapeContainer">axisLabelY2ShapeContainer</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisLabelYShapeContainer">axisLabelYShapeContainer</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisReferenceLine">axisReferenceLine</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisX">axisX</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisY">axisY</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisY2">axisY2</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.axisYTrackLabel">axisYTrackLabel</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.bar">bar</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.barGoalLine">barGoalLine</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.barGraphContent">barGraphContent</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.barHashedRect">barHashedRect</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.barSelectionGroup">barSelectionGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.blur">blur</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.bubbleBlur">bubbleBlur</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.bubbleGraphContent">bubbleGraphContent</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.canvas">canvas</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.canvasXAxis">canvasXAxis</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.container">container</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.contentContainer">contentContainer</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.criticalityInnerPoint">criticalityInnerPoint</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.criticalityOuterPoint">criticalityOuterPoint</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.criticalityTimelineInnerPoint">criticalityTimelineInnerPoint</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.criticalityTimelineOuterPoint">criticalityTimelineOuterPoint</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.currentBarsGroup">currentBarsGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.currentLinesGroup">currentLinesGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.currentPointsGroup">currentPointsGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.dataPointDisplayEnable">dataPointDisplayEnable</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.dataPointSelection">dataPointSelection</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.dateline">dateline</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.datelineContent">datelineContent</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.datelineGroup">datelineGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.datelinePoint">datelinePoint</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.eventline">eventline</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.eventlineContent">eventlineContent</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.eventlineGroup">eventlineGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.ganttChartContent">ganttChartContent</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.ganttTrackBarSelection">ganttTrackBarSelection</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.ganttTrackSelectorGroup">ganttTrackSelectorGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.grid">grid</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.gridH">gridH</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.gridLowerStep">gridLowerStep</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.gridMidpoint">gridMidpoint</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.gridUpperStep">gridUpperStep</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.gridV">gridV</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.high">high</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.highlight">highlight</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.labelPopupOverlay">labelPopupOverlay</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.labelPopupTooltip">labelPopupTooltip</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.legend">legend</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.legendItem">legendItem</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.legendItemBtn">legendItemBtn</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.legendItemIcon">legendItemIcon</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.legendItemLine">legendItemLine</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.legendItemLineWithIcon">legendItemLineWithIcon</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.legendItemSpan">legendItemSpan</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.legendItemText">legendItemText</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.legendItemWhiteLine">legendItemWhiteLine</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.line">line</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.lineGraphContent">lineGraphContent</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.low">low</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.mid">mid</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.noDataContainer">noDataContainer</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.noDataLabel">noDataLabel</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.noDataOverlay">noDataOverlay</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.pairedBox">pairedBox</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.pairedBoxGroup">pairedBoxGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.pairedLine">pairedLine</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.pairedPoint">pairedPoint</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.pieChartCanvas">pieChartCanvas</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.pieChartContent">pieChartContent</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.pieContentGroup">pieContentGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.pieContentSlice">pieContentSlice</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.pieLegendItem">pieLegendItem</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.pieLegendItemIcon">pieLegendItemIcon</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.pieLegendItemSliceHover">pieLegendItemSliceHover</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.point">point</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.pointGroup">pointGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.region">region</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.regionBlur">regionBlur</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.regionGroup">regionGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.regionHighlight">regionHighlight</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.regionPairGroup">regionPairGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.scatterGraphContent">scatterGraphContent</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.svgIcon">svgIcon</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.task">task</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.taskBar">taskBar</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.taskBarCompletion">taskBarCompletion</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.taskBarSelection">taskBarSelection</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.taskGroup">taskGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.timelineContentGroup">timelineContentGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.timelineGraphContent">timelineGraphContent</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.trackGroup">trackGroup</a></li><li data-type='member' style='display: none;'><a href="module-styles.html#.valueRegion">valueRegion</a></li></ul></li><li><a href="module-utils.html">utils</a><ul class='members'><li data-type='member' style='display: none;'><a href="module-utils.html#.deepClone">deepClone</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.getNumber">getNumber</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.getTime">getTime</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.hasValue">hasValue</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.isArray">isArray</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.isBoolean">isBoolean</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.isDate">isDate</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.isDateInstance">isDateInstance</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.isDefined">isDefined</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.isEmpty">isEmpty</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.isEmptyArray">isEmptyArray</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.isEqual">isEqual</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.isFunction">isFunction</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.isNumber">isNumber</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.isUndefined">isUndefined</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.notEmpty">notEmpty</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.parseDateTime">parseDateTime</a></li><li data-type='member' style='display: none;'><a href="module-utils.html#.sanitize">sanitize</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#d3">d3</a></li><li><a href="global.html#getDefaultSVGProps">getDefaultSVGProps</a></li><li><a href="global.html#getSVGObject">getSVGObject</a></li><li><a href="global.html#getSVGObjectForEvent">getSVGObjectForEvent</a></li><li><a href="global.html#getValueRegionSubset">getValueRegionSubset</a></li><li><a href="global.html#helpers">helpers</a></li><li><a href="global.html#LINE">LINE</a></li><li><a href="global.html#LINE_DASHED">LINE_DASHED</a></li><li><a href="global.html#LOCALE">LOCALE</a></li><li><a href="global.html#renderSelectionPathForEvents">renderSelectionPathForEvents</a></li><li><a href="global.html#tools">tools</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">controls/PairedResult/helpers/helpers.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict";
+import * as d3 from "d3";
+import { Shape } from "../../../core";
+import { parseTypedValue } from "../../../core/BaseConfig";
+import { getDefaultSVGProps } from "../../../core/Shape";
+import {
+    calculateVerticalPadding,
+    getXAxisXPosition,
+    isValidAxisType
+} from "../../../helpers/axis";
+import constants, { SHAPES } from "../../../helpers/constants";
+import errors from "../../../helpers/errors";
+import {
+    legendClickHandler,
+    legendHoverHandler,
+    loadLegendItem,
+    isLegendSelected,
+    getDefaultLegendOptions
+} from "../../../helpers/legend";
+import {
+    createRegion,
+    hideAllRegions,
+    isSingleTargetDisplayed,
+    regionLegendHoverHandler,
+    showHideRegion,
+    areRegionsIdentical,
+    createValueRegion
+} from "../../../helpers/region";
+import { getSVGObject } from "../../../helpers/shapeSVG";
+import styles from "../../../helpers/styles";
+import { getTransformScale } from "../../../helpers/transformUtils";
+import utils from "../../../helpers/utils";
+import {
+    d3RemoveElement,
+    getColorForTarget,
+    getShapeForTarget
+} from "../../Graph/helpers/helpers";
+import {
+    dataPointActionHandler,
+    drawSelectionIndicator,
+    translateSelectionBox,
+    translateSelectionItem
+} from "./selectionIndicatorHelpers";
+
+/**
+ * @typedef PairedResult
+ */
+
+/**
+ * Returns the value based on the type of data point - High, mid or low
+ *
+ * @private
+ * @param {object} val - A value
+ * @param {string} type - High, mid or low
+ * @returns {object} value of the type
+ */
+const getValue = (val, type) => (val ? val[type] : "");
+/**
+ * Iterates each type of a pair. High, low and mid.
+ *
+ * @private
+ * @param {Function} fn - A function
+ * @returns {undefined} - returns nothing
+ */
+const iterateOnPairType = (fn) => constants.PAIR_ITEM_TYPES.forEach(fn);
+/**
+ * Creates a new d3 Paired Result using given x1, x2 and y1,y2 coordinates.
+ * Interpolation is default linear
+ *
+ * @private
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} d - High and low x,y coordinates
+ * @returns {undefined} - returns nothing
+ */
+const createLine = (scale, d) => {
+    const newLine = d3
+        .line()
+        .x((value) => scale.x(value.x))
+        .y((value) => scale[d.yAxis](value.y))
+        .curve(constants.DEFAULT_INTERPOLATION);
+    return newLine([
+        {
+            x: d.high.x,
+            y: d.high.y
+        },
+        {
+            x: d.low.x,
+            y: d.low.y
+        }
+    ]);
+};
+/**
+ * Transforms the point in the Paired Result graph on resize
+ *
+ * @private
+ * @param {object} scale - d3 scale for Graph
+ * @param {string} type - high, mid or low
+ * @returns {Function} - translate function for d3 transform
+ */
+const transformPoint = (scale, type) => (value) => (scaleFactor) => {
+    const getX = (val) => scale.x(getValue(val, type).x);
+    const getY = (val) => scale[val.yAxis](getValue(val, type).y);
+    return `translate(${getX(value)},${getY(value)}) scale(${scaleFactor})`;
+};
+/**
+ * Transforms lines for a data point set in the Paired Result graph on resize
+ *
+ * @private
+ * @param {object} scale - d3 scale for Graph
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
+ * @param {object} config - Graph config object derived from input JSON
+ * @returns {object} - d3 select object
+ */
+const translateLines = (scale, canvasSVG, config) =>
+    canvasSVG
+        .selectAll(`.${styles.pairedBoxGroup} .${styles.pairedLine}`)
+        .transition()
+        .call(constants.d3Transition(config.settingsDictionary.transition))
+        .attr("d", (d) => (d.high &amp;&amp; d.low ? createLine(scale, d) : ""));
+/**
+ * Transforms points for a data point set (high, low and mid) in the Paired Result graph on resize
+ *
+ * @private
+ * @param {object} scale - d3 scale for Graph
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
+ * @param {object} config - Graph config object derived from input JSON
+ * @returns {object} - d3 select object
+ */
+const translatePoints = (scale, canvasSVG, config) =>
+    iterateOnPairType((type) => {
+        canvasSVG
+            .selectAll(
+                `.${styles.pairedBoxGroup} .${styles.pairedPoint}.${getValue(
+                    styles,
+                    type
+                )}`
+            )
+            .each(function (d) {
+                const pairedPointSVG = d3.select(this);
+                pairedPointSVG
+                    .select("g")
+                    .transition()
+                    .call(
+                        constants.d3Transition(
+                            config.settingsDictionary.transition
+                        )
+                    )
+                    .attr("transform", function () {
+                        return transformPoint(scale, type)(d)(
+                            getTransformScale(this)
+                        );
+                    });
+            });
+    });
+/**
+ * Draws the PairedResult graph on the canvas element.
+ * Once these items are rendered, we will parse through the data points and render the line and points
+ * We draw paired box groups. Each box comprises of a Line and 2 points (high and low) possibly mid, if provided
+ *
+ * @private
+ * @param {object} scale - d3 scale taking into account the input parameters
+ * @param {object} config - config object derived from input JSON
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
+ * @param {Array} dataTarget - Data points
+ * @returns {undefined} - returns nothing
+ */
+const draw = (scale, config, canvasSVG, dataTarget) => {
+    const drawBox = (boxPath) => {
+        drawSelectionIndicator(scale, config, boxPath);
+        drawLine(scale, config, boxPath);
+        drawPoints(scale, config, boxPath);
+    };
+    const pairedBoxGroupSVG = canvasSVG
+        .append("g")
+        .classed(styles.pairedBoxGroup, true)
+        .attr("clip-path", `url(#${config.clipPathId})`)
+        .attr("aria-describedby", dataTarget.key);
+    const pairedBoxPath = pairedBoxGroupSVG
+        .selectAll(`.${styles.pairedBox}`)
+        .data(getDataPointValues(dataTarget));
+    pairedBoxPath
+        .enter()
+        .append("g")
+        .classed(styles.pairedBox, true)
+        .attr("aria-selected", false)
+        .attr(
+            "transform",
+            `translate(${getXAxisXPosition(config)},${calculateVerticalPadding(
+                config
+            )})`
+        )
+        .call(drawBox);
+    pairedBoxPath
+        .exit()
+        .transition()
+        .call(constants.d3Transition(config.settingsDictionary.transition))
+        .remove();
+};
+/**
+ * Processes the input JSON and adds the shapes, colors, labels etc. to each data points so that we
+ * can use them when rendering the data point.
+ *
+ * @private
+ * @param {object} graphConfig - config object of Graph API
+ * @param {object} dataTarget - Data points object
+ * @param {boolean} reflow - flag to check if reflow function called it
+ * @returns {object} dataTarget - Updated data target object
+ */
+const processDataPoints = (graphConfig, dataTarget, reflow = false) => {
+    const type = graphConfig.axis.x.type;
+    const getXDataValues = (x) => {
+        if (!isValidAxisType(x, type)) {
+            throw new Error(errors.THROW_MSG_INVALID_FORMAT_TYPE);
+        }
+        return parseTypedValue(x, type);
+    };
+    const valueRegions = {
+        high: [],
+        low: [],
+        mid: []
+    };
+    const regionObject = {
+        high: {
+            color: undefined,
+            values: []
+        },
+        low: {
+            color: undefined,
+            values: []
+        },
+        mid: {
+            color: undefined,
+            values: []
+        }
+    };
+    // Each value is a pair. Construct enough information so that you can
+    // construct a box. Each box would need 3 icons so we need 3 (max) data sets
+    dataTarget.internalValuesSubset = dataTarget.values.map((value) => {
+        const subset = {};
+        // We are going to iterate through different pair item types: HIGH, LOW and MID
+        iterateOnPairType((type) => {
+            if (utils.isDefined(getValue(value, type))) {
+                const currentValue = getValue(value, type);
+                subset[type] = {
+                    x: getXDataValues(currentValue.x),
+                    y: utils.getNumber(currentValue.y),
+                    isCritical: currentValue.isCritical || false,
+                    color:
+                        getValue(dataTarget.color, type) ||
+                        constants.DEFAULT_COLOR,
+                    label: getValue(dataTarget.label, type) || {},
+                    shape: getValue(dataTarget.shape, type) || SHAPES.CIRCLE,
+                    key: `${dataTarget.key}_${type}`
+                };
+                if (
+                    !utils.hasValue(
+                        graphConfig.shownTargets,
+                        subset[type].key
+                    ) &amp;&amp;
+                    !reflow
+                ) {
+                    graphConfig.shownTargets.push(subset[type].key);
+                }
+
+                // Generate value regions subset, by extracting the region object from each value
+                if (
+                    !utils.isEmpty(currentValue.region) &amp;&amp;
+                    !utils.isEmpty(currentValue.region.start) &amp;&amp;
+                    !utils.isEmpty(currentValue.region.end)
+                ) {
+                    // If the color is different, then move to new region set.
+                    if (
+                        regionObject[type].color !== currentValue.region.color
+                    ) {
+                        regionObject[type].values.length > 0 &amp;&amp;
+                            valueRegions[type].push(regionObject[type]);
+
+                        regionObject[type] = {
+                            color: currentValue.region.color,
+                            values: []
+                        };
+                    }
+                    regionObject[type].color = currentValue.region.color;
+                    regionObject[type].values.push({
+                        x: getXDataValues(currentValue.x),
+                        start: currentValue.region.start,
+                        end: currentValue.region.end
+                    });
+                } else if (regionObject[type].values.length > 0) {
+                    valueRegions[type].push(regionObject[type]);
+                    regionObject[type] = {
+                        color: undefined,
+                        values: []
+                    };
+                }
+            }
+        });
+        subset.yAxis = dataTarget.yAxis || constants.Y_AXIS;
+        subset.onClick = dataTarget.onClick;
+        subset.key = dataTarget.key;
+        return subset;
+    });
+    const valueRegionSubset = {
+        high: [],
+        low: [],
+        mid: []
+    };
+    let isValueRegionExist = false;
+    // Check if the value region exist and also
+    // Add start and end of a valueRegion to new valueRegion,
+    // This is to cover the start and end data value with region.
+    iterateOnPairType((type) => {
+        if (regionObject[type].values.length > 0) {
+            valueRegions[type].push(regionObject[type]);
+        }
+        valueRegions[type].forEach((region) => {
+            isValueRegionExist = true;
+            valueRegionSubset[type].push(region);
+            if (region.values.length > 1) {
+                valueRegionSubset[type].push({
+                    color: region.color,
+                    values: region.values.slice(0, 1)
+                });
+
+                valueRegionSubset[type].push({
+                    color: region.color,
+                    values: region.values.slice(region.values.length - 1)
+                });
+            }
+        });
+    });
+    dataTarget.valueRegionSubset = isValueRegionExist
+        ? valueRegionSubset
+        : undefined;
+    dataTarget.legendOptions = getDefaultLegendOptions(graphConfig, dataTarget);
+    return dataTarget;
+};
+/**
+ * Returns the internal values subset which is the array that was created from the input JSON.
+ * This array has information for each data point w.r.t shape, colors and on click callback along with
+ * x and y co-ordinates.
+ *
+ * @private
+ * @param {object} target - Object containing the subsets
+ * @returns {Array} List of data point subsets
+ */
+const getDataPointValues = (target) => target.internalValuesSubset;
+/**
+ * Draws line between the 2 data points high and low. If either one of them is missing
+ * then the line is not drawn.
+ * Lines are created using d3 svg line with linear interpolation.
+ *
+ * @private
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {Array} boxPath - d3 html element of the paired box
+ * @returns {object} - d3 append object
+ */
+const drawLine = (scale, config, boxPath) =>
+    boxPath.each(function (value, index) {
+        const shouldCreateLine = (d) =>
+            d.high &amp;&amp;
+            d.low &amp;&amp;
+            utils.hasValue(config.shownTargets, d.high.key) &amp;&amp;
+            utils.hasValue(config.shownTargets, d.low.key) &amp;&amp;
+            document
+                .querySelector(
+                    `.${styles.legendItem}[aria-describedby="${d.high.key}"]`
+                )
+                ?.getAttribute("aria-current") !== false &amp;&amp;
+            document
+                .querySelector(
+                    `.${styles.legendItem}[aria-describedby="${d.low.key}"]`
+                )
+                ?.getAttribute("aria-current") !== false;
+        return d3
+            .select(this)
+            .append("path")
+            .classed(styles.pairedLine, true)
+            .attr("aria-describedby", value.key)
+            .attr("aria-hidden", (d) => !shouldCreateLine(d))
+            .attr("aria-disabled", !utils.isFunction(value.onClick))
+            .attr("d", value.high &amp;&amp; value.low ? createLine(scale, value) : "")
+            .on("click", function () {
+                dataPointActionHandler(config, value, index, this.parentNode);
+            });
+    });
+/**
+ * Draws the points with options opted in the input JSON by the consumer for each data set.
+ *  Render the point with appropriate color, shape, x and y co-ordinates, label etc.
+ *  On click content callback function is called.
+ *
+ * @private
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {d3.selection} canvasSVG - d3 html element of the canvas
+ * @returns {undefined} - returns nothing
+ */
+const drawPoints = (scale, config, canvasSVG) => {
+    const getDataPointPath = (path, type, value, index) =>
+        path.append(() =>
+            new Shape(getShapeForTarget(getValue(value, type))).getShapeElement(
+                getDefaultSVGProps({
+                    svgClassNames: `${styles.pairedPoint} ${getValue(
+                        styles,
+                        type
+                    )}`,
+                    svgStyles: `fill: ${getColorForTarget(
+                        getValue(value, type)
+                    )};`,
+                    transformFn: transformPoint(scale, type)(value),
+                    onClickFn() {
+                        dataPointActionHandler(
+                            config,
+                            value,
+                            index,
+                            this.parentNode.parentNode
+                        );
+                    },
+                    a11yAttributes: {
+                        "aria-hidden":
+                            document
+                                .querySelector(
+                                    `.${styles.legendItem}[aria-describedby="${
+                                        getValue(value, type).key
+                                    }"]`
+                                )
+                                ?.getAttribute("aria-current") === "false",
+                        "aria-describedby": getValue(value, type).key,
+                        "aria-disabled": !utils.isFunction(value.onClick)
+                    }
+                })
+            )
+        );
+    canvasSVG.each(function (value, index) {
+        const boxPath = d3.select(this);
+        iterateOnPairType((type) => {
+            if (utils.isDefined(getValue(value, type))) {
+                const currentValue = getValue(value, type);
+                const pointGroup = boxPath
+                    .append("g")
+                    .classed(styles.pointGroup, true);
+                if (currentValue.isCritical) {
+                    config.hasCriticality = true;
+                    drawCriticalityPoints(
+                        scale,
+                        config,
+                        pointGroup,
+                        type,
+                        value,
+                        index
+                    );
+                }
+                getDataPointPath(pointGroup, type, value, index);
+            }
+        });
+    });
+};
+/**
+ * Shows line between the 2 data points high and low. If either one of them is missing
+ * then the line is not shown.
+ *
+ * @private
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {Array} boxPath - d3 html element of the paired box
+ * @returns {object} - d3 append object
+ */
+const showLine = (config, boxPath) =>
+    boxPath.each(function () {
+        const shouldCreateLine = (d) =>
+            d.high &amp;&amp;
+            d.low &amp;&amp;
+            utils.hasValue(config.shownTargets, d.high.key) &amp;&amp;
+            utils.hasValue(config.shownTargets, d.low.key) &amp;&amp;
+            document
+                .querySelector(
+                    `.${styles.legendItem}[aria-describedby="${d.high.key}"]`
+                )
+                ?.getAttribute("aria-current") === "true" &amp;&amp;
+            document
+                .querySelector(
+                    `.${styles.legendItem}[aria-describedby="${d.low.key}"]`
+                )
+                ?.getAttribute("aria-current") === "true";
+        return d3
+            .select(this)
+            .select(`.${styles.pairedLine}`)
+            .attr("aria-hidden", (d) => !shouldCreateLine(d));
+    });
+/**
+ * Draws the criticality points with options opted in the input JSON by the consumer for each data set.
+ *  On click content callback function is called.
+ *
+ * @private
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {Array} pointGroup - d3 html element of the point group (high, mid or low)
+ * @param {string} type - High, mid or low
+ * @param {object} value - A value
+ * @param {number} index - Value index
+ * @returns {undefined} - returns nothing
+ */
+const drawCriticalityPoints = (
+    scale,
+    config,
+    pointGroup,
+    type,
+    value,
+    index
+) => {
+    const renderPoint = (path, type, value, index, cls) =>
+        path.append(() =>
+            new Shape(getShapeForTarget(getValue(value, type))).getShapeElement(
+                getDefaultSVGProps({
+                    svgClassNames: `${cls}`,
+                    transformFn: transformPoint(scale, type)(value),
+                    onClickFn() {
+                        dataPointActionHandler(
+                            config,
+                            value,
+                            index,
+                            this.parentNode.parentNode
+                        );
+                    },
+                    a11yAttributes: {
+                        "aria-hidden":
+                            document
+                                .querySelector(
+                                    `.${styles.legendItem}[aria-describedby="${
+                                        getValue(value, type).key
+                                    }"]`
+                                )
+                                ?.getAttribute("aria-current") === "false",
+                        "aria-describedby": getValue(value, type).key,
+                        "aria-disabled": !utils.isFunction(value.onClick)
+                    }
+                })
+            )
+        );
+    renderPoint(
+        pointGroup,
+        type,
+        value,
+        index,
+        `${styles.pairedPoint} ${getValue(styles, type)} ${
+            styles.criticalityOuterPoint
+        }`
+    );
+    renderPoint(
+        pointGroup,
+        type,
+        value,
+        index,
+        `${styles.pairedPoint} ${getValue(styles, type)} ${
+            styles.criticalityInnerPoint
+        }`
+    );
+};
+/**
+ * Called on resize, translates the data point values.
+ * This includes:
+ *  Lines
+ *  Points
+ *
+ * @private
+ * @param {object} scale - d3 scale for Graph
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
+ * @param {object} config - Graph config object derived from input JSON
+ * @returns {undefined} - returns nothing
+ */
+const translatePairedResultGraph = (scale, canvasSVG, config) => {
+    translateSelectionBox(scale, canvasSVG, config);
+    translateSelectionItem(scale, canvasSVG, config);
+    translateLines(scale, canvasSVG, config);
+    translatePoints(scale, canvasSVG, config);
+};
+/**
+ * Show/hide regions based on the following criteria:
+ * * Regions would be checked if they are identical before hiding them.
+ * * If only 1 target is displayed -> show the region using unique data set key
+ *
+ * @private
+ * @param {object} graphContext - Graph instance
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
+ * @param {string} key - Pair type - high, low or mid pair object containing the key
+ * @returns {undefined} - returns nothing
+ */
+const processRegions = (graphContext, config, canvasSVG, { key }) => {
+    if (isSinglePairedResultTargetDisplayed(config, graphContext)) {
+        const showHideKeys = config.shownTargets.concat([key]);
+        showHideKeys.forEach((targetKey) => {
+            showHideRegion(
+                canvasSVG,
+                `region_${targetKey}`,
+                config.shownTargets.indexOf(targetKey) > -1
+            );
+        });
+    } else if (
+        !config.shouldHideAllRegion &amp;&amp;
+        config.shownTargets.length > 0 &amp;&amp;
+        areRegionsIdentical(canvasSVG)
+    ) {
+        canvasSVG.selectAll(`.${styles.region}`).attr("aria-hidden", false);
+    } else {
+        hideAllRegions(canvasSVG);
+    }
+};
+/**
+ * Checks if only one paired result content item is present in the graph
+ *
+ * @private
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {object} graphContext - Graph instance
+ * @returns {boolean} true if displayed targets is equal to 1, false otherwise
+ */
+const isSinglePairedResultTargetDisplayed = (config, graphContext) => {
+    const displayedPairedResults = [];
+
+    config.shownTargets.forEach((target) => {
+        graphContext.contentKeys.forEach((key) => {
+            if (target.includes(key) &amp;&amp; !displayedPairedResults.includes(key)) {
+                displayedPairedResults.push(key);
+            }
+        });
+    });
+
+    return isSingleTargetDisplayed(
+        displayedPairedResults,
+        graphContext.content
+    );
+};
+/**
+ * Checks the region data of Paired Result so that if one of regions for Paired Result data pairs are not provided,
+ * i.e. if regions for "high" and "low" are provided and the values contain data for "high", "mid" and "low",
+ * all regions would be hidden(returns false) and if region for all "high", "mid" and "low" is there as well as value contains
+ * data for "high", "mid" and "low" then it returns true.
+ *
+ * @private
+ * @param {object} value - pairedResult values
+ * @param {object} regionList - List of all the regions provided
+ * @returns { boolean } returns true if regions are not missing for the value keys( high, mid or low) else false
+ */
+const isRegionMappedToAllValues = (value, regionList) =>
+    Object.keys(value).every((v) =>
+        Object.prototype.hasOwnProperty.call(regionList, v)
+    );
+/**
+ * Handler for Request animation frame, executes on resize.
+ *  * Order of execution
+ *      * Shows/hides the regions
+ *
+ * @private
+ * @param {object} graphContext - Graph instance
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
+ * @param {string} item - paired result type unique key
+ * @returns {function()} callback function handler for RAF
+ */
+const onAnimationHandler = (graphContext, config, canvasSVG, item) => () => {
+    processRegions(graphContext, config, canvasSVG, item);
+};
+/**
+ * Click handler for legend item. Removes the line from graph when clicked
+ *
+ * @private
+ * @param {object} graphContext - Graph instance
+ * @param {PairedResult} control - Paired Result instance
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
+ * @returns {undefined} - returns nothing
+ */
+const clickHandler = (graphContext, control, config, canvasSVG) => (
+    element,
+    item
+) => {
+    const updateShownTarget = (shownTargets, item) => {
+        const index = shownTargets.indexOf(item.key);
+        if (index > -1) {
+            shownTargets.splice(index, 1);
+        } else {
+            shownTargets.push(item.key);
+        }
+    };
+    legendClickHandler(element);
+    const legendSelected = isLegendSelected(d3.select(element));
+    updateShownTarget(config.shownTargets, item);
+    canvasSVG
+        .selectAll(`path[aria-describedby="${item.key}"]`)
+        .attr("aria-hidden", legendSelected);
+    canvasSVG
+        .selectAll(`.${styles.pairedPoint}[aria-describedby="${item.key}"]`)
+        .attr("aria-hidden", legendSelected);
+    /*
+    Select only those .carbon-data-pair elements that belong to the particular canvas for which a paired result legend item was clicked
+    and  pass them to showLine() method.
+    This ensures that when there are multiple canvases with paired results in each canvas,
+    selecting a paired result legend item in one canvas does not affect paired results in other canvases.
+    */
+    const pairedBoxGroupClipPath = `url(#${config.clipPathId})`;
+    const pairedBoxGroup = d3.selectAll(`.${styles.pairedBoxGroup}`);
+    pairedBoxGroup.each(function () {
+        const clipPath = d3.select(this).attr("clip-path");
+        if (clipPath === pairedBoxGroupClipPath) {
+            const boxPath = d3.select(this).selectAll(`.${styles.pairedBox}`);
+            showLine(config, boxPath);
+        }
+    });
+    window.requestAnimationFrame(
+        onAnimationHandler(graphContext, config, canvasSVG, item)
+    );
+};
+/**
+ * Hover handler for legend item. Highlights current line and blurs the rest of the targets in Graph
+ * if present.
+ *
+ * @private
+ * @param {Array} config - Graph config object derived from input JSON
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
+ * @returns {undefined} - returns nothing
+ */
+const hoverHandler = (config, canvasSVG) => (item, state) => {
+    const additionalHoverHandler = (
+        shownTargets,
+        canvasSVG,
+        currentKey,
+        hoverState,
+        k
+    ) => {
+        canvasSVG
+            .selectAll(`.${styles.region}[aria-describedby="region_${k}"]`)
+            .classed(
+                styles.regionBlur,
+                hoverState === constants.HOVER_EVENT.MOUSE_ENTER
+            );
+    };
+    legendHoverHandler(config.shownTargets, canvasSVG, item.key, state, [
+        additionalHoverHandler
+    ]);
+    // Highlight the line of the item hovered on
+    canvasSVG
+        .selectAll(`path[aria-describedby="${item.key}"]`)
+        .classed(styles.highlight, state === constants.HOVER_EVENT.MOUSE_ENTER);
+    canvasSVG
+        .selectAll(`.${styles.pairedPoint}[aria-describedby="${item.key}"]`)
+        .classed(styles.highlight, state === constants.HOVER_EVENT.MOUSE_ENTER);
+
+    // Highlight region(s) of the item hovered on, only if the graph is currently displayed
+    regionLegendHoverHandler(config.shownTargets, canvasSVG, item.key, state);
+};
+/**
+ * A callback that will be sent to Graph class so that when graph is
+ * created the Graph API will execute this callback function and the legend
+ * items are loaded.
+ *
+ * @private
+ * @param {object} config - Graph config object derived from input JSON
+ * @param {object} eventHandlers - Object containing click and hover event handlers for legend item
+ * @param {object} dataTarget - Data points object
+ * @param {object} legendSVG - d3 element that will be need to render the legend
+ * items into.
+ * @returns {undefined} - returns nothing
+ */
+const prepareLegendItems = (config, eventHandlers, dataTarget, legendSVG) => {
+    const constructLegendLabels = (d, type) =>
+        Object.assign(
+            {},
+            {
+                shape: getValue(d.shape, type),
+                color: getValue(d.color, type),
+                label: getValue(d.label, type),
+                key: `${d.key}_${type}`,
+                values: dataTarget.values,
+                legendOptions: dataTarget.legendOptions
+            }
+        );
+    if (dataTarget.label &amp;&amp; legendSVG) {
+        iterateOnPairType((type) => {
+            const label = getValue(dataTarget.label, type);
+            if (label &amp;&amp; label.display) {
+                loadLegendItem(
+                    legendSVG,
+                    constructLegendLabels(dataTarget, type),
+                    config,
+                    eventHandlers
+                );
+            }
+        });
+    }
+};
+/**
+ * Renders the regions for each pair item, if available
+ * Each region in a graph content is created as a group.
+ * Each group is defined by its unique id with the prefix "region_",
+ * so that any region belonging to the pair can be rendered within the paired region group.
+ * This is a bit different than other types of graph since we have individual legend
+ * for each of the pair types.
+ * Criteria for loading the regions:
+ *  Each content should show regions for high, low and/or mid upfront
+ *  Region should only be hidden if:
+ *      Toggled using legend
+ *      If more than 1 data set/content is available
+ *
+ * @private
+ * @param {object} scale - d3 scale for Graph
+ * @param {object} config - config object derived from input JSON
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
+ * @param {object} dataTarget - Data points object
+ * @returns {undefined} - returns nothing
+ */
+const renderRegion = (scale, config, canvasSVG, dataTarget) => {
+    const regionGroupSVG = canvasSVG.select(`.${styles.regionGroup}`);
+    const regionPairGroup = regionGroupSVG
+        .append("g")
+        .classed(styles.regionPairGroup, true)
+        .attr("aria-describedby", `region_${dataTarget.key}`);
+    regionPairGroup.call(() => {
+        iterateOnPairType((type) => {
+            if (
+                dataTarget.valueRegionSubset &amp;&amp;
+                dataTarget.valueRegionSubset[type]
+            ) {
+                createValueRegion(
+                    scale,
+                    config,
+                    regionPairGroup,
+                    dataTarget.valueRegionSubset[type],
+                    `region_${dataTarget.key}_${type}`,
+                    dataTarget.yAxis
+                );
+            } else if (dataTarget.regions &amp;&amp; dataTarget.regions[type]) {
+                if (
+                    !utils.isArray(dataTarget.regions[type]) ||
+                    utils.isUndefined(dataTarget.regions[type])
+                ) {
+                    throw new Error(errors.THROW_MSG_REGION_EMPTY);
+                }
+                createRegion(
+                    scale,
+                    config,
+                    regionPairGroup,
+                    dataTarget.regions[type],
+                    `region_${dataTarget.key}_${type}`,
+                    dataTarget.yAxis
+                );
+            }
+        });
+    });
+};
+
+/**
+ * Clears the paired boxes before redrawing.
+ * We are selecting all the box pairs along
+ * with all the data sets before clearing them.
+ *
+ * @private
+ * @param {d3.selection} canvasSVG - d3 selection node of canvas svg
+ * @param {object} dataTarget - Data points object
+ * @returns {object} - d3 select object
+ */
+const clear = (canvasSVG, dataTarget) =>
+    d3RemoveElement(canvasSVG, `g[aria-describedby="${dataTarget.key}"]`);
+
+export {
+    getSVGObject,
+    getValue,
+    translatePoints,
+    translateLines,
+    createLine,
+    clickHandler,
+    iterateOnPairType,
+    hoverHandler,
+    transformPoint,
+    draw,
+    getDataPointValues,
+    processDataPoints,
+    drawLine,
+    drawPoints,
+    translatePairedResultGraph,
+    prepareLegendItems,
+    renderRegion,
+    isRegionMappedToAllValues,
+    clear,
+    isSinglePairedResultTargetDisplayed
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/search.js" defer></script>
+
+
+<script src="scripts/collapse.js" defer></script>
+
+
+</body>
+</html>
