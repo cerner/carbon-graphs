@@ -547,12 +547,17 @@ export const renderLineY2AxisWithPanning = (id) => {
     const graphDataY2 = utils.deepClone(
         getDemoData(`#${id}`, "LINE_TIMESERIES").data[1]
     );
-    const graphDataY3 = [
-        utils.deepClone(
-            getDemoData(`#${id}`, 'LINE_TIMESERIES').data[0]), 
-        utils.deepClone(
-            getDemoData(`#${id}`, 'LINE_TIMESERIES_DATELINE').data[1])
-    ];
+    const graphDataY3 = {
+        panData: [
+            utils.deepClone(
+                getDemoData(`#${id}`, 'LINE_TIMESERIES').data[0]), 
+            utils.deepClone(
+                getDemoData(`#${id}`, 'LINE_TIMESERIES_DATELINE').data[1]),
+        ],
+        xLabel: "xLabel",
+        yLabel: "yLabel",
+        y2Label: "y2Label"
+    };
 
     const createGraph = () => {
         graph.reflow(graphDataY3);

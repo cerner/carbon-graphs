@@ -414,7 +414,7 @@ class Graph extends Construct {
   reflow(graphData) {
     let position;
     if (graphData) {
-      graphData.forEach((data) => {
+      graphData.panData.forEach((data) => {
         if(data.values) {
           this.contentKeys.forEach((key, index) => {
             if (key === data.key) position = index;
@@ -444,7 +444,7 @@ class Graph extends Construct {
     if (
       graphData
     ) {
-      graphData.forEach((data) => {
+      graphData.panData.forEach((data) => {
         if(data.values) {
           this.contentKeys.forEach((key, index) => {
             if (key === data.key) position = index;
